@@ -361,6 +361,13 @@ module.exports = function (grunt) {
                 dropboxAppkey: '7wew0rj0gh2qcik'
               }
           },
+          as_dev: {
+              constants: {
+                backendUrl: 'https://hbp-dev-backend.ahead-solutions.ch',
+                backendExportChartUrl: '<%= ngconstant.demo.constants.backendUrl %>/exportingChart.php',
+                dropboxAppkey: '7wew0rj0gh2qcik'
+              }
+          },
           prod: {
               constants: {
                 backendUrl: 'http://hbp-mip.chuv.ch/services/backend',
@@ -445,6 +452,19 @@ module.exports = function (grunt) {
         }
       },
       docker_dev: {
+        files: {
+          '<%= yeoman.dist %>/': '<%= yeoman.dist %>/index.html'
+        },
+        options: {
+          replacements: [
+            {
+              pattern: "%DropBoxAppKey%",
+              replacement: "<%= ngconstant.prod.constants.dropboxAppkey %>"
+            }
+          ]
+        }
+      },
+      as_dev: {
         files: {
           '<%= yeoman.dist %>/': '<%= yeoman.dist %>/index.html'
         },
