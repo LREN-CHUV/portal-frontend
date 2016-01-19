@@ -1,9 +1,8 @@
 angular.module('app.config', [])
 
-.constant('backendUrl', '//backend')
+.constant('backendUrl', 'https://hbp-dev-backend.ahead-solutions.ch')
 
-.constant('backendExportChartUrl', 'BACKEND-URL/exportingChart.php')
+.constant('backendExportChartUrl', 'http://chuv-backend.redfroggy.fr/exportingChart.php')
 
-.constant('dropboxAppkey', 'OPT DROPBOX!!!!')
-
+.constant('dropboxAppkey', '7wew0rj0gh2qcik')
 ;
