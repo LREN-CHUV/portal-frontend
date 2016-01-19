@@ -209,7 +209,10 @@ angular.module('chuvApp.models')
               $scope.set_focused_variable(variable);
 
               if ($scope.search_history.indexOf(variable) < 0) {
-                $scope.search_history.push(variable);
+                $scope.search_history.unshift(variable);
+                if ($scope.search_history.length > 5) {
+                  $scope.search_history.pop();
+                }
               }
             }
           }

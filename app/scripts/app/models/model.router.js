@@ -9,7 +9,7 @@ angular.module('chuvApp.models').config(['$stateProvider',function($stateProvide
 
     $stateProvider
         .state('models', {
-            url: '/models?variable',
+            url: '/models',
             templateUrl: 'scripts/app/models/model.html',
             controller:'ModelController'
         //})

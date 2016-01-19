@@ -80,13 +80,14 @@ angular.module('chuvApp.models')
         return variable in $scope.configuration[type];
       };
 
+      var config_keys = Object.keys($scope.configuration);
+
       Variable.query()
         .$promise.then(function (allVariables) {
           $scope.allVariables = _
             .sortBy(allVariables, "label")
             .filter(function (variable) { return variable.group && variable.group.code;});
 
-        var config_keys = Object.keys($scope.configuration);
         $scope.allVariables.forEach(function (variable) {
             config_keys.forEach(function (config_name) {
               if (variable.code in $scope.configuration[config_name])
@@ -100,6 +101,24 @@ angular.module('chuvApp.models')
           $scope.groups = group.groups;
           $scope.loaded = true;
         });
+
+      config_keys.forEach(function (config_name) {
+        $scope.$watch(
+          function () {
+            return Object.keys($scope.configuration[config_name]).length
+          },
+          function (picked_configuration_count) {
+            if (picked_configuration_count) {
+              $location.search(
+                config_name,
+                Object.keys($scope.configuration[config_name]).join(",")
+              );
+            } else {
+              $location.search(config_name, undefined);
+            }
+          }
+        )
+      });
     }])
   .controller('ModelsController', ['$scope', '$translatePartialLoader', '$translate', '$rootScope', 'Model', 'backendUrl', '$attrs', 'WidgetService', 'User',
     function ($scope, $translatePartialLoader, $translate, $rootScope, Model, backendUrl, $attrs, WidgetService, User) {
