@@ -1,0 +1,20 @@
+<div class="explore">
+  <div class="row" ng-if="loaded">
+    <div class="col-md-6">
+      <circle-packing></circle-packing>
+    </div>
+    <div class="col-md-6">
+      <variable-statistics></variable-statistics>
+      <variable-configuration
+          set-focused-variable="set_focused_variable"
+          set-variable-selected-as="use_variable_as"
+          configuration="configuration"></variable-configuration>
+    </div>
+  </div>
+  <div ng-if="!loaded" class="text-center">
+    <h1>
+      <span class="fa fa-spin fa-spinner"></span>
+      Loading data...
+    </h1>
+  </div>
+</div>

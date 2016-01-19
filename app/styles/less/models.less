@@ -1,0 +1,38 @@
+
+.explore {
+
+  .node {
+    cursor: pointer;
+  }
+
+  .node:hover {
+    stroke: #000;
+    stroke-width: 1.5px;
+  }
+
+  .node--leaf {
+    fill: white;
+  }
+
+  .circle-label {
+    font: 11px "Helvetica Neue", Helvetica, Arial, sans-serif;
+    text-anchor: middle;
+    text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, -1px 0 0 #fff, 0 -1px 0 #fff;
+
+    &.group {
+      font-size: 13px;
+      font-weight: 700;
+    }
+  }
+
+  .overflow-hidden {
+    overflow: hidden;
+  }
+
+  .panel.panel.panel {
+    background: none;
+  }
+  .panel-body.panel-body.panel-body {
+    background: rgba(255,255,255,0.7);
+  }
+}
