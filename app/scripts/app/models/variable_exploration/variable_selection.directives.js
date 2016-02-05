@@ -7,7 +7,7 @@ angular.module('chuvApp.models')
 
   .directive("circlePacking", [function () {
     return {
-      templateUrl: "scripts/app/models/variable_selection/circle_packing.html",
+      templateUrl: "scripts/app/models/variable_exploration/circle_packing.html",
       replace: true,
       link: function ($scope, element) {
 
@@ -51,6 +51,16 @@ angular.module('chuvApp.models')
               is_group: false,
               original: variable,
               children: []
+            })
+          });
+        }
+
+        function applyNodeColors () {
+          var circle = svg.selectAll("circle");
+          circle.style("fill", color_for_node);
+          Object.keys($scope.configuration).forEach(function (category) {
+            circle.classed(category, function (node) {
+              return node.code && $scope.variable_is_used_as(category, node.code);
             })
           });
         }
@@ -116,6 +126,7 @@ angular.module('chuvApp.models')
             node = svg.selectAll("circle,text");
 
           zoomTo([root.x, root.y, root.r * 2 + margin]);
+          applyNodeColors();
 
           function zoom(d) {
             focus = d;
@@ -164,21 +175,16 @@ angular.module('chuvApp.models')
         }
 
         function color_for_node (node) {
-            var category = _.find(Object.keys($scope.configuration), function (category) {
-              return node.code && $scope.variable_is_used_as(category, node.code)
-            });
-            if (category) {
-              return $scope.colors[category];
-            }
-            return node.children ? color(node.depth) : null;
+          var category = _.find(Object.keys($scope.configuration), function (category) {
+            return node.code && $scope.variable_is_used_as(category, node.code)
+          });
+          if (category) {
+            return null;
           }
+          return node.children ? color(node.depth) : null;
+        }
 
-        $scope.$on(
-          "configurationChanged",
-          function () {
-            svg.selectAll("circle").style("fill", color_for_node);
-          }
-        );
+        $scope.$on("configurationChanged", applyNodeColors);
 
         // update circle packing whenever groups change
         // (won't happen often)
@@ -191,8 +197,10 @@ angular.module('chuvApp.models')
 
         //redraw the whole stuff when resizing.
         //every circle changes size and position, so I might as well...
+        var prev_dimension = element.width();
         function resize_handler() {
-          if ($scope.groups != null) {
+          if ($scope.groups != null && element.width !== prev_dimension) {
+            prev_dimension = element.width();
             updateCirclePacking();
           }
         }
@@ -225,7 +233,7 @@ angular.module('chuvApp.models')
 
   .directive("variableStatistics", ["$timeout", "Variable", '$stateParams', function ($timeout, Variable, $stateParams) {
     return {
-      templateUrl: "scripts/app/models/variable_selection/variable_statistics.html",
+      templateUrl: "scripts/app/models/variable_exploration/variable_statistics.html",
       link: function ($scope, element) {
 
         // so that two simultaneous requests don't clash.
@@ -387,11 +395,11 @@ angular.module('chuvApp.models')
             return;
           }
 
-          if (val.length < 800) {
+          if (val.length < 600) {
             $scope.real_text = val;
             $scope.is_shortened = false;
           } else {
-            $scope.real_text = val.substr(0, 700) + "...";
+            $scope.real_text = val.substr(0, 400) + "...";
             $scope.is_shortened = true;
           }
           $scope.real_text = $scope.real_text.split("\n");
@@ -409,13 +417,18 @@ angular.module('chuvApp.models')
 
   .directive("variableConfiguration", function () {
     return {
-      templateUrl: "scripts/app/models/variable_selection/variable_configuration.html",
+      templateUrl: "scripts/app/models/variable_exploration/variable_configuration.html",
       scope: {
         setFocusedVariable: "=",
         setVariableSelectedAs: "=",
+        getFocusedVariable: "=",
         configuration: "="
       },
       controller: ["$scope", function ($scope) {
+
+        $scope.do_configure = false;
+
+        $scope.set_configure = function () { $scope.do_configure = true; };
 
         $scope.has_configuration = function () {
           return _.any(

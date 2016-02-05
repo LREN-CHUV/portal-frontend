@@ -129,7 +129,7 @@ describe('Unit testing great quotes', function() {
         $httpBackend.when('GET', 'i18n/en/header.json').respond(200);
         $httpBackend.when('GET', 'i18n/fr/header.json').respond(200);
 
-        _$templateCache_.get("/scripts/app/models/variable_selection/variable_selection.html");
+        _$templateCache_.get("/scripts/app/models/variable_exploration/variable_selection.html");
     }));
 
     it('Replaces the element with the appropriate content', function() {

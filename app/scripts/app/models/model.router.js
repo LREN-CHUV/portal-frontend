@@ -8,20 +8,14 @@
 angular.module('chuvApp.models').config(['$stateProvider',function($stateProvider){
 
     $stateProvider
-        .state('models', {
-            url: '/models',
-            templateUrl: 'scripts/app/models/model.html',
-            controller:'ModelController'
-        //})
-        //.state('models-edit', {
-        //    url: '/models/:slug/:isCopy',
-        //    templateUrl: 'scripts/app/models/model.html',
-        //    controller:'ModelController',
-        //    resolve: {
-        //        translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
-        //            $translatePartialLoader.addPart('model');
-        //            return $translate.refresh();
-        //        }]
-        //    }
+        .state('explore', {
+          url: '/explore',
+          templateUrl: 'scripts/app/models/variable_exploration/explore.html',
+          controller: 'ExploreController'
+        })
+        .state('review', {
+            url: '/review',
+            templateUrl: 'scripts/app/models/review/review.html',
+            controller:'ReviewController'
         });
 }]);

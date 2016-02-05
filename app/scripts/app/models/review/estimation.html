@@ -1,0 +1,31 @@
+<div ng-controller="EstimationController">
+  <div class="col-md-4">
+    <div class="panel">
+      <div class="panel-heading">
+        <h2>Estimate model</h2>
+      </div>
+      <div class="panel-body">
+        <div ng-repeat="possible_estimation in possible_estimations">
+          <label>
+            <input type="checkbox" id="estimation_{{ possible_estimation.id }}"
+                   ng-model="chosen_estimations[possible_estimation.id]">
+            <span ng-bind="possible_estimation.label"></span>
+          </label>
+        </div>
+      </div>
+
+      <button type="button"
+              class="btn-round"
+              ng-if="can_estimate_model()"
+              style="bottom: -45px"
+              ng-click="estimate_model()">
+        <span>
+          <span class="ng-binding">Apply</span>
+          <i class="ti ti-arrow-down" ng-if="!estimating"></i>
+          <i class="ti ti-reload ti-spin" ng-if="estimating"></i>
+        </span>
+      </button>
+
+    </div>
+  </div>
+</div>

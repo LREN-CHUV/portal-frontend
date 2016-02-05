@@ -57,29 +57,6 @@
           <h2 class="text-center"><span class="fa fa-spin fa-spinner"></span> Loading the variable's data</h2>
         </div>
 
-        <div>
-          <button ng-click="use_variable_as('variable')"
-             ng-if="focused_variable.isVariable"
-             ng-bind="variable_is_used_as('variable') ? 'Remove as Variable' : 'Use as Variable'"
-             ng-style="{backgroundColor: colors.variable}"
-             class="btn"></button>
-          <button ng-click="use_variable_as('grouping')"
-             ng-if="focused_variable.isGrouping"
-             ng-bind="variable_is_used_as('grouping') ? 'Remove as Grouping' : 'Use as Grouping'"
-             ng-style="{backgroundColor: colors.grouping}"
-             class="btn"></button>
-          <button ng-click="use_variable_as('covariable')"
-             ng-if="focused_variable.isCovariable"
-             ng-bind="variable_is_used_as('covariable') ? 'Remove as Covariable' : 'Use as Covariable'"
-             ng-style="{backgroundColor: colors.covariable}"
-             class="btn"></button>
-          <button ng-click="use_variable_as('filter')"
-             ng-if="focused_variable.isFilter"
-             ng-bind="variable_is_used_as('filter') ? 'Remove as Filter' : 'Use as Filter'"
-             ng-style="{backgroundColor: colors.filter}"
-             class="btn"></button>
-        </div>
-
       </div>
 
     </div>

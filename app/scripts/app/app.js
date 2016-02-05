@@ -39,6 +39,7 @@ angular
     'ui.select',
     'app.config',
     'ab-base64',
+    "btford.markdown",
     //components
     'chuvApp.components.filters',
     'chuvApp.components.criteria',

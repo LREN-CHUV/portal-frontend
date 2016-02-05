@@ -427,20 +427,6 @@
 	padding-top: 0.1em;
 
 
-  // palette: http://paletton.com/#uid=70S1x0k5xw00-Uh2yIe9qrxedn8
-	&.variable {
-    background: rgba(255, 239, 211, 0.35);
-	}
-	&.covariable {
-    background: rgba(222, 237, 196, 0.35);
-	}
-	&.grouping {
-    background: rgba(208, 172, 191, 0.35);
-	}
-	&.filter {
-    background: rgba(142, 152, 169, 0.35);
-	}
-
 	h3 {
 		font-size: 14px;
 		font-weight: 700;
@@ -585,12 +571,126 @@
 	position: relative;
 	background-color: rgba(255, 255, 255, 0.7);
 	box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.2);
-	transition: all 0.3s ease;
   height: 300px;
-  overflow: hidden;
 
-  &.closed {
-    height: 0;
-    padding: 0;
+  .trigger-execute {
+    bottom: -46px;
+    left: 50%;
+    transform: translate(-50%,0);
+    position: absolute;
   }
+}
+
+.container-ee-search-resume {
+	background: rgba(241, 196, 149, 0.7);
+	border-bottom: 1px solid #f7dfe1;
+	line-height: 60px;
+
+	.bg {
+		background: rgba(255, 255, 255, 0.6);
+	}
+
+	[class^="col-"] {
+		position: relative;
+	}
+
+	label {
+		font-size: 14px;
+		color: #000;
+		text-transform: uppercase;
+		font-weight: 700;
+		display: block;
+		padding-right: 6px;
+		width: 200px;
+		white-space: nowrap;
+		float: left;
+		margin: 0;
+	}
+
+	.search-list-arrows {
+		position: absolute;
+		right: 0;
+		top: 0;
+		width: 50px;
+		height: 100%;
+		font-size: 12px;
+
+		a {
+			display: block;
+			width: 50%;
+			height: 100%;
+			color: #444444;
+			float: left;
+			visibility: hidden;
+			opacity: 0;
+			transition: all 0.3s ease;
+
+			&.active {
+				visibility: visible;
+				opacity: 1;
+			}
+
+			&:hover {
+				font-size: 16px;
+				opacity: 0.8;
+			}
+		}
+	}
+
+	.search-list {
+		display: block;
+		white-space: nowrap;
+		width: calc(~"100% - 250px");
+		overflow: hidden;
+		float: left;
+		height: 60px;
+		font-size: 0;
+		position: relative;
+
+		.wrapper-search-list {
+			position: absolute;
+			top: 0;
+			left: 0;
+		}
+
+		a {
+			line-height: 25px;
+			display: inline-block;
+			border: 1px solid #FFF;
+			border-radius: 13px;
+			font-size: 12px;
+			color: #ef3b4a;
+			padding-left: 12px;
+			padding-right: 30px;
+			position: relative;
+			margin: 0 3px;
+			transition: all 0.3s ease;
+			vertical-align: middle;
+
+			.ti {
+				color: #FFF;
+				position: absolute;
+				line-height: 25px;
+				top: 0px;
+				right: 0px;
+				text-align: center;
+				font-size: 8px;
+				width: 25px;
+				border-radius: 50%;
+				transition: all 0.3s ease;
+
+				&:hover {
+					transform: rotate(180deg);
+					background: #FFF;
+					color: #ef3b4a;
+				}
+			}
+
+			&:hover {
+				background: #ef3b4a;
+				color: #FFF;
+				border-color: #ef3b4a;
+			}
+		}
+	}
 }

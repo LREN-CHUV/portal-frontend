@@ -1,0 +1,9 @@
+<div class="review">
+    <div ng-if="isMine(model)"
+         ng-controller="CriteriaController"
+         class="col-xs-12"
+         style="float: none"
+         ng-include="'scripts/app/models/review/criteria.html'"></div>
+    <div ng-include="'scripts/app/models/review/chart.html'"></div>
+    <div ng-include="'scripts/app/models/review/footer.html'"></div>
+</div>
