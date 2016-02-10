@@ -1,5 +1,5 @@
-angular.module('chuvApp.intro').controller('IntroController', ['$scope', '$translatePartialLoader', '$translate', '$rootScope', '$state', 'User',
-    function ($scope, $translatePartialLoader, $translate, $rootScope, $state, User) {
+angular.module('chuvApp.intro').controller('IntroController', ['$scope', '$translatePartialLoader', '$translate', '$rootScope', '$state', 'User', 'backendUrl',
+    function ($scope, $translatePartialLoader, $translate, $rootScope, $state, User, backendUrl) {
         $translatePartialLoader.addPart('intro');
         $translate.refresh();
 
@@ -27,7 +27,8 @@ angular.module('chuvApp.intro').controller('IntroController', ['$scope', '$trans
         stackImages['Proteins'] = 'stackProteins.png';
 
         $scope.login = function () {
-        $state.go('login');
+        //$state.go('login');
+        window.location.href = backendUrl + '/login/hbp';
         };
 
         $scope.explore = function () {
