@@ -1,6 +1,6 @@
 angular.module('app.config', [])
 
-.constant('backendUrl', 'http://backend')
+.constant('backendUrl', 'http://localhost:7800/services')
 
 .constant('backendExportChartUrl', 'http://chuv-backend.redfroggy.fr/exportingChart.php')
 
