@@ -87,14 +87,14 @@
 }
 
 .review {
-  margin-top: 10px;
+  margin-top: 40px;
 
   // this is the explore button
   > .btn-round {
-position: absolute;
-    z-index: 1000;
+    position: absolute;
+    z-index: 100;
     left: ~"calc(50% - 45px)";
-    top: -30px;
+    top: -20px;
   }
 
   .toolbar-container.toolbar-container {
@@ -106,17 +106,18 @@ position: absolute;
     position: static;
   }
 
-  // override the default styling of querybuilderjs
 
-  // this hides the "add group" button of subgroups so that we can have only 2 levels of filtering
-  .query-builder .rules-group-body .rules-group-header > .group-actions > .btn:nth-child(2) {
-    display: none;
-  }
+}
+
+// override the default styling of querybuilderjs
+// this hides the "add group" button of subgroups so that we can have only 2 levels of filtering
+.query-builder .rules-group-body .rules-group-header > .group-actions > .btn:nth-child(2) {
+  display: none;
 }
 
 // reset all panel styles for collapser
 .collapser > .panel-group {
-   margin-bottom: 0;
+  margin-bottom: 0;
 
   > .panel {
     background-color: initial;

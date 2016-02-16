@@ -234,7 +234,7 @@ angular.module('chuvApp.components.criteria')
 
         // wait for data to be there before initializing directive.
         var watchOnce = $scope.$watchGroup(
-          ["variables", "groups"],
+          ["variables", "groups", "coVariables", "filters"],
           function (newValue) {
             if (!newValue[0] || !newValue[1]) return;
 

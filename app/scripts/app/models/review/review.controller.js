@@ -280,11 +280,6 @@ angular.module('chuvApp.models').controller('ReviewController',['$scope','$trans
 
       $scope.loading_model = true;
 
-      // ignore filter without range values
-      query.filters = _.filter(query.filters, function (filter) {
-        return filter.values.length > 0;
-      });
-
       Model.executeQuery(query).success(function (queryResult) {
         $scope.executeBtnAnimate();
         $scope.executed = true;
@@ -300,8 +295,7 @@ angular.module('chuvApp.models').controller('ReviewController',['$scope','$trans
         }
         $scope.loading_model = false;
       });
-
-    };
+    }
 
     if ($location.search().execute) {
 

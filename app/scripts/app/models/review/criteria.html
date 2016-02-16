@@ -134,10 +134,10 @@
 
               <p class="consigne"><i class="ti ti-info-alt"></i> Select then complete your filters</p>
 
-              <div class="query-filters form-group-covariable active"  ng-repeat="filterVariable in query.filters"
+              <div class="query-filters form-group-covariable"  ng-repeat="filterVariable in query.filters"
                    id="query-filter{{$index}}">
                 <input type="text"
-                       ng-value="getDataByCode(filterVariables,filterVariable.variable.code).label"
+                       ng-value="getDataByCode(filterVariables,filterVariable.code).label"
                        ng-click="activateGroup($event)"
                        readonly="readonly"
                 />
@@ -146,10 +146,22 @@
                 <div class="form-group-select">
                   <criteria-chained-select groups="groups"
                                            variables="filterVariables"
-                                           criteria="filterVariable.variable"
+                                           criteria="query.filters[$index]"
                                            remove-event="removeFilter{{$index}}"
                                            focus-event="focusFilter{{$index}}"
                                            class="form-group-select"></criteria-chained-select>
+                  <!--criteria-chained-select groups="groups"
+                                           variables="coVariables"
+                                           criteria="query.coVariables[$index]"
+                                           remove-event="removeCovariable{{$index}}"
+                                           focus-event="focusCovariable{{$index}}"
+                                           class="form-group-select"></criteria-chained-select>
+                  <criteria-chained-select groups="groups"
+                                           variables="filterVariables"
+                                           criteria="filterVariable.variable"
+                                           remove-event="removeFilter{{$index}}"
+                                           focus-event="focusFilter{{$index}}"
+                                           class="form-group-select"></criteria-chained-select-->
                 </div>
 
               </div>
