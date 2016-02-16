@@ -28,34 +28,6 @@ angular.module('chuvApp.models').controller('CriteriaController', ['$scope', '$s
       }
     };
 
-
-    /**
-     *
-     * @param model
-     */
-    $scope.loadResources = function (model) {
-      if ($stateParams.slug !== undefined) {
-        $scope.initDesign();
-      }
-
-      Variable.query()
-        .$promise.then(function (allVariables) {
-          $scope.allVariables = _.sortBy(allVariables,"label");
-          $scope.variables = filterFilter($scope.allVariables, {isVariable: true});
-          $scope.groupingVariables = filterFilter($scope.allVariables, {isGrouping: true});
-          $scope.coVariables = filterFilter($scope.allVariables, {isCovariable: true});
-          $scope.filterVariables = filterFilter($scope.allVariables, {isFilter: true});
-          return Group.get().$promise;
-        })
-        .then(function (group) {
-          $scope.groups = group.groups;
-          _.extend($scope.query, model.query);
-          if ($stateParams.slug === undefined) {
-            $scope.initDesign();
-          }
-        });
-    };
-
     /**
      * add item in list
      */

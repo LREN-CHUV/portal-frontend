@@ -6,7 +6,9 @@
 
 angular.module('chuvApp.models').controller('EstimationController',['$scope', '$q', '$http', '$modal', function($scope, $q, $http, $modal) {
 
-  $scope.chosen_estimations = {};
+  $scope.shared = {
+    chosen_estimation: null
+  };
 
   $scope.possible_estimations = [{
     id: "glr",
@@ -19,40 +21,26 @@ angular.module('chuvApp.models').controller('EstimationController',['$scope', '$
     label: "Genetic Model"
   }];
 
-  $scope.can_estimate_model = function () {
-    return Object.keys($scope.chosen_estimations).length > 0;
-  };
-
   $scope.estimate_model = function () {
-    $scope.loading_estimations = true;
+    $scope.loading_estimation = true;
 
     var child_scope = $scope.$new();
-    child_scope.estimations = {};
     child_scope.parametrization = {};
     child_scope.help_is_open = true;
-    child_scope.parametrization_is_correct = function (estimation_id) {
+    child_scope.parametrization_is_correct = function () {
       return _.all(
-        child_scope.estimations[estimation_id].parameters,
+        child_scope.estimation.parameters,
         function (parameter) { return !!child_scope.parametrization[parameter.id] }
       )
     };
 
-    $q.all(
-      Object
-        .keys($scope.chosen_estimations)
-        .map(function (estimation_id) {
-          var promise = $http.get("/mocks/estimations/" + estimation_id + ".json");
-          promise.then(function (result) {
-            child_scope.estimations[estimation_id] = result.data;
-          });
-          return promise;
-        })
-    ).then(
-      function () {
+    $http.get("/mocks/estimations/" + $scope.shared.chosen_estimation + ".json")
+      .then(function (result) {
         // all get succeeded
-        $scope.loading_estimations = false;
+        child_scope.estimation = result.data;
+        $scope.loading_estimation = false;
 
-        child_scope.run_estimation = function (estimation_id) {
+        child_scope.run_estimation = function () {
           $http
             .get("/mocks/estimations/result.json")
             .then(function (result) {
@@ -69,7 +57,7 @@ angular.module('chuvApp.models').controller('EstimationController',['$scope', '$
       },
       function () {
         // fail
-        $scope.loading_estimations = false;
+        $scope.loading_estimation = false;
 
         $modal.open({
           size: "md",

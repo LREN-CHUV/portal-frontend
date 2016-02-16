@@ -4,8 +4,8 @@
 
 'use strict';
 angular.module('chuvApp.models')
-  .controller('ExploreController',['$scope', '$location', "$state", 'Variable', 'Group',
-    function($scope, $location, $state, Variable, Group){
+  .controller('ExploreController',['$scope', '$location', "$state", '$timeout', 'Variable', 'Group',
+    function($scope, $location, $state, $timeout, Variable, Group){
 
       function make_configuration (config_name) {
         var config = {},
@@ -57,6 +57,10 @@ angular.module('chuvApp.models')
         if (variable.code in config) {
           delete config[variable.code];
         } else {
+          if (type == 'variable') {
+            config = $scope.configuration[type] = {};
+          }
+
           // remove from all other configuration
           Object.keys($scope.configuration).forEach(function (var_config) {
             if (variable.code in $scope.configuration[var_config]) {
@@ -93,10 +97,10 @@ angular.module('chuvApp.models')
         $location.url(
           "/review?execute=true&"
           + Object.keys($scope.configuration).map(function (category) {
-              return category
-                + "="
-                + Object.keys($scope.configuration[category]).join(",");
-            }).join("&")
+            return category
+              + "="
+              + Object.keys($scope.configuration[category]).join(",");
+          }).join("&")
         );
       };
 
@@ -139,4 +143,5 @@ angular.module('chuvApp.models')
           }
         )
       });
-    }]);
+    }
+  ]);

@@ -3,8 +3,10 @@
  */
 
 'use strict';
-angular.module('chuvApp.models').controller('ReviewController',['$scope','$translatePartialLoader','$translate','$rootScope','Model','$stateParams','ChartUtil',"$state",'$log','User','$location',
-  function($scope, $translatePartialLoader, $translate, $rootScope, Model, $stateParams, ChartUtil, $state, $log, User, $location) {
+angular.module('chuvApp.models').controller('ReviewController',['$scope','$translatePartialLoader','$translate','Model','$stateParams','ChartUtil',"$state",'$log','User','$location', '$modal', '$timeout', '$filter', 'Variable', 'Group',
+  function($scope, $translatePartialLoader, $translate, Model, $stateParams, ChartUtil, $state, $log, User, $location, $modal, $timeout, $filter, Variable, Group) {
+
+    var filterFilter = $filter("filter");
 
     $translatePartialLoader.addPart('model');
     $translate.refresh();
@@ -15,7 +17,7 @@ angular.module('chuvApp.models').controller('ReviewController',['$scope','$trans
     $scope.chartConfig = {
       options: {
         chart: {
-          type: 'boxplot',
+          type: 'heatmap',
           zoomType: 'x'
         }
       },
@@ -141,9 +143,109 @@ angular.module('chuvApp.models').controller('ReviewController',['$scope','$trans
     };
 
     /**
+     * Returns a promise that resolves when filterQuery is set.
+     */
+    $scope.configureFilterQuery = function () {
+      var childScope = $scope.$new();
+
+      var modal = $modal.open({
+        templateUrl: 'scripts/app/models/review/filter-query-modal.html',
+        scope: childScope,
+        size: 'lg',
+        controller: function () {
+          childScope.contructQB = function () {
+
+            var filterVariables = $scope.query.filters
+              .concat($scope.query.coVariables)
+              .concat($scope.query.groupings)
+              .map(function (variable) {
+                variable = $scope.allVariables[variable.code];
+                return {
+                  id: variable.code,
+                  label: variable.label,
+                  type: 'double',
+                  operators: ['equal', 'not_equal', 'less', 'greater', 'between', 'not_between']
+                }
+              });
+
+            $(".query-builder").queryBuilder({
+              plugins: ['bt-tooltip-errors'],
+              filters: filterVariables,
+              allow_empty: true,
+              inputs_separator: " - ",
+              rules: $scope.query.filterQuery,
+              icons: {
+                add_group: "ti ti-plus",
+                add_rule: "ti ti-plus",
+                remove_group: "ti ti-close",
+                remove_rule: "ti ti-close",
+                error: "ti ti-na"
+              }
+            });
+          };
+
+          childScope.validateQuery = function () {
+            var qb = $(".query-builder");
+            if(qb.queryBuilder('validate')) {
+              $scope.query.filterQuery = qb.queryBuilder('getRules');
+              // ok this is not to be used in the DB, but is intented as a textual representation
+              $scope.query.textQuery = qb.queryBuilder('getSQL', false, false).sql;
+              qb.queryBuilder('destroy');
+              modal.close();
+            }
+          }
+        }
+      });
+
+      // do not unwrap this: childScope.contructQB is set later.
+      modal.opened.then(function () {
+        $timeout(
+          childScope.contructQB,
+          300
+        )
+      });
+      return modal.result;
+    };
+
+    $scope.executeQuery = function () {
+      $scope.query.filters.length && !$scope.query.filterQuery
+        ? $scope.configureFilterQuery().then(doExecuteQuery)
+        : doExecuteQuery();
+    };
+
+    /**
+     *
+     * @param model
+     */
+    $scope.loadResources = function (model) {
+      if ($stateParams.slug !== undefined) {
+        //$scope.initDesign();
+      }
+
+      Variable.query()
+        .$promise.then(function (allVariables) {
+          allVariables = _.sortBy(allVariables,"label");
+          $scope.variables = filterFilter(allVariables, {isVariable: true});
+          $scope.groupingVariables = filterFilter(allVariables, {isGrouping: true});
+          $scope.coVariables = filterFilter(allVariables, {isCovariable: true});
+          $scope.filterVariables = filterFilter(allVariables, {isFilter: true});
+
+          $scope.allVariables = _.indexBy(allVariables, 'code');
+          return Group.get().$promise;
+        })
+        .then(function (group) {
+          $scope.groups = group.groups;
+          _.extend($scope.query, model.query);
+          if ($stateParams.slug === undefined) {
+            //$scope.initDesign();
+          }
+        });
+    };
+
+    /**
      * Execute a search query
      */
-    $scope.executeQuery = function () {
+    function doExecuteQuery() {
       var query = angular.copy($scope.query);
       //check query
       var error = "";
@@ -205,9 +307,9 @@ angular.module('chuvApp.models').controller('ReviewController',['$scope','$trans
 
       // wait for data to be there before executing query.
       var watchOnce = $scope.$watchGroup(
-        ["query.variables", "query.groupings", "query.coVariables"],
+        ["query.variables", "query.groupings", "query.coVariables", "variables"],
         function (newValue) {
-          if (!newValue[0] || !newValue[1] || !newValue[2]) return;
+          if (!_.all(newValue)) return;
 
           // unbind watch
           watchOnce();
@@ -218,4 +320,43 @@ angular.module('chuvApp.models').controller('ReviewController',['$scope','$trans
 
     }
 
-  }]);
+    /**
+     * programmatically redirects to the review model, with the current model.
+     */
+    $scope.go_to_explore = function () {
+      var should_configure = $scope.query.variables &&
+        $scope.query.groupings &&
+        $scope.query.coVariables &&
+        $scope.query.filters &&
+        ($scope.query.variables.length ||
+        $scope.query.groupings.length ||
+        $scope.query.filters.length ||
+        $scope.query.coVariables.length);
+
+      if (!should_configure) {
+        return $location.url("/explore")
+      }
+
+      function unmap_category(category) {
+        return $scope.query[category]
+          .map(function (variable) { return variable.code; })
+          .join(",");
+      }
+
+      var query = {
+        variable: unmap_category("variables"),
+        covariable: unmap_category("coVariables"),
+        grouping: unmap_category("groupings"),
+        filter: unmap_category("filters")
+      };
+
+      $location.url(
+        "/explore?configure=true&"
+        + Object.keys(query).map(function (category) {
+          return category + "=" + query[category]
+        }).join("&"));
+    };
+
+
+  }
+]);

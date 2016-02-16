@@ -1,49 +1,50 @@
 <!doctype html>
 <html class="no-js">
 <head>
-    <meta charset="utf-8">
-    <title>Brain Project Portal</title>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-touch-fullscreen" content="yes">
-    <meta name="description" content="Human Brain Project">
+  <meta charset="utf-8">
+  <title>Brain Project Portal</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-touch-fullscreen" content="yes">
+  <meta name="description" content="Human Brain Project">
 
-    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700|EB+Garamond|Open+Sans+Condensed:300,700' rel='stylesheet' type='text/css'>
-    <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+  <link href='//fonts.googleapis.com/css?family=Open+Sans:400,700|EB+Garamond|Open+Sans+Condensed:300,700' rel='stylesheet' type='text/css'>
+  <link href='//fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
 
-    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-    <!-- build:css(app) styles/vendor.css -->
-    <!-- bower:css -->
-    <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.css" />
-    <link rel="stylesheet" href="bower_components/themify-icons/themify-icons.css" />
-    <link rel="stylesheet" href="bower_components/themify-icons/ie7/ie7.css" />
-    <link rel="stylesheet" href="bower_components/angular-bootstrap-colorpicker/css/colorpicker.css" />
-    <link rel="stylesheet" href="bower_components/iCheck/skins/all.css" />
-    <link rel="stylesheet" href="bower_components/angular-ui-select/dist/select.min.css">
-    <link rel="stylesheet" href="bower_components/gridster/dist/jquery.gridster.css">
-    <link rel="stylesheet" href="bower_components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css" />
+  <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+  <!-- build:css(app) styles/vendor.css -->
+  <!-- bower:css -->
+  <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.css" />
+  <link rel="stylesheet" href="bower_components/themify-icons/themify-icons.css" />
+  <link rel="stylesheet" href="bower_components/themify-icons/ie7/ie7.css" />
+  <link rel="stylesheet" href="bower_components/angular-bootstrap-colorpicker/css/colorpicker.css" />
+  <link rel="stylesheet" href="bower_components/iCheck/skins/all.css" />
+  <link rel="stylesheet" href="bower_components/angular-ui-select/dist/select.min.css">
+  <link rel="stylesheet" href="bower_components/gridster/dist/jquery.gridster.css">
+  <link rel="stylesheet" href="bower_components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css" />
+  <link rel="stylesheet" href="bower_components/jQuery-QueryBuilder/dist/css/query-builder.default.min.css" />
 
-    <!-- endbower -->
-    <!-- endbuild -->
+  <!-- endbower -->
+  <!-- endbuild -->
 
-    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/select2/3.4.5/select2.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/select2/3.4.5/select2.css">
 
-    <!-- build:css(.tmp) styles/main.css -->
-    <link rel="stylesheet" href="styles/css/custom.css" />
-    <!--<link rel="stylesheet" href="styles/css/styles.css" /> -->
-    <!-- endbuild -->
+  <!-- build:css(.tmp) styles/main.css -->
+  <link rel="stylesheet" href="styles/css/custom.css" />
+  <!--<link rel="stylesheet" href="styles/css/styles.css" /> -->
+  <!-- endbuild -->
 
-    <!-- prochtml:remove:dist -->
-    <link href="styles/less/styles.less" rel="stylesheet/less" media="all">
-    <!-- /prochtml -->
+  <!-- prochtml:remove:dist -->
+  <link href="styles/less/styles.less" rel="stylesheet/less" media="all">
+  <!-- /prochtml -->
 
-    <!-- prochtml:remove:dist -->
-    <script type="text/javascript">less = { env: 'development'};</script>
-    <script type="text/javascript" src="bower_components/less/dist/less.js"></script>
-    <!-- /prochtml -->
+  <!-- prochtml:remove:dist -->
+  <script type="text/javascript">less = { env: 'development'};</script>
+  <script type="text/javascript" src="bower_components/less/dist/less.js"></script>
+  <!-- /prochtml -->
 </head>
 <body ng-app="chuvApp" class="ng-cloak" ng-cloak to-top-on-load>
 
@@ -51,37 +52,37 @@
 <header id="topnav" class="navbar navbar-default navbar-fixed-top fixed" change-on-scroll role="banner"
         ng-include="'scripts/app/header/header.html'" ng-controller="HeaderController" ng-show="!isNewVisitor()"></header>
 <div id="wrapper">
-    <div id="layout-static">
-        <div class="static-content-wrapper">
-            <div class="static-content">
-                <div class="page-content" ui-view class="mainview-animation animated"></div>
+  <div id="layout-static">
+    <div class="static-content-wrapper">
+      <div class="static-content">
+        <div class="page-content" ui-view class="mainview-animation animated"></div>
+      </div>
+      <footer id="footer" role="contentinfo" ng-cloak ng-show="!isNewVisitor()">
+        <div class="clearfix container-fluid">
+          <div class="row">
+            <ul class="list-unstyled list-inline col-md-6">
+              <li><h6 class="copyright">&copy; 2015 Human Brain Project. All right reserved</h6></li>
+            </ul>
+            <div class="col-md-6 text-right">
+              <a href="//www.virtua.ch/" targe="_blank">Powered by V//</a>
             </div>
-            <footer id="footer" role="contentinfo" ng-cloak ng-show="!isNewVisitor()">
-                <div class="clearfix container-fluid">
-                    <div class="row">
-                        <ul class="list-unstyled list-inline col-md-6">
-                            <li><h6 class="copyright">&copy; 2015 Human Brain Project. All right reserved</h6></li>
-                        </ul>
-                        <div class="col-md-6 text-right">
-                            <a href="http://www.virtua.ch/" targe="_blank">Powered by V//</a>
-                        </div>
-                    </div>
-                </div>
-            </footer>
+          </div>
         </div>
+      </footer>
     </div>
+  </div>
 </div>
 
 
 <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
 <script>
-    /*!function(A,n,g,u,l,a,r){A.GoogleAnalyticsObject=l,A[l]=A[l]||function(){
-     (A[l].q=A[l].q||[]).push(arguments)},A[l].l=+new Date,a=n.createElement(g),
-     r=n.getElementsByTagName(g)[0],a.src=u,r.parentNode.insertBefore(a,r)
-     }(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  /*!function(A,n,g,u,l,a,r){A.GoogleAnalyticsObject=l,A[l]=A[l]||function(){
+   (A[l].q=A[l].q||[]).push(arguments)},A[l].l=+new Date,a=n.createElement(g),
+   r=n.getElementsByTagName(g)[0],a.src=u,r.parentNode.insertBefore(a,r)
+   }(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-     ga('create', 'UA-XXXXX-X');
-     ga('send', 'pageview');*/
+   ga('create', 'UA-XXXXX-X');
+   ga('send', 'pageview');*/
 </script>
 
 <!-- build:js(app) scripts/vendor.js -->
@@ -128,6 +129,7 @@
 <script src="bower_components/image-map-resizer/js/imageMapResizer.min.js"></script>
 <script src="bower_components/showdown/src/showdown.js"></script>
 <script src="bower_components/angular-markdown-directive/markdown.js"></script>
+<script src="bower_components/jQuery-QueryBuilder/dist/js/query-builder.standalone.js"></script>
 <script src="bower_components/d3/d3.js"></script>
 <!-- endbower -->
 <script type='text/javascript' src='styles/plugins/wijets/wijets.js'></script>
@@ -246,7 +248,7 @@
 
 <!-- endbuild -->
 
-<script type="text/javascript" src="https://www.dropbox.com/static/api/2/dropins.js" id="dropboxjs" data-app-key="7wew0rj0gh2qcik"></script>
-<script type="text/javascript" src="http://code.highcharts.com/mapdata/custom/world.js"></script>
+<script type="text/javascript" src="//www.dropbox.com/static/api/2/dropins.js" id="dropboxjs" data-app-key="7wew0rj0gh2qcik"></script>
+<script type="text/javascript" src="//code.highcharts.com/mapdata/custom/world.js"></script>
 </body>
 </html>

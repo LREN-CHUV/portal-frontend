@@ -5,7 +5,7 @@
       <div class="tile-body">
         <ul class="list-graphs text-left">
           <li>
-            <a href="" ng-click="changeGraphType($event,'boxplot')" ng-class="{active : chartConfig.options.chart.type == 'boxplot'}"><i class="ti ti-custom-bar-chart graph-plot"></i></a>
+            <a href="" ng-click="changeGraphType($event,'heatmap')" ng-class="{active : chartConfig.options.chart.type == 'heatmap'}"><i class="ti ti-custom-bar-chart graph-plot"></i></a>
           </li>
           <li>
             <a href="" ng-click="changeGraphType($event,'column')" ng-class="{active : chartConfig.options.chart.type == 'column'}"><i class="ti ti-custom-bar-chart graph-column"></i></a>
@@ -50,17 +50,6 @@
         </ul>
       </div>
 
-      <div class="tile-heading"><span>Colors</span></div>
-      <div class="tile-body">
-        <ul class="list-colors">
-          <li>
-            <a href="" ng-click="changeColor('blue',$event)" style="background-color: #00bcd4" class="active"></a>
-          </li>
-          <li>
-            <a href="" ng-click="changeColor('green',$event)" style="background-color: #8bc34a"></a>
-          </li>
-        </ul>
-      </div>
     </div>
   </div>
 </div>

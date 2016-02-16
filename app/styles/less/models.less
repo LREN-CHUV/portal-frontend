@@ -87,6 +87,16 @@
 }
 
 .review {
+  margin-top: 10px;
+
+  // this is the explore button
+  > .btn-round {
+position: absolute;
+    z-index: 1000;
+    left: ~"calc(50% - 45px)";
+    top: -30px;
+  }
+
   .toolbar-container.toolbar-container {
     margin-left: -50px;
     margin-right: -50px;
@@ -94,5 +104,33 @@
     padding-right: 50px;
     width: auto;
     position: static;
+  }
+
+  // override the default styling of querybuilderjs
+
+  // this hides the "add group" button of subgroups so that we can have only 2 levels of filtering
+  .query-builder .rules-group-body .rules-group-header > .group-actions > .btn:nth-child(2) {
+    display: none;
+  }
+}
+
+// reset all panel styles for collapser
+.collapser > .panel-group {
+   margin-bottom: 0;
+
+  > .panel {
+    background-color: initial;
+    border-color: initial;
+    margin: initial;
+    box-shadow: initial;
+
+    > .panel-heading {
+      display: none;
+    }
+
+    > .panel-collapse > .panel-body {
+      background-color: initial;
+      padding: initial;
+    }
   }
 }

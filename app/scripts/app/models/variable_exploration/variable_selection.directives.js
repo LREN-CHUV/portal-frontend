@@ -424,9 +424,16 @@ angular.module('chuvApp.models')
         getFocusedVariable: "=",
         configuration: "="
       },
-      controller: ["$scope", function ($scope) {
+      controller: ["$scope", '$location', '$timeout', function ($scope, $location, $timeout) {
 
         $scope.do_configure = false;
+
+        // configure panel starts hidden, and then reveals itself if needed.
+        $timeout(
+          function () {
+            $scope.do_configure = !!$location.search().configure;
+          }
+        );
 
         $scope.set_configure = function () { $scope.do_configure = true; };
 

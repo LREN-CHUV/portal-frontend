@@ -150,31 +150,14 @@
                                            remove-event="removeFilter{{$index}}"
                                            focus-event="focusFilter{{$index}}"
                                            class="form-group-select"></criteria-chained-select>
-                  <div class="form-group-filter row">
-                    <div class="col-md-5">
-                      <label>MIN</label>
-                      <input type="text"
-                             style=" background-color: white;"
-                             placeholder="min" ng-model="filterVariable.values[0]"
-                             ng-disabled="filterVariable.variable === undefined"
-                             ng-change="setFilterValue(filterVariable,0);setOperator(filterVariable)">
-                    </div>
-                    <div class="col-md-2 text-center">
-                      <label>&nbsp;</label>
-                      TO
-                    </div>
-                    <div class="col-md-5">
-                      <label>MAX</label>
-                      <input type="text"
-                             placeholder="max" ng-model="filterVariable.values[1]"
-                             style=" background-color: white;"
-                             ng-disabled="query.filters[$index].variable === undefined || filterVariable.values[0]=== undefined"
-                             ng-change="setFilterValue(filterVariable,1);setOperator(filterVariable)">
-                    </div>
-                  </div>
                 </div>
+
               </div>
+              <div ng-bind="query.textQuery"></div>
               <div class="form-action">
+                <a href="" ng-click="configureFilterQuery()">
+                  <i class="ti ti-panel"></i>
+                </a>
                 <a href="" ng-click="addItem(query.filters,{operator:'',values:[]},'query-filters')">
                   <i class="ti ti-plus"></i>
                 </a>
@@ -189,6 +172,7 @@
     </div>
   </div>
 
-  <rounded-button label="{{'common.button.execute' | translate}}" icon-class="ti {{ loading_model ? 'ti-reload ti-spin' : 'ti-arrow-down' }}"
+  <rounded-button label="{{'common.button.execute' | translate}}"
+                  icon-class="ti {{ loading_model ? 'ti-reload ti-spin reverse-direction' : 'ti-arrow-down' }}"
                   on-click="executeQuery()"></rounded-button>
 </div>

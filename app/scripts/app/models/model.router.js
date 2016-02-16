@@ -17,5 +17,16 @@ angular.module('chuvApp.models').config(['$stateProvider',function($stateProvide
             url: '/review',
             templateUrl: 'scripts/app/models/review/review.html',
             controller:'ReviewController'
+        })
+        .state('models-edit', {
+            url: '/models/:slug/:isCopy',
+            templateUrl: 'scripts/app/models/review/review.html',
+            controller:'ReviewController',
+            resolve: {
+                translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
+                    $translatePartialLoader.addPart('model');
+                    return $translate.refresh();
+                }]
+            }
         });
 }]);

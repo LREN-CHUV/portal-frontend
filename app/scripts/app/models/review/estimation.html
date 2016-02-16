@@ -7,8 +7,10 @@
       <div class="panel-body">
         <div ng-repeat="possible_estimation in possible_estimations">
           <label>
-            <input type="checkbox" id="estimation_{{ possible_estimation.id }}"
-                   ng-model="chosen_estimations[possible_estimation.id]">
+            <input type="radio" id="estimation_{{ possible_estimation.id }}"
+                   name="chosen_estimation"
+                   value="{{ possible_estimation.id }}"
+                   ng-model="shared.chosen_estimation">
             <span ng-bind="possible_estimation.label"></span>
           </label>
         </div>
@@ -16,7 +18,7 @@
 
       <button type="button"
               class="btn-round"
-              ng-if="can_estimate_model()"
+              ng-if="!! shared.chosen_estimation"
               style="bottom: -45px"
               ng-click="estimate_model()">
         <span>

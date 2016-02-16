@@ -6,7 +6,7 @@
 
 angular.module('chuvApp.models').controller('ConfigurationController',['$scope','$rootScope','ChartUtil',function($scope,$rootScope,ChartUtil){
 
-  var currentColors = ChartUtil.getChartColor()['blue'];
+  //var currentColors = ChartUtil.getChartColor()['blue'];
 
   /**
    * Triggered when the search is successful and complete
@@ -25,8 +25,8 @@ angular.module('chuvApp.models').controller('ConfigurationController',['$scope',
     if(type === "pie"){
       $scope.chartConfigCopy = angular.copy($scope.chartConfig);
       ChartUtil.buildPieChart($scope.chartConfig,$scope.dataset);
-    } else if (type === "boxplot" ) {
-      ChartUtil.buildBoxplotChart($scope.chartConfig,$scope.dataset);
+    } else if (type === "heatmap" ) {
+      ChartUtil.buildDesignMatrix($scope.chartConfig,$scope.dataset);
     } else if ($scope.chartConfig.options.chart.type === "pie" ) {
       $scope.chartConfig.series = angular.copy($scope.chartConfigCopy.series);
       ChartUtil.buildStandardChart($scope.chartConfig,$scope.dataset);
@@ -35,7 +35,6 @@ angular.module('chuvApp.models').controller('ConfigurationController',['$scope',
     $('.list-graphs').find('a').removeClass('active');
     $($event.currentTarget).addClass("active");
     $scope.chartConfig.options.chart.type = type;
-    $scope.refreshColor();
   };
 
   /**
@@ -63,13 +62,12 @@ angular.module('chuvApp.models').controller('ConfigurationController',['$scope',
 
     if ($scope.chartConfig.options.chart.type === "pie") {
       ChartUtil.buildPieChart($scope.chartConfig, $scope.dataset);
-    } else if ($scope.chartConfig.options.chart.type === "boxplot") {
-      ChartUtil.buildBoxplotChart($scope.chartConfig, $scope.dataset);
+    } else if ($scope.chartConfig.options.chart.type === "heatmap") {
+      ChartUtil.buildDesignMatrix($scope.chartConfig, $scope.dataset);
     } else {
       ChartUtil.buildStandardChart($scope.chartConfig,$scope.dataset);
       $scope.chartConfigCopy = angular.copy($scope.chartConfig);
     }
-    $scope.refreshColor();
   };
 
 
@@ -81,13 +79,12 @@ angular.module('chuvApp.models').controller('ConfigurationController',['$scope',
     $scope.chartConfig.xAxis.code = axeCode;
     if ($scope.chartConfig.options.chart.type === "pie"){
       ChartUtil.buildPieChart($scope.chartConfig,$scope.dataset);
-    } else if ($scope.chartConfig.options.chart.type === "boxplot") {
-      ChartUtil.buildBoxplotChart($scope.chartConfig, $scope.dataset);
+    } else if ($scope.chartConfig.options.chart.type === "heatmap") {
+      ChartUtil.buildDesignMatrix($scope.chartConfig, $scope.dataset);
     } else {
       ChartUtil.buildStandardChart($scope.chartConfig,$scope.dataset);
       $scope.chartConfigCopy = angular.copy($scope.chartConfig);
     }
-    $scope.refreshColor();
   };
 
   /**
@@ -96,30 +93,9 @@ angular.module('chuvApp.models').controller('ConfigurationController',['$scope',
    * @returns {*}
    */
   $scope.getSeriesByCode = function(axeCode){
-    var serie;
-    serie = _.find($scope.chartConfig.series,{code:axeCode});
-    return serie;
-  };
-
-  /**
-   * Change colors of the graph series
-   * @param color new color theme
-   * @param event current click event
-   */
-  $scope.changeColor = function(color,event){
-    currentColors = ChartUtil.getChartColor()[color];
-    $scope.refreshColor();
-    $('ul.list-colors').find('a').removeClass('active');
-    $(event.currentTarget).addClass('active');
-  };
-
-  /**
-   * Refresh series color
-   */
-  $scope.refreshColor = function() {
-    angular.forEach($scope.chartConfig.series,function(serie,index) {
-      serie.color = currentColors[index];
-    });
+    return $scope.chartConfig.options.chart.type === "heatmap" ?
+      ($scope.chartConfig.xAxis.categories.indexOf(axeCode) !== -1 ? $scope.chartConfig.series[0] : undefined) :
+      _.find($scope.chartConfig.series,{code:axeCode});
   };
 
 }]);

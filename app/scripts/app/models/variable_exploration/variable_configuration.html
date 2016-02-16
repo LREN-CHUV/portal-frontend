@@ -5,7 +5,6 @@
 
   <div class="panel-heading">
     <button ng-click="setVariableSelectedAs('variable', getFocusedVariable())"
-            ng-class="getFocusedVariable().isVariable ? '' : 'disabled'"
             ng-bind="variable_is_used_as('variable') ? 'Remove as Variable' : 'Use as Variable'"
             class="btn variable"></button>
     <button ng-click="setVariableSelectedAs('grouping', getFocusedVariable())"
@@ -13,11 +12,9 @@
             ng-bind="variable_is_used_as('grouping') ? 'Remove as Grouping' : 'Use as Grouping'"
             class="btn grouping"></button>
     <button ng-click="setVariableSelectedAs('covariable', getFocusedVariable())"
-            ng-class="getFocusedVariable().isCovariable ? '' : 'disabled'"
             ng-bind="variable_is_used_as('covariable') ? 'Remove as Covariable' : 'Use as Covariable'"
             class="btn covariable"></button>
     <button ng-click="setVariableSelectedAs('filter', getFocusedVariable())"
-            ng-class="getFocusedVariable().isFilter ? '' : 'disabled'"
             ng-bind="variable_is_used_as('filter') ? 'Remove as Filter' : 'Use as Filter'"
             class="btn filter"></button>
   </div>
