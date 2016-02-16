@@ -35,7 +35,7 @@ angular.module('chuvApp.users')
       },
 
       get: function (username) {
-        $http.get("/users/"+username).success(function(data) {
+        $http.get(backendUrl+"/users/"+username).success(function(data) {
           return data;
         }).error(function() {
         return null;
