@@ -22,6 +22,7 @@ angular.module('chuvApp.home').controller('HomeController',['$scope','$translate
      * Search articles with current selected filters
      */
     $scope.init = function () {
+        $http.get(backendUrl+'/user');
         $http.get(backendUrl+"/stats").success(
           function (response) {
             $scope.datas = response;
