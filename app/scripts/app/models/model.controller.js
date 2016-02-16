@@ -25,7 +25,7 @@ angular.module('chuvApp.models')
        * @returns {boolean}
        */
       $scope.isMine = function (obj) {
-        return obj.createdBy.id == User.current().id;
+        return obj.createdBy.username == User.current().username;
       };
 
       Model.getList(params).then(function (response) {

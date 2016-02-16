@@ -41,11 +41,11 @@ angular.module('chuvApp.articles')
             "importcss media nonbreaking noneditable pagebreak paste preview print save searchreplace spellchecker " +
             "tabfocus table template textcolor textpattern visualblocks visualchars wordcount eqneditor",
         external_plugins: {
-          "eqneditor": "/mip/libs/tinymce/plugins/eqneditor/plugin.min.js"
+          "eqneditor": "../../libs/tinymce/plugins/eqneditor/plugin.min.js"
         },
         language: $scope.getLanguageCodeForTinyMCE(),
         paste_data_images: true,
-        language_url: "/mip/libs/tinymce/langs/" + $scope.getLanguageCodeForTinyMCE() + ".js",
+        language_url: "libs/tinymce/langs/" + $scope.getLanguageCodeForTinyMCE() + ".js",
         height: 500
       };
 
@@ -168,7 +168,7 @@ angular.module('chuvApp.articles').controller('ArticlesController', ['$scope','A
      * @returns {boolean}
      */
     $scope.isMine = function(obj) {
-      return User.hasCurrent() ? obj.createdBy.id == User.current().id : false;
+      return User.hasCurrent() ? obj.createdBy.username == User.current().username : false;
     };
 
     $scope.isAuthorized = function(article){

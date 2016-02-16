@@ -1,9 +1,9 @@
 /**
  * Created by Michael DESIGAUD on 09/09/2015.
  */
-angular.module('chuvApp.profile').controller('ProfileController', ['$scope', '$translatePartialLoader', '$translate', '$stateParams','User',
-  function ($scope, $translatePartialLoader, $translate, $stateParams, User) {
+angular.module('chuvApp.profile').controller('ProfileController', ['$scope', '$translatePartialLoader', '$translate', '$stateParams','User','$http','backendUrl',
+  function ($scope, $translatePartialLoader, $translate, $stateParams, User, $http, backendUrl) {
 
-    $scope.user = User.current();
+    $http.get(backendUrl+"/users/"+User.current().username).success(function(data) {$scope.user = data;});
 
 }]);

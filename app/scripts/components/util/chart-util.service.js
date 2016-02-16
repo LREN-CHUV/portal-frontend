@@ -9,7 +9,7 @@ angular.module('chuvApp.util')
     }
 
     return function (config, dataset) {
-        
+
         var result = {};
 
         return ({

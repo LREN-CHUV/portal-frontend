@@ -1,20 +1,20 @@
 /**
  * Created by Michael DESIGAUD on 11/08/2015.
  */
-angular.module('chuvApp.home').controller('HomeController',['$scope','$translatePartialLoader','$translate','WidgetService','$rootScope','User','$cookies','Model','ChartUtil','$q',
-  function($scope,$translatePartialLoader,$translate,WidgetService,$rootScope,User,$cookies,Model,ChartUtil,$q){
+angular.module('chuvApp.home').controller('HomeController',['$scope','$translatePartialLoader','$translate','WidgetService','$rootScope','User','$cookies','Model','ChartUtil','$q','$http', 'backendUrl',
+  function($scope,$translatePartialLoader,$translate,WidgetService,$rootScope,User,$cookies,Model,ChartUtil,$q,$http, backendUrl){
 
     $translatePartialLoader.addPart('home');
     $translatePartialLoader.addPart('articles');
     $translatePartialLoader.addPart('requests');
     $translate.refresh();
 
-    $scope.datas = {
+    /*$scope.datas = {
       scientists: 14,
       articles: 73,
       patients: 3721,
       teams: 126
-    };
+    };*/
 
     $scope.models = [];
 
@@ -22,16 +22,22 @@ angular.module('chuvApp.home').controller('HomeController',['$scope','$translate
      * Search articles with current selected filters
      */
     $scope.init = function () {
-      var introTxtSelector = '.intro-txt';
-      $scope.tlIntro = new TimelineMax({ paused : true });
-      $scope.tlIntro .to($('.intro'), 0.6, { y : '-100%', scale : .4, autoAlpha : 0, ease : Power4.easeIn })
-        .to($(introTxtSelector), 0.6, { y : '0%', scale : 1, autoAlpha : 1, ease : Power4.easeOut });
+        $http.get(backendUrl+'/user');
+        $http.get(backendUrl+"/stats").success(
+          function (response) {
+            $scope.datas = response;
+          }
+        );
+        var introTxtSelector = '.intro-txt';
+        $scope.tlIntro = new TimelineMax({ paused : true });
+        $scope.tlIntro .to($('.intro'), 0.6, { y : '-100%', scale : .4, autoAlpha : 0, ease : Power4.easeIn })
+            .to($(introTxtSelector), 0.6, { y : '0%', scale : 1, autoAlpha : 1, ease : Power4.easeOut });
 
-      $scope.tlIntro2 = new TimelineMax({ paused : true });
-      $scope.tlIntro2.to($(introTxtSelector), 0.6, { y : '-100%', scale : .4, autoAlpha : 0, ease : Power4.easeIn }, 'start')
-        .to($('.trigger-intro'), 0.3, { autoAlpha : 0 }, 'start')
-        .to($('.trigger-close-intro'), 0.3, { autoAlpha : 0 }, 'start')
-        .to($('.intro-container'), 0.2, { height: 0 }, '-=0.2');
+        $scope.tlIntro2 = new TimelineMax({ paused : true });
+        $scope.tlIntro2.to($(introTxtSelector), 0.6, { y : '-100%', scale : .4, autoAlpha : 0, ease : Power4.easeIn }, 'start')
+            .to($('.trigger-intro'), 0.3, { autoAlpha : 0 }, 'start')
+            .to($('.trigger-close-intro'), 0.3, { autoAlpha : 0 }, 'start')
+            .to($('.intro-container'), 0.2, { height: 0 }, '-=0.2');
 
       Model.getList({ limit:3, team:0, own:1}).then(function(response){
         $scope.results = response.data;
@@ -74,35 +80,37 @@ angular.module('chuvApp.home').controller('HomeController',['$scope','$translate
           configSet.code = o.code;
           return configSet;
         });
-        ChartUtil.toChartData(model.chartConfig, model.dataset);
+        ChartUtil.toChartData(model.chartConfig,model.dataset);
         deferred.resolve(model);
       });
       return deferred.promise;
     };
 
     $scope.gridsterOpts = {
-      resizable: {
-        enabled: false
-      }
+        resizable: {
+            enabled: false
+        }
     };
 
     $scope.animateIntro = function(){
-      if( !$scope.step2 ) {
-        $scope.tlIntro.play();
-        $scope.step2 = true;
-      }
-      else {
-        $scope.tlIntro2.play();
-        $scope.hideIntro();
-      }
+        if( !$scope.step2 ) {
+            $scope.tlIntro.play();
+            $scope.step2 = true;
+        }
+        else {
+            $scope.tlIntro2.play();
+          $scope.hideIntro();
+        }
     };
 
     $scope.closePanel = function(event){
-      $(event.currentTarget).fadeOut();
-      TweenMax.to($('.intro'), 0.6, { y : '-100%', scale : .4, autoAlpha : 0, ease : Power4.easeIn });
-      $scope.tlIntro2.play();
-      $scope.hideIntro();
+        $(event.currentTarget).fadeOut();
+        TweenMax.to($('.intro'), 0.6, { y : '-100%', scale : .4, autoAlpha : 0, ease : Power4.easeIn });
+        $scope.tlIntro2.play();
+        $scope.hideIntro();
     };
+
+
 
     /**
      * Hide intro and store in cookie
