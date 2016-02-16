@@ -150,21 +150,10 @@
                                            remove-event="removeFilter{{$index}}"
                                            focus-event="focusFilter{{$index}}"
                                            class="form-group-select"></criteria-chained-select>
-                  <!--criteria-chained-select groups="groups"
-                                           variables="coVariables"
-                                           criteria="query.coVariables[$index]"
-                                           remove-event="removeCovariable{{$index}}"
-                                           focus-event="focusCovariable{{$index}}"
-                                           class="form-group-select"></criteria-chained-select>
-                  <criteria-chained-select groups="groups"
-                                           variables="filterVariables"
-                                           criteria="filterVariable.variable"
-                                           remove-event="removeFilter{{$index}}"
-                                           focus-event="focusFilter{{$index}}"
-                                           class="form-group-select"></criteria-chained-select-->
                 </div>
 
               </div>
+              <h3 ng-if="query.textQuery">Your query:</h3>
               <div ng-bind="query.textQuery"></div>
               <div class="form-action">
                 <a href="" ng-click="configureFilterQuery()">

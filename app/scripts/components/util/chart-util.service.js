@@ -1,7 +1,24 @@
 /**
  * Created by Michael DESIGAUD on 12/08/2015.
  */
-angular.module('chuvApp.util').factory('ChartUtil', ['$timeout',function ($timeout) {
+
+angular.module('chuvApp.util')
+  .factory('ChartUtil2', [function () {
+
+    function buildDesignMatrix (config, dataset) {
+    }
+
+    return function (config, dataset) {
+        
+        var result = {};
+
+        return ({
+          designmatrix: buildDesignMatrix
+        }[config.type] || angular.identity)(config, dataset);
+      }
+
+  }])
+  .factory('ChartUtil', ['$timeout',function ($timeout) {
 
     /**
      *  build box plot chart
@@ -34,7 +51,7 @@ angular.module('chuvApp.util').factory('ChartUtil', ['$timeout',function ($timeo
      */
     var buildDesignMatrix = function (chartConfig, dataset) {
       chartConfig.options.chart.type = 'heatmap';
-      chartConfig.options.title = {
+      chartConfig.title = {
         text: "Design matrix"
       };
       chartConfig.options.colorAxis = {
@@ -259,15 +276,6 @@ angular.module('chuvApp.util').factory('ChartUtil', ['$timeout',function ($timeo
         var response = {};
         response.dataset = dataset;
 
-        // resize chart
-        chartConfig.func = function(chart) {
-          $timeout(function() {
-            if (chart) {
-              chart.reflow();
-            }
-          }, 0);
-        };
-
         // add xAxis data
         if (chartConfig.xAxis !== undefined && dataset.header.indexOf(chartConfig.xAxis.code) > -1) {
           // existing chart
@@ -313,12 +321,6 @@ angular.module('chuvApp.util').factory('ChartUtil', ['$timeout',function ($timeo
         console.log(chartConfig);
         return response;
       },
-      //getChartColor: function () {
-      //    return {
-      //        blue: ['#7fdde9', '#4693b1', '#eb5333'],
-      //        green: ['#7ecfa6', '#c3e87f', '#f3a238']
-      //    };
-      //},
       /**
        * build boxplot
        * @param chartConfig

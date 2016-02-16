@@ -14,19 +14,25 @@ angular.module('chuvApp.models').controller('ReviewController',['$scope','$trans
     $scope.model = {};
     $scope.query = {};
     $scope.dataset = {};
+
     $scope.chartConfig = {
-      options: {
-        chart: {
-          type: 'heatmap',
-          zoomType: 'x'
-        }
-      },
-      size: {
-        height: 480
-      },
-      title:{},
-      subtitle:{}
+      type: 'designmatrix',
+      height: 480
     };
+
+    //$scope.chartConfig = {
+    //  options: {
+    //    chart: {
+    //      type: 'heatmap',
+    //      zoomType: 'x'
+    //    }
+    //  },
+    //  size: {
+    //    height: 480
+    //  },
+    //  title:{},
+    //  subtitle:{}
+    //};
 
     /**
      * load model by slug
