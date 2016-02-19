@@ -356,14 +356,14 @@ module.exports = function (grunt) {
           },
           docker_dev: {
               constants: {
-                backendUrl: 'http://localhost:7800/services',
+                backendUrl: 'http://frontend/services',
                 backendExportChartUrl: '<%= ngconstant.demo.constants.backendUrl %>/exportingChart.php',
                 dropboxAppkey: '7wew0rj0gh2qcik'
               }
           },
           as_dev: {
               constants: {
-                backendUrl: 'https://hbp-dev-backend.ahead-solutions.ch',
+                backendUrl: 'https://hbp-dev.ahead-solutions.ch/services',
                 backendExportChartUrl: '<%= ngconstant.demo.constants.backendUrl %>/exportingChart.php',
                 dropboxAppkey: '7wew0rj0gh2qcik'
               }
