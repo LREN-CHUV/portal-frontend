@@ -86,8 +86,7 @@ angular.module('chuvApp.models')
        */
       $scope.has_valid_configuration = function () {
         return Object.keys($scope.configuration.variable).length > 0
-          && Object.keys($scope.configuration.covariable).length > 0
-          && Object.keys($scope.configuration.grouping).length > 0;
+          && Object.keys($scope.configuration.covariable).length > 0;
       };
 
       /**
