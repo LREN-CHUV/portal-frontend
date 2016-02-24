@@ -13,26 +13,14 @@ angular.module('chuvApp.models').controller('ReviewController',['$scope','$trans
 
     $scope.model = {};
     $scope.query = {};
-    $scope.dataset = {};
+    $scope.dataset = null;
 
     $scope.chartConfig = {
       type: 'designmatrix',
-      height: 480
+      height: 480,
+      yAxisVariables: null,
+      xAxisVariable: null
     };
-
-    //$scope.chartConfig = {
-    //  options: {
-    //    chart: {
-    //      type: 'heatmap',
-    //      zoomType: 'x'
-    //    }
-    //  },
-    //  size: {
-    //    height: 480
-    //  },
-    //  title:{},
-    //  subtitle:{}
-    //};
 
     /**
      * load model by slug
@@ -81,22 +69,9 @@ angular.module('chuvApp.models').controller('ReviewController',['$scope','$trans
      * save or update model
      */
     $scope.saveModel = function() {
-      $scope.model.chart = {chartType: $scope.chartConfig.options.chart.type};
-      $scope.model.chart.xAxis = $scope.chartConfig.xAxis.code;
-      $scope.model.chart.svg = $scope.chartConfig.getHighcharts().getSVG();
-      $scope.model.chart.chartConfigSets = _.map($scope.chartConfig.series, function (o) {
-        var configSet = {};
-        configSet.color = o.color;
-        configSet.label = o.name;
-        configSet.code = o.code;
-        return configSet;
-      });
-
+      $scope.model.config = $scope.chartConfig;
       $scope.model.dataset = {code: $scope.dataset.code};
       $scope.model.query = $scope.query;
-
-      $scope.model.title = $scope.chartConfig.title.text;
-      $scope.model.description = $scope.chartConfig.subtitle.text;
 
       if ($scope.model.slug == null) {
         // save new model
@@ -259,9 +234,6 @@ angular.module('chuvApp.models').controller('ReviewController',['$scope','$trans
       if (query.variables.length < 1) {
         error += "The query must have at less a Variable.\n";
       }
-      if (query.groupings.length < 1) {
-        error += "The query must have at less a Grouping.\n";
-      }
       // check if grouping is complete
       if ($scope.contains(query.groupings, {code: undefined})) {
         error += "A grouping is not complete yet.\n";
@@ -289,19 +261,15 @@ angular.module('chuvApp.models').controller('ReviewController',['$scope','$trans
       Model.executeQuery(query).success(function (queryResult) {
         $scope.executeBtnAnimate();
         $scope.executed = true;
-        var chartData = ChartUtil.toChartData($scope.chartConfig, queryResult);
-        $scope.dataset = chartData.dataset;
-        $log.debug("Generating chart with config:", $scope.chartConfig);
-        $scope.$emit('event:searchSuccess', chartData);
-        var chart = $scope.chartConfig.getHighcharts();
-        if (chart) {
-          for (var i = 0; i < chart.series.length; i++) {
-            chart.series[i].show();
-          }
-        }
         $scope.loading_model = false;
+        $scope.dataset = queryResult;
+        $scope.hcConfig = ChartUtil($scope.chartConfig, $scope.dataset);
       });
     }
+
+    $scope.$on("chartConfigChanged", function () {
+      $scope.hcConfig = ChartUtil($scope.chartConfig, $scope.dataset);
+    });
 
     if ($location.search().execute) {
 

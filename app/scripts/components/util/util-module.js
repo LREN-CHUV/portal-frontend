@@ -1,13 +1,42 @@
 /**
  * Created by Michael DESIGAUD on 26/08/2015.
  */
-angular.module('chuvApp.util',['ui.bootstrap']);
 
-/**
- * Register http interceptors to the http provider
- */
-angular.module('chuvApp.util').config(['$httpProvider',function ($httpProvider) {
+angular.module('chuvApp.util',['ui.bootstrap'])
+  .config(['$httpProvider',function ($httpProvider) {
     //Default timeout
     $httpProvider.defaults.timeout = 5000;
-    $httpProvider.interceptors.push('httpSecurityInterceptor');
-}]);
+
+    /**
+     * Send the user to the login page if he tried to access a forbidden service
+     * @param {object} data
+     * @param {number} status
+     */
+    function logoutOnForbidden(data, status) {
+      if ((status === 401 || status === 403) && document.getElementById("logout-link") !== undefined) {
+        //forces logout-login redirect;
+        setTimeout(function () {
+          document.getElementById("logout-link").click();
+        }, 0);
+      }
+    }
+
+    $httpProvider.interceptors.unshift(['$q', function ($q) {
+      return {
+        response: function (config) {
+          if ((config.status === 401 || config.status === 403) && document.getElementById("logout-link") !== undefined) {
+            //forces logout-login redirect;
+            setTimeout(function () {
+              document.getElementById("logout-link").click();
+            }, 0);
+            $q.reject(config);
+          } //else if (config.status === 302)
+          return config;
+        },
+        responseError: function (rejection) {
+          return rejection;
+        }
+      };
+    }]);
+
+  }]);

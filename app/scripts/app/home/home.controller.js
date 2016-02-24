@@ -40,6 +40,10 @@ angular.module('chuvApp.home').controller('HomeController',['$scope','$translate
             .to($('.intro-container'), 0.2, { height: 0 }, '-=0.2');
 
       Model.getList({ limit:3, team:0, own:1}).then(function(response){
+        if (!angular.isObject(response.data)) {
+          return;
+        }
+
         $scope.results = response.data;
         var promises = [];
 
@@ -58,31 +62,31 @@ angular.module('chuvApp.home').controller('HomeController',['$scope','$translate
 
     $scope.getModel = function(slug){
       var deferred = $q.defer();
-      Model.get({slug:slug}).$promise.then(function(model){
-        model.chartConfig = {
-          options: {
-            chart: {
-              zoomType: 'x',
-              height:'280'
-            }
-          },
-          title:{},
-          subtitle:{}
-        };
-        model.chartConfig.title.text = model.title;
-        model.chartConfig.subtitle.text = model.description;
-        model.chartConfig.options.chart.type = model.chart.chartType;
-        model.chartConfig.xAxis = {code:model.chart.xAxis};
-        model.chartConfig.series = _.map(model.chart.chartConfigSets, function(o) {
-          var configSet = {};
-          configSet.color = o.color;
-          configSet.name = o.label;
-          configSet.code = o.code;
-          return configSet;
-        });
-        ChartUtil.toChartData(model.chartConfig,model.dataset);
-        deferred.resolve(model);
-      });
+      //Model.get({slug:slug}).$promise.then(function(model){
+      //  model.chartConfig = {
+      //    options: {
+      //      chart: {
+      //        zoomType: 'x',
+      //        height:'280'
+      //      }
+      //    },
+      //    title:{},
+      //    subtitle:{}
+      //  };
+      //  model.chartConfig.title.text = model.title;
+      //  model.chartConfig.subtitle.text = model.description;
+      //  model.chartConfig.options.chart.type = model.chart.chartType;
+      //  model.chartConfig.xAxis = {code:model.chart.xAxis};
+      //  model.chartConfig.series = _.map(model.chart.chartConfigSets, function(o) {
+      //    var configSet = {};
+      //    configSet.color = o.color;
+      //    configSet.name = o.label;
+      //    configSet.code = o.code;
+      //    return configSet;
+      //  });
+      //  ChartUtil.toChartData(model.chartConfig,model.dataset);
+      //  deferred.resolve(model);
+      //});
       return deferred.promise;
     };
 

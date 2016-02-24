@@ -3,12 +3,6 @@
 
       <a class="navbar-brand" href="#/home">Human Brain Project</a>
 
-      <div class="toolbar-icon-bg hidden-xs" id="toolbar-search">
-        <div class="input-group">
-          <span class="input-group-btn"><button class="btn" type="button"><i class="ti ti-search"></i></button></span>
-          <input type="text" class="form-control" placeholder="{{ 'header.menu.search' | translate }}" size="25">
-        </div>
-      </div>
         <span id="trigger-sidebar" class="toolbar-trigger toolbar-icon-bg" ng-click="toggleLeftBar()" ng-show="!getLayoutOption('layoutHorizontal')">
 			<a data-toggle="tooltips" data-placement="right" title="{{'header.menu.my-data' | translate}}" href="#/data/mydata">
 				<span class="icon-bg">
@@ -48,7 +42,8 @@
           <li class="disabled"><a href=""><i class="ti ti-settings"></i><span>{{'header.menu.settings' | translate}}</span></a>
           </li>
           <li class="divider"></li>
-          <li><a href="" ng-click="logout()"><i class="ti ti-shift-right"></i><span>{{'header.menu.signout' | translate}}</span></a></li>
+          <li>
+            <a href="" id="logout-link" ng-click="logout()"><i class="ti ti-shift-right"></i><span>{{'header.menu.signout' | translate}}</span></a></li>
         </ul>
       </li>
       <li class="toolbar-trigger toolbar-icon-bg">
