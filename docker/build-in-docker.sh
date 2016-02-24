@@ -5,6 +5,6 @@ cd /frontend
 
 npm install
 bower install
-grunt build-env:docker_dev
+grunt build-env:docker
 
 echo ">>> Frontend build is complete"

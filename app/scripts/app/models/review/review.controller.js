@@ -33,19 +33,11 @@ angular.module('chuvApp.models').controller('ReviewController',['$scope','$trans
         if($stateParams.isCopy === "true"){
           $scope.model.title = "Copy of "+$scope.model.title;
         }
-        $scope.chartConfig.title.text = $scope.model.title;
-        $scope.chartConfig.subtitle.text = $scope.model.description;
-        $scope.chartConfig.options.chart.type = $scope.model.chart.chartType;
-        $scope.chartConfig.xAxis = {code:$scope.model.chart.xAxis};
-        $scope.chartConfig.series = _.map($scope.model.chart.chartConfigSets, function(o,idx) {
-          var configSet = {};
-          configSet.color = o.color;
-          configSet.name = o.label;
-          configSet.code = o.code;
-          return configSet;
-        });
+        $scope.chartConfig = result.config;
+        $scope.query = result.query;
+        $scope.query.filterQuery = JSON.parse($scope.query.filterQuery);
+
         $scope.$emit('event:loadModel',result);
-        $scope.$emit('event:searchSuccess',ChartUtil.toChartData($scope.chartConfig,result.dataset));
         $scope.executeBtnAnimate();
         $scope.executed = true;
       });
@@ -70,8 +62,9 @@ angular.module('chuvApp.models').controller('ReviewController',['$scope','$trans
      */
     $scope.saveModel = function() {
       $scope.model.config = $scope.chartConfig;
-      $scope.model.dataset = {code: $scope.dataset.code};
-      $scope.model.query = $scope.query;
+      $scope.model.dataset = $scope.dataset;
+      $scope.model.query = angular.copy($scope.query); // will be modified, therefore we do a deep copy
+      delete $scope.model.query.filterQuery;
 
       if ($scope.model.slug == null) {
         // save new model
@@ -96,17 +89,16 @@ angular.module('chuvApp.models').controller('ReviewController',['$scope','$trans
      * Execute animation
      */
     $scope.executeBtnAnimate = function () {
-      var searchHelpSelector = '.search-help-container';
-      var searchResultSelector = '.search-result';
-      var tl = new TimelineMax({ paused: true, onComplete: function () {
-        TweenMax.set($(searchHelpSelector), { position: 'absolute'});
-        TweenMax.set($(searchResultSelector), { position: 'relative', left: 0, x: 0, y: 0 });
-      } });
-      tl.fromTo($(searchHelpSelector), 0.3, { scale: 1 }, { scale: 0.8 })
-        .fromTo($(searchHelpSelector), 0.3, {  autoAlpha: 1, x: '0%' }, { autoAlpha: 0, x: '40%' })
-        .fromTo($(searchResultSelector), 0.3, { scale: 0.8, autoAlpha: 0 }, { scale: 1, autoAlpha: 1 });
-
-      tl.play();
+      var searchHelpSelector = $('.search-help-container');
+      var searchResultSelector = $('.search-result');
+      new TimelineMax({ paused: true, onComplete: function () {
+        TweenMax.set(searchHelpSelector, { position: 'absolute'});
+        TweenMax.set(searchResultSelector, { position: 'relative', left: 0, x: 0, y: 0 });
+      } })
+        .fromTo(searchHelpSelector, 0.3, { scale: 1 }, { scale: 0.8 })
+        .fromTo(searchHelpSelector, 0.3, {  autoAlpha: 1, x: '0%' }, { autoAlpha: 0, x: '40%' })
+        .fromTo(searchResultSelector, 0.3, { scale: 0.8, autoAlpha: 0 }, { scale: 1, autoAlpha: 1 })
+        .play();
     };
 
     /**
@@ -199,10 +191,6 @@ angular.module('chuvApp.models').controller('ReviewController',['$scope','$trans
      * @param model
      */
     $scope.loadResources = function (model) {
-      if ($stateParams.slug !== undefined) {
-        //$scope.initDesign();
-      }
-
       Variable.query()
         .$promise.then(function (allVariables) {
           allVariables = _.sortBy(allVariables,"label");
@@ -217,9 +205,6 @@ angular.module('chuvApp.models').controller('ReviewController',['$scope','$trans
         .then(function (group) {
           $scope.groups = group.groups;
           _.extend($scope.query, model.query);
-          if ($stateParams.slug === undefined) {
-            //$scope.initDesign();
-          }
         });
     };
 
