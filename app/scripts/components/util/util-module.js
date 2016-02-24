@@ -23,17 +23,13 @@ angular.module('chuvApp.util',['ui.bootstrap'])
 
     $httpProvider.interceptors.unshift(['$q', function ($q) {
       return {
-        response: function (config) {
-          if ((config.status === 401 || config.status === 403) && document.getElementById("logout-link") !== undefined) {
+        responseError: function (rejection) {
+          if ((rejection.status === 401 || rejection.status === 403) && document.getElementById("logout-link") !== undefined) {
             //forces logout-login redirect;
             setTimeout(function () {
               document.getElementById("logout-link").click();
             }, 0);
-            $q.reject(config);
           } //else if (config.status === 302)
-          return config;
-        },
-        responseError: function (rejection) {
           return rejection;
         }
       };

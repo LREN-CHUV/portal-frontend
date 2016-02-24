@@ -60,7 +60,6 @@ angular
     'chuvApp.components.widget',
     'chuvApp.mydata',
     'chuvApp.profile',
-    'chuvApp.login',
     'chuvApp.components.toolbar',
     'chuvApp.intro'
   ])
