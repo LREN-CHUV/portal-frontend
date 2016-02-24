@@ -35,7 +35,6 @@ angular.module('chuvApp.models').controller('ReviewController',['$scope','$trans
         }
         $scope.chartConfig = result.config;
         $scope.query = result.query;
-        $scope.query.filterQuery = JSON.parse($scope.query.filterQuery);
 
         $scope.$emit('event:loadModel',result);
         $scope.executeBtnAnimate();
@@ -155,6 +154,10 @@ angular.module('chuvApp.models').controller('ReviewController',['$scope','$trans
                 error: "ti ti-na"
               }
             });
+
+            if (!$scope.query.filterQuery && $scope.query.textQuery) {
+              $(".query-builder").queryBuilder('setRulesFromSQL', $scope.query.textQuery)
+            }
           };
 
           childScope.validateQuery = function () {
@@ -170,6 +173,9 @@ angular.module('chuvApp.models').controller('ReviewController',['$scope','$trans
         }
       });
 
+      $scope.$on("$stateChangeStart", modal.dismiss);
+      modal.result.then($scope.executeQuery);
+
       // do not unwrap this: childScope.contructQB is set later.
       modal.opened.then(function () {
         $timeout(
@@ -177,14 +183,16 @@ angular.module('chuvApp.models').controller('ReviewController',['$scope','$trans
           300
         )
       });
+
+
       return modal.result;
     };
 
-    $scope.executeQuery = function () {
-      $scope.query.filters.length && !$scope.query.filterQuery
-        ? $scope.configureFilterQuery().then(doExecuteQuery)
-        : doExecuteQuery();
-    };
+    //$scope.executeQuery = function () {
+    //  $scope.query.filters.length && !$scope.query.filterQuery
+    //    ? $scope.configureFilterQuery().then(doExecuteQuery)
+    //    : doExecuteQuery();
+    //};
 
     /**
      *
@@ -211,7 +219,7 @@ angular.module('chuvApp.models').controller('ReviewController',['$scope','$trans
     /**
      * Execute a search query
      */
-    function doExecuteQuery() {
+    $scope.executeQuery = function doExecuteQuery() {
       var query = angular.copy($scope.query);
       //check query
       var error = "";
@@ -248,6 +256,7 @@ angular.module('chuvApp.models').controller('ReviewController',['$scope','$trans
         $scope.executed = true;
         $scope.loading_model = false;
         $scope.dataset = queryResult;
+        update_location_search();
         $scope.hcConfig = ChartUtil($scope.chartConfig, $scope.dataset);
       });
     }
@@ -271,6 +280,28 @@ angular.module('chuvApp.models').controller('ReviewController',['$scope','$trans
         }
       );
 
+    }
+
+    function update_location_search() {
+
+      function unmap_category(category) {
+        return $scope.query[category]
+          .map(function (variable) { return variable.code; })
+          .join(",");
+      }
+
+      var query = {
+        variable: unmap_category("variables"),
+        covariable: unmap_category("coVariables"),
+        grouping: unmap_category("groupings"),
+        filter: unmap_category("filters"),
+        query: $scope.query.textQuery,
+        execute: true
+      };
+
+      angular.forEach(query, function(val, key) {
+        $location.search(key, val);
+      });
     }
 
     /**

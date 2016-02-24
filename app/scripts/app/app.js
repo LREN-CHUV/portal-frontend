@@ -79,42 +79,40 @@ angular
 
     // set global configuration highcharts
     Highcharts.setOptions({
-        exporting: {
-            url:backendExportChartUrl
-        }
+      exporting: {
+        url:backendExportChartUrl
+      }
     });
   }])
   .run(['$state','$translatePartialLoader','$translate', 'amMoment', '$rootScope','backendUrl','$cookies','User',
     function($state,$translatePartialLoader,$translate, amMoment,$rootScope,backendUrl,$cookies,User){
-        $translatePartialLoader.addPart('common');
-        $translate.refresh();
-        amMoment.changeLocale('en');
-        $state.go('intro');
+      $translatePartialLoader.addPart('common');
+      $translate.refresh();
+      amMoment.changeLocale('en');
+      $state.go('intro');
 
-        $rootScope.getPdfUrl = function(slug){
-            return backendUrl+"/articles/"+slug+".pdf";
-        };
+      $rootScope.getPdfUrl = function(slug){
+        return backendUrl+"/articles/"+slug+".pdf";
+      };
 
-        $rootScope.$on('$stateChangeStart',function(){
-            if(User.hasCurrent()){
-                $rootScope.user = User.current();
-            }
-        });
+      User.get().success(function(data) {
+        $rootScope.user = User.current();
+      });
 
-        /**
-         * Check if is a new visitor or not
-         */
-        $rootScope.isNewVisitor = function() {
-            if(User.hasCurrent()) {
-                return $cookies.get('intro-' + User.current().username) !== "hide";
-            }
-            return true;
-        };
+      /**
+       * Check if is a new visitor or not
+       */
+      $rootScope.isNewVisitor = function() {
+        if(User.hasCurrent()) {
+          return $cookies.get('intro-' + User.current().username) !== "hide";
+        }
+        return true;
+      };
 
-        /**
-         * Check if user seems to be logged in
-         */
-         $rootScope.isLoggedIn = function() {
-          return User.hasCurrent();
-        };
+      /**
+       * Check if user seems to be logged in
+       */
+      $rootScope.isLoggedIn = function() {
+        return User.hasCurrent();
+      };
     }]);

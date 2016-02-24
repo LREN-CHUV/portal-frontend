@@ -35,11 +35,7 @@ angular.module('chuvApp.users')
       },
 
       get: function (username) {
-        $http.get(backendUrl+"/users/"+username).success(function(data) {
-          return data;
-        }).error(function() {
-        return null;
-        });
+        return $http.get(username ? backendUrl+"/users/"+username : backendUrl + "/user")
       },
 
       create: function (user) {

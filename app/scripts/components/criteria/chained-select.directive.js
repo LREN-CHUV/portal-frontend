@@ -45,21 +45,17 @@ angular.module('chuvApp.components.criteria')
             return;
           }
 
-          var variableGroup = variable.group;
-          if (variableGroup === undefined) {
-            return;
-          }
-          var group = $scope.getDataByCode($scope.groups, variable.group.code);
+          var group = groupMap[variable.group.code];
+          $scope.selectedList.push(variable);
 
-          while (variableGroup !== undefined && variableGroup != null) {
+          while (group && group.code) {
             $scope.selectedList.push(group);
             $scope.initSelectedVariablesByGroup(group);
-            variableGroup = variableGroup.groups[0];
-            if (variableGroup !== undefined) {
-              group = $scope.getDataByCode(group.groups, variableGroup.code);
-            }
+            group = group.parent ? groupMap[group.parent] : undefined;
           }
-          $scope.selectedList.push(variable);
+
+          $scope.selectedList.reverse();
+
           if (_.isArray(criteria) && criteria.length>1){
             $scope.selectedList = _.initial($scope.selectedList);
           }
@@ -231,6 +227,18 @@ angular.module('chuvApp.components.criteria')
           }
         };
 
+        var groupMap = {};
+
+        function buildGroupMap(baseGroup, parentGroupCode) {
+          if (!baseGroup || !baseGroup.code) return;
+
+          baseGroup.parent = parentGroupCode;
+          groupMap[baseGroup.code] = baseGroup;
+
+          angular.forEach(baseGroup.groups, function (group) {
+            buildGroupMap(group, baseGroup.code);
+          });
+        }
 
         // wait for data to be there before initializing directive.
         var watchOnce = $scope.$watchGroup(
@@ -240,6 +248,8 @@ angular.module('chuvApp.components.criteria')
 
             // unbind watch
             watchOnce();
+
+            angular.forEach($scope.groups, buildGroupMap);
 
             //initialize directive
             $scope.$watch('criteria', function (newValue, oldValue) {

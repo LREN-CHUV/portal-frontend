@@ -18,6 +18,7 @@ angular.module('chuvApp.models').controller('CriteriaController', ['$scope', '$s
     $scope.query.groupings = map_query("grouping");
     $scope.query.coVariables = map_query("covariable");
     $scope.query.filters = map_query("filter");
+    $scope.query.textQuery = search.query;
 
     /**
      * load jquery decorator
