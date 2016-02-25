@@ -28,6 +28,12 @@
           <li>
             AXE X
             <ul>
+              <li>
+                <a href="" ng-click="changeXaxis(null)" ng-class="!chartConfig.hasXAxis || chartConfig.xAxisVariable == null ? 'active' : ''">
+                  <span>No X sorting</span>
+                  <i class="ti ti-check"></i>
+                </a>
+              </li>
               <li ng-repeat="xAxe in dataset.header">
                 <a href="" ng-click="changeXaxis(xAxe)" ng-class="chartConfig.hasXAxis && chartConfig.xAxisVariable == xAxe ? 'active' : ''">
                   <span>{{xAxe}}</span>
@@ -39,6 +45,9 @@
           <li>
             AXE Y
             <ul>
+              <li>
+                <span><br></span>
+              </li>
               <li ng-repeat="yAxe in dataset.header">
                 <a href="" ng-click="enableYAxe(yAxe)" ng-class="chartConfig.yAxisVariables.indexOf(yAxe) >= 0 ? 'active' : ''">
                   <span>{{yAxe}}</span>

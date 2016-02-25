@@ -79,7 +79,11 @@ angular.module('chuvApp.models')
             pack = d3.layout.pack()
               .padding(2)
               // prevent sorting, otherwise packing will look way too regular.
-              .sort(null)
+              //.sort(null)
+              // disabled: sort by descending value for better packing
+              .sort(function comparator(a, b) {
+                return b.value - a.value;
+              })
               .size([diameter - margin, diameter - margin])
               // circle weight is based on the length of text. It's not
               // strictly necessary but makes things nicer looking.

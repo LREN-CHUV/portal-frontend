@@ -185,28 +185,6 @@ angular.module('chuvApp.components.criteria')
             })
           });
           return _.uniq(_.flatten(result));
-
-          //var selectedGroup;
-          //var tmpGroup;
-          //var filterArray = variables;
-          //angular.forEach(groups, function (currentGroup, index) {
-          //  if (currentGroup.isVariable === undefined) {
-          //    if (selectedGroup === undefined) {
-          //      selectedGroup = _.pick(currentGroup, "code", "label");
-          //      selectedGroup.groups = [];
-          //      tmpGroup = selectedGroup.groups;
-          //      filterArray = filterFilter(filterArray, {group: {code: currentGroup.code}});
-          //    } else {
-          //      tmpGroup.push(_.pick(currentGroup, "code", "label"));
-          //      tmpGroup[0].groups = [];
-          //      tmpGroup = tmpGroup[0].groups;
-          //    }
-          //  }
-          //});
-          //var filterArray = _.filter(filterArray, function (variable) {
-          //  return _.isEqual(variable.group, selectedGroup);
-          //});
-          //return   filterArray;
         };
 
         /**

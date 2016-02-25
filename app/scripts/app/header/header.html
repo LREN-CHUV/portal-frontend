@@ -22,15 +22,21 @@
 
     <ul class="nav navbar-nav toolbar pull-right">
       <li class="toolbar-icon-bg hidden-xs">
-        <a ui-sref="explore" title="{{'header.menu.ee' | translate}}"><span class="icon-bg"><i>{{'header.menu.ee' | translate}}</i></span></a>
+        <a ui-sref="explore" title="{{'header.menu.ee.title' | translate}}" ui-sref-active="active">
+          <span class="icon-bg"><i>{{'header.menu.ee' | translate}}</i></span>
+        </a>
       </li>
 
       <li class="toolbar-icon-bg hidden-xs">
-        <a ui-sref="review" title="{{'header.menu.ia' | translate}}"><span class="icon-bg"><i>{{'header.menu.ia' | translate}}</i></span></a>
+        <a ui-sref="review" title="{{'header.menu.ia.title' | translate}}" ui-sref-active="active">
+          <span class="icon-bg"><i>{{'header.menu.ia' | translate}}</i></span>
+        </a>
       </li>
 
       <li class="toolbar-icon-bg hidden-xs disabled">
-        <a href="" title="{{'header.menu.bsd' | translate}}"><span class="icon-bg"><i>{{'header.menu.bsd' | translate}}</i></span></a>
+        <a href="" title="{{'header.menu.bsd.title' | translate}}" ui-sref-active="active">
+          <span class="icon-bg"><i>{{'header.menu.bsd' | translate}}</i></span>
+        </a>
       </li>
 
       <li class="dropdown toolbar-icon-bg">

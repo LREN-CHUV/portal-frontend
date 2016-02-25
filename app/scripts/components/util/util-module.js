@@ -29,8 +29,8 @@ angular.module('chuvApp.util',['ui.bootstrap'])
             setTimeout(function () {
               document.getElementById("logout-link").click();
             }, 0);
-          } //else if (config.status === 302)
-          return rejection;
+          }
+          return $q.reject(rejection);
         }
       };
     }]);
