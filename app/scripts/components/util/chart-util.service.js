@@ -5,6 +5,11 @@
 angular.module('chuvApp.util')
   .factory('ChartUtil', [function () {
 
+    // map array to number array
+    function aToI(arr) {
+      return arr.map(function (x) { return +x;});
+    }
+
     function buildDesignMatrix (config, dataset) {
       config.hasXAxis = false;
 
@@ -45,7 +50,7 @@ angular.module('chuvApp.util')
             for (idx1 = 0; idx1 < config.yAxisVariables.length; idx1++) {
               data = dataset.data[config.yAxisVariables[idx1]];
               for (idx2 = 0; idx2 < data.length; idx2++) {
-                result.push([idx1, idx2, data[idx2]]);
+                result.push([idx1, idx2, +data[idx2]]);
               }
             }
 
@@ -81,12 +86,12 @@ angular.module('chuvApp.util')
           text: null
         },
         series: [
-          {name:yCode,data: dataset.data[yCode],code:yCode}
+          {name:yCode,data: aToI(dataset.data[yCode]),code:yCode}
         ]
       };
 
       if(y2Code){
-        result.series.push({name:y2Code,data: dataset.data[y2Code],type: 'scatter',code:y2Code})
+        result.series.push({name:y2Code,data: aToI(dataset.data[y2Code]),type: 'scatter',code:y2Code})
       }
 
       return result;
@@ -94,27 +99,39 @@ angular.module('chuvApp.util')
 
     function buildRegularChart (type) {
 
-      function orderBy(orderAxis, targetAxis) {
+      function orderBy(orderAxis, data) {
         if (!orderAxis)
-          return targetAxis;
+          return data;
 
-        return _.unzip(
+        var sortedData = _.unzip(
           _.sortBy(
-            _.zip(orderAxis, targetAxis),
-            0
+            _.unzip(data.concat([orderAxis])),
+            data.length
           )
-        )[1];
+        );
+        sortedData.pop();
+        return sortedData;
       }
 
 
       return function (config, dataset) {
         config.hasXAxis = true;
 
-        var result = {
+        var xAxisVariableIdx,
+          variableIdxs = {},
+          data = dataset.header.map(function (name, index) {
+            if (name === config.xAxisVariable)
+              xAxisVariableIdx = index;
+            variableIdxs[name] = index;
+            return aToI(dataset.data[name]);
+          });
+        data = orderBy(data[xAxisVariableIdx], data);
+
+        return {
           xAxis: {
             code: config.xAxisVariable,
             title: { text: config.xAxisVariable},
-            categories: _.sortBy(dataset.data[config.xAxisVariable])
+            categories: data[xAxisVariableIdx]
           },
           title: {
             text: null
@@ -130,12 +147,10 @@ angular.module('chuvApp.util')
           series: config.yAxisVariables.map(function (code) {
             return {
               name: code,
-              data: orderBy(dataset.data[config.xAxisVariable], dataset.data[code])
+              data: data[variableIdxs[code]]
             }
           })
         };
-
-        return result;
       }
     }
 
