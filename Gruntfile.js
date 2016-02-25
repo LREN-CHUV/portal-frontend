@@ -354,16 +354,9 @@ module.exports = function (grunt) {
                 dropboxAppkey: '7wew0rj0gh2qcik'
               }
           },
-          docker: {
-              constants: {
-                backendUrl: '/services',
-                backendExportChartUrl: '<%= ngconstant.demo.constants.backendUrl %>/exportingChart.php',
-                dropboxAppkey: '7wew0rj0gh2qcik'
-              }
-          },
           prod: {
               constants: {
-                backendUrl: 'http://hbp-mip.chuv.ch/services/backend',
+                backendUrl: '/services',
                 backendExportChartUrl: '<%= ngconstant.prod.constants.backendUrl %>/exportingChart.php',
                 dropboxAppkey: 'PROD_DROPBOX_APPKEY'
               }
@@ -444,19 +437,6 @@ module.exports = function (grunt) {
           ]
         }
       },
-      docker: {
-        files: {
-          '<%= yeoman.dist %>/': '<%= yeoman.dist %>/index.html'
-        },
-        options: {
-          replacements: [
-            {
-              pattern: "%DropBoxAppKey%",
-              replacement: "<%= ngconstant.prod.constants.dropboxAppkey %>"
-            }
-          ]
-        }
-      }
     },
 
     // Copies remaining files to places other tasks can use
@@ -622,6 +602,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('build', [
     'clean:dist',
+    'ngconstant:prod',
     'useminPrepare',
     'concurrent:dist',
     'less:dist',
