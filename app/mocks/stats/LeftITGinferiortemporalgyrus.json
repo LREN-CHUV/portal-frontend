@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "LeftITGinferiortemporalgyrus",
+		"count": 1649,
+		"min": 0.009076315,
+		"max": 15.194371,
+		"average": 10.43803603,
+		"std": 1.347318156
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftITGinferiortemporalgyrus",
+		"dataset": {
+			"data": {
+				"header": [0.7683410493,2.286870518,3.805399986,5.323929455,6.842458923,8.360988392,9.87951786,11.39804733,12.9165768,14.43510627],
+				"shape": "vector",
+				"value": [1,0,0,0,23,231,694,538,148,14]
+			},
+			"name": "Count LeftITGinferiortemporalgyrus values"
+		},
+		"label": "Histogram :LeftITGinferiortemporalgyrus"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftITGinferiortemporalgyrus",
+		"dataset": {
+			"data": {
+				"header": [0.7420013492,2.207851418,3.673701486,5.139551555,6.605401623,8.071251692,9.53710176,11.00295183,12.4688019,13.93465197],
+				"shape": "vector",
+				"value": [1,0,0,0,15,107,420,255,31,5]
+			},
+			"name": "Count LeftITGinferiortemporalgyrus values"
+		},
+		"label": "Histogram :LeftITGinferiortemporalgyrus-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftITGinferiortemporalgyrus",
+		"dataset": {
+			"data": {
+				"header": [6.972642455,7.838087565,8.703532675,9.568977785,10.43442289,11.299868,12.16531311,13.03075823,13.89620333,14.76164844],
+				"shape": "vector",
+				"value": [5,8,61,104,172,227,157,66,12,3]
+			},
+			"name": "Count LeftITGinferiortemporalgyrus values"
+		},
+		"label": "Histogram :LeftITGinferiortemporalgyrus-PTGENDER=Male"
+	}
+]

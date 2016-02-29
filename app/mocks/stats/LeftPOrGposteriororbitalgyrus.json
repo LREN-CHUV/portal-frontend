@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "LeftPOrGposteriororbitalgyrus",
+		"count": 1649,
+		"min": 0,
+		"max": 3.5244055,
+		"average": 2.407980932,
+		"std": 0.2704551143
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftPOrGposteriororbitalgyrus",
+		"dataset": {
+			"data": {
+				"header": [0.176220275,0.528660825,0.881101375,1.233541925,1.585982475,1.938423025,2.290863575,2.643304125,2.995744675,3.348185225],
+				"shape": "vector",
+				"value": [1,0,0,1,10,193,780,561,95,8]
+			},
+			"name": "Count LeftPOrGposteriororbitalgyrus values"
+		},
+		"label": "Histogram :LeftPOrGposteriororbitalgyrus"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftPOrGposteriororbitalgyrus",
+		"dataset": {
+			"data": {
+				"header": [0.176220275,0.528660825,0.881101375,1.233541925,1.585982475,1.938423025,2.290863575,2.643304125,2.995744675,3.348185225],
+				"shape": "vector",
+				"value": [1,0,0,1,7,150,476,179,16,4]
+			},
+			"name": "Count LeftPOrGposteriororbitalgyrus values"
+		},
+		"label": "Histogram :LeftPOrGposteriororbitalgyrus-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftPOrGposteriororbitalgyrus",
+		"dataset": {
+			"data": {
+				"header": [1.65138597,1.83598771,2.02058945,2.20519119,2.38979293,2.57439467,2.75899641,2.94359815,3.12819989,3.31280163],
+				"shape": "vector",
+				"value": [3,8,34,88,247,238,129,50,17,1]
+			},
+			"name": "Count LeftPOrGposteriororbitalgyrus values"
+		},
+		"label": "Histogram :LeftPOrGposteriororbitalgyrus-PTGENDER=Male"
+	}
+]

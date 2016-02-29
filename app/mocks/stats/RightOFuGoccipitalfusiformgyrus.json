@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "RightOFuGoccipitalfusiformgyrus",
+		"count": 1649,
+		"min": 0.36061266,
+		"max": 6.0305538,
+		"average": 4.034567191,
+		"std": 0.4890135918
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightOFuGoccipitalfusiformgyrus",
+		"dataset": {
+			"data": {
+				"header": [0.644109717,1.211103831,1.778097945,2.345092059,2.912086173,3.479080287,4.046074401,4.613068515,5.180062629,5.747056743],
+				"shape": "vector",
+				"value": [1,0,0,4,39,431,764,342,60,8]
+			},
+			"name": "Count RightOFuGoccipitalfusiformgyrus values"
+		},
+		"label": "Histogram :RightOFuGoccipitalfusiformgyrus"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightOFuGoccipitalfusiformgyrus",
+		"dataset": {
+			"data": {
+				"header": [0.613420622,1.119036546,1.62465247,2.130268394,2.635884318,3.141500242,3.647116166,4.15273209,4.658348014,5.163963938],
+				"shape": "vector",
+				"value": [1,0,0,2,10,98,369,304,42,8]
+			},
+			"name": "Count RightOFuGoccipitalfusiformgyrus values"
+		},
+		"label": "Histogram :RightOFuGoccipitalfusiformgyrus-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightOFuGoccipitalfusiformgyrus",
+		"dataset": {
+			"data": {
+				"header": [2.97160206,3.29359698,3.6155919,3.93758682,4.25958174,4.58157666,4.90357158,5.2255665,5.54756142,5.86955634],
+				"shape": "vector",
+				"value": [4,18,72,195,235,190,70,20,4,7]
+			},
+			"name": "Count RightOFuGoccipitalfusiformgyrus values"
+		},
+		"label": "Histogram :RightOFuGoccipitalfusiformgyrus-PTGENDER=Male"
+	}
+]

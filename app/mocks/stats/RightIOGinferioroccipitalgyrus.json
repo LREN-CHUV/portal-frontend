@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "RightIOGinferioroccipitalgyrus",
+		"count": 1649,
+		"min": 0.99434972,
+		"max": 10.452621,
+		"average": 6.303546198,
+		"std": 0.817679014
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightIOGinferioroccipitalgyrus",
+		"dataset": {
+			"data": {
+				"header": [1.467263284,2.413090412,3.35891754,4.304744668,5.250571796,6.196398924,7.142226052,8.08805318,9.033880308,9.979707436],
+				"shape": "vector",
+				"value": [1,0,3,33,341,757,430,74,4,6]
+			},
+			"name": "Count RightIOGinferioroccipitalgyrus values"
+		},
+		"label": "Histogram :RightIOGinferioroccipitalgyrus"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightIOGinferioroccipitalgyrus",
+		"dataset": {
+			"data": {
+				"header": [1.378914344,2.148043592,2.91717284,3.686302088,4.455431336,5.224560584,5.993689832,6.76281908,7.531948328,8.301077576],
+				"shape": "vector",
+				"value": [1,0,1,5,34,228,361,153,41,10]
+			},
+			"name": "Count RightIOGinferioroccipitalgyrus values"
+		},
+		"label": "Histogram :RightIOGinferioroccipitalgyrus-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightIOGinferioroccipitalgyrus",
+		"dataset": {
+			"data": {
+				"header": [4.71726789,5.32098927,5.92471065,6.52843203,7.13215341,7.73587479,8.33959617,8.94331755,9.54703893,10.15076031],
+				"shape": "vector",
+				"value": [9,36,175,280,217,73,18,1,4,2]
+			},
+			"name": "Count RightIOGinferioroccipitalgyrus values"
+		},
+		"label": "Histogram :RightIOGinferioroccipitalgyrus-PTGENDER=Male"
+	}
+]

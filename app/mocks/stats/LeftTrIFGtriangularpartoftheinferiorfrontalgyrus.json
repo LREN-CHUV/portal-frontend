@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "LeftTrIFGtriangularpartoftheinferiorfrontalgyrus",
+		"count": 1649,
+		"min": 0,
+		"max": 5.2877955,
+		"average": 3.742166661,
+		"std": 0.4689711257
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftTrIFGtriangularpartoftheinferiorfrontalgyrus",
+		"dataset": {
+			"data": {
+				"header": [0.264389775,0.793169325,1.321948875,1.850728425,2.379507975,2.908287525,3.437067075,3.965846625,4.494626175,5.023405725],
+				"shape": "vector",
+				"value": [1,0,0,0,8,152,620,640,194,34]
+			},
+			"name": "Count LeftTrIFGtriangularpartoftheinferiorfrontalgyrus values"
+		},
+		"label": "Histogram :LeftTrIFGtriangularpartoftheinferiorfrontalgyrus"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftTrIFGtriangularpartoftheinferiorfrontalgyrus",
+		"dataset": {
+			"data": {
+				"header": [0.254343225,0.763029675,1.271716125,1.780402575,2.289089025,2.797775475,3.306461925,3.815148375,4.323834825,4.832521275],
+				"shape": "vector",
+				"value": [1,0,0,0,3,72,353,309,82,14]
+			},
+			"name": "Count LeftTrIFGtriangularpartoftheinferiorfrontalgyrus values"
+		},
+		"label": "Histogram :LeftTrIFGtriangularpartoftheinferiorfrontalgyrus-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftTrIFGtriangularpartoftheinferiorfrontalgyrus",
+		"dataset": {
+			"data": {
+				"header": [2.661359855,2.937826765,3.214293675,3.490760585,3.767227495,4.043694405,4.320161315,4.596628225,4.873095135,5.149562045],
+				"shape": "vector",
+				"value": [7,18,43,138,212,183,120,56,33,5]
+			},
+			"name": "Count LeftTrIFGtriangularpartoftheinferiorfrontalgyrus values"
+		},
+		"label": "Histogram :LeftTrIFGtriangularpartoftheinferiorfrontalgyrus-PTGENDER=Male"
+	}
+]

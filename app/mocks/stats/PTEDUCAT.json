@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "PTEDUCAT",
+		"count": 1649,
+		"min": 6,
+		"max": 20,
+		"average": 15.82474227,
+		"std": 2.773000736
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "PTEDUCAT",
+		"dataset": {
+			"data": {
+				"header": [6.7,8.1,9.5,10.9,12.3,13.7,15.1,16.5,17.9,19.3],
+				"shape": "vector",
+				"value": [9,9,37,7,277,210,58,512,271,259]
+			},
+			"name": "Count PTEDUCAT values"
+		},
+		"label": "Histogram :PTEDUCAT"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "PTEDUCAT",
+		"dataset": {
+			"data": {
+				"header": [6.7,8.1,9.5,10.9,12.3,13.7,15.1,16.5,17.9,19.3],
+				"shape": "vector",
+				"value": [8,3,30,0,192,132,37,239,130,63]
+			},
+			"name": "Count PTEDUCAT values"
+		},
+		"label": "Histogram :PTEDUCAT-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "PTEDUCAT",
+		"dataset": {
+			"data": {
+				"header": [7.65,8.95,10.25,11.55,12.85,14.15,15.45,16.75,18.05,19.35],
+				"shape": "vector",
+				"value": [7,4,3,69,23,78,258,36,141,196]
+			},
+			"name": "Count PTEDUCAT values"
+		},
+		"label": "Histogram :PTEDUCAT-PTGENDER=Male"
+	}
+]

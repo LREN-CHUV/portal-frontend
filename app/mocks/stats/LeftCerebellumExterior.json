@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "LeftCerebellumExterior",
+		"count": 1649,
+		"min": 2.0283778,
+		"max": 57.246712,
+		"average": 44.35542103,
+		"std": 4.396437865
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftCerebellumExterior",
+		"dataset": {
+			"data": {
+				"header": [4.78929451,10.31112793,15.83296135,21.35479477,26.87662819,32.39846161,37.92029503,43.44212845,48.96396187,54.48579529],
+				"shape": "vector",
+				"value": [1,0,0,0,4,17,264,834,433,96]
+			},
+			"name": "Count LeftCerebellumExterior values"
+		},
+		"label": "Histogram :LeftCerebellumExterior"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftCerebellumExterior",
+		"dataset": {
+			"data": {
+				"header": [4.71210656,10.07956408,15.4470216,20.81447912,26.18193664,31.54939416,36.91685168,42.2843092,47.65176672,53.01922424],
+				"shape": "vector",
+				"value": [1,0,0,0,2,9,153,460,180,29]
+			},
+			"name": "Count LeftCerebellumExterior values"
+		},
+		"label": "Histogram :LeftCerebellumExterior-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftCerebellumExterior",
+		"dataset": {
+			"data": {
+				"header": [34.5244676,36.9162828,39.308098,41.6999132,44.0917284,46.4835436,48.8753588,51.267174,53.6589892,56.0508044],
+				"shape": "vector",
+				"value": [4,8,33,126,181,182,148,85,36,12]
+			},
+			"name": "Count LeftCerebellumExterior values"
+		},
+		"label": "Histogram :LeftCerebellumExterior-PTGENDER=Male"
+	}
+]

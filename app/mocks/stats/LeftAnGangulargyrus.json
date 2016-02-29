@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "LeftAnGangulargyrus",
+		"count": 1649,
+		"min": 0.48089853,
+		"max": 14.045033,
+		"average": 8.849530136,
+		"std": 1.132727403
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftAnGangulargyrus",
+		"dataset": {
+			"data": {
+				"header": [1.159105253,2.5155187,3.871932147,5.228345595,6.584759041,7.941172488,9.297585936,10.65399938,12.01041283,13.36682628],
+				"shape": "vector",
+				"value": [1,0,0,8,120,561,744,179,34,2]
+			},
+			"name": "Count LeftAnGangulargyrus values"
+		},
+		"label": "Histogram :LeftAnGangulargyrus"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftAnGangulargyrus",
+		"dataset": {
+			"data": {
+				"header": [1.075146254,2.263641701,3.452137148,4.640632594,5.829128041,7.017623489,8.206118935,9.394614383,10.58310983,11.77160528],
+				"shape": "vector",
+				"value": [1,0,0,2,18,137,363,252,46,15]
+			},
+			"name": "Count LeftAnGangulargyrus values"
+		},
+		"label": "Histogram :LeftAnGangulargyrus-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftAnGangulargyrus",
+		"dataset": {
+			"data": {
+				"header": [6.74156505,7.51035115,8.27913725,9.04792335,9.81670945,10.58549555,11.35428165,12.12306775,12.89185385,13.66063995],
+				"shape": "vector",
+				"value": [25,49,173,241,200,85,36,4,0,2]
+			},
+			"name": "Count LeftAnGangulargyrus values"
+		},
+		"label": "Histogram :LeftAnGangulargyrus-PTGENDER=Male"
+	}
+]

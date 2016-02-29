@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "AGE",
+		"count": 1649,
+		"min": 55.9,
+		"max": 90.9,
+		"average": 75.404245,
+		"std": 6.214843368
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "AGE",
+		"dataset": {
+			"data": {
+				"header": [57.65,61.15,64.65,68.15,71.65,75.15,78.65,82.15,85.65,89.15],
+				"shape": "vector",
+				"value": [23,29,65,101,451,315,338,149,135,43]
+			},
+			"name": "Count AGE values"
+		},
+		"label": "Histogram :AGE"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "AGE",
+		"dataset": {
+			"data": {
+				"header": [57.65,61.15,64.65,68.15,71.65,75.15,78.65,82.15,85.65,89.15],
+				"shape": "vector",
+				"value": [14,8,24,64,238,166,175,77,34,34]
+			},
+			"name": "Count AGE values"
+		},
+		"label": "Histogram :AGE-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "AGE",
+		"dataset": {
+			"data": {
+				"header": [57.49,60.67,63.85,67.03,70.21,73.39,76.57,79.75,82.93,86.11],
+				"shape": "vector",
+				"value": [9,16,32,35,127,156,155,125,93,67]
+			},
+			"name": "Count AGE values"
+		},
+		"label": "Histogram :AGE-PTGENDER=Male"
+	}
+]

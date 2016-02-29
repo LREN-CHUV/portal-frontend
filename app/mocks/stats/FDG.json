@@ -1,0 +1,61 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "FDG",
+		"count": 1,
+		"min": 5.98253,
+		"max": 5.98253,
+		"average": 5.98253,
+		"std": 0
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "FDG",
+		"dataset": {
+			"data": {
+				"header": [0.98253,1.98253,2.98253,3.98253,4.98253,5.98253,6.98253,7.98253,8.98253,9.98253],
+				"shape": "vector",
+				"value": [0,0,0,0,0,1,0,0,0,0]
+			},
+			"name": "Count FDG values"
+		},
+		"label": "Histogram :FDG"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "FDG",
+		"dataset": {
+			"data": {
+				"header": [0.98253,1.98253,2.98253,3.98253,4.98253,5.98253,6.98253,7.98253,8.98253,9.98253],
+				"shape": "vector",
+				"value": [0,0,0,0,0,1,0,0,0,0]
+			},
+			"name": "Count FDG values"
+		},
+		"label": "Histogram :FDG-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "FDG",
+		"dataset": {
+			"data": {
+				"header": [
+					[1],
+					[2],
+					[3],
+					[4],
+					[5],
+					[6],
+					[7],
+					[8],
+					[9],
+					[10]
+				],
+				"shape": "vector",
+				"value": [0,0,0,0,0,0,0,0,0,0]
+			},
+			"name": "Count FDG values"
+		},
+		"label": "Histogram :FDG-PTGENDER=Male"
+	}
+]

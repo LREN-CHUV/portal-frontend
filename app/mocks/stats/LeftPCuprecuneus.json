@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "LeftPCuprecuneus",
+		"count": 1649,
+		"min": 0.34483826,
+		"max": 14.99729,
+		"average": 10.49891997,
+		"std": 1.240631369
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftPCuprecuneus",
+		"dataset": {
+			"data": {
+				"header": [1.077460847,2.542706021,4.007951195,5.473196369,6.938441543,8.403686717,9.868931891,11.33417707,12.79942224,14.26466741],
+				"shape": "vector",
+				"value": [1,0,0,1,8,215,664,600,144,16]
+			},
+			"name": "Count LeftPCuprecuneus values"
+		},
+		"label": "Histogram :LeftPCuprecuneus"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftPCuprecuneus",
+		"dataset": {
+			"data": {
+				"header": [1.004868347,2.324928521,3.644988695,4.965048869,6.285109043,7.605169217,8.925229391,10.24528957,11.56534974,12.88540991],
+				"shape": "vector",
+				"value": [1,0,0,0,1,40,277,366,128,21]
+			},
+			"name": "Count LeftPCuprecuneus values"
+		},
+		"label": "Histogram :LeftPCuprecuneus-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftPCuprecuneus",
+		"dataset": {
+			"data": {
+				"header": [8.1692847,8.8880221,9.6067595,10.3254969,11.0442343,11.7629717,12.4817091,13.2004465,13.9191839,14.6379213],
+				"shape": "vector",
+				"value": [13,28,69,178,235,167,83,27,11,4]
+			},
+			"name": "Count LeftPCuprecuneus values"
+		},
+		"label": "Histogram :LeftPCuprecuneus-PTGENDER=Male"
+	}
+]

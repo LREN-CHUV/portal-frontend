@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "LeftMFCmedialfrontalcortex",
+		"count": 1649,
+		"min": 0,
+		"max": 2.505944,
+		"average": 1.747632025,
+		"std": 0.2292241678
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftMFCmedialfrontalcortex",
+		"dataset": {
+			"data": {
+				"header": [0.1252972,0.3758916,0.626486,0.8770804,1.1276748,1.3782692,1.6288636,1.879458,2.1300524,2.3806468],
+				"shape": "vector",
+				"value": [1,0,1,2,11,216,614,607,169,28]
+			},
+			"name": "Count LeftMFCmedialfrontalcortex values"
+		},
+		"label": "Histogram :LeftMFCmedialfrontalcortex"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftMFCmedialfrontalcortex",
+		"dataset": {
+			"data": {
+				"header": [0.11690806,0.35072418,0.5845403,0.81835642,1.05217254,1.28598866,1.51980478,1.7536209,1.98743702,2.22125314],
+				"shape": "vector",
+				"value": [1,0,0,3,2,56,349,327,83,13]
+			},
+			"name": "Count LeftMFCmedialfrontalcortex values"
+		},
+		"label": "Histogram :LeftMFCmedialfrontalcortex-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftMFCmedialfrontalcortex",
+		"dataset": {
+			"data": {
+				"header": [1.08142033,1.23137019,1.38132005,1.53126991,1.68121977,1.83116963,1.98111949,2.13106935,2.28101921,2.43096907],
+				"shape": "vector",
+				"value": [1,9,26,41,155,273,196,81,25,8]
+			},
+			"name": "Count LeftMFCmedialfrontalcortex values"
+		},
+		"label": "Histogram :LeftMFCmedialfrontalcortex-PTGENDER=Male"
+	}
+]

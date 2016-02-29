@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "EcogSPOrgan_bl",
+		"count": 405,
+		"min": 1,
+		"max": 4,
+		"average": 1.465514667,
+		"std": 0.8263353258
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "EcogSPOrgan_bl",
+		"dataset": {
+			"data": {
+				"header": [1.15,1.45,1.75,2.05,2.35,2.65,2.95,3.25,3.55,3.85],
+				"shape": "vector",
+				"value": [288,22,10,15,12,10,10,16,6,16]
+			},
+			"name": "Count EcogSPOrgan_bl values"
+		},
+		"label": "Histogram :EcogSPOrgan_bl"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "EcogSPOrgan_bl",
+		"dataset": {
+			"data": {
+				"header": [1.1416665,1.4249995,1.7083325,1.9916655,2.2749985,2.5583315,2.8416645,3.1249975,3.4083305,3.6916635],
+				"shape": "vector",
+				"value": [160,10,6,3,8,7,7,6,4,4]
+			},
+			"name": "Count EcogSPOrgan_bl values"
+		},
+		"label": "Histogram :EcogSPOrgan_bl-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "EcogSPOrgan_bl",
+		"dataset": {
+			"data": {
+				"header": [1.15,1.45,1.75,2.05,2.35,2.65,2.95,3.25,3.55,3.85],
+				"shape": "vector",
+				"value": [128,12,4,8,4,4,4,12,0,14]
+			},
+			"name": "Count EcogSPOrgan_bl values"
+		},
+		"label": "Histogram :EcogSPOrgan_bl-PTGENDER=Male"
+	}
+]

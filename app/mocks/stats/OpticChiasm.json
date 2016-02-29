@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "OpticChiasm",
+		"count": 1649,
+		"min": 0,
+		"max": 0.11752564,
+		"average": 0.07554562385,
+		"std": 0.00898064569
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "OpticChiasm",
+		"dataset": {
+			"data": {
+				"header": [0.005876282,0.017628846,0.02938141,0.041133974,0.052886538,0.064639102,0.076391666,0.08814423,0.099896794,0.111649358],
+				"shape": "vector",
+				"value": [1,0,0,2,28,415,854,313,33,3]
+			},
+			"name": "Count OpticChiasm values"
+		},
+		"label": "Histogram :OpticChiasm"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "OpticChiasm",
+		"dataset": {
+			"data": {
+				"header": [0.0049053706,0.0147161118,0.024526853,0.0343375942,0.0441483354,0.0539590766,0.0637698178,0.073580559,0.0833913002,0.0932020414],
+				"shape": "vector",
+				"value": [1,0,0,0,2,27,219,392,161,32]
+			},
+			"name": "Count OpticChiasm values"
+		},
+		"label": "Histogram :OpticChiasm-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "OpticChiasm",
+		"dataset": {
+			"data": {
+				"header": [0.0548213517,0.0614218031,0.0680222545,0.0746227059,0.0812231573,0.0878236087,0.0944240601,0.1010245115,0.1076249629,0.1142254143],
+				"shape": "vector",
+				"value": [2,18,134,258,223,128,40,8,2,2]
+			},
+			"name": "Count OpticChiasm values"
+		},
+		"label": "Histogram :OpticChiasm-PTGENDER=Male"
+	}
+]

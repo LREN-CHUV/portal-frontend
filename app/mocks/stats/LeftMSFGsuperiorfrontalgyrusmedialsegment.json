@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "LeftMSFGsuperiorfrontalgyrusmedialsegment",
+		"count": 1649,
+		"min": 0,
+		"max": 9.9278517,
+		"average": 6.870852996,
+		"std": 0.8448903129
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftMSFGsuperiorfrontalgyrusmedialsegment",
+		"dataset": {
+			"data": {
+				"header": [0.496392585,1.489177755,2.481962925,3.474748095,4.467533265,5.460318435,6.453103605,7.445888775,8.438673945,9.431459115],
+				"shape": "vector",
+				"value": [1,0,0,2,3,187,726,555,158,17]
+			},
+			"name": "Count LeftMSFGsuperiorfrontalgyrusmedialsegment values"
+		},
+		"label": "Histogram :LeftMSFGsuperiorfrontalgyrusmedialsegment"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftMSFGsuperiorfrontalgyrusmedialsegment",
+		"dataset": {
+			"data": {
+				"header": [0.4244164,1.2732492,2.122082,2.9709148,3.8197476,4.6685804,5.5174132,6.366246,7.2150788,8.0639116],
+				"shape": "vector",
+				"value": [1,0,0,0,4,4,155,443,192,35]
+			},
+			"name": "Count LeftMSFGsuperiorfrontalgyrusmedialsegment values"
+		},
+		"label": "Histogram :LeftMSFGsuperiorfrontalgyrusmedialsegment-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftMSFGsuperiorfrontalgyrusmedialsegment",
+		"dataset": {
+			"data": {
+				"header": [5.452765455,5.923827165,6.394888875,6.865950585,7.337012295,7.808074005,8.279135715,8.750197425,9.221259135,9.692320845],
+				"shape": "vector",
+				"value": [9,30,103,172,203,172,80,32,11,3]
+			},
+			"name": "Count LeftMSFGsuperiorfrontalgyrusmedialsegment values"
+		},
+		"label": "Histogram :LeftMSFGsuperiorfrontalgyrusmedialsegment-PTGENDER=Male"
+	}
+]

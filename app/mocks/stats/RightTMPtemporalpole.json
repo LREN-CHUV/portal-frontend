@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "RightTMPtemporalpole",
+		"count": 1649,
+		"min": 7.4e-006,
+		"max": 10.010409,
+		"average": 7.43371871,
+		"std": 0.9465140379
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightTMPtemporalpole",
+		"dataset": {
+			"data": {
+				"header": [0.50052748,1.50156764,2.5026078,3.50364796,4.50468812,5.50572828,6.50676844,7.5078086,8.50884876,9.50988892],
+				"shape": "vector",
+				"value": [1,0,0,2,7,116,414,621,439,49]
+			},
+			"name": "Count RightTMPtemporalpole values"
+		},
+		"label": "Histogram :RightTMPtemporalpole"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightTMPtemporalpole",
+		"dataset": {
+			"data": {
+				"header": [0.473883505,1.421635715,2.369387925,3.317140135,4.264892345,5.212644555,6.160396765,7.108148975,8.055901185,9.003653395],
+				"shape": "vector",
+				"value": [1,0,0,0,5,41,200,366,191,30]
+			},
+			"name": "Count RightTMPtemporalpole values"
+		},
+		"label": "Histogram :RightTMPtemporalpole-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightTMPtemporalpole",
+		"dataset": {
+			"data": {
+				"header": [5.02312674,5.54810382,6.0730809,6.59805798,7.12303506,7.64801214,8.17298922,8.6979663,9.22294338,9.74792046],
+				"shape": "vector",
+				"value": [4,6,38,53,92,190,251,125,45,11]
+			},
+			"name": "Count RightTMPtemporalpole values"
+		},
+		"label": "Histogram :RightTMPtemporalpole-PTGENDER=Male"
+	}
+]

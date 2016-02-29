@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "RightAInsanteriorinsula",
+		"count": 1649,
+		"min": 0,
+		"max": 5.337657,
+		"average": 4.016369,
+		"std": 0.4630178842
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightAInsanteriorinsula",
+		"dataset": {
+			"data": {
+				"header": [0.26688285,0.80064855,1.33441425,1.86817995,2.40194565,2.93571135,3.46947705,4.00324275,4.53700845,5.07077415],
+				"shape": "vector",
+				"value": [1,0,0,2,3,30,398,752,371,92]
+			},
+			"name": "Count RightAInsanteriorinsula values"
+		},
+		"label": "Histogram :RightAInsanteriorinsula"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightAInsanteriorinsula",
+		"dataset": {
+			"data": {
+				"header": [0.26129997,0.78389991,1.30649985,1.82909979,2.35169973,2.87429967,3.39689961,3.91949955,4.44209949,4.96469943],
+				"shape": "vector",
+				"value": [1,0,0,1,3,5,281,433,96,14]
+			},
+			"name": "Count RightAInsanteriorinsula values"
+		},
+		"label": "Histogram :RightAInsanteriorinsula-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightAInsanteriorinsula",
+		"dataset": {
+			"data": {
+				"header": [2.776295405,3.045912415,3.315529425,3.585146435,3.854763445,4.124380455,4.393997465,4.663614475,4.933231485,5.202848495],
+				"shape": "vector",
+				"value": [4,6,17,41,150,211,189,115,65,17]
+			},
+			"name": "Count RightAInsanteriorinsula values"
+		},
+		"label": "Histogram :RightAInsanteriorinsula-PTGENDER=Male"
+	}
+]

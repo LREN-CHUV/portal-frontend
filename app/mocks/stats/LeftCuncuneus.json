@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "LeftCuncuneus",
+		"count": 1649,
+		"min": 1.0292406,
+		"max": 6.6808357,
+		"average": 4.352738328,
+		"std": 0.6039324173
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftCuncuneus",
+		"dataset": {
+			"data": {
+				"header": [1.311820355,1.876979865,2.442139375,3.007298885,3.572458395,4.137617905,4.702777415,5.267936925,5.833096435,6.398255945],
+				"shape": "vector",
+				"value": [1,0,6,35,275,635,487,162,29,19]
+			},
+			"name": "Count LeftCuncuneus values"
+		},
+		"label": "Histogram :LeftCuncuneus"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftCuncuneus",
+		"dataset": {
+			"data": {
+				"header": [1.272519675,1.759077825,2.245635975,2.732194125,3.218752275,3.705310425,4.191868575,4.678426725,5.164984875,5.651543025],
+				"shape": "vector",
+				"value": [1,0,1,17,50,215,303,188,42,17]
+			},
+			"name": "Count LeftCuncuneus values"
+		},
+		"label": "Histogram :LeftCuncuneus-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftCuncuneus",
+		"dataset": {
+			"data": {
+				"header": [2.982129735,3.371467205,3.760804675,4.150142145,4.539479615,4.928817085,5.318154555,5.707492025,6.096829495,6.486166965],
+				"shape": "vector",
+				"value": [4,22,91,214,183,189,72,14,11,15]
+			},
+			"name": "Count LeftCuncuneus values"
+		},
+		"label": "Histogram :LeftCuncuneus-PTGENDER=Male"
+	}
+]

@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "LeftPPplanumpolare",
+		"count": 1649,
+		"min": 0,
+		"max": 2.9272258,
+		"average": 2.246788406,
+		"std": 0.2466493351
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftPPplanumpolare",
+		"dataset": {
+			"data": {
+				"header": [0.14636129,0.43908387,0.73180645,1.02452903,1.31725161,1.60997419,1.90269677,2.19541935,2.48814193,2.78086451],
+				"shape": "vector",
+				"value": [1,0,0,0,3,22,302,781,422,118]
+			},
+			"name": "Count LeftPPplanumpolare values"
+		},
+		"label": "Histogram :LeftPPplanumpolare"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftPPplanumpolare",
+		"dataset": {
+			"data": {
+				"header": [0.14572196,0.43716588,0.7286098,1.02005372,1.31149764,1.60294156,1.89438548,2.1858294,2.47727332,2.76871724],
+				"shape": "vector",
+				"value": [1,0,0,0,3,16,230,434,132,18]
+			},
+			"name": "Count LeftPPplanumpolare values"
+		},
+		"label": "Histogram :LeftPPplanumpolare-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftPPplanumpolare",
+		"dataset": {
+			"data": {
+				"header": [1.597453705,1.737429715,1.877405725,2.017381735,2.157357745,2.297333755,2.437309765,2.577285775,2.717261785,2.857237795],
+				"shape": "vector",
+				"value": [4,4,11,66,141,225,167,106,63,28]
+			},
+			"name": "Count LeftPPplanumpolare values"
+		},
+		"label": "Histogram :LeftPPplanumpolare-PTGENDER=Male"
+	}
+]

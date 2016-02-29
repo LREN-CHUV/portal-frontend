@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "LeftLOrGlateralorbitalgyrus",
+		"count": 1649,
+		"min": 0,
+		"max": 3.2525604,
+		"average": 2.3082178,
+		"std": 0.2658725001
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftLOrGlateralorbitalgyrus",
+		"dataset": {
+			"data": {
+				"header": [0.16262802,0.48788406,0.8131401,1.13839614,1.46365218,1.78890822,2.11416426,2.4394203,2.76467634,3.08993238],
+				"shape": "vector",
+				"value": [1,0,1,1,6,113,620,728,149,30]
+			},
+			"name": "Count LeftLOrGlateralorbitalgyrus values"
+		},
+		"label": "Histogram :LeftLOrGlateralorbitalgyrus"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftLOrGlateralorbitalgyrus",
+		"dataset": {
+			"data": {
+				"header": [0.150647845,0.451943535,0.753239225,1.054534915,1.355830605,1.657126295,1.958421985,2.259717675,2.561013365,2.862309055],
+				"shape": "vector",
+				"value": [1,0,0,2,3,21,237,413,136,21]
+			},
+			"name": "Count LeftLOrGlateralorbitalgyrus values"
+		},
+		"label": "Histogram :LeftLOrGlateralorbitalgyrus-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftLOrGlateralorbitalgyrus",
+		"dataset": {
+			"data": {
+				"header": [1.61755321,1.78965923,1.96176525,2.13387127,2.30597729,2.47808331,2.65018933,2.82229535,2.99440137,3.16650739],
+				"shape": "vector",
+				"value": [5,14,32,111,212,261,127,25,18,10]
+			},
+			"name": "Count LeftLOrGlateralorbitalgyrus values"
+		},
+		"label": "Histogram :LeftLOrGlateralorbitalgyrus-PTGENDER=Male"
+	}
+]

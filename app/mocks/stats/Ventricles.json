@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "Ventricles",
+		"count": 1233,
+		"min": 7697,
+		"max": 156735,
+		"average": 40820.68532,
+		"std": 22273.73728
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "Ventricles",
+		"dataset": {
+			"data": {
+				"header": [15148.9,30052.7,44956.5,59860.3,74764.1,89667.9,104571.7,119475.5,134379.3,149283.1],
+				"shape": "vector",
+				"value": [262,373,293,173,56,49,14,7,2,4]
+			},
+			"name": "Count Ventricles values"
+		},
+		"label": "Histogram :Ventricles"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "Ventricles",
+		"dataset": {
+			"data": {
+				"header": [13084.45,23859.35,34634.25,45409.15,56184.05,66958.95,77733.85,88508.75,99283.65,110058.55],
+				"shape": "vector",
+				"value": [124,174,133,88,50,27,12,8,2,3]
+			},
+			"name": "Count Ventricles values"
+		},
+		"label": "Histogram :Ventricles-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "Ventricles",
+		"dataset": {
+			"data": {
+				"header": [18150.9,32738.7,47326.5,61914.3,76502.1,91089.9,105677.7,120265.5,134853.3,149441.1],
+				"shape": "vector",
+				"value": [100,164,153,101,36,38,9,5,2,4]
+			},
+			"name": "Count Ventricles values"
+		},
+		"label": "Histogram :Ventricles-PTGENDER=Male"
+	}
+]

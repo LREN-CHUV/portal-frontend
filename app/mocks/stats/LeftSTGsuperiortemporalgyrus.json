@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "LeftSTGsuperiortemporalgyrus",
+		"count": 1649,
+		"min": 0.000135664,
+		"max": 10.678226,
+		"average": 6.856396795,
+		"std": 0.8878604818
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftSTGsuperiortemporalgyrus",
+		"dataset": {
+			"data": {
+				"header": [0.5340401808,1.601849214,2.669658248,3.737467282,4.805276315,5.873085349,6.940894382,8.008703416,9.07651245,10.14432148],
+				"shape": "vector",
+				"value": [1,0,0,3,55,414,853,252,69,2]
+			},
+			"name": "Count LeftSTGsuperiortemporalgyrus values"
+		},
+		"label": "Histogram :LeftSTGsuperiortemporalgyrus"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftSTGsuperiortemporalgyrus",
+		"dataset": {
+			"data": {
+				"header": [0.4613633058,1.383818589,2.306273873,3.228729157,4.15118444,5.073639724,5.996095007,6.918550291,7.841005575,8.763460858],
+				"shape": "vector",
+				"value": [1,0,0,0,12,66,286,368,82,19]
+			},
+			"name": "Count LeftSTGsuperiortemporalgyrus values"
+		},
+		"label": "Histogram :LeftSTGsuperiortemporalgyrus-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftSTGsuperiortemporalgyrus",
+		"dataset": {
+			"data": {
+				"header": [4.86755746,5.47920678,6.0908561,6.70250542,7.31415474,7.92580406,8.53745338,9.1491027,9.76075202,10.37240134],
+				"shape": "vector",
+				"value": [11,30,96,201,262,123,61,29,0,2]
+			},
+			"name": "Count LeftSTGsuperiortemporalgyrus values"
+		},
+		"label": "Histogram :LeftSTGsuperiortemporalgyrus-PTGENDER=Male"
+	}
+]

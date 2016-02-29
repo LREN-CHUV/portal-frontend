@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "RightInfLatVent",
+		"count": 1649,
+		"min": 0,
+		"max": 5.1023154,
+		"average": 0.9463657034,
+		"std": 0.550770847
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightInfLatVent",
+		"dataset": {
+			"data": {
+				"header": [0.25511577,0.76534731,1.27557885,1.78581039,2.29604193,2.80627347,3.31650501,3.82673655,4.33696809,4.84719963],
+				"shape": "vector",
+				"value": [233,912,316,113,40,17,6,7,4,1]
+			},
+			"name": "Count RightInfLatVent values"
+		},
+		"label": "Histogram :RightInfLatVent"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightInfLatVent",
+		"dataset": {
+			"data": {
+				"header": [0.13967856,0.41903568,0.6983928,0.97774992,1.25710704,1.53646416,1.81582128,2.0951784,2.37453552,2.65389264],
+				"shape": "vector",
+				"value": [1,248,300,138,72,43,20,6,2,4]
+			},
+			"name": "Count RightInfLatVent values"
+		},
+		"label": "Histogram :RightInfLatVent-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightInfLatVent",
+		"dataset": {
+			"data": {
+				"header": [0.61076385,1.08355875,1.55635365,2.02914855,2.50194345,2.97473835,3.44753325,3.92032815,4.39312305,4.86591795],
+				"shape": "vector",
+				"value": [375,252,97,42,22,11,7,5,3,1]
+			},
+			"name": "Count RightInfLatVent values"
+		},
+		"label": "Histogram :RightInfLatVent-PTGENDER=Male"
+	}
+]

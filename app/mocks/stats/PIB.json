@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "PIB",
+		"count": 39,
+		"min": 1.1225,
+		"max": 2.5775,
+		"average": 1.809358974,
+		"std": 0.4519594467
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "PIB",
+		"dataset": {
+			"data": {
+				"header": [1.19525,1.34075,1.48625,1.63175,1.77725,1.92275,2.06825,2.21375,2.35925,2.50475],
+				"shape": "vector",
+				"value": [7,5,0,4,5,2,5,4,4,3]
+			},
+			"name": "Count PIB values"
+		},
+		"label": "Histogram :PIB"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "PIB",
+		"dataset": {
+			"data": {
+				"header": [1.278375,1.415125,1.551875,1.688625,1.825375,1.962125,2.098875,2.235625,2.372375,2.509125],
+				"shape": "vector",
+				"value": [5,2,0,0,1,0,2,1,2,2]
+			},
+			"name": "Count PIB values"
+		},
+		"label": "Histogram :PIB-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "PIB",
+		"dataset": {
+			"data": {
+				"header": [1.19075,1.32725,1.46375,1.60025,1.73675,1.87325,2.00975,2.14625,2.28275,2.41925],
+				"shape": "vector",
+				"value": [4,1,0,3,3,2,4,2,4,1]
+			},
+			"name": "Count PIB values"
+		},
+		"label": "Histogram :PIB-PTGENDER=Male"
+	}
+]

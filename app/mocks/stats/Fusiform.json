@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "Fusiform",
+		"count": 1233,
+		"min": 8743,
+		"max": 26297,
+		"average": 16580.6691,
+		"std": 2813.616196
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "Fusiform",
+		"dataset": {
+			"data": {
+				"header": [9620.7,11376.1,13131.5,14886.9,16642.3,18397.7,20153.1,21908.5,23663.9,25419.3],
+				"shape": "vector",
+				"value": [17,62,149,239,306,250,140,54,13,3]
+			},
+			"name": "Count Fusiform values"
+		},
+		"label": "Histogram :Fusiform"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "Fusiform",
+		"dataset": {
+			"data": {
+				"header": [9736.6,11479.8,13223,14966.2,16709.4,18452.6,20195.8,21939,23682.2,25425.4],
+				"shape": "vector",
+				"value": [17,59,102,153,147,100,38,3,1,1]
+			},
+			"name": "Count Fusiform values"
+		},
+		"label": "Histogram :Fusiform-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "Fusiform",
+		"dataset": {
+			"data": {
+				"header": [9546.85,11154.55,12762.25,14369.95,15977.65,17585.35,19193.05,20800.75,22408.45,24016.15],
+				"shape": "vector",
+				"value": [2,6,34,77,109,150,120,71,34,9]
+			},
+			"name": "Count Fusiform values"
+		},
+		"label": "Histogram :Fusiform-PTGENDER=Male"
+	}
+]

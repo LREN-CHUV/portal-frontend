@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "EcogSPDivatt_bl",
+		"count": 423,
+		"min": 1,
+		"max": 4,
+		"average": 1.671394799,
+		"std": 0.9654258656
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "EcogSPDivatt_bl",
+		"dataset": {
+			"data": {
+				"header": [1.15,1.45,1.75,2.05,2.35,2.65,2.95,3.25,3.55,3.85],
+				"shape": "vector",
+				"value": [256,20,20,41,7,3,14,7,18,37]
+			},
+			"name": "Count EcogSPDivatt_bl values"
+		},
+		"label": "Histogram :EcogSPDivatt_bl"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "EcogSPDivatt_bl",
+		"dataset": {
+			"data": {
+				"header": [1.15,1.45,1.75,2.05,2.35,2.65,2.95,3.25,3.55,3.85],
+				"shape": "vector",
+				"value": [145,8,4,26,4,3,4,3,9,6]
+			},
+			"name": "Count EcogSPDivatt_bl values"
+		},
+		"label": "Histogram :EcogSPDivatt_bl-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "EcogSPDivatt_bl",
+		"dataset": {
+			"data": {
+				"header": [1.15,1.45,1.75,2.05,2.35,2.65,2.95,3.25,3.55,3.85],
+				"shape": "vector",
+				"value": [111,12,16,15,3,0,10,4,9,31]
+			},
+			"name": "Count EcogSPDivatt_bl values"
+		},
+		"label": "Histogram :EcogSPDivatt_bl-PTGENDER=Male"
+	}
+]

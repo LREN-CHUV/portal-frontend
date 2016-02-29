@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "ADAS13_bl",
+		"count": 1639,
+		"min": 0,
+		"max": 54.67,
+		"average": 14.92355705,
+		"std": 10.58226555
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "ADAS13_bl",
+		"dataset": {
+			"data": {
+				"header": [2.7335,8.2005,13.6675,19.1345,24.6015,30.0685,35.5355,41.0025,46.4695,51.9365],
+				"shape": "vector",
+				"value": [267,532,324,117,108,145,100,31,7,8]
+			},
+			"name": "Count ADAS13_bl values"
+		},
+		"label": "Histogram :ADAS13_bl"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "ADAS13_bl",
+		"dataset": {
+			"data": {
+				"header": [3.5,8.5,13.5,18.5,23.5,28.5,33.5,38.5,43.5,48.5],
+				"shape": "vector",
+				"value": [238,248,98,48,53,63,50,20,5,10]
+			},
+			"name": "Count ADAS13_bl values"
+		},
+		"label": "Histogram :ADAS13_bl-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "ADAS13_bl",
+		"dataset": {
+			"data": {
+				"header": [2.7335,8.2005,13.6675,19.1345,24.6015,30.0685,35.5355,41.0025,46.4695,51.9365],
+				"shape": "vector",
+				"value": [70,260,207,63,42,91,52,17,0,4]
+			},
+			"name": "Count ADAS13_bl values"
+		},
+		"label": "Histogram :ADAS13_bl-PTGENDER=Male"
+	}
+]

@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "LeftLiGlingualgyrus",
+		"count": 1649,
+		"min": 0.55617326,
+		"max": 10.770746,
+		"average": 7.207592613,
+		"std": 0.8346365068
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftLiGlingualgyrus",
+		"dataset": {
+			"data": {
+				"header": [1.066901897,2.088359171,3.109816445,4.131273719,5.152730993,6.174188267,7.195645541,8.217102815,9.238560089,10.26001736],
+				"shape": "vector",
+				"value": [1,0,0,3,29,383,819,361,46,7]
+			},
+			"name": "Count LeftLiGlingualgyrus values"
+		},
+		"label": "Histogram :LeftLiGlingualgyrus"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftLiGlingualgyrus",
+		"dataset": {
+			"data": {
+				"header": [1.000801027,1.890056561,2.779312095,3.668567629,4.557823163,5.447078697,6.336334231,7.225589765,8.114845299,9.004100833],
+				"shape": "vector",
+				"value": [1,0,0,2,4,62,286,370,97,12]
+			},
+			"name": "Count LeftLiGlingualgyrus values"
+		},
+		"label": "Histogram :LeftLiGlingualgyrus-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftLiGlingualgyrus",
+		"dataset": {
+			"data": {
+				"header": [5.82968371,6.34979553,6.86990735,7.39001917,7.91013099,8.43024281,8.95035463,9.47046645,9.99057827,10.51069009],
+				"shape": "vector",
+				"value": [12,68,162,225,189,108,34,9,3,5]
+			},
+			"name": "Count LeftLiGlingualgyrus values"
+		},
+		"label": "Histogram :LeftLiGlingualgyrus-PTGENDER=Male"
+	}
+]

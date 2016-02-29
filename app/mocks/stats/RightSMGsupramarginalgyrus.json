@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "RightSMGsupramarginalgyrus",
+		"count": 1649,
+		"min": 2.3e-005,
+		"max": 11.852451,
+		"average": 7.702746235,
+		"std": 0.8992880844
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightSMGsupramarginalgyrus",
+		"dataset": {
+			"data": {
+				"header": [0.5926444,1.7778872,2.96313,4.1483728,5.3336156,6.5188584,7.7041012,8.889344,10.0745868,11.2598296],
+				"shape": "vector",
+				"value": [1,0,0,2,21,390,848,343,41,3]
+			},
+			"name": "Count RightSMGsupramarginalgyrus values"
+		},
+		"label": "Histogram :RightSMGsupramarginalgyrus"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightSMGsupramarginalgyrus",
+		"dataset": {
+			"data": {
+				"header": [0.5385421,1.6155803,2.6926185,3.7696567,4.8466949,5.9237331,7.0007713,8.0778095,9.1548477,10.2318859],
+				"shape": "vector",
+				"value": [1,0,0,0,4,99,381,293,51,5]
+			},
+			"name": "Count RightSMGsupramarginalgyrus values"
+		},
+		"label": "Histogram :RightSMGsupramarginalgyrus-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightSMGsupramarginalgyrus",
+		"dataset": {
+			"data": {
+				"header": [5.795189345,6.432795835,7.070402325,7.708008815,8.345615305,8.983221795,9.620828285,10.25843478,10.89604126,11.53364775],
+				"shape": "vector",
+				"value": [13,50,115,221,260,103,42,9,0,2]
+			},
+			"name": "Count RightSMGsupramarginalgyrus values"
+		},
+		"label": "Histogram :RightSMGsupramarginalgyrus-PTGENDER=Male"
+	}
+]

@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "EcogSPMem_bl",
+		"count": 426,
+		"min": 1,
+		"max": 4,
+		"average": 1.74277615,
+		"std": 0.9839261138
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "EcogSPMem_bl",
+		"dataset": {
+			"data": {
+				"header": [1.15,1.45,1.75,2.05,2.35,2.65,2.95,3.25,3.55,3.85],
+				"shape": "vector",
+				"value": [240,47,23,16,5,15,7,26,10,37]
+			},
+			"name": "Count EcogSPMem_bl values"
+		},
+		"label": "Histogram :EcogSPMem_bl"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "EcogSPMem_bl",
+		"dataset": {
+			"data": {
+				"header": [1.15,1.45,1.75,2.05,2.35,2.65,2.95,3.25,3.55,3.85],
+				"shape": "vector",
+				"value": [144,23,5,7,0,8,3,9,3,13]
+			},
+			"name": "Count EcogSPMem_bl values"
+		},
+		"label": "Histogram :EcogSPMem_bl-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "EcogSPMem_bl",
+		"dataset": {
+			"data": {
+				"header": [1.15,1.45,1.75,2.05,2.35,2.65,2.95,3.25,3.55,3.85],
+				"shape": "vector",
+				"value": [96,24,18,9,5,7,4,17,7,24]
+			},
+			"name": "Count EcogSPMem_bl values"
+		},
+		"label": "Histogram :EcogSPMem_bl-PTGENDER=Male"
+	}
+]

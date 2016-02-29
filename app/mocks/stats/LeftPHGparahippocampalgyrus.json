@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "LeftPHGparahippocampalgyrus",
+		"count": 1649,
+		"min": 0,
+		"max": 4.0692453,
+		"average": 3.009536288,
+		"std": 0.3428496051
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftPHGparahippocampalgyrus",
+		"dataset": {
+			"data": {
+				"header": [0.203462265,0.610386795,1.017311325,1.424235855,1.831160385,2.238084915,2.645009445,3.051933975,3.458858505,3.865783035],
+				"shape": "vector",
+				"value": [1,0,0,0,5,83,421,751,361,27]
+			},
+			"name": "Count LeftPHGparahippocampalgyrus values"
+		},
+		"label": "Histogram :LeftPHGparahippocampalgyrus"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftPHGparahippocampalgyrus",
+		"dataset": {
+			"data": {
+				"header": [0.188777865,0.566333595,0.943889325,1.321445055,1.699000785,2.076556515,2.454112245,2.831667975,3.209223705,3.586779435],
+				"shape": "vector",
+				"value": [1,0,0,0,3,20,157,428,206,19]
+			},
+			"name": "Count LeftPHGparahippocampalgyrus values"
+		},
+		"label": "Histogram :LeftPHGparahippocampalgyrus-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftPHGparahippocampalgyrus",
+		"dataset": {
+			"data": {
+				"header": [2.25409208,2.44516084,2.6362296,2.82729836,3.01836712,3.20943588,3.40050464,3.5915734,3.78264216,3.97371092],
+				"shape": "vector",
+				"value": [9,16,45,89,158,217,173,91,11,6]
+			},
+			"name": "Count LeftPHGparahippocampalgyrus values"
+		},
+		"label": "Histogram :LeftPHGparahippocampalgyrus-PTGENDER=Male"
+	}
+]

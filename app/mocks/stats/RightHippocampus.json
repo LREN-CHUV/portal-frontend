@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "RightHippocampus",
+		"count": 1649,
+		"min": 0,
+		"max": 4.1525531,
+		"average": 3.116622486,
+		"std": 0.4154616348
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightHippocampus",
+		"dataset": {
+			"data": {
+				"header": [0.207627655,0.622882965,1.038138275,1.453393585,1.868648895,2.283904205,2.699159515,3.114414825,3.529670135,3.944925445],
+				"shape": "vector",
+				"value": [1,0,1,0,11,100,358,666,431,81]
+			},
+			"name": "Count RightHippocampus values"
+		},
+		"label": "Histogram :RightHippocampus"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightHippocampus",
+		"dataset": {
+			"data": {
+				"header": [0.198927175,0.596781525,0.994635875,1.392490225,1.790344575,2.188198925,2.586053275,2.983907625,3.381761975,3.779616325],
+				"shape": "vector",
+				"value": [1,0,1,0,5,64,174,378,174,37]
+			},
+			"name": "Count RightHippocampus values"
+		},
+		"label": "Histogram :RightHippocampus-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightHippocampus",
+		"dataset": {
+			"data": {
+				"header": [2.355210005,2.544404015,2.733598025,2.922792035,3.111986045,3.301180055,3.490374065,3.679568075,3.868762085,4.057956095],
+				"shape": "vector",
+				"value": [11,34,52,82,139,164,161,116,40,16]
+			},
+			"name": "Count RightHippocampus values"
+		},
+		"label": "Histogram :RightHippocampus-PTGENDER=Male"
+	}
+]

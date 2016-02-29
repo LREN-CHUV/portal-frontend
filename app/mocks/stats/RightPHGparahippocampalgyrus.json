@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "RightPHGparahippocampalgyrus",
+		"count": 1649,
+		"min": 0,
+		"max": 3.8538637,
+		"average": 2.775225294,
+		"std": 0.3385761924
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightPHGparahippocampalgyrus",
+		"dataset": {
+			"data": {
+				"header": [0.192693185,0.578079555,0.963465925,1.348852295,1.734238665,2.119625035,2.505011405,2.890397775,3.275784145,3.661170515],
+				"shape": "vector",
+				"value": [1,0,0,1,8,143,512,689,275,20]
+			},
+			"name": "Count RightPHGparahippocampalgyrus values"
+		},
+		"label": "Histogram :RightPHGparahippocampalgyrus"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightPHGparahippocampalgyrus",
+		"dataset": {
+			"data": {
+				"header": [0.177835275,0.533505825,0.889176375,1.244846925,1.600517475,1.956188025,2.311858575,2.667529125,3.023199675,3.378870225],
+				"shape": "vector",
+				"value": [1,0,0,1,3,37,208,402,155,27]
+			},
+			"name": "Count RightPHGparahippocampalgyrus values"
+		},
+		"label": "Histogram :RightPHGparahippocampalgyrus-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightPHGparahippocampalgyrus",
+		"dataset": {
+			"data": {
+				"header": [2.11666501,2.29952803,2.48239105,2.66525407,2.84811709,3.03098011,3.21384313,3.39670615,3.57956917,3.76243219],
+				"shape": "vector",
+				"value": [7,37,56,94,189,226,143,48,10,5]
+			},
+			"name": "Count RightPHGparahippocampalgyrus values"
+		},
+		"label": "Histogram :RightPHGparahippocampalgyrus-PTGENDER=Male"
+	}
+]

@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "RightCalccalcarinecortex",
+		"count": 1649,
+		"min": 0.26909149,
+		"max": 5.0199776,
+		"average": 3.178645011,
+		"std": 0.4650523433
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightCalccalcarinecortex",
+		"dataset": {
+			"data": {
+				"header": [0.5066357955,0.9817244065,1.456813017,1.931901629,2.40699024,2.882078851,3.357167462,3.832256073,4.307344684,4.782433295],
+				"shape": "vector",
+				"value": [1,0,1,26,137,584,623,234,22,21]
+			},
+			"name": "Count RightCalccalcarinecortex values"
+		},
+		"label": "Histogram :RightCalccalcarinecortex"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightCalccalcarinecortex",
+		"dataset": {
+			"data": {
+				"header": [0.4829685755,0.9107227465,1.338476918,1.766231089,2.193985259,2.62173943,3.049493602,3.477247772,3.905001943,4.332756114],
+				"shape": "vector",
+				"value": [1,0,1,8,44,213,308,203,46,10]
+			},
+			"name": "Count RightCalccalcarinecortex values"
+		},
+		"label": "Histogram :RightCalccalcarinecortex-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightCalccalcarinecortex",
+		"dataset": {
+			"data": {
+				"header": [2.18881173,2.48682919,2.78484665,3.08286411,3.38088157,3.67889903,3.97691649,4.27493395,4.57295141,4.87096887],
+				"shape": "vector",
+				"value": [6,20,154,179,226,146,55,8,11,10]
+			},
+			"name": "Count RightCalccalcarinecortex values"
+		},
+		"label": "Histogram :RightCalccalcarinecortex-PTGENDER=Male"
+	}
+]

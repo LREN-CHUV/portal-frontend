@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "RightSCAsubcallosalarea",
+		"count": 1649,
+		"min": 0,
+		"max": 1.6295973,
+		"average": 1.158299106,
+		"std": 0.139174159
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightSCAsubcallosalarea",
+		"dataset": {
+			"data": {
+				"header": [0.081479865,0.244439595,0.407399325,0.570359055,0.733318785,0.896278515,1.059238245,1.222197975,1.385157705,1.548117435],
+				"shape": "vector",
+				"value": [1,0,0,1,2,121,673,608,202,41]
+			},
+			"name": "Count RightSCAsubcallosalarea values"
+		},
+		"label": "Histogram :RightSCAsubcallosalarea"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightSCAsubcallosalarea",
+		"dataset": {
+			"data": {
+				"header": [0.076202865,0.228608595,0.381014325,0.533420055,0.685825785,0.838231515,0.990637245,1.143042975,1.295448705,1.447854435],
+				"shape": "vector",
+				"value": [1,0,0,0,3,24,339,345,109,13]
+			},
+			"name": "Count RightSCAsubcallosalarea values"
+		},
+		"label": "Histogram :RightSCAsubcallosalarea-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightSCAsubcallosalarea",
+		"dataset": {
+			"data": {
+				"header": [0.903200263,0.979663109,1.056125955,1.132588801,1.209051647,1.285514493,1.361977339,1.438440185,1.514903031,1.591365877],
+				"shape": "vector",
+				"value": [8,20,68,201,203,153,88,43,21,10]
+			},
+			"name": "Count RightSCAsubcallosalarea values"
+		},
+		"label": "Histogram :RightSCAsubcallosalarea-PTGENDER=Male"
+	}
+]

@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "EcogPtMem_bl",
+		"count": 430,
+		"min": 1,
+		"max": 3.75,
+		"average": 1.750913558,
+		"std": 0.6289166784
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "EcogPtMem_bl",
+		"dataset": {
+			"data": {
+				"header": [1.1375,1.4125,1.6875,1.9625,2.2375,2.5125,2.7875,3.0625,3.3375,3.6125],
+				"shape": "vector",
+				"value": [116,99,52,63,44,15,11,15,4,11]
+			},
+			"name": "Count EcogPtMem_bl values"
+		},
+		"label": "Histogram :EcogPtMem_bl"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "EcogPtMem_bl",
+		"dataset": {
+			"data": {
+				"header": [1.1375,1.4125,1.6875,1.9625,2.2375,2.5125,2.7875,3.0625,3.3375,3.6125],
+				"shape": "vector",
+				"value": [64,55,26,30,22,0,4,3,0,8]
+			},
+			"name": "Count EcogPtMem_bl values"
+		},
+		"label": "Histogram :EcogPtMem_bl-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "EcogPtMem_bl",
+		"dataset": {
+			"data": {
+				"header": [1.13125,1.39375,1.65625,1.91875,2.18125,2.44375,2.70625,2.96875,3.23125,3.49375],
+				"shape": "vector",
+				"value": [52,44,26,33,10,23,11,6,6,7]
+			},
+			"name": "Count EcogPtMem_bl values"
+		},
+		"label": "Histogram :EcogPtMem_bl-PTGENDER=Male"
+	}
+]

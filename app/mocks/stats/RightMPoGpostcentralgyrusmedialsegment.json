@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "RightMPoGpostcentralgyrusmedialsegment",
+		"count": 1649,
+		"min": 0.000959596,
+		"max": 1.6072345,
+		"average": 1.058533903,
+		"std": 0.1523065543
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightMPoGpostcentralgyrusmedialsegment",
+		"dataset": {
+			"data": {
+				"header": [0.0812733412,0.2419008316,0.402528322,0.5631558124,0.7237833028,0.8844107932,1.045038284,1.205665774,1.366293264,1.526920755],
+				"shape": "vector",
+				"value": [1,0,0,2,39,409,712,348,116,22]
+			},
+			"name": "Count RightMPoGpostcentralgyrusmedialsegment values"
+		},
+		"label": "Histogram :RightMPoGpostcentralgyrusmedialsegment"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightMPoGpostcentralgyrusmedialsegment",
+		"dataset": {
+			"data": {
+				"header": [0.0812733412,0.2419008316,0.402528322,0.5631558124,0.7237833028,0.8844107932,1.045038284,1.205665774,1.366293264,1.526920755],
+				"shape": "vector",
+				"value": [1,0,0,2,35,287,381,107,17,4]
+			},
+			"name": "Count RightMPoGpostcentralgyrusmedialsegment values"
+		},
+		"label": "Histogram :RightMPoGpostcentralgyrusmedialsegment-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightMPoGpostcentralgyrusmedialsegment",
+		"dataset": {
+			"data": {
+				"header": [0.775567156,0.860404908,0.94524266,1.030080412,1.114918164,1.199755916,1.284593668,1.36943142,1.454269172,1.539106924],
+				"shape": "vector",
+				"value": [5,35,125,179,188,107,97,55,15,9]
+			},
+			"name": "Count RightMPoGpostcentralgyrusmedialsegment values"
+		},
+		"label": "Histogram :RightMPoGpostcentralgyrusmedialsegment-PTGENDER=Male"
+	}
+]

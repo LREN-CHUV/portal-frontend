@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "RightPCuprecuneus",
+		"count": 1649,
+		"min": 0.3167465,
+		"max": 15.085825,
+		"average": 10.4759088,
+		"std": 1.229344857
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightPCuprecuneus",
+		"dataset": {
+			"data": {
+				"header": [1.055200425,2.532108275,4.009016125,5.485923975,6.962831825,8.439739675,9.916647525,11.39355538,12.87046323,14.34737108],
+				"shape": "vector",
+				"value": [1,0,0,1,7,225,671,620,111,13]
+			},
+			"name": "Count RightPCuprecuneus values"
+		},
+		"label": "Histogram :RightPCuprecuneus"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightPCuprecuneus",
+		"dataset": {
+			"data": {
+				"header": [0.955977025,2.234438075,3.512899125,4.791360175,6.069821225,7.348282275,8.626743325,9.905204375,11.18366543,12.46212648],
+				"shape": "vector",
+				"value": [1,0,0,0,1,15,215,370,199,33]
+			},
+			"name": "Count RightPCuprecuneus values"
+		},
+		"label": "Histogram :RightPCuprecuneus-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightPCuprecuneus",
+		"dataset": {
+			"data": {
+				"header": [7.981234705,8.729086315,9.476937925,10.22478954,10.97264115,11.72049276,12.46834437,13.21619598,13.96404759,14.71189919],
+				"shape": "vector",
+				"value": [6,20,85,132,271,182,80,24,8,7]
+			},
+			"name": "Count RightPCuprecuneus values"
+		},
+		"label": "Histogram :RightPCuprecuneus-PTGENDER=Male"
+	}
+]

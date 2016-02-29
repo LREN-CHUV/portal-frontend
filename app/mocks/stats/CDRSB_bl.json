@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "CDRSB_bl",
+		"count": 1649,
+		"min": 0,
+		"max": 10,
+		"average": 1.313523347,
+		"std": 2.188535945
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "CDRSB_bl",
+		"dataset": {
+			"data": {
+				"header": [0.5,1.5,2.5,3.5,4.5,5.5,6.5,7.5,8.5,9.5],
+				"shape": "vector",
+				"value": [1169,30,85,112,147,48,31,15,8,4]
+			},
+			"name": "Count CDRSB_bl values"
+		},
+		"label": "Histogram :CDRSB_bl"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "CDRSB_bl",
+		"dataset": {
+			"data": {
+				"header": [0.5,1.5,2.5,3.5,4.5,5.5,6.5,7.5,8.5,9.5],
+				"shape": "vector",
+				"value": [605,14,34,56,76,21,11,8,5,4]
+			},
+			"name": "Count CDRSB_bl values"
+		},
+		"label": "Histogram :CDRSB_bl-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "CDRSB_bl",
+		"dataset": {
+			"data": {
+				"header": [0.45,1.35,2.25,3.15,4.05,4.95,5.85,6.75,7.65,8.55],
+				"shape": "vector",
+				"value": [561,7,27,65,72,26,27,20,7,3]
+			},
+			"name": "Count CDRSB_bl values"
+		},
+		"label": "Histogram :CDRSB_bl-PTGENDER=Male"
+	}
+]

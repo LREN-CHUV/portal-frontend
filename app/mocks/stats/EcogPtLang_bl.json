@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "EcogPtLang_bl",
+		"count": 430,
+		"min": 1,
+		"max": 3.85714,
+		"average": 1.494859372,
+		"std": 0.536289478
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "EcogPtLang_bl",
+		"dataset": {
+			"data": {
+				"header": [1.142857,1.428571,1.714285,1.999999,2.285713,2.571427,2.857141,3.142855,3.428569,3.714283],
+				"shape": "vector",
+				"value": [193,108,60,25,18,10,5,3,0,8]
+			},
+			"name": "Count EcogPtLang_bl values"
+		},
+		"label": "Histogram :EcogPtLang_bl"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "EcogPtLang_bl",
+		"dataset": {
+			"data": {
+				"header": [1.142857,1.428571,1.714285,1.999999,2.285713,2.571427,2.857141,3.142855,3.428569,3.714283],
+				"shape": "vector",
+				"value": [111,44,23,18,6,0,2,0,0,8]
+			},
+			"name": "Count EcogPtLang_bl values"
+		},
+		"label": "Histogram :EcogPtLang_bl-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "EcogPtLang_bl",
+		"dataset": {
+			"data": {
+				"header": [1.1,1.3,1.5,1.7,1.9,2.1,2.3,2.5,2.7,2.9],
+				"shape": "vector",
+				"value": [51,57,38,37,4,3,12,6,7,3]
+			},
+			"name": "Count EcogPtLang_bl values"
+		},
+		"label": "Histogram :EcogPtLang_bl-PTGENDER=Male"
+	}
+]

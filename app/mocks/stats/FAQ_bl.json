@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "FAQ_bl",
+		"count": 1649,
+		"min": 0,
+		"max": 30,
+		"average": 3.974530018,
+		"std": 7.0012538
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "FAQ_bl",
+		"dataset": {
+			"data": {
+				"header": [1.5,4.5,7.5,10.5,13.5,16.5,19.5,22.5,25.5,28.5],
+				"shape": "vector",
+				"value": [1207,34,72,93,74,58,50,30,27,4]
+			},
+			"name": "Count FAQ_bl values"
+		},
+		"label": "Histogram :FAQ_bl"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "FAQ_bl",
+		"dataset": {
+			"data": {
+				"header": [1.5,4.5,7.5,10.5,13.5,16.5,19.5,22.5,25.5,28.5],
+				"shape": "vector",
+				"value": [626,9,36,42,42,24,24,19,8,4]
+			},
+			"name": "Count FAQ_bl values"
+		},
+		"label": "Histogram :FAQ_bl-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "FAQ_bl",
+		"dataset": {
+			"data": {
+				"header": [1.35,4.05,6.75,9.45,12.15,14.85,17.55,20.25,22.95,25.65],
+				"shape": "vector",
+				"value": [555,38,38,29,46,31,22,26,11,19]
+			},
+			"name": "Count FAQ_bl values"
+		},
+		"label": "Histogram :FAQ_bl-PTGENDER=Male"
+	}
+]

@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "RightPOparietaloperculum",
+		"count": 1649,
+		"min": 0,
+		"max": 3.0849807,
+		"average": 2.130122181,
+		"std": 0.3013082621
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightPOparietaloperculum",
+		"dataset": {
+			"data": {
+				"header": [0.154249035,0.462747105,0.771245175,1.079743245,1.388241315,1.696739385,2.005237455,2.313735525,2.622233595,2.930731665],
+				"shape": "vector",
+				"value": [1,0,0,2,24,228,720,449,186,39]
+			},
+			"name": "Count RightPOparietaloperculum values"
+		},
+		"label": "Histogram :RightPOparietaloperculum"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightPOparietaloperculum",
+		"dataset": {
+			"data": {
+				"header": [0.154249035,0.462747105,0.771245175,1.079743245,1.388241315,1.696739385,2.005237455,2.313735525,2.622233595,2.930731665],
+				"shape": "vector",
+				"value": [1,0,0,2,22,175,432,146,44,12]
+			},
+			"name": "Count RightPOparietaloperculum values"
+		},
+		"label": "Histogram :RightPOparietaloperculum-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightPOparietaloperculum",
+		"dataset": {
+			"data": {
+				"header": [1.422577175,1.595335125,1.768093075,1.940851025,2.113608975,2.286366925,2.459124875,2.631882825,2.804640775,2.977398725],
+				"shape": "vector",
+				"value": [2,13,40,149,180,168,143,74,33,13]
+			},
+			"name": "Count RightPOparietaloperculum values"
+		},
+		"label": "Histogram :RightPOparietaloperculum-PTGENDER=Male"
+	}
+]

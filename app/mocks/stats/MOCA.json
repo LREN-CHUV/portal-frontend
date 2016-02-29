@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "MOCA",
+		"count": 430,
+		"min": 3,
+		"max": 30,
+		"average": 24.20232558,
+		"std": 4.406870477
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "MOCA",
+		"dataset": {
+			"data": {
+				"header": [4.35,7.05,9.75,12.45,15.15,17.85,20.55,23.25,25.95,28.65],
+				"shape": "vector",
+				"value": [2,1,11,4,11,18,27,100,167,89]
+			},
+			"name": "Count MOCA values"
+		},
+		"label": "Histogram :MOCA"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "MOCA",
+		"dataset": {
+			"data": {
+				"header": [6.25,8.75,11.25,13.75,16.25,18.75,21.25,23.75,26.25,28.75],
+				"shape": "vector",
+				"value": [1,4,3,4,2,5,23,68,51,66]
+			},
+			"name": "Count MOCA values"
+		},
+		"label": "Histogram :MOCA-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "MOCA",
+		"dataset": {
+			"data": {
+				"header": [4.35,7.05,9.75,12.45,15.15,17.85,20.55,23.25,25.95,28.65],
+				"shape": "vector",
+				"value": [1,0,6,3,7,15,13,51,84,23]
+			},
+			"name": "Count MOCA values"
+		},
+		"label": "Histogram :MOCA-PTGENDER=Male"
+	}
+]

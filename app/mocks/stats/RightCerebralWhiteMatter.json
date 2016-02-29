@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "RightCerebralWhiteMatter",
+		"count": 1649,
+		"min": 0.55154681,
+		"max": 302.26718,
+		"average": 204.1204632,
+		"std": 26.61999047
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightCerebralWhiteMatter",
+		"dataset": {
+			"data": {
+				"header": [15.63732847,45.80889179,75.98045511,106.1520184,136.3235817,166.4951451,196.6667084,226.8382717,257.009835,287.1813983],
+				"shape": "vector",
+				"value": [1,0,0,1,30,302,667,532,103,13]
+			},
+			"name": "Count RightCerebralWhiteMatter values"
+		},
+		"label": "Histogram :RightCerebralWhiteMatter"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightCerebralWhiteMatter",
+		"dataset": {
+			"data": {
+				"header": [13.77763147,40.22980079,66.68197011,93.13413943,119.5863087,146.0384781,172.4906474,198.9428167,225.394986,251.8471553],
+				"shape": "vector",
+				"value": [1,0,0,1,3,52,299,311,148,19]
+			},
+			"name": "Count RightCerebralWhiteMatter values"
+		},
+		"label": "Histogram :RightCerebralWhiteMatter-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightCerebralWhiteMatter",
+		"dataset": {
+			"data": {
+				"header": [131.8807565,149.8161695,167.7515825,185.6869955,203.6224085,221.5578215,239.4932345,257.4286475,275.3640605,293.2994735],
+				"shape": "vector",
+				"value": [3,1,30,94,215,283,117,54,11,7]
+			},
+			"name": "Count RightCerebralWhiteMatter values"
+		},
+		"label": "Histogram :RightCerebralWhiteMatter-PTGENDER=Male"
+	}
+]

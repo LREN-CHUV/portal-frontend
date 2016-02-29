@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "RightPutamen",
+		"count": 1649,
+		"min": 0,
+		"max": 5.3775792,
+		"average": 3.633433279,
+		"std": 0.4443002597
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightPutamen",
+		"dataset": {
+			"data": {
+				"header": [0.26887896,0.80663688,1.3443948,1.88215272,2.41991064,2.95766856,3.49542648,4.0331844,4.57094232,5.10870024],
+				"shape": "vector",
+				"value": [2,0,0,0,27,223,810,508,56,23]
+			},
+			"name": "Count RightPutamen values"
+		},
+		"label": "Histogram :RightPutamen"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightPutamen",
+		"dataset": {
+			"data": {
+				"header": [0.261925555,0.785776665,1.309627775,1.833478885,2.357329995,2.881181105,3.405032215,3.928883325,4.452734435,4.976585545],
+				"shape": "vector",
+				"value": [2,0,0,0,14,96,455,239,17,11]
+			},
+			"name": "Count RightPutamen values"
+		},
+		"label": "Histogram :RightPutamen-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightPutamen",
+		"dataset": {
+			"data": {
+				"header": [2.55443228,2.85160564,3.148779,3.44595236,3.74312572,4.04029908,4.33747244,4.6346458,4.93181916,5.22899252],
+				"shape": "vector",
+				"value": [11,20,59,161,273,197,56,21,12,5]
+			},
+			"name": "Count RightPutamen values"
+		},
+		"label": "Histogram :RightPutamen-PTGENDER=Male"
+	}
+]

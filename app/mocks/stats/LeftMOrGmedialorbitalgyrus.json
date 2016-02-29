@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "LeftMOrGmedialorbitalgyrus",
+		"count": 1649,
+		"min": 0,
+		"max": 5.0915027,
+		"average": 3.809169612,
+		"std": 0.4111280512
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftMOrGmedialorbitalgyrus",
+		"dataset": {
+			"data": {
+				"header": [0.254575135,0.763725405,1.272875675,1.782025945,2.291176215,2.800326485,3.309476755,3.818627025,4.327777295,4.836927565],
+				"shape": "vector",
+				"value": [1,0,0,2,3,35,375,837,345,51]
+			},
+			"name": "Count LeftMOrGmedialorbitalgyrus values"
+		},
+		"label": "Histogram :LeftMOrGmedialorbitalgyrus"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftMOrGmedialorbitalgyrus",
+		"dataset": {
+			"data": {
+				"header": [0.252300785,0.756902355,1.261503925,1.766105495,2.270707065,2.775308635,3.279910205,3.784511775,4.289113345,4.793714915],
+				"shape": "vector",
+				"value": [1,0,0,2,2,14,278,412,104,21]
+			},
+			"name": "Count LeftMOrGmedialorbitalgyrus values"
+		},
+		"label": "Histogram :LeftMOrGmedialorbitalgyrus-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftMOrGmedialorbitalgyrus",
+		"dataset": {
+			"data": {
+				"header": [2.652216485,2.908983455,3.165750425,3.422517395,3.679284365,3.936051335,4.192818305,4.449585275,4.706352245,4.963119215],
+				"shape": "vector",
+				"value": [3,13,20,58,167,264,183,74,19,14]
+			},
+			"name": "Count LeftMOrGmedialorbitalgyrus values"
+		},
+		"label": "Histogram :LeftMOrGmedialorbitalgyrus-PTGENDER=Male"
+	}
+]

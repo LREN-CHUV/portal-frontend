@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "RightFuGfusiformgyrus",
+		"count": 1649,
+		"min": 0.000135066,
+		"max": 9.6619883,
+		"average": 6.971398355,
+		"std": 0.854196095
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightFuGfusiformgyrus",
+		"dataset": {
+			"data": {
+				"header": [0.4832277277,1.449413051,2.415598375,3.381783698,4.347969021,5.314154345,6.280339668,7.246524992,8.212710315,9.178895638],
+				"shape": "vector",
+				"value": [1,0,0,1,11,123,511,700,276,26]
+			},
+			"name": "Count RightFuGfusiformgyrus values"
+		},
+		"label": "Histogram :RightFuGfusiformgyrus"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightFuGfusiformgyrus",
+		"dataset": {
+			"data": {
+				"header": [0.4438080727,1.331154086,2.218500099,3.105846113,3.993192126,4.88053814,5.767884153,6.655230167,7.54257618,8.429922193],
+				"shape": "vector",
+				"value": [1,0,0,1,5,27,202,394,189,15]
+			},
+			"name": "Count RightFuGfusiformgyrus values"
+		},
+		"label": "Histogram :RightFuGfusiformgyrus-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightFuGfusiformgyrus",
+		"dataset": {
+			"data": {
+				"header": [4.828637105,5.337410915,5.846184725,6.354958535,6.863732345,7.372506155,7.881279965,8.390053775,8.898827585,9.407601395],
+				"shape": "vector",
+				"value": [4,9,46,75,162,198,192,97,27,5]
+			},
+			"name": "Count RightFuGfusiformgyrus values"
+		},
+		"label": "Histogram :RightFuGfusiformgyrus-PTGENDER=Male"
+	}
+]

@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "RightAmygdala",
+		"count": 1649,
+		"min": 0,
+		"max": 1.1294163,
+		"average": 0.7925316658,
+		"std": 0.128177198
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightAmygdala",
+		"dataset": {
+			"data": {
+				"header": [0.056470815,0.169412445,0.282354075,0.395295705,0.508237335,0.621178965,0.734120595,0.847062225,0.960003855,1.072945485],
+				"shape": "vector",
+				"value": [1,1,0,3,83,236,444,554,292,35]
+			},
+			"name": "Count RightAmygdala values"
+		},
+		"label": "Histogram :RightAmygdala"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightAmygdala",
+		"dataset": {
+			"data": {
+				"header": [0.056470815,0.169412445,0.282354075,0.395295705,0.508237335,0.621178965,0.734120595,0.847062225,0.960003855,1.072945485],
+				"shape": "vector",
+				"value": [1,1,0,3,68,156,315,216,67,7]
+			},
+			"name": "Count RightAmygdala values"
+		},
+		"label": "Histogram :RightAmygdala-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightAmygdala",
+		"dataset": {
+			"data": {
+				"header": [0.49597826,0.55786658,0.6197549,0.68164322,0.74353154,0.80541986,0.86730818,0.9291965,0.99108482,1.05297314],
+				"shape": "vector",
+				"value": [7,21,38,64,66,134,213,188,60,24]
+			},
+			"name": "Count RightAmygdala values"
+		},
+		"label": "Histogram :RightAmygdala-PTGENDER=Male"
+	}
+]

@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "LeftPTplanumtemporale",
+		"count": 1649,
+		"min": 0,
+		"max": 2.8422406,
+		"average": 1.985875628,
+		"std": 0.3054103397
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftPTplanumtemporale",
+		"dataset": {
+			"data": {
+				"header": [0.14211203,0.42633609,0.71056015,0.99478421,1.27900827,1.56323233,1.84745639,2.13168045,2.41590451,2.70012857],
+				"shape": "vector",
+				"value": [1,0,0,2,21,283,562,452,275,53]
+			},
+			"name": "Count LeftPTplanumtemporale values"
+		},
+		"label": "Histogram :LeftPTplanumtemporale"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftPTplanumtemporale",
+		"dataset": {
+			"data": {
+				"header": [0.13803513,0.41410539,0.69017565,0.96624591,1.24231617,1.51838643,1.79445669,2.07052695,2.34659721,2.62266747],
+				"shape": "vector",
+				"value": [1,0,0,0,10,198,294,252,64,15]
+			},
+			"name": "Count LeftPTplanumtemporale values"
+		},
+		"label": "Histogram :LeftPTplanumtemporale-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftPTplanumtemporale",
+		"dataset": {
+			"data": {
+				"header": [1.35823952,1.51445016,1.6706608,1.82687144,1.98308208,2.13929272,2.29550336,2.451714,2.60792464,2.76413528],
+				"shape": "vector",
+				"value": [3,24,48,139,153,141,136,110,53,8]
+			},
+			"name": "Count LeftPTplanumtemporale values"
+		},
+		"label": "Histogram :LeftPTplanumtemporale-PTGENDER=Male"
+	}
+]

@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "LeftSPLsuperiorparietallobule",
+		"count": 1649,
+		"min": 0.48444715,
+		"max": 18.312254,
+		"average": 10.29883051,
+		"std": 1.23876781
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftSPLsuperiorparietallobule",
+		"dataset": {
+			"data": {
+				"header": [1.375837492,3.158618177,4.941398862,6.724179548,8.506960232,10.28974092,12.0725216,13.85530229,15.63808297,17.42086366],
+				"shape": "vector",
+				"value": [1,0,1,10,355,902,359,19,0,2]
+			},
+			"name": "Count LeftSPLsuperiorparietallobule values"
+		},
+		"label": "Histogram :LeftSPLsuperiorparietallobule"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftSPLsuperiorparietallobule",
+		"dataset": {
+			"data": {
+				"header": [1.153437593,2.491418477,3.829399362,5.167380247,6.505361133,7.843342018,9.181322902,10.51930379,11.85728467,13.19526556],
+				"shape": "vector",
+				"value": [1,0,0,1,3,83,332,299,105,10]
+			},
+			"name": "Count LeftSPLsuperiorparietallobule values"
+		},
+		"label": "Histogram :LeftSPLsuperiorparietallobule-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftSPLsuperiorparietallobule",
+		"dataset": {
+			"data": {
+				"header": [7.92343096,9.01699128,10.1105516,11.20411192,12.29767224,13.39123256,14.48479288,15.5783532,16.67191352,17.76547384],
+				"shape": "vector",
+				"value": [13,135,263,251,127,22,2,0,0,2]
+			},
+			"name": "Count LeftSPLsuperiorparietallobule values"
+		},
+		"label": "Histogram :LeftSPLsuperiorparietallobule-PTGENDER=Male"
+	}
+]

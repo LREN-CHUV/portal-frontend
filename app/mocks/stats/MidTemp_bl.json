@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "MidTemp_bl",
+		"count": 1415,
+		"min": 9375,
+		"max": 28103,
+		"average": 19139.90318,
+		"std": 3084.912578
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "MidTemp_bl",
+		"dataset": {
+			"data": {
+				"header": [10311.4,12184.2,14057,15929.8,17802.6,19675.4,21548.2,23421,25293.8,27166.6],
+				"shape": "vector",
+				"value": [13,32,86,176,341,310,257,140,43,17]
+			},
+			"name": "Count MidTemp_bl values"
+		},
+		"label": "Histogram :MidTemp_bl"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "MidTemp_bl",
+		"dataset": {
+			"data": {
+				"header": [11065.6,12728.8,14392,16055.2,17718.4,19381.6,21044.8,22708,24371.2,26034.4],
+				"shape": "vector",
+				"value": [26,13,69,104,191,170,89,34,12,12]
+			},
+			"name": "Count MidTemp_bl values"
+		},
+		"label": "Histogram :MidTemp_bl-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "MidTemp_bl",
+		"dataset": {
+			"data": {
+				"header": [10311.4,12184.2,14057,15929.8,17802.6,19675.4,21548.2,23421,25293.8,27166.6],
+				"shape": "vector",
+				"value": [3,6,27,61,129,130,174,119,32,14]
+			},
+			"name": "Count MidTemp_bl values"
+		},
+		"label": "Histogram :MidTemp_bl-PTGENDER=Male"
+	}
+]

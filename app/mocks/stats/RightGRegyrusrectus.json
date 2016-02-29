@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "RightGRegyrusrectus",
+		"count": 1649,
+		"min": 0,
+		"max": 2.7922742,
+		"average": 1.995080883,
+		"std": 0.2300636548
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightGRegyrusrectus",
+		"dataset": {
+			"data": {
+				"header": [0.13961371,0.41884113,0.69806855,0.97729597,1.25652339,1.53575081,1.81497823,2.09420565,2.37343307,2.65266049],
+				"shape": "vector",
+				"value": [1,0,0,3,7,88,607,728,184,31]
+			},
+			"name": "Count RightGRegyrusrectus values"
+		},
+		"label": "Histogram :RightGRegyrusrectus"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightGRegyrusrectus",
+		"dataset": {
+			"data": {
+				"header": [0.13961371,0.41884113,0.69806855,0.97729597,1.25652339,1.53575081,1.81497823,2.09420565,2.37343307,2.65266049],
+				"shape": "vector",
+				"value": [1,0,0,2,4,74,431,280,36,6]
+			},
+			"name": "Count RightGRegyrusrectus values"
+		},
+		"label": "Histogram :RightGRegyrusrectus-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightGRegyrusrectus",
+		"dataset": {
+			"data": {
+				"header": [1.036229164,1.207652074,1.379074982,1.550497891,1.721920801,1.89334371,2.064766619,2.236189528,2.407612437,2.579035346],
+				"shape": "vector",
+				"value": [1,0,5,7,41,172,298,190,71,30]
+			},
+			"name": "Count RightGRegyrusrectus values"
+		},
+		"label": "Histogram :RightGRegyrusrectus-PTGENDER=Male"
+	}
+]

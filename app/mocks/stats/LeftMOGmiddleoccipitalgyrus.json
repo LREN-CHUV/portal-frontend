@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "LeftMOGmiddleoccipitalgyrus",
+		"count": 1649,
+		"min": 1.1522921,
+		"max": 8.5249786,
+		"average": 5.914019564,
+		"std": 0.7807990276
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftMOGmiddleoccipitalgyrus",
+		"dataset": {
+			"data": {
+				"header": [1.520926425,2.258195075,2.995463725,3.732732375,4.470001025,5.207269675,5.944538325,6.681806975,7.419075625,8.156344275],
+				"shape": "vector",
+				"value": [1,0,2,14,92,451,585,387,103,14]
+			},
+			"name": "Count LeftMOGmiddleoccipitalgyrus values"
+		},
+		"label": "Histogram :LeftMOGmiddleoccipitalgyrus"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftMOGmiddleoccipitalgyrus",
+		"dataset": {
+			"data": {
+				"header": [1.52041831,2.25667073,2.99292315,3.72917557,4.46542799,5.20168041,5.93793283,6.67418525,7.41043767,8.14669009],
+				"shape": "vector",
+				"value": [1,0,2,12,69,321,291,122,14,2]
+			},
+			"name": "Count LeftMOGmiddleoccipitalgyrus values"
+		},
+		"label": "Histogram :LeftMOGmiddleoccipitalgyrus-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftMOGmiddleoccipitalgyrus",
+		"dataset": {
+			"data": {
+				"header": [4.189598405,4.645954215,5.102310025,5.558665835,6.015021645,6.471377455,6.927733265,7.384089075,7.840444885,8.296800695],
+				"shape": "vector",
+				"value": [8,22,62,129,190,201,120,63,13,7]
+			},
+			"name": "Count LeftMOGmiddleoccipitalgyrus values"
+		},
+		"label": "Histogram :LeftMOGmiddleoccipitalgyrus-PTGENDER=Male"
+	}
+]

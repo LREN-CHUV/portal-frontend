@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "WholeBrain_bl",
+		"count": 1411,
+		"min": 750109,
+		"max": 1364690,
+		"average": 1002062.333,
+		"std": 107592.507
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "WholeBrain_bl",
+		"dataset": {
+			"data": {
+				"header": [780838.05,842296.15,903754.25,965212.35,1026670.45,1088128.55,1149586.65,1211044.75,1272502.85,1333960.95],
+				"shape": "vector",
+				"value": [54,138,198,289,334,216,102,64,9,7]
+			},
+			"name": "Count WholeBrain_bl values"
+		},
+		"label": "Histogram :WholeBrain_bl"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "WholeBrain_bl",
+		"dataset": {
+			"data": {
+				"header": [773692.05,820858.15,868024.25,915190.35,962356.45,1009522.55,1056688.65,1103854.75,1151020.85,1198186.95],
+				"shape": "vector",
+				"value": [34,57,99,153,134,88,92,35,10,14]
+			},
+			"name": "Count WholeBrain_bl values"
+		},
+		"label": "Histogram :WholeBrain_bl-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "WholeBrain_bl",
+		"dataset": {
+			"data": {
+				"header": [826764.85,883388.55,940012.25,996635.95,1053259.65,1109883.35,1166507.05,1223130.75,1279754.45,1336378.15],
+				"shape": "vector",
+				"value": [11,37,93,98,183,167,54,36,9,7]
+			},
+			"name": "Count WholeBrain_bl values"
+		},
+		"label": "Histogram :WholeBrain_bl-PTGENDER=Male"
+	}
+]

@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "LeftLateralVentricle",
+		"count": 1649,
+		"min": 0,
+		"max": 66.395355,
+		"average": 23.41265296,
+		"std": 11.0321456
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftLateralVentricle",
+		"dataset": {
+			"data": {
+				"header": [3.31976775,9.95930325,16.59883875,23.23837425,29.87790975,36.51744525,43.15698075,49.79651625,56.43605175,63.07558725],
+				"shape": "vector",
+				"value": [8,287,441,412,220,134,71,44,20,12]
+			},
+			"name": "Count LeftLateralVentricle values"
+		},
+		"label": "Histogram :LeftLateralVentricle"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftLateralVentricle",
+		"dataset": {
+			"data": {
+				"header": [3.22596055,9.67788165,16.12980275,22.58172385,29.03364495,35.48556605,41.93748715,48.38940825,54.84132935,61.29325045],
+				"shape": "vector",
+				"value": [8,203,273,178,86,59,15,6,1,5]
+			},
+			"name": "Count LeftLateralVentricle values"
+		},
+		"label": "Histogram :LeftLateralVentricle-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftLateralVentricle",
+		"dataset": {
+			"data": {
+				"header": [11.27268914,17.07507502,22.8774609,28.67984678,34.48223266,40.28461854,46.08700442,51.8893903,57.69177618,63.49416206],
+				"shape": "vector",
+				"value": [82,158,211,131,87,50,45,29,13,9]
+			},
+			"name": "Count LeftLateralVentricle values"
+		},
+		"label": "Histogram :LeftLateralVentricle-PTGENDER=Male"
+	}
+]

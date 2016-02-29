@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "CerebellarVermalLobulesVI_VII",
+		"count": 1649,
+		"min": 0.14867851,
+		"max": 2.8954015,
+		"average": 2.167123964,
+		"std": 0.2130293605
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "CerebellarVermalLobulesVI_VII",
+		"dataset": {
+			"data": {
+				"header": [0.2860146595,0.5606869585,0.8353592575,1.110031557,1.384703856,1.659376155,1.934048454,2.208720752,2.483393051,2.75806535],
+				"shape": "vector",
+				"value": [1,0,0,1,2,52,456,848,245,44]
+			},
+			"name": "Count CerebellarVermalLobulesVI_VII values"
+		},
+		"label": "Histogram :CerebellarVermalLobulesVI_VII"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "CerebellarVermalLobulesVI_VII",
+		"dataset": {
+			"data": {
+				"header": [0.2860146595,0.5606869585,0.8353592575,1.110031557,1.384703856,1.659376155,1.934048454,2.208720752,2.483393051,2.75806535],
+				"shape": "vector",
+				"value": [1,0,0,1,2,33,344,381,55,17]
+			},
+			"name": "Count CerebellarVermalLobulesVI_VII values"
+		},
+		"label": "Histogram :CerebellarVermalLobulesVI_VII-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "CerebellarVermalLobulesVI_VII",
+		"dataset": {
+			"data": {
+				"header": [1.727762375,1.837711325,1.947660275,2.057609225,2.167558175,2.277507125,2.387456075,2.497405025,2.607353975,2.717302925],
+				"shape": "vector",
+				"value": [14,24,41,98,212,198,117,69,22,20]
+			},
+			"name": "Count CerebellarVermalLobulesVI_VII values"
+		},
+		"label": "Histogram :CerebellarVermalLobulesVI_VII-PTGENDER=Male"
+	}
+]

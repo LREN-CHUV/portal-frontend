@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "RightOCPoccipitalpole",
+		"count": 1649,
+		"min": 1.1430161,
+		"max": 5.3248167,
+		"average": 2.828341396,
+		"std": 0.4412158171
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightOCPoccipitalpole",
+		"dataset": {
+			"data": {
+				"header": [1.35210613,1.77028619,2.18846625,2.60664631,3.02482637,3.44300643,3.86118649,4.27936655,4.69754661,5.11572667],
+				"shape": "vector",
+				"value": [3,22,238,587,516,223,50,8,1,1]
+			},
+			"name": "Count RightOCPoccipitalpole values"
+		},
+		"label": "Histogram :RightOCPoccipitalpole"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightOCPoccipitalpole",
+		"dataset": {
+			"data": {
+				"header": [1.35210613,1.77028619,2.18846625,2.60664631,3.02482637,3.44300643,3.86118649,4.27936655,4.69754661,5.11572667],
+				"shape": "vector",
+				"value": [3,20,202,384,174,42,8,0,0,1]
+			},
+			"name": "Count RightOCPoccipitalpole values"
+		},
+		"label": "Histogram :RightOCPoccipitalpole-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightOCPoccipitalpole",
+		"dataset": {
+			"data": {
+				"header": [2.02348228,2.28377564,2.544069,2.80436236,3.06465572,3.32494908,3.58524244,3.8455358,4.10582916,4.36612252],
+				"shape": "vector",
+				"value": [8,31,101,215,212,116,95,23,9,5]
+			},
+			"name": "Count RightOCPoccipitalpole values"
+		},
+		"label": "Histogram :RightOCPoccipitalpole-PTGENDER=Male"
+	}
+]

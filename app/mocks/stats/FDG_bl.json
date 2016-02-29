@@ -1,0 +1,61 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "FDG_bl",
+		"count": 7,
+		"min": 5.98253,
+		"max": 6.43812,
+		"average": 6.177782857,
+		"std": 0.2435230984
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "FDG_bl",
+		"dataset": {
+			"data": {
+				"header": [6.0053095,6.0508685,6.0964275,6.1419865,6.1875455,6.2331045,6.2786635,6.3242225,6.3697815,6.4153405],
+				"shape": "vector",
+				"value": [4,0,0,0,0,0,0,0,0,3]
+			},
+			"name": "Count FDG_bl values"
+		},
+		"label": "Histogram :FDG_bl"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "FDG_bl",
+		"dataset": {
+			"data": {
+				"header": [6.0053095,6.0508685,6.0964275,6.1419865,6.1875455,6.2331045,6.2786635,6.3242225,6.3697815,6.4153405],
+				"shape": "vector",
+				"value": [4,0,0,0,0,0,0,0,0,3]
+			},
+			"name": "Count FDG_bl values"
+		},
+		"label": "Histogram :FDG_bl-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "FDG_bl",
+		"dataset": {
+			"data": {
+				"header": [
+					[1],
+					[2],
+					[3],
+					[4],
+					[5],
+					[6],
+					[7],
+					[8],
+					[9],
+					[10]
+				],
+				"shape": "vector",
+				"value": [0,0,0,0,0,0,0,0,0,0]
+			},
+			"name": "Count FDG_bl values"
+		},
+		"label": "Histogram :FDG_bl-PTGENDER=Male"
+	}
+]

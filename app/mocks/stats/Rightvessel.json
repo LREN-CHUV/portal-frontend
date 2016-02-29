@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "Rightvessel",
+		"count": 1649,
+		"min": 0,
+		"max": 0,
+		"average": 0,
+		"std": 0
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "Rightvessel",
+		"dataset": {
+			"data": {
+				"header": [-5,-4,-3,-2,-1,0,1,2,3,4],
+				"shape": "vector",
+				"value": [0,0,0,0,0,1649,0,0,0,0]
+			},
+			"name": "Count Rightvessel values"
+		},
+		"label": "Histogram :Rightvessel"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "Rightvessel",
+		"dataset": {
+			"data": {
+				"header": [-5,-4,-3,-2,-1,0,1,2,3,4],
+				"shape": "vector",
+				"value": [0,0,0,0,0,834,0,0,0,0]
+			},
+			"name": "Count Rightvessel values"
+		},
+		"label": "Histogram :Rightvessel-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "Rightvessel",
+		"dataset": {
+			"data": {
+				"header": [-5,-4,-3,-2,-1,0,1,2,3,4],
+				"shape": "vector",
+				"value": [0,0,0,0,0,815,0,0,0,0]
+			},
+			"name": "Count Rightvessel values"
+		},
+		"label": "Histogram :Rightvessel-PTGENDER=Male"
+	}
+]

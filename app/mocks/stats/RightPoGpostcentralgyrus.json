@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "RightPoGpostcentralgyrus",
+		"count": 1649,
+		"min": 0.001382013,
+		"max": 16.711824,
+		"average": 9.987236542,
+		"std": 1.154231134
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightPoGpostcentralgyrus",
+		"dataset": {
+			"data": {
+				"header": [0.8369041123,2.507948311,4.17899251,5.850036708,7.521080907,9.192125106,10.8631693,12.5342135,14.2052577,15.8763019],
+				"shape": "vector",
+				"value": [1,0,0,3,96,759,683,101,4,2]
+			},
+			"name": "Count RightPoGpostcentralgyrus values"
+		},
+		"label": "Histogram :RightPoGpostcentralgyrus"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightPoGpostcentralgyrus",
+		"dataset": {
+			"data": {
+				"header": [0.7160483623,2.145381061,3.57471376,5.004046458,6.433379157,7.862711856,9.292044555,10.72137725,12.15070995,13.58004265],
+				"shape": "vector",
+				"value": [1,0,0,0,6,120,411,265,30,1]
+			},
+			"name": "Count RightPoGpostcentralgyrus values"
+		},
+		"label": "Histogram :RightPoGpostcentralgyrus-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightPoGpostcentralgyrus",
+		"dataset": {
+			"data": {
+				"header": [7.621186315,8.578095545,9.535004775,10.49191401,11.44882324,12.40573247,13.3626417,14.31955093,15.27646016,16.23336939],
+				"shape": "vector",
+				"value": [5,89,212,274,177,48,8,0,0,2]
+			},
+			"name": "Count RightPoGpostcentralgyrus values"
+		},
+		"label": "Histogram :RightPoGpostcentralgyrus-PTGENDER=Male"
+	}
+]

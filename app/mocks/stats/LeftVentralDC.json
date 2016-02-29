@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "LeftVentralDC",
+		"count": 1649,
+		"min": 0,
+		"max": 6.2315092,
+		"average": 4.649153425,
+		"std": 0.4612135951
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftVentralDC",
+		"dataset": {
+			"data": {
+				"header": [0.31157546,0.93472638,1.5578773,2.18102822,2.80417914,3.42733006,4.05048098,4.6736319,5.29678282,5.91993374],
+				"shape": "vector",
+				"value": [1,0,0,1,1,29,410,823,359,25]
+			},
+			"name": "Count LeftVentralDC values"
+		},
+		"label": "Histogram :LeftVentralDC"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftVentralDC",
+		"dataset": {
+			"data": {
+				"header": [0.28759949,0.86279847,1.43799745,2.01319643,2.58839541,3.16359439,3.73879337,4.31399235,4.88919133,5.46439031],
+				"shape": "vector",
+				"value": [1,0,0,0,2,2,91,499,203,36]
+			},
+			"name": "Count LeftVentralDC values"
+		},
+		"label": "Histogram :LeftVentralDC-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftVentralDC",
+		"dataset": {
+			"data": {
+				"header": [3.76823995,4.02753145,4.28682295,4.54611445,4.80540595,5.06469745,5.32398895,5.58328045,5.84257195,6.10186345],
+				"shape": "vector",
+				"value": [2,15,84,145,210,205,98,45,4,7]
+			},
+			"name": "Count LeftVentralDC values"
+		},
+		"label": "Histogram :LeftVentralDC-PTGENDER=Male"
+	}
+]

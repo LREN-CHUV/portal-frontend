@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "RightAnGangulargyrus",
+		"count": 1649,
+		"min": 0.32878637,
+		"max": 16.90799,
+		"average": 9.812677904,
+		"std": 1.219661491
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightAnGangulargyrus",
+		"dataset": {
+			"data": {
+				"header": [1.157746552,2.815666915,4.473587278,6.13150764,7.789428004,9.447348367,11.10526873,12.76318909,14.42110946,16.07902982],
+				"shape": "vector",
+				"value": [1,0,0,9,235,824,513,65,0,2]
+			},
+			"name": "Count RightAnGangulargyrus values"
+		},
+		"label": "Histogram :RightAnGangulargyrus"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightAnGangulargyrus",
+		"dataset": {
+			"data": {
+				"header": [0.9746188515,2.266283815,3.557948778,4.849613741,6.141278704,7.432943667,8.72460863,10.01627359,11.30793856,12.59960352],
+				"shape": "vector",
+				"value": [1,0,0,0,4,84,360,289,83,13]
+			},
+			"name": "Count RightAnGangulargyrus values"
+		},
+		"label": "Histogram :RightAnGangulargyrus-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightAnGangulargyrus",
+		"dataset": {
+			"data": {
+				"header": [7.232561195,8.251027385,9.269493575,10.28795977,11.30642596,12.32489215,13.34335834,14.36182453,15.38029072,16.39875691],
+				"shape": "vector",
+				"value": [10,57,193,305,185,53,10,0,0,2]
+			},
+			"name": "Count RightAnGangulargyrus values"
+		},
+		"label": "Histogram :RightAnGangulargyrus-PTGENDER=Male"
+	}
+]

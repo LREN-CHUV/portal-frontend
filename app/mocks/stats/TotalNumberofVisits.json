@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "TotalNumberofVisits",
+		"count": 1649,
+		"min": 1,
+		"max": 16,
+		"average": 6.506367495,
+		"std": 3.049369577
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "TotalNumberofVisits",
+		"dataset": {
+			"data": {
+				"header": [1.75,3.25,4.75,6.25,7.75,9.25,10.75,12.25,13.75,15.25],
+				"shape": "vector",
+				"value": [49,405,396,265,168,169,75,41,47,34]
+			},
+			"name": "Count TotalNumberofVisits values"
+		},
+		"label": "Histogram :TotalNumberofVisits"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "TotalNumberofVisits",
+		"dataset": {
+			"data": {
+				"header": [1.75,3.25,4.75,6.25,7.75,9.25,10.75,12.25,13.75,15.25],
+				"shape": "vector",
+				"value": [21,191,187,108,105,75,61,34,25,27]
+			},
+			"name": "Count TotalNumberofVisits values"
+		},
+		"label": "Histogram :TotalNumberofVisits-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "TotalNumberofVisits",
+		"dataset": {
+			"data": {
+				"header": [1.75,3.25,4.75,6.25,7.75,9.25,10.75,12.25,13.75,15.25],
+				"shape": "vector",
+				"value": [28,214,209,157,63,94,14,7,22,7]
+			},
+			"name": "Count TotalNumberofVisits values"
+		},
+		"label": "Histogram :TotalNumberofVisits-PTGENDER=Male"
+	}
+]

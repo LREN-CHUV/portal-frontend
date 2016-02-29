@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "RightPPplanumpolare",
+		"count": 1649,
+		"min": 0,
+		"max": 2.926954,
+		"average": 2.065732583,
+		"std": 0.2334166832
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightPPplanumpolare",
+		"dataset": {
+			"data": {
+				"header": [0.1463477,0.4390431,0.7317385,1.0244339,1.3171293,1.6098247,1.9025201,2.1952155,2.4879109,2.7806063],
+				"shape": "vector",
+				"value": [1,0,0,2,2,107,729,617,179,12]
+			},
+			"name": "Count RightPPplanumpolare values"
+		},
+		"label": "Histogram :RightPPplanumpolare"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightPPplanumpolare",
+		"dataset": {
+			"data": {
+				"header": [0.13263526,0.39790578,0.6631763,0.92844682,1.19371734,1.45898786,1.72425838,1.9895289,2.25479942,2.52006994],
+				"shape": "vector",
+				"value": [1,0,0,0,3,7,239,450,119,15]
+			},
+			"name": "Count RightPPplanumpolare values"
+		},
+		"label": "Histogram :RightPPplanumpolare-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightPPplanumpolare",
+		"dataset": {
+			"data": {
+				"header": [1.585716735,1.726899605,1.868082475,2.009265345,2.150448215,2.291631085,2.432813955,2.573996825,2.715179695,2.856362565],
+				"shape": "vector",
+				"value": [6,8,85,185,191,196,88,47,6,3]
+			},
+			"name": "Count RightPPplanumpolare values"
+		},
+		"label": "Histogram :RightPPplanumpolare-PTGENDER=Male"
+	}
+]

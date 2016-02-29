@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "Entorhinal_bl",
+		"count": 1415,
+		"min": 1426,
+		"max": 5731,
+		"average": 3514.025442,
+		"std": 803.5732686
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "Entorhinal_bl",
+		"dataset": {
+			"data": {
+				"header": [1641.25,2071.75,2502.25,2932.75,3363.25,3793.75,4224.25,4654.75,5085.25,5515.75],
+				"shape": "vector",
+				"value": [37,77,128,173,295,293,260,106,30,16]
+			},
+			"name": "Count Entorhinal_bl values"
+		},
+		"label": "Histogram :Entorhinal_bl"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "Entorhinal_bl",
+		"dataset": {
+			"data": {
+				"header": [1619.3,2005.9,2392.5,2779.1,3165.7,3552.3,3938.9,4325.5,4712.1,5098.7],
+				"shape": "vector",
+				"value": [23,39,77,60,166,160,89,84,19,3]
+			},
+			"name": "Count Entorhinal_bl values"
+		},
+		"label": "Histogram :Entorhinal_bl-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "Entorhinal_bl",
+		"dataset": {
+			"data": {
+				"header": [1652.65,2081.95,2511.25,2940.55,3369.85,3799.15,4228.45,4657.75,5087.05,5516.35],
+				"shape": "vector",
+				"value": [14,26,43,66,136,127,165,79,23,16]
+			},
+			"name": "Count Entorhinal_bl values"
+		},
+		"label": "Histogram :Entorhinal_bl-PTGENDER=Male"
+	}
+]

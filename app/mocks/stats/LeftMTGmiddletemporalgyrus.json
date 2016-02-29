@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "LeftMTGmiddletemporalgyrus",
+		"count": 1649,
+		"min": 0.011333139,
+		"max": 19.293606,
+		"average": 12.86080633,
+		"std": 1.712163997
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftMTGmiddletemporalgyrus",
+		"dataset": {
+			"data": {
+				"header": [0.975446782,2.903674068,4.831901354,6.76012864,8.688355926,10.61658321,12.5448105,14.47303778,16.40126507,18.32949236],
+				"shape": "vector",
+				"value": [1,0,0,3,47,312,751,435,84,16]
+			},
+			"name": "Count LeftMTGmiddletemporalgyrus values"
+		},
+		"label": "Histogram :LeftMTGmiddletemporalgyrus"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftMTGmiddletemporalgyrus",
+		"dataset": {
+			"data": {
+				"header": [0.899443232,2.675663418,4.451883604,6.22810379,8.004323976,9.780544163,11.55676435,13.33298453,15.10920472,16.88542491],
+				"shape": "vector",
+				"value": [1,0,0,0,14,79,383,289,56,12]
+			},
+			"name": "Count LeftMTGmiddletemporalgyrus values"
+		},
+		"label": "Histogram :LeftMTGmiddletemporalgyrus-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftMTGmiddletemporalgyrus",
+		"dataset": {
+			"data": {
+				"header": [8.79574595,9.90078385,11.00582175,12.11085965,13.21589755,14.32093545,15.42597335,16.53101125,17.63604915,18.74108705],
+				"shape": "vector",
+				"value": [9,19,71,141,230,188,117,23,15,2]
+			},
+			"name": "Count LeftMTGmiddletemporalgyrus values"
+		},
+		"label": "Histogram :LeftMTGmiddletemporalgyrus-PTGENDER=Male"
+	}
+]

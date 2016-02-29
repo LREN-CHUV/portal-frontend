@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "_3rdVentricle",
+		"count": 1649,
+		"min": 0,
+		"max": 4.1260505,
+		"average": 1.711390532,
+		"std": 0.5500919338
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "_3rdVentricle",
+		"dataset": {
+			"data": {
+				"header": [0.206302525,0.618907575,1.031512625,1.444117675,1.856722725,2.269327775,2.681932825,3.094537875,3.507142925,3.919747975],
+				"shape": "vector",
+				"value": [1,38,328,474,379,276,110,33,6,4]
+			},
+			"name": "Count _3rdVentricle values"
+		},
+		"label": "Histogram :_3rdVentricle"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "_3rdVentricle",
+		"dataset": {
+			"data": {
+				"header": [0.15701232,0.47103696,0.7850616,1.09908624,1.41311088,1.72713552,2.04116016,2.3551848,2.66920944,2.98323408],
+				"shape": "vector",
+				"value": [1,5,74,201,221,162,92,48,23,7]
+			},
+			"name": "Count _3rdVentricle values"
+		},
+		"label": "Histogram :_3rdVentricle-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "_3rdVentricle",
+		"dataset": {
+			"data": {
+				"header": [1.023848509,1.350396087,1.676943665,2.003491243,2.330038821,2.656586399,2.983133977,3.309681555,3.636229133,3.962776711],
+				"shape": "vector",
+				"value": [74,136,156,189,148,73,22,10,4,3]
+			},
+			"name": "Count _3rdVentricle values"
+		},
+		"label": "Histogram :_3rdVentricle-PTGENDER=Male"
+	}
+]

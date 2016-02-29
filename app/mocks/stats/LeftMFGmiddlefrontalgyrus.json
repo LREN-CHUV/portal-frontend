@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "LeftMFGmiddlefrontalgyrus",
+		"count": 1649,
+		"min": 0,
+		"max": 24.867014,
+		"average": 18.00050395,
+		"std": 2.100040374
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftMFGmiddlefrontalgyrus",
+		"dataset": {
+			"data": {
+				"header": [1.2433507,3.7300521,6.2167535,8.7034549,11.1901563,13.6768577,16.1635591,18.6502605,21.1369619,23.6236633],
+				"shape": "vector",
+				"value": [1,0,0,1,3,85,554,739,222,44]
+			},
+			"name": "Count LeftMFGmiddlefrontalgyrus values"
+		},
+		"label": "Histogram :LeftMFGmiddlefrontalgyrus"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftMFGmiddlefrontalgyrus",
+		"dataset": {
+			"data": {
+				"header": [1.2433507,3.7300521,6.2167535,8.7034549,11.1901563,13.6768577,16.1635591,18.6502605,21.1369619,23.6236633],
+				"shape": "vector",
+				"value": [1,0,0,1,3,66,389,335,28,11]
+			},
+			"name": "Count LeftMFGmiddlefrontalgyrus values"
+		},
+		"label": "Histogram :LeftMFGmiddlefrontalgyrus-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftMFGmiddlefrontalgyrus",
+		"dataset": {
+			"data": {
+				"header": [13.4976217,14.6696971,15.8417725,17.0138479,18.1859233,19.3579987,20.5300741,21.7021495,22.8742249,24.0463003],
+				"shape": "vector",
+				"value": [9,21,55,125,187,195,123,63,25,12]
+			},
+			"name": "Count LeftMFGmiddlefrontalgyrus values"
+		},
+		"label": "Histogram :LeftMFGmiddlefrontalgyrus-PTGENDER=Male"
+	}
+]

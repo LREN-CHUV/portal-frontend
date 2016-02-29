@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "BrainStem",
+		"count": 1649,
+		"min": 0,
+		"max": 23.911949,
+		"average": 17.62412141,
+		"std": 1.985729
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "BrainStem",
+		"dataset": {
+			"data": {
+				"header": [1.19559745,3.58679235,5.97798725,8.36918215,10.76037705,13.15157195,15.54276685,17.93396175,20.32515665,22.71635155],
+				"shape": "vector",
+				"value": [1,1,0,2,4,45,496,742,319,39]
+			},
+			"name": "Count BrainStem values"
+		},
+		"label": "Histogram :BrainStem"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "BrainStem",
+		"dataset": {
+			"data": {
+				"header": [1.14415205,3.43245615,5.72076025,8.00906435,10.29736845,12.58567255,14.87397665,17.16228075,19.45058485,21.73888895],
+				"shape": "vector",
+				"value": [1,1,0,0,5,21,218,433,118,37]
+			},
+			"name": "Count BrainStem values"
+		},
+		"label": "Histogram :BrainStem-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "BrainStem",
+		"dataset": {
+			"data": {
+				"header": [12.32741055,13.54683565,14.76626075,15.98568585,17.20511095,18.42453605,19.64396115,20.86338625,22.08281135,23.30223645],
+				"shape": "vector",
+				"value": [2,2,31,94,170,228,176,78,26,8]
+			},
+			"name": "Count BrainStem values"
+		},
+		"label": "Histogram :BrainStem-PTGENDER=Male"
+	}
+]

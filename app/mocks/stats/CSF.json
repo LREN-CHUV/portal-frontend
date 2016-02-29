@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "CSF",
+		"count": 1649,
+		"min": 0,
+		"max": 3.9202387,
+		"average": 1.690805429,
+		"std": 0.5447173843
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "CSF",
+		"dataset": {
+			"data": {
+				"header": [0.196011935,0.588035805,0.980059675,1.372083545,1.764107415,2.156131285,2.548155155,2.940179025,3.332202895,3.724226765],
+				"shape": "vector",
+				"value": [1,15,231,533,430,239,123,54,13,10]
+			},
+			"name": "Count CSF values"
+		},
+		"label": "Histogram :CSF"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "CSF",
+		"dataset": {
+			"data": {
+				"header": [0.196011935,0.588035805,0.980059675,1.372083545,1.764107415,2.156131285,2.548155155,2.940179025,3.332202895,3.724226765],
+				"shape": "vector",
+				"value": [1,15,170,323,186,69,50,13,1,6]
+			},
+			"name": "Count CSF values"
+		},
+		"label": "Histogram :CSF-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "CSF",
+		"dataset": {
+			"data": {
+				"header": [1.019700712,1.317294438,1.614888163,1.912481888,2.210075612,2.507669337,2.805263062,3.102856787,3.400450512,3.698044237],
+				"shape": "vector",
+				"value": [60,153,183,175,116,59,40,16,10,3]
+			},
+			"name": "Count CSF values"
+		},
+		"label": "Histogram :CSF-PTGENDER=Male"
+	}
+]

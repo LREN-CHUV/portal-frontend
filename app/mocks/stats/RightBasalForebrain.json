@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "RightBasalForebrain",
+		"count": 1649,
+		"min": 0,
+		"max": 0.55036438,
+		"average": 0.3702211846,
+		"std": 0.03998588627
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightBasalForebrain",
+		"dataset": {
+			"data": {
+				"header": [0.027518219,0.082554657,0.137591095,0.192627533,0.247663971,0.302700409,0.357736847,0.412773285,0.467809723,0.522846161],
+				"shape": "vector",
+				"value": [1,0,0,1,15,212,847,511,58,4]
+			},
+			"name": "Count RightBasalForebrain values"
+		},
+		"label": "Histogram :RightBasalForebrain"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightBasalForebrain",
+		"dataset": {
+			"data": {
+				"header": [0.027518219,0.082554657,0.137591095,0.192627533,0.247663971,0.302700409,0.357736847,0.412773285,0.467809723,0.522846161],
+				"shape": "vector",
+				"value": [1,0,0,1,8,171,493,147,9,4]
+			},
+			"name": "Count RightBasalForebrain values"
+		},
+		"label": "Histogram :RightBasalForebrain-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightBasalForebrain",
+		"dataset": {
+			"data": {
+				"header": [0.2612704345,0.2846096435,0.3079488525,0.3312880615,0.3546272705,0.3779664795,0.4013056885,0.4246448975,0.4479841065,0.4713233155],
+				"shape": "vector",
+				"value": [7,4,22,44,134,235,194,114,44,17]
+			},
+			"name": "Count RightBasalForebrain values"
+		},
+		"label": "Histogram :RightBasalForebrain-PTGENDER=Male"
+	}
+]

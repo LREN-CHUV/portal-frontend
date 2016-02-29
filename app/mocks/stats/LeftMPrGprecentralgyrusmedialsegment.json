@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "LeftMPrGprecentralgyrusmedialsegment",
+		"count": 1649,
+		"min": 0,
+		"max": 5.8626971,
+		"average": 2.566191386,
+		"std": 0.3542333265
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftMPrGprecentralgyrusmedialsegment",
+		"dataset": {
+			"data": {
+				"header": [0.293134855,0.879404565,1.465674275,2.051943985,2.638213695,3.224483405,3.810753115,4.397022825,4.983292535,5.569562245],
+				"shape": "vector",
+				"value": [1,0,5,387,1053,186,12,2,0,3]
+			},
+			"name": "Count LeftMPrGprecentralgyrusmedialsegment values"
+		},
+		"label": "Histogram :LeftMPrGprecentralgyrusmedialsegment"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftMPrGprecentralgyrusmedialsegment",
+		"dataset": {
+			"data": {
+				"header": [0.184525095,0.553575285,0.922625475,1.291675665,1.660725855,2.029776045,2.398826235,2.767876425,3.136926615,3.505976805],
+				"shape": "vector",
+				"value": [1,0,0,1,15,145,481,145,43,3]
+			},
+			"name": "Count LeftMPrGprecentralgyrusmedialsegment values"
+		},
+		"label": "Histogram :LeftMPrGprecentralgyrusmedialsegment-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftMPrGprecentralgyrusmedialsegment",
+		"dataset": {
+			"data": {
+				"header": [2.00847566,2.41418318,2.8198907,3.22559822,3.63130574,4.03701326,4.44272078,4.8484283,5.25413582,5.65984334],
+				"shape": "vector",
+				"value": [36,289,380,83,22,2,0,0,1,2]
+			},
+			"name": "Count LeftMPrGprecentralgyrusmedialsegment values"
+		},
+		"label": "Histogram :LeftMPrGprecentralgyrusmedialsegment-PTGENDER=Male"
+	}
+]

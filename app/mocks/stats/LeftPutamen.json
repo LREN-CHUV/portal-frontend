@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "LeftPutamen",
+		"count": 1649,
+		"min": 0,
+		"max": 5.4383116,
+		"average": 3.722562167,
+		"std": 0.4436036199
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftPutamen",
+		"dataset": {
+			"data": {
+				"header": [0.27191558,0.81574674,1.3595779,1.90340906,2.44724022,2.99107138,3.53490254,4.0787337,4.62256486,5.16639602],
+				"shape": "vector",
+				"value": [2,0,0,0,26,178,746,608,71,18]
+			},
+			"name": "Count LeftPutamen values"
+		},
+		"label": "Histogram :LeftPutamen"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftPutamen",
+		"dataset": {
+			"data": {
+				"header": [0.265948485,0.797845455,1.329742425,1.861639395,2.393536365,2.925433335,3.457330305,3.989227275,4.521124245,5.053021215],
+				"shape": "vector",
+				"value": [1,1,0,0,15,89,402,295,21,10]
+			},
+			"name": "Count LeftPutamen values"
+		},
+		"label": "Histogram :LeftPutamen-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftPutamen",
+		"dataset": {
+			"data": {
+				"header": [2.585083975,2.885423725,3.185763475,3.486103225,3.786442975,4.086782725,4.387122475,4.687462225,4.987801975,5.288141725],
+				"shape": "vector",
+				"value": [8,20,42,137,288,223,61,20,13,3]
+			},
+			"name": "Count LeftPutamen values"
+		},
+		"label": "Histogram :LeftPutamen-PTGENDER=Male"
+	}
+]

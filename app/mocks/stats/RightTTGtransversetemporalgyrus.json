@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "RightTTGtransversetemporalgyrus",
+		"count": 1649,
+		"min": 0,
+		"max": 2.2108386,
+		"average": 1.48897444,
+		"std": 0.2005454964
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightTTGtransversetemporalgyrus",
+		"dataset": {
+			"data": {
+				"header": [0.11054193,0.33162579,0.55270965,0.77379351,0.99487737,1.21596123,1.43704509,1.65812895,1.87921281,2.10029667],
+				"shape": "vector",
+				"value": [1,0,0,3,15,326,706,443,143,12]
+			},
+			"name": "Count RightTTGtransversetemporalgyrus values"
+		},
+		"label": "Histogram :RightTTGtransversetemporalgyrus"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightTTGtransversetemporalgyrus",
+		"dataset": {
+			"data": {
+				"header": [0.103368115,0.310104345,0.516840575,0.723576805,0.930313035,1.137049265,1.343785495,1.550521725,1.757257955,1.963994185],
+				"shape": "vector",
+				"value": [1,0,0,2,7,120,381,265,45,13]
+			},
+			"name": "Count RightTTGtransversetemporalgyrus values"
+		},
+		"label": "Histogram :RightTTGtransversetemporalgyrus-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightTTGtransversetemporalgyrus",
+		"dataset": {
+			"data": {
+				"header": [1.10165337,1.21840971,1.33516605,1.45192239,1.56867873,1.68543507,1.80219141,1.91894775,2.03570409,2.15246043],
+				"shape": "vector",
+				"value": [9,30,108,164,178,174,103,42,6,1]
+			},
+			"name": "Count RightTTGtransversetemporalgyrus values"
+		},
+		"label": "Histogram :RightTTGtransversetemporalgyrus-PTGENDER=Male"
+	}
+]

@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "LeftMPoGpostcentralgyrusmedialsegment",
+		"count": 1649,
+		"min": 0,
+		"max": 1.7734727,
+		"average": 1.109192118,
+		"std": 0.1636977495
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftMPoGpostcentralgyrusmedialsegment",
+		"dataset": {
+			"data": {
+				"header": [0.088673635,0.266020905,0.443368175,0.620715445,0.798062715,0.975409985,1.152757255,1.330104525,1.507451795,1.684799065],
+				"shape": "vector",
+				"value": [1,0,0,3,109,563,674,229,54,16]
+			},
+			"name": "Count LeftMPoGpostcentralgyrusmedialsegment values"
+		},
+		"label": "Histogram :LeftMPoGpostcentralgyrusmedialsegment"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftMPoGpostcentralgyrusmedialsegment",
+		"dataset": {
+			"data": {
+				"header": [0.079423075,0.238269225,0.397115375,0.555961525,0.714807675,0.873653825,1.032499975,1.191346125,1.350192275,1.509038425],
+				"shape": "vector",
+				"value": [1,0,0,0,18,170,386,219,27,13]
+			},
+			"name": "Count LeftMPoGpostcentralgyrusmedialsegment values"
+		},
+		"label": "Histogram :LeftMPoGpostcentralgyrusmedialsegment-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftMPoGpostcentralgyrusmedialsegment",
+		"dataset": {
+			"data": {
+				"header": [0.818317012,0.918859716,1.01940242,1.119945124,1.220487828,1.321030532,1.421573236,1.52211594,1.622658644,1.723201348],
+				"shape": "vector",
+				"value": [20,50,149,209,193,102,60,14,16,2]
+			},
+			"name": "Count LeftMPoGpostcentralgyrusmedialsegment values"
+		},
+		"label": "Histogram :LeftMPoGpostcentralgyrusmedialsegment-PTGENDER=Male"
+	}
+]

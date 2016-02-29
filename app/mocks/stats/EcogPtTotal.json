@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "EcogPtTotal",
+		"count": 429,
+		"min": 1,
+		"max": 3.76923,
+		"average": 1.437424033,
+		"std": 0.4373670016
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "EcogPtTotal",
+		"dataset": {
+			"data": {
+				"header": [1.1384615,1.4153845,1.6923075,1.9692305,2.2461535,2.5230765,2.7999995,3.0769225,3.3538455,3.6307685],
+				"shape": "vector",
+				"value": [193,120,55,29,13,6,7,3,2,1]
+			},
+			"name": "Count EcogPtTotal values"
+		},
+		"label": "Histogram :EcogPtTotal"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "EcogPtTotal",
+		"dataset": {
+			"data": {
+				"header": [1.1384615,1.4153845,1.6923075,1.9692305,2.2461535,2.5230765,2.7999995,3.0769225,3.3538455,3.6307685],
+				"shape": "vector",
+				"value": [103,76,23,9,5,2,4,2,1,1]
+			},
+			"name": "Count EcogPtTotal values"
+		},
+		"label": "Histogram :EcogPtTotal-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "EcogPtTotal",
+		"dataset": {
+			"data": {
+				"header": [1.1171055,1.3513165,1.5855275,1.8197385,2.0539495,2.2881605,2.5223715,2.7565825,2.9907935,3.2250045],
+				"shape": "vector",
+				"value": [78,47,25,26,15,4,3,3,1,1]
+			},
+			"name": "Count EcogPtTotal values"
+		},
+		"label": "Histogram :EcogPtTotal-PTGENDER=Male"
+	}
+]

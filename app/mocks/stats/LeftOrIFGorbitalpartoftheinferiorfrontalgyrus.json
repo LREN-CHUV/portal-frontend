@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "LeftOrIFGorbitalpartoftheinferiorfrontalgyrus",
+		"count": 1649,
+		"min": 0,
+		"max": 2.1593199,
+		"average": 1.478517085,
+		"std": 0.1898137682
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftOrIFGorbitalpartoftheinferiorfrontalgyrus",
+		"dataset": {
+			"data": {
+				"header": [0.107965995,0.323897985,0.539829975,0.755761965,0.971693955,1.187625945,1.403557935,1.619489925,1.835421915,2.051353905],
+				"shape": "vector",
+				"value": [1,0,1,2,8,247,695,537,149,9]
+			},
+			"name": "Count LeftOrIFGorbitalpartoftheinferiorfrontalgyrus values"
+		},
+		"label": "Histogram :LeftOrIFGorbitalpartoftheinferiorfrontalgyrus"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftOrIFGorbitalpartoftheinferiorfrontalgyrus",
+		"dataset": {
+			"data": {
+				"header": [0.107965995,0.323897985,0.539829975,0.755761965,0.971693955,1.187625945,1.403557935,1.619489925,1.835421915,2.051353905],
+				"shape": "vector",
+				"value": [1,0,1,2,6,192,443,159,26,4]
+			},
+			"name": "Count LeftOrIFGorbitalpartoftheinferiorfrontalgyrus values"
+		},
+		"label": "Histogram :LeftOrIFGorbitalpartoftheinferiorfrontalgyrus-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftOrIFGorbitalpartoftheinferiorfrontalgyrus",
+		"dataset": {
+			"data": {
+				"header": [1.06084834,1.16641242,1.2719765,1.37754058,1.48310466,1.58866874,1.69423282,1.7997969,1.90536098,2.01092506],
+				"shape": "vector",
+				"value": [5,24,52,89,200,209,126,70,35,5]
+			},
+			"name": "Count LeftOrIFGorbitalpartoftheinferiorfrontalgyrus values"
+		},
+		"label": "Histogram :LeftOrIFGorbitalpartoftheinferiorfrontalgyrus-PTGENDER=Male"
+	}
+]

@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "LeftFOfrontaloperculum",
+		"count": 1649,
+		"min": 0,
+		"max": 2.7346454,
+		"average": 1.921982447,
+		"std": 0.2287909699
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftFOfrontaloperculum",
+		"dataset": {
+			"data": {
+				"header": [0.13673227,0.41019681,0.68366135,0.95712589,1.23059043,1.50405497,1.77751951,2.05098405,2.32444859,2.59791313],
+				"shape": "vector",
+				"value": [1,0,0,2,2,156,668,637,164,19]
+			},
+			"name": "Count LeftFOfrontaloperculum values"
+		},
+		"label": "Histogram :LeftFOfrontaloperculum"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftFOfrontaloperculum",
+		"dataset": {
+			"data": {
+				"header": [0.123631095,0.370893285,0.618155475,0.865417665,1.112679855,1.359942045,1.607204235,1.854466425,2.101728615,2.348990805],
+				"shape": "vector",
+				"value": [1,0,0,0,3,19,218,449,120,24]
+			},
+			"name": "Count LeftFOfrontaloperculum values"
+		},
+		"label": "Histogram :LeftFOfrontaloperculum-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftFOfrontaloperculum",
+		"dataset": {
+			"data": {
+				"header": [1.508406205,1.637484015,1.766561825,1.895639635,2.024717445,2.153795255,2.282873065,2.411950875,2.541028685,2.670106495],
+				"shape": "vector",
+				"value": [14,25,79,197,225,147,68,45,11,4]
+			},
+			"name": "Count LeftFOfrontaloperculum values"
+		},
+		"label": "Histogram :LeftFOfrontaloperculum-PTGENDER=Male"
+	}
+]

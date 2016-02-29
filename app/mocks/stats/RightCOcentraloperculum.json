@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "RightCOcentraloperculum",
+		"count": 1649,
+		"min": 0,
+		"max": 5.1329479,
+		"average": 3.845394313,
+		"std": 0.4553099991
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightCOcentraloperculum",
+		"dataset": {
+			"data": {
+				"header": [0.256647395,0.769942185,1.283236975,1.796531765,2.309826555,2.823121345,3.336416135,3.849710925,4.363005715,4.876300505],
+				"shape": "vector",
+				"value": [1,0,0,2,3,44,450,713,347,89]
+			},
+			"name": "Count RightCOcentraloperculum values"
+		},
+		"label": "Histogram :RightCOcentraloperculum"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightCOcentraloperculum",
+		"dataset": {
+			"data": {
+				"header": [0.25661373,0.76984119,1.28306865,1.79629611,2.30952357,2.82275103,3.33597849,3.84920595,4.36243341,4.87566087],
+				"shape": "vector",
+				"value": [1,0,0,2,3,38,333,349,92,16]
+			},
+			"name": "Count RightCOcentraloperculum values"
+		},
+		"label": "Histogram :RightCOcentraloperculum-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightCOcentraloperculum",
+		"dataset": {
+			"data": {
+				"header": [2.795619485,3.041654055,3.287688625,3.533723195,3.779757765,4.025792335,4.271826905,4.517861475,4.763896045,5.009930615],
+				"shape": "vector",
+				"value": [1,11,44,89,163,210,149,78,45,25]
+			},
+			"name": "Count RightCOcentraloperculum values"
+		},
+		"label": "Histogram :RightCOcentraloperculum-PTGENDER=Male"
+	}
+]

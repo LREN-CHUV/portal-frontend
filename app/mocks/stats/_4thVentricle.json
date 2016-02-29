@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "_4thVentricle",
+		"count": 1649,
+		"min": 0,
+		"max": 5.638474,
+		"average": 2.091866911,
+		"std": 0.5195140174
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "_4thVentricle",
+		"dataset": {
+			"data": {
+				"header": [0.2819237,0.8457711,1.4096185,1.9734659,2.5373133,3.1011607,3.6650081,4.2288555,4.7927029,5.3565503],
+				"shape": "vector",
+				"value": [1,2,349,820,323,122,22,9,0,1]
+			},
+			"name": "Count _4thVentricle values"
+		},
+		"label": "Histogram :_4thVentricle"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "_4thVentricle",
+		"dataset": {
+			"data": {
+				"header": [0.2819237,0.8457711,1.4096185,1.9734659,2.5373133,3.1011607,3.6650081,4.2288555,4.7927029,5.3565503],
+				"shape": "vector",
+				"value": [1,2,272,414,99,31,9,5,0,1]
+			},
+			"name": "Count _4thVentricle values"
+		},
+		"label": "Histogram :_4thVentricle-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "_4thVentricle",
+		"dataset": {
+			"data": {
+				"header": [1.427719945,1.736801635,2.045883325,2.354965015,2.664046705,2.973128395,3.282210085,3.591291775,3.900373465,4.209455155],
+				"shape": "vector",
+				"value": [34,163,253,153,104,47,46,9,4,2]
+			},
+			"name": "Count _4thVentricle values"
+		},
+		"label": "Histogram :_4thVentricle-PTGENDER=Male"
+	}
+]

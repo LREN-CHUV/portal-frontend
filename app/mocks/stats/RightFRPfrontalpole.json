@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "RightFRPfrontalpole",
+		"count": 1649,
+		"min": 0,
+		"max": 5.6461849,
+		"average": 3.737050997,
+		"std": 0.4623254204
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightFRPfrontalpole",
+		"dataset": {
+			"data": {
+				"header": [0.282309245,0.846927735,1.411546225,1.976164715,2.540783205,3.105401695,3.670020185,4.234638675,4.799257165,5.363875655],
+				"shape": "vector",
+				"value": [1,0,0,2,9,350,803,397,76,11]
+			},
+			"name": "Count RightFRPfrontalpole values"
+		},
+		"label": "Histogram :RightFRPfrontalpole"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightFRPfrontalpole",
+		"dataset": {
+			"data": {
+				"header": [0.2816427,0.8449281,1.4082135,1.9714989,2.5347843,3.0980697,3.6613551,4.2246405,4.7879259,5.3512113],
+				"shape": "vector",
+				"value": [1,0,0,2,5,286,449,77,8,6]
+			},
+			"name": "Count RightFRPfrontalpole values"
+		},
+		"label": "Histogram :RightFRPfrontalpole-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightFRPfrontalpole",
+		"dataset": {
+			"data": {
+				"header": [2.536227185,2.863591155,3.190955125,3.518319095,3.845683065,4.173047035,4.500411005,4.827774975,5.155138945,5.482502915],
+				"shape": "vector",
+				"value": [1,13,37,167,262,211,76,36,8,4]
+			},
+			"name": "Count RightFRPfrontalpole values"
+		},
+		"label": "Histogram :RightFRPfrontalpole-PTGENDER=Male"
+	}
+]

@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "LeftThalamusProper",
+		"count": 1649,
+		"min": 0,
+		"max": 8.7982807,
+		"average": 6.829200136,
+		"std": 0.6885775821
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftThalamusProper",
+		"dataset": {
+			"data": {
+				"header": [0.439914035,1.319742105,2.199570175,3.079398245,3.959226315,4.839054385,5.718882455,6.598710525,7.478538595,8.358366665],
+				"shape": "vector",
+				"value": [1,0,0,1,2,9,244,761,546,85]
+			},
+			"name": "Count LeftThalamusProper values"
+		},
+		"label": "Histogram :LeftThalamusProper"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftThalamusProper",
+		"dataset": {
+			"data": {
+				"header": [0.4364635,1.3093905,2.1823175,3.0552445,3.9281715,4.8010985,5.6740255,6.5469525,7.4198795,8.2928065],
+				"shape": "vector",
+				"value": [1,0,0,1,2,6,162,458,176,28]
+			},
+			"name": "Count LeftThalamusProper values"
+		},
+		"label": "Histogram :LeftThalamusProper-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftThalamusProper",
+		"dataset": {
+			"data": {
+				"header": [5.2357617,5.6107637,5.9857657,6.3607677,6.7357697,7.1107717,7.4857737,7.8607757,8.2357777,8.6107797],
+				"shape": "vector",
+				"value": [2,12,56,91,160,211,160,84,26,13]
+			},
+			"name": "Count LeftThalamusProper values"
+		},
+		"label": "Histogram :LeftThalamusProper-PTGENDER=Male"
+	}
+]

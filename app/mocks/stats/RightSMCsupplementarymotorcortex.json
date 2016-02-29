@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "RightSMCsupplementarymotorcortex",
+		"count": 1649,
+		"min": 0,
+		"max": 8.4532404,
+		"average": 5.142547474,
+		"std": 0.6203488664
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightSMCsupplementarymotorcortex",
+		"dataset": {
+			"data": {
+				"header": [0.42266202,1.26798606,2.1133101,2.95863414,3.80395818,4.64928222,5.49460626,6.3399303,7.18525434,8.03057838],
+				"shape": "vector",
+				"value": [1,0,0,3,68,748,671,140,14,4]
+			},
+			"name": "Count RightSMCsupplementarymotorcortex values"
+		},
+		"label": "Histogram :RightSMCsupplementarymotorcortex"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightSMCsupplementarymotorcortex",
+		"dataset": {
+			"data": {
+				"header": [0.34106877,1.02320631,1.70534385,2.38748139,3.06961893,3.75175647,4.43389401,5.11603155,5.79816909,6.48030663],
+				"shape": "vector",
+				"value": [1,0,0,0,3,36,302,398,89,5]
+			},
+			"name": "Count RightSMCsupplementarymotorcortex values"
+		},
+		"label": "Histogram :RightSMCsupplementarymotorcortex-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightSMCsupplementarymotorcortex",
+		"dataset": {
+			"data": {
+				"header": [4.0571534,4.5198994,4.9826454,5.4453914,5.9081374,6.3708834,6.8336294,7.2963754,7.7591214,8.2218674],
+				"shape": "vector",
+				"value": [4,100,202,258,164,61,15,6,3,2]
+			},
+			"name": "Count RightSMCsupplementarymotorcortex values"
+		},
+		"label": "Histogram :RightSMCsupplementarymotorcortex-PTGENDER=Male"
+	}
+]

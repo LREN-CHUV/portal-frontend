@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "LeftFuGfusiformgyrus",
+		"count": 1649,
+		"min": 0.000438526,
+		"max": 9.2035904,
+		"average": 6.808856875,
+		"std": 0.7951167175
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftFuGfusiformgyrus",
+		"dataset": {
+			"data": {
+				"header": [0.4605961197,1.380911307,2.301226494,3.221541682,4.141856869,5.062172057,5.982487244,6.902802431,7.823117619,8.743432806],
+				"shape": "vector",
+				"value": [1,0,0,0,5,73,416,756,356,42]
+			},
+			"name": "Count LeftFuGfusiformgyrus values"
+		},
+		"label": "Histogram :LeftFuGfusiformgyrus"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftFuGfusiformgyrus",
+		"dataset": {
+			"data": {
+				"header": [0.4250802397,1.274363667,2.123647094,2.972930522,3.822213949,4.671497377,5.520780804,6.370064231,7.219347659,8.068631086],
+				"shape": "vector",
+				"value": [1,0,0,0,3,14,151,401,240,24]
+			},
+			"name": "Count LeftFuGfusiformgyrus values"
+		},
+		"label": "Histogram :LeftFuGfusiformgyrus-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftFuGfusiformgyrus",
+		"dataset": {
+			"data": {
+				"header": [4.960062285,5.406749455,5.853436625,6.300123795,6.746810965,7.193498135,7.640185305,8.086872475,8.533559645,8.980246815],
+				"shape": "vector",
+				"value": [6,15,55,80,150,187,195,90,30,7]
+			},
+			"name": "Count LeftFuGfusiformgyrus values"
+		},
+		"label": "Histogram :LeftFuGfusiformgyrus-PTGENDER=Male"
+	}
+]

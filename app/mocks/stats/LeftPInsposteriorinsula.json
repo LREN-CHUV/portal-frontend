@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "LeftPInsposteriorinsula",
+		"count": 1649,
+		"min": 0,
+		"max": 3.2279856,
+		"average": 2.31788923,
+		"std": 0.2709036605
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftPInsposteriorinsula",
+		"dataset": {
+			"data": {
+				"header": [0.16139928,0.48419784,0.8069964,1.12979496,1.45259352,1.77539208,2.09819064,2.4209892,2.74378776,3.06658632],
+				"shape": "vector",
+				"value": [1,0,0,0,4,97,642,657,205,43]
+			},
+			"name": "Count LeftPInsposteriorinsula values"
+		},
+		"label": "Histogram :LeftPInsposteriorinsula"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftPInsposteriorinsula",
+		"dataset": {
+			"data": {
+				"header": [0.1541468,0.4624404,0.770734,1.0790276,1.3873212,1.6956148,2.0039084,2.312202,2.6204956,2.9287892],
+				"shape": "vector",
+				"value": [1,0,0,0,4,28,331,355,108,7]
+			},
+			"name": "Count LeftPInsposteriorinsula values"
+		},
+		"label": "Histogram :LeftPInsposteriorinsula-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftPInsposteriorinsula",
+		"dataset": {
+			"data": {
+				"header": [1.74882686,1.90452778,2.0602287,2.21592962,2.37163054,2.52733146,2.68303238,2.8387333,2.99443422,3.15013514],
+				"shape": "vector",
+				"value": [7,8,90,144,215,170,94,54,28,5]
+			},
+			"name": "Count LeftPInsposteriorinsula values"
+		},
+		"label": "Histogram :LeftPInsposteriorinsula-PTGENDER=Male"
+	}
+]

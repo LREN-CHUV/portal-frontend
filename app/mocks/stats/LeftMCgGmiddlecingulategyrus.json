@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "LeftMCgGmiddlecingulategyrus",
+		"count": 1649,
+		"min": 0,
+		"max": 9.6231585,
+		"average": 4.589035314,
+		"std": 0.5956124068
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftMCgGmiddlecingulategyrus",
+		"dataset": {
+			"data": {
+				"header": [0.481157925,1.443473775,2.405789625,3.368105475,4.330421325,5.292737175,6.255053025,7.217368875,8.179684725,9.142000575],
+				"shape": "vector",
+				"value": [1,0,4,102,1016,506,9,4,3,4]
+			},
+			"name": "Count LeftMCgGmiddlecingulategyrus values"
+		},
+		"label": "Histogram :LeftMCgGmiddlecingulategyrus"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftMCgGmiddlecingulategyrus",
+		"dataset": {
+			"data": {
+				"header": [0.29992676,0.89978028,1.4996338,2.09948732,2.69934084,3.29919436,3.89904788,4.4989014,5.09875492,5.69860844],
+				"shape": "vector",
+				"value": [1,0,0,0,4,10,306,362,141,10]
+			},
+			"name": "Count LeftMCgGmiddlecingulategyrus values"
+		},
+		"label": "Histogram :LeftMCgGmiddlecingulategyrus-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftMCgGmiddlecingulategyrus",
+		"dataset": {
+			"data": {
+				"header": [3.50013737,4.14466591,4.78919445,5.43372299,6.07825153,6.72278007,7.36730861,8.01183715,8.65636569,9.30089423],
+				"shape": "vector",
+				"value": [16,172,432,178,3,4,3,3,0,4]
+			},
+			"name": "Count LeftMCgGmiddlecingulategyrus values"
+		},
+		"label": "Histogram :LeftMCgGmiddlecingulategyrus-PTGENDER=Male"
+	}
+]

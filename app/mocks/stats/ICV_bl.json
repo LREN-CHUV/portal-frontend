@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "ICV_bl",
+		"count": 1615,
+		"min": 1116280,
+		"max": 2057400,
+		"average": 1528900.062,
+		"std": 160694.6372
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "ICV_bl",
+		"dataset": {
+			"data": {
+				"header": [1163336,1257448,1351560,1445672,1539784,1633896,1728008,1822120,1916232,2010344],
+				"shape": "vector",
+				"value": [12,97,274,328,339,283,140,112,23,7]
+			},
+			"name": "Count ICV_bl values"
+		},
+		"label": "Histogram :ICV_bl"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "ICV_bl",
+		"dataset": {
+			"data": {
+				"header": [1150242.5,1218167.5,1286092.5,1354017.5,1421942.5,1489867.5,1557792.5,1625717.5,1693642.5,1761567.5],
+				"shape": "vector",
+				"value": [9,25,84,179,173,167,92,54,23,16]
+			},
+			"name": "Count ICV_bl values"
+		},
+		"label": "Histogram :ICV_bl-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "ICV_bl",
+		"dataset": {
+			"data": {
+				"header": [1254878,1339354,1423830,1508306,1592782,1677258,1761734,1846210,1930686,2015162],
+				"shape": "vector",
+				"value": [4,22,68,128,214,169,100,66,15,7]
+			},
+			"name": "Count ICV_bl values"
+		},
+		"label": "Histogram :ICV_bl-PTGENDER=Male"
+	}
+]

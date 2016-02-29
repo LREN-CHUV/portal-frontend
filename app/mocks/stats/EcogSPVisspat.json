@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "EcogSPVisspat",
+		"count": 424,
+		"min": 1,
+		"max": 4,
+		"average": 1.356272476,
+		"std": 0.7188765357
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "EcogSPVisspat",
+		"dataset": {
+			"data": {
+				"header": [1.15,1.45,1.75,2.05,2.35,2.65,2.95,3.25,3.55,3.85],
+				"shape": "vector",
+				"value": [334,19,12,9,11,10,3,6,8,12]
+			},
+			"name": "Count EcogSPVisspat values"
+		},
+		"label": "Histogram :EcogSPVisspat"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "EcogSPVisspat",
+		"dataset": {
+			"data": {
+				"header": [1.15,1.45,1.75,2.05,2.35,2.65,2.95,3.25,3.55,3.85],
+				"shape": "vector",
+				"value": [181,11,7,4,3,5,1,3,3,7]
+			},
+			"name": "Count EcogSPVisspat values"
+		},
+		"label": "Histogram :EcogSPVisspat-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "EcogSPVisspat",
+		"dataset": {
+			"data": {
+				"header": [1.15,1.45,1.75,2.05,2.35,2.65,2.95,3.25,3.55,3.85],
+				"shape": "vector",
+				"value": [153,8,5,5,8,5,2,3,5,5]
+			},
+			"name": "Count EcogSPVisspat values"
+		},
+		"label": "Histogram :EcogSPVisspat-PTGENDER=Male"
+	}
+]

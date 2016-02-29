@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "M",
+		"count": 1649,
+		"min": 0,
+		"max": 96,
+		"average": 16.73741662,
+		"std": 18.40857924
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "M",
+		"dataset": {
+			"data": {
+				"header": [4.8,14.4,24,33.6,43.2,52.8,62.4,72,81.6,91.2],
+				"shape": "vector",
+				"value": [755,348,257,122,67,1,40,39,18,2]
+			},
+			"name": "Count M values"
+		},
+		"label": "Histogram :M"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "M",
+		"dataset": {
+			"data": {
+				"header": [4.8,14.4,24,33.6,43.2,52.8,62.4,72,81.6,91.2],
+				"shape": "vector",
+				"value": [385,169,122,63,35,0,22,24,12,2]
+			},
+			"name": "Count M values"
+		},
+		"label": "Histogram :M-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "M",
+		"dataset": {
+			"data": {
+				"header": [4.2,12.6,21,29.4,37.8,46.2,54.6,63,71.4,79.8],
+				"shape": "vector",
+				"value": [370,179,135,0,59,32,1,18,15,6]
+			},
+			"name": "Count M values"
+		},
+		"label": "Histogram :M-PTGENDER=Male"
+	}
+]

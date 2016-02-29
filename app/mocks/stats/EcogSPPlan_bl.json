@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "EcogSPPlan_bl",
+		"count": 426,
+		"min": 1,
+		"max": 3.6,
+		"average": 1.411345822,
+		"std": 0.718939123
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "EcogSPPlan_bl",
+		"dataset": {
+			"data": {
+				"header": [1.13,1.39,1.65,1.91,2.17,2.43,2.69,2.95,3.21,3.47],
+				"shape": "vector",
+				"value": [299,20,24,22,3,0,21,11,7,19]
+			},
+			"name": "Count EcogSPPlan_bl values"
+		},
+		"label": "Histogram :EcogSPPlan_bl"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "EcogSPPlan_bl",
+		"dataset": {
+			"data": {
+				"header": [1.13,1.39,1.65,1.91,2.17,2.43,2.69,2.95,3.21,3.47],
+				"shape": "vector",
+				"value": [166,9,8,10,0,0,4,4,3,11]
+			},
+			"name": "Count EcogSPPlan_bl values"
+		},
+		"label": "Histogram :EcogSPPlan_bl-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "EcogSPPlan_bl",
+		"dataset": {
+			"data": {
+				"header": [1.12,1.36,1.6,1.84,2.08,2.32,2.56,2.8,3.04,3.28],
+				"shape": "vector",
+				"value": [127,17,16,4,11,0,10,7,7,12]
+			},
+			"name": "Count EcogSPPlan_bl values"
+		},
+		"label": "Histogram :EcogSPPlan_bl-PTGENDER=Male"
+	}
+]

@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "AV45_bl",
+		"count": 430,
+		"min": 0.89242,
+		"max": 2.00588,
+		"average": 1.169295426,
+		"std": 0.2264869679
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "AV45_bl",
+		"dataset": {
+			"data": {
+				"header": [0.948093,1.059439,1.170785,1.282131,1.393477,1.504823,1.616169,1.727515,1.838861,1.950207],
+				"shape": "vector",
+				"value": [117,140,32,26,45,41,22,6,0,1]
+			},
+			"name": "Count AV45_bl values"
+		},
+		"label": "Histogram :AV45_bl"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "AV45_bl",
+		"dataset": {
+			"data": {
+				"header": [0.9591947,1.0693721,1.1795495,1.2897269,1.3999043,1.5100817,1.6202591,1.7304365,1.8406139,1.9507913],
+				"shape": "vector",
+				"value": [63,71,9,15,22,21,7,6,0,1]
+			},
+			"name": "Count AV45_bl values"
+		},
+		"label": "Histogram :AV45_bl-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "AV45_bl",
+		"dataset": {
+			"data": {
+				"header": [0.9309265,1.0079395,1.0849525,1.1619655,1.2389785,1.3159915,1.3930045,1.4700175,1.5470305,1.6240435],
+				"shape": "vector",
+				"value": [44,52,34,14,9,9,21,13,4,15]
+			},
+			"name": "Count AV45_bl values"
+		},
+		"label": "Histogram :AV45_bl-PTGENDER=Male"
+	}
+]

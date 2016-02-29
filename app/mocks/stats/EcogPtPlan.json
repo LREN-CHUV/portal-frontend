@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "EcogPtPlan",
+		"count": 428,
+		"min": 1,
+		"max": 3.6,
+		"average": 1.226012453,
+		"std": 0.4072155102
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "EcogPtPlan",
+		"dataset": {
+			"data": {
+				"header": [1.13,1.39,1.65,1.91,2.17,2.43,2.69,2.95,3.21,3.47],
+				"shape": "vector",
+				"value": [322,40,17,30,4,6,4,2,1,2]
+			},
+			"name": "Count EcogPtPlan values"
+		},
+		"label": "Histogram :EcogPtPlan"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "EcogPtPlan",
+		"dataset": {
+			"data": {
+				"header": [1.13,1.39,1.65,1.91,2.17,2.43,2.69,2.95,3.21,3.47],
+				"shape": "vector",
+				"value": [182,18,5,13,3,1,0,1,0,2]
+			},
+			"name": "Count EcogPtPlan values"
+		},
+		"label": "Histogram :EcogPtPlan-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "EcogPtPlan",
+		"dataset": {
+			"data": {
+				"header": [1.11,1.33,1.55,1.77,1.99,2.21,2.43,2.65,2.87,3.09],
+				"shape": "vector",
+				"value": [139,23,11,12,6,1,5,3,1,2]
+			},
+			"name": "Count EcogPtPlan values"
+		},
+		"label": "Histogram :EcogPtPlan-PTGENDER=Male"
+	}
+]

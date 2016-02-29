@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "Hippocampus_bl",
+		"count": 1415,
+		"min": 3091,
+		"max": 10769,
+		"average": 6805.277739,
+		"std": 1208.032542
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "Hippocampus_bl",
+		"dataset": {
+			"data": {
+				"header": [3474.9,4242.7,5010.5,5778.3,6546.1,7313.9,8081.7,8849.5,9617.3,10385.1],
+				"shape": "vector",
+				"value": [16,52,146,172,296,375,262,91,4,1]
+			},
+			"name": "Count Hippocampus_bl values"
+		},
+		"label": "Histogram :Hippocampus_bl"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "Hippocampus_bl",
+		"dataset": {
+			"data": {
+				"header": [3395.05,4003.15,4611.25,5219.35,5827.45,6435.55,7043.65,7651.75,8259.85,8867.95],
+				"shape": "vector",
+				"value": [9,13,69,65,69,125,159,144,43,24]
+			},
+			"name": "Count Hippocampus_bl values"
+		},
+		"label": "Histogram :Hippocampus_bl-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "Hippocampus_bl",
+		"dataset": {
+			"data": {
+				"header": [4400.2,5070.6,5741,6411.4,7081.8,7752.2,8422.6,9093,9763.4,10433.8],
+				"shape": "vector",
+				"value": [29,47,72,106,139,189,82,26,4,1]
+			},
+			"name": "Count Hippocampus_bl values"
+		},
+		"label": "Histogram :Hippocampus_bl-PTGENDER=Male"
+	}
+]

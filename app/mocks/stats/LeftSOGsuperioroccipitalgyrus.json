@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "LeftSOGsuperioroccipitalgyrus",
+		"count": 1649,
+		"min": 1.0169466,
+		"max": 5.4174261,
+		"average": 3.433829917,
+		"std": 0.4868178475
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftSOGsuperioroccipitalgyrus",
+		"dataset": {
+			"data": {
+				"header": [1.236970575,1.677018525,2.117066475,2.557114425,2.997162375,3.437210325,3.877258275,4.317306225,4.757354175,5.197402125],
+				"shape": "vector",
+				"value": [1,1,6,138,393,601,367,111,23,8]
+			},
+			"name": "Count LeftSOGsuperioroccipitalgyrus values"
+		},
+		"label": "Histogram :LeftSOGsuperioroccipitalgyrus"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftSOGsuperioroccipitalgyrus",
+		"dataset": {
+			"data": {
+				"header": [1.2155567,1.6127769,2.0099971,2.4072173,2.8044375,3.2016577,3.5988779,3.9960981,4.3933183,4.7905385],
+				"shape": "vector",
+				"value": [1,1,2,31,188,274,211,93,27,6]
+			},
+			"name": "Count LeftSOGsuperioroccipitalgyrus values"
+		},
+		"label": "Histogram :LeftSOGsuperioroccipitalgyrus-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftSOGsuperioroccipitalgyrus",
+		"dataset": {
+			"data": {
+				"header": [2.56690037,2.86695571,3.16701105,3.46706639,3.76712173,4.06717707,4.36723241,4.66728775,4.96734309,5.26739843],
+				"shape": "vector",
+				"value": [25,68,153,225,174,112,37,10,7,4]
+			},
+			"name": "Count LeftSOGsuperioroccipitalgyrus values"
+		},
+		"label": "Histogram :LeftSOGsuperioroccipitalgyrus-PTGENDER=Male"
+	}
+]

@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "EcogSPMem",
+		"count": 427,
+		"min": 1,
+		"max": 4,
+		"average": 1.70070815,
+		"std": 0.9329666348
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "EcogSPMem",
+		"dataset": {
+			"data": {
+				"header": [1.15,1.45,1.75,2.05,2.35,2.65,2.95,3.25,3.55,3.85],
+				"shape": "vector",
+				"value": [227,55,40,16,12,11,6,12,8,40]
+			},
+			"name": "Count EcogSPMem values"
+		},
+		"label": "Histogram :EcogSPMem"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "EcogSPMem",
+		"dataset": {
+			"data": {
+				"header": [1.15,1.45,1.75,2.05,2.35,2.65,2.95,3.25,3.55,3.85],
+				"shape": "vector",
+				"value": [133,27,27,7,4,5,3,6,4,12]
+			},
+			"name": "Count EcogSPMem values"
+		},
+		"label": "Histogram :EcogSPMem-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "EcogSPMem",
+		"dataset": {
+			"data": {
+				"header": [1.15,1.45,1.75,2.05,2.35,2.65,2.95,3.25,3.55,3.85],
+				"shape": "vector",
+				"value": [94,28,13,9,8,6,3,6,4,28]
+			},
+			"name": "Count EcogSPMem values"
+		},
+		"label": "Histogram :EcogSPMem-PTGENDER=Male"
+	}
+]

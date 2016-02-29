@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "RightAccumbensArea",
+		"count": 1649,
+		"min": 0,
+		"max": 0.55911094,
+		"average": 0.3661678052,
+		"std": 0.0514685439
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightAccumbensArea",
+		"dataset": {
+			"data": {
+				"header": [0.027955547,0.083866641,0.139777735,0.195688829,0.251599923,0.307511017,0.363422111,0.419333205,0.475244299,0.531155393],
+				"shape": "vector",
+				"value": [2,0,1,10,53,348,753,395,76,11]
+			},
+			"name": "Count RightAccumbensArea values"
+		},
+		"label": "Histogram :RightAccumbensArea"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightAccumbensArea",
+		"dataset": {
+			"data": {
+				"header": [0.026416543,0.079249629,0.132082715,0.184915801,0.237748887,0.290581973,0.343415059,0.396248145,0.449081231,0.501914317],
+				"shape": "vector",
+				"value": [2,0,0,3,20,125,423,200,49,12]
+			},
+			"name": "Count RightAccumbensArea values"
+		},
+		"label": "Histogram :RightAccumbensArea-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightAccumbensArea",
+		"dataset": {
+			"data": {
+				"header": [0.1707737495,0.2116513485,0.2525289475,0.2934065465,0.3342841455,0.3751617445,0.4160393435,0.4569169425,0.4977945415,0.5386721405],
+				"shape": "vector",
+				"value": [2,2,13,48,164,287,217,60,17,5]
+			},
+			"name": "Count RightAccumbensArea values"
+		},
+		"label": "Histogram :RightAccumbensArea-PTGENDER=Male"
+	}
+]

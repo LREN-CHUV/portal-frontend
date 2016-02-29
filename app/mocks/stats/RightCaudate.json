@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "RightCaudate",
+		"count": 1649,
+		"min": 0,
+		"max": 5.5571365,
+		"average": 3.134116257,
+		"std": 0.475401545
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightCaudate",
+		"dataset": {
+			"data": {
+				"header": [0.277856825,0.833570475,1.389284125,1.944997775,2.500711425,3.056425075,3.612138725,4.167852375,4.723566025,5.279279675],
+				"shape": "vector",
+				"value": [1,1,1,19,328,804,390,89,12,4]
+			},
+			"name": "Count RightCaudate values"
+		},
+		"label": "Histogram :RightCaudate"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightCaudate",
+		"dataset": {
+			"data": {
+				"header": [0.231013965,0.693041895,1.155069825,1.617097755,2.079125685,2.541153615,3.003181545,3.465209475,3.927237405,4.389265335],
+				"shape": "vector",
+				"value": [1,1,0,1,24,190,394,160,42,21]
+			},
+			"name": "Count RightCaudate values"
+		},
+		"label": "Histogram :RightCaudate-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightCaudate",
+		"dataset": {
+			"data": {
+				"header": [2.247754025,2.596110075,2.944466125,3.292822175,3.641178225,3.989534275,4.337890325,4.686246375,5.034602425,5.382958475],
+				"shape": "vector",
+				"value": [24,104,210,273,127,48,21,3,3,2]
+			},
+			"name": "Count RightCaudate values"
+		},
+		"label": "Histogram :RightCaudate-PTGENDER=Male"
+	}
+]

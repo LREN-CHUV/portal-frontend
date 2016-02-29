@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "RightPCgGposteriorcingulategyrus",
+		"count": 1649,
+		"min": 0,
+		"max": 5.9484205,
+		"average": 3.903189224,
+		"std": 0.4598584643
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightPCgGposteriorcingulategyrus",
+		"dataset": {
+			"data": {
+				"header": [0.297421025,0.892263075,1.487105125,2.081947175,2.676789225,3.271631275,3.866473325,4.461315375,5.056157425,5.650999475],
+				"shape": "vector",
+				"value": [1,0,0,1,23,358,803,424,33,6]
+			},
+			"name": "Count RightPCgGposteriorcingulategyrus values"
+		},
+		"label": "Histogram :RightPCgGposteriorcingulategyrus"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightPCgGposteriorcingulategyrus",
+		"dataset": {
+			"data": {
+				"header": [0.24869828,0.74609484,1.2434914,1.74088796,2.23828452,2.73568108,3.23307764,3.7304742,4.22787076,4.72526732],
+				"shape": "vector",
+				"value": [1,0,0,0,1,18,213,415,162,24]
+			},
+			"name": "Count RightPCgGposteriorcingulategyrus values"
+		},
+		"label": "Histogram :RightPCgGposteriorcingulategyrus-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightPCgGposteriorcingulategyrus",
+		"dataset": {
+			"data": {
+				"header": [3.046410755,3.351885465,3.657360175,3.962834885,4.268309595,4.573784305,4.879259015,5.184733725,5.490208435,5.795683145],
+				"shape": "vector",
+				"value": [16,34,111,248,248,115,29,8,1,5]
+			},
+			"name": "Count RightPCgGposteriorcingulategyrus values"
+		},
+		"label": "Histogram :RightPCgGposteriorcingulategyrus-PTGENDER=Male"
+	}
+]

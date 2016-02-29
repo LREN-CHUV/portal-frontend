@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "LeftCaudate",
+		"count": 1649,
+		"min": 0,
+		"max": 4.8379264,
+		"average": 2.940102185,
+		"std": 0.4128494278
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftCaudate",
+		"dataset": {
+			"data": {
+				"header": [0.24189632,0.72568896,1.2094816,1.69327424,2.17706688,2.66085952,3.14465216,3.6284448,4.11223744,4.59603008],
+				"shape": "vector",
+				"value": [1,1,0,7,131,619,683,182,22,3]
+			},
+			"name": "Count LeftCaudate values"
+		},
+		"label": "Histogram :LeftCaudate"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftCaudate",
+		"dataset": {
+			"data": {
+				"header": [0.20002098,0.60006294,1.0001049,1.40014686,1.80018882,2.20023078,2.60027274,3.0003147,3.40035666,3.80039862],
+				"shape": "vector",
+				"value": [1,1,0,1,8,65,295,327,101,35]
+			},
+			"name": "Count LeftCaudate values"
+		},
+		"label": "Histogram :LeftCaudate-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftCaudate",
+		"dataset": {
+			"data": {
+				"header": [1.857618985,2.171335555,2.485052125,2.798768695,3.112485265,3.426201835,3.739918405,4.053634975,4.367351545,4.681068115],
+				"shape": "vector",
+				"value": [3,36,99,228,248,121,64,11,2,3]
+			},
+			"name": "Count LeftCaudate values"
+		},
+		"label": "Histogram :LeftCaudate-PTGENDER=Male"
+	}
+]

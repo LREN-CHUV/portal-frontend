@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "MMSE_bl",
+		"count": 1649,
+		"min": 19,
+		"max": 30,
+		"average": 27.38083687,
+		"std": 3.100347855
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "MMSE_bl",
+		"dataset": {
+			"data": {
+				"header": [19.55,20.65,21.75,22.85,23.95,25.05,26.15,27.25,28.35,29.45],
+				"shape": "vector",
+				"value": [53,84,66,72,66,68,108,45,165,922]
+			},
+			"name": "Count MMSE_bl values"
+		},
+		"label": "Histogram :MMSE_bl"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "MMSE_bl",
+		"dataset": {
+			"data": {
+				"header": [20.5,21.5,22.5,23.5,24.5,25.5,26.5,27.5,28.5,29.5],
+				"shape": "vector",
+				"value": [63,29,28,32,35,53,23,74,176,321]
+			},
+			"name": "Count MMSE_bl values"
+		},
+		"label": "Histogram :MMSE_bl-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "MMSE_bl",
+		"dataset": {
+			"data": {
+				"header": [19.55,20.65,21.75,22.85,23.95,25.05,26.15,27.25,28.35,29.45],
+				"shape": "vector",
+				"value": [22,52,37,44,34,33,55,22,91,425]
+			},
+			"name": "Count MMSE_bl values"
+		},
+		"label": "Histogram :MMSE_bl-PTGENDER=Male"
+	}
+]

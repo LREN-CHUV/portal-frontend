@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "RightPallidum",
+		"count": 1649,
+		"min": 0,
+		"max": 2.0728753,
+		"average": 1.493604398,
+		"std": 0.1773806821
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightPallidum",
+		"dataset": {
+			"data": {
+				"header": [0.103643765,0.310931295,0.518218825,0.725506355,0.932793885,1.140081415,1.347368945,1.554656475,1.761944005,1.969231535],
+				"shape": "vector",
+				"value": [1,0,1,1,5,97,591,677,235,41]
+			},
+			"name": "Count RightPallidum values"
+		},
+		"label": "Histogram :RightPallidum"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightPallidum",
+		"dataset": {
+			"data": {
+				"header": [0.0989247,0.2967741,0.4946235,0.6924729,0.8903223,1.0881717,1.2860211,1.4838705,1.6817199,1.8795693],
+				"shape": "vector",
+				"value": [1,0,1,0,4,42,301,366,101,18]
+			},
+			"name": "Count RightPallidum values"
+		},
+		"label": "Histogram :RightPallidum-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightPallidum",
+		"dataset": {
+			"data": {
+				"header": [1.07414372,1.17927336,1.284403,1.38953264,1.49466228,1.59979192,1.70492156,1.8100512,1.91518084,2.02031048],
+				"shape": "vector",
+				"value": [1,8,32,116,199,237,141,47,24,10]
+			},
+			"name": "Count RightPallidum values"
+		},
+		"label": "Histogram :RightPallidum-PTGENDER=Male"
+	}
+]

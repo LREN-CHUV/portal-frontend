@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "MOCA_bl",
+		"count": 429,
+		"min": 9,
+		"max": 30,
+		"average": 23.77389277,
+		"std": 4.680209776
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "MOCA_bl",
+		"dataset": {
+			"data": {
+				"header": [10.05,12.15,14.25,16.35,18.45,20.55,22.65,24.75,26.85,28.95],
+				"shape": "vector",
+				"value": [18,3,11,16,26,23,40,105,111,76]
+			},
+			"name": "Count MOCA_bl values"
+		},
+		"label": "Histogram :MOCA_bl"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "MOCA_bl",
+		"dataset": {
+			"data": {
+				"header": [10.05,12.15,14.25,16.35,18.45,20.55,22.65,24.75,26.85,28.95],
+				"shape": "vector",
+				"value": [3,3,8,7,5,8,16,52,57,54]
+			},
+			"name": "Count MOCA_bl values"
+		},
+		"label": "Histogram :MOCA_bl-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "MOCA_bl",
+		"dataset": {
+			"data": {
+				"header": [10.05,12.15,14.25,16.35,18.45,20.55,22.65,24.75,26.85,28.95],
+				"shape": "vector",
+				"value": [15,0,3,9,21,15,24,53,54,22]
+			},
+			"name": "Count MOCA_bl values"
+		},
+		"label": "Histogram :MOCA_bl-PTGENDER=Male"
+	}
+]

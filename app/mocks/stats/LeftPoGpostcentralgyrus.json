@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "LeftPoGpostcentralgyrus",
+		"count": 1649,
+		"min": 1.02e-007,
+		"max": 16.844755,
+		"average": 11.31164268,
+		"std": 1.28456357
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftPoGpostcentralgyrus",
+		"dataset": {
+			"data": {
+				"header": [0.8422378469,2.526713337,4.211188826,5.895664316,7.580139806,9.264615296,10.94909079,12.63356628,14.31804177,16.00251726],
+				"shape": "vector",
+				"value": [1,0,0,0,12,245,842,468,69,12]
+			},
+			"name": "Count LeftPoGpostcentralgyrus values"
+		},
+		"label": "Histogram :LeftPoGpostcentralgyrus"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftPoGpostcentralgyrus",
+		"dataset": {
+			"data": {
+				"header": [0.7650436469,2.295130737,3.825217827,5.355304916,6.885392006,8.415479096,9.945566186,11.47565328,13.00574037,14.53582746],
+				"shape": "vector",
+				"value": [1,0,0,0,7,28,331,380,71,16]
+			},
+			"name": "Count LeftPoGpostcentralgyrus values"
+		},
+		"label": "Histogram :LeftPoGpostcentralgyrus-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "LeftPoGpostcentralgyrus",
+		"dataset": {
+			"data": {
+				"header": [8.47147495,9.35287285,10.23427075,11.11566865,11.99706655,12.87846445,13.75986235,14.64126025,15.52265815,16.40405605],
+				"shape": "vector",
+				"value": [10,32,110,202,263,132,44,11,8,3]
+			},
+			"name": "Count LeftPoGpostcentralgyrus values"
+		},
+		"label": "Histogram :LeftPoGpostcentralgyrus-PTGENDER=Male"
+	}
+]

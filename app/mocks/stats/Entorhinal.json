@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "Entorhinal",
+		"count": 1233,
+		"min": 1123,
+		"max": 5906,
+		"average": 3423.83455,
+		"std": 835.1349929
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "Entorhinal",
+		"dataset": {
+			"data": {
+				"header": [1362.15,1840.45,2318.75,2797.05,3275.35,3753.65,4231.95,4710.25,5188.55,5666.85],
+				"shape": "vector",
+				"value": [23,80,109,145,263,304,203,81,19,6]
+			},
+			"name": "Count Entorhinal values"
+		},
+		"label": "Histogram :Entorhinal"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "Entorhinal",
+		"dataset": {
+			"data": {
+				"header": [1353.1,1813.3,2273.5,2733.7,3193.9,3654.1,4114.3,4574.5,5034.7,5494.9],
+				"shape": "vector",
+				"value": [16,47,71,76,160,134,84,27,5,1]
+			},
+			"name": "Count Entorhinal values"
+		},
+		"label": "Histogram :Entorhinal-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "Entorhinal",
+		"dataset": {
+			"data": {
+				"header": [1381.15,1857.45,2333.75,2810.05,3286.35,3762.65,4238.95,4715.25,5191.55,5667.85],
+				"shape": "vector",
+				"value": [7,28,38,52,101,170,134,60,17,5]
+			},
+			"name": "Count Entorhinal values"
+		},
+		"label": "Histogram :Entorhinal-PTGENDER=Male"
+	}
+]

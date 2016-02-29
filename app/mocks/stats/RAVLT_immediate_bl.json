@@ -1,0 +1,50 @@
+[
+	{
+		"dataType": "SummaryStatistics",
+		"code": "RAVLT_immediate_bl",
+		"count": 1635,
+		"min": 1,
+		"max": 71,
+		"average": 37.89724771,
+		"std": 13.20005975
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RAVLT_immediate_bl",
+		"dataset": {
+			"data": {
+				"header": [4.5,11.5,18.5,25.5,32.5,39.5,46.5,53.5,60.5,67.5],
+				"shape": "vector",
+				"value": [8,79,167,208,225,374,238,262,57,17]
+			},
+			"name": "Count RAVLT_immediate_bl values"
+		},
+		"label": "Histogram :RAVLT_immediate_bl"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RAVLT_immediate_bl",
+		"dataset": {
+			"data": {
+				"header": [8.2,14.6,21,27.4,33.8,40.2,46.6,53,59.4,65.8],
+				"shape": "vector",
+				"value": [15,33,88,64,96,166,123,182,29,32]
+			},
+			"name": "Count RAVLT_immediate_bl values"
+		},
+		"label": "Histogram :RAVLT_immediate_bl-PTGENDER=Female"
+	},
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RAVLT_immediate_bl",
+		"dataset": {
+			"data": {
+				"header": [4.5,11.5,18.5,25.5,32.5,39.5,46.5,53.5,60.5,67.5],
+				"shape": "vector",
+				"value": [4,38,106,117,151,183,103,79,20,6]
+			},
+			"name": "Count RAVLT_immediate_bl values"
+		},
+		"label": "Histogram :RAVLT_immediate_bl-PTGENDER=Male"
+	}
+]
