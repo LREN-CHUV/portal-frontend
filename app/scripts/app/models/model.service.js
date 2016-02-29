@@ -19,6 +19,10 @@ angular.module('chuvApp.models')
             return $http.post(backendUrl+"/queries/requests.json",data);
         };
 
+        resource.estimateQuery = function(data){
+            return $http.post(backendUrl+"/estimations", data);
+        };
+
         resource.getList = function(params){
             return $http.get(backendUrl+"/models", {params:params});
         };

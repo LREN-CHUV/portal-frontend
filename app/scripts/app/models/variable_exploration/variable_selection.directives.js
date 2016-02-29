@@ -345,7 +345,7 @@ angular.module('chuvApp.models')
                 }
 
                 $scope.stats
-                  .filter(function (statistic) { return statistic.dataType === 'DatasetStatistics' })
+                  .filter(function (statistic) { return statistic.dataType === 'DatasetStatistic' })
                   .forEach(setup_stats);
 
                 $scope.measurement_count = $scope.stats[0].count || "??";

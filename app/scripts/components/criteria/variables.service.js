@@ -18,7 +18,7 @@ angular.module('chuvApp.components.criteria')
         );
 
         resource.get_stats = function (code) {
-            return $http.get("/mocks/stats/"+code+"/response.json");
+            return $http.get("/mocks/stats/"+code+".json");
         };
 
         return resource;

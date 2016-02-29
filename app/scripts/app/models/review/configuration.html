@@ -5,19 +5,29 @@
       <div class="tile-body">
         <ul class="list-graphs text-left">
           <li>
-            <a href="" ng-click="changeGraphType('designmatrix')" ng-class="{active : chartConfig.type == 'designmatrix'}"><i class="ti ti-custom-bar-chart graph-plot"></i></a>
+            <a href="" ng-click="changeGraphType('designmatrix')" ng-class="{active : chartConfig.type == 'designmatrix'}">
+              <img src="/images/cube.svg" title="Design Matrix">
+            </a>
           </li>
           <li>
-            <a href="" ng-click="changeGraphType('column')" ng-class="{active : chartConfig.type == 'column'}"><i class="ti ti-custom-bar-chart graph-column"></i></a>
+            <a href="" ng-click="changeGraphType('column')" ng-class="{active : chartConfig.type == 'column'}">
+              <i class="ti ti-custom-bar-chart graph-column" title="Bar Chart"></i>
+            </a>
           </li>
           <li>
-            <a href="" ng-click="changeGraphType('line')" ng-class="{active : chartConfig.type == 'line'}"><i class="ti ti-custom-bar-chart graph-area"></i></a>
+            <a href="" ng-click="changeGraphType('line')" ng-class="{active : chartConfig.type == 'line'}">
+              <i class="ti ti-custom-bar-chart graph-area" title="Line Chart"></i>
+            </a>
           </li>
           <li>
-            <a href="" ng-click="changeGraphType('pie')" ng-class="{active : chartConfig.type == 'pie'}"><i class="ti ti-custom-bar-chart graph-pie"></i></a>
+            <a href="" ng-click="changeGraphType('pie')" ng-class="{active : chartConfig.type == 'pie'}">
+              <i class="ti ti-custom-bar-chart graph-pie" title="Pie Chart"></i>
+            </a>
           </li>
           <li>
-            <a href="" ng-click="changeGraphType('scatter')" ng-class="{active : chartConfig.type == 'scatter'}"><i class="ti ti-custom-bar-chart graph-scatter"></i></a>
+            <a href="" ng-click="changeGraphType('scatter')" ng-class="{active : chartConfig.type == 'scatter'}">
+              <i class="ti ti-custom-bar-chart graph-scatter" title="Scatter Plot"></i>
+            </a>
           </li>
         </ul>
       </div>

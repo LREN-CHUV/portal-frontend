@@ -4,7 +4,7 @@
 
 'use strict';
 
-angular.module('chuvApp.models').controller('EstimationController',['$scope', '$q', '$http', '$modal', function($scope, $q, $http, $modal) {
+angular.module('chuvApp.models').controller('EstimationController',['$scope', '$q', '$http', '$modal', 'Model', function($scope, $q, $http, $modal, Model) {
 
   $scope.shared = {
     chosen_estimation: null
@@ -41,8 +41,7 @@ angular.module('chuvApp.models').controller('EstimationController',['$scope', '$
         $scope.loading_estimation = false;
 
         child_scope.run_estimation = function () {
-          $http
-            .get("/mocks/estimations/result.json")
+          Model.estimateQuery($scope.query)
             .then(function (result) {
               child_scope.result = result.data;
               child_scope.help_is_open = false;
