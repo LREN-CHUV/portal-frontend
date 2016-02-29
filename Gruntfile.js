@@ -452,7 +452,7 @@ module.exports = function (grunt) {
             '.htaccess',
             '*.html',
             'scripts/**/{,*/}*.html',
-            'images/{,*/}*.{webp}',
+            'images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
             'i18n/{,*/}*.json',
             'i18n/{,*/}*.js',
             'font/**',
@@ -490,7 +490,12 @@ module.exports = function (grunt) {
           cwd: 'app/bower_components/font-awesome',
           src: 'fonts/*',
           dest: '<%= yeoman.dist %>'
-        }]
+        }, {
+            expand: true,
+            cwd: 'app',
+            src: 'mocks/**',
+            dest: '<%= yeoman.dist %>'
+          }]
       },
       styles: {
         expand: true,
@@ -615,6 +620,7 @@ module.exports = function (grunt) {
     'uglify',
     'filerev',
     'usemin',
+    'imagemin',
     'processhtml:dist',
     'htmlmin'
   ]);
