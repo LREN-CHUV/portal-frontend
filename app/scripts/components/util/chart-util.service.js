@@ -35,12 +35,18 @@ angular.module('chuvApp.util')
           //yAxis: {
           //  title: null
           //}
+          legend: {
+              enabled: false
+          },
         },
-        title: {
-          text: angular.isDefined(config.title) ? config.title : "Box Plot"
+        title:  angular.isDefined(config.title) ? config.title : {
+          text: "Box Plot"
         },
         xAxis: {
           categories: dataset.header,
+          title: null
+        },
+        yAxis: {
           title: null
         },
         size: {
@@ -50,9 +56,8 @@ angular.module('chuvApp.util')
         series: [{
           name: "",
           data: result,
-          index: 1,
-          id: 1,
-          legendIndex: 1
+          //index: 1,
+          //id: 1
         }]
       };
     }

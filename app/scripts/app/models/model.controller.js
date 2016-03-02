@@ -35,7 +35,7 @@ angular.module('chuvApp.models')
 
       $scope.get_config = function (model) {
         var config = angular.copy(model.config);
-        config.height = 300;
+        config.height = 250;
         config.width = undefined;
         config.title = null;
         return ChartUtil(config, model.dataset);
