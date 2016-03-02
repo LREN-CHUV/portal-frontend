@@ -1,36 +1,4 @@
-<div id="accessDeniedPage" ng-show="!isLoggedIn()">
-  <h1>Are you lost ?</h1>
-  <p>Click  <a ng-href="/#/intro">here</a> </p>
-</div>
-
-<div class="container-fluid intro-container" ng-show="isNewVisitor() && isLoggedIn()">
-    <a href="" ng-click="closePanel($event)" class="trigger-close-intro">
-        <i class="ti ti-close"></i>
-    </a>
-    <div class="intro block-header">
-        <h3>Access the largest</h3>
-        <h2>Brain</h2>
-        <ul>
-            <li>clinical</li>
-            <li>database</li>
-        </ul>
-        <img src="images/intro.png" />
-    </div>
-
-    <div class="block-content row intro-txt">
-        <div class="col-md-6 col-md-offset-3">
-            <h4>Titre chapitre :</h4>
-            <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.</p>
-            <h3>Titre chapitre :</h3>
-            <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.</p>
-        </div>
-    </div>
-    <a class="trigger-intro" ng-click="animateIntro()">
-        <i class="ti ti-arrow-down"></i>
-    </a>
-</div>
-
-<div class="container-fluid mt" ng-show="!isNewVisitor() && isLoggedIn()">
+<div class="container-fluid mt" ng-show="!isNewVisitor()">
     <div class="row">
         <div class="col-md-3">
             <div class="info-tile tile-orange">

@@ -1,50 +1,53 @@
-[
-	{
-		"dataType": "SummaryStatistics",
-		"code": "ADAS11",
-		"count": 1505,
-		"min": 0,
-		"max": 66,
-		"average": 10.85851827,
-		"std": 9.640863171
-	},
-	{
-		"dataType": "DatasetStatistic",
-		"code": "ADAS11",
-		"dataset": {
-			"data": {
-				"header": [3.3,9.9,16.5,23.1,29.7,36.3,42.9,49.5,56.1,62.7],
-				"shape": "vector",
-				"value": [687,404,150,151,58,25,17,8,4,1]
-			},
-			"name": "Count ADAS11 values"
-		},
-		"label": "Histogram :ADAS11"
-	},
-	{
-		"dataType": "DatasetStatistic",
-		"code": "ADAS11",
-		"dataset": {
-			"data": {
-				"header": [2.95,8.85,14.75,20.65,26.55,32.45,38.35,44.25,50.15,56.05],
-				"shape": "vector",
-				"value": [332,213,75,61,35,27,11,3,2,3]
-			},
-			"name": "Count ADAS11 values"
-		},
-		"label": "Histogram :ADAS11-PTGENDER=Female"
-	},
-	{
-		"dataType": "DatasetStatistic",
-		"code": "ADAS11",
-		"dataset": {
-			"data": {
-				"header": [3.3,9.9,16.5,23.1,29.7,36.3,42.9,49.5,56.1,62.7],
-				"shape": "vector",
-				"value": [302,225,73,92,24,9,10,6,1,1]
-			},
-			"name": "Count ADAS11 values"
-		},
-		"label": "Histogram :ADAS11-PTGENDER=Male"
-	}
-]
+{
+  "tabs": [
+    {
+      "dataType": "SummaryStatistics",
+      "code": "ADAS11",
+      "count": 1505,
+      "min": 0,
+      "max": 66,
+      "average": 10.85851827,
+      "std": 9.640863171
+    },
+    {
+      "dataType": "DatasetStatistic",
+      "code": "ADAS11",
+      "dataset": {
+        "data": {
+          "header": [3.3,9.9,16.5,23.1,29.7,36.3,42.9,49.5,56.1,62.7],
+          "shape": "vector",
+          "value": [687,404,150,151,58,25,17,8,4,1]
+        },
+        "name": "Count ADAS11 values"
+      },
+      "label": "Histogram :ADAS11"
+    },
+    {
+      "dataType": "DatasetStatistic",
+      "code": "ADAS11",
+      "dataset": {
+        "data": {
+          "header": [2.95,8.85,14.75,20.65,26.55,32.45,38.35,44.25,50.15,56.05],
+          "shape": "vector",
+          "value": [332,213,75,61,35,27,11,3,2,3]
+        },
+        "name": "Count ADAS11 values"
+      },
+      "label": "Histogram :ADAS11-PTGENDER=Female"
+    },
+    {
+      "dataType": "DatasetStatistic",
+      "code": "ADAS11",
+      "dataset": {
+        "data": {
+          "header": [3.3,9.9,16.5,23.1,29.7,36.3,42.9,49.5,56.1,62.7],
+          "shape": "vector",
+          "value": [302,225,73,92,24,9,10,6,1,1]
+        },
+        "name": "Count ADAS11 values"
+      },
+      "label": "Histogram :ADAS11-PTGENDER=Male"
+    }
+  ],
+  "description": "some text"
+}

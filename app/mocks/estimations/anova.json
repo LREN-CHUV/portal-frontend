@@ -1,15 +1,6 @@
 {
   "id": "anova",
   "label": "Anova",
-  "parameters": [{
-    "label": "Feature selection",
-    "type": "select",
-    "options": ["None", "M5 prime", "Greedy", "T-Test", "Iterative T-Test"],
-    "id": "feature_selection"
-  }, {
-    "id": "ridge",
-    "label": "ridge",
-    "type": "number"
-  }],
+  "parameters": [],
   "help": "synopsis\n======\nhello markdown"
 }

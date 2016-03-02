@@ -1,0 +1,335 @@
+
+.intro {
+  /**
+   * don't blame me if any of this is ugly: I just copy pasted it from what I was given
+   * by Mihaela, without and checks.
+   */
+
+  margin: 0 -50px;
+
+  h1 {
+    color: #ffffff;
+    text-transform: uppercase;
+    margin: 2.75rem auto;
+  }
+  p,
+  ol,
+  li {
+    color: #ffffff;
+    margin: 2.75rem auto;
+    font-weight: 100;
+    font-size: 1.7rem;
+    line-height: 3rem;
+  }
+  @media screen and (min-width: 768px) {
+    p,
+    ol,
+    li {
+      font-size: 2rem;
+      line-height: 3.5rem;
+    }
+  }
+  span {
+    color: #ffffff;
+  }
+
+  .background__blue {
+    background-color: rgba(93, 167, 189, 0.5);
+    padding-bottom: 100px;
+  }
+  .background__red {
+    background-color: rgba(239, 59, 74, 0.5);
+  }
+  @media screen and (min-width: 768px) {
+    .background__brain {
+      background: url(../images/svg/brain.svg) no-repeat center center;
+      -webkit-background-size: 30%;
+      -moz-background-size: 30%;
+      -o-background-size: 30%;
+      background-size: 30%;
+    }
+
+    .background__worldmap {
+      background: url(../images/svg/worldmap.svg) no-repeat center center;
+      -webkit-background-size: 85%;
+      -moz-background-size: 85%;
+      -o-background-size: 85%;
+      background-size: 85%;
+    }
+
+    .background__worldmap--network {
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      background: url(../images/svg/map-network.svg) no-repeat center center;
+      -webkit-background-size: 85%;
+      -moz-background-size: 85%;
+      -o-background-size: 85%;
+      background-size: 85%;
+    }
+
+    .background__blue {
+      padding-bottom: 0;
+    }
+  }
+  .onboarding {
+    background: url(../images/body-bg.jpg) no-repeat top center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+  }
+  .onboarding__block {
+    overflow: hidden;
+  }
+  @media screen and (min-width: 768px) {
+    .network {
+      background: url(../images/svg/network.svg) no-repeat top center;
+      -webkit-background-size: 100vw;
+      -moz-background-size: 100vw;
+      -o-background-size: 100vw;
+      background-size: 100vw;
+    }
+  }
+  .hidden {
+    visibility: hidden;
+    display: none;
+  }
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+  }
+  div {
+    margin: 0;
+    padding: 0;
+  }
+  .grid-container {
+    position: relative;
+    width: 100%;
+    height: auto;
+    display: -webkit-box;
+    display: -moz-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-flex-wrap: wrap;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+  }
+  @media screen and (min-width: 768px) {
+    .grid-container {
+      height: 100vh;
+    }
+  }
+  .grid-container .grid__cell {
+    -webkit-box-flex: 1;
+    -moz-box-flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+    position: relative;
+  }
+  .grid--full-height > .grid__cell {
+    display: -webkit-box;
+    display: -moz-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-direction: normal;
+    -moz-box-direction: normal;
+    -webkit-box-orient: vertical;
+    -moz-box-orient: vertical;
+    -webkit-flex-direction: column;
+    -ms-flex-direction: column;
+    flex-direction: column;
+  }
+  .align--center {
+    text-align: center;
+  }
+  .limited-width {
+    max-width: 800px;
+  }
+  .block__content {
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+  }
+  .block__content.grid__cell {
+    -webkit-box-flex: 0;
+    -moz-box-flex: 0;
+    -webkit-flex: 0 0 100%;
+    -ms-flex: 0 0 100%;
+    flex: 0 0 100%;
+  }
+  @media screen and (min-width: 768px) {
+    .block__content.grid__cell {
+      -webkit-box-flex: 0;
+      -moz-box-flex: 0;
+      -webkit-flex: 0 0 50%;
+      -ms-flex: 0 0 50%;
+      flex: 0 0 50%;
+    }
+  }
+  .block__wrapper {
+    padding: 0 2rem;
+  }
+  @media screen and (min-width: 768px) {
+    .block__wrapper {
+      padding: 0 5rem;
+    }
+  }
+  .action--next {
+    position: fixed;
+    bottom: 3rem;
+    left: 0;
+    right: 0;
+  }
+  .action--circle {
+    visibility: hidden;
+    display: none;
+    position: relative;
+    width: 8rem;
+    height: 8rem;
+    border-radius: 50%;
+    background-color: #ffffff;
+    margin: auto;
+    transition: all 0.2s ease-in-out;
+  }
+  @media screen and (min-width: 768px) {
+    .action--circle {
+      visibility: visible;
+      display: block;
+    }
+  }
+  .action--circle:hover {
+    background-color: #ef3b4a;
+    transition: all 0.2s ease-in-out;
+  }
+  .action--circle:hover > #arrow-down {
+    fill: #ffffff;
+  }
+  #arrow-down {
+    width: 30px;
+    height: 30px;
+    top: 2.5rem;
+    left: 0;
+    right: 0;
+    margin: auto;
+    position: absolute;
+    display: inline-block;
+    fill: #ef3b4a;
+  }
+  .anchor {
+    position: absolute;
+    top: 0;
+  }
+  .animate__from-left {
+    transition-delay: 0.4s;
+  }
+  @media screen and (min-width: 768px) {
+    .animate__from-left {
+      transform: translateX(-200px);
+    }
+  }
+  .animate__from-right {
+    transition-delay: 0.4s;
+  }
+  @media screen and (min-width: 768px) {
+    .animate__from-right {
+      transform: translateX(200px);
+    }
+  }
+  .to-animate {
+    transition: 0.8s;
+    transition-delay: 0.4s;
+  }
+  @media screen and (min-width: 768px) {
+    .to-animate {
+      opacity: 0;
+    }
+  }
+  .animate {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  .animate-with-delay {
+    transition-delay: 1.5s;
+  }
+  .cloud__wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+  .cloud__word {
+    border: 2px solid #ffffff;
+    padding: 0.7rem 1.2rem;
+    font-size: 1.7rem;
+    position: absolute;
+  }
+  .cloud__word--1 {
+    left: 40%;
+    top: 30%;
+    transition-delay: 0.5s;
+  }
+  .cloud__word--2 {
+    left: 70%;
+    top: 37%;
+    transition-delay: 0.8s;
+  }
+  .cloud__word--3 {
+    left: 15%;
+    top: 42%;
+    transition-delay: 1.5s;
+  }
+  .cloud__word--4 {
+    left: 25%;
+    top: 54%;
+    transition-delay: 0.9s;
+  }
+  .cloud__word--5 {
+    left: 60%;
+    top: 65%;
+    transition-delay: 1.2s;
+  }
+  .cloud__word--6 {
+    left: 35%;
+    top: 70%;
+    transition-delay: 1.8s;
+  }
+  .intro__content {
+    background-color: rgba(50, 50, 50, 0.5);
+    padding: 2rem;
+    margin: 0 auto;
+  }
+  .intro__logo {
+    width: 80%;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    width: 40vh;
+    margin-top: 5vh;
+    margin-bottom: 5vh;
+  }
+  @media screen and (min-width: 768px) {
+    .intro__logo {
+      margin-top: 0;
+    }
+  }
+
+  #login_btn {
+    position: absolute;
+    bottom: 20px;
+    left: calc(~"50% - 40px");
+
+    span {
+      color: black;
+    }
+    &:hover span {
+      color: white;
+    }
+  }
+}

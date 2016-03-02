@@ -49,8 +49,14 @@
 <body ng-app="chuvApp" class="ng-cloak" ng-cloak to-top-on-load>
 
 <!-- Add your site or application content here -->
-<header id="topnav" class="navbar navbar-default navbar-fixed-top fixed" change-on-scroll role="banner"
-        ng-include="'scripts/app/header/header.html'" ng-controller="HeaderController" ng-show="!isNewVisitor()"></header>
+<header id="topnav"
+        class="navbar navbar-default navbar-fixed-top fixed"
+        change-on-scroll
+        role="banner"
+        ng-cloak
+        ng-if="isLoggedIn()"
+        ng-include="'scripts/app/header/header.html'"
+        ng-controller="HeaderController"></header>
 <div id="wrapper">
   <div id="layout-static">
     <div class="static-content-wrapper">
@@ -64,7 +70,7 @@
               <li><h6 class="copyright">&copy; 2015 Human Brain Project. All right reserved</h6></li>
             </ul>
             <div class="col-md-6 text-right">
-              <a href="//www.virtua.ch/" targe="_blank">Powered by V//</a>
+              <a href="https://www.ahead-solutions.ch/" target="_blank">Powered by Ahead Solutions</a>
             </div>
           </div>
         </div>

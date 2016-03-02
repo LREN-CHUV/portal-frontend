@@ -39,6 +39,84 @@
 		"code": "RightTrIFGtriangularpartoftheinferiorfrontalgyrus",
 		"dataset": {
 			"data": {
+        "categories": [
+          "Male",
+          "Female",
+          "Male",
+          "Female",
+          "Male",
+          "Female",
+          "Male",
+          "Female",
+          "Male",
+          "Female",
+          "Male",
+          "Female",
+          "Male",
+          "Female",
+          "Male",
+          "Female",
+          "Male",
+          "Female",
+          "Male",
+          "Female"
+        ],
+				"header": [
+          0.237883665,
+          0.237883665,
+          0.713650995,
+          0.713650995,
+          1.189418325,
+          1.189418325,
+          1.665185655,
+          1.665185655,
+          2.140952985,
+          2.140952985,
+          2.616720315,
+          2.616720315,
+          3.092487645,
+          3.092487645,
+          3.568254975,
+          3.568254975,
+          4.044022305,
+          4.044022305,
+          4.519789635,
+          4.519789635
+        ],
+				"shape": "vector",
+				"value": [
+          1,
+          3,
+          0,
+          6,
+          0,
+          22,
+          2,
+          80,
+          2,
+          179,
+          92,
+          187,
+          388,
+          187,
+          277,
+          104,
+          36,
+          67,
+          11,
+          5
+        ]
+			},
+			"name": "RightTrIFGtriangularpartoftheinferiorfrontalgyrus per gender"
+		},
+		"label": "Per Gender"
+	},
+
+	{
+		"dataType": "DatasetStatistic",
+		"code": "RightTrIFGtriangularpartoftheinferiorfrontalgyrus",
+		"dataset": {
+			"data": {
 				"header": [2.26103884,2.52288272,2.7847266,3.04657048,3.30841436,3.57025824,3.83210212,4.093946,4.35578988,4.61763376],
 				"shape": "vector",
 				"value": [3,6,22,80,179,187,187,104,36,11]

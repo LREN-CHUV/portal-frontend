@@ -1,6 +1,6 @@
 {
   "id": "glr",
-  "label": "General Linear Regression (GLR)",
+  "label": "General Linear Model (GLM)",
   "parameters": [{
     "label": "Feature selection",
     "type": "select",
