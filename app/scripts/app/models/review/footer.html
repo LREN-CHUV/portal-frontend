@@ -7,8 +7,8 @@
             <div class="col-md-8">
               <div class="form icheck-minimal validate-model-field">
                 <label class="txt">{{'model.yours.title' | translate}}</label>
-                <input type="text" ng-model="chartConfig.title.text" ng-disabled="!isMine(model)" />
-                <div class="checkbox red" ng-if="isMine(model)">
+                <input type="text" ng-model="chartConfig.title.text" ng-disabled="!isMine()" />
+                <div class="checkbox red" ng-if="isMine()">
                   <label>
                     <input type="checkbox" ng-model="model.valid" />
                     {{'model.validate' | translate}}
@@ -22,13 +22,13 @@
                 <li class="toolbar-icon-bg hidden-xs">
                   <a href="" ng-click="copyModel()" ng-if="!isNew()"><span class="icon-bg"><i class="ti ti-files"></i></span></a>
                 </li>
-                <li class="toolbar-icon-bg hidden-xs">
+                <li class="toolbar-icon-bg hidden-xs" ng-if="!isNew()">
                   <a href="" ng-click="exportPdf()"><span class="icon-bg"><i class="icon-pdf"></i></span></a>
                 </li>
-                <li class="toolbar-icon-bg hidden-xs disabled">
+                <li class="toolbar-icon-bg hidden-xs disabled" ng-if="!isNew()">
                   <a href=""><span class="icon-bg"><span>XLS</span></span></a>
                 </li>
-                <li ng-if="isMine(model)">
+                <li ng-if="isMine()">
                   <button type="submit" ng-click="saveModel()" class="btn-round">
                     <span>
                       <span>{{'common.save' | translate }}</span>

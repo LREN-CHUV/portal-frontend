@@ -4,8 +4,8 @@
 
 'use strict';
 angular.module('chuvApp.models')
-  .controller('ModelsController', ['$scope', '$translatePartialLoader', '$translate', '$rootScope', 'Model', 'backendUrl', '$attrs', 'WidgetService', 'User',
-    function ($scope, $translatePartialLoader, $translate, $rootScope, Model, backendUrl, $attrs, WidgetService, User) {
+  .controller('ModelsController', ['$scope', '$translatePartialLoader', '$translate', '$rootScope', 'Model', 'backendUrl', '$attrs', 'WidgetService', 'User', "ChartUtil",
+    function ($scope, $translatePartialLoader, $translate, $rootScope, Model, backendUrl, $attrs, WidgetService, User, ChartUtil) {
 
       $translatePartialLoader.addPart('model');
       $translate.refresh();
@@ -32,4 +32,12 @@ angular.module('chuvApp.models')
         $scope.models = response.data;
         WidgetService.make();
       });
+
+      $scope.get_config = function (model) {
+        var config = angular.copy(model.config);
+        config.height = 300;
+        config.width = undefined;
+        config.title = null;
+        return ChartUtil(config, model.dataset);
+      }
     }]);

@@ -37,14 +37,15 @@ angular.module('chuvApp.util')
           //}
         },
         title: {
-          text: "Box Plot"
+          text: angular.isDefined(config.title) ? config.title : "Box Plot"
         },
         xAxis: {
           categories: dataset.header,
           title: null
         },
         size: {
-         height: config.height
+          height: config.height,
+          width: config.width
         },
         series: [{
           name: "",
@@ -75,14 +76,15 @@ angular.module('chuvApp.util')
           }
         },
         title: {
-          text: "Design matrix"
+          text: angular.isDefined(config.title) ? config.title : "Design matrix"
         },
         xAxis: {
           categories: dataset.header,
           title: null
         },
         size: {
-         height: config.height
+          height: config.height,
+          width: config.width
         },
         series: [{
           name: null,
@@ -128,7 +130,8 @@ angular.module('chuvApp.util')
           yAxis: [{title: {text: yCode}}]
         },
         size: {
-         height: config.height
+          height: config.height,
+          width: config.width
         },
         title: {
           text: null
@@ -185,7 +188,8 @@ angular.module('chuvApp.util')
             text: null
           },
           size: {
-           height: config.height
+            height: config.height,
+            width: config.width
           },
           options: {
             chart: {

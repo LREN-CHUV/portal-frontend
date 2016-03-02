@@ -34,6 +34,7 @@ angular.module('chuvApp.models').controller('ReviewController',['$scope','$trans
           $scope.model.title = "Copy of "+$scope.model.title;
         }
         $scope.chartConfig = result.config;
+        $scope.hcConfig = ChartUtil($scope.chartConfig, $scope.dataset);
         $scope.query = result.query;
 
         $scope.$emit('event:loadModel',result);
@@ -49,11 +50,18 @@ angular.module('chuvApp.models').controller('ReviewController',['$scope','$trans
 
     /**
      * Return true if object has been created by current user
-     * @param obj
      * @returns {boolean}
      */
-    $scope.isMine = function (obj) {
-      return obj.id == null || obj.createdBy.id == User.current().id;
+    $scope.isMine = function () {
+      return $scope.model.id == null || $scope.model.createdBy.username == User.current().username;
+    };
+
+    /**
+     * Return true if the model has not been saved yet
+     * @returns {boolean}
+     */
+    $scope.isNew = function () {
+      return $scope.model.id == null;
     };
 
     /**
@@ -77,7 +85,6 @@ angular.module('chuvApp.models').controller('ReviewController',['$scope','$trans
         // save existing model
         Model.update({slug: $scope.model.slug}, $scope.model, function (model) {
           $state.go('models-edit', {slug: model.slug});
-          alert("Save ok");
         },function(){
           alert("Error on save!");
         });
@@ -259,7 +266,7 @@ angular.module('chuvApp.models').controller('ReviewController',['$scope','$trans
         update_location_search();
         $scope.hcConfig = ChartUtil($scope.chartConfig, $scope.dataset);
       });
-    }
+    };
 
     $scope.$on("chartConfigChanged", function () {
       $scope.hcConfig = ChartUtil($scope.chartConfig, $scope.dataset);
