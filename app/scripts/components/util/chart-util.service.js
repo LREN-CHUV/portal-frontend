@@ -10,6 +10,53 @@ angular.module('chuvApp.util')
       return arr.map(function (x) { return +x;});
     }
 
+    function  buildBoxPlot (config, dataset) {
+      config.hasXAxis = false;
+
+      var data, result = [], idx1, idx2;
+
+      for (idx1 = 0; idx1 < config.yAxisVariables.length; idx1++) {
+        data = _.sortBy(dataset.data[config.yAxisVariables[idx1]]);
+
+        result.push([
+          data[Math.floor(data.length / 10.0)], // 1st decile
+          data[Math.floor(data.length / 4.0)], // Q1
+          data[Math.floor(data.length / 2.0)], // Q2
+          data[Math.floor(data.length * 3.0 / 4.0)], // Q3
+          data[Math.floor(data.length * 9.0 / 10.0)] // 9th decile
+        ])
+      }
+
+      return {
+        options: {
+          "chart": {
+            "type":"boxplot"
+          },
+          //yAxis: {
+          //  title: null
+          //}
+        },
+        title: {
+          text: "Box Plot"
+        },
+        xAxis: {
+          categories: dataset.header,
+          title: null
+        },
+        size: {
+         height: config.height
+        },
+        series: [{
+          name: "",
+          data: result,
+          index: 1,
+          id: 1,
+          legendIndex: 1
+        }]
+      };
+    }
+
+
     function buildDesignMatrix (config, dataset) {
       config.hasXAxis = false;
 
@@ -40,6 +87,7 @@ angular.module('chuvApp.util')
         series: [{
           name: null,
           borderWidth: 0,
+          index: 1,
           data: function() {
 
             // create a list of [coord X, coord Y, val]
@@ -144,10 +192,13 @@ angular.module('chuvApp.util')
               type: type
             }
           },
-          series: config.yAxisVariables.map(function (code) {
+          series: config.yAxisVariables.map(function (code, index) {
             return {
               name: code,
-              data: data[variableIdxs[code]]
+              data: data[variableIdxs[code]],
+              index: index,
+              id: index,
+              legendIndex: index
             }
           })
         };
@@ -166,6 +217,7 @@ angular.module('chuvApp.util')
       return ({
         designmatrix: buildDesignMatrix,
         pie: buildPieChart,
+        boxplot: buildBoxPlot,
         column: buildRegularChart("column"),
         scatter: buildRegularChart("scatter"),
         line: buildRegularChart("line")
