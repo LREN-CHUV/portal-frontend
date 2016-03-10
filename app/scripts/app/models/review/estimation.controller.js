@@ -14,7 +14,7 @@ angular.module('chuvApp.models').controller('EstimationController',['$scope', '$
     id: "glr",
     label: "General Linear Regression (GLR)"
   }, {
-    id: "anova",
+    id: "anv",
     label: "Anova"
   }, {
     id: "genetic",
@@ -28,10 +28,11 @@ angular.module('chuvApp.models').controller('EstimationController',['$scope', '$
     child_scope.parametrization = {};
     child_scope.help_is_open = true;
     child_scope.parametrization_is_correct = function () {
-      return _.all(
-        child_scope.estimation.parameters,
-        function (parameter) { return !!child_scope.parametrization[parameter.id] }
-      )
+      return true;
+      //return _.all(
+      //  child_scope.estimation.parameters,
+      //  function (parameter) { return !!child_scope.parametrization[parameter.id] }
+      //)
     };
 
     $http.get("/mocks/estimations/" + $scope.shared.chosen_estimation + ".json")
@@ -41,8 +42,21 @@ angular.module('chuvApp.models').controller('EstimationController',['$scope', '$
         $scope.loading_estimation = false;
 
         child_scope.run_estimation = function () {
-          Model.estimateQuery($scope.query)
-            .then(function (result) {
+
+          function _map (variable) {
+            return { "code": variable.code };
+          }
+
+          Model.estimateQuery(
+            $scope.shared.chosen_estimation,
+            {
+              request: { plot: "linearRegression" },
+              covariables: $scope.query.coVariables.map(_map),
+              variables: $scope.query.variables.map(_map),
+              filters: $scope.query.filters.map(_map),
+              grouping: $scope.query.groupings.map(_map)
+            }
+          ).then(function (result) {
               child_scope.result = result.data;
               child_scope.help_is_open = false;
             });

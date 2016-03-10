@@ -1,6 +1,15 @@
 angular.module('chuvApp.intro').controller('IntroController', ['$scope', '$translatePartialLoader', '$translate', '$rootScope', '$state', 'User', 'backendUrl',
   function ($scope, $translatePartialLoader, $translate, $rootScope, $state, User, backendUrl) {
 
+    $scope.$watch(
+      function () {return User.hasCurrent();},
+      function (hasCurrent) {
+        if (hasCurrent) {
+          $state.go("home")
+        }
+      }
+    );
+
     $translatePartialLoader.addPart('intro');
     $translate.refresh();
 

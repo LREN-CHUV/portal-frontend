@@ -56,8 +56,8 @@ angular.module('chuvApp.util')
         series: [{
           name: "",
           data: result,
-          //index: 1,
-          //id: 1
+          index: 1,
+          id: 1
         }]
       };
     }

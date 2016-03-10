@@ -1,7 +1,7 @@
 <div class="modal-body">
 
   <accordion close-others="false">
-    <accordion-group ng-if="estimation.parameters.length" is-open="true">
+    <!--accordion-group ng-if="estimation.parameters.length" is-open="true">
       <accordion-heading>
         <span class="ti ti-panel"></span>
         Parameters
@@ -26,7 +26,7 @@
           </td>
         </tr>
       </table>
-    </accordion-group>
+    </accordion-group-->
 
     <accordion-group is-open="help_is_open">
       <accordion-heading>
@@ -46,43 +46,25 @@
       <div style="margin: -16px -16px 0 -16px" class="table-responsive">
         <table class="table table-striped table-bordered">
           <tr>
-            <th></th>
-            <th>Temporal Amyloid Deposition</th>
-            <th>Std Err</th>
-            <th>t</th>
-            <th>p</th>
-            <th>Beta (&beta;)</th>
-            <th>Std Err &beta;</th>
-            <th>-95.00% Cnf.Lm</th>
-            <th>+95.00% Cnf.Lm</th>
+            <th>Variable</th>
+            <th>Coefficients</th>
+            <th>Standard Error</th>
+            <th>T-value</th>
+            <th>Pr(>|t|)</th>
           </tr>
-          <tr ng-repeat="row in result">
-            <td ng-bind="row.name"></td>
-            <td ng-bind="row.tad"></td>
-            <td ng-bind="row.std_err"></td>
-            <td ng-bind="row.t"></td>
-            <td ng-bind="row.p"></td>
-            <td ng-bind="row.beta"></td>
-            <td ng-bind="row.std_err_beta"></td>
-            <td ng-bind="row['-95%']"></td>
-            <td ng-bind="row['+95%']"></td>
+          <tr ng-repeat="field in result.input.fields" ng-init="name = field.name">
+            <td ng-bind="name"></td>
+            <td ng-bind="result.cells.coefficients.init[name]"></td>
+            <td ng-bind="result.cells.summary.init.coefficients[name].std_error"></td>
+            <td ng-bind="result.cells.summary.init.coefficients[name].t_value"></td>
+            <td ng-bind="result.cells.summary.init.coefficients[name].p_value"></td>
           </tr>
         </table>
       </div>
-
       <div>
         <p>
-          <b>t</b>: t-statistics
-          <br>
-          <b>p</b>: p-value, all p-values less than 0.05 in this case were considiered significant
-          <br>
-          <b>Beta (&beta;)</b>: Value of regression coefficients
-          <br>
-          <b>Std Err &beta;</b>: Standard error of the refression coefficients
-          <br>
-          <b>- 95.00% Cnf Lmt</b>: Confidential interval for regression coefficients, left side
-          <br>
-          <b>+ 95.00% Cnf Lmt</b>: Confidential interval for regression coefficients, right side
+          <b>Degrees of freedom: </b>
+          <span ng-bind="result.cells.summary.init.degrees_freedom[1]"></span>
         </p>
       </div>
     </accordion-group>

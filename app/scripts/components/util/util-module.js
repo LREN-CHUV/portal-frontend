@@ -13,7 +13,7 @@ angular.module('chuvApp.util',['ui.bootstrap'])
      * @param {number} status
      */
     function logoutOnForbidden(data, status) {
-      if ((status === 401 || status === 403) && document.getElementById("logout-link") !== undefined) {
+      if (status === 401 && document.getElementById("logout-link") !== undefined) {
         //forces logout-login redirect;
         setTimeout(function () {
           document.getElementById("logout-link").click();

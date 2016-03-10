@@ -32,10 +32,15 @@ angular.module('chuvApp.header').controller('HeaderController', ['$scope', '$tra
       $state.go('search');
     };
 
-    $scope.logout = function(){
-      User.removeCurrent();
-      $http.post(backendUrl+'/logout');
-      $state.go('intro');
+    $scope.logout = function() {
+      if ($state.current.name !== 'intro') {
+        $state.go('intro');
+      }
       $rootScope.user = null;
+
+      if (User.hasCurrent()) {
+        User.removeCurrent();
+        $http.post(backendUrl+'/logout');
+      }
     };
   }]);
