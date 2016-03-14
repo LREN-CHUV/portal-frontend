@@ -53,11 +53,14 @@
             <th>Pr(>|t|)</th>
           </tr>
           <tr ng-repeat="field in result.input.fields" ng-init="name = field.name">
-            <td ng-bind="name"></td>
-            <td ng-bind="result.cells.coefficients.init[name]"></td>
-            <td ng-bind="result.cells.summary.init.coefficients[name].std_error"></td>
-            <td ng-bind="result.cells.summary.init.coefficients[name].t_value"></td>
-            <td ng-bind="result.cells.summary.init.coefficients[name].p_value"></td>
+            <td ng-bind="variable_title(name)"></td>
+            <td ng-bind="result.cells.coefficients.init[name] | number"></td>
+            <td ng-bind="result.cells.summary.init.coefficients[name].std_error | number"></td>
+            <td ng-bind="result.cells.summary.init.coefficients[name].t_value | number"></td>
+            <td>
+              <span ng-bind="result.cells.summary.init.coefficients[name].p_value | number"></span>
+              <span ng-bind="pvalue_quality(result.cells.summary.init.coefficients[name].p_value)"></span>
+            </td>
           </tr>
         </table>
       </div>

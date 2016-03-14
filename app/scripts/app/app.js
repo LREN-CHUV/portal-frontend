@@ -40,6 +40,7 @@ angular
     'app.config',
     'ab-base64',
     "btford.markdown",
+    'ang-drag-drop',
     //components
     'chuvApp.components.filters',
     'chuvApp.components.criteria',
@@ -61,7 +62,7 @@ angular
     'chuvApp.mydata',
     'chuvApp.profile',
     'chuvApp.components.toolbar',
-    'chuvApp.intro'
+    'chuvApp.intro',
   ])
   .config(['$translateProvider','tmhDynamicLocaleProvider','backendExportChartUrl', function ($translateProvider,tmhDynamicLocaleProvider,backendExportChartUrl) {
     $translateProvider.useLoader('$translatePartialLoader', {
@@ -97,6 +98,10 @@ angular
 
       User.get().success(function(data) {
         $rootScope.user = User.current();
+
+        if (!User.hasAgreedTos()) {
+          $state.go("tos_agreement")
+        }
       });
 
       /**

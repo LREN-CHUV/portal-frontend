@@ -6,7 +6,7 @@
 angular.module('chuvApp.users')
   .factory('User', ['$rootScope','backendUrl','$http','$cookieStore','base64', function ($rootScope,backendUrl,$http,$cookieStore,base64) {
 
-    var currentUser;
+    var hasAgreedTos = $rootScope.hasAgreedTos = !!$cookieStore.get("tos");
 
     return {
 
@@ -17,37 +17,29 @@ angular.module('chuvApp.users')
           return $cookieStore.get('user') !== null && $cookieStore.get('user') !== undefined;
       },
       removeCurrent: function () {
-            return $cookieStore.remove('user');
+        $cookieStore.remove('tos');
+        return $cookieStore.remove('user');
       },
 
-      authenticate: function (login, password) {
-          currentUser = {username:login,password:password};
-          var cString = login + ':' + password;
-          return $http.post(backendUrl+"/authenticate",currentUser,{
-              headers:{
-                'Authorization':'Basic ' + base64.encode(cString)
-              }
-          }).success(function (response) {
-              $cookieStore.put('user',response);
-              return response;
-           }
-          );
+      get: function () {
+        var promise = $http.get(backendUrl + "/user")
+        promise.then(function (user_data) {
+          // TODO connect to backend
+          //$rootScope.hasAgreedTos = hasAgreedTos = user_data.hasAgreedTos;
+        })
+        return promise;
       },
 
-      get: function (username) {
-        return $http.get(username ? backendUrl+"/users/"+username : backendUrl + "/user")
+      hasAgreedTos: function () {
+        return !!hasAgreedTos;
       },
-
-      create: function (user) {
-        return user
-      },
-
-      update: function (user) {
-        return user
-      },
-
-      remove: function (username) {
-            return;
+      agreeTos: function () {
+        // TODO: post
+        var promise = $http.post(backendUrl + "/user?agreeNDA=true");
+        promise.then(function () {
+          $cookieStore.put("tos", $rootScope.hasAgreedTos = hasAgreedTos = true);
+        });
+        return promise;
       }
 
     };

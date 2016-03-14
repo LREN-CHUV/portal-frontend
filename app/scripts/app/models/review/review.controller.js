@@ -195,11 +195,17 @@ angular.module('chuvApp.models').controller('ReviewController',['$scope','$trans
       return modal.result;
     };
 
-    //$scope.executeQuery = function () {
-    //  $scope.query.filters.length && !$scope.query.filterQuery
-    //    ? $scope.configureFilterQuery().then(doExecuteQuery)
-    //    : doExecuteQuery();
-    //};
+    var axeCodeUsability = {};
+    $scope.canUseAxis = function (axeCode) {
+
+      if (!axeCodeUsability.hasOwnProperty(axeCode)) {
+        axeCodeUsability[axeCode] = !_.any(
+          $scope.dataset.data[axeCode],
+          function (datapoint) { return !isFinite(datapoint); }
+        );
+      }
+      return axeCodeUsability[axeCode];
+    };
 
     /**
      *
@@ -263,6 +269,7 @@ angular.module('chuvApp.models').controller('ReviewController',['$scope','$trans
         $scope.executed = true;
         $scope.loading_model = false;
         $scope.dataset = queryResult;
+        $scope.chartConfig.yAxisVariables = _.filter($scope.dataset.header, $scope.canUseAxis);
         update_location_search();
         $scope.hcConfig = ChartUtil($scope.chartConfig, $scope.dataset);
       });

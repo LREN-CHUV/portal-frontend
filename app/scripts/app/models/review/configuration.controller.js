@@ -13,6 +13,8 @@ angular.module('chuvApp.models')
     };
 
     $scope.enableYAxe = function(axeCode) {
+      if (!$scope.canUseAxis(axeCode)) return;
+
       var idx = $scope.chartConfig.yAxisVariables.indexOf(axeCode);
 
       if (idx === -1) {

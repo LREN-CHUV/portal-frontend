@@ -54,7 +54,7 @@
         change-on-scroll
         role="banner"
         ng-cloak
-        ng-show="isLoggedIn()"
+        ng-show="isLoggedIn() && hasAgreedTos"
         ng-include="'scripts/app/header/header.html'"
         ng-controller="HeaderController"></header>
 <div id="wrapper">
@@ -145,6 +145,7 @@
 <!-- build:js({.tmp,app}) scripts/scripts.js -->
 <script src="scripts/app/app.js"></script>
 <script src="scripts/app/app.config.js"></script>
+<script src="scripts/components/dragdrop/draganddrop.js"></script>
 
 <!-- Components -->
 <script src="scripts/components/hightlight/hightlight.filter.js"></script>
@@ -157,6 +158,7 @@
 <script src="scripts/app/home/home.module.js"></script>
 <script src="scripts/app/home/home.router.js"></script>
 <script src="scripts/app/home/home.controller.js"></script>
+<script src="scripts/app/home/tos.controller.js"></script>
 
 <!-- Apps -->
 <script src="scripts/app/hbpapps/hbpapps.module.js"></script>

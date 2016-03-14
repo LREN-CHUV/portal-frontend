@@ -18,7 +18,8 @@ angular.module('chuvApp.models').controller('EstimationController',['$scope', '$
     label: "Anova"
   }, {
     id: "genetic",
-    label: "Genetic Model"
+    label: "Genetic Model",
+    disabled: true
   }];
 
   $scope.estimate_model = function () {
@@ -41,6 +42,23 @@ angular.module('chuvApp.models').controller('EstimationController',['$scope', '$
     promise1.then(function (result) {
       child_scope.result = result.data;
       child_scope.help_is_open = false;
+
+      child_scope.variable_title = function (variable_code) {
+        // capitalize
+        return variable_code
+          .split(/[ _\-]/)
+          .map(function (code_part) { return code_part.replace(/^[a-z]/, function (str) {return str.toUpperCase(); })})
+          .join(" ");
+      };
+
+      child_scope.pvalue_quality = function (pvalue) {
+        pvalue = Math.abs(pvalue);
+        if (pvalue <= 0.001) return "(★★★)";
+        if (pvalue <= 0.01) return "(★★)";
+        if (pvalue <= 0.1) return "(★)";
+        return "";
+
+      }
     });
 
     promise2.then(function (result) {

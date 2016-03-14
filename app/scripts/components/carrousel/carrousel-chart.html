@@ -1,0 +1,19 @@
+<div ui-draggable="true" drag="get_drag_data()">
+
+  <h3 class="search-title">
+    <a ui-sref="models-edit({slug: model.slug})" ng-bind="model.title"></a>
+  </h3>
+  <span class="search-img">
+    <div ng-if="config">
+      <highchart config="config" ng-if="!svg"></highchart>
+      <img ng-src="{{ svg }}">
+    </div>
+  </span>
+  <div class="author-box">
+    <a href="{{'#/users/' + model.createdBy.id }}" class="avatar">
+      <img ng-src="{{model.createdBy.picture}}" alt="" class="avatar" />
+    </a>
+    by <a href="{{'#/users/' + model.createdBy.id }}">{{model.createdBy.fullname}}</a><br />
+    <span class="time">{{model.createdAt | fromNow}}</span>
+  </div>
+</div>

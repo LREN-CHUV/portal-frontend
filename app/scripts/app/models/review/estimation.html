@@ -10,6 +10,7 @@
             <input type="radio" id="estimation_{{ possible_estimation.id }}"
                    name="chosen_estimation"
                    value="{{ possible_estimation.id }}"
+                   ng-disabled="{{ possible_estimation.disabled }}"
                    ng-model="shared.chosen_estimation">
             <span ng-bind="possible_estimation.label"></span>
           </label>
@@ -24,7 +25,7 @@
         <span>
           <span class="ng-binding">Apply</span>
           <i class="ti ti-arrow-down" ng-if="!loading_estimation"></i>
-          <i class="ti ti-reload ti-spin" ng-if="loading_estimation"></i>
+          <i class="ti ti-reload ti-spin reverse-direction" ng-if="loading_estimation"></i>
         </span>
       </button>
 

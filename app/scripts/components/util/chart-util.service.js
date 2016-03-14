@@ -13,10 +13,16 @@ angular.module('chuvApp.util')
     function  buildBoxPlot (config, dataset) {
       config.hasXAxis = false;
 
-      var data, result = [], idx1, idx2;
+      var data, result = [], idx1, idx2,
+        variables = _.filter(
+          dataset.header,
+          function (header) {
+            return config.yAxisVariables.indexOf(header) >= 0;
+          }
+        );
 
-      for (idx1 = 0; idx1 < config.yAxisVariables.length; idx1++) {
-        data = _.sortBy(dataset.data[config.yAxisVariables[idx1]]);
+      for (idx1 = 0; idx1 < variables.length; idx1++) {
+        data = _.sortBy(dataset.data[variables[idx1]]);
 
         result.push([
           data[Math.floor(data.length / 10.0)], // 1st decile
@@ -32,9 +38,6 @@ angular.module('chuvApp.util')
           "chart": {
             "type":"boxplot"
           },
-          //yAxis: {
-          //  title: null
-          //}
           legend: {
               enabled: false
           },
@@ -43,11 +46,11 @@ angular.module('chuvApp.util')
           text: "Box Plot"
         },
         xAxis: {
-          categories: dataset.header,
+          categories: config.yAxisVariables,
           title: null
         },
         yAxis: {
-          title: null
+          visible: false
         },
         size: {
           height: config.height,
@@ -66,6 +69,16 @@ angular.module('chuvApp.util')
     function buildDesignMatrix (config, dataset) {
       config.hasXAxis = false;
 
+      var variables = _.filter(
+        dataset.header,
+        function (header) {
+          return config.yAxisVariables.indexOf(header) >= 0;
+        }
+      );
+
+      var mins = [],
+        maxes = [];
+
       return {
         options: {
           "chart": {
@@ -76,16 +89,26 @@ angular.module('chuvApp.util')
             minColor: '#FFFFFF',
             maxColor: '#000000'
           },
-          yAxis: {
-            title: null
+        tooltip: {
+          formatter: function () {
+            return this.point.value * (maxes[this.point.x] - mins[this.point.x]) + mins[this.point.x];
           }
+        },
+        //yAxis: {
+        //  title: null,
+        //  labels: {enabled: false}
+        //},
         },
         title: {
           text: angular.isDefined(config.title) ? config.title : "Design matrix"
         },
         xAxis: {
-          categories: dataset.header,
+          categories: variables,
           title: null
+        },
+        yAxis: {
+          title: null,
+          labels: {enabled: false}
         },
         size: {
           height: config.height,
@@ -100,13 +123,17 @@ angular.module('chuvApp.util')
             // create a list of [coord X, coord Y, val]
             // this is the dataset expected by highcharts
             var result = [],
-              idx1, idx2, data;
+              min, max, idx1, idx2, data;
 
-            for (idx1 = 0; idx1 < config.yAxisVariables.length; idx1++) {
-              data = dataset.data[config.yAxisVariables[idx1]];
+            for (idx1 = 0; idx1 < variables.length; idx1++) {
+              data = dataset.data[variables[idx1]];
+              max = _.max(data);
+              min = _.min(data);
               for (idx2 = 0; idx2 < data.length; idx2++) {
-                result.push([idx1, idx2, +data[idx2]]);
+                result.push([idx1, idx2, (data[idx2] - min) / (max - min), min, max]);
               }
+              mins.push(min);
+              maxes.push(max);
             }
 
             return result;

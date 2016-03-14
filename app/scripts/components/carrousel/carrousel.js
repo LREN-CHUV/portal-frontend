@@ -66,32 +66,48 @@ angular.module('chuvApp.components.carrousel').directive("carrousel", [function 
       };
 
       scope.loadCarrousel();
+
     }
   };
 }]);
 
-angular.module('chuvApp.components.carrousel').directive("carrouselChart", ['ChartUtil', 'Model','backendUrl','$compile','$templateRequest','$q',function (ChartUtil, Model,backendUrl,$compile,$templateRequest,$q) {
+angular.module('chuvApp.components.carrousel').directive("carrouselChart", ['ChartUtil', 'Model','backendUrl','$compile','$templateRequest','$q', '$timeout', function (ChartUtil, Model,backendUrl,$compile,$templateRequest,$q, $timeout) {
   return {
-    template: '<div ng-if="config"><highchart config="config"></highchart></div>',
+    templateUrl: './scripts/components/carrousel/carrousel-chart.html',
     restrict: 'E',
     scope:{
       "model":"="
     },
-    link:function(scope,element){
+    link:function(scope,element) {
+      scope.get_drag_data = function() {
+        return '<img src="' + scope.largeSvg + '"><br><a href="' + location.origin + '/#/models/' + scope.model.slug + '/">' + scope.model.title + '</a>';
+      }
+
       $q.all([Model.get({slug:scope.model.slug}).$promise,$templateRequest("./scripts/app/articles/article-table.html")]).then(function(data){
-        scope.dataset = data[0].dataset;
-
-        scope.compiledHtml = $compile(angular.element(data[1]))(scope);
-
-        element.bind('dragstart',function(event){
-          event.originalEvent.dataTransfer.setData('text/html', scope.compiledHtml[0].outerHTML);
-        });
 
         var config = angular.copy(scope.model.config);
         config.height = 200;
-        config.width = undefined;
-        config.title = null;
+        config.width = element.parent().width();
         scope.config = ChartUtil(config, scope.model.dataset);
+        scope.config.title = {text: scope.model.title};
+
+        $timeout(
+          function () {
+            var chart = _.find(
+              Highcharts.charts,
+              function (chart) {
+                if (!chart) return false;
+                return $(chart.renderTo).parents().index(element[0]) >= 0;
+              }
+            )
+            if (!chart) return;
+            scope.svg = "data:image/svg+xml;utf8," + encodeURIComponent(chart.getSVG());
+            chart.userOptions.chart.width = chart.options.chart.width = chart.chartWidth = 700;
+            chart.userOptions.chart.height = chart.options.chart.height = chart.chartHeight = 450;
+            scope.largeSvg = "data:image/svg+xml;utf8," + encodeURIComponent(chart.getSVG());
+          },
+          100
+        )
       });
 
     }

@@ -9,4 +9,9 @@ angular.module('chuvApp.home').config(['$stateProvider',function($stateProvider)
             templateUrl: 'scripts/app/home/home.html',
             controller:'HomeController'
         })
+        .state('tos_agreement', {
+            url: '/tos',
+            templateUrl: 'scripts/app/home/term-of-service.html',
+            controller:'TosController'
+        })
 }]);
