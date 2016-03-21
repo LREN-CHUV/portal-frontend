@@ -284,10 +284,45 @@ angular.module('chuvApp.models')
           return [ordered_x_values, series, has_multiple_series];
         }
 
+        $scope.init_hc_config = function (statistic) {
+          if (statistic.hc_config) return;
+
+          var categories_and_data = map_data_to_hc_series(statistic.dataset.data, statistic.dataset.name);
+
+          statistic.hc_config = {
+
+            options: {
+              chart: {
+                type: 'column'
+              },
+              tooltip: {
+                headerFormat: '<span style="font-weight:bold">{point.key}</span><table>',
+                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                '<td style="padding:0"><b>{point.y:.2f}</b></td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+              }
+            },
+            xAxis: { categories: categories_and_data[0] },
+
+            series: categories_and_data[1],
+
+            title: {
+              text: categories_and_data[2] ? statistic.dataset.name : null
+            },
+
+            size: {
+              width: null,
+              height: 350
+            }
+          };
+        };
+
         /**
          * sets up the highcharts configuration for a given statistics dataset.
          * @param statistic
-         */
+         *
         function setup_stats (statistic) {
 
           var categories_and_data = map_data_to_hc_series(statistic.dataset.data, statistic.dataset.name);
@@ -320,7 +355,7 @@ angular.module('chuvApp.models')
               height: 350
             }
           };
-        }
+        }*/
 
         $scope.$watch(
           "focused_variable",
@@ -345,10 +380,10 @@ angular.module('chuvApp.models')
                 if (!angular.isArray($scope.stats)) {
                   $scope.stats = [$scope.stats];
                 }
-
-                $scope.stats
-                  .filter(function (statistic) { return statistic.dataType === 'DatasetStatistic' })
-                  .forEach(setup_stats);
+                //
+                //$scope.stats
+                //  .filter(function (statistic) { return statistic.dataType === 'DatasetStatistic' })
+                //  .forEach(setup_stats);
 
                 $scope.measurement_count = $scope.stats[0].count || "??";
 
@@ -360,7 +395,13 @@ angular.module('chuvApp.models')
         );
 
         // this is to overcome a ng-highcharts sizing bug.
-        $scope.show_stats_after_timeout = function () {
+        $scope.show_stats_after_timeout = function (statistics) {
+
+          $scope.stats.forEach(function (stat) {
+            stat.active = false;
+          })
+
+          statistics.active = true;
           $scope.show = false;
           $timeout(
             function () {
