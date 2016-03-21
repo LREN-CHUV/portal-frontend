@@ -33,7 +33,7 @@
       </div>
 
       <div class="tile-heading"><span>Show</span></div>
-      <div class="tile-body">
+      <div class="tile-body" style="margin-bottom: -30px">
         <ul class="list-axe">
           <li>
             AXE X
@@ -44,9 +44,21 @@
                   <i class="ti ti-check"></i>
                 </a>
               </li>
+              <li ng-repeat="xAxe in dataset.variable">
+                <a href="" ng-click="changeXaxis(xAxe)" ng-class="chartConfig.hasXAxis && chartConfig.xAxisVariable == xAxe ? 'active' : ''">
+                  <span ng-bind="xAxe"></span>
+                  <i class="ti ti-check"></i>
+                </a>
+              </li>
+              <li ng-repeat="xAxe in dataset.grouping">
+                <a href="" ng-click="changeXaxis(xAxe)" ng-class="chartConfig.hasXAxis && chartConfig.xAxisVariable == xAxe ? 'active' : ''">
+                  <span ng-bind="xAxe"></span>
+                  <i class="ti ti-check"></i>
+                </a>
+              </li>
               <li ng-repeat="xAxe in dataset.header">
                 <a href="" ng-click="changeXaxis(xAxe)" ng-class="chartConfig.hasXAxis && chartConfig.xAxisVariable == xAxe ? 'active' : ''">
-                  <span>{{xAxe}}</span>
+                  <span ng-bind="xAxe"></span>
                   <i class="ti ti-check"></i>
                 </a>
               </li>
@@ -58,9 +70,21 @@
               <li>
                 <span><br></span>
               </li>
+              <li ng-repeat="yAxe in dataset.variable">
+                <a href="" ng-click="enableYAxe(yAxe)" ng-class="chartConfig.yAxisVariables.indexOf(yAxe) >= 0 ? 'active' : ''">
+                  <span ng-bind="yAxe"></span>
+                  <i class="ti ti-check"></i>
+                </a>
+              </li>
+              <li ng-repeat="yAxe in dataset.grouping">
+                <a href="" ng-click="enableYAxe(yAxe)" ng-class="chartConfig.yAxisVariables.indexOf(yAxe) >= 0 ? 'active' : ''">
+                  <span ng-bind="yAxe"></span>
+                  <i class="ti ti-check"></i>
+                </a>
+              </li>
               <li ng-repeat="yAxe in dataset.header">
                 <a href="" ng-click="enableYAxe(yAxe)" ng-class="chartConfig.yAxisVariables.indexOf(yAxe) >= 0 ? 'active' : ''">
-                  <span>{{yAxe}}</span>
+                  <span ng-bind="yAxe"></span>
                   <i class="ti ti-check"></i>
                 </a>
               </li>

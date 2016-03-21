@@ -319,44 +319,6 @@ angular.module('chuvApp.models')
           };
         };
 
-        /**
-         * sets up the highcharts configuration for a given statistics dataset.
-         * @param statistic
-         *
-        function setup_stats (statistic) {
-
-          var categories_and_data = map_data_to_hc_series(statistic.dataset.data, statistic.dataset.name);
-
-          statistic.hc_config = {
-
-            options: {
-              chart: {
-                type: 'column'
-              },
-              tooltip: {
-                headerFormat: '<span style="font-weight:bold">{point.key}</span><table>',
-                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                '<td style="padding:0"><b>{point.y:.2f}</b></td></tr>',
-                footerFormat: '</table>',
-                shared: true,
-                useHTML: true
-              }
-            },
-            xAxis: { categories: categories_and_data[0] },
-
-            series: categories_and_data[1],
-
-            title: {
-              text: categories_and_data[2] ? statistic.dataset.name : null
-            },
-
-            size: {
-              width: null,
-              height: 350
-            }
-          };
-        }*/
-
         $scope.$watch(
           "focused_variable",
           function (focused_variable) {

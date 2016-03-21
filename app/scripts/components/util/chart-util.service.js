@@ -12,6 +12,39 @@ angular.module('chuvApp.util')
       return arr.map(function (x) { return +x;});
     }
 
+    function orderBy(sortAxis, data) {
+      var sortedData = _.chain(data.concat([sortAxis]))
+        .unzip()
+        .sortBy(data.length)
+        .unzip()
+        .value();
+      return [sortedData, sortedData.pop()]
+    }
+
+    function groupBy(groupAxis, data) {
+      if (!groupAxis)
+        return data;
+
+      var sortedData = orderBy(groupAxis, data),
+        dataIdx,
+        arrayIdx,
+        result = new Array(data.length),
+        sortedXAxis = sortedData[1];
+      sortedData = sortedData[0];
+
+      for (dataIdx = 0; dataIdx < sortedData.length; dataIdx++) {
+        result[dataIdx] = result[dataIdx] || new Array(groupAxis.length);
+        for (arrayIdx = 0; arrayIdx < groupAxis.length; arrayIdx++) {
+          result[dataIdx][arrayIdx] = [sortedXAxis[arrayIdx], sortedData[dataIdx][arrayIdx]];
+        }
+      }
+      return result;
+    }
+
+    function isNumberArray(data) {
+      return !_.any(data, isNaN)
+    }
+
     function  buildBoxPlot (config, dataset) {
       config.hasXAxis = false;
 
@@ -34,9 +67,6 @@ angular.module('chuvApp.util')
           "chart": {
             "type":"boxplot"
           },
-          //yAxis: {
-          //  title: null
-          //}
           legend: {
             enabled: false
           },
@@ -66,17 +96,35 @@ angular.module('chuvApp.util')
 
 
     function buildDesignMatrix (config, dataset) {
-      config.hasXAxis = false;
+      config.hasXAxis = true;
 
-      var variables = _.filter(
-        dataset.header,
-        function (header) {
-          return config.yAxisVariables.indexOf(header) >= 0;
-        }
-      );
+      // all variables
+      var headers = dataset.variable.concat(dataset.grouping).concat(dataset.header),
 
-      var mins = [],
-        maxes = [];
+        variables = _.filter(
+          headers,
+          function (header) {
+            return config.yAxisVariables.indexOf(header) >= 0;
+          }
+        ),
+        mins = [],
+        maxes = [],
+        xAxisVariableIdx,
+        variableIdxs = {},
+
+        // all the data, with numbers represented as string that are mapped to actual numbers
+          raw_data = headers.map(function (name, index) {
+            if (name === config.xAxisVariable)
+              xAxisVariableIdx = index;
+            variableIdxs[name] = index;
+          return isNumberArray(dataset.data[name]) ? aToI(dataset.data[name]) : dataset.data[name];
+        }),
+
+        // whether the x axis is string-indexed or number-indexed
+          xSortingByNumber = angular.isNumber(xAxisVariableIdx) && isNumberArray(raw_data[xAxisVariableIdx]),
+
+        // the actual data for HC
+          sorted_data = xSortingByNumber ? orderBy(raw_data[xAxisVariableIdx], raw_data)[0] : raw_data;
 
       return {
         options: {
@@ -119,7 +167,7 @@ angular.module('chuvApp.util')
               min, max, idx1, idx2, data;
 
             for (idx1 = 0; idx1 < variables.length; idx1++) {
-              data = dataset.data[variables[idx1]];
+              data = sorted_data[variableIdxs[variables[idx1]]];
               max = _.max(data);
               min = _.min(data);
               for (idx2 = 0; idx2 < data.length; idx2++) {
@@ -137,39 +185,76 @@ angular.module('chuvApp.util')
 
     function buildRegularChart (type) {
 
-      function orderBy(orderAxis, data) {
-        if (!orderAxis)
-          return data;
-
-        var sortedData = _.unzip(
-          _.sortBy(
-            _.unzip(data.concat([orderAxis])),
-            data.length
-          )
-        );
-        sortedData.pop();
-        return sortedData;
-      }
-
-
       return function (config, dataset) {
         config.hasXAxis = true;
 
-        var xAxisVariableIdx,
+        // all variables
+        var headers = dataset.variable.concat(dataset.grouping).concat(dataset.header),
+
+        // if sorting, then the index (within headers) of the sorting variable
+          xAxisVariableIdx,
           variableIdxs = {},
-          data = dataset.header.map(function (name, index) {
+
+        // all the data, with numbers represented as string that are mapped to actual numbers
+          raw_data = headers.map(function (name, index) {
             if (name === config.xAxisVariable)
               xAxisVariableIdx = index;
             variableIdxs[name] = index;
-            return aToI(dataset.data[name]);
+            return isNumberArray(dataset.data[name]) ? aToI(dataset.data[name]) : dataset.data[name];
+          }),
+
+        // whether the x axis is string-indexed or number-indexed
+          xSortingByString = angular.isNumber(xAxisVariableIdx) && !isNumberArray(raw_data[xAxisVariableIdx]),
+
+        // the actual data for HC
+          data = angular.isNumber(xAxisVariableIdx) ? groupBy(raw_data[xAxisVariableIdx], raw_data) : raw_data,
+
+        // the categories for HC (if applicable)
+          categories = xSortingByString ? _.uniq(raw_data[xAxisVariableIdx]) : undefined;
+
+        // if line or bar, do average when sorting
+        if (angular.isNumber(xAxisVariableIdx) && (type === 'line' || type === 'column')) {
+          data = data.map(function (array) {
+            var result = _.chain(array)
+              .groupBy(0)
+              .mapObject(function average (arr) {
+                return _.reduce(arr, function(memo, num) {
+                    return memo + num[1];
+                  }, 0) / (arr.length === 0 ? 1 : arr.length);
+              })
+              .pairs();
+
+            if (!xSortingByString) {
+              result = result.map(function (point) {
+                return [+point[0], point[1]];
+              });
+            }
+
+            return result.value()
           });
-        data = orderBy(data[xAxisVariableIdx], data);
+        }
+
+        if (xSortingByString) {
+          data.forEach(function (array) {
+            array.forEach(function (point) {
+              point[0] = categories.indexOf(point[0]);
+            });
+          })
+        }
+
+        if (config.colorByVariable) {
+          // make coloring
+        }
 
         return {
           xAxis: {
             code: config.xAxisVariable,
             title: { text: config.xAxisVariable},
-            categories: data[xAxisVariableIdx]
+            categories: categories
+          },
+          yAxis: {
+            title: null,
+            labels: {enabled: false}
           },
           title: {
             text: null
@@ -208,8 +293,8 @@ angular.module('chuvApp.util')
       return ({
         designmatrix: buildDesignMatrix,
         boxplot: buildBoxPlot,
-        column: buildRegularChart("column"),
         scatter: buildRegularChart("scatter"),
+        column: buildRegularChart("column"),
         line: buildRegularChart("line")
       }[config.type] || angular.identity)(config, dataset);
     }

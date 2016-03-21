@@ -31,7 +31,7 @@ angular.module('chuvApp.models').controller('EstimationController',['$scope', '$
 
     var child_scope = $scope.$new(),
       promise1 = Model.estimateQuery($scope.shared.chosen_estimation, {
-        request: { plot: "linearRegression" },
+        algorithm: "linearRegression",
         covariables: $scope.query.coVariables.map(_map),
         variables: $scope.query.variables.map(_map),
         filters: $scope.query.filters.map(_map),
