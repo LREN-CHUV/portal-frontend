@@ -20,11 +20,6 @@
             </a>
           </li>
           <li>
-            <a href="" ng-click="changeGraphType('pie')" ng-class="{active : chartConfig.type == 'pie'}">
-              <i class="ti ti-custom-bar-chart graph-pie" title="Pie Chart"></i>
-            </a>
-          </li>
-          <li>
             <a href="" ng-click="changeGraphType('scatter')" ng-class="{active : chartConfig.type == 'scatter'}">
               <i class="ti ti-custom-bar-chart graph-scatter" title="Scatter Plot"></i>
             </a>
@@ -40,69 +35,39 @@
       <div class="tile-heading"><span>Show</span></div>
       <div class="tile-body">
         <ul class="list-axe">
-          <li ng-repeat="yAxe in dataset.header">
-            <a href="" ng-click="enableYAxe(yAxe)" ng-class="chartConfig.yAxisVariables.indexOf(yAxe) >= 0 ? 'active' : ''">
-              <span ng-bind="yAxe"></span>
-              <i class="ti ti-check"></i>
-            </a>
-          </li>
-        </ul>
-      </div>
-
-      <div class="tile-heading">Group</div>
-      <div class="tile-body">
-        <ul class="list-axe">
           <li>
-            <a href="" ng-click="changeXaxis(null)" ng-class="!chartConfig.hasXAxis || chartConfig.xAxisVariable == null ? 'active' : ''">
-              <span>No X grouping</span>
-              <i class="ti ti-check"></i>
-            </a>
+            AXE X
+            <ul>
+              <li>
+                <a href="" ng-click="changeXaxis(null)" ng-class="!chartConfig.hasXAxis || chartConfig.xAxisVariable == null ? 'active' : ''">
+                  <span>No X sorting</span>
+                  <i class="ti ti-check"></i>
+                </a>
+              </li>
+              <li ng-repeat="xAxe in dataset.header">
+                <a href="" ng-click="changeXaxis(xAxe)" ng-class="chartConfig.hasXAxis && chartConfig.xAxisVariable == xAxe ? 'active' : ''">
+                  <span>{{xAxe}}</span>
+                  <i class="ti ti-check"></i>
+                </a>
+              </li>
+            </ul>
           </li>
-          <li ng-repeat="xAxe in dataset.grouping">
-            <a href="" ng-click="changeXaxis(xAxe)" ng-class="chartConfig.hasXAxis && chartConfig.xAxisVariable == xAxe ? 'active' : ''">
-              <span ng-bind="xAxe"></span>
-              <i class="ti ti-check"></i>
-            </a>
-          </li>
-        </ul>
-      </div>
-
-      <div class="tile-heading">Sort</div>
-      <div class="tile-body">
-        <ul class="list-axe">
           <li>
-            <a href="" ng-click="changeXaxis(null)" ng-class="!chartConfig.hasXAxis || chartConfig.xAxisVariable == null ? 'active' : ''">
-              <span>No X sorting</span>
-              <i class="ti ti-check"></i>
-            </a>
-          </li>
-          <li ng-repeat="xAxe in dataset.grouping">
-            <a href="" ng-click="changeXaxis(xAxe)" ng-class="chartConfig.hasXAxis && chartConfig.xAxisVariable == xAxe ? 'active' : ''">
-              <span ng-bind="xAxe"></span>
-              <i class="ti ti-check"></i>
-            </a>
-          </li>
-        </ul>
-      </div>
-
-      <div class="tile-heading">Color</div>
-      <div class="tile-body">
-        <ul class="list-axe">
-          <li>
-            <a href="" ng-click="changeXaxis(null)" ng-class="!chartConfig.hasXAxis || chartConfig.xAxisVariable == null ? 'active' : ''">
-              <span>No coloring</span>
-              <i class="ti ti-check"></i>
-            </a>
-          </li>
-          <li ng-repeat="xAxe in dataset.grouping">
-            <a href="" ng-click="changeXaxis(xAxe)" ng-class="chartConfig.hasXAxis && chartConfig.xAxisVariable == xAxe ? 'active' : ''">
-              <span ng-bind="xAxe"></span>
-              <i class="ti ti-check"></i>
-            </a>
+            AXE Y
+            <ul>
+              <li>
+                <span><br></span>
+              </li>
+              <li ng-repeat="yAxe in dataset.header">
+                <a href="" ng-click="enableYAxe(yAxe)" ng-class="chartConfig.yAxisVariables.indexOf(yAxe) >= 0 ? 'active' : ''">
+                  <span>{{yAxe}}</span>
+                  <i class="ti ti-check"></i>
+                </a>
+              </li>
+            </ul>
           </li>
         </ul>
       </div>
-
 
     </div>
   </div>

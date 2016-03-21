@@ -3,7 +3,9 @@
  */
 
 angular.module('chuvApp.util')
-  .factory('ChartUtil', [function () {
+  .factory('ChartUtil', ['$filter', function ($filter) {
+
+    var number = $filter("number");
 
     // map array to number array
     function aToI(arr) {
@@ -13,16 +15,10 @@ angular.module('chuvApp.util')
     function  buildBoxPlot (config, dataset) {
       config.hasXAxis = false;
 
-      var data, result = [], idx1, idx2,
-        variables = _.filter(
-          dataset.header,
-          function (header) {
-            return config.yAxisVariables.indexOf(header) >= 0;
-          }
-        );
+      var data, result = [], idx1, idx2;
 
-      for (idx1 = 0; idx1 < variables.length; idx1++) {
-        data = _.sortBy(dataset.data[variables[idx1]]);
+      for (idx1 = 0; idx1 < config.yAxisVariables.length; idx1++) {
+        data = _.sortBy(dataset.data[config.yAxisVariables[idx1]]);
 
         result.push([
           data[Math.floor(data.length / 10.0)], // 1st decile
@@ -38,19 +34,22 @@ angular.module('chuvApp.util')
           "chart": {
             "type":"boxplot"
           },
+          //yAxis: {
+          //  title: null
+          //}
           legend: {
-              enabled: false
+            enabled: false
           },
         },
         title:  angular.isDefined(config.title) ? config.title : {
           text: "Box Plot"
         },
         xAxis: {
-          categories: config.yAxisVariables,
+          categories: dataset.header,
           title: null
         },
         yAxis: {
-          visible: false
+          title: null
         },
         size: {
           height: config.height,
@@ -89,19 +88,13 @@ angular.module('chuvApp.util')
             minColor: '#FFFFFF',
             maxColor: '#000000'
           },
-        tooltip: {
-          formatter: function () {
-            return this.point.value * (maxes[this.point.x] - mins[this.point.x]) + mins[this.point.x];
-          }
+          tooltip: {
+            formatter: function () {
+              return number(this.point.value * (maxes[this.point.x] - mins[this.point.x]) + mins[this.point.x]);
+            }
+          },
         },
-        //yAxis: {
-        //  title: null,
-        //  labels: {enabled: false}
-        //},
-        },
-        title: {
-          text: angular.isDefined(config.title) ? config.title : "Design matrix"
-        },
+        title: angular.isDefined(config.title) ? config.title : {text: "Design matrix"},
         xAxis: {
           categories: variables,
           title: null
@@ -140,44 +133,6 @@ angular.module('chuvApp.util')
           }()
         }]
       };
-    }
-
-    function buildPieChart (config, dataset) {
-      config.hasXAxis = false;
-
-      var xCode = dataset.header[0];
-      var yCode = dataset.header[1];
-      var y2Code = dataset.header[2];
-
-      var result = {
-        xAxis: {
-          code: xCode,
-          title: { text: xCode},
-          //categories: dataset.data[config.xAxis.code]
-        },
-        options: {
-          chart: {
-            type: "pie",
-          },
-          yAxis: [{title: {text: yCode}}]
-        },
-        size: {
-          height: config.height,
-          width: config.width
-        },
-        title: {
-          text: null
-        },
-        series: [
-          {name:yCode,data: aToI(dataset.data[yCode]),code:yCode}
-        ]
-      };
-
-      if(y2Code){
-        result.series.push({name:y2Code,data: aToI(dataset.data[y2Code]),type: 'scatter',code:y2Code})
-      }
-
-      return result;
     }
 
     function buildRegularChart (type) {
@@ -252,7 +207,6 @@ angular.module('chuvApp.util')
 
       return ({
         designmatrix: buildDesignMatrix,
-        pie: buildPieChart,
         boxplot: buildBoxPlot,
         column: buildRegularChart("column"),
         scatter: buildRegularChart("scatter"),
