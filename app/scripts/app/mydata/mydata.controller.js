@@ -39,18 +39,28 @@ angular.module('chuvApp.mydata').controller('MyDataController', ['$scope', '$tra
           });
 
           $q.all(promises).then(function (modelsData) {
-            angular.forEach(modelsData,function(model,index){
-              $scope.rows.push({type: 'M', data: model, size: 1, row: index+1, col: 1});
-              if(articles[index]) {
-                $scope.rows.push({type: 'A', data: articles[index], size: 2, row: index + 1, col: 2});
-              }
+            _.chain(modelsData)
+              .sortBy('createdAt')
+              .reverse()
+              .each(function (model, index) {
+                $scope.rows.push({type: 'M', data: model, size: 1, row: index+1, col: 1, showChart: false});
+
+                if(articles[index]) {
+                  $scope.rows.push({type: 'A', data: articles[index], size: 2, row: index + 1, col: 2});
+                }
+              });
+            $timeout(function () {
+              _.each($scope.rows, function(row) {
+                if (row.showChart === false)
+                  row.showChart = true;
+              })
             });
+
             if(articles.length > modelsData.length){
               angular.forEach(articles.slice(modelsData.length),function(article,index){
                 $scope.rows.push({type: 'A', data: article, size: 2, row: index + 1, col: 2});
               });
             }
-            $scope.refresh();
           });
         }
       });
@@ -61,6 +71,7 @@ angular.module('chuvApp.mydata').controller('MyDataController', ['$scope', '$tra
       Model.get({slug:slug}).$promise.then(function(model){
         var config = angular.copy(model.config);
         config.height = 300;
+        config.showLegend = false;
         model.chartConfig = ChartUtil(config, model.dataset);
         deferred.resolve(model);
       });
@@ -76,21 +87,6 @@ angular.module('chuvApp.mydata').controller('MyDataController', ['$scope', '$tra
      */
     $scope.isMine = function(obj) {
       return obj.createdBy.username == User.current().username;
-    };
-
-    $scope.refresh = function(){
-      $timeout(function(){
-        $("div.gridster").gridster({
-          namespace: 'div.gridster',
-          widget_selector: "div.grid-item",
-          widget_margins: [10, 10],
-          widget_base_dimensions: [340, 360],
-          max_cols : 1,
-          max_rows : 1
-        }).data('gridster');
-        $scope.$broadcast('highchartsng.reflow');
-        WidgetService.make();
-      },500);
     };
 
     $scope.showArticleModal = function(article){

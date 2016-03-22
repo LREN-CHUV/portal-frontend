@@ -36,28 +36,31 @@
       <div class="tile-body" style="margin-bottom: -30px">
         <ul class="list-axe">
           <li>
-            AXE X
+            <span ng-bind="mainAxisTitle()"></span>
             <ul>
               <li>
-                <a href="" ng-click="changeXaxis(null)" ng-class="!chartConfig.hasXAxis || chartConfig.xAxisVariable == null ? 'active' : ''">
-                  <span>No X sorting</span>
+                <a href="" ng-click="changeMainAxis(null)" ng-class="chartConfig.xAxisVariable == null ? 'active' : ''">
+                  <span>No sorting</span>
                   <i class="ti ti-check"></i>
                 </a>
               </li>
-              <li ng-repeat="xAxe in dataset.variable">
-                <a href="" ng-click="changeXaxis(xAxe)" ng-class="chartConfig.hasXAxis && chartConfig.xAxisVariable == xAxe ? 'active' : ''">
+              <li ng-repeat="xAxe in dataset.variable"
+                  ng-if="canUseAsPrimaryAxis(xAxe)">
+                <a href="" ng-click="changeMainAxis(xAxe)" ng-class="chartConfig.xAxisVariable == xAxe ? 'active' : ''">
                   <span ng-bind="xAxe"></span>
                   <i class="ti ti-check"></i>
                 </a>
               </li>
-              <li ng-repeat="xAxe in dataset.grouping">
-                <a href="" ng-click="changeXaxis(xAxe)" ng-class="chartConfig.hasXAxis && chartConfig.xAxisVariable == xAxe ? 'active' : ''">
+              <li ng-repeat="xAxe in dataset.grouping"
+                  ng-if="canUseAsPrimaryAxis(xAxe)">
+                <a href="" ng-click="changeMainAxis(xAxe)" ng-class="chartConfig.xAxisVariable == xAxe ? 'active' : ''">
                   <span ng-bind="xAxe"></span>
                   <i class="ti ti-check"></i>
                 </a>
               </li>
-              <li ng-repeat="xAxe in dataset.header">
-                <a href="" ng-click="changeXaxis(xAxe)" ng-class="chartConfig.hasXAxis && chartConfig.xAxisVariable == xAxe ? 'active' : ''">
+              <li ng-repeat="xAxe in dataset.header"
+                  ng-if="canUseAsPrimaryAxis(xAxe)">
+                <a href="" ng-click="changeMainAxis(xAxe)" ng-class="chartConfig.xAxisVariable == xAxe ? 'active' : ''">
                   <span ng-bind="xAxe"></span>
                   <i class="ti ti-check"></i>
                 </a>
@@ -65,25 +68,28 @@
             </ul>
           </li>
           <li>
-            AXE Y
+            <span ng-bind="secondaryAxisTitle()"></span>
             <ul>
-              <li>
-                <span><br></span>
-              </li>
-              <li ng-repeat="yAxe in dataset.variable">
-                <a href="" ng-click="enableYAxe(yAxe)" ng-class="chartConfig.yAxisVariables.indexOf(yAxe) >= 0 ? 'active' : ''">
+              <li ng-repeat="yAxe in dataset.variable"
+                  ng-if="canUseAsSecondaryAxis(yAxe)">
+                <a href="" ng-click="enableSecondaryAxe(yAxe)"
+                   ng-class="chartConfig.yAxisVariables.indexOf(yAxe) >= 0 ? 'active' : ''">
                   <span ng-bind="yAxe"></span>
                   <i class="ti ti-check"></i>
                 </a>
               </li>
-              <li ng-repeat="yAxe in dataset.grouping">
-                <a href="" ng-click="enableYAxe(yAxe)" ng-class="chartConfig.yAxisVariables.indexOf(yAxe) >= 0 ? 'active' : ''">
+              <li ng-repeat="yAxe in dataset.grouping"
+                  ng-if="canUseAsSecondaryAxis(yAxe)">
+                <a href="" ng-click="enableSecondaryAxe(yAxe)"
+                   ng-class="chartConfig.yAxisVariables.indexOf(yAxe) >= 0 ? 'active' : ''">
                   <span ng-bind="yAxe"></span>
                   <i class="ti ti-check"></i>
                 </a>
               </li>
-              <li ng-repeat="yAxe in dataset.header">
-                <a href="" ng-click="enableYAxe(yAxe)" ng-class="chartConfig.yAxisVariables.indexOf(yAxe) >= 0 ? 'active' : ''">
+              <li ng-repeat="yAxe in dataset.header"
+                  ng-if="canUseAsSecondaryAxis(yAxe)">
+                <a href="" ng-click="enableSecondaryAxe(yAxe)"
+                   ng-class="chartConfig.yAxisVariables.indexOf(yAxe) >= 0 ? 'active' : ''">
                   <span ng-bind="yAxe"></span>
                   <i class="ti ti-check"></i>
                 </a>

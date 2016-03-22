@@ -85,6 +85,12 @@ angular
       }
     });
   }])
+  .run(['$rootScope', '$modalStack', function($rootScope, $modalStack) {
+    $rootScope.$on(
+      '$stateChangeStart',
+      function () { $modalStack.dismissAll(); }
+    );
+  }])
   .run(['$state','$translatePartialLoader','$translate', 'amMoment', '$rootScope','backendUrl','$cookies','User',
     function($state,$translatePartialLoader,$translate, amMoment,$rootScope,backendUrl,$cookies,User){
       $translatePartialLoader.addPart('common');

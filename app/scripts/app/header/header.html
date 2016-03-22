@@ -4,14 +4,14 @@
     <a class="navbar-brand" href="#/home">Human Brain Project</a>
 
     <span id="trigger-sidebar" class="toolbar-trigger toolbar-icon-bg" ng-click="toggleLeftBar()" ng-show="!getLayoutOption('layoutHorizontal')">
-			<a data-toggle="tooltips" data-placement="right" title="{{'header.menu.my-data' | translate}}" href="#/data/mydata">
+			<a data-toggle="tooltips" data-placement="right" title="{{'header.menu.my-data' | translate}}" ui-sref="data({scope: 'mydata'})"  ui-sref-active="active">
 				<span class="icon-bg">
 					<i class="ti ti-menu"></i>
 				</span>
       </a>
 		</span>
 		<span class="toolbar-trigger toolbar-icon-bg" >
-			<a href="#/data/communitydata" title="{{'header.menu.my-community' | translate}}">
+			<a ui-sref="data({scope: 'communitydata'})" title="{{'header.menu.my-community' | translate}}"  ui-sref-active="active">
 				<span class="icon-bg">
 					<i class="ti ti-world"></i>
 				</span>

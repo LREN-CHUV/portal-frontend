@@ -196,15 +196,20 @@ angular.module('chuvApp.models').controller('ReviewController',['$scope','$trans
     };
 
     var axeCodeUsability = {};
-    $scope.canUseAxis = function (axeCode) {
+    $scope.canUseAxis = function (isXAxis, axeCode) {
 
-      if (!axeCodeUsability.hasOwnProperty(axeCode)) {
-        axeCodeUsability[axeCode] = !_.any(
-          $scope.dataset.data[axeCode],
-          function (datapoint) { return !isFinite(datapoint); }
-        );
+      // if boxplot and isYAxis or not boxplot and isXAxis
+      if (isXAxis !== ($scope.chartConfig.type === 'boxplot')) {
+        if (!axeCodeUsability.hasOwnProperty(axeCode)) {
+          axeCodeUsability[axeCode] = !_.any(
+            $scope.dataset.data[axeCode],
+            function (datapoint) { return !isFinite(datapoint); }
+          );
+        }
+        return axeCodeUsability[axeCode];
+      } else {
+        return ChartUtil.canUseAsMainAxis($scope.dataset.data[axeCode], $scope.chartConfig.type);
       }
-      return axeCodeUsability[axeCode];
     };
 
     /**

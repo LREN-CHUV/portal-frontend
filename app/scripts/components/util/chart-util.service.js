@@ -7,6 +7,20 @@ angular.module('chuvApp.util')
 
     var number = $filter("number");
 
+    var colorCategories = d3.scale.category10();
+
+    function getColorScale (array, colorIndex) {
+      var hue = colorIndex * 70 % 360,
+        max = _.max(array),
+        min = _.min(array),
+        target_max = 0.8,
+        target_min = 0.2;
+
+      return _.map(array, function (val) {
+        return d3.hsl(hue, 0.7, (val - min) / (max-min) * (target_max - target_min) + target_min)
+      });
+    }
+
     // map array to number array
     function aToI(arr) {
       return arr.map(function (x) { return +x;});
@@ -45,21 +59,47 @@ angular.module('chuvApp.util')
       return !_.any(data, isNaN)
     }
 
+    /**
+     * Creates a HC boxplot config. Note that X and Y are invertes
+     */
     function  buildBoxPlot (config, dataset) {
-      config.hasXAxis = false;
 
-      var data, result = [], idx1, idx2;
+      var result = [], categories = [];
+      if (config.xAxisVariable && ChartUtil.canUseAsYAxis(config.xAxisVariable, "boxplot", dataset.data[config.xAxisVariable])) {
 
-      for (idx1 = 0; idx1 < config.yAxisVariables.length; idx1++) {
-        data = _.sortBy(dataset.data[config.yAxisVariables[idx1]]);
+        var groupingAxis;
 
-        result.push([
-          data[Math.floor(data.length / 10.0)], // 1st decile
-          data[Math.floor(data.length / 4.0)], // Q1
-          data[Math.floor(data.length / 2.0)], // Q2
-          data[Math.floor(data.length * 3.0 / 4.0)], // Q3
-          data[Math.floor(data.length * 9.0 / 10.0)] // 9th decile
-        ])
+        if (!config.yAxisVariables.length) {
+          groupingAxis = new Array(dataset.data[dataset.variable[0]].length).fill("All");
+        } else {
+          groupingAxis = _.chain(config.yAxisVariables)
+            .map(function (axisCode) { return dataset.data[axisCode]; })
+            .unzip()
+            .map(function (vals) { return vals.join(", "); })
+            .value()
+        }
+
+        var data = _.chain([groupingAxis, dataset.data[config.xAxisVariable]])
+          .unzip()
+          .groupBy(0)
+          .mapObject(_.partial(_.map, _, 1))
+          .pairs()
+          .value(),
+          array_data, idx;
+
+        for (idx = 0; idx < data.length; idx++) {
+          array_data = _.sortBy(data[idx][1]);
+
+          result.push([
+            array_data[Math.floor(array_data.length / 10.0)], // 1st decile
+            array_data[Math.floor(array_data.length / 4.0)], // Q1
+            array_data[Math.floor(array_data.length / 2.0)], // Q2
+            array_data[Math.floor(array_data.length * 3.0 / 4.0)], // Q3
+            array_data[Math.floor(array_data.length * 9.0 / 10.0)] // 9th decile
+          ])
+        }
+
+        categories = _.map(data, 0);
       }
 
       return {
@@ -67,15 +107,16 @@ angular.module('chuvApp.util')
           "chart": {
             "type":"boxplot"
           },
-          legend: {
-            enabled: false
-          },
+          //legend: {
+          //  enabled: false
+          //},
         },
         title:  angular.isDefined(config.title) ? config.title : {
-          text: "Box Plot"
+          text: null,
+          enabled: false
         },
         xAxis: {
-          categories: dataset.header,
+          categories: categories,
           title: null
         },
         yAxis: {
@@ -86,7 +127,7 @@ angular.module('chuvApp.util')
           width: config.width
         },
         series: [{
-          name: "",
+          name: config.xAxisVariable,
           data: result,
           index: 1,
           id: 1
@@ -95,6 +136,10 @@ angular.module('chuvApp.util')
     }
 
 
+    // okay so these are globals and it's really bad, but I have a scope/cache issue with the formatter for HC
+    // so check that before you remove those.
+    var dm_mins = [],
+      dm_maxes = [];
     function buildDesignMatrix (config, dataset) {
       config.hasXAxis = true;
 
@@ -107,8 +152,6 @@ angular.module('chuvApp.util')
             return config.yAxisVariables.indexOf(header) >= 0;
           }
         ),
-        mins = [],
-        maxes = [],
         xAxisVariableIdx,
         variableIdxs = {},
 
@@ -126,6 +169,9 @@ angular.module('chuvApp.util')
         // the actual data for HC
           sorted_data = xSortingByNumber ? orderBy(raw_data[xAxisVariableIdx], raw_data)[0] : raw_data;
 
+      dm_mins.length = 0;
+      dm_maxes.length = 0;
+
       return {
         options: {
           "chart": {
@@ -138,7 +184,7 @@ angular.module('chuvApp.util')
           },
           tooltip: {
             formatter: function () {
-              return number(this.point.value * (maxes[this.point.x] - mins[this.point.x]) + mins[this.point.x]);
+              return number(this.point.value * (dm_maxes[this.point.x] - dm_mins[this.point.x]) + dm_mins[this.point.x]);
             }
           },
         },
@@ -173,8 +219,8 @@ angular.module('chuvApp.util')
               for (idx2 = 0; idx2 < data.length; idx2++) {
                 result.push([idx1, idx2, (data[idx2] - min) / (max - min), min, max]);
               }
-              mins.push(min);
-              maxes.push(max);
+              dm_mins.push(min);
+              dm_maxes.push(max);
             }
 
             return result;
@@ -250,11 +296,11 @@ angular.module('chuvApp.util')
           xAxis: {
             code: config.xAxisVariable,
             title: { text: config.xAxisVariable},
-            categories: categories
+            categories: categories,
           },
           yAxis: {
             title: null,
-            labels: {enabled: false}
+            //labels: {enabled: false}
           },
           title: {
             text: null
@@ -266,7 +312,10 @@ angular.module('chuvApp.util')
           options: {
             chart: {
               type: type
-            }
+            },
+            legend: {
+              enabled: config.showLegend !== false
+            },
           },
           series: config.yAxisVariables.map(function (code, index) {
             return {
@@ -281,7 +330,7 @@ angular.module('chuvApp.util')
       }
     }
 
-    return function (config, dataset) {
+    var ChartUtil = function ChartUtil(config, dataset) {
 
       if (!dataset) {
         return null;
@@ -297,6 +346,34 @@ angular.module('chuvApp.util')
         column: buildRegularChart("column"),
         line: buildRegularChart("line")
       }[config.type] || angular.identity)(config, dataset);
-    }
+    };
+
+    // axis configuration information
+
+    var axisUsability = {},
+      invertedAxisPlots = ['designmatrix', 'boxplot'];
+
+    ChartUtil.canUseAsXAxis = function (axeCode, chartType, dataArray) {
+      return ({
+        boxplot: function () { return _.uniq(dataArray).length <= 8; },
+        designmatrix: function () { return ChartUtil.canUseAsYAxis(axeCode, chartType, dataArray) }
+      }[chartType] || function () { return true; })();
+    };
+
+    ChartUtil.canUseAsYAxis = function (axeCode, chartType, dataArray) {
+      if (!axisUsability.hasOwnProperty(axeCode)) {
+        axisUsability[axeCode] = !_.any(
+          dataArray,
+          function (datapoint) { return !isFinite(datapoint); }
+        );
+      }
+      return axisUsability[axeCode];
+    };
+
+    ChartUtil.isXAxisMain = function (chartType) {
+      return invertedAxisPlots.indexOf(chartType) < 0;
+    };
+
+    return ChartUtil;
 
   }]);

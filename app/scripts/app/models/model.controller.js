@@ -38,6 +38,7 @@ angular.module('chuvApp.models')
         config.height = 250;
         config.width = undefined;
         config.title = null;
+        config.showLegend = false;
         return ChartUtil(config, model.dataset);
       }
     }]);
