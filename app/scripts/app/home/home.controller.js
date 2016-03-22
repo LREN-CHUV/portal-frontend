@@ -44,51 +44,23 @@ angular.module('chuvApp.home').controller('HomeController',['$scope','$translate
           return;
         }
 
-        $scope.results = response.data;
-        var promises = [];
+        $scope.models = response.data;
 
-        angular.forEach($scope.results, function(model) {
-          promises.push($scope.getModel(model.slug));
+        _.each($scope.models, function (model) {
+          var config = angular.copy(model.config);
+          config.height = 250;
+          config.showLegend = false;
+          model.chartConfig = ChartUtil(config, model.dataset);
         });
-
-        $q.all(promises).then(function (modelsData) {
-          angular.forEach(modelsData,function(model){
-            $scope.models.push(model);
-          });
-        });
-
       });
     };
 
-    $scope.getModel = function(slug){
-      var deferred = $q.defer();
-      //Model.get({slug:slug}).$promise.then(function(model){
-      //  model.chartConfig = {
-      //    options: {
-      //      chart: {
-      //        zoomType: 'x',
-      //        height:'280'
-      //      }
-      //    },
-      //    title:{},
-      //    subtitle:{}
-      //  };
-      //  model.chartConfig.title.text = model.title;
-      //  model.chartConfig.subtitle.text = model.description;
-      //  model.chartConfig.options.chart.type = model.chart.chartType;
-      //  model.chartConfig.xAxis = {code:model.chart.xAxis};
-      //  model.chartConfig.series = _.map(model.chart.chartConfigSets, function(o) {
-      //    var configSet = {};
-      //    configSet.color = o.color;
-      //    configSet.name = o.label;
-      //    configSet.code = o.code;
-      //    return configSet;
-      //  });
-      //  ChartUtil.toChartData(model.chartConfig,model.dataset);
-      //  deferred.resolve(model);
-      //});
-      return deferred.promise;
-    };
+    //$scope.getModel = function(slug){
+    //  var deferred = $q.defer();
+    //  Model.get({slug:slug}).$promise.then(function(model){
+    //  });
+    //  return deferred.promise;
+    //};
 
     $scope.gridsterOpts = {
         resizable: {
