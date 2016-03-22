@@ -107,11 +107,8 @@ angular.module('chuvApp.util')
           "chart": {
             "type":"boxplot"
           },
-          //legend: {
-          //  enabled: false
-          //},
         },
-        title:  angular.isDefined(config.title) ? config.title : {
+        title:  config.title || {
           text: null,
           enabled: false
         },

@@ -72,7 +72,7 @@ angular.module('chuvApp.models').controller('EstimationController',['$scope', '$
         $modal.open({
           size: "lg",
           scope: child_scope,
-          templateUrl: "scripts/app/models/review/estimation-modal.html"
+          templateUrl: "scripts/app/models/review/estimation-" + $scope.shared.chosen_estimation + ".html"
         });
       },
       function () {
