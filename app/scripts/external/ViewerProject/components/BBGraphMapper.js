@@ -303,9 +303,18 @@ BB.GraphMapper.prototype.map = function(obj, el, cb) {
                 var dataType = legends[that.activeObject.userData.idx];
                 var label = that.activeObject.userData.label;
                 var url = undefined;
+
                 if(dataType == 'Genetic')
                 {
-                    url = 'http://www.genecards.org/cgi-bin/carddisp.pl?gene=' + encodeURIComponent(label.match("\\[(.*)\\]")[1]);
+                    url = 'http://www.ensembl.org/Homo_sapiens/Variation/Explore?v=' + encodeURIComponent(label.match("(rs[0-9]*)")[1]);
+                }
+                else if (dataType == 'CSF proteins')
+                {
+                    url = 'http://www.uniprot.org/uniprot/?query=' + encodeURIComponent(label);
+                }
+                else if (dataType == 'Blood proteins')
+                {
+                    url = 'http://www.uniprot.org/uniprot/?query=' + encodeURIComponent(label.match("Protein: (.*)")[1]);
                 }
                 else if (dataType == 'Brain anatomy')
                 {
@@ -317,25 +326,17 @@ BB.GraphMapper.prototype.map = function(obj, el, cb) {
                 }
                 else if (dataType == 'AD')
                 {
-                    url = 'http://google.com/search?q=' + encodeURIComponent(label);
+                    alert("You selected AD " + label);
                 }
                 else if (dataType == 'Controls')
                 {
-                    url = 'http://google.com/search?q=' + encodeURIComponent(label);
+                    alert("You selected control " + label);
                 }
-                else if (dataType == 'CSF proteins')
+
+                if(url !== undefined)
                 {
-                    url = 'http://google.com/search?q=' + encodeURIComponent(label);
+                    window.open(url, '_blank');
                 }
-                else if (dataType == 'Blood proteins')
-                {
-                    url = 'http://google.com/search?q=' + encodeURIComponent(label);
-                }
-                else
-                {
-                    url = 'http://google.com/search?q=' + encodeURIComponent(label);   
-                }
-                window.open(url, '_blank');
             }
         }))
         .append($('<input type="button" value="Only" />').click(function() {
