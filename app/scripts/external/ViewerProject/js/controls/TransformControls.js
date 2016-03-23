@@ -167,7 +167,7 @@ THREE.TransformControls = function ( camera, domElement, doc ) {
 			depthWrite: false,
 			transparent: true
 		} );
-		mesh = new THREE.Line( geometry, material, THREE.LinePieces );
+		mesh = new THREE.Line( geometry, material, THREE.LineSegments );
 		displayAxes['translate'].add( mesh );
 		displayAxes['scale'].add( mesh.clone() );
 
