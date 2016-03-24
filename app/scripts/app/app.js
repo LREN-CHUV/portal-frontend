@@ -85,7 +85,7 @@ angular
                 plotOptions: {
                     series: {
                         dataLabels: {
-                            enabled: true
+                            enabled: false
                         }
                     }
                 }
