@@ -69,6 +69,14 @@ angular.module('chuvApp.articles')
        * Save article
        */
       $scope.save = function () {
+        if (!$scope.article.title) {
+          alert("You need a title for your article!");
+          return;
+        }
+        if (!$scope.article.abstract) {
+          alert("You need an abstract for your article!");
+          return;
+        }
         $scope.article.date = new Date().toISOString();
         $scope.article.status = $scope.publishArticle ? 'published' : 'closed';
         if ($scope.isNew()) {

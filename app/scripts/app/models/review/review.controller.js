@@ -68,6 +68,12 @@ angular.module('chuvApp.models').controller('ReviewController',['$scope','$trans
      * save or update model
      */
     $scope.saveModel = function() {
+
+      if (!$scope.model.name) {
+        alert("You need a name for your model!");
+        return;
+      }
+
       $scope.model.config = $scope.chartConfig;
       $scope.model.dataset = $scope.dataset;
       $scope.model.query = angular.copy($scope.query); // will be modified, therefore we do a deep copy

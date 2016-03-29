@@ -1,10 +1,11 @@
 <div class="intro">
+
   <div class="grid-container onboarding__block onboarding__block--intro" id="block__1">
     <div class="grid__cell align--center">
       <img class="intro__logo" src="/images/hbp_logo_large.png" alt="humain brain project"/>
       <div class="intro__content align--center">
         <h1 class="limited-width">The Medical Informatics Platform</h1>
-        <p class="limited-width">Thousands of brain images and terabytes of invaluable associated medical data are produced every day at a gigantic pace around the world. The Medical Informatics Platform (MIP) aims to federate this information and provide the tools to the experts to effectively analyse it and advance more rapidly in understanding the neurological and psychiatric diseases. This will in turn allow identifying the biological changes associated and open real possibilities for early diagnosis and personalised medicine.
+        <p class="limited-width">Medicine is experiencing a data explosion. The Medical Informatics Platform (MIP) aims to federate and analyse the huge volumes of data on neurological and psychiatric diseases. This will allow researchers to identify the biological changes associated with diseases and open possibilities for early diagnosis and personalised medicine.
         </p>
       </div>
     </div>
@@ -14,12 +15,12 @@
     <div class="grid__cell block__content background__red to-animate animate__from-left">
       <div class="block__wrapper limited-width">
         <p>
-          <b>The MIP has three main goals:</b>
+          <b>The MIP currently has three goals:</b>
         </p>
         <ol>
-          <li>Build the tools to <b>federate clinical data</b>, currently inaccessible outside hospital and research archives;</li>
-          <li>Recruit hospitals to <b>contribute to</b> and <b>benefit</b> by using the platform;</li>
-          <li>Develop tools for <b>extracting biological signatures</b> of diseases from multi-level data.</li>
+          <li>Build the tools to <b>federate clinical data</b> which is currently locked in hospital and research archives;</li>
+          <li>Recruit hospitals to <b>contribute to</b> and use the platform;</li>
+          <li>Develop tools which make it possible to <b>extract biological signatures</b> of diseases from multi-level data.</li>
         </ol>
       </div>
     </div>
@@ -42,7 +43,7 @@
     <div class="grid__cell block__content background__blue to-animate animate__from-right">
 
       <div class="block__wrapper limited-width">
-        <p>The MIP provides methods to analyse federated data from hospitals, research centres and biobanks. Clinical scientists can develop, share and release results of their research. The MIP aims to bring together people across professional and scientific fields encourages them to actively contribute to the design and development of the services which the MIP provides.</p>
+        <p>The MIP provides methods to analyse federated data from hospitals, research centres and biobanks. Clinical scientist can develop, share and release their research. The MIP aims to bring together people across disciplines who can contribute to the design and development of the services which the MIP provides.</p>
         <p><b>You can use the MIP</b></p>
         <ul>
           <li>as a <b>clinician</b>, for objective diagnoses and treatment of brain disease;</li>
@@ -51,13 +52,14 @@
         </ul>
       </div>
     </div>
-    <button type="button" class="btn-round" ng-click="login()" id="login_btn">
+  </div>
+
+  <button type="button" class="btn-round" ng-click="login()" id="login_btn">
       <span>
         <span>{{'intro.title' | translate }}</span>
         <i class="ti ti-arrow-down"></i>
       </span>
-    </button>
-  </div>
+  </button>
 
   <!-- TODO button can be updated to the one in the existing platform-->
   <div class="action--next">
@@ -74,4 +76,5 @@
       </div>
     </a>
   </div>
+
 </div>

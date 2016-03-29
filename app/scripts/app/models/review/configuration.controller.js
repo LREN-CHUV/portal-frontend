@@ -23,8 +23,14 @@ angular.module('chuvApp.models')
           }
         );
       } else if ($scope.chartConfig.type == 'boxplot') {
-        $scope.chartConfig.xAxisVariable = axisConfiguration.x;
-        $scope.chartConfig.yAxisVariables = axisConfiguration.y;
+        $scope.chartConfig.xAxisVariable = axisConfiguration
+          ? axisConfiguration.x
+          : ChartUtil.canUseAsXAxis($scope.chartConfig.xAxisVariable, type, $scope.dataset.data[$scope.chartConfig.xAxisVariable])
+            ? $scope.chartConfig.xAxisVariable
+            : undefined;
+        $scope.chartConfig.yAxisVariables = axisConfiguration
+          ? axisConfiguration.y
+          : _.filter($scope.chartConfig.yAxisVariables, function (code) { return ChartUtil.canUseAsYAxis(code, type, $scope.dataset.data[code]) });
       }
       $scope.chartConfig.type = type;
       $scope.$emit("chartConfigChanged");

@@ -66,7 +66,9 @@ angular.module('chuvApp.mydata').controller('MyDataController', ['$scope', '$tra
       });
     };
 
-    $scope.getModel = function(slug){
+    $scope.getModel = function(slug) {
+      if (!slug) return;
+
       var deferred = $q.defer();
       Model.get({slug:slug}).$promise.then(function(model){
         var config = angular.copy(model.config);
