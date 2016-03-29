@@ -85,6 +85,7 @@ angular.module('chuvApp.models').controller('ReviewController',['$scope','$trans
         // save existing model
         Model.update({slug: $scope.model.slug}, $scope.model, function (model) {
           $state.go('models-edit', {slug: model.slug});
+          alert("Save successful");
         },function(){
           alert("Error on save!");
         });

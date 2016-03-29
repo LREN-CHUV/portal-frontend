@@ -29,11 +29,15 @@ angular.module('chuvApp.models')
           group_dict = {};
 
           function map_groups(group) {
+            var description = group.label;
+            if (group.description)
+              description += "\n" + group.description;
             return group_dict[group.code] = {
               label: group.label,
               code: group.code,
               is_group: true,
               original: group,
+              description: description,
               children: group.groups.map(map_groups)
             };
           }
@@ -43,12 +47,16 @@ angular.module('chuvApp.models')
 
           // and then all the variables in all the right groups
           $scope.allVariables.forEach(function (variable) {
-            var group = group_dict[variable.group.code];
+            var group = group_dict[variable.group.code],
+              description = variable.label;
+            if (variable.description)
+              description += "\n" + variable.description;
             if (!group) return;
             group.children.push(group_dict[variable.code] = {
               code: variable.code,
               label: variable.label,
               is_group: false,
+              description: description,
               original: variable,
               children: []
             })
@@ -128,6 +136,10 @@ angular.module('chuvApp.models')
                 return d.label;
               }),
             node = svg.selectAll("circle,text");
+
+          circle.append("title").text(function (d) {
+            return d.description;
+          });
 
           zoomTo([root.x, root.y, root.r * 2 + margin]);
           applyNodeColors();

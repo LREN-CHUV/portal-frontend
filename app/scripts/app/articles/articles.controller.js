@@ -70,7 +70,7 @@ angular.module('chuvApp.articles')
        */
       $scope.save = function () {
         $scope.article.date = new Date().toISOString();
-        $scope.publishArticle ? $scope.article.status = 'published' : $scope.article.status = 'closed';
+        $scope.article.status = $scope.publishArticle ? 'published' : 'closed';
         if ($scope.isNew()) {
           $scope.article = Article.save($scope.article,function(){
               $location.path("/home");
@@ -89,6 +89,10 @@ angular.module('chuvApp.articles')
       $scope.loadArticle = function () {
         if (!$scope.isNew()) {
           $scope.article = Article.get({slug:$stateParams.slug});
+
+          $scope.article.$promise.then(function () {
+            $scope.publishArticle = $scope.article.status === 'published';
+          });
         } else {
           $scope.article = {
             status: "draft"
