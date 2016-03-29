@@ -69,10 +69,12 @@ angular.module('chuvApp.models').controller('ReviewController',['$scope','$trans
      */
     $scope.saveModel = function() {
 
-      if (!$scope.model.name) {
+
+      if (!($scope.chartConfig.title && $scope.chartConfig.title.text)) {
         alert("You need a name for your model!");
         return;
       }
+      $scope.model.title = $scope.chartConfig.title.text;
 
       $scope.model.config = $scope.chartConfig;
       $scope.model.dataset = $scope.dataset;
