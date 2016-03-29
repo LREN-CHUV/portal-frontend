@@ -240,7 +240,7 @@ BB.GraphMapper.prototype.map = function(obj, el, cb) {
 
     var edgeMat = new THREE.LineBasicMaterial({vertexColors: THREE.VertexColors, transparent: true, opacity: 0.5});
 
-    var edgesObj = new THREE.Line(edges, edgeMat, THREE.LinePieces);
+    var edgesObj = new THREE.Line(edges, edgeMat, THREE.LineSegments);
 
     graph.add(edgesObj);
 
@@ -293,10 +293,51 @@ BB.GraphMapper.prototype.map = function(obj, el, cb) {
     this.activeLabel = $('<div>Active Node:</div>');
 
     $(el).append(this.activeLabel)
-        .append($('<input type="button" value="Google" />').click(function() {
-            var label = that.activeObject.userData.label;
-            var url = 'http://google.com/search?q=' + encodeURIComponent(label); // + ' Les Miserables');
-            window.open(url, '_blank');
+        .append($('<input type="button" value="More" />').click(function() {
+            if(that.activeObject.userData === undefined)
+            {
+                alert("Click on a sphere first...");
+            }
+            else
+            {
+                var dataType = legends[that.activeObject.userData.idx];
+                var label = that.activeObject.userData.label;
+                var url = undefined;
+
+                if(dataType == 'Genetic')
+                {
+                    url = 'http://www.ensembl.org/Homo_sapiens/Variation/Explore?v=' + encodeURIComponent(label.match("(rs[0-9]*)")[1]);
+                }
+                else if (dataType == 'CSF proteins')
+                {
+                    url = 'http://www.uniprot.org/uniprot/?query=' + encodeURIComponent(label);
+                }
+                else if (dataType == 'Blood proteins')
+                {
+                    url = 'http://www.uniprot.org/uniprot/?query=' + encodeURIComponent(label.match("Protein: (.*)")[1]);
+                }
+                else if (dataType == 'Brain anatomy')
+                {
+                    url = 'http://google.com/search?q=' + encodeURIComponent(label);
+                }
+                else if (dataType == 'Brain metabolism')
+                {
+                    url = 'http://google.com/search?q=' + encodeURIComponent(label);
+                }
+                else if (dataType == 'AD')
+                {
+                    alert("You selected AD " + label);
+                }
+                else if (dataType == 'Controls')
+                {
+                    alert("You selected control " + label);
+                }
+
+                if(url !== undefined)
+                {
+                    window.open(url, '_blank');
+                }
+            }
         }))
         .append($('<input type="button" value="Only" />').click(function() {
             var active = that.active;

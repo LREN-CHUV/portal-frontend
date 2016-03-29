@@ -81,8 +81,18 @@ angular
     // set global configuration highcharts
     Highcharts.setOptions({
       exporting: {
-        url:backendExportChartUrl
-      }
+            chartOptions: { // specific options for the exported image
+                plotOptions: {
+                    series: {
+                        dataLabels: {
+                            enabled: false
+                        }
+                    }
+                }
+            },
+            scale: 3,
+            fallbackToExportServer: false
+        }
     });
   }])
   .run(['$rootScope', '$modalStack', function($rootScope, $modalStack) {
