@@ -1,6 +1,6 @@
 <div class="mt">
   <div class="container-fluid row">
-    <div ng-repeat="item in rows" ng-class="{A: 'col-xs-12 col-md-6', M: 'col-xs-12 col-sm-6 col-md-3'}[item.type]">
+    <div ng-if="loaded" ng-repeat="item in rows" ng-class="{A: 'col-xs-12 col-md-6', M: 'col-xs-12 col-sm-6 col-md-3'}[item.type]">
       <div class="panel panel-default ui-state-default panel-height-fixe">
 
         <!-- model -->
@@ -46,6 +46,27 @@
                                         </span>
             </a>
           </div>
+        </div>
+      </div>
+    </div>
+    <div ng-if="!loaded" class="text-center">
+      <h1>
+        <span class="fa fa-spin fa-spinner"></span>
+        Loading data...
+      </h1>
+    </div>
+    <div ng-if="loaded && !rows.length" class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
+      <div class="panel" ng-if="isMyDataScope">
+        <div class="panel-heading">My data</div>
+        <div class="panel-body">
+          Your data will be placed here, once you have some (either create a new model or a new article).
+        </div>
+      </div>
+      <div class="panel" ng-if="!isMyDataScope">
+        <div class="panel-heading">Community's data</div>
+        <div class="panel-body">
+          The community's data will be placed here. This consists of the statistical models and research articles written by fellow scientists.
+          You can write  community models and articles by creating regular models and articles and by clicking "share" before saving.
         </div>
       </div>
     </div>

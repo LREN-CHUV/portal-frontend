@@ -9,6 +9,7 @@ angular.module('chuvApp.mydata').controller('MyDataController', ['$scope', '$tra
     $translate.refresh();
 
     $scope.rows = [];
+    $scope.loaded = false;
 
     $scope.isMyDataScope = $stateParams.scope === "mydata";
 
@@ -32,13 +33,12 @@ angular.module('chuvApp.mydata').controller('MyDataController', ['$scope', '$tra
           angular.forEach(articles,function(article){
             $scope.rows.push({type: 'A', data: article, size: 2, row: index + 1, col: 2});
           });
+          $scope.loaded = true;
         } else {
-          var promises = [];
-          angular.forEach(models, function (model) {
-            promises.push($scope.getModel(model.slug));
-          });
-
-          $q.all(promises).then(function (modelsData) {
+          $q.all(
+            _.map(models, function (model) { return $scope.getModel(model.slug) })
+          ).then(function (modelsData) {
+            $scope.loaded = true;
             _.chain(modelsData)
               .sortBy('createdAt')
               .reverse()
