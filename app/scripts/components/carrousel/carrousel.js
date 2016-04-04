@@ -87,9 +87,9 @@ angular.module('chuvApp.components.carrousel').directive("carrouselChart", ['Cha
 
         var config = angular.copy(scope.model.config);
         config.height = 200;
+        config.title = {text: ''};
         config.width = element.parent().width();
         scope.config = ChartUtil(config, scope.model.dataset);
-        scope.config.title = {text: scope.model.title};
 
         $timeout(
           function () {

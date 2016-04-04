@@ -49,18 +49,12 @@ angular.module('chuvApp.home').controller('HomeController',['$scope','$translate
         _.each($scope.models, function (model) {
           var config = angular.copy(model.config);
           config.height = 250;
+          config.title = {text: ''};
           config.showLegend = false;
           model.chartConfig = ChartUtil(config, model.dataset);
         });
       });
     };
-
-    //$scope.getModel = function(slug){
-    //  var deferred = $q.defer();
-    //  Model.get({slug:slug}).$promise.then(function(model){
-    //  });
-    //  return deferred.promise;
-    //};
 
     $scope.gridsterOpts = {
         resizable: {

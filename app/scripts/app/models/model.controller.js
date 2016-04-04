@@ -37,7 +37,7 @@ angular.module('chuvApp.models')
         var config = angular.copy(model.config);
         config.height = 250;
         config.width = undefined;
-        config.title = null;
+        config.title = {text: ''};
         config.showLegend = false;
         return ChartUtil(config, model.dataset);
       }
