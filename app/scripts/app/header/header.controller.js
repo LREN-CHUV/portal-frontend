@@ -36,10 +36,7 @@ angular.module('chuvApp.header').controller('HeaderController', ['$scope', '$tra
       if ($state.current.name !== 'intro') {
         $state.go('intro');
       }
-      $rootScope.user = null;
 
-      if (User.hasCurrent()) {
-        $http.post(backendUrl+'/logout');
-      }
+      User.logout();
     };
   }]);

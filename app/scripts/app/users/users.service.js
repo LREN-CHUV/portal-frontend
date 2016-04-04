@@ -4,7 +4,7 @@
 'use strict';
 
 angular.module('chuvApp.users')
-  .factory('User', ['$rootScope','backendUrl','$http','$cookieStore','base64', function ($rootScope,backendUrl,$http,$cookieStore,base64) {
+  .factory('User', ['$rootScope','backendUrl','$http', function ($rootScope,backendUrl,$http) {
 
     var user_oauth_obj,
       user_backend_obj,
@@ -40,6 +40,12 @@ angular.module('chuvApp.users')
       agreeTos: function () {
         return $http.post(backendUrl + "/user?agreeNDA=true");
         $rootScope.hasAgreedTos = user_backend_obj.agreeNDA = true;
+      },
+
+      logout: function () {
+        $rootScope.user = null;
+        user_promise = user_backend_obj = user_promise = $rootScope.hasAgreedTos = false;
+        $http.post(backendUrl+'/logout');
       }
 
     };
