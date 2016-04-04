@@ -354,16 +354,13 @@ angular.module('chuvApp.models')
                 if (!angular.isArray($scope.stats)) {
                   $scope.stats = [$scope.stats];
                 }
-                //
-                //$scope.stats
-                //  .filter(function (statistic) { return statistic.dataType === 'DatasetStatistic' })
-                //  .forEach(setup_stats);
 
-                $scope.measurement_count = $scope.stats[0].count || "??";
+                $scope.measurement_count = ($scope.stats.length && $scope.stats[0].count) || "??";
 
               }, function () {
                 if (current_request_id != request_id) return;
                 $scope.has_error = true;
+                $scope.focused_variable_loaded = true;
               })
           }
         );

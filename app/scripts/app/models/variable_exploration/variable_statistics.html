@@ -14,13 +14,14 @@
     </div>
 
     <div ng-if="focused_variable">
-      <div ng-if="has_error">
+      <div ng-if="has_error && !variable_description">
         <h2>No data found</h2>
       </div>
-      <div ng-if="!has_error">
+      <div ng-if="!has_error || variable_description">
 
         <div ng-if="focused_variable_loaded">
-          <tabset>
+          <div ng-if="stats.length">
+            <tabset>
             <tab ng-repeat="statistic in stats"
                  select="show_stats_after_timeout(statistic)"
                  heading="{{ statistic.dataType == 'SummaryStatistics' ? 'Summary' : statistic.label }}">
@@ -50,6 +51,7 @@
               </div>
             </tab>
           </tabset>
+          </div>
 
           <variable-description text="variable_description"></variable-description>
 

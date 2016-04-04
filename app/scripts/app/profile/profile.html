@@ -1,6 +1,6 @@
 <div id="accessDeniedPage" ng-show="!isLoggedIn()">
   <h1>Are you lost ?</h1>
-  <p>Click  <a ng-href="/#/intro">here</a> </p>
+  <p>Click  <a ui-sref="intro">here</a> </p>
 </div>
 
 <div class="container-fluid mt" ng-show="isLoggedIn()">
@@ -23,7 +23,6 @@
 				<a href="" ng-click="selectedTab='0'" ng-class="{active: selectedTab=='0'}" class="list-group-item active"><i class="ti ti-user"></i> About <span class="badge badge-primary">80%</span></a>
 				<a href="" ng-click="selectedTab='1'" ng-class="{active: selectedTab=='1'}" class="list-group-item"><i class="ti ti-time"></i> Timeline</a>
 				<a href="" ng-click="selectedTab='2'" ng-class="{active: selectedTab=='2'}" class="list-group-item"><i class="ti ti-microphone"></i> Conférences</a>
-				<a href="" ng-click="selectedTab='3'" ng-class="{active: selectedTab=='3'}" class="list-group-item"><i class="ti ti-file"></i> Articles</a>
 				<a href="" ng-click="selectedTab='4'" ng-class="{active: selectedTab=='4'}" class="list-group-item"><i class="ti ti-pencil"></i> Posters</a>
 				<a href="" ng-click="selectedTab='5'" ng-class="{active: selectedTab=='5'}" class="list-group-item"><i class="ti ti-layout-width-default"></i> Models</a>
 				<a href="" ng-click="selectedTab='6'" ng-class="{active: selectedTab=='6'}" class="list-group-item"><i class="ti ti-pin-alt"></i> Points of Interest</a>
@@ -281,10 +280,6 @@
 												</div>
 												<div class="timeline-content">
 													<h4>Consectetur Adipisicing Elit</h4>
-													<ul class="list-inline">
-														<li><img masked-image src="assets/demo/stockphoto/blog_06.jpg" alt="" class="pull-left img-thumbnail img-responsive clearfix" width="200" height="133"></li>
-														<li><img masked-image src="assets/demo/stockphoto/blog_06.jpg" alt="" class="pull-left img-thumbnail img-responsive clearfix" width="200" height="133"></li>
-													</ul>
 												</div>
 											</div>
 										</li>
@@ -302,44 +297,6 @@
 											</div>
 										</li>
 									</ul>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<div class="tab-pane" ng-class="{active: selectedTab=='3'}">
-					<div class="panel">
-						<div class="panel-heading">
-							<h2>Photos</h2>
-						</div>
-						<div class="panel-body profile-photos">
-							<div class="row">
-								<div class="col-md-3">
-									<img load-as-modal src="assets/demo/stockphoto/blog_01.jpg" alt="" class="img-thumbnail img-responsive mb-xl">
-								</div>
-								<div class="col-md-3">
-									<img load-as-modal src="assets/demo/stockphoto/blog_02.jpg" alt="" class="img-thumbnail img-responsive mb-xl">
-								</div>
-								<div class="col-md-3">
-									<img load-as-modal src="assets/demo/stockphoto/blog_03.jpg" alt="" class="img-thumbnail img-responsive mb-xl">
-								</div>
-								<div class="col-md-3">
-									<img load-as-modal src="assets/demo/stockphoto/blog_04.jpg" alt="" class="img-thumbnail img-responsive mb-xl">
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-md-3">
-									<img load-as-modal src="assets/demo/stockphoto/blog_01.jpg" alt="" class="img-thumbnail img-responsive mb-xl">
-								</div>
-								<div class="col-md-3">
-									<img load-as-modal src="assets/demo/stockphoto/blog_02.jpg" alt="" class="img-thumbnail img-responsive mb-xl">
-								</div>
-								<div class="col-md-3">
-									<img load-as-modal src="assets/demo/stockphoto/blog_03.jpg" alt="" class="img-thumbnail img-responsive mb-xl">
-								</div>
-								<div class="col-md-3">
-									<img load-as-modal src="assets/demo/stockphoto/blog_04.jpg" alt="" class="img-thumbnail img-responsive mb-xl">
 								</div>
 							</div>
 						</div>

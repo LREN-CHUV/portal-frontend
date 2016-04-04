@@ -101,6 +101,10 @@ angular
       function () { $modalStack.dismissAll(); }
     );
   }])
+  .config(['$locationProvider', function ($locationProvider) {
+      'use strict';
+      $locationProvider.html5Mode(true);
+  }])
   .run(['$state','$translatePartialLoader','$translate', 'amMoment', '$rootScope','backendUrl','$cookies','User',
     function($state,$translatePartialLoader,$translate, amMoment,$rootScope,backendUrl,$cookies,User){
       $translatePartialLoader.addPart('common');
@@ -112,7 +116,7 @@ angular
         return backendUrl+"/articles/"+slug+".pdf";
       };
 
-      User.get().success(function(data) {
+      User.get().then(function(data) {
         $rootScope.user = User.current();
 
         if (!User.hasAgreedTos()) {

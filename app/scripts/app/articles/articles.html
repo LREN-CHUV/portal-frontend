@@ -17,10 +17,10 @@
             <div class="timeline-content">
               <a href="" ng-click="showModal(article)" class="name">{{article.title}}</a>
               <div class="author-box">
-                <a href="{{'#/users/' + article.createdBy.username }}" class="avatar">
+                <a ui-sref="usershow({username: article.createdBy.username })" class="avatar">
                   <img ng-src="{{article.createdBy.picture}}" alt="" class="avatar" />
                 </a>
-                by <a href="{{'#/users/' + article.createdBy.username }}">{{article.createdBy.fullname}}</a><br />
+                by <a ui-sref="user-show({username: article.createdBy.username })">{{article.createdBy.fullname}}</a><br />
                 <span class="time">{{article.createdAt | fromNow}}</span>
               </div>
             </div>
@@ -31,7 +31,7 @@
               <a ng-href="" class="icon-tl" style="cursor:not-allowed;">
                 <i class="icon-pdf"></i>
               </a>
-              <a ng-if="isMine(article)" href="#/articles/edit/{{article.slug}}" ng-if="isAuthorized(article)" class="icon-tl">
+              <a ng-if="isMine(article)" ui-sref="articles-edit({action: 'edit', slug: article.slug})" ng-if="isAuthorized(article)" class="icon-tl">
                 <i class="icon-html"></i>
               </a>
             </div>

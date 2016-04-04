@@ -6,40 +6,40 @@
 angular.module('chuvApp.users')
   .factory('User', ['$rootScope','backendUrl','$http','$cookieStore','base64', function ($rootScope,backendUrl,$http,$cookieStore,base64) {
 
-    var hasAgreedTos = $rootScope.hasAgreedTos = !!$cookieStore.get("tos");
+    var user_oauth_obj,
+      user_backend_obj,
+      user_promise;
 
     return {
 
       current: function () {
-        return $cookieStore.get('user');
+        return user_backend_obj;
       },
       hasCurrent : function(){
-          return $cookieStore.get('user') !== null && $cookieStore.get('user') !== undefined;
-      },
-      removeCurrent: function () {
-        $cookieStore.remove('tos');
-        return $cookieStore.remove('user');
+          return !!user_backend_obj;
       },
 
       get: function () {
-        var promise = $http.get(backendUrl + "/user")
-        promise.then(function (user_data) {
-          // TODO connect to backend
-          //$rootScope.hasAgreedTos = hasAgreedTos = user_data.hasAgreedTos;
-        })
-        return promise;
+        return user_promise || (user_promise =
+            $http.get(backendUrl + "/user")
+              .then(function (user_data) {
+                user_oauth_obj = user_data.data;
+                var promise = $http.get(backendUrl + "/users/" + user_data.data.userAuthentication.details.preferred_username);
+                promise.then(function (user_data) {
+                  user_backend_obj = user_data.data;
+                  $rootScope.hasAgreedTos = user_backend_obj.agreeNDA;
+                })
+                return promise;
+              })
+          );
       },
 
       hasAgreedTos: function () {
-        return !!hasAgreedTos;
+        return user_backend_obj && user_backend_obj.agreeNDA;
       },
       agreeTos: function () {
-        // TODO: post
-        var promise = $http.post(backendUrl + "/user?agreeNDA=true");
-        promise.then(function () {
-          $cookieStore.put("tos", $rootScope.hasAgreedTos = hasAgreedTos = true);
-        });
-        return promise;
+        return $http.post(backendUrl + "/user?agreeNDA=true");
+        $rootScope.hasAgreedTos = user_backend_obj.agreeNDA = true;
       }
 
     };

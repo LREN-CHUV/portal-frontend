@@ -35,7 +35,7 @@
         <div class="tile-icon"><i class="icon-write"></i></div>
         <div class="tile-heading"><span>&nbsp;</span></div>
         <div class="tile-body"><span>&nbsp;</span></div>
-        <a href="#/articles/create" class="tile-title">
+        <a ui-sref="articles-create" class="tile-title">
           <big>write</big>
           <span>an article</span>
 
@@ -61,7 +61,7 @@
           <div class="panel-body panel-body-graph">
             <highchart config="model.chartConfig"></highchart>
           </div>
-          <a ng-href="#/models/{{model.slug}}/false" class="panel-link"><i>+</i></a>
+          <a ui-sref="models-edit({slug: model.slug, isCopy: false})" class="panel-link"><i>+</i></a>
         </div>
       </div>
 

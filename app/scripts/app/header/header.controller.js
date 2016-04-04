@@ -39,7 +39,6 @@ angular.module('chuvApp.header').controller('HeaderController', ['$scope', '$tra
       $rootScope.user = null;
 
       if (User.hasCurrent()) {
-        User.removeCurrent();
         $http.post(backendUrl+'/logout');
       }
     };

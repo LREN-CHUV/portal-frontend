@@ -80,7 +80,7 @@ angular.module('chuvApp.components.carrousel').directive("carrouselChart", ['Cha
     },
     link:function(scope,element) {
       scope.get_drag_data = function() {
-        return '<img src="' + scope.largeSvg + '"><br><a href="' + location.origin + '/#/models/' + scope.model.slug + '/">' + scope.model.title + '</a>';
+        return '<img src="' + scope.largeSvg + '"><br><a href="' + location.origin + '/models/' + scope.model.slug + '/">' + scope.model.title + '</a>';
       }
 
       $q.all([Model.get({slug:scope.model.slug}).$promise,$templateRequest("./scripts/app/articles/article-table.html")]).then(function(data){

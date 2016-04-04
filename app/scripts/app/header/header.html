@@ -1,7 +1,7 @@
 <div class="container-fluid">
   <div class="logo-area">
 
-    <a class="navbar-brand" href="#/home">Human Brain Project</a>
+    <a class="navbar-brand" ui-sref="home">Human Brain Project</a>
 
     <span id="trigger-sidebar" class="toolbar-trigger toolbar-icon-bg" ng-click="toggleLeftBar()" ng-show="!getLayoutOption('layoutHorizontal')">
 			<a data-toggle="tooltips" data-placement="right" title="{{'header.menu.my-data' | translate}}" ui-sref="data({scope: 'mydata'})"  ui-sref-active="active">
@@ -44,7 +44,7 @@
         <img class="img-circle" ng-src="{{user.picture}}" alt="{{user.fullname}}"/>
       </a>
       <ul class="dropdown-menu userinfo arrow">
-        <li><a href="#/profile"><i class="ti ti-user"></i><span>{{'header.menu.profile' | translate}}</span></a></li>
+        <li><a ui-sref="profile"><i class="ti ti-user"></i><span>{{'header.menu.profile' | translate}}</span></a></li>
         <!--li><a href="https://mip.humanbrainproject.eu/help/" target="_blank">
           <i class="ti ti-settings"></i><span>{{'header.menu.settings' | translate}}</span>
         </a></li-->
@@ -59,7 +59,7 @@
       </a>
     </li>
     <li class="toolbar-trigger toolbar-icon-bg">
-      <a href="#/hbpapps" title="{{'header.menu.app' | translate}}">
+      <a ui-sref="hbpapps" title="{{'header.menu.app' | translate}}">
                 <span class="icon-bg">
                     <i class="ti ti-layout-grid3-alt " style="font-family: 'themify';font-weight: normal;"></i>
                 </span>
