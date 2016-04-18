@@ -218,6 +218,7 @@ angular.module('chuvApp.models')
           if ($scope.groups != null && element.width !== prev_dimension) {
             prev_dimension = element.width();
             updateCirclePacking();
+            $scope.$apply();
           }
         }
         angular.element(window).bind('resize', resize_handler);
@@ -447,6 +448,14 @@ angular.module('chuvApp.models')
             Object.keys($scope.configuration),
             function (sub_arr) { return Object.keys($scope.configuration[sub_arr]).length; }
           );
+        };
+
+        $scope.get_button_label = function(type) {
+          var focusedVariable = $scope.getFocusedVariable(),
+            is_group = focusedVariable && !!focusedVariable.groups,
+            is_used_as = focusedVariable && focusedVariable.code in $scope.configuration[type];
+
+          return [["Use", "Remove"], ["Add all", "Remove all"]][+is_group][+is_used_as] + " as " + type
         };
 
       }]

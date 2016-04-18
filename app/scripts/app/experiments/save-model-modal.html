@@ -1,0 +1,31 @@
+<div class="modal-header">
+  <h3 style="margin: 0">Save your model</h3>
+</div>
+<form>
+  <div class="modal-body">
+    <div class="form-group">
+      <label for="name"><b>Name of your model</b></label>
+      <input type="text" id="name" ng-model="name" class="form-control">
+    </div>
+    <div class="checkbox">
+      <label>
+        <input type="checkbox" ng-model="share">
+        Share model with the community
+      </label>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-default pull-right"
+            type="button"
+            style="margin-left: 10px"
+            ng-click="$dismiss()">
+      Close
+    </button>
+    <button class="btn btn-primary pull-right"
+            type="submit"
+            ng-class="name ? '' : 'disabled'"
+            ng-click="do_save_model()">
+      Save model
+    </button>
+  </div>
+</form>

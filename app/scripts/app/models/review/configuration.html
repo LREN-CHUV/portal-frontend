@@ -1,7 +1,7 @@
 <div ng-controller="ConfigurationController">
   <div class="col-md-4">
     <div class="info-tile tile-blue tile-sidebar" style="visibility: visible; opacity: 1; display: block; transform: translateY(0px);">
-      <div class="tile-heading"><span>Static view</span></div>
+      <div class="tile-heading"><span>Configure chart</span></div>
       <div class="tile-body">
         <ul class="list-graphs text-left">
           <li>
@@ -34,7 +34,7 @@
 
       <div class="tile-heading"><span>Show</span></div>
       <div class="tile-body" style="margin-bottom: -30px">
-        <ul class="list-axe">
+        <ul class="list-axe" style="max-height: 400px; overflow: auto">
           <li>
             <span ng-bind="mainAxisTitle()"></span>
             <ul>
@@ -91,6 +91,38 @@
                 <a href="" ng-click="enableSecondaryAxe(yAxe)"
                    ng-class="chartConfig.yAxisVariables.indexOf(yAxe) >= 0 ? 'active' : ''">
                   <span ng-bind="yAxe"></span>
+                  <i class="ti ti-check"></i>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li ng-if="chartConfig.type === 'scatter'">
+            <span>Coloring</span>
+            <ul>
+              <li>
+                <a href="" ng-click="changeColoring(null)" ng-class="chartConfig.coloringVariable == null ? 'active' : ''">
+                  <span>No coloring</span>
+                  <i class="ti ti-check"></i>
+                </a>
+              </li>
+              <li ng-repeat="xAxe in dataset.variable"
+                  ng-if="canUseAsPrimaryAxis(xAxe)">
+                <a href="" ng-click="changeColoring(xAxe)" ng-class="chartConfig.coloringVariable == xAxe ? 'active' : ''">
+                  <span ng-bind="xAxe"></span>
+                  <i class="ti ti-check"></i>
+                </a>
+              </li>
+              <li ng-repeat="xAxe in dataset.grouping"
+                  ng-if="canUseAsPrimaryAxis(xAxe)">
+                <a href="" ng-click="changeColoring(xAxe)" ng-class="chartConfig.coloringVariable == xAxe ? 'active' : ''">
+                  <span ng-bind="xAxe"></span>
+                  <i class="ti ti-check"></i>
+                </a>
+              </li>
+              <li ng-repeat="xAxe in dataset.header"
+                  ng-if="canUseAsPrimaryAxis(xAxe)">
+                <a href="" ng-click="changeColoring(xAxe)" ng-class="chartConfig.coloringVariable == xAxe ? 'active' : ''">
+                  <span ng-bind="xAxe"></span>
                   <i class="ti ti-check"></i>
                 </a>
               </li>

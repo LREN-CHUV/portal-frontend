@@ -47,30 +47,52 @@ angular.module('chuvApp.models')
       $scope.get_focused_variable = function () { return $scope.focused_variable; };
 
 
-      $scope.use_variable_as = function(type, variable) {
+      $scope.use_variable_as = function(type, variable, dont_broadcast) {
         var config = $scope.configuration[type];
 
         if (!variable) {
           variable = $scope.focused_variable;
         }
 
-        if (variable.code in config) {
-          delete config[variable.code];
+        // if is group
+        if (variable && !!variable.groups) {
+
+          // recurse subgroups
+          variable.groups.forEach(function(group) {
+            $scope.use_variable_as(type, group, true);
+          });
+
+          // recurse variables
+          _.chain($scope.allVariables)
+            .filter(function (child_variable) { return child_variable.group.code === variable.code; })
+            .forEach(function (child_variable) {
+              $scope.use_variable_as(type, child_variable, true);
+            });
+
         } else {
-          if (type == 'variable') {
-            config = $scope.configuration[type] = {};
+
+          if (variable.code in config) {
+            delete config[variable.code];
+          } else {
+            if (type == 'variable') {
+              config = $scope.configuration[type] = {};
+            }
+
+            // remove from all other configuration
+            Object.keys($scope.configuration).forEach(function (var_config) {
+              if (variable.code in $scope.configuration[var_config]) {
+                delete $scope.configuration[var_config][variable.code];
+              }
+            });
+            config[variable.code] = variable;
           }
 
-          // remove from all other configuration
-          Object.keys($scope.configuration).forEach(function (var_config) {
-            if (variable.code in $scope.configuration[var_config]) {
-              delete $scope.configuration[var_config][variable.code];
-            }
-          });
-          config[variable.code] = variable;
         }
 
-        $scope.$broadcast("configurationChanged");
+
+        if (!dont_broadcast) {
+          $scope.$broadcast("configurationChanged");
+        }
       };
 
 

@@ -8,7 +8,8 @@ angular.module('chuvApp.models')
   .controller('ConfigurationController',['$scope','$rootScope','ChartUtil',function($scope,$rootScope,ChartUtil) {
 
     // backup of the axis configuration when switching to boxplot
-    var axisConfiguration;
+    var axisConfiguration,
+      maxYAxisVariableCount = 5;
 
     $scope.changeGraphType = function(type){
       if (type == 'boxplot') {
@@ -40,6 +41,9 @@ angular.module('chuvApp.models')
       var idx = $scope.chartConfig.yAxisVariables.indexOf(axeCode);
 
       if (idx === -1) {
+        if ($scope.chartConfig.yAxisVariables.length >= maxYAxisVariableCount) {
+          $scope.chartConfig.yAxisVariables.pop();
+        }
         $scope.chartConfig.yAxisVariables.push(axeCode);
       } else {
         $scope.chartConfig.yAxisVariables.splice(idx, 1);
@@ -72,13 +76,17 @@ angular.module('chuvApp.models')
       return ChartUtil.isXAxisMain($scope.chartConfig.type) ? "AXE Y" : 'AXE X';
     };
 
-
     ///**
     // * change Xaxis
     // * @param axeCode
     // */
     $scope.changeMainAxis = function(axeCode){
       $scope.chartConfig.xAxisVariable = axeCode;
+      $scope.$emit("chartConfigChanged");
+    };
+
+    $scope.changeColoring = function(axeCode){
+      $scope.chartConfig.coloringVariable = axeCode;
       $scope.$emit("chartConfigChanged");
     };
 

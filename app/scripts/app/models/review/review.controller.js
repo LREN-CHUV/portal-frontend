@@ -243,6 +243,19 @@ angular.module('chuvApp.models').controller('ReviewController',['$scope','$trans
         });
     };
 
+    function reload_hc_config() {
+      $scope.chartConfig.yAxisVariables = ($scope.chartConfig.yAxisVariables || [])
+        .filter(function (code) {
+          return (ChartUtil.isXAxisMain($scope.chartConfig.type)
+            ? ChartUtil.canUseAsYAxis
+            : ChartUtil.canUseAsXAxis)(
+            code, $scope.chartConfig.type, $scope.dataset.data[code]
+          )
+        })
+        .slice(0, 5);
+      $scope.hcConfig = ChartUtil($scope.chartConfig, $scope.dataset);
+    }
+
     /**
      * Execute a search query
      */
@@ -283,15 +296,13 @@ angular.module('chuvApp.models').controller('ReviewController',['$scope','$trans
         $scope.executed = true;
         $scope.loading_model = false;
         $scope.dataset = queryResult;
-        $scope.chartConfig.yAxisVariables = _.filter($scope.dataset.header, $scope.canUseAxis);
+        $scope.chartConfig.yAxisVariables = _.filter($scope.dataset.header, $scope.canUseAxis).slice(0, 5);
         update_location_search();
-        $scope.hcConfig = ChartUtil($scope.chartConfig, $scope.dataset);
+        reload_hc_config();
       });
     };
 
-    $scope.$on("chartConfigChanged", function () {
-      $scope.hcConfig = ChartUtil($scope.chartConfig, $scope.dataset);
-    });
+    $scope.$on("chartConfigChanged", reload_hc_config);
 
     if ($location.search().execute) {
 

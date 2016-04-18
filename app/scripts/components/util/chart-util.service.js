@@ -13,11 +13,11 @@ angular.module('chuvApp.util')
       var hue = colorIndex * 70 % 360,
         max = _.max(array),
         min = _.min(array),
-        target_max = 0.8,
-        target_min = 0.2;
+        target_max = 0.75,
+        target_min = 0.25;
 
       return _.map(array, function (val) {
-        return d3.hsl(hue, 0.7, (val - min) / (max-min) * (target_max - target_min) + target_min)
+        return d3.hsl(hue, 0.7, (val - min) / (max-min) * (target_max - target_min) + target_min).toString();
       });
     }
 
@@ -146,7 +146,7 @@ angular.module('chuvApp.util')
         variables = _.filter(
           headers,
           function (header) {
-            return config.yAxisVariables.indexOf(header) >= 0;
+            return config.yAxisVariables.indexOf(header) >= 0 && !_.any(dataset, function (datapoint) { return isNaN(+datapoint);});
           }
         ),
         xAxisVariableIdx,
@@ -285,8 +285,38 @@ angular.module('chuvApp.util')
           })
         }
 
-        if (config.colorByVariable) {
-          // make coloring
+        // make coloring
+        if (type === 'scatter' && config.coloringVariable) {
+          var coloring_data = data[variableIdxs[config.coloringVariable]];
+          if (config.xAxisVariable) {
+            coloring_data = _.map(coloring_data, 1);
+          }
+          if (!isNumberArray(coloring_data)) {
+            var string_to_number = {},
+              idx = 0;
+            coloring_data = coloring_data.map(function (str_pt) {
+              if (!string_to_number.hasOwnProperty(str_pt)) {
+                string_to_number[str_pt] = idx++;
+              }
+              return string_to_number[str_pt];
+            })
+          }
+
+          config.yAxisVariables.forEach(function (code, index) {
+
+            data[variableIdxs[code]] = _.zip(
+              data[variableIdxs[code]],
+              getColorScale(coloring_data, index)
+            ).map(function (point, idx) {
+              return {
+                x: config.xAxisVariable ? point[0][0] : idx,
+                y: config.xAxisVariable ? point[0][1] : point[0],
+                marker: {
+                  fillColor: point[1]
+                }
+              }
+            })
+          });
         }
 
         return {

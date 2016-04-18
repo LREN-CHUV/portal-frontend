@@ -37,6 +37,7 @@ angular
     'tmh.dynamicLocale',
     'angularMoment',
     'ui.select',
+    'ui.bootstrap',
     'app.config',
     'ab-base64',
     "btford.markdown",
@@ -61,6 +62,7 @@ angular
     'chuvApp.components.widget',
     'chuvApp.mydata',
     'chuvApp.profile',
+    'chuvApp.experiments',
     'chuvApp.components.toolbar',
     'chuvApp.intro',
   ])
