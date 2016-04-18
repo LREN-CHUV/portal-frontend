@@ -146,7 +146,7 @@ angular.module('chuvApp.util')
         variables = _.filter(
           headers,
           function (header) {
-            return config.yAxisVariables.indexOf(header) >= 0 && !_.any(dataset, function (datapoint) { return isNaN(+datapoint);});
+            return config.yAxisVariables.indexOf(header) >= 0 && !_.any(dataset.data[header], function (datapoint) { return isNaN(+datapoint);});
           }
         ),
         xAxisVariableIdx,
