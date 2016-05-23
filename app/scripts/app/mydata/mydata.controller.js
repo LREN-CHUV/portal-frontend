@@ -72,7 +72,7 @@ angular.module('chuvApp.mydata').controller('MyDataController', ['$scope', '$tra
       var deferred = $q.defer();
       Model.get({slug:slug}).$promise.then(function(model){
         var config = angular.copy(model.config);
-        config.height = 300;
+        config.height = 240;
         config.showLegend = false;
         model.chartConfig = ChartUtil(config, model.dataset);
         deferred.resolve(model);

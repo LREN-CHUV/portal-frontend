@@ -6724,9 +6724,6 @@ fieldset[disabled] .form-control {
   height: 40px;
   line-height: 1.65;
 }
-.form-group {
-  margin-bottom: 32px;
-}
 .row-border .form-group {
   border-top: 1px solid #fafafa;
   padding: 16px 0px;
@@ -19129,7 +19126,7 @@ body.topnav-collapsed header.navbar.navbar-default .navbar-collapse .open .tt-dr
 /*!
  * Yamm!3
  * Yet another megamenu for Bootstrap 3
- * 
+ *
  * http://geedmo.github.com/yamm3
  */
 .yamm .nav,

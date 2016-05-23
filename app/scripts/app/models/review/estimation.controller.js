@@ -10,7 +10,7 @@ angular.module('chuvApp.models').controller('EstimationController',['$scope', '$
   $scope.open_experiment = function () {
 
     if ($scope.model && $scope.model.slug) {
-      return $state.go("experiment", {slug: $scope.model.slug});
+      return $state.go("new_experiment", {model_slug: $scope.model.slug});
     }
 
     function unmap_category(category) {

@@ -1,0 +1,22 @@
+<span dropdown class="pull-right">
+  <a href dropdown-toggle class="btn btn-default">
+    Related experiments <span class="fa fa-caret-down"></span>
+  </a>
+  <ul class="dropdown-menu">
+    <li>
+      <a ui-sref="new_experiment({model_slug: modelSlug})">Create New Experiment</a>
+    </li>
+    <li class="divider" ng-if="model_experiments.length"></li>
+    <li ng-repeat="experiment in model_experiments | orderBy:'-created'">
+      <a ui-sref="experiment_details({model_slug: modelSlug, experiment_uuid: experiment.uuid})">
+        <b ng-bind="experiment.name"></b>
+        <span style="font-size: 12px">
+          -
+          <span ng-bind="experiment.created | fromNow"></span>
+          by
+          <span ng-bind="experiment.createdBy.fullname"></span>
+        </span>
+      </a>
+    </li>
+  </ul>
+</span>

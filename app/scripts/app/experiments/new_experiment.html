@@ -15,10 +15,14 @@
 <div ng-cloak ng-if="loaded">
 
   <div class="row">
-    <div class="col-xs-9">
+    <div class="col-xs-12">
       <div class="panel">
         <div class="panel-heading">
-          <h3 ng-if="model">Run an Experiment on <a ui-sref="models-edit({slug: model.slug, isCopy: false})" ng-bind="model.title"></a> </h3>
+          <h3 ng-if="model">
+            Run an Experiment on
+            <a ui-sref="models-edit({slug: model.slug, isCopy: false})" ng-bind="model.title"></a>
+            <other-experiments model_slug="model.slug"></other-experiments>
+          </h3>
           <h3 ng-if="!model">
             Run an Experiment on &lt;Unsaved Model&gt;
             <button class="btn btn-primary col-bottom" ng-click="save_model()">Save Model</button>
@@ -28,7 +32,7 @@
 
       <div class="row">
 
-        <div class="col-sm-4">
+        <div class="col-sm-3">
           <div class="panel">
             <div class="panel-heading">
               Choose a ML Algorithm
@@ -45,17 +49,17 @@
               <p ng-repeat="method in ml_methods_by_type[predictor_type]">
                 <label class="btn btn-primary-alt col-xs-12"
                        ng-model="shared.chosen_method"
+                       ng-click="shared.method_parameters = []"
                        btn-radio="method"
                        uncheckable
-                       ng-class="foo() ? 'disabled' : ''"
-                       ng-bind="method.display"></label>
+                       ng-bind="method.label"></label>
                 <br><br>
               </p>
             </div>
           </div>
         </div>
 
-        <div class="col-sm-8">
+        <div class="col-sm-6">
 
           <!-- ng-show instead of ng-if because I don't want the inner directives to be destroyed  when unpicking the method -->
           <form class="row" ng-show="shared.chosen_method">
@@ -64,7 +68,7 @@
 
               <accordion close-others="false">
 
-                <accordion-group is-open="false">
+                <accordion-group is-open="true">
                   <accordion-heading>
                     <span class="ti ti-panel"></span>
                     Configure The Algorithm's Parameters
@@ -73,29 +77,26 @@
                   <div ng-if="shared.chosen_method.parameters.length" class="form-group">
                     <div ng-repeat="parameter in shared.chosen_method.parameters" class="form-inline">
                       <label for="{{parameter.name}}">
-                        <b ng-bind="parameter.display + ': '"></b>
+                        <b ng-bind="parameter.label + ': '"></b>
                       </label>
                       <input type="number"
                              step="1"
                              id="{{parameter.name}}"
                              class="form-control"
-                             ng-model="query.parameters[parameter.name]"
-                             ng-init="query.parameters[parameter.name] = parameter.default_value">
+                             ng-model="shared.method_parameters[$index].value"
+                             ng-init="shared.method_parameters[$index] = {name: parameter.name, label: parameter.label, value: parameter.default_value}">
                       <p ng-bind="parameter.description"></p>
                     </div>
                   </div>
                   <div ng-if="!shared.chosen_method.parameters.length">
-                    There are no parameters for the <span ng-bind="shared.chosen_method.display"></span>.
+                    There are no parameters for <span ng-bind="shared.chosen_method.label"></span>.
                   </div>
-                </accordion-group>
 
-                <accordion-group is-open="true">
-                  <accordion-heading>
-                    <span class="ti ti-check-box"></span>
-                    Run the algorithm / Results
-                  </accordion-heading>
-
-                  <algorithm-runner query="query" algorithm="shared.chosen_method.name"></algorithm-runner>
+                  <button class="btn btn-primary pull-right"
+                          ng-class="{'disabled': method_already_configured() || configuration_not_valid()}"
+                          ng-click="add_to_experiment()">
+                    Add to experiment
+                  </button>
 
                 </accordion-group>
 
@@ -131,38 +132,15 @@
           </div>
 
         </div>
+
+        <div class="col-xs-3">
+          <algorithm-runner></algorithm-runner>
+        </div>
+
       </div>
 
     </div>
 
-    <div class="col-xs-3">
-      <div class="panel">
-        <div class="panel-heading">
-          Running Experiments
-        </div>
-        <div class="panel-body">
-          Coming soon
-          <br>
-          <br>
-
-          <div>
-            <a href="">Experiment #732 on MyModel3</a>
-            <div class="progress">
-              <div class="progress-bar progress-bar-striped active progress-bar-success" role="progressbar" style="width: 100%"></div>
-            </div>
-          </div>
-
-          <div>
-            <a href="">Experiment #735 on MyModel5</a>
-            <div class="progress">
-              <div class="progress-bar progress-bar-striped active progress-bar-success" role="progressbar" style="width: 100%">
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </div>
   </div>
 
 </div>

@@ -8,8 +8,8 @@ angular.module('chuvApp.articles')
 /**
  * Show and form articles controller
  */
-  .controller('ArticleController', ['$scope', '$translatePartialLoader', '$translate', '$location', '$stateParams', 'Article', 'User', 'Model','backendUrl','ModalUtil',
-    function ($scope, $translatePartialLoader, $translate, $location, $stateParams, Article, User, Model, backendUrl, ModalUtil) {
+  .controller('ArticleController', ['$scope', '$translatePartialLoader', '$translate', '$location', '$stateParams', 'Article', 'User', 'Model','backendUrl','ModalUtil', 'MLUtils', '$q',
+    function ($scope, $translatePartialLoader, $translate, $location, $stateParams, Article, User, Model, backendUrl, ModalUtil, MLUtils, $q) {
 
       /**
        * Initialize controller
@@ -116,6 +116,17 @@ angular.module('chuvApp.articles')
             params = {team:1};
         }
         $scope.models = Model.query(params);
+        $scope.experiments = MLUtils.list_available_experiments();
+        $q.all($scope.models.$promise, $scope.models.$promise).then(function () {
+          $scope.model_and_experiments = $filter(
+            "orderBy",
+            "-createdAt"
+          )(
+            $scope.experiments
+              .map(function (experiment) { experiment.createdAt = Date.parse(experiment.created); return experiment; })
+              .concat($cope.models)
+          );
+        })
       };
 
         /**

@@ -79,8 +79,27 @@ angular.module('chuvApp.components.carrousel').directive("carrouselChart", ['Cha
       "model":"="
     },
     link:function(scope,element) {
+
+      /**
+       * @returns {boolean} is the "model" an actual model (instead of an experiment
+       */
+      scope.is_model = function () {
+        // if the "model" has a model, then it's an experiment
+        return !scope.model.model;
+      }
+
+      /**
+       * @returns {boolean} is the "model" an experiment
+       */
+      scope.is_experiment = function () {
+        // if the "model" has a model, then it's an experiment
+        return !!scope.model.model;
+      }
+
       scope.get_drag_data = function() {
-        return '<img src="' + scope.largeSvg + '"><br><a href="' + location.origin + '/models/' + scope.model.slug + '/">' + scope.model.title + '</a>';
+        if (scope.is_model)
+          return '<img src="' + scope.largeSvg + '"><br><a href="' + location.origin + '/models/' + scope.model.slug + '/">' + scope.model.title + '</a>';
+        return '<table></table>';
       }
 
       $q.all([Model.get({slug:scope.model.slug}).$promise,$templateRequest("./scripts/app/articles/article-table.html")]).then(function(data){
@@ -101,10 +120,10 @@ angular.module('chuvApp.components.carrousel').directive("carrouselChart", ['Cha
               }
             )
             if (!chart) return;
-            scope.svg = "data:image/svg+xml;utf8," + encodeURIComponent(chart.getSVG());
+            scope.svg = "data:image/svg+xml," + encodeURIComponent(chart.getSVG());
             chart.userOptions.chart.width = chart.options.chart.width = chart.chartWidth = 700;
             chart.userOptions.chart.height = chart.options.chart.height = chart.chartHeight = 450;
-            scope.largeSvg = "data:image/svg+xml;utf8," + encodeURIComponent(chart.getSVG());
+            scope.largeSvg = "data:image/svg+xml," + encodeURIComponent(chart.getSVG());
           },
           100
         )

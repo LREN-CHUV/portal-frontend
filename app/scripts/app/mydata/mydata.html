@@ -10,10 +10,28 @@
           <div class="panel-ctrls button-icon-bg">
           </div>
         </div>
-        <div class="panel-body panel-body-graph" ng-if="item.type === 'M'">
-          <highchart config="item.data.chartConfig" ng-if="item.showChart"></highchart>
+        <div class="panel-body panel-body-graph panel-body-article" ng-if="item.type === 'M'">
+          <highchart config="item.data.chartConfig" ng-if="item.showChart" style="margin-bottom: 40px"></highchart>
+
+
+          <div class="author-box">
+            <a ui-sref="user-show({username: item.data.createdBy.username })" class="avatar">
+              <img ng-src="{{item.data.createdBy.picture}}" alt="" class="avatar" />
+            </a>
+            by <a ui-sref="user-show({username: item.data.createdBy.username })">{{item.data.createdBy.fullname}}</a><br />
+            <span class="time">{{item.data.createdAt | fromNow}}</span>
+          </div>
+          <div class="action">
+
+            <a ng-if="isMine(item.data)"
+               ui-sref="models-edit({slug: item.data.slug, isCopy: false})"
+               class="icon-tl">
+                <span class="icon-bg">
+                    <i class="icon-html"></i>
+                </span>
+            </a>
+          </div>
         </div>
-        <a ui-sref="models-edit({slug: item.data.slug, isCopy: false})" class="panel-link" ng-if="item.type === 'M'"><i>+</i></a>
 
         <!-- article -->
         <div class="panel-body panel-body-article" ng-if="item.type === 'A'">

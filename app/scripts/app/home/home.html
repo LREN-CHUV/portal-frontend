@@ -58,10 +58,27 @@
                  data-action-refresh-demo='{"type": "circular"}' >
             </div>
           </div>
-          <div class="panel-body panel-body-graph">
+          <div class="panel-body panel-body-graph panel-body-article">
             <highchart config="model.chartConfig"></highchart>
+
+            <div class="author-box">
+              <a ui-sref="user-show({username: model.createdBy.username })" class="avatar">
+                <img ng-src="{{model.createdBy.picture}}" alt="" class="avatar" />
+              </a>
+              by <a ui-sref="user-show({username: model.createdBy.username })">{{model.createdBy.fullname}}</a><br />
+              <span class="time">{{model.createdAt | fromNow}}</span>
+            </div>
+            <div class="action">
+
+              <a ui-sref="models-edit({slug: model.slug, isCopy: false})"
+                 class="icon-tl">
+                <span class="icon-bg">
+                    <i class="icon-html"></i>
+                </span>
+              </a>
+            </div>
+
           </div>
-          <a ui-sref="models-edit({slug: model.slug, isCopy: false})" class="panel-link"><i>+</i></a>
         </div>
       </div>
 

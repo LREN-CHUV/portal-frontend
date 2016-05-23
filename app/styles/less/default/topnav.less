@@ -6,7 +6,7 @@
 
 #topnav {
 	margin: 0;
-	border:none; 
+	border:none;
 	padding-left: 8px;
 	padding-right: 8px;
 	box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.2);
@@ -15,7 +15,7 @@
 
 	// Logo
 		.navbar-brand {
-			.text-hide() !important; 
+			.text-hide() !important;
 			background: url("") no-repeat top left; // Put your logo here
 			height: @navbar-height;
 			width: @navbar-brand-width;
@@ -76,9 +76,9 @@
 				width: 456px;
 				height: 56px;
 				display: inline-block;
-			}	
+			}
 		}
-		
+
 	// Toolbar Icon
 		.toolbar-icon-bg {
 			> a:hover, > a:focus, > a.active {background-color: transparent;}
@@ -92,16 +92,31 @@
 			> a {
 				padding: 8px 0;
 				span.icon-bg {
-					display: block; 
-					border-radius: 20px; 
+					display: block;
+					border-radius: 20px;
 					padding: 0;
 					line-height: 40px;
-					font-size: 17px; 
-					text-align: center; 
-					height: 40px; 
+					font-size: 17px;
+					text-align: center;
+					height: 40px;
 					width: 40px;
 					i {}
 				}
+
+        .unread_count_badge {
+          position: absolute;
+          bottom: -6px;
+          right: -5px;
+          background: @green-700;
+          color: white;
+          border: thin solid black;
+          border-radius: 50%;
+          width: 20px;
+          height: 20px;
+          line-height: 20px;
+          font-size: 12px;
+          z-index: 10;
+        }
 			}
 			&:hover {
 				span.icon-bg {}
@@ -127,7 +142,7 @@
 		.navbar-nav           {margin: 0;
 			&.toolbar   {
 				>li {
-					float: left; 
+					float: left;
 					margin-right: 8px;
 					>a {padding: 14px 16px; }
 					&:last-child {margin-right: 0;}
@@ -146,7 +161,7 @@
 				border-radius: 50%;
 			}
 		}
-	
+
 	//Badges
 		.nav .badge {
 			text-align: center;
@@ -183,7 +198,7 @@
 					button {
 						&.active, &:active {box-shadow: none !important;}
 						transition: none !important;
-						
+
 						border:none !important;
 						border-radius: 20px 0 0 20px;
 						padding: 10px;
@@ -241,7 +256,7 @@
 		.topnav-dropdown-footer {
 			border-top: 1px solid @border-lighter;
 			a {
-				display: block; 
+				display: block;
 				text-align: center;
 			}
 		}
