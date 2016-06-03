@@ -2,6 +2,7 @@ angular.module('chuvApp.experiments')
   .controller('NewExperimentController',[
     '$scope', 'MLUtils', '$stateParams', 'Model', '$location', '$modal', function($scope, MLUtils, $stateParams, Model, $location, $modal) {
       $scope.loaded = false;
+      $scope.parseInt = parseInt;
 
       $scope.ml_methods_by_type = {};
       $scope.shared = {
@@ -162,10 +163,22 @@ angular.module('chuvApp.experiments')
       };
 
       $scope.add_to_experiment = function () {
+
+        var name = $scope.shared.chosen_method.label;
+        if ($scope.shared.method_parameters && $scope.shared.method_parameters.length) {
+          name += " with " + $scope.shared.method_parameters.map(function (parameter, index) {
+              return parameter.label
+                + '='
+                + parameter.value
+                + (index !== $scope.shared.method_parameters.length - 1 ? ", " : "");
+            });
+
+        }
+
         $scope.shared.experiment_configuration.push({
           code: $scope.shared.chosen_method.code,
-          label: $scope.shared.chosen_method.label,
-          parameters: $scope.shared.method_parameters.map(function (param) { return angular.copy(param)}),
+          name: name,
+          parameters: $scope.shared.method_parameters.map(function (param) { return { code: param.code, value: param.value }}),
         });
       };
 
@@ -187,6 +200,41 @@ angular.module('chuvApp.experiments')
       }
     }
 
+    function compute_aggregated_algorithms_comparison_hc_config() {
+
+      $scope.aggregated_algorithms_comparison_hc_config = {
+        "options": {
+          "chart": {
+            "type": "column"
+          },
+        },
+        "series": $scope.result.map(function (experiment_result) {
+          var validation_avg = experiment_result.data.cells.validations[0].data.average;
+          return {
+            name: experiment_result.name,
+            data: [
+              validation_avg.MSE,
+              validation_avg.RMSE,
+              validation_avg.R2,
+              validation_avg.FAC2
+            ],
+            id: experiment_result.code
+          }
+        }),
+        "title": {
+          "text": "Algorithm result comparison"
+        },
+        "loading": false,
+        "xAxis": {
+          categories: ["Mean square error", "Root mean square error", "Coefficient of determination (R²)", "Fac2 fit ratio"]
+        }
+      };
+      $scope.show_aggregated_algorithms_comparison = false;
+      $timeout(function () {
+        $scope.show_aggregated_algorithms_comparison = true;
+      }, 100)
+    }
+
     function get_experiment () {
       MLUtils.get_experiment($stateParams.experiment_uuid).then(
         function on_get_experiment_success (response) {
@@ -206,6 +254,8 @@ angular.module('chuvApp.experiments')
           $scope.algorithms = JSON.parse($scope.experiment.algorithms);
           try {
             $scope.result = JSON.parse($scope.experiment.result);
+            if ($scope.result)
+            compute_aggregated_algorithms_comparison_hc_config();
           } catch (e) {
             if (!($scope.experiment.hasError || $scope.experiment.hasServerError)) {
               $scope.experiment.hasError = true;

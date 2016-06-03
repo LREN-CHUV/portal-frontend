@@ -1,14 +1,19 @@
-<span dropdown class="pull-right">
-  <a href dropdown-toggle class="btn btn-default">
+<span dropdown class="pull-right" dropdown-append-to-body style="margin: 0 5px">
+  <a href dropdown-toggle class="btn btn-default" ng-if="!minimal" ng-click="open_popover()">
     Related experiments <span class="fa fa-caret-down"></span>
+  </a>
+  <a href dropdown-toggle class="icon-tl" ng-if="!!minimal"  ng-click="open_popover()">
+    <span class="icon-bg">
+      <i class="fa fa-flask"></i>
+    </span>
   </a>
   <ul class="dropdown-menu">
     <li>
       <a ui-sref="new_experiment({model_slug: modelSlug})">Create New Experiment</a>
     </li>
-    <li class="divider" ng-if="model_experiments.length"></li>
+    <li class="divider"></li>
     <li ng-repeat="experiment in model_experiments | orderBy:'-created'">
-      <a ui-sref="experiment_details({model_slug: modelSlug, experiment_uuid: experiment.uuid})">
+      <a ui-sref="experiment_details({model_slug: modelSlug, experiment_uuid: experiment.uuid})" ui-draggable="true" drag="get_drag_data(experiment)">
         <b ng-bind="experiment.name"></b>
         <span style="font-size: 12px">
           -
@@ -16,6 +21,11 @@
           by
           <span ng-bind="experiment.createdBy.fullname"></span>
         </span>
+      </a>
+    </li>
+    <li ng-if="!model_experiments.length">
+      <a>
+        No <span ng-if="!!onlyPositive">successful</span> Experiment has been created yet for this Model.
       </a>
     </li>
   </ul>

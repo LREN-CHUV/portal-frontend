@@ -3,203 +3,6 @@ angular.module('chuvApp.experiments')
 
   .directive("algorithmRunner", ['MLUtils', 'Model', '$stateParams', '$state', function (MLUtils, Model, $stateParams, $state) {
 
-    var cross_val_mocks = {
-      real: [
-        {
-          "k": 10,
-          "seed": "i281731z2uqzewze",
-          "folds": [
-            {
-              "mse": 100.20,
-              "rmse": 56.56,
-              "fac2": 0.45,
-              "r2": 0.56
-            },
-            {
-              "mse": 100.20,
-              "rmse": 56.56,
-              "fac2": 0.45,
-              "r2": 0.56
-            },
-            {
-              "mse": 100.20,
-              "rmse": 56.56,
-              "fac2": 0.45,
-              "r2": 0.56
-            },
-            {
-              "mse": 100.20,
-              "rmse": 56.56,
-              "fac2": 0.45,
-              "r2": 0.56
-            },
-            {
-              "mse": 100.20,
-              "rmse": 56.56,
-              "fac2": 0.45,
-              "r2": 0.56
-            },
-            {
-              "mse": 100.20,
-              "rmse": 56.56,
-              "fac2": 0.45,
-              "r2": 0.56
-            },
-            {
-              "mse": 100.20,
-              "rmse": 56.56,
-              "fac2": 0.45,
-              "r2": 0.56
-            },
-            {
-              "mse": 100.20,
-              "rmse": 56.56,
-              "fac2": 0.45,
-              "r2": 0.56
-            },
-            {
-              "mse": 100.20,
-              "rmse": 56.56,
-              "fac2": 0.45,
-              "r2": 0.56
-            },
-            {
-              "mse": 100.20,
-              "rmse": 56.56,
-              "fac2": 0.45,
-              "r2": 0.56
-            }
-          ],
-          "overall_mse": 100.20,
-          "overall_rmse": 56.56,
-          "overall_fac2": 0.45,
-          "overall_r2": 0.56
-        }
-      ],
-      binary: [
-        {
-          "k": 10,
-          "seed": "i281731z2uqzewze",
-          "folds": [
-            {
-              "confusion": [[1, 2], [2, 4]],
-              "accuracy": 0.35,
-              "precision": 0.45,
-              "recall": 0.21
-            },
-            {
-              "confusion": [[1, 2], [2, 4]],
-              "accuracy": 0.35,
-              "precision": 0.45,
-              "recall": 0.21
-            },
-            {
-              "confusion": [[1, 2], [2, 4]],
-              "accuracy": 0.35,
-              "precision": 0.45,
-              "recall": 0.21
-            },
-            {
-              "confusion": [[1, 2], [2, 4]],
-              "accuracy": 0.35,
-              "precision": 0.45,
-              "recall": 0.21
-            },
-            {
-              "confusion": [[1, 2], [2, 4]],
-              "accuracy": 0.35,
-              "precision": 0.45,
-              "recall": 0.21
-            },
-            {
-              "confusion": [[1, 2], [2, 4]],
-              "accuracy": 0.35,
-              "precision": 0.45,
-              "recall": 0.21
-            },
-            {
-              "confusion": [[1, 2], [2, 4]],
-              "accuracy": 0.35,
-              "precision": 0.45,
-              "recall": 0.21
-            },
-            {
-              "confusion": [[1, 2], [2, 4]],
-              "accuracy": 0.35,
-              "precision": 0.45,
-              "recall": 0.21
-            },
-            {
-              "confusion": [[1, 2], [2, 4]],
-              "accuracy": 0.35,
-              "precision": 0.45,
-              "recall": 0.21
-            },
-            {
-              "confusion": [[1, 2], [2, 4]],
-              "accuracy": 0.35,
-              "precision": 0.45,
-              "recall": 0.21
-            }
-          ],
-          "overall_confusion": [[1, 2], [2, 4]],
-          "overall_accuracy": 0.5,
-          "overall_precision": 0.34,
-          "overall_recall": 0.16
-        }
-      ],
-      polynomial: [
-        {
-          "k": 10,
-          "seed": "i281731z2uqzewze",
-          "folds": [
-            {
-              "confusion": [[1, 2, 6], [2, 4, 1], [5, 3, 1]],
-              "accuracy": 0.35
-            },
-            {
-              "confusion": [[1, 2, 6], [2, 4, 1], [5, 3, 1]],
-              "accuracy": 0.35
-            },
-            {
-              "confusion": [[1, 2, 6], [2, 4, 1], [5, 3, 1]],
-              "accuracy": 0.35
-            },
-            {
-              "confusion": [[1, 2, 6], [2, 4, 1], [5, 3, 1]],
-              "accuracy": 0.35
-            },
-            {
-              "confusion": [[1, 2, 6], [2, 4, 1], [5, 3, 1]],
-              "accuracy": 0.35
-            },
-            {
-              "confusion": [[1, 2, 6], [2, 4, 1], [5, 3, 1]],
-              "accuracy": 0.35
-            },
-            {
-              "confusion": [[1, 2, 6], [2, 4, 1], [5, 3, 1]],
-              "accuracy": 0.35
-            },
-            {
-              "confusion": [[1, 2, 6], [2, 4, 1], [5, 3, 1]],
-              "accuracy": 0.35
-            },
-            {
-              "confusion": [[1, 2, 6], [2, 4, 1], [5, 3, 1]],
-              "accuracy": 0.35
-            },
-            {
-              "confusion": [[1, 2, 6], [2, 4, 1], [5, 3, 1]],
-              "accuracy": 0.35
-            }
-          ],
-          "overall_confusion": [[1, 2, 6], [2, 4, 1], [5, 3, 1]],
-          "overall_accuracy": 0.5
-        }
-      ]
-    };
-
     return {
       templateUrl: "/scripts/app/experiments/algorithm-runner.html",
       scope: true,
@@ -212,7 +15,7 @@ angular.module('chuvApp.experiments')
 
           MLUtils.run_experiment({
             model: $stateParams.model_slug,
-            validations: [{"code":"kfold", "label": "kfold", "parameters": [{"code": "k", "value": $scope.shared.kfold}]}],
+            validations: [{"code":"kfold", label: "kfold", "parameters": [{"code": "k", "value": $scope.shared.kfold}]}],
             algorithms: $scope.shared.experiment_configuration,
             name: $scope.shared.experiment_name
           }).then(function (result) {
@@ -274,17 +77,53 @@ angular.module('chuvApp.experiments')
       }]
     }
   }])
-  .directive('otherExperiments', ['MLUtils', '$http', function (MLUtils, $http) {
+  .directive('otherExperiments', ['MLUtils', '$http', '$compile', function (MLUtils, $http, $compile) {
+
     return {
       templateUrl: "/scripts/app/experiments/other-experiments.html",
       replace: true,
       scope: {
-        modelSlug: '='
+        modelSlug: '=',
+        minimal: '=',
+        onlyPositive: '='
       },
       controller: ["$scope", function ($scope) {
-        MLUtils.list_experiments($scope.modelSlug).then(function (response) {
-          $scope.model_experiments = response.data;
-        })
+        $scope.open_popover = function () {
+          MLUtils.list_experiments($scope.modelSlug).then(function (response) {
+            if (!!$scope.onlyPositive) {
+              $scope.model_experiments = _.filter(
+                response.data,
+                function (experiment) { return !!experiment.finished && !experiment.hasError && !experiment.hasServerError; }
+              );
+            } else {
+              $scope.model_experiments = response.data;
+            }
+          });
+        };
+
+        $scope.get_drag_data = function (experiment) {
+
+          var result = JSON.parse(experiment.result);
+          return '<table class="table table-striped table-bordered">' +
+            '<tr>' +
+            '<th>Algorithm</th>' +
+            '<th>Mean square error</th>' +
+            '<th>Root mean square error</th>' +
+            '<th>Coefficient of determination (R&sup2;)</th>' +
+            '<th>Fac2 fit ratio</th>' +
+            '</tr>' +
+            result.map(function (experiment_result) {
+              return '<tr>' +
+                '<td>' + experiment_result.name + '</td>' +
+                '<td>' + experiment_result.data.cells.validations[0].data.average.MSE + '</td>' +
+                '<td>' + experiment_result.data.cells.validations[0].data.average.RMSE + '</td>' +
+                '<td>' + experiment_result.data.cells.validations[0].data.average.R2 + '</td>' +
+                '<td>' + experiment_result.data.cells.validations[0].data.average.FAC2 + '</td>' +
+                '</tr>';
+            }).join('') +
+            '</table>' +
+            '<p><a href="/experiment/' + experiment.model.slug + '/' + experiment.uuid + '">' + experiment.name + '</p>';
+        }
       }]
     }
   }]);

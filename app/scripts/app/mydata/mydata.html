@@ -22,7 +22,7 @@
             <span class="time">{{item.data.createdAt | fromNow}}</span>
           </div>
           <div class="action">
-
+            <other-experiments model-slug="item.data.slug" minimal="true"></other-experiments>
             <a ng-if="isMine(item.data)"
                ui-sref="models-edit({slug: item.data.slug, isCopy: false})"
                class="icon-tl">

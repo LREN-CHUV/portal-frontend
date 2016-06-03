@@ -42,6 +42,7 @@ angular
     'ab-base64',
     "btford.markdown",
     'ang-drag-drop',
+    'xeditable',
     //components
     'chuvApp.components.filters',
     'chuvApp.components.criteria',
@@ -107,8 +108,8 @@ angular
       'use strict';
       $locationProvider.html5Mode(true);
   }])
-  .run(['$state','$translatePartialLoader','$translate', 'amMoment', '$rootScope','backendUrl','$cookies','User',
-    function($state,$translatePartialLoader,$translate, amMoment,$rootScope,backendUrl,$cookies,User){
+  .run(['$state','$translatePartialLoader','$translate', 'amMoment', '$rootScope','backendUrl','$cookies','User', 'editableOptions',
+    function($state,$translatePartialLoader,$translate, amMoment,$rootScope,backendUrl,$cookies,User, editableOptions){
       $translatePartialLoader.addPart('common');
       $translate.refresh();
       amMoment.changeLocale('en');
@@ -142,4 +143,7 @@ angular
       $rootScope.isLoggedIn = function() {
         return User.hasCurrent();
       };
+
+      editableOptions.theme = 'bs3';
+      editableOptions.icon_set = 'font-awesome';
     }]);

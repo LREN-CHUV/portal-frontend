@@ -1,7 +1,7 @@
 /**
  * Created by Michael DESIGAUD on 11/08/2015.
  */
-angular.module('chuvApp.home').controller('TosController',['$scope','$state','User', function($scope, $state, User){
+angular.module('chuvApp.home').controller('TosController',['$scope','$rootScope','$state','User', function($scope, $rootScope, $state, User){
   User.get().then(function () {
     if (User.hasAgreedTos()) {
       $state.go("home");

@@ -38,7 +38,6 @@
         <a ui-sref="articles-create" class="tile-title">
           <big>write</big>
           <span>an article</span>
-
           <span class="icon">+</span>
         </a>
       </div>
@@ -69,13 +68,13 @@
               <span class="time">{{model.createdAt | fromNow}}</span>
             </div>
             <div class="action">
-
               <a ui-sref="models-edit({slug: model.slug, isCopy: false})"
                  class="icon-tl">
                 <span class="icon-bg">
                     <i class="icon-html"></i>
                 </span>
               </a>
+              <other-experiments style="margin: 0 5px" model-slug="model.slug" minimal="true"></other-experiments>
             </div>
 
           </div>

@@ -15,5 +15,6 @@
     </a>
     by <a ui-sref="user-show({username: model.createdBy.id })">{{model.createdBy.fullname}}</a><br />
     <span class="time">{{model.createdAt | fromNow}}</span>
+    <other-experiments model-slug="model.slug" only-positive="true" minimal="true"></other-experiments>
   </div>
 </div>

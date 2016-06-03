@@ -1,37 +1,33 @@
-<form>
-  <div class="panel">
-    <div class="panel-heading">
-      Your Experiment
+<div class="panel">
+  <div class="panel-heading">
+    Your Experiment
+  </div>
+  <div class="panel-body">
+
+    <div ng-if="shared.experiment_configuration.length == 0">
+      <p>
+        Pick a Machine Learning Algorithm on the left and add it here to create an experiment
+      </p>
     </div>
-    <div class="panel-body">
 
-      <div ng-if="shared.experiment_configuration.length == 0">
-        <p>
-          Pick a ML algorithm on the left and add it here to create an experiment
-        </p>
-      </div>
+    <div ng-if="shared.experiment_configuration.length > 0">
 
-      <div ng-if="shared.experiment_configuration.length > 0">
+      <h4>Algorithms</h4>
+      <ul>
+        <li ng-repeat="experiment in shared.experiment_configuration track by $index">
+          <div style="max-width: calc(100% - 20px); display: inline-block; vertical-align: top">
+            <a href="#" editable-text="experiment.name">{{ experiment.name || "yolo" }}</a>
+          </div>
 
-        <ul>
-          <li ng-repeat="experiment in shared.experiment_configuration track by $index">
-            <div style="max-width: calc(100% - 20px); display: inline-block; vertical-align: top">
-              <span ng-bind="experiment.label"></span>
-              <span ng-if="experiment.parameters.length">
-                with
-                <span ng-repeat="parameter in experiment.parameters">
-                  <span ng-bind="parameter.label + '=' + parameter.value"></span><span ng-if="$index != experiment.parameters.length - 1">, </span>
-                </span>
-              </span>
-            </div>
+          <a ng-click="shared.experiment_configuration.splice($index, 1)"
+             style="margin-top: 2px"
+             class="btn btn-xs btn-default fa fa-remove pull-right"></a>
+        </li>
 
-            <a ng-click="shared.experiment_configuration.splice($index, 1)"
-               style="margin-top: 2px"
-               class="btn btn-xs btn-default fa fa-remove pull-right"></a>
-          </li>
+      </ul>
 
-        </ul>
-
+      <form>
+        <h4>Validation</h4>
         <div class="form-group">
           <label for="kfold">K-Fold: </label>
           <div class="input-group">
@@ -44,6 +40,7 @@
           </div>
         </div>
 
+        <h4>Description</h4>
         <div class="form-group">
           <label for="name">Name: </label>
           <div class="input-group">
@@ -62,13 +59,8 @@
           Run experiment
         </button>
 
-        <button class="btn btn-primary pull-right disabled"
-                ng-if="running">
-          <span class="fa fa-spinner fa-spin"></span>
-          Starting experiment
-        </button>
-      </div>
-
+      </form>
     </div>
+
   </div>
-</form>
+</div>

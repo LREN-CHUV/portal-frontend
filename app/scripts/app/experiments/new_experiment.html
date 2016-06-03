@@ -84,7 +84,8 @@
                              id="{{parameter.name}}"
                              class="form-control"
                              ng-model="shared.method_parameters[$index].value"
-                             ng-init="shared.method_parameters[$index] = {name: parameter.name, label: parameter.label, value: parameter.default_value}">
+                             value="{{shared.method_parameters[$index].value}}"
+                             ng-init="shared.method_parameters[$index] = {code: parameter.code, label: parameter.label, value: parseInt(parameter.default_value)}">
                       <p ng-bind="parameter.description"></p>
                     </div>
                   </div>

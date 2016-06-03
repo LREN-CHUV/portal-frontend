@@ -14,7 +14,10 @@ angular.module('chuvApp.util')
         })
       }
       experiment.algorithms.forEach(map_parameters_values_to_string);
-      experiment.validations.forEach(map_parameters_values_to_string);
+      experiment.validations.forEach(function (validation) {
+        map_parameters_values_to_string(validation);
+        validation.name = "Untitled validation";
+      });
 
       return experiment;
     }

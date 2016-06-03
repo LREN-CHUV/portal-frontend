@@ -38,8 +38,11 @@ angular.module('chuvApp.users')
         return user_backend_obj && user_backend_obj.agreeNDA;
       },
       agreeTos: function () {
-        return $http.post(backendUrl + "/user?agreeNDA=true");
-        $rootScope.hasAgreedTos = user_backend_obj.agreeNDA = true;
+        var promise = $http.post(backendUrl + "/user?agreeNDA=true");
+        promise.then(function () {
+          $rootScope.hasAgreedTos = user_backend_obj.agreeNDA = true;
+        });
+        return promise;
       },
 
       logout: function () {

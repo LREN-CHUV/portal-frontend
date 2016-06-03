@@ -4,7 +4,7 @@
 angular.module('chuvApp.components.carrousel').directive("carrousel", [function () {
   return {
     replace: true,
-    templateUrl: './scripts/components/carrousel/carrousel-template.html',
+    templateUrl: '/scripts/components/carrousel/carrousel-template.html',
     restrict: 'E',
     scope: {
       items: '=',

@@ -49,13 +49,7 @@
               <ul>
                 <li ng-repeat="experiment in algorithms track by $index">
                   <div style="max-width: calc(100% - 20px); display: inline-block; vertical-align: top">
-                    <span ng-bind="experiment.label"></span>
-                    <span ng-if="experiment.parameters.length">
-                      with
-                      <span ng-repeat="parameter in experiment.parameters">
-                        <span ng-bind="parameter.label + '=' + parameter.value"></span><span ng-if="$index != experiment.parameters.length - 1">, </span>
-                      </span>
-                    </span>
+                    <span ng-bind="experiment.name"></span>
                   </div>
                 </li>
 
@@ -103,7 +97,23 @@
           </div>
           <div ng-if="experiment.finished && !experiment.hasError" ng-cloak>
             <tabset active="0">
-              <tab ng-repeat="experiment_result in result" heading="{{ experiment_result.label }}">
+
+              <tab heading="Overview">
+                <div class="panel">
+                  <div class="panel-body">
+
+                    <highchart config="aggregated_algorithms_comparison_hc_config" ng-if="show_aggregated_algorithms_comparison"></highchart>
+
+                    <button class="btn btn-default" ng-click="hideJson = !hideJson" ng-init="hideJson=true">
+                      <span ng-bind="hideJson ? 'Show' : 'Hide'"></span> raw JSON
+                    </button>
+                    <pre collapse="hideJson" ng-bind="experiment.result"></pre>
+                  </div>
+                </div>
+
+              </tab>
+
+              <tab ng-repeat="experiment_result in result" heading="{{ experiment_result.name }}">
                 <div class="panel" ng-if="experiment.finished && !experiment.hasError">
 
 
@@ -116,25 +126,25 @@
                             <th>
                               Mean square error
                             </th>
-                            <td ng-bind="experiment_result.data.cells.validations.kfold.average.MSE"></td>
+                            <td ng-bind="experiment_result.data.cells.validations[0].data.average.MSE"></td>
                           </tr>
                           <tr>
                             <th>
                               Root mean square error
                             </th>
-                            <td ng-bind="experiment_result.data.cells.validations.kfold.average.RMSE"></td>
+                            <td ng-bind="experiment_result.data.cells.validations[0].data.average.RMSE"></td>
                           </tr>
                           <tr>
                             <th>
                               Coefficient of determination (R&sup2;)
                             </th>
-                            <td ng-bind="experiment_result.data.cells.validations.kfold.average.R2"></td>
+                            <td ng-bind="experiment_result.data.cells.validations[0].data.average.R2"></td>
                           </tr>
                           <tr>
                             <th>
                               Fac2 fit ratio
                             </th>
-                            <td ng-bind="experiment_result.data.cells.validations.kfold.average.FAC2"></td>
+                            <td ng-bind="experiment_result.data.cells.validations[0].data.average.FAC2"></td>
                           </tr>
                         </table>
                       </div>
@@ -202,14 +212,6 @@
 
                   </div>
                 </div>
-              </tab>
-              <tab heading="JSON">
-                <div class="panel">
-                  <div class="panel-body">
-                    <pre ng-bind="experiment.result"></pre>
-                  </div>
-                </div>
-
               </tab>
             </tabset>
 
