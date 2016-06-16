@@ -84,18 +84,6 @@ angular.module('chuvApp.util')
         // for now feature don't matter, everything is possible
         return true;
       },
-      can_use_datatype_for_method_as_variable: function (datatype, method_name) {
-
-        //ml_methods[];
-
-        var possible_features = {
-          anova: ["real"],
-          lm: ["real"],
-          knn: ["real", "binomial", "polynomial"],
-          nb: ["binomial", "polynomial"],
-        }[method_name];
-        return possible_features && possible_features.indexOf(datatype) >= 0;
-      },
       run_experiment: function (experiment) {
         return $http.post(backendUrl + "/experiments", map_experiment_for_backend(experiment));
       },

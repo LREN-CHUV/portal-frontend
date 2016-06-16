@@ -46,10 +46,11 @@
               has <span ng-bind="predicting_type"></span>-typed values.
               </p>
 
-              <p ng-repeat="method in ml_methods_by_type[predictor_type]">
+              <p ng-repeat="method in ml_methods | orderBy:'-label'">
                 <label class="btn btn-primary-alt col-xs-12"
                        ng-model="shared.chosen_method"
-                       ng-click="shared.method_parameters = []"
+                       ng-disabled="method.disable"
+                       ng-click="method.disable? angular.noop : shared.method_parameters = []"
                        btn-radio="method"
                        uncheckable
                        ng-bind="method.label"></label>

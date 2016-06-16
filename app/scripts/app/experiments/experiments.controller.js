@@ -4,11 +4,11 @@ angular.module('chuvApp.experiments')
       $scope.loaded = false;
       $scope.parseInt = parseInt;
 
-      $scope.ml_methods_by_type = {};
+      $scope.ml_methods = [];
       $scope.shared = {
         chosen_method: null,
         method_parameters: [],
-        experiment_configuration: [],
+        experiment_configuration: []
       };
       $scope.help_is_open = true;
 
@@ -16,18 +16,65 @@ angular.module('chuvApp.experiments')
         return method_name.charAt(0).toUpperCase() + method_name.slice(1) + "s";
       };
 
+      // Get all the ml methods
       MLUtils.list_ml_methods().$promise.then(
         function (data) {
-          data.forEach(function (method) {
-            method.type.forEach(function (type) {
-              if (!$scope.ml_methods_by_type.hasOwnProperty(type)) {
-                $scope.ml_methods_by_type[type] = [];
-              }
-              $scope.ml_methods_by_type[type].push(method);
-            })
-          })
+          $scope.ml_methods = data;
         }
       );
+
+      // Check if the method can be applied to the model
+      function disable_method (method) {
+
+        if (method.disable) {
+          return true;
+        }
+
+        // Check output contraints
+        if (method.type.indexOf($scope.predictor_type) < 0) {
+          return true;
+        }
+
+        // Check input constraints
+        if (method.constraints) {
+
+          // Covariable constraints
+          var cov_nb = 0;
+          var grp_nb = 0;
+          if (method.constraints.covariables) {
+
+            var cov_nb = $scope.dataset.header.length;
+
+            if (method.constraints.covariables.min_count && n < method.constraints.covariables.min_count) {
+              return true;
+            }
+
+            if (method.constraints.covariables.max_count && n < method.constraints.covariables.max_count) {
+              return true;
+            }
+          }
+
+          // Grouping constraints
+          if (method.constraints.grouping) {
+
+            var grp_nb = $scope.dataset.grouping.length;
+
+            if (method.constraints.grouping.min_count && n < method.constraints.grouping.min_count) {
+              return true;
+            }
+
+            if (method.constraints.grouping.max_count && n > method.constraints.grouping.max_count) {
+              return true;
+            }
+          }
+
+          if (grp_nb > 0 && cov_nb > 0 && !method.constraints.mixed) {
+            return true;
+          }
+        }
+
+        return false;
+      }
 
       // function to be called when query and dataset are ready
       function on_data_loaded () {
@@ -39,6 +86,9 @@ angular.module('chuvApp.experiments')
         $scope.predicting_type = MLUtils.get_datatype($scope.dataset.variable[0], variable_data);
         $scope.predictor_type = $scope.predicting_type === 'real' ? 'regressor' : 'classifier';
 
+        $scope.ml_methods.forEach(function(method) {
+            method.disable = disable_method(method);
+        });
       }
 
 
@@ -67,8 +117,8 @@ angular.module('chuvApp.experiments')
           groupings: map_query("groupings"),
           coVariables: map_query("coVariables"),
           filters: map_query("filters"),
-          textQuery: search.query,
-        }
+          textQuery: search.query
+        };
 
         // step 2: load dataset
         var query = angular.copy($scope.query);
@@ -103,7 +153,7 @@ angular.module('chuvApp.experiments')
 
                 // save new model
                 Model.save($scope.model, function (model) {
-                  $state.go('experiment', {model_slug: model.slug})
+                  $state.go('experiment', {model_slug: model.slug});
                   alert("Save ok");
                 }, function(){
                   alert("Error on save!");
