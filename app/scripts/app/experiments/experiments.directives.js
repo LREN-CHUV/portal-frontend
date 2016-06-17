@@ -11,14 +11,32 @@ angular.module('chuvApp.experiments')
         $scope.shared.kfold = 2;
 
         $scope.run_experiment = function () {
+
+          if (!$scope.model) {
+            $scope.save_model();
+            return;
+          }
+
           //$scope.running = true;
 
-          MLUtils.run_experiment({
-            model: $stateParams.model_slug,
-            validations: [{"code":"kfold", label: "kfold", "parameters": [{"code": "k", "value": $scope.shared.kfold}]}],
-            algorithms: $scope.shared.experiment_configuration,
-            name: $scope.shared.experiment_name
-          }).then(function (result) {
+          var promise;
+          if ($scope.shared.cross_validation) {
+            promise = MLUtils.run_experiment({
+              model: $stateParams.model_slug,
+              validations: [{"code":"kfold", label: "kfold", "parameters": [{"code": "k", "value": $scope.shared.kfold}]}],
+              algorithms: $scope.shared.experiment_configuration,
+              name: $scope.shared.experiment_name
+            });
+
+          } else {
+            promise = MLUtils.run_mining({
+              model: $stateParams.model_slug,
+              algorithms: $scope.shared.experiment_configuration,
+              name: $scope.shared.experiment_name
+            })
+          }
+
+          promise.then(function (result) {
             //$state.go(result.data.uuid);
             $state.go('experiment_details', {
               model_slug: $stateParams.model_slug,
@@ -28,7 +46,6 @@ angular.module('chuvApp.experiments')
             $scope.error = true;
           });
         }
-
       }]
     }
   }])

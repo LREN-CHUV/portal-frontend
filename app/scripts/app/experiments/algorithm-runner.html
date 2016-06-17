@@ -12,33 +12,7 @@
 
     <div ng-if="shared.experiment_configuration.length > 0">
 
-      <h4>Algorithms</h4>
-      <ul>
-        <li ng-repeat="experiment in shared.experiment_configuration track by $index">
-          <div style="max-width: calc(100% - 20px); display: inline-block; vertical-align: top">
-            <a href="#" editable-text="experiment.name">{{ experiment.name || "yolo" }}</a>
-          </div>
-
-          <a ng-click="shared.experiment_configuration.splice($index, 1)"
-             style="margin-top: 2px"
-             class="btn btn-xs btn-default fa fa-remove pull-right"></a>
-        </li>
-
-      </ul>
-
       <form>
-        <h4>Validation</h4>
-        <div class="form-group">
-          <label for="kfold">K-Fold: </label>
-          <div class="input-group">
-            <input id="kfold" ng-model="shared.kfold" step="1" min="1" class="form-control" type="number"/>
-            <div class="input-group-addon fa fa-question-circle"
-                 popover-title="K-fold cross validation"
-                 popover-placement="left"
-                 popover-append-to-body="true"
-                 popover="Defines the number of folds used in the cross-validation. Typical numbers are 2 or 10. More information: https://en.wikipedia.org/wiki/Cross-validation_(statistics)"></div>
-          </div>
-        </div>
 
         <h4>Description</h4>
         <div class="form-group">
@@ -49,6 +23,35 @@
                  popover-placement="left"
                  popover-append-to-body="true"
                  popover="The name of the experiment, for other humans"></div>
+          </div>
+        </div>
+
+        <h4>Algorithms</h4>
+        <ul>
+          <li ng-repeat="experiment in shared.experiment_configuration track by $index">
+            <div style="max-width: calc(100% - 20px); display: inline-block; vertical-align: top">
+              <a href="#" editable-text="experiment.name">{{ experiment.name || "yolo" }}</a>
+            </div>
+
+            <a ng-click="shared.experiment_configuration.splice($index, 1)"
+               style="margin-top: 2px"
+               class="btn btn-xs btn-default fa fa-remove pull-right"></a>
+          </li>
+
+        </ul>
+
+        <div ng-if="shared.cross_validation">
+          <h4>Validation</h4>
+          <div class="form-group">
+            <label for="kfold">K-Fold: </label>
+            <div class="input-group">
+              <input id="kfold" ng-model="shared.kfold" step="1" min="1" class="form-control" type="number"/>
+              <div class="input-group-addon fa fa-question-circle"
+                   popover-title="K-fold cross validation"
+                   popover-placement="left"
+                   popover-append-to-body="true"
+                   popover="Defines the number of folds used in the cross-validation. Typical numbers are 2 or 10. More information: https://en.wikipedia.org/wiki/Cross-validation_(statistics)"></div>
+            </div>
           </div>
         </div>
 

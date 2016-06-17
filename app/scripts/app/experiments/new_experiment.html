@@ -39,23 +39,51 @@
             </div>
             <div class="panel-body">
 
-              <p>
+              <div ng-if="!ml_methods.length">
               <h4>Note:</h4>
-              We are only presenting <span ng-bind="predictor_type"></span>-type algorithms because
-              the variable you are trying to predict, <span ng-bind="dataset.variable[0]"></span>
-              has <span ng-bind="predicting_type"></span>-typed values.
-              </p>
+                <p>
+                  No algorithm available for the moment...
+                </p>
+              </div>
 
-              <p ng-repeat="method in ml_methods | orderBy:'-label'">
-                <label class="btn btn-primary-alt col-xs-12"
-                       ng-model="shared.chosen_method"
-                       ng-disabled="method.disable"
-                       ng-click="method.disable? angular.noop : shared.method_parameters = []"
-                       btn-radio="method"
-                       uncheckable
-                       ng-bind="method.label"></label>
-                <br><br>
-              </p>
+              <accordion ng-if="ml_methods.length" close-others="false">
+                <accordion-group heading="Statistical Analysis" ng-init="acc_stats.open = true" is-open="acc_stats.open" ng-click="!acc_stats.open">
+                  <p ng-repeat="method in ml_methods | filter:{type:'statistics'}  | orderBy:'-label'">
+                    <label class="btn btn-primary-alt col-xs-12"
+                           ng-model="shared.chosen_method"
+                           ng-disabled="method.disable"
+                           ng-click="method.disable? angular.noop : shared.method_parameters = []"
+                           btn-radio="method"
+                           uncheckable
+                           ng-bind="method.label"></label>
+                    <br><br>
+                  </p>
+                </accordion-group>
+                <accordion-group heading="Features Extraction" ng-init="acc_fe.open = true" is-open="acc_fe.open" ng-click="!acc_fe.open">
+                  <p ng-repeat="method in ml_methods | filter:{type:'features_extraction'}  | orderBy:'-label'">
+                    <label class="btn btn-primary-alt col-xs-12"
+                           ng-model="shared.chosen_method"
+                           ng-disabled="method.disable"
+                           ng-click="method.disable? angular.noop : shared.method_parameters = []"
+                           btn-radio="method"
+                           uncheckable
+                           ng-bind="method.label"></label>
+                    <br><br>
+                  </p>
+                </accordion-group>
+                <accordion-group heading="Predictive Model" ng-init="acc_pm.open = true" is-open="acc_pm.open" ng-click="!acc_pm.open">
+                  <p ng-repeat="method in ml_methods | filter:{type:'predictive_model'}  | orderBy:'-label'">
+                    <label class="btn btn-primary-alt col-xs-12"
+                           ng-model="shared.chosen_method"
+                           ng-disabled="method.disable"
+                           ng-click="method.disable? angular.noop : shared.method_parameters = []"
+                           btn-radio="method"
+                           uncheckable
+                           ng-bind="method.label"></label>
+                    <br><br>
+                  </p>
+                </accordion-group>
+              </accordion>
             </div>
           </div>
         </div>
