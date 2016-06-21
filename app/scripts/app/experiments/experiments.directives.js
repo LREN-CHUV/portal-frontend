@@ -17,10 +17,15 @@ angular.module('chuvApp.experiments')
             return;
           }
 
+          var validations = [];
+          if ($scope.shared.cross_validation) {
+            validations.push({"code":"kfold", label: "kfold", "parameters": [{"code": "k", "value": $scope.shared.kfold}]})
+          }
+
           //$scope.running = true;
           var promise = MLUtils.run_experiment({
-            model: $stateParams.model_slug,
-            validations: [{"code":"kfold", label: "kfold", "parameters": [{"code": "k", "value": $scope.shared.kfold}]}],
+            model: $scope.model.slug,
+            validations: validations,
             algorithms: $scope.shared.experiment_configuration,
             name: $scope.shared.experiment_name
           });
@@ -28,7 +33,7 @@ angular.module('chuvApp.experiments')
           promise.then(function (result) {
             //$state.go(result.data.uuid);
             $state.go('experiment_details', {
-              model_slug: $stateParams.model_slug,
+              model_slug: $scope.model.slug,
               experiment_uuid: result.data.uuid
             });
           }, function () {
