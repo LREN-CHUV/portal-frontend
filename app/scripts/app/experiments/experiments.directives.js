@@ -18,23 +18,12 @@ angular.module('chuvApp.experiments')
           }
 
           //$scope.running = true;
-
-          var promise;
-          if ($scope.shared.cross_validation) {
-            promise = MLUtils.run_experiment({
-              model: $stateParams.model_slug,
-              validations: [{"code":"kfold", label: "kfold", "parameters": [{"code": "k", "value": $scope.shared.kfold}]}],
-              algorithms: $scope.shared.experiment_configuration,
-              name: $scope.shared.experiment_name
-            });
-
-          } else {
-            promise = MLUtils.run_mining({
-              model: $stateParams.model_slug,
-              algorithms: $scope.shared.experiment_configuration,
-              name: $scope.shared.experiment_name
-            })
-          }
+          var promise = MLUtils.run_experiment({
+            model: $stateParams.model_slug,
+            validations: [{"code":"kfold", label: "kfold", "parameters": [{"code": "k", "value": $scope.shared.kfold}]}],
+            algorithms: $scope.shared.experiment_configuration,
+            name: $scope.shared.experiment_name
+          });
 
           promise.then(function (result) {
             //$state.go(result.data.uuid);

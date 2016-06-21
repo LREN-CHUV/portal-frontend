@@ -110,6 +110,10 @@ angular.module('chuvApp.experiments')
             on_data_loaded();
           });
 
+          console.log($stateParams.model_slug);
+
+          $scope.model_slug = $stateParams.model_slug;
+
         } else {
           // load model from data
 
@@ -161,9 +165,10 @@ angular.module('chuvApp.experiments')
                   };
 
                   // save new model
-                  Model.save($scope.model, function (model) {
-                    //$state.go('experiment', {model_slug: model.slug}); //TODO To be removed?
-                    //TODO Add a notification service...
+                  Model.save($scope.model, function (result) {
+                    $scope.model = result;
+                    $scope.dataset = result.dataset;
+                    $scope.query = result.query;
                     //notifications.error("The model was successfully saved!");
                     alert("Save ok");
                     child_scope.$close();

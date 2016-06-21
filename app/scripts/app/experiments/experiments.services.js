@@ -7,12 +7,12 @@ angular.module('chuvApp.util')
       ml_methods_promise;
 
     function map_experiment_for_backend (experiment) {
-
       function map_parameters_values_to_string(algo) {
         algo.parameters.forEach(function (parameter) {
           parameter.value = "" + parameter.value;
         })
       }
+
       experiment.algorithms.forEach(map_parameters_values_to_string);
       experiment.validations.forEach(function (validation) {
         map_parameters_values_to_string(validation);
@@ -20,22 +20,6 @@ angular.module('chuvApp.util')
       });
 
       return experiment;
-    }
-
-    function map_mining_for_backend (experiment) {
-
-      function map_parameters_values_to_string(algo) {
-        algo.parameters.forEach(function (parameter) {
-          parameter.value = "" + parameter.value;
-        })
-      }
-      experiment.algorithms.forEach(map_parameters_values_to_string);
-
-      return {
-        algorithm: experiment.algorithms[0],
-        model: experiment.model,
-        name: experiment.name
-      };
     }
 
     function compute_data_types (dataset) {
@@ -102,9 +86,6 @@ angular.module('chuvApp.util')
       },
       run_experiment: function (experiment) {
         return $http.post(backendUrl + "/experiments", map_experiment_for_backend(experiment));
-      },
-      run_mining: function (experiment) {
-        return $http.post(backendUrl + "/mining", map_mining_for_backend(experiment));
       },
       get_experiment: function (experiment_uuid) {
         return $http.get(backendUrl + "/experiments/" + experiment_uuid);
