@@ -52,7 +52,7 @@ angular.module('chuvApp.experiments')
                 return true;
               }
 
-              if (method.constraints.covariables.max_count && cov_nb < method.constraints.covariables.max_count) {
+              if (method.constraints.covariables.max_count && cov_nb > method.constraints.covariables.max_count) {
                 return true;
               }
             }
