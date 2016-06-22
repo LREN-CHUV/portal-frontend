@@ -1,0 +1,16 @@
+frontend-builder:
+  build: Dockerfile.builder
+  image: hbpmip/frontend-build
+  pre:
+    - echo "Building frontend"
+  post:
+    - docker run -ti --rm -v $(pwd)/frontend:/frontend/ -v $(pwd)/.npm:/root/.npm/ hbpmip/frontend-build
+    - echo "Finished building frontend"
+
+frontend:
+  build: Dockerfile
+  image: hbpmip/frontend
+  pre:
+    - echo "Preparing frontend lightweight image"
+  post:
+    - echo "Finished frontend lightweight image"
