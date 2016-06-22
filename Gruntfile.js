@@ -436,7 +436,7 @@ module.exports = function (grunt) {
             }
           ]
         }
-      }
+      },
     },
 
     // Copies remaining files to places other tasks can use
@@ -488,6 +488,11 @@ module.exports = function (grunt) {
         }, {
           expand: true,
           cwd: 'app/bower_components/font-awesome',
+          src: 'fonts/*',
+          dest: '<%= yeoman.dist %>'
+        }, {
+          expand: true,
+          cwd: 'app/bower_components/themify-icons',
           src: 'fonts/*',
           dest: '<%= yeoman.dist %>'
         }, {

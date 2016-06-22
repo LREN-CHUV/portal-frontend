@@ -4,7 +4,7 @@ frontend-builder:
   pre:
     - echo "Building frontend"
   post:
-    - docker run -ti --rm -v $(pwd)/frontend:/frontend/ -v $(pwd)/.npm:/root/.npm/ hbpmip/frontend-build
+    - docker run -ti --rm -v $(pwd):/frontend/ -v $(pwd):/root/.npm/ hbpmip/frontend-build
     - echo "Finished building frontend"
 
 frontend:
