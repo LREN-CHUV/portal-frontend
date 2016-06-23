@@ -17,6 +17,8 @@ angular.module('chuvApp.experiments')
           return method_name.charAt(0).toUpperCase() + method_name.slice(1) + "s";
         };
 
+        $scope.get_display_type = MLUtils.get_display_type;
+
         // Get all the ml methods
         MLUtils.list_ml_methods().$promise.then(
             function (data) {
@@ -87,6 +89,7 @@ angular.module('chuvApp.experiments')
           var variable_data = $scope.dataset.data[$scope.dataset.variable[0]];
 
           $scope.predicting_type = MLUtils.get_datatype($scope.dataset.variable[0], variable_data);
+          $scope.cross_validation_type = MLUtils.CV[$scope.predicting_type];
 
           $scope.ml_methods.forEach(function(method) {
             method.disable = disable_method(method);
@@ -277,38 +280,23 @@ angular.module('chuvApp.experiments')
         }
       }
 
-      function compute_aggregated_algorithms_comparison_hc_config() {
-
-        $scope.aggregated_algorithms_comparison_hc_config = {
+      function compute_overview_graph_config() {
+        $scope.overview_graph_config = {
           "options": {
             "chart": {
               "type": "column"
             }
           },
-          "series": $scope.result.map(function (experiment_result) {
-            var validation_avg = experiment_result.data.cells.validations[0].data.average;
-            return {
-              name: experiment_result.name,
-              data: [
-                validation_avg.MSE,
-                validation_avg.RMSE,
-                validation_avg.R2,
-                validation_avg.FAC2
-              ],
-              id: experiment_result.code
-            }
-          }),
+          "series": cross_validation_type.compute_series($scope.result),
           "title": {
             "text": "Algorithm result comparison"
           },
           "loading": false,
-          "xAxis": {
-            categories: ["Mean square error", "Root mean square error", "Coefficient of determination (R²)", "Fac2 fit ratio"]
-          }
+          "xAxis": cross_validation_type.compute_legend()
         };
-        $scope.show_aggregated_algorithms_comparison = false;
+        $scope.show_overview_graph = false;
         $timeout(function () {
-          $scope.show_aggregated_algorithms_comparison = true;
+          $scope.show_overview_graph = true;
         }, 100)
       }
 
@@ -330,9 +318,9 @@ angular.module('chuvApp.experiments')
               $scope.validations = JSON.parse($scope.experiment.validations);
               $scope.algorithms = JSON.parse($scope.experiment.algorithms);
               try {
-                $scope.result = JSON.parse($scope.experiment.result);
-                if ($scope.result)
-                  compute_aggregated_algorithms_comparison_hc_config();
+                if ($scope.result) {
+                  compute_overview_graph_config();
+                }
               } catch (e) {
                 if (!($scope.experiment.hasError || $scope.experiment.hasServerError)) {
                   $scope.experiment.hasError = true;
