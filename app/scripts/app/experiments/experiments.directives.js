@@ -19,7 +19,7 @@ angular.module('chuvApp.experiments')
 
           var validations = [];
           if ($scope.shared.cross_validation) {
-            validations.push({"code":"kfold", label: "kfold", "parameters": [{"code": "k", "value": $scope.shared.kfold}]})
+            validations.push({"code":"kfold", "parameters": [{"code": "k", "value": $scope.shared.kfold}]})
           }
 
           //$scope.running = true;

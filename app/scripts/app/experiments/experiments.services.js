@@ -140,7 +140,7 @@ angular.module('chuvApp.util')
               break;
             default: // Check if cross-validation and prediction type
               if (result.data.cells.validations && result.data.cells.validations.length) {
-                if (experiment_result.data.cells.validations[0].data.average.R2) {
+                if (result.data.cells.validations[0].data.average.hasOwnProperty("R2")) {
                   return "regression";
                 }
                 return "classification";
@@ -184,7 +184,7 @@ angular.module('chuvApp.util')
                   return {
                     name: method_result.name,
                     data: [
-                      compute_classifier_accuracy(confusion_matrix),
+                      compute_classifier_accuracy(cm),
                       cm[0][0] / (cm[0][0] + cm[0][1]),
                       cm[0][0] / (cm[0][0] + cm[1][0]),
                       cm[1][1] / (cm[1][1] + cm[1][0])

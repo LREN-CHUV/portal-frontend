@@ -33,7 +33,7 @@
               <a href="#" editable-text="experiment.name">{{ experiment.name || "yolo" }}</a>
             </div>
 
-            <a ng-click="shared.experiment_configuration.splice($index, 1)"
+            <a ng-click="remove_from_experiment($index)"
                style="margin-top: 2px"
                class="btn btn-xs btn-default fa fa-remove pull-right"></a>
           </li>

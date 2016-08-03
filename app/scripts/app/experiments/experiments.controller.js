@@ -17,8 +17,6 @@ angular.module('chuvApp.experiments')
           return method_name.charAt(0).toUpperCase() + method_name.slice(1) + "s";
         };
 
-        $scope.get_display_type = MLUtils.get_display_type;
-
         // Get all the ml methods
         MLUtils.list_ml_methods().$promise.then(
             function (data) {
@@ -30,13 +28,17 @@ angular.module('chuvApp.experiments')
         function disable_method (method) {
 
           if (method.disable) {
-            return true;
+            return true; $scope.validations
           }
 
           // Check constraints
           if (method.constraints) {
 
-            // Input constraints
+            // Output constraints
+            var lol = method.constraints.variable;
+            var lil = $scope.predicting_type;
+            var lal = method.constraints.variable[$scope.predicting_type];
+            debugger;
             if (method.constraints.variable) {
               if (!method.constraints.variable[$scope.predicting_type]) {
                 return true;
@@ -89,7 +91,6 @@ angular.module('chuvApp.experiments')
           var variable_data = $scope.dataset.data[$scope.dataset.variable[0]];
 
           $scope.predicting_type = MLUtils.get_datatype($scope.dataset.variable[0], variable_data);
-          $scope.cross_validation_type = MLUtils.CV[$scope.predicting_type];
 
           $scope.ml_methods.forEach(function(method) {
             method.disable = disable_method(method);
@@ -103,7 +104,6 @@ angular.module('chuvApp.experiments')
           };
         }
 
-
         if ($stateParams.model_slug) {
           // we have a slug: load model
           Model.get({slug: $stateParams.model_slug}, function(result) {
@@ -113,11 +113,10 @@ angular.module('chuvApp.experiments')
             on_data_loaded();
           });
 
-          console.log($stateParams.model_slug);
-
           $scope.model_slug = $stateParams.model_slug;
 
         } else {
+
           // load model from data
 
           // step 1: load query
@@ -246,21 +245,27 @@ angular.module('chuvApp.experiments')
                 });
           }
 
+          var is_predictive_model = $scope.shared.chosen_method.type.indexOf("predictive_model") >= 0;
+
           var method_to_be_added = {
             code: $scope.shared.chosen_method.code,
             name: name,
+            validation: is_predictive_model,
             parameters: $scope.shared.method_parameters.map(function (param) { return { code: param.code, value: param.value }})
           };
 
-          var is_predictive_model = $scope.shared.chosen_method.type.indexOf("predictive_model") >= 0;
+          $scope.shared.experiment_configuration.push(method_to_be_added);
+          $scope.shared.cross_validation |= is_predictive_model;
+        };
+        $scope.remove_from_experiment = function (index) {
 
-          if ($scope.shared.cross_validation && is_predictive_model) {
-            $scope.shared.experiment_configuration.push(method_to_be_added);
-          } else {
-            $scope.shared.experiment_configuration = [method_to_be_added];
+          // If we remove a predictive model, check that we still require a validation
+          if ($scope.shared.experiment_configuration[index].validation) {
+            var predictive_models = $scope.shared.experiment_configuration.filter(function (m) { return m.validation });
+            $scope.shared.cross_validation = !!(predictive_models.length - 1);
           }
 
-          $scope.shared.cross_validation = is_predictive_model;
+          $scope.shared.experiment_configuration.splice(index, 1)
         };
       }])
     .controller('ExperimentDetailsController', ['$stateParams', '$state', 'MLUtils', '$scope', '$timeout', 'User', function ($stateParams, $state, MLUtils, $scope, $timeout, User) {
@@ -271,6 +276,8 @@ angular.module('chuvApp.experiments')
       var is_waiting_for_finish = false;
       $scope.loading = true;
       $scope.model_slug = $stateParams.model_slug;
+
+      $scope.get_display_type = MLUtils.get_display_type;
 
       function refresh_experiment_until_done () {
         if (!cancelled && !$scope.experiment.finished) {
@@ -287,12 +294,12 @@ angular.module('chuvApp.experiments')
               "type": "column"
             }
           },
-          "series": cross_validation_type.compute_series($scope.result),
+          "series": $scope.cross_validation_type.compute_series($scope.results),
           "title": {
             "text": "Algorithm result comparison"
           },
           "loading": false,
-          "xAxis": cross_validation_type.compute_legend()
+          "xAxis": $scope.cross_validation_type.compute_legend()
         };
         $scope.show_overview_graph = false;
         $timeout(function () {
@@ -318,10 +325,27 @@ angular.module('chuvApp.experiments')
               $scope.validations = JSON.parse($scope.experiment.validations);
               $scope.algorithms = JSON.parse($scope.experiment.algorithms);
               try {
-                if ($scope.result) {
+                $scope.results = JSON.parse($scope.experiment.result);
+
+                //TODO Pass a tag instead
+                var predicting_type;
+                if ($scope.validations.length) {
+                  for (var i = 0; i < $scope.results.length; i++) {
+                    var result = $scope.results[i];
+                    if (result.data.cells.validations.length) {
+                      if(result.data.cells.validations[0].data.average.hasOwnProperty("MSE")) {
+                        predicting_type = 'real';
+                      } else {
+                        predicting_type = (result.data.cells.validations[0].data.average.confusion_matrix.length > 2)? 'polynominal' : 'binominal';
+                      }
+                    }
+                  }
+
+                  $scope.cross_validation_type = MLUtils.CV[predicting_type];
                   compute_overview_graph_config();
                 }
               } catch (e) {
+                console.log(e);
                 if (!($scope.experiment.hasError || $scope.experiment.hasServerError)) {
                   $scope.experiment.hasError = true;
                   $scope.experiment.result = "Invalid JSON: \n" + $scope.experiment.result;
