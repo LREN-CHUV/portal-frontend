@@ -1,6 +1,22 @@
 angular.module('chuvApp.experiments')
-    .controller('NewExperimentController',[
-      '$scope', 'MLUtils', '$stateParams', 'Model', '$location', '$modal', function($scope, MLUtils, $stateParams, Model, $location, $modal) {
+    .controller('NewExperimentController',
+      [
+        '$scope',
+        'MLUtils',
+        '$stateParams',
+        'Model',
+        '$location',
+        '$modal',
+        'notifications',
+        function(
+          $scope,
+          MLUtils,
+          $stateParams,
+          Model,
+          $location,
+          $modal,
+          notifications
+        ) {
         $scope.loaded = false;
         $scope.parseInt = parseInt;
 
@@ -8,7 +24,7 @@ angular.module('chuvApp.experiments')
         $scope.shared = {
           chosen_method: null,
           method_parameters: [],
-          cross_validation: true,
+          cross_validation: false,
           experiment_configuration: []
         };
         $scope.help_is_open = true;
@@ -25,23 +41,19 @@ angular.module('chuvApp.experiments')
         );
 
         // Check if the method can be applied to the model
-        function disable_method (method) {
+        function available_method (method) {
 
           if (method.disable) {
-            return true; $scope.validations
+            return false;
           }
 
           // Check constraints
           if (method.constraints) {
 
             // Output constraints
-            var lol = method.constraints.variable;
-            var lil = $scope.predicting_type;
-            var lal = method.constraints.variable[$scope.predicting_type];
-            debugger;
             if (method.constraints.variable) {
               if (!method.constraints.variable[$scope.predicting_type]) {
-                return true;
+                return false;
               }
             }
 
@@ -53,11 +65,11 @@ angular.module('chuvApp.experiments')
               var cov_nb = $scope.dataset.header.length;
 
               if (method.constraints.covariables.min_count && cov_nb < method.constraints.covariables.min_count) {
-                return true;
+                return false;
               }
 
               if (method.constraints.covariables.max_count && cov_nb > method.constraints.covariables.max_count) {
-                return true;
+                return false;
               }
             }
 
@@ -67,20 +79,20 @@ angular.module('chuvApp.experiments')
               var grp_nb = $scope.dataset.grouping.length;
 
               if (method.constraints.grouping.min_count && grp_nb < method.constraints.grouping.min_count) {
-                return true;
+                return false;
               }
 
               if (method.constraints.grouping.max_count && grp_nb > method.constraints.grouping.max_count) {
-                return true;
+                return false;
               }
             }
 
             if (grp_nb > 0 && cov_nb > 0 && !method.constraints.mixed) {
-              return true;
+              return false;
             }
           }
 
-          return false;
+          return true;
         }
 
         // function to be called when query and dataset are ready
@@ -93,7 +105,7 @@ angular.module('chuvApp.experiments')
           $scope.predicting_type = MLUtils.get_datatype($scope.dataset.variable[0], variable_data);
 
           $scope.ml_methods.forEach(function(method) {
-            method.disable = disable_method(method);
+            method.available = available_method(method);
           });
 
           // Open methods menu accordion
@@ -171,19 +183,16 @@ angular.module('chuvApp.experiments')
                     $scope.model = result;
                     $scope.dataset = result.dataset;
                     $scope.query = result.query;
-                    //notifications.error("The model was successfully saved!");
-                    alert("Save ok");
+                    notifications.success("The model was successfully saved!");
                     child_scope.$close();
                   }, function(){
                     // TODO Add a notification service...
-                    //notifications.error("An error occurred when trying to save the model!");
-                    alert("Error on save!");
+                    notifications.error("An error occurred when trying to save the model!");
                     child_scope.$dismiss();
                   });
                 };
               }]
             })
-
           }
         }
 
@@ -257,6 +266,7 @@ angular.module('chuvApp.experiments')
           $scope.shared.experiment_configuration.push(method_to_be_added);
           $scope.shared.cross_validation |= is_predictive_model;
         };
+
         $scope.remove_from_experiment = function (index) {
 
           // If we remove a predictive model, check that we still require a validation

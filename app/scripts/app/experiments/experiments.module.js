@@ -1,4 +1,7 @@
-angular.module('chuvApp.experiments', ['ngResource', 'ui.router', 'chuvApp.util'])
+/**
+ * Modified by Arnaud Jutzeler on 05/08/2016.
+ */
+angular.module('chuvApp.experiments', ['ngResource', 'ui.router', 'chuvApp.util', 'chuvApp.components.notifications'])
     .config(['$stateProvider', function ($stateProvider) {
         $stateProvider
         .state('new_experiment', {

@@ -1,12 +1,13 @@
 /**
  * Created by Florent PERINEL on 12/08/2015.
+ * Modified by Arnaud Jutzeler on 05/08/2016.
  */
 'use strict';
 
 angular.module('chuvApp.articles',
 
   // Module requirements
-  ['ngResource', 'pascalprecht.translate', 'ui.router'])
+  ['ngResource', 'pascalprecht.translate', 'ui.router', "chuvApp.components.notifications"])
 
   // Module configuration
   .config(['$stateProvider', function ($stateProvider) {

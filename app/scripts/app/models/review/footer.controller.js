@@ -3,7 +3,18 @@
  */
 'use strict';
 
-angular.module('chuvApp.models').controller('ModelFooterController',['$scope','Model','$state',function($scope,Model,$state) {
+angular.module('chuvApp.models').controller('ModelFooterController',
+  [
+    '$scope',
+    'Model',
+    '$state',
+    'notifications',
+    function(
+      $scope,
+      Model,
+      $state,
+      notifications
+    ) {
 
   /**
    * export chart in pdf file
@@ -11,7 +22,7 @@ angular.module('chuvApp.models').controller('ModelFooterController',['$scope','M
   $scope.exportPdf = function () {
     var highChart = $scope.chartConfig.getHighcharts();
     if (highChart === undefined) {
-      alert("no chart available!");
+      notifications.warning("no chart available!");
     }
 
     highChart.exportChart({

@@ -8,8 +8,36 @@ angular.module('chuvApp.articles')
 /**
  * Show and form articles controller
  */
-  .controller('ArticleController', ['$scope', '$translatePartialLoader', '$translate', '$location', '$stateParams', 'Article', 'User', 'Model','backendUrl','ModalUtil', 'MLUtils', '$q',
-    function ($scope, $translatePartialLoader, $translate, $location, $stateParams, Article, User, Model, backendUrl, ModalUtil, MLUtils, $q) {
+  .controller('ArticleController',
+    [
+      '$scope',
+      '$translatePartialLoader',
+      '$translate',
+      '$location',
+      '$stateParams',
+      'Article',
+      'User',
+      'Model',
+      'backendUrl',
+      'ModalUtil',
+      'MLUtils',
+      '$q',
+      'notifications',
+      function (
+        $scope,
+        $translatePartialLoader,
+        $translate,
+        $location,
+        $stateParams,
+        Article,
+        User,
+        Model,
+        backendUrl,
+        ModalUtil,
+        MLUtils,
+        $q,
+        notifications
+      ) {
 
       /**
        * Initialize controller
@@ -70,11 +98,11 @@ angular.module('chuvApp.articles')
        */
       $scope.save = function () {
         if (!$scope.article.title) {
-          alert("You need a title for your article!");
+          notifications.warning("You need a title for your article!");
           return;
         }
         if (!$scope.article.abstract) {
-          alert("You need an abstract for your article!");
+          notifications.warning("You need an abstract for your article!");
           return;
         }
         $scope.article.date = new Date().toISOString();
@@ -139,13 +167,13 @@ angular.module('chuvApp.articles')
               // Dropbox, although they may not have synced to the user's devices yet.
               success: function () {
                   // Indicate to the user that the files have been saved.
-                  alert("Success! Files saved to your Dropbox.");
+                  notifications.success("Success! Files saved to your Dropbox.");
               },
               // Error is called in the event of an unexpected response from the server
               // hosting the files, such as not being able to find a file. This callback is
               // also called if there is an error on Dropbox or if the user is over quota.
               error: function (errorMessage) {
-                  alert(errorMessage);
+                  notifications.error(errorMessage);
               }
           };
           // local url not working for dev=> var baseUrl="http://chuv-backend.redfroggy.fr";

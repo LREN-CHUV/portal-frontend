@@ -672,3 +672,31 @@ body.sidebar-collapsed .widget-body > ul.acc-menu {
 
 }
 
+// Notifications
+#notifications {
+
+  position: fixed;
+  z-index: 10000;
+  top: 10px;
+  .transition(left, 0.5s, ease;);
+
+  .alert {
+    margin-bottom: 0;
+  }
+
+  @media (min-width: 768px) {
+    width: ~"calc(100% - 200px)";
+  }
+
+  @media (max-width: 768px) {
+    width: ~"calc(100% - 45px)";
+    left: 60px;
+  }
+}
+@media (max-width: 768px) {
+  #wrapper.toggled #notifications {
+    left: 260px;
+  }
+}
+
+

@@ -1,10 +1,44 @@
 /**
  * Created by Michael DESIGAUD on 12/08/2015.
+ * Modified by Arnaud Jutzeler on 05/08/2016
  */
 
 'use strict';
-angular.module('chuvApp.models').controller('ReviewController',['$scope','$translatePartialLoader','$translate','Model','$stateParams','ChartUtil',"$state",'$log','User','$location', '$modal', '$timeout', '$filter', 'Variable', 'Group',
-  function($scope, $translatePartialLoader, $translate, Model, $stateParams, ChartUtil, $state, $log, User, $location, $modal, $timeout, $filter, Variable, Group) {
+angular.module('chuvApp.models').controller('ReviewController',
+  ['$scope',
+    '$translatePartialLoader',
+    '$translate',
+    'Model',
+    '$stateParams',
+    'ChartUtil',
+    "$state",
+    '$log',
+    'User',
+    '$location',
+    '$modal',
+    '$timeout',
+    '$filter',
+    'Variable',
+    'Group',
+    'notifications',
+  function(
+    $scope,
+    $translatePartialLoader,
+    $translate,
+    Model,
+    $stateParams,
+    ChartUtil,
+    $state,
+    $log,
+    User,
+    $location,
+    $modal,
+    $timeout,
+    $filter,
+    Variable,
+    Group,
+    notifications
+  ) {
 
     var filterFilter = $filter("filter");
 
@@ -71,7 +105,7 @@ angular.module('chuvApp.models').controller('ReviewController',['$scope','$trans
 
 
       if (!($scope.chartConfig.title && $scope.chartConfig.title.text)) {
-        alert("You need a name for your model!");
+        notifications.warning("You need a name for your model!");
         return;
       }
       $scope.model.title = $scope.chartConfig.title.text;
@@ -85,17 +119,17 @@ angular.module('chuvApp.models').controller('ReviewController',['$scope','$trans
         // save new model
         Model.save($scope.model, function (model) {
           $state.go('models-edit', {slug: model.slug});
-          alert("Save ok");
+          notifications.success("The model was successfully saved!");
         },function(){
-          alert("Error on save!");
+          notifications.error("An error occurred when trying to save the model!");
         });
       } else {
         // save existing model
         Model.update({slug: $scope.model.slug}, $scope.model, function (model) {
           $state.go('models-edit', {slug: model.slug});
-          alert("Save successful");
+          notifications.success("The model was successfully updated!");
         },function(){
-          alert("Error on save!");
+          notifications.error("An error occurred when trying to update the model!");
         });
       }
     };
@@ -285,7 +319,7 @@ angular.module('chuvApp.models').controller('ReviewController',['$scope','$trans
         error += "A filter is not complete yet.\n";
       }
       if (error.length > 0) {
-        alert(error);
+        notifications.error(error);
         return;
       }
 
