@@ -1,0 +1,6 @@
+.tmp/
+app/bower_components/
+app/scripts/app/app.config.js
+dist/
+node_modules/
+
