@@ -1,2 +1,2 @@
 #!/bin/sh
-captain push
+captain push --commit-tags frontend
