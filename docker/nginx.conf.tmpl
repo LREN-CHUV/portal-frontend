@@ -8,10 +8,10 @@
 #
 
 user  nginx nginx;
-worker_processes  {{ default .env.WORKER_PROCESSES "1" }};
+worker_processes  {{ default .Env.WORKER_PROCESSES "1" }};
 worker_rlimit_nofile 1024;
 
-error_log  /var/log/nginx/error.log {{ default .env.ERROR_LOG_LEVEL "warn" }};
+error_log  /var/log/nginx/error.log {{ default .Env.ERROR_LOG_LEVEL "warn" }};
 pid        /var/run/nginx.pid;
 
 events {
@@ -60,7 +60,7 @@ http {
     server {
       listen 80;
       listen [::]:80;
-      server_name {{ default .env.PORTAL_VIRTUAL_HOST "frontend" }};
+      server_name {{ default .Env.PORTAL_VIRTUAL_HOST "frontend" }};
 
       root /usr/share/nginx/html;
       location / {
@@ -68,7 +68,7 @@ http {
         error_page 404 /index.html;
       }
 
-{{ if .env.PORTAL_BACKEND_SERVER }}
+{{ if .Env.PORTAL_BACKEND_SERVER }}
       location /services {
         proxy_pass http://portal-backend;
         proxy_redirect off;
