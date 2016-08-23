@@ -13,4 +13,4 @@ else
   rm -f /etc/nginx/conf.d/gzip.conf
 fi
 
-exec dockerize $OPTS $@
+exec dockerize $OPTS nginx -g 'daemon off;'
