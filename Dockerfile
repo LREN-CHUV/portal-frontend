@@ -23,4 +23,4 @@ COPY docker/run.sh /
 COPY ./dist/ /usr/share/nginx/html/
 
 ENTRYPOINT ["/run.sh"]
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["nginx", "-g", "'daemon off;'"]
