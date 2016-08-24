@@ -47,7 +47,7 @@ angular.module('chuvApp.users')
 
       logout: function () {
         $rootScope.user = null;
-        user_promise = user_backend_obj = user_promise = $rootScope.hasAgreedTos = false;
+        user_promise = user_backend_obj = $rootScope.hasAgreedTos = false;
         $http.post(backendUrl+'/logout');
       }
 
