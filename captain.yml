@@ -7,9 +7,9 @@ frontend-builder:
     - /usr/bin/env bash -c "docker run -ti --rm -v $(pwd):/frontend/ -v $HOME/.npm:/home/build/.npm/ hbpmip/frontend-build"
     - echo "Finished building frontend"
 
-frontend:
+portal-frontend:
   build: Dockerfile
-  image: hbpmip/frontend
+  image: hbpmip/portal-frontend
   pre:
     - echo "Preparing frontend lightweight image"
   post:
