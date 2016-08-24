@@ -30,13 +30,17 @@ http {
 
     access_log  /var/log/nginx/access.log  main;
 
-    sendfile        off; # TODO on?
-    #tcp_nopush     on;
-    #tcp_nodelay on;
+    # zero-copy when serving files
+    sendfile        on;
+    # limit network overhead, accelerate sending of files
+    tcp_nopush     on;
+    # remove 200ms delay on TCP send
+    tcp_nodelay on;
     keepalive_timeout  65; # 300?
     # don't send the nginx version number in error pages and Server header
     server_tokens off;
-    #types_hash_max_size 2048;
+    # CPU dependent optimisations. See http://nginx.org/en/docs/hash.html
+    # types_hash_max_size 2048;
     # server_names_hash_bucket_size 64;
     # server_name_in_redirect off;
     underscores_in_headers on;
@@ -70,7 +74,7 @@ http {
 
 {{ if .Env.PORTAL_BACKEND_SERVER }}
       location /services {
-        proxy_pass http://portal-backend;
+        proxy_pass http://portal-backend/{{ default .Env.PORTAL_BACKEND_CONTEXT "services" }};
         proxy_redirect off;
       }
 {{ end }}
