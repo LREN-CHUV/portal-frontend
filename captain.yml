@@ -7,7 +7,7 @@ builder:
   pre:
     - echo "Building portal frontend builder"
   post:
-    - docker run -ti --rm -v $WORKSPACE:/frontend/ -v $HOME/.npm:/home/build/.npm/ hbpmip/frontend-build
+    - docker run -ti --rm -v $WORKSPACE:/frontend/ -v $HOME/.npm:/home/build/.npm/ frontend-builder
     - echo "Finished building portal frontend builder"
 
 portal-frontend:
