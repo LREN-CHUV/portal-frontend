@@ -1,11 +1,14 @@
-frontend-builder:
+# Builder image
+# Creates a portable environemnt to build this project.
+# Do not push this image to Docker hub.
+builder:
   build: Dockerfile.builder
-  image: hbpmip/frontend-build
+  image: frontend-builder
   pre:
-    - echo "Building frontend"
+    - echo "Building portal frontend builder"
   post:
-    - /usr/bin/env bash -c "docker run -ti --rm -v $(pwd):/frontend/ -v $HOME/.npm:/home/build/.npm/ hbpmip/frontend-build"
-    - echo "Finished building frontend"
+    - docker run -ti --rm -v $WORKSPACE:/frontend/ -v $HOME/.npm:/home/build/.npm/ hbpmip/frontend-build
+    - echo "Finished building portal frontend builder"
 
 portal-frontend:
   build: Dockerfile

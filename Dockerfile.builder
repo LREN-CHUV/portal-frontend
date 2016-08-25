@@ -1,6 +1,6 @@
 FROM digitallyseamless/nodejs-bower-grunt
 
-COPY ./docker/build-in-docker.sh /
+COPY ./docker/builder/build-in-docker.sh /
 
 VOLUME /frontend
 

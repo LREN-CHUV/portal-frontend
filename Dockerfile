@@ -11,13 +11,13 @@ RUN apt-get update \
     && rm -rf /tmp/dockerize.tar.gz /var/lib/apt/lists/*
 
 # Add nginx config
-COPY ./docker/nginx.conf.tmpl \
-     ./docker/proxy.conf.tmpl \
-     ./docker/gzip.conf.tmpl \
-     ./docker/portal-backend-upstream.conf.tmpl \
+COPY ./docker/runner/conf/nginx.conf.tmpl \
+     ./docker/runner/conf/proxy.conf.tmpl \
+     ./docker/runner/conf/gzip.conf.tmpl \
+     ./docker/runner/conf/portal-backend-upstream.conf.tmpl \
          /portal/conf/
 
-COPY docker/run.sh /
+COPY docker/runner/run.sh /
 
 # Add front end ressources
 COPY ./dist/ /usr/share/nginx/html/

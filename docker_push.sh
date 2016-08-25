@@ -14,5 +14,17 @@ get_script_dir () {
 }
 
 export WORKSPACE=$(get_script_dir)
-captain push --commit-tags portal-frontend
-curl -k -X POST --data-urlencode payload@$WORKSPACE/docker/slack.json https://hbps1.chuv.ch/slack/dev-activity
+
+if pgrep -lf sshuttle > /dev/null ; then
+  echo "sshuttle detected. Please close this program as it messes with networking and prevents builds inside Docker to work"
+  exit 1
+fi
+
+if groups $USER | grep &>/dev/null '\bdocker\b'; then
+  CAPTAIN="captain"
+else
+  CAPTAIN="sudo captain"
+fi
+
+$CAPTAIN push --commit-tags portal-frontend
+curl -k -X POST --data-urlencode payload@$WORKSPACE/docker/runner/slack.json https://hbps1.chuv.ch/slack/dev-activity
