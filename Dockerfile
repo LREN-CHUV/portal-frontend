@@ -22,4 +22,6 @@ COPY docker/runner/run.sh /
 # Add front end ressources
 COPY ./dist/ /usr/share/nginx/html/
 
+EXPOSE 80 443
+
 CMD ["/run.sh"]
