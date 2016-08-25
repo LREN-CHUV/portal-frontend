@@ -5,10 +5,12 @@ builder:
   build: Dockerfile.builder
   image: frontend-builder
   pre:
-    - echo "Building portal frontend builder"
+    - echo "Building portal frontend builder image"
   post:
+    - echo "Finished building frontend builder image"
+    - echo "Building project..."
     - docker run -ti --rm -v $WORKSPACE:/frontend/ -v $HOME/.npm:/home/build/.npm/ frontend-builder
-    - echo "Finished building portal frontend builder"
+    - echo "Finished building project"
 
 portal-frontend:
   build: Dockerfile
