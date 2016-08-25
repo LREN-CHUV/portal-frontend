@@ -47,16 +47,15 @@
             <div class="panel-body">
               <h3>Algorithms:</h3>
               <ul>
-                <li ng-repeat="experiment in algorithms track by $index">
+                <li ng-repeat="algorithm in experiment.algorithms track by $index">
                   <div style="max-width: calc(100% - 20px); display: inline-block; vertical-align: top">
-                    <span ng-bind="experiment.name"></span>
+                    <span ng-bind="algorithm.name"></span>
                   </div>
                 </li>
-
               </ul>
-              <h3 ng-if="validations.length">Validations:</h3>
+              <h3 ng-if="experiment.validations.length">Validations:</h3>
               <ul>
-                <li ng-repeat="validation in validations">
+                <li ng-repeat="validation in experiment.validations">
                   <span ng-bind="validation.code"></span>:
                   <span ng-bind="validation.parameters[0].value"></span>
                 </li>
@@ -95,57 +94,54 @@
               <pre ng-bind="experiment.result"></pre>
             </div>
           </div>
-          <div ng-if="experiment.finished && !experiment.hasError" ng-cloak>
+          <div class="experiment-details" ng-if="experiment.finished && !experiment.hasError" ng-cloak>
             <tabset active="0">
 
-              <tab heading="Overview" ng-if="overview_graph_config.series.length">
+              <tab heading="Overview" ng-if="overview_charts.length">
                 <div class="panel">
                   <div class="panel-body">
-
-                    <highchart config="overview_graph_config" ng-if="show_overview_graph"></highchart>
-
-                    <button class="btn btn-default" ng-click="hideJson = !hideJson" ng-init="hideJson=true">
-                      <span ng-bind="hideJson ? 'Show' : 'Hide'"></span> raw JSON
-                    </button>
-                    <pre collapse="hideJson" ng-bind="experiment.result"></pre>
+                    <div class="row">
+                      <div class="single-legend col-sm-12"></div>
+                    </div>
+                    <div class="row overview-charts">
+                      <div class="col-sm-3" ng-repeat="chart_config in overview_charts">
+                        <highchart config="chart_config"></highchart>
+                      </div>
+                    </div>
+                    <div class="pull-right">
+                      <button class="btn btn-default" ng-click="hideJson = !hideJson" ng-init="hideJson=true">
+                        <span ng-bind="hideJson ? 'Show' : 'Hide'"></span> raw JSON
+                      </button>
+                      <pre collapse="hideJson" ng-bind="experiment.raw"></pre>
+                    </div>
                   </div>
                 </div>
-
               </tab>
 
-              <tab ng-repeat="method_result in results" heading="{{ method_result.name }}">
-                <div class="panel" ng-if="experiment.finished && !experiment.hasError">
-
+              <tab ng-repeat="method in experiment.display.methods" heading="{{ method.name }}">
+                <div class="panel">
                   <div class="panel-body">
-
-                    <div ng-switch="get_display_type(method_result)">
+                    <div ng-switch="method.type">
                       <div ng-switch-when="regression">
                         <h4>Cross-Validation results (Regression)</h4>
+                        <div class="row">
+                          <div ng-repeat="metric in method.metrics | filter: {type: 'numeric'}" class="col-sm-4">
+                            <span tooltip-placement="top" tooltip="{{ metric.tooltip }}"><span ng-bind="metric.label"></span>: <span ng-bind="metric.value | number:3"></span>
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                      <div ng-switch-when="binary_classification">
+                        <h4>Cross-Validation results (Binary Classification)</h4>
                         <div>
-                          <table class="table table-striped table-bordered">
+                          <table class="table table-condensed table-bordered">
                             <tr>
                               <th>
-                                Mean square error
+                                Confusion Matrix
                               </th>
-                              <td ng-bind="method_result.data.cells.validations[0].data.average.MSE"></td>
-                            </tr>
-                            <tr>
-                              <th>
-                                Root mean square error
-                              </th>
-                              <td ng-bind="method_result.data.cells.validations[0].data.average.RMSE"></td>
-                            </tr>
-                            <tr>
-                              <th>
-                                Coefficient of determination (R&sup2;)
-                              </th>
-                              <td ng-bind="method_result.data.cells.validations[0].data.average.R2"></td>
-                            </tr>
-                            <tr>
-                              <th>
-                                Fac2 fit ratio
-                              </th>
-                              <td ng-bind="method_result.data.cells.validations[0].data.average.FAC2"></td>
+                              <td>
+                                <confusion-matrix data="method.metrics['Confusion matrix']"></confusion-matrix>
+                              </td>
                             </tr>
                           </table>
                         </div>
@@ -153,20 +149,17 @@
                       <div ng-switch-when="classification">
                         <h4>Cross-Validation results (Classification)</h4>
                         <div>
-                          <table class="table table-striped table-bordered">
-                            <tr>
-                              <th>
-                                Confusion Matrix
-                              </th>
-                              <td>
-                                <table>
-                                  <tr ng-repeat="row in method_result.data.cells.validations[0].data.average.confusion_matrix">
-                                    <td ng-repeat="elem in row" ng-bind="elem"></td>
-                                  </tr>
-                                </table>
-                              </td>
-                            </tr>
-                          </table>
+                          <div class="row">
+                            <div ng-repeat="metric in method.metrics | filter: {type: 'confusion_matrix'}" class="col-sm-6">
+                              <span ng-bind="metric.label"></span>: <confusion-matrix data="metric.value"></confusion-matrix>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div ng-repeat="metric in method.metrics | filter: {type: 'numeric'}" class="col-sm-4">
+                            <span tooltip-placement="top" tooltip="{{ metric.tooltip }}"><span ng-bind="metric.label"></span>: <span ng-bind="metric.value | number:3"></span>
+                            </span>
+                            </div>
+                          </div>
                         </div>
                       </div>
                       <div ng-switch-when="linearRegression">
@@ -180,7 +173,7 @@
                             <th>T-statistic</th>
                             <th>P-value</th>
                           </tr>
-                          <tr ng-repeat="(name, value) in method_result.data.cells.summary.init.coefficients">
+                          <tr ng-repeat="(name, value) in method.raw.data.cells.summary.init.coefficients">
                             <td ng-bind="variable_title(name)"></td>
                             <td ng-bind="value.estimate | number"></td>
                             <td ng-bind="value.std_error | number"></td>
@@ -195,7 +188,7 @@
                         <div>
                           <p>
                             <b>Degrees of freedom: </b>
-                            <span ng-bind="method_result.data.cells.summary.init.degrees_freedom[1]"></span>
+                            <span ng-bind="method.raw.data.cells.summary.init.degrees_freedom[1]"></span>
                           </p>
                         </div>
 
@@ -212,11 +205,11 @@
                               <th>Max</th>
                             </tr>
                             <tr>
-                              <td ng-bind="method_result.data.cells.summary.init.residuals.min | number"></td>
-                              <td ng-bind="method_result.data.cells.summary.init.residuals.q1 | number"></td>
-                              <td ng-bind="method_result.data.cells.summary.init.residuals.median | number"></td>
-                              <td ng-bind="method_result.data.cells.summary.init.residuals.q3 | number"></td>
-                              <td ng-bind="method_result.data.cells.summary.init.residuals.max | number"></td>
+                              <td ng-bind="method.raw.data.cells.summary.init.residuals.min | number"></td>
+                              <td ng-bind="method.raw.data.cells.summary.init.residuals.q1 | number"></td>
+                              <td ng-bind="method.raw.data.cells.summary.init.residuals.median | number"></td>
+                              <td ng-bind="method.raw.data.cells.summary.init.residuals.q3 | number"></td>
+                              <td ng-bind="method.raw.data.cells.summary.init.residuals.max | number"></td>
                             </tr>
                           </table>
                         </div>
@@ -224,7 +217,7 @@
                         <div>
                           <p><b>Covariance matrix</b></p>
                           <table class="table table-condensed table-bordered">
-                            <tr ng-repeat="row in method_result.data.cells.summary.init.cov_unscaled">
+                            <tr ng-repeat="row in method.raw.data.cells.summary.init.cov_unscaled">
                               <td ng-repeat="cell in row" ng-bind="cell | number"></td>
                             </tr>
                           </table>
@@ -243,25 +236,13 @@
                       </div>
                     </div>
                   </div>
+                </div>
               </tab>
             </tabset>
 
           </div>
-
-          <!--div class="panel" ng-if="experiment.finished && !experiment.hasError">
-            <div class="panel-body">
-
-
-            </div>
-          </div-->
-
         </div>
-
-
       </div>
-
     </div>
-
   </div>
-
 </div>

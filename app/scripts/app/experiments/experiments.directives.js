@@ -81,13 +81,14 @@ angular.module('chuvApp.experiments')
         function repeat_refresh_running_experiments () {
           refresh_running_experiments();
           if (repeat_running)
-            $timeout(repeat_refresh_running_experiments, 5000);
+            $timeout(repeat_refresh_running_experiments, 20000); //TODO Remove this hardcoded value!
         }
 
         User.get().then(repeat_refresh_running_experiments);
       }]
     }
   }])
+  //TODO Useful?
   .directive('otherExperiments', ['MLUtils', '$http', '$compile', function (MLUtils, $http, $compile) {
 
     return {
@@ -120,21 +121,37 @@ angular.module('chuvApp.experiments')
             '<th>Algorithm</th>' +
             '<th>Mean square error</th>' +
             '<th>Root mean square error</th>' +
+            '<th>Mean absolute error</th>' +
             '<th>Coefficient of determination (R&sup2;)</th>' +
-            '<th>Fac2 fit ratio</th>' +
+            '<th>Explained variance</th>' +
             '</tr>' +
             result.map(function (experiment_result) {
               return '<tr>' +
                 '<td>' + experiment_result.name + '</td>' +
                 '<td>' + experiment_result.data.cells.validations[0].data.average.MSE + '</td>' +
                 '<td>' + experiment_result.data.cells.validations[0].data.average.RMSE + '</td>' +
-                '<td>' + experiment_result.data.cells.validations[0].data.average.R2 + '</td>' +
-                '<td>' + experiment_result.data.cells.validations[0].data.average.FAC2 + '</td>' +
+                '<td>' + experiment_result.data.cells.validations[0].data.average.MAE + '</td>' +
+                '<td>' + experiment_result.data.cells.validations[0].data.average['R-squared'] + '</td>' +
+                '<td>' + experiment_result.data.cells.validations[0].data.average['Explained variance'] + '</td>' +
                 '</tr>';
             }).join('') +
             '</table>' +
             '<p><a href="/experiment/' + experiment.model.slug + '/' + experiment.uuid + '">' + experiment.name + '</p>';
         }
+      }]
+    }
+  }])
+.directive('confusionMatrix', [ function () {
+
+    return {
+      templateUrl: "/scripts/app/experiments/confusion-matrix.html",
+      replace: true,
+      scope: {
+        data: '='
+      },
+      controller: ["$scope", function ($scope) {
+          $scope.labels = $scope.data.labels;
+          $scope.values = $scope.data.values;
       }]
     }
   }]);

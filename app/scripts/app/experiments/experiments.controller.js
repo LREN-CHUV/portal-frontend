@@ -1,22 +1,22 @@
 angular.module('chuvApp.experiments')
-    .controller('NewExperimentController',
-      [
-        '$scope',
-        'MLUtils',
-        '$stateParams',
-        'Model',
-        '$location',
-        '$modal',
-        'notifications',
-        function(
-          $scope,
-          MLUtils,
-          $stateParams,
-          Model,
-          $location,
-          $modal,
-          notifications
-        ) {
+  .controller('NewExperimentController',
+    [
+      '$scope',
+      'MLUtils',
+      '$stateParams',
+      'Model',
+      '$location',
+      '$modal',
+      'notifications',
+      function(
+        $scope,
+        MLUtils,
+        $stateParams,
+        Model,
+        $location,
+        $modal,
+        notifications
+      ) {
         $scope.loaded = false;
         $scope.parseInt = parseInt;
 
@@ -35,9 +35,9 @@ angular.module('chuvApp.experiments')
 
         // Get all the ml methods
         MLUtils.list_ml_methods().$promise.then(
-            function (data) {
-              $scope.ml_methods = data;
-            }
+          function (data) {
+            $scope.ml_methods = data;
+          }
         );
 
         // Check if the method can be applied to the model
@@ -135,8 +135,8 @@ angular.module('chuvApp.experiments')
           var search = $location.search();
           function map_query(category) {
             return search[category]
-                ? search[category].split(",").map(function (code) { return {code: code}})
-                : [];
+              ? search[category].split(",").map(function (code) { return {code: code}})
+              : [];
           }
 
           $scope.query = {
@@ -205,24 +205,24 @@ angular.module('chuvApp.experiments')
           var method_idx, chosen_parameter_idx, other_parameter_idx, method;
 
           return _.any(
-              $scope.shared.experiment_configuration,
-              function (method) {
+            $scope.shared.experiment_configuration,
+            function (method) {
 
-                return method.code == $scope.shared.chosen_method.code && _.all(
-                        $scope.shared.method_parameters,
-                        function (chosen_parameter) {
+              return method.code == $scope.shared.chosen_method.code && _.all(
+                  $scope.shared.method_parameters,
+                  function (chosen_parameter) {
 
-                          return _.any(
-                              method.parameters,
-                              function (other_parameter) {
+                    return _.any(
+                      method.parameters,
+                      function (other_parameter) {
 
-                                return other_parameter.code == chosen_parameter.code && chosen_parameter.value == other_parameter.value
+                        return other_parameter.code == chosen_parameter.code && chosen_parameter.value == other_parameter.value
 
-                              }
-                          )
-                        }
+                      }
                     )
-              }
+                  }
+                )
+            }
           )
         };
 
@@ -247,11 +247,11 @@ angular.module('chuvApp.experiments')
           var name = $scope.shared.chosen_method.label;
           if ($scope.shared.method_parameters && $scope.shared.method_parameters.length) {
             name += " with " + $scope.shared.method_parameters.map(function (parameter, index) {
-                  return parameter.label
-                      + '='
-                      + parameter.value
-                      + (index !== $scope.shared.method_parameters.length - 1 ? ", " : "");
-                });
+                return parameter.label
+                  + '='
+                  + parameter.value
+                  + (index !== $scope.shared.method_parameters.length - 1 ? ", " : "");
+              });
           }
 
           var is_predictive_model = $scope.shared.chosen_method.type.indexOf("predictive_model") >= 0;
@@ -278,156 +278,196 @@ angular.module('chuvApp.experiments')
           $scope.shared.experiment_configuration.splice(index, 1)
         };
       }])
-    .controller('ExperimentDetailsController', ['$stateParams', '$state', 'MLUtils', '$scope', '$timeout', 'User', function ($stateParams, $state, MLUtils, $scope, $timeout, User) {
+  .controller('ExperimentDetailsController', ['$stateParams', '$state', 'MLUtils', '$scope', '$timeout', 'User', function ($stateParams, $state, MLUtils, $scope, $timeout, User) {
 
-      var refresh_rate = 2500; // ms
-      var cancel_timeout;
-      var cancelled = false;
-      var is_waiting_for_finish = false;
-      $scope.loading = true;
-      $scope.model_slug = $stateParams.model_slug;
+    var refresh_rate = 10000; // ms
+    var cancel_timeout;
+    var cancelled = false;
+    var is_waiting_for_finish = false;
+    $scope.loading = true;
+    $scope.model_slug = $stateParams.model_slug;
 
-      $scope.get_display_type = MLUtils.get_display_type;
+    $scope.get_display_type = MLUtils.get_display_type;
 
-      function refresh_experiment_until_done () {
-        if (!cancelled && !$scope.experiment.finished) {
-          is_waiting_for_finish = true;
-          cancel_timeout = $timeout(refresh_experiment_until_done, refresh_rate);
-          get_experiment();
-        }
+    function refresh_experiment_until_done () {
+      if (!cancelled && !$scope.experiment.finished) {
+        is_waiting_for_finish = true;
+        cancel_timeout = $timeout(refresh_experiment_until_done, refresh_rate);
+        get_experiment();
       }
+    }
 
-      function compute_overview_graph_config() {
-        $scope.overview_graph_config = {
-          "options": {
-            "chart": {
-              "type": "column"
-            }
+    function compute_overview_graph(overview) {
+      return {
+        "options": {
+          "chart": {
+            "type": "column",
+            "height": 250
           },
-          "series": $scope.cross_validation_type.compute_series($scope.results),
+          "plotOptions": {
+            "column": {}
+          },
+          "exporting": {"enabled": false},
+          "tooltip": {
+            headerFormat: "",
+            pointFormat: "<span style=\"color:{point.color}\">\u25CF</span> {series.name}: <b>{point.y:.3f}</b><br/>"
+          },
+          "legend": {
+            enabled: false
+          }
+        },
+        "series": overview.data,
+        "title": {
+          "text": overview.label
+        },
+        "loading": false,
+        "xAxis": {
+          "categories": overview.methods,
+          "labels": {
+            "enabled": false
+          },
+          "tickLength": 0
+
+        },
+        "yAxis": {
           "title": {
-            "text": "Algorithm result comparison"
-          },
-          "loading": false,
-          "xAxis": $scope.cross_validation_type.compute_legend()
-        };
-        $scope.show_overview_graph = false;
-        $timeout(function () {
-          $scope.show_overview_graph = true;
-        }, 100)
-      }
-
-      function get_experiment () {
-        MLUtils.get_experiment($stateParams.experiment_uuid).then(
-            function on_get_experiment_success (response) {
-              if (cancelled) return;
-
-              $scope.experiment = response.data;
-
-              $scope.loading = false;
-
-              if (!is_waiting_for_finish)
-                refresh_experiment_until_done();
-
-              if (!!$scope.experiment.finished && !$scope.experiment.resultsViewed)
-                MLUtils.mark_as_read($scope.experiment);
-
-              $scope.validations = JSON.parse($scope.experiment.validations);
-              $scope.algorithms = JSON.parse($scope.experiment.algorithms);
-              try {
-                $scope.results = JSON.parse($scope.experiment.result);
-
-                //TODO Pass a tag instead
-                var predicting_type;
-                if ($scope.validations.length) {
-                  for (var i = 0; i < $scope.results.length; i++) {
-                    var result = $scope.results[i];
-                    if (result.data.cells.validations.length) {
-                      if(result.data.cells.validations[0].data.average.hasOwnProperty("MSE")) {
-                        predicting_type = 'real';
-                      } else {
-                        predicting_type = (result.data.cells.validations[0].data.average.confusion_matrix.length > 2)? 'polynominal' : 'binominal';
-                      }
-                    }
-                  }
-
-                  $scope.cross_validation_type = MLUtils.CV[predicting_type];
-                  compute_overview_graph_config();
-                }
-              } catch (e) {
-                console.log(e);
-                if (!($scope.experiment.hasError || $scope.experiment.hasServerError)) {
-                  $scope.experiment.hasError = true;
-                  $scope.experiment.result = "Invalid JSON: \n" + $scope.experiment.result;
-                }
-              } // pass
-
-            },
-            function on_get_experiment_fail (response) {
-              if (cancelled) return;
-
-              $scope.loading = false;
-              $scope.experiment = {
-                hasError: true,
-                result: "This experiment doesn't exist",
-                finished: true
-              }
-            }
-        )
-      }
-
-      get_experiment();
-
-      $scope.$on("$destroy", function () {
-        if (cancel_timeout) {
-          cancelled = true;
-          $timeout.cancel(cancel_timeout);
+            "text": null
+          }
         }
+      };
+    }
+
+    function link_charts_legend (chart) {
+      chart.options.chart.events = {
+        redraw: function () {
+          $('.single-legend').empty();
+          var chart = this;
+          $(chart.series).each(function (i, serie) {
+            $('<li style="color: ' + (serie.visible? serie.color  : 'grey') + '">' + serie.name + '</li>').click(function () {
+              $('.overview-charts > div > div').each(function() {
+                var series = $(this).highcharts().series[serie.index];
+                if (series.visible) {
+                  series.hide();
+                } else {
+                  series.show();
+                }
+              });
+            }).appendTo('.single-legend');
+          });
+        }
+      }
+    }
+
+    function get_experiment () {
+      MLUtils.get_experiment($stateParams.experiment_uuid).then(
+        function on_get_experiment_success (response) {
+          if (cancelled) return;
+
+          $scope.experiment = response.data;
+          $scope.loading = false;
+
+          // TODO Workaround while backend give us string instead of JSON objects...
+          // TODO To be removed!
+          $scope.experiment.validations = JSON.parse(response.data.validations);
+          $scope.experiment.algorithms = JSON.parse(response.data.algorithms);
+          $scope.experiment.results = JSON.parse(response.data.result);
+
+          if (!is_waiting_for_finish)
+            refresh_experiment_until_done();
+
+          // Parse the results
+          try {
+            console.log($scope.experiment);
+            $scope.experiment.display = MLUtils.parse_results($scope.experiment.results);
+
+            // Prepare charts
+            $scope.overview_charts = $scope.experiment.display.overview.map(function (o) {
+              return compute_overview_graph(o);
+            });
+
+            // Add legend
+            if($scope.overview_charts.length) {
+              link_charts_legend($scope.overview_charts[0]);
+            }
+
+          } catch (e) {
+            throw e;
+            if (!($scope.experiment.hasError || $scope.experiment.hasServerError)) {
+              $scope.experiment.hasError = true;
+              $scope.experiment.result = "Invalid JSON: \n" + $scope.experiment.result;
+            }
+          } finally {
+
+            // Mark as read
+            if (!$scope.experiment.resultsViewed) {
+              MLUtils.mark_as_read($scope.experiment);
+            }
+          }
+        },
+        function on_get_experiment_fail (response) {
+
+          if (cancelled) return;
+          $scope.loading = false;
+          $scope.experiment = {
+            hasError: true,
+            result: "This experiment doesn't exist"
+          };
+        }
+      )
+    }
+
+    get_experiment();
+
+    $scope.$on("$destroy", function () {
+      if (cancel_timeout) {
+        cancelled = true;
+        $timeout.cancel(cancel_timeout);
+      }
+    });
+
+    var user;
+    $scope.sharing_working = false;
+    User.get().then(function () { user = User.current(); });
+
+    $scope.experiment_is_mine = function () {
+      return $scope.experiment.createdBy.username === user.username;
+    };
+
+    $scope.mark_experiment_as_unshared = function () {
+      $scope.sharing_working = true;
+      MLUtils.mark_as_unshared($scope.experiment).then(function () {
+        $scope.experiment.shared = false;
+        $scope.sharing_working = false;
+      }, function () {
+        $scope.experiment.shared = true;
+        $scope.sharing_working = false;
       });
+    };
+    $scope.mark_experiment_as_shared = function () {
+      $scope.sharing_working = true;
+      MLUtils.mark_as_shared($scope.experiment).then(function () {
+        $scope.experiment.shared = true;
+        $scope.sharing_working = false;
+      }, function () {
+        $scope.experiment.shared = false;
+        $scope.sharing_working = false;
+      });
+    };
 
-      var user;
-      $scope.sharing_working = false;
-      User.get().then(function () { user = User.current(); });
+    $scope.variable_title = function (variable_code) {
+      // capitalize
+      return variable_code
+        .split(/[ _\-]/)
+        .map(function (code_part) { return code_part.replace(/^[a-z]/, function (str) {return str.toUpperCase(); })})
+        .join(" ");
+    };
 
-      $scope.experiment_is_mine = function () {
-        return $scope.experiment.createdBy.username === user.username;
-      };
+    $scope.pvalue_quality = function (pvalue) {
+      pvalue = Math.abs(pvalue);
+      if (pvalue <= 0.001) return "(★★★)";
+      if (pvalue <= 0.01) return "(★★)";
+      if (pvalue <= 0.1) return "(★)";
+      return "";
+    };
 
-      $scope.mark_experiment_as_unshared = function () {
-        $scope.sharing_working = true;
-        MLUtils.mark_as_unshared($scope.experiment).then(function () {
-          $scope.experiment.shared = false;
-          $scope.sharing_working = false;
-        }, function () {
-          $scope.experiment.shared = true;
-          $scope.sharing_working = false;
-        });
-      };
-      $scope.mark_experiment_as_shared = function () {
-        $scope.sharing_working = true;
-        MLUtils.mark_as_shared($scope.experiment).then(function () {
-          $scope.experiment.shared = true;
-          $scope.sharing_working = false;
-        }, function () {
-          $scope.experiment.shared = false;
-          $scope.sharing_working = false;
-        });
-      };
-
-      $scope.variable_title = function (variable_code) {
-        // capitalize
-        return variable_code
-            .split(/[ _\-]/)
-            .map(function (code_part) { return code_part.replace(/^[a-z]/, function (str) {return str.toUpperCase(); })})
-            .join(" ");
-      };
-
-      $scope.pvalue_quality = function (pvalue) {
-        pvalue = Math.abs(pvalue);
-        if (pvalue <= 0.001) return "(★★★)";
-        if (pvalue <= 0.01) return "(★★)";
-        if (pvalue <= 0.1) return "(★)";
-        return "";
-      };
-
-    }]);
+  }]);
