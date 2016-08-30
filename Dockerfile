@@ -22,6 +22,17 @@ COPY docker/runner/run.sh /
 # Add front end ressources
 COPY ./dist/ /usr/share/nginx/html/
 
+# org.label-schema.build-date=$BUILD_DATE
+# org.label-schema.vcs-ref=$VCS_REF
+LABEL org.label-schema.schema-version="1.0" \
+        org.label-schema.license="AGPLv3" \
+        org.label-schema.name="portal-frontend" \
+        org.label-schema.description="Nginx server configured to serve the frontend of the MIP portal" \
+        org.label-schema.url="https://mip.humanbrainproject.eu" \
+        org.label-schema.vendor="CHUV" \
+        org.label-schema.docker.dockerfile="Dockerfile" \
+        org.label-schema.memory-hint="10"
+
 EXPOSE 80 443
 
 CMD ["/run.sh"]
