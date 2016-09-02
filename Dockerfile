@@ -1,3 +1,5 @@
+# Verified with http://hadolint.lukasmartinelli.ch/
+
 FROM nginx:1.11
 
 MAINTAINER arnaud.jutzeler@chuv.ch
@@ -5,10 +7,11 @@ MAINTAINER arnaud.jutzeler@chuv.ch
 ENV DOCKERIZE_VERSION=v0.2.0
 
 RUN apt-get update \
-    && apt-get install --no-install-recommends --no-install-suggests -y wget \
-    && wget -O /tmp/dockerize.tar.gz https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-${DOCKERIZE_VERSION}.tar.gz \
+    && apt-get install --no-install-recommends --no-install-suggests -y wget=1.16-1 \
+    && wget -O /tmp/dockerize.tar.gz "https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-${DOCKERIZE_VERSION}.tar.gz" \
     && tar -C /usr/local/bin -xzvf /tmp/dockerize.tar.gz \
-    && rm -rf /tmp/dockerize.tar.gz /var/lib/apt/lists/*
+    && rm -f /tmp/dockerize.tar.gz \
+    && rm -rf /var/lib/apt/lists/*
 
 # Add nginx config
 COPY ./docker/runner/conf/nginx.conf.tmpl \
@@ -29,7 +32,7 @@ LABEL org.label-schema.schema-version="1.0" \
         org.label-schema.name="portal-frontend" \
         org.label-schema.description="Nginx server configured to serve the frontend of the MIP portal" \
         org.label-schema.url="https://mip.humanbrainproject.eu" \
-        org.label-schema.vendor="CHUV" \
+        org.label-schema.vendor="LREN CHUV" \
         org.label-schema.docker.dockerfile="Dockerfile" \
         org.label-schema.memory-hint="10"
 
