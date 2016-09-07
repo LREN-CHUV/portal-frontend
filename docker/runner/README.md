@@ -1,6 +1,6 @@
 # hbpmip/portal-frontend
 
-[![](https://images.microbadger.com/badges/version/hbpmip/portal-frontend.svg)](http://microbadger.com/images/hbpmip/portal-frontend "Get your own version badge on microbadger.com") [![](https://images.microbadger.com/badges/image/hbpmip/portal-frontend.svg)](http://microbadger.com/images/hbpmip/portal-frontend "Get your own image badge on microbadger.com")
+[![License](https://img.shields.io/badge/license-AGPL--3.0-blue.svg)](https://www.gnu.org/licenses/agpl-3.0.html) [![](https://images.microbadger.com/badges/version/hbpmip/portal-frontend.svg)](http://microbadger.com/images/hbpmip/portal-frontend "Get your own version badge on microbadger.com") [![](https://images.microbadger.com/badges/image/hbpmip/portal-frontend.svg)](http://microbadger.com/images/hbpmip/portal-frontend "Get your own image badge on microbadger.com")
 
 ## Docker image for Portal Frontend
 
