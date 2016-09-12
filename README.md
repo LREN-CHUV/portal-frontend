@@ -21,3 +21,7 @@
 ## Testing
 
 Running `grunt test` will run the unit tests with karma.
+
+
+## Develop & debug
+One may use dev/docker-compose.yml

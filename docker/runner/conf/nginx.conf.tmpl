@@ -62,8 +62,8 @@ http {
     include /etc/nginx/conf.d/*.conf;
 
     server {
-      listen 80;
-      listen [::]:80;
+      listen {{ default .Env.PORTAL_PORT "80" }};
+      listen [::]:{{ default .Env.PORTAL_PORT "80" }};
       server_name {{ default .Env.PORTAL_VIRTUAL_HOST "frontend" }};
 
       root /usr/share/nginx/html;

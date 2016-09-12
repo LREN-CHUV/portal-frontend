@@ -1,0 +1,24 @@
+version: '2'
+services:
+  frontend_builder:
+    build:
+      context: ../
+      dockerfile: Dockerfile.builder
+    volumes:
+      - ../:/frontend/
+      - ../.npm/:/root/.npm/
+
+  frontend:
+    build:
+      context: ../
+      dockerfile: Dockerfile
+    network_mode: "host"
+    volumes:
+      - ../app/:/usr/share/nginx/html:ro
+    environment:
+      WORKER_PROCESSES: 1
+      ERROR_LOG_LEVEL: warn
+      PORTAL_PORT: 8081
+      PORTAL_VIRTUAL_HOST: frontend
+      PORTAL_BACKEND_SERVER: backend:8080
+      PORTAL_BACKEND_CONTEXT: services
