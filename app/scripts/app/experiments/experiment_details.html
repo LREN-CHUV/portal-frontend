@@ -117,129 +117,15 @@
                   </div>
                 </div>
               </tab>
-
               <tab ng-repeat="method in experiment.display.methods" heading="{{ method.name }}">
                 <div class="panel">
                   <div class="panel-body">
-                    <div ng-switch="method.type">
-                      <div ng-switch-when="regression">
-                        <h4>Cross-Validation results (Regression)</h4>
-                        <div class="row">
-                          <div ng-repeat="metric in method.metrics | filter: {type: 'numeric'}" class="col-sm-4">
-                            <span tooltip-placement="top" tooltip="{{ metric.tooltip }}"><span ng-bind="metric.label"></span>: <span ng-bind="metric.value | number:3"></span>
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                      <div ng-switch-when="binary_classification">
-                        <h4>Cross-Validation results (Binary Classification)</h4>
-                        <div>
-                          <table class="table table-condensed table-bordered">
-                            <tr>
-                              <th>
-                                Confusion Matrix
-                              </th>
-                              <td>
-                                <confusion-matrix data="method.metrics['Confusion matrix']"></confusion-matrix>
-                              </td>
-                            </tr>
-                          </table>
-                        </div>
-                      </div>
-                      <div ng-switch-when="classification">
-                        <h4>Cross-Validation results (Classification)</h4>
-                        <div>
-                          <div class="row">
-                            <div ng-repeat="metric in method.metrics | filter: {type: 'confusion_matrix'}" class="col-sm-6">
-                              <span ng-bind="metric.label"></span>: <confusion-matrix data="metric.value"></confusion-matrix>
-                            </div>
-                          </div>
-                          <div class="row">
-                            <div ng-repeat="metric in method.metrics | filter: {type: 'numeric'}" class="col-sm-4">
-                            <span tooltip-placement="top" tooltip="{{ metric.tooltip }}"><span ng-bind="metric.label"></span>: <span ng-bind="metric.value | number:3"></span>
-                            </span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div ng-switch-when="linearRegression">
-                        <h4>Results</h4>
-
-                        <table class="table table-striped table-bordered">
-                          <tr>
-                            <th>Variable</th>
-                            <th>Coefficients</th>
-                            <th>Standard Error</th>
-                            <th>T-statistic</th>
-                            <th>P-value</th>
-                          </tr>
-                          <tr ng-repeat="(name, value) in method.raw.data.cells.summary.init.coefficients">
-                            <td ng-bind="variable_title(name)"></td>
-                            <td ng-bind="value.estimate | number"></td>
-                            <td ng-bind="value.std_error | number"></td>
-                            <td ng-bind="value.t_value | number"></td>
-                            <td>
-                              <span ng-bind="value.p_value | number"></span>
-                              <span ng-bind="pvalue_quality(value.p_value)"></span>
-                            </td>
-                          </tr>
-                        </table>
-
-                        <div>
-                          <p>
-                            <b>Degrees of freedom: </b>
-                            <span ng-bind="method.raw.data.cells.summary.init.degrees_freedom[1]"></span>
-                          </p>
-                        </div>
-
-                        <div>
-                          <p>
-                            <b>Residuals </b>
-                          </p>
-                          <table class="table table-bordered">
-                            <tr>
-                              <th>Min</th>
-                              <th>Q1</th>
-                              <th>Median</th>
-                              <th>Q3</th>
-                              <th>Max</th>
-                            </tr>
-                            <tr>
-                              <td ng-bind="method.raw.data.cells.summary.init.residuals.min | number"></td>
-                              <td ng-bind="method.raw.data.cells.summary.init.residuals.q1 | number"></td>
-                              <td ng-bind="method.raw.data.cells.summary.init.residuals.median | number"></td>
-                              <td ng-bind="method.raw.data.cells.summary.init.residuals.q3 | number"></td>
-                              <td ng-bind="method.raw.data.cells.summary.init.residuals.max | number"></td>
-                            </tr>
-                          </table>
-                        </div>
-
-                        <div>
-                          <p><b>Covariance matrix</b></p>
-                          <table class="table table-condensed table-bordered">
-                            <tr ng-repeat="row in method.raw.data.cells.summary.init.cov_unscaled">
-                              <td ng-repeat="cell in row" ng-bind="cell | number"></td>
-                            </tr>
-                          </table>
-                        </div>
-                      </div>
-                      <div ng-switch-default>
-                        <h1>Results</h1>
-                        <p></p>
-                        <div class="panel-body">
-                          The methods ran successfully but unfortunately we are not yet able to display the results in a nicely way.
-                          <br>
-                          Here's the raw output:
-                          <br><br>
-                          <pre ng-bind="experiment.result"></pre>
-                        </div>
-                      </div>
-                    </div>
+                    <h1>Results</h1>
+                    <method-result data="method"></method-result>
                   </div>
                 </div>
               </tab>
             </tabset>
-
           </div>
         </div>
       </div>
