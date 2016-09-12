@@ -4,6 +4,7 @@ angular.module('chuvApp.util')
     var datatypes_per_code = {},
       ml_methods,
       ml_validations,
+      ml_metrics,
       ml_methods_promise;
 
     function map_experiment_for_backend (experiment) {
@@ -50,6 +51,7 @@ angular.module('chuvApp.util')
       return uuid;
     }
 
+    //TODO One call only!
     ml_methods = $resource(backendUrl + "/experiments/methods", {},
       { query : {
         transformResponse: [angular.fromJson, function (response) {
@@ -66,6 +68,17 @@ angular.module('chuvApp.util')
         isArray: true
       } }
     ).query();
+    $resource(backendUrl + "/experiments/methods", {},
+      { get : {
+        transformResponse: [angular.fromJson, function (response) {
+          return response.metrics;
+        }]
+      } }
+    ).get().$promise.then(
+      function (data) {
+        ml_metrics = data;
+      }
+    );
 
     function compute_classifier_accuracy(matrix) {
       var i, j, fc = 0, sum = 0;
@@ -85,6 +98,9 @@ angular.module('chuvApp.util')
       },
       list_validations: function () {
         return ml_validations;
+      },
+      list_metrics: function () {
+        return ml_metrics;
       },
       get_datatype: function (code, dataArray) {
         if (!datatypes_per_code.hasOwnProperty(code)) {
@@ -158,7 +174,7 @@ angular.module('chuvApp.util')
      *
      * @param data
      * @returns {{validations, algorithms, validation_type: *, methods: *, overview: Array, raw}}
-       */
+     */
     function parse_results(results) {
 
       var overview = [], validation_type = null;
@@ -178,7 +194,7 @@ angular.module('chuvApp.util')
 
         if(output.type === validation_type) {
           var i = 0;
-          output.metrics = MLUtils.CV[validation_type].metrics.map(function(metric){
+          output.metrics = ml_metrics[output.type].map(function(metric){
 
             var value = result.data.cells.validations[0].data.average[metric.code];
 
@@ -196,7 +212,7 @@ angular.module('chuvApp.util')
             return angular.extend({value: value}, metric);
           });
         } else {
-         output.raw = result
+          output.raw = result
         }
 
         return output;
