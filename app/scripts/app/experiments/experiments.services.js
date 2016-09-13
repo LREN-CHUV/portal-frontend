@@ -80,18 +80,6 @@ angular.module('chuvApp.util')
       }
     );
 
-    function compute_classifier_accuracy(matrix) {
-      var i, j, fc = 0, sum = 0;
-      for(i = 0; i < matrix.length; i++) {
-        fc += matrix[i][i];
-        for(j = 0; j < matrix.length; j++) {
-          sum += matrix[i][j];
-        }
-      }
-
-      return fc / sum;
-    }
-
     var MLUtils = {
       list_ml_methods: function () {
         return ml_methods;

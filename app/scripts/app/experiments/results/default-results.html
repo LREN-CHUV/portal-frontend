@@ -1,10 +1,26 @@
 <div>
-  <p></p>
-  <div class="panel-body">
-    The methods ran successfully but unfortunately we are not yet able to display the results in a nicely way.
-    <br>
-    Here's the raw output:
-    <br><br>
-    <pre ng-bind="data"></pre>
-  </div>
+  <accordion close-others="false">
+
+  <accordion-group ng-if="data.raw" is-open="true">
+    <accordion-heading>
+      <span class="ti ti-check-box"></span>
+      Results
+    </accordion-heading>
+    <div>
+      The methods ran successfully but unfortunately we are not yet able to display the results in a nicely way.
+      <br>
+      Here's the raw output:
+      <br><br>
+      <pretty-json data="data.raw"></pretty-json>
+    </div>
+  </accordion-group>
+
+  <accordion-group is-open="help_is_open">
+    <accordion-heading>
+      <span class="ti ti-help-alt"></span>
+      Help
+    </accordion-heading>
+
+    <div class="panel-body" btf-markdown="estimation.help"></div>
+  </accordion-group>
 </div>

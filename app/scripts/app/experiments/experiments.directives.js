@@ -141,7 +141,7 @@ angular.module('chuvApp.experiments')
       }]
     }
   }])
-.directive('confusionMatrix', [ function () {
+  .directive('confusionMatrix', [ function () {
 
     return {
       templateUrl: "/scripts/app/experiments/confusion-matrix.html",
@@ -150,8 +150,53 @@ angular.module('chuvApp.experiments')
         data: '='
       },
       controller: ["$scope", function ($scope) {
-          $scope.labels = $scope.data.labels;
-          $scope.values = $scope.data.values;
+        $scope.labels = $scope.data.labels;
+        $scope.values = $scope.data.values;
       }]
     }
-  }]);
+  }])
+  .directive("prettyJson",
+    [
+      '$compile',
+      function (
+        $compile
+      ) {
+        var linker = function($scope, element) {
+
+          // Taken from http://jsfiddle.net/KJQ9K/554/
+          function syntaxHighlight(json) {
+            if (typeof json != 'string') {
+              json = JSON.stringify(json, undefined, 2);
+            }
+            json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+              var cls = 'number';
+              if (/^"/.test(match)) {
+                if (/:$/.test(match)) {
+                  cls = 'key';
+                } else {
+                  cls = 'string';
+                }
+              } else if (/true|false/.test(match)) {
+                cls = 'boolean';
+              } else if (/null/.test(match)) {
+                cls = 'null';
+              }
+              return '<span class="' + cls + '">' + match + '</span>';
+            });
+          }
+
+          element.children().html(syntaxHighlight($scope.data)).show();
+          $compile(element.contents())($scope);
+        };
+
+        return {
+          template: "<pre><pre>",
+          restrict: "E",
+          link: linker,
+          scope: {
+            data: '='
+          }
+        };
+      }]
+  );

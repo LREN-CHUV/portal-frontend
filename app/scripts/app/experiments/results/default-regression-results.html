@@ -1,9 +1,28 @@
 <div>
-  <h4>Cross-Validation results (Regression)</h4>
-  <div class="row">
-    <div ng-repeat="metric in data.metrics | filter: {type: 'numeric'}" class="col-sm-4">
+  <accordion close-others="false">
+
+    <accordion-group ng-if="data.metrics" is-open="true">
+      <accordion-heading>
+        <span class="ti ti-check-box"></span>
+        Results: Cross-Validation (Regression)
+      </accordion-heading>
+
+      <div class="row">
+        <div ng-repeat="metric in data.metrics | filter: {type: 'numeric'}" class="col-sm-4">
       <span tooltip-placement="top" tooltip="{{ metric.tooltip }}"><span ng-bind="metric.label"></span>: <span ng-bind="metric.value | number:3"></span>
       </span>
-    </div>
-  </div>
+        </div>
+      </div>
+    </accordion-group>
+
+    <accordion-group is-open="help_is_open">
+      <accordion-heading>
+        <span class="ti ti-help-alt"></span>
+        Help
+      </accordion-heading>
+
+      <div class="panel-body" btf-markdown="estimation.help"></div>
+    </accordion-group>
+
+  </accordion>
 </div>

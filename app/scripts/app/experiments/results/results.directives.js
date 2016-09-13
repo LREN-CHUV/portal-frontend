@@ -9,8 +9,10 @@ angular.module('chuvApp.experiments')
  */
   .directive("methodResult",
     [
+      '$compile',
       '$http',
       function (
+        $compile,
         $http
       ) {
 
@@ -19,7 +21,7 @@ angular.module('chuvApp.experiments')
           var templateUrl = 'default-results.html';
           switch(type) {
             case 'linearRegression':
-              templateUrl = 'linear-regression-results';
+              templateUrl = 'linear-regression-results.html';
               break;
             case 'anova':
               templateUrl = 'anova-results.html';
@@ -39,13 +41,29 @@ angular.module('chuvApp.experiments')
         };
 
         var linker = function($scope, element) {
-          scope.rootDirectory = 'images/';
-
           // TODO package all the templates at once...
-          getTemplate($scope.data.type).then(function (data) {
-            element.html(data).show();
+          getTemplate($scope.data.type).then(function (response) {
+            element.html(response.data).show();
             $compile(element.contents())($scope);
           });
+
+          // Linear regression & ANOVA utility functions...
+          // TODO Put somewhere
+          $scope.variable_title = function (variable_code) {
+            // capitalize
+            return variable_code
+              .split(/[ _\-]/)
+              .map(function (code_part) { return code_part.replace(/^[a-z]/, function (str) {return str.toUpperCase(); })})
+              .join(" ");
+          };
+
+          $scope.pvalue_quality = function (pvalue) {
+            pvalue = Math.abs(pvalue);
+            if (pvalue <= 0.001) return "(★★★)";
+            if (pvalue <= 0.01) return "(★★)";
+            if (pvalue <= 0.1) return "(★)";
+            return "";
+          };
         };
 
         return {

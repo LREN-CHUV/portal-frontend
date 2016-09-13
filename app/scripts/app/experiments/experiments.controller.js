@@ -377,7 +377,6 @@ angular.module('chuvApp.experiments')
 
           // Parse the results
           try {
-            console.log($scope.experiment);
             $scope.experiment.display = MLUtils.parse_results($scope.experiment.results);
 
             // Prepare charts
@@ -453,21 +452,4 @@ angular.module('chuvApp.experiments')
         $scope.sharing_working = false;
       });
     };
-
-    $scope.variable_title = function (variable_code) {
-      // capitalize
-      return variable_code
-        .split(/[ _\-]/)
-        .map(function (code_part) { return code_part.replace(/^[a-z]/, function (str) {return str.toUpperCase(); })})
-        .join(" ");
-    };
-
-    $scope.pvalue_quality = function (pvalue) {
-      pvalue = Math.abs(pvalue);
-      if (pvalue <= 0.001) return "(★★★)";
-      if (pvalue <= 0.01) return "(★★)";
-      if (pvalue <= 0.1) return "(★)";
-      return "";
-    };
-
   }]);

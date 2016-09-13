@@ -100,27 +100,41 @@
               <tab heading="Overview" ng-if="overview_charts.length">
                 <div class="panel">
                   <div class="panel-body">
-                    <div class="row">
-                      <div class="single-legend col-sm-12"></div>
-                    </div>
-                    <div class="row overview-charts">
-                      <div class="col-sm-3" ng-repeat="chart_config in overview_charts">
-                        <highchart config="chart_config"></highchart>
-                      </div>
-                    </div>
-                    <div class="pull-right">
-                      <button class="btn btn-default" ng-click="hideJson = !hideJson" ng-init="hideJson=true">
-                        <span ng-bind="hideJson ? 'Show' : 'Hide'"></span> raw JSON
-                      </button>
-                      <pre collapse="hideJson" ng-bind="experiment.raw"></pre>
-                    </div>
+
+                    <accordion close-others="false">
+
+                      <accordion-group ng-if="overview_charts" is-open="true">
+                        <accordion-heading>
+                          <span class="ti ti-check-box"></span>
+                          Results: Cross-validation
+                        </accordion-heading>
+
+                        <div class="row">
+                          <div class="single-legend col-sm-12"></div>
+                        </div>
+
+                        <div class="row overview-charts">
+                          <div class="col-sm-3" ng-repeat="chart_config in overview_charts">
+                            <highchart config="chart_config"></highchart>
+                          </div>
+                        </div>
+                      </accordion-group>
+
+                      <accordion-group is-open="false">
+                        <accordion-heading>
+                          <span class="ti ti-list"></span>
+                          Raw JSON
+                        </accordion-heading>
+                        <pretty-json collapse="hideJson" data="experiment.display.raw"></pretty-json>
+                      </accordion-group>
+
+                    </accordion>
                   </div>
                 </div>
               </tab>
               <tab ng-repeat="method in experiment.display.methods" heading="{{ method.name }}">
                 <div class="panel">
                   <div class="panel-body">
-                    <h1>Results</h1>
                     <method-result data="method"></method-result>
                   </div>
                 </div>
