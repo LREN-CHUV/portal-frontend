@@ -9,8 +9,8 @@
 
       <div class="row">
         <div ng-repeat="metric in data.metrics | filter: {type: 'numeric'}" class="col-sm-4">
-      <span tooltip-placement="top" tooltip="{{ metric.tooltip }}"><span ng-bind="metric.label"></span>: <span ng-bind="metric.value | number:3"></span>
-      </span>
+          <span tooltip-placement="top" tooltip="{{ metric.tooltip }}"><b ng-bind="metric.label"></b>: <span ng-bind="metric.value | number:3"></span>
+          </span>
         </div>
       </div>
     </accordion-group>

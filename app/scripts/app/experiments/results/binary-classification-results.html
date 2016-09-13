@@ -7,16 +7,19 @@
         Results: Cross-Validation (Binary Classification)
       </accordion-heading>
 
-      <table class="table table-condensed table-bordered">
-        <tr>
-          <th>
-            Confusion Matrix
-          </th>
-          <td>
-            <confusion-matrix data="data.metrics['Confusion matrix']"></confusion-matrix>
-          </td>
-        </tr>
-      </table>
+      <div class="row">
+        <div ng-repeat="metric in data.metrics | filter: {type: 'numeric'}" class="col-sm-4">
+          <span tooltip-placement="top" tooltip="{{ metric.tooltip }}"><b ng-bind="metric.label"></b>: <span ng-bind="metric.value | number:3"></span>
+          </span>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-12">
+          <b ng-bind="data.metrics[0].label"></b>:
+          <confusion-matrix data="data.metrics[0].value"></confusion-matrix>
+        </div>
+      </div>
     </accordion-group>
 
     <accordion-group is-open="help_is_open">
