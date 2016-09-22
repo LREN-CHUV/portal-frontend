@@ -1,0 +1,29 @@
+[
+    {
+        "code": "rs610932_A",
+        "count": 1115,
+        "dataType": "SummaryStatistics"
+    },
+    {
+        "code": "rs610932_A",
+        "dataType": "DatasetStatistic",
+        "dataset": {
+            "data": {
+                "category": [],
+                "header": [
+                    "0",
+                    "1",
+                    "2"
+                ],
+                "shape": "vector",
+                "value": [
+                    297,
+                    486,
+                    154
+                ]
+            },
+            "name": "Count"
+        },
+        "label": "Histogram"
+    }
+]

@@ -33,16 +33,16 @@
       <div class="row">
 
         <div class="col-sm-3">
-          <div class="panel">
+          <div class="method-panel panel">
             <div class="panel-heading">
-              Choose a ML Algorithm
+              Available Methods
             </div>
             <div class="panel-body">
 
               <div ng-if="!ml_methods.length">
               <h4>Note:</h4>
                 <p>
-                  No algorithm available for the moment...
+                  No method available at the moment...
                 </p>
               </div>
 
@@ -51,8 +51,8 @@
                   <p ng-repeat="method in ml_methods | filter:{type:'statistics'}  | orderBy:'-label'">
                     <label class="btn btn-primary-alt col-xs-12"
                            ng-model="shared.chosen_method"
-                           ng-disabled="method.disable"
-                           ng-click="method.disable? angular.noop : shared.method_parameters = []"
+                           ng-disabled="!method.available"
+                           ng-click="method.available? shared.method_parameters = [] : angular.noop"
                            btn-radio="method"
                            uncheckable
                            ng-bind="method.label"></label>
@@ -63,8 +63,8 @@
                   <p ng-repeat="method in ml_methods | filter:{type:'features_extraction'}  | orderBy:'-label'">
                     <label class="btn btn-primary-alt col-xs-12"
                            ng-model="shared.chosen_method"
-                           ng-disabled="method.disable"
-                           ng-click="method.disable? angular.noop : shared.method_parameters = []"
+                           ng-disabled="!method.available"
+                           ng-click="method.available? shared.method_parameters = [] :  angular.noop"
                            btn-radio="method"
                            uncheckable
                            ng-bind="method.label"></label>
@@ -100,7 +100,7 @@
                 <accordion-group is-open="true">
                   <accordion-heading>
                     <span class="ti ti-panel"></span>
-                    Configure The Algorithm's Parameters
+                    Configure The Method's Parameters
                   </accordion-heading>
 
                   <div ng-if="shared.chosen_method.parameters.length" class="form-group">
@@ -137,7 +137,7 @@
                   </accordion-heading>
 
                   <div ng-if="!shared.chosen_method.help">
-                    There is no help for this algorithm
+                    There is no help for this method
                   </div>
                   <div ng-if="shared.chosen_method.help" btf-markdown="shared.chosen_method.help"></div>
                 </accordion-group>

@@ -1,0 +1,29 @@
+[
+    {
+        "code": "PTETHCAT",
+        "count": 1115,
+        "dataType": "SummaryStatistics"
+    },
+    {
+        "code": "PTETHCAT",
+        "dataType": "DatasetStatistic",
+        "dataset": {
+            "data": {
+                "category": [],
+                "header": [
+                    "Hisp/Latino",
+                    "Not Hisp/Latino",
+                    "Unknown"
+                ],
+                "shape": "vector",
+                "value": [
+                    28,
+                    1080,
+                    7
+                ]
+            },
+            "name": "Count"
+        },
+        "label": "Histogram"
+    }
+]

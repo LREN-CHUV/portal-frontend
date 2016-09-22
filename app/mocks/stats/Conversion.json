@@ -1,0 +1,41 @@
+[
+    {
+        "code": "Conversion",
+        "count": 1115,
+        "dataType": "SummaryStatistics"
+    },
+    {
+        "code": "Conversion",
+        "dataType": "DatasetStatistic",
+        "dataset": {
+            "data": {
+                "category": [],
+                "header": [
+                    "CN to CN",
+                    "CN to MCI",
+                    "CN to AD",
+                    "MCI to MCI",
+                    "MCI to CN",
+                    "MCI to AD",
+                    "AD to AD",
+                    "AD to MCI",
+                    "AD to CN"
+                ],
+                "shape": "vector",
+                "value": [
+                    223,
+                    41,
+                    18,
+                    334,
+                    36,
+                    228,
+                    229,
+                    2,
+                    0
+                ]
+            },
+            "name": "Count"
+        },
+        "label": "Histogram"
+    }
+]

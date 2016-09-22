@@ -264,8 +264,8 @@ angular.module('chuvApp.models').controller('ReviewController',
         .$promise.then(function (allVariables) {
           allVariables = _.sortBy(allVariables,"label");
           $scope.variables = filterFilter(allVariables, {isVariable: true});
-          $scope.groupingVariables = filterFilter(allVariables, {isGrouping: true});
-          $scope.coVariables = filterFilter(allVariables, {isCovariable: true});
+          $scope.groupingVariables = allVariables.filter(function(v) {return ["polynominal", "binominal"].indexOf(v.type) != -1});
+          $scope.coVariables = allVariables.filter(function(v) {return ["real", "continuous"].indexOf(v.type) != -1});
           $scope.filterVariables = filterFilter(allVariables, {isFilter: true});
 
           $scope.allVariables = _.indexBy(allVariables, 'code');
@@ -299,15 +299,15 @@ angular.module('chuvApp.models').controller('ReviewController',
       var error = "";
       //The query must have at less a Variable, a Grouping and a Covariable to be sent to the API.
       if (query.variables.length < 1) {
-        error += "The query must have at less a Variable.\n";
+        error += "The query must have at least a Variable.\n";
       }
       // check if grouping is complete
       if ($scope.contains(query.groupings, {code: undefined})) {
         error += "A grouping is not complete yet.\n";
       }
 
-      if (query.coVariables.length < 1) {
-        error += "The query must have at less a Covariable.\n";
+      if (query.coVariables.length + query.groupings.length < 1) {
+        error += "The query must have at least a covariable.\n";
       }
       // check if coVariables is complete
       if ($scope.contains(query.coVariables, {code: undefined})) {

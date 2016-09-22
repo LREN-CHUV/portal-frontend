@@ -1,0 +1,29 @@
+[
+    {
+        "code": "rs3865444_T",
+        "count": 1115,
+        "dataType": "SummaryStatistics"
+    },
+    {
+        "code": "rs3865444_T",
+        "dataType": "DatasetStatistic",
+        "dataset": {
+            "data": {
+                "category": [],
+                "header": [
+                    "0",
+                    "1",
+                    "2"
+                ],
+                "shape": "vector",
+                "value": [
+                    475,
+                    392,
+                    73
+                ]
+            },
+            "name": "Count"
+        },
+        "label": "Histogram"
+    }
+]

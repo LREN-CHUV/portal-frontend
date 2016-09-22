@@ -1,0 +1,29 @@
+[
+    {
+        "code": "rs3851179_A",
+        "count": 1115,
+        "dataType": "SummaryStatistics"
+    },
+    {
+        "code": "rs3851179_A",
+        "dataType": "DatasetStatistic",
+        "dataset": {
+            "data": {
+                "category": [],
+                "header": [
+                    "0",
+                    "1",
+                    "2"
+                ],
+                "shape": "vector",
+                "value": [
+                    412,
+                    416,
+                    112
+                ]
+            },
+            "name": "Count"
+        },
+        "label": "Histogram"
+    }
+]

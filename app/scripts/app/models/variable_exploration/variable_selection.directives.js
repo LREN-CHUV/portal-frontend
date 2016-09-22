@@ -61,6 +61,7 @@ angular.module('chuvApp.models')
               children: []
             })
           });
+
         }
 
         function applyNodeColors () {
@@ -108,6 +109,7 @@ angular.module('chuvApp.models')
             circle = svg.selectAll("circle")
               .data(nodes)
               .enter().append("circle")
+              .filter(function(d) {return !d.is_group || d.children}) // Do not display enpty groups
               .attr("class", function(d) { return d.parent ? d.children ? "node" : "node node--leaf" : "node node--root"; })
               .style("fill", color_for_node)
               .on("click", function(d) {
@@ -119,6 +121,7 @@ angular.module('chuvApp.models')
             text = svg.selectAll("text")
               .data(nodes)
               .enter().append("text")
+              .filter(function(d) {return !d.is_group || d.children}) // Do not display enpty groups
               .attr("class", function(d) { return d.children ? "circle-label group" : "circle-label"; })
               .style("display", function(d) {
                 return d.parent === root ? "inline" : "none";
@@ -248,7 +251,7 @@ angular.module('chuvApp.models')
   }])
 
 
-  .directive("variableStatistics", ["$timeout", "Variable", '$stateParams', function ($timeout, Variable, $stateParams) {
+  .directive("variableStatistics", ["$timeout", "$filter", "Variable", '$stateParams', function ($timeout, $filter, Variable, $stateParams) {
     return {
       templateUrl: "scripts/app/models/variable_exploration/variable_statistics.html",
       link: function ($scope, element) {
@@ -297,6 +300,8 @@ angular.module('chuvApp.models')
           return [ordered_x_values, series, has_multiple_series];
         }
 
+        var f_number = $filter("number");
+
         $scope.init_hc_config = function (statistic) {
           if (statistic.hc_config) return;
 
@@ -309,15 +314,23 @@ angular.module('chuvApp.models')
                 type: 'column'
               },
               tooltip: {
-                headerFormat: '<span style="font-weight:bold">{point.key}</span><table>',
-                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                '<td style="padding:0"><b>{point.y:.2f}</b></td></tr>',
-                footerFormat: '</table>',
-                shared: true,
+                formatter: function () {
+                  return '<span style="font-weight:bold">' + (angular.isNumber(this.x)? f_number(this.x, 2) : this.x) + '</span><table>' +
+                    '<tr><td style="color:{series.color};padding:0">' + this.series.name + ':</td>' +
+                    '<td style="padding:0"><b>' + this.point.y + '</b></td></tr>' +
+                    '</table>'
+                },
                 useHTML: true
               }
             },
-            xAxis: { categories: categories_and_data[0] },
+            xAxis: {
+              categories: categories_and_data[0],
+              labels: {
+                formatter: function () {
+                  return angular.isNumber(this.value)? f_number(this.value, 2) : this.value;
+                }
+              }
+            },
 
             series: categories_and_data[1],
 
@@ -371,7 +384,7 @@ angular.module('chuvApp.models')
 
           $scope.stats.forEach(function (stat) {
             stat.active = false;
-          })
+          });
 
           statistics.active = true;
           $scope.show = false;

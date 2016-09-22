@@ -48,6 +48,11 @@ angular.module('chuvApp.models')
 
 
       $scope.use_variable_as = function(type, variable, dont_broadcast) {
+
+        if(type === "covariable" && ["polynominal", "binominal"].indexOf(variable.type) != -1) {
+          type = "grouping";
+        }
+
         var config = $scope.configuration[type];
 
         if (!variable) {
@@ -108,7 +113,7 @@ angular.module('chuvApp.models')
        */
       $scope.has_valid_configuration = function () {
         return Object.keys($scope.configuration.variable).length > 0
-          && Object.keys($scope.configuration.covariable).length > 0;
+          && Object.keys($scope.configuration.grouping).length + Object.keys($scope.configuration.covariable).length > 0;
       };
 
       /**
@@ -131,7 +136,8 @@ angular.module('chuvApp.models')
         .$promise.then(function (allVariables) {
           $scope.allVariables = _
             .sortBy(allVariables, "label")
-            .filter(function (variable) { return variable.group && variable.group.code;});
+            // TODO For the moment we do not make available variable of type 'text' (Visit ID, etc)
+            .filter(function (variable) { return variable.group && variable.group.code && ["real", "integer", "polynominal", "binominal"].indexOf(variable.type) != -1;});
 
           $scope.allVariables.forEach(function (variable) {
             config_keys.forEach(function (config_name) {
@@ -143,7 +149,8 @@ angular.module('chuvApp.models')
           return Group.get().$promise;
         })
         .then(function (group) {
-          $scope.groups = group.groups;
+          // Do not display no-group group
+          $scope.groups = group.groups.filter(function (g) {return g.code !== "no-group"});
           $scope.loaded = true;
         });
 

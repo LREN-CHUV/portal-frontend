@@ -1,0 +1,29 @@
+[
+    {
+        "code": "LatestDX",
+        "count": 1115,
+        "dataType": "SummaryStatistics"
+    },
+    {
+        "code": "LatestDX",
+        "dataType": "DatasetStatistic",
+        "dataset": {
+            "data": {
+                "category": [],
+                "header": [
+                    "CN",
+                    "MCI",
+                    "AD"
+                ],
+                "shape": "vector",
+                "value": [
+                    259,
+                    377,
+                    475
+                ]
+            },
+            "name": "Count"
+        },
+        "label": "Histogram"
+    }
+]

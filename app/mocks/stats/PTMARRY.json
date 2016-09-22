@@ -1,0 +1,33 @@
+[
+    {
+        "code": "PTMARRY",
+        "count": 1115,
+        "dataType": "SummaryStatistics"
+    },
+    {
+        "code": "PTMARRY",
+        "dataType": "DatasetStatistic",
+        "dataset": {
+            "data": {
+                "category": [],
+                "header": [
+                    "Married",
+                    "Widowed",
+                    "Divorced",
+                    "Never married",
+                    "Unknown"
+                ],
+                "shape": "vector",
+                "value": [
+                    864,
+                    127,
+                    88,
+                    34,
+                    2
+                ]
+            },
+            "name": "Count"
+        },
+        "label": "Histogram"
+    }
+]

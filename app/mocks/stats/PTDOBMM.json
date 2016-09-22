@@ -1,0 +1,52 @@
+[
+    {
+        "average": 6.834977578475336,
+        "code": "PTDOBMM",
+        "count": 1115,
+        "dataType": "SummaryStatistics",
+        "max": 12.0,
+        "min": 1.0,
+        "std": 3.385227188253279
+    },
+    {
+        "code": "PTDOBMM",
+        "dataType": "DatasetStatistic",
+        "dataset": {
+            "data": {
+                "category": [],
+                "header": [
+                    1.0,
+                    2.0,
+                    3.0,
+                    4.0,
+                    5.0,
+                    6.0,
+                    7.0,
+                    8.0,
+                    9.0,
+                    10.0,
+                    11.0,
+                    12.0,
+                    13.0
+                ],
+                "shape": "vector",
+                "value": [
+                    80,
+                    71,
+                    79,
+                    82,
+                    91,
+                    117,
+                    104,
+                    94,
+                    98,
+                    83,
+                    107,
+                    109
+                ]
+            },
+            "name": "Count"
+        },
+        "label": "Histogram"
+    }
+]

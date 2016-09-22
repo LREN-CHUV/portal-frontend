@@ -1,0 +1,29 @@
+[
+    {
+        "code": "rs3764650_G",
+        "count": 1115,
+        "dataType": "SummaryStatistics"
+    },
+    {
+        "code": "rs3764650_G",
+        "dataType": "DatasetStatistic",
+        "dataset": {
+            "data": {
+                "category": [],
+                "header": [
+                    "0",
+                    "1",
+                    "2"
+                ],
+                "shape": "vector",
+                "value": [
+                    752,
+                    165,
+                    23
+                ]
+            },
+            "name": "Count"
+        },
+        "label": "Histogram"
+    }
+]

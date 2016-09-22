@@ -1,1 +1,27 @@
-[]
+[
+    {
+        "code": "PTGENDER",
+        "count": 1115,
+        "dataType": "SummaryStatistics"
+    },
+    {
+        "code": "PTGENDER",
+        "dataType": "DatasetStatistic",
+        "dataset": {
+            "data": {
+                "category": [],
+                "header": [
+                    "Male",
+                    "Female"
+                ],
+                "shape": "vector",
+                "value": [
+                    604,
+                    511
+                ]
+            },
+            "name": "Count"
+        },
+        "label": "Histogram"
+    }
+]

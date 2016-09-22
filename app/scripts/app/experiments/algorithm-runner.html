@@ -6,7 +6,7 @@
 
     <div ng-if="shared.experiment_configuration.length == 0">
       <p>
-        Pick a Machine Learning Algorithm on the left and add it here to create an experiment
+        Pick a Method on the left and add it here to create an experiment
       </p>
     </div>
 
@@ -26,7 +26,7 @@
           </div>
         </div>
 
-        <h4>Algorithms</h4>
+        <h4>Selected Methods</h4>
         <ul>
           <li ng-repeat="experiment in shared.experiment_configuration track by $index">
             <div style="max-width: calc(100% - 20px); display: inline-block; vertical-align: top">

@@ -1,0 +1,29 @@
+[
+    {
+        "code": "ORIGPROT",
+        "count": 1115,
+        "dataType": "SummaryStatistics"
+    },
+    {
+        "code": "ORIGPROT",
+        "dataType": "DatasetStatistic",
+        "dataset": {
+            "data": {
+                "category": [],
+                "header": [
+                    "ADNI1",
+                    "ADNIGO",
+                    "ADNI2"
+                ],
+                "shape": "vector",
+                "value": [
+                    645,
+                    65,
+                    405
+                ]
+            },
+            "name": "Count"
+        },
+        "label": "Histogram"
+    }
+]

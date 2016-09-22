@@ -1,0 +1,27 @@
+[
+    {
+        "code": "MRIScanner",
+        "count": 1115,
+        "dataType": "SummaryStatistics"
+    },
+    {
+        "code": "MRIScanner",
+        "dataType": "DatasetStatistic",
+        "dataset": {
+            "data": {
+                "category": [],
+                "header": [
+                    "1.5",
+                    "3.0"
+                ],
+                "shape": "vector",
+                "value": [
+                    575,
+                    540
+                ]
+            },
+            "name": "Count"
+        },
+        "label": "Histogram"
+    }
+]

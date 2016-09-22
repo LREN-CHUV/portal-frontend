@@ -1,1 +1,29 @@
-[]
+[
+    {
+        "code": "DX",
+        "count": 1115,
+        "dataType": "SummaryStatistics"
+    },
+    {
+        "code": "DX",
+        "dataType": "DatasetStatistic",
+        "dataset": {
+            "data": {
+                "category": [],
+                "header": [
+                    "CN",
+                    "MCI",
+                    "AD"
+                ],
+                "shape": "vector",
+                "value": [
+                    283,
+                    600,
+                    232
+                ]
+            },
+            "name": "Count"
+        },
+        "label": "Histogram"
+    }
+]

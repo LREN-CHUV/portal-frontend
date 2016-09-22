@@ -1,0 +1,33 @@
+[
+    {
+        "code": "AgeGroup",
+        "count": 1115,
+        "dataType": "SummaryStatistics"
+    },
+    {
+        "code": "AgeGroup",
+        "dataType": "DatasetStatistic",
+        "dataset": {
+            "data": {
+                "category": [],
+                "header": [
+                    "-50y",
+                    "50-59y",
+                    "60-69y",
+                    "70-79y",
+                    "+80y"
+                ],
+                "shape": "vector",
+                "value": [
+                    0,
+                    47,
+                    266,
+                    566,
+                    236
+                ]
+            },
+            "name": "Count"
+        },
+        "label": "Histogram"
+    }
+]

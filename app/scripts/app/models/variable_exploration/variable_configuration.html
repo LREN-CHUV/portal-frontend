@@ -3,23 +3,19 @@
 </button>
 <div class="configuration panel closed" ng-class="do_configure ? '' : 'closed'">
 
-  <div class="panel-heading">
+  <div class="row panel-heading">
     <button ng-click="setVariableSelectedAs('variable', getFocusedVariable())"
             ng-class="!getFocusedVariable() || !getFocusedVariable().isVariable ? 'disabled' : ''"
             ng-bind="get_button_label('variable')"
-            class="btn variable"></button>
-    <button ng-click="setVariableSelectedAs('grouping', getFocusedVariable())"
-            ng-class="!getFocusedVariable() && !getFocusedVariable().isGrouping ? 'disabled' : ''"
-            ng-bind="get_button_label('grouping')"
-            class="btn grouping"></button>
+            class="col-sm-3 btn variable"></button>
     <button ng-click="setVariableSelectedAs('covariable', getFocusedVariable())"
-            ng-class="!getFocusedVariable() ? 'disabled' : ''"
+            ng-class="!getFocusedVariable() && ['real', 'integer'].indexOf(getFocusedVariable().type) === -1 ? 'disabled' : ''"
             ng-bind="get_button_label('covariable')"
-            class="btn covariable"></button>
+            class="col-sm-6 btn covariable"></button>
     <button ng-click="setVariableSelectedAs('filter', getFocusedVariable())"
             ng-class="!getFocusedVariable() ? 'disabled' : ''"
             ng-bind="get_button_label('filter')"
-            class="btn filter"></button>
+            class="col-sm-3 btn filter"></button>
   </div>
 
   <div class="panel-body">
@@ -34,7 +30,7 @@
       </div>
 
       <div class="col-xs-3 form-conf grouping transparent">
-        <h3>Grouping</h3>
+        <h3>Nominal</h3>
 
         <div ng-repeat="(code, variable) in configuration.grouping" class="text-nowrap overflow-hidden">
           <a ng-click="setVariableSelectedAs('grouping', variable)" class="btn btn-default btn-xs"><i class="ti ti-close"></i></a>
@@ -43,7 +39,7 @@
       </div>
 
       <div class="col-xs-3 form-conf covariable transparent">
-        <h3>Covariable</h3>
+        <h3>Continuous</h3>
         <div ng-repeat="(code, variable) in configuration.covariable"  class="text-nowrap overflow-hidden">
           <a ng-click="setVariableSelectedAs('covariable', variable)" class="btn btn-default btn-xs"><i class="ti ti-close"></i></a>
           <a ng-bind="variable.label" ng-click="setFocusedVariable(variable)"></a>

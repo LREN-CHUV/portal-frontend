@@ -1,0 +1,35 @@
+[
+    {
+        "code": "Stage",
+        "count": 1115,
+        "dataType": "SummaryStatistics"
+    },
+    {
+        "code": "Stage",
+        "dataType": "DatasetStatistic",
+        "dataset": {
+            "data": {
+                "category": [],
+                "header": [
+                    "CN",
+                    "SMC",
+                    "EMCI",
+                    "MCI",
+                    "LMCI",
+                    "AD"
+                ],
+                "shape": "vector",
+                "value": [
+                    283,
+                    0,
+                    189,
+                    0,
+                    411,
+                    232
+                ]
+            },
+            "name": "Count"
+        },
+        "label": "Histogram"
+    }
+]

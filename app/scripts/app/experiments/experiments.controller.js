@@ -37,6 +37,13 @@ angular.module('chuvApp.experiments')
         MLUtils.list_ml_methods().$promise.then(
           function (data) {
             $scope.ml_methods = data;
+
+            // TODO Quick and dirty fix!
+            // TODO to be added in the backend instead
+            var exareme = $scope.ml_methods.filter(function(m){return m.code === "glm_exareme"});
+            if (exareme.length > 0) {
+              exareme[0].disable = true;
+            }
           }
         );
 

@@ -1,0 +1,37 @@
+[
+    {
+        "code": "PTRACCAT",
+        "count": 1115,
+        "dataType": "SummaryStatistics"
+    },
+    {
+        "code": "PTRACCAT",
+        "dataType": "DatasetStatistic",
+        "dataset": {
+            "data": {
+                "category": [],
+                "header": [
+                    "Am Indian/Alaskan",
+                    "Asian",
+                    "Hawaiian/Other PI",
+                    "Black",
+                    "More than one",
+                    "White",
+                    "Unknown"
+                ],
+                "shape": "vector",
+                "value": [
+                    2,
+                    14,
+                    1,
+                    54,
+                    12,
+                    1030,
+                    2
+                ]
+            },
+            "name": "Count"
+        },
+        "label": "Histogram"
+    }
+]

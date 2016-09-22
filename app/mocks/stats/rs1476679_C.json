@@ -1,0 +1,29 @@
+[
+    {
+        "code": "rs1476679_C",
+        "count": 1115,
+        "dataType": "SummaryStatistics"
+    },
+    {
+        "code": "rs1476679_C",
+        "dataType": "DatasetStatistic",
+        "dataset": {
+            "data": {
+                "category": [],
+                "header": [
+                    "0",
+                    "1",
+                    "2"
+                ],
+                "shape": "vector",
+                "value": [
+                    293,
+                    218,
+                    47
+                ]
+            },
+            "name": "Count"
+        },
+        "label": "Histogram"
+    }
+]

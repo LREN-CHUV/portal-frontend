@@ -2,10 +2,8 @@
 
   <div class="panel-heading">
     <h2 ng-if="!focused_variable">Select variable</h2>
-    <h2 ng-if="focused_variable">
-      <span ng-bind="focused_variable.label"></span
-      ><span ng-if="!has_error && focused_variable_loaded">: {{ measurement_count }} Measurements</span>
-    </h2>
+    <h2 ng-if="focused_variable && focused_variable.isVariable">Variable Details</h2>
+    <h2 ng-if="focused_variable && !focused_variable.isVariable">Group Details</h2>
   </div>
 
   <div class="panel-body">
@@ -14,46 +12,64 @@
     </div>
 
     <div ng-if="focused_variable">
-      <div ng-if="has_error && !variable_description">
+      <div ng-if="!focused_variable.isVariable">
+        <div tooltip-placement="left" tooltip="The name of the group">
+          <b>Name</b>: <span ng-bind="focused_variable.label || 'Missing'"></span>
+        </div>
+      </div>
+      <div ng-if="focused_variable.isVariable && (has_error && !variable_description)">
         <h2>No data found</h2>
       </div>
-      <div ng-if="!has_error || variable_description">
+      <div ng-if="focused_variable.isVariable && (!has_error || variable_description)">
 
         <div ng-if="focused_variable_loaded">
+          <div tooltip-placement="left" tooltip="The name of the variable">
+            <b>Name</b>: <span ng-bind="focused_variable.label || 'Missing'"></span>
+          </div>
+          <div tooltip-placement="left" tooltip="The methodology used to derive the science data">
+            <b>Methodology</b>: <span ng-bind="focused_variable.methodology || 'Missing'"></span>
+          </div>
+          <div ng-if="['real', 'integer'].indexOf(focused_variable.type) != -1" tooltip-placement="left" tooltip="The unit in which the values are expressed">
+            <b>Units</b>: <span ng-bind="focused_variable.units || 'Missing'"></span>
+          </div>
+          <div tooltip-placement="left" tooltip="The data type of the variable">
+            <b>Type</b>: <span ng-bind="focused_variable.type.replace('real', 'continuous') || 'Missing'"></span>
+          </div>
+          <div tooltip-placement="left" ng-if="focused_variable.description.length > 0" tooltip="The description of the variable">
+            <b>Description</b>: <variable-description text="variable_description"></variable-description>
+          </div>
           <div ng-if="stats.length">
             <tabset>
-            <tab ng-repeat="statistic in stats"
-                 select="show_stats_after_timeout(statistic)"
-                 heading="{{ statistic.dataType == 'SummaryStatistics' ? 'Summary' : statistic.label }}">
-              <div ng-if="statistic.active">
-                <div ng-if="statistic.dataType !== 'SummaryStatistics'" ng-init="init_hc_config(statistic)">
-                  <highchart config="statistic.hc_config" ng-if="show"></highchart>
-                  <div style="height: 350px" ng-if="!show"></div>
+              <tab ng-repeat="statistic in stats"
+                   select="show_stats_after_timeout(statistic)"
+                   heading="{{ statistic.dataType == 'SummaryStatistics' ? 'Summary' : statistic.label }}">
+                <div ng-if="statistic.active">
+                  <div ng-if="statistic.dataType !== 'SummaryStatistics'" ng-init="init_hc_config(statistic)">
+                    <highchart config="statistic.hc_config" ng-if="show"></highchart>
+                    <div style="height: 350px" ng-if="!show"></div>
+                  </div>
+                  <div ng-if="statistic.dataType === 'SummaryStatistics'">
+                    <table class="table table-striped">
+                      <tr>
+                        <th>Measurement count</th>
+                        <th>Min</th>
+                        <th>Max</th>
+                        <th>Average</th>
+                        <th>Standard dev.</th>
+                      </tr>
+                      <tr>
+                        <td ng-bind="statistic.count | number"></td>
+                        <td ng-bind="statistic.min | number"></td>
+                        <td ng-bind="statistic.max | number"></td>
+                        <td ng-bind="statistic.average | number"></td>
+                        <td ng-bind="statistic.std | number"></td>
+                      </tr>
+                    </table>
+                  </div>
                 </div>
-                <div ng-if="statistic.dataType === 'SummaryStatistics'">
-                  <table class="table table-striped">
-                    <tr>
-                      <th>Measurement count</th>
-                      <th>Min</th>
-                      <th>Max</th>
-                      <th>Average</th>
-                      <th>Standard dev.</th>
-                    </tr>
-                    <tr>
-                      <td ng-bind="statistic.count | number"></td>
-                      <td ng-bind="statistic.min | number"></td>
-                      <td ng-bind="statistic.max | number"></td>
-                      <td ng-bind="statistic.average | number"></td>
-                      <td ng-bind="statistic.std | number"></td>
-                    </tr>
-                  </table>
-                </div>
-              </div>
-            </tab>
-          </tabset>
+              </tab>
+            </tabset>
           </div>
-
-          <variable-description text="variable_description"></variable-description>
 
         </div>
         <div ng-if="!focused_variable_loaded">

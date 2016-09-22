@@ -1,0 +1,29 @@
+[
+    {
+        "code": "rs2718058_G",
+        "count": 1115,
+        "dataType": "SummaryStatistics"
+    },
+    {
+        "code": "rs2718058_G",
+        "dataType": "DatasetStatistic",
+        "dataset": {
+            "data": {
+                "category": [],
+                "header": [
+                    "0",
+                    "1",
+                    "2"
+                ],
+                "shape": "vector",
+                "value": [
+                    248,
+                    272,
+                    80
+                ]
+            },
+            "name": "Count"
+        },
+        "label": "Histogram"
+    }
+]

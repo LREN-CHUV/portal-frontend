@@ -1,0 +1,54 @@
+[
+    {
+        "average": 4.702242152466368,
+        "code": "TotalVisits",
+        "count": 1115,
+        "dataType": "SummaryStatistics",
+        "max": 13.0,
+        "min": 1.0,
+        "std": 2.1080976472263107
+    },
+    {
+        "code": "TotalVisits",
+        "dataType": "DatasetStatistic",
+        "dataset": {
+            "data": {
+                "category": [],
+                "header": [
+                    1.0,
+                    2.0,
+                    3.0,
+                    4.0,
+                    5.0,
+                    6.0,
+                    7.0,
+                    8.0,
+                    9.0,
+                    10.0,
+                    11.0,
+                    12.0,
+                    13.0,
+                    14.0
+                ],
+                "shape": "vector",
+                "value": [
+                    75,
+                    91,
+                    111,
+                    240,
+                    295,
+                    132,
+                    62,
+                    40,
+                    34,
+                    26,
+                    3,
+                    5,
+                    1
+                ]
+            },
+            "name": "Count"
+        },
+        "label": "Histogram"
+    }
+]

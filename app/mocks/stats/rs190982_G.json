@@ -1,0 +1,29 @@
+[
+    {
+        "code": "rs190982_G",
+        "count": 1115,
+        "dataType": "SummaryStatistics"
+    },
+    {
+        "code": "rs190982_G",
+        "dataType": "DatasetStatistic",
+        "dataset": {
+            "data": {
+                "category": [],
+                "header": [
+                    "0",
+                    "1",
+                    "2"
+                ],
+                "shape": "vector",
+                "value": [
+                    228,
+                    257,
+                    74
+                ]
+            },
+            "name": "Count"
+        },
+        "label": "Histogram"
+    }
+]
