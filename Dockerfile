@@ -6,7 +6,7 @@ MAINTAINER arnaud.jutzeler@chuv.ch
 
 ENV DOCKERIZE_VERSION=v0.2.0
 
-RUN apk add --no-cache --update-cache ca-certificates openssl \
+RUN apk add --no-cache --update-cache ca-certificates openssl bash \
     && update-ca-certificates \
     && wget -O /tmp/dockerize.tar.gz "https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-${DOCKERIZE_VERSION}.tar.gz" \
     && tar -C /usr/local/bin -xzvf /tmp/dockerize.tar.gz \
