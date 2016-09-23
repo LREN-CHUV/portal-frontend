@@ -9,7 +9,7 @@
         "dataType": "DatasetStatistic",
         "dataset": {
             "data": {
-                "category": [],
+                "categories": [],
                 "header": [
                     "Married",
                     "Widowed",
@@ -29,5 +29,268 @@
             "name": "Count"
         },
         "label": "Histogram"
+    },
+    {
+        "code": "PTMARRY",
+        "dataType": "DatasetStatistic",
+        "dataset": {
+            "data": {
+                "categories": [
+                    "Male",
+                    "Male",
+                    "Male",
+                    "Male",
+                    "Male",
+                    "Female",
+                    "Female",
+                    "Female",
+                    "Female",
+                    "Female"
+                ],
+                "header": [
+                    "Married",
+                    "Widowed",
+                    "Divorced",
+                    "Never married",
+                    "Unknown",
+                    "Married",
+                    "Widowed",
+                    "Divorced",
+                    "Never married",
+                    "Unknown"
+                ],
+                "shape": "vector",
+                "value": [
+                    540,
+                    30,
+                    24,
+                    8,
+                    2,
+                    324,
+                    97,
+                    64,
+                    26,
+                    0
+                ]
+            },
+            "name": "Count"
+        },
+        "label": "Histogram - PTGENDER"
+    },
+    {
+        "code": "PTMARRY",
+        "dataType": "DatasetStatistic",
+        "dataset": {
+            "data": {
+                "categories": [
+                    "CN",
+                    "CN",
+                    "CN",
+                    "CN",
+                    "CN",
+                    "MCI",
+                    "MCI",
+                    "MCI",
+                    "MCI",
+                    "MCI",
+                    "AD",
+                    "AD",
+                    "AD",
+                    "AD",
+                    "AD"
+                ],
+                "header": [
+                    "Married",
+                    "Widowed",
+                    "Divorced",
+                    "Never married",
+                    "Unknown",
+                    "Married",
+                    "Widowed",
+                    "Divorced",
+                    "Never married",
+                    "Unknown",
+                    "Married",
+                    "Widowed",
+                    "Divorced",
+                    "Never married",
+                    "Unknown"
+                ],
+                "shape": "vector",
+                "value": [
+                    196,
+                    44,
+                    29,
+                    13,
+                    1,
+                    472,
+                    63,
+                    50,
+                    14,
+                    1,
+                    196,
+                    20,
+                    9,
+                    7,
+                    0
+                ]
+            },
+            "name": "Count"
+        },
+        "label": "Histogram - DX"
+    },
+    {
+        "code": "PTMARRY",
+        "dataType": "DatasetStatistic",
+        "dataset": {
+            "data": {
+                "categories": [
+                    "0",
+                    "0",
+                    "0",
+                    "0",
+                    "0",
+                    "1",
+                    "1",
+                    "1",
+                    "1",
+                    "1",
+                    "2",
+                    "2",
+                    "2",
+                    "2",
+                    "2"
+                ],
+                "header": [
+                    "Married",
+                    "Widowed",
+                    "Divorced",
+                    "Never married",
+                    "Unknown",
+                    "Married",
+                    "Widowed",
+                    "Divorced",
+                    "Never married",
+                    "Unknown",
+                    "Married",
+                    "Widowed",
+                    "Divorced",
+                    "Never married",
+                    "Unknown"
+                ],
+                "shape": "vector",
+                "value": [
+                    414,
+                    75,
+                    54,
+                    19,
+                    2,
+                    326,
+                    47,
+                    28,
+                    11,
+                    0,
+                    120,
+                    5,
+                    6,
+                    3,
+                    0
+                ]
+            },
+            "name": "Count"
+        },
+        "label": "Histogram - APOE4"
+    },
+    {
+        "code": "PTMARRY",
+        "dataType": "DatasetStatistic",
+        "dataset": {
+            "data": {
+                "categories": [
+                    "-50y",
+                    "-50y",
+                    "-50y",
+                    "-50y",
+                    "-50y",
+                    "50-59y",
+                    "50-59y",
+                    "50-59y",
+                    "50-59y",
+                    "50-59y",
+                    "60-69y",
+                    "60-69y",
+                    "60-69y",
+                    "60-69y",
+                    "60-69y",
+                    "70-79y",
+                    "70-79y",
+                    "70-79y",
+                    "70-79y",
+                    "70-79y",
+                    "+80y",
+                    "+80y",
+                    "+80y",
+                    "+80y",
+                    "+80y"
+                ],
+                "header": [
+                    "Married",
+                    "Widowed",
+                    "Divorced",
+                    "Never married",
+                    "Unknown",
+                    "Married",
+                    "Widowed",
+                    "Divorced",
+                    "Never married",
+                    "Unknown",
+                    "Married",
+                    "Widowed",
+                    "Divorced",
+                    "Never married",
+                    "Unknown",
+                    "Married",
+                    "Widowed",
+                    "Divorced",
+                    "Never married",
+                    "Unknown",
+                    "Married",
+                    "Widowed",
+                    "Divorced",
+                    "Never married",
+                    "Unknown"
+                ],
+                "shape": "vector",
+                "value": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    40,
+                    1,
+                    5,
+                    1,
+                    0,
+                    215,
+                    13,
+                    30,
+                    8,
+                    0,
+                    443,
+                    61,
+                    42,
+                    18,
+                    2,
+                    166,
+                    52,
+                    11,
+                    7,
+                    0
+                ]
+            },
+            "name": "Count"
+        },
+        "label": "Histogram - AgeGroup"
     }
 ]

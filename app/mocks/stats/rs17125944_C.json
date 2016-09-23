@@ -9,7 +9,7 @@
         "dataType": "DatasetStatistic",
         "dataset": {
             "data": {
-                "category": [],
+                "categories": [],
                 "header": [
                     "0",
                     "1",
@@ -25,5 +25,190 @@
             "name": "Count"
         },
         "label": "Histogram"
+    },
+    {
+        "code": "rs17125944_C",
+        "dataType": "DatasetStatistic",
+        "dataset": {
+            "data": {
+                "categories": [
+                    "Male",
+                    "Male",
+                    "Male",
+                    "Female",
+                    "Female",
+                    "Female"
+                ],
+                "header": [
+                    "0",
+                    "1",
+                    "2",
+                    "0",
+                    "1",
+                    "2"
+                ],
+                "shape": "vector",
+                "value": [
+                    425,
+                    77,
+                    6,
+                    356,
+                    71,
+                    1
+                ]
+            },
+            "name": "Count"
+        },
+        "label": "Histogram - PTGENDER"
+    },
+    {
+        "code": "rs17125944_C",
+        "dataType": "DatasetStatistic",
+        "dataset": {
+            "data": {
+                "categories": [
+                    "CN",
+                    "CN",
+                    "CN",
+                    "MCI",
+                    "MCI",
+                    "MCI",
+                    "AD",
+                    "AD",
+                    "AD"
+                ],
+                "header": [
+                    "0",
+                    "1",
+                    "2",
+                    "0",
+                    "1",
+                    "2",
+                    "0",
+                    "1",
+                    "2"
+                ],
+                "shape": "vector",
+                "value": [
+                    226,
+                    36,
+                    2,
+                    429,
+                    71,
+                    4,
+                    126,
+                    41,
+                    1
+                ]
+            },
+            "name": "Count"
+        },
+        "label": "Histogram - DX"
+    },
+    {
+        "code": "rs17125944_C",
+        "dataType": "DatasetStatistic",
+        "dataset": {
+            "data": {
+                "categories": [
+                    "0",
+                    "0",
+                    "0",
+                    "1",
+                    "1",
+                    "1",
+                    "2",
+                    "2",
+                    "2"
+                ],
+                "header": [
+                    "0",
+                    "1",
+                    "2",
+                    "0",
+                    "1",
+                    "2",
+                    "0",
+                    "1",
+                    "2"
+                ],
+                "shape": "vector",
+                "value": [
+                    421,
+                    67,
+                    3,
+                    284,
+                    57,
+                    2,
+                    76,
+                    24,
+                    2
+                ]
+            },
+            "name": "Count"
+        },
+        "label": "Histogram - APOE4"
+    },
+    {
+        "code": "rs17125944_C",
+        "dataType": "DatasetStatistic",
+        "dataset": {
+            "data": {
+                "categories": [
+                    "-50y",
+                    "-50y",
+                    "-50y",
+                    "50-59y",
+                    "50-59y",
+                    "50-59y",
+                    "60-69y",
+                    "60-69y",
+                    "60-69y",
+                    "70-79y",
+                    "70-79y",
+                    "70-79y",
+                    "+80y",
+                    "+80y",
+                    "+80y"
+                ],
+                "header": [
+                    "0",
+                    "1",
+                    "2",
+                    "0",
+                    "1",
+                    "2",
+                    "0",
+                    "1",
+                    "2",
+                    "0",
+                    "1",
+                    "2",
+                    "0",
+                    "1",
+                    "2"
+                ],
+                "shape": "vector",
+                "value": [
+                    0,
+                    0,
+                    0,
+                    32,
+                    5,
+                    0,
+                    177,
+                    33,
+                    3,
+                    399,
+                    79,
+                    2,
+                    173,
+                    31,
+                    2
+                ]
+            },
+            "name": "Count"
+        },
+        "label": "Histogram - AgeGroup"
     }
 ]

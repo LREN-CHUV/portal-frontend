@@ -9,7 +9,7 @@
         "dataType": "DatasetStatistic",
         "dataset": {
             "data": {
-                "category": [],
+                "categories": [],
                 "header": [
                     "1.5",
                     "3.0"
@@ -23,5 +23,151 @@
             "name": "Count"
         },
         "label": "Histogram"
+    },
+    {
+        "code": "MRIScanner",
+        "dataType": "DatasetStatistic",
+        "dataset": {
+            "data": {
+                "categories": [
+                    "Male",
+                    "Male",
+                    "Female",
+                    "Female"
+                ],
+                "header": [
+                    "1.5",
+                    "3.0",
+                    "1.5",
+                    "3.0"
+                ],
+                "shape": "vector",
+                "value": [
+                    328,
+                    276,
+                    247,
+                    264
+                ]
+            },
+            "name": "Count"
+        },
+        "label": "Histogram - PTGENDER"
+    },
+    {
+        "code": "MRIScanner",
+        "dataType": "DatasetStatistic",
+        "dataset": {
+            "data": {
+                "categories": [
+                    "CN",
+                    "CN",
+                    "MCI",
+                    "MCI",
+                    "AD",
+                    "AD"
+                ],
+                "header": [
+                    "1.5",
+                    "3.0",
+                    "1.5",
+                    "3.0",
+                    "1.5",
+                    "3.0"
+                ],
+                "shape": "vector",
+                "value": [
+                    157,
+                    126,
+                    282,
+                    318,
+                    136,
+                    96
+                ]
+            },
+            "name": "Count"
+        },
+        "label": "Histogram - DX"
+    },
+    {
+        "code": "MRIScanner",
+        "dataType": "DatasetStatistic",
+        "dataset": {
+            "data": {
+                "categories": [
+                    "0",
+                    "0",
+                    "1",
+                    "1",
+                    "2",
+                    "2"
+                ],
+                "header": [
+                    "1.5",
+                    "3.0",
+                    "1.5",
+                    "3.0",
+                    "1.5",
+                    "3.0"
+                ],
+                "shape": "vector",
+                "value": [
+                    284,
+                    280,
+                    221,
+                    191,
+                    70,
+                    64
+                ]
+            },
+            "name": "Count"
+        },
+        "label": "Histogram - APOE4"
+    },
+    {
+        "code": "MRIScanner",
+        "dataType": "DatasetStatistic",
+        "dataset": {
+            "data": {
+                "categories": [
+                    "-50y",
+                    "-50y",
+                    "50-59y",
+                    "50-59y",
+                    "60-69y",
+                    "60-69y",
+                    "70-79y",
+                    "70-79y",
+                    "+80y",
+                    "+80y"
+                ],
+                "header": [
+                    "1.5",
+                    "3.0",
+                    "1.5",
+                    "3.0",
+                    "1.5",
+                    "3.0",
+                    "1.5",
+                    "3.0",
+                    "1.5",
+                    "3.0"
+                ],
+                "shape": "vector",
+                "value": [
+                    0,
+                    0,
+                    18,
+                    29,
+                    96,
+                    170,
+                    317,
+                    249,
+                    144,
+                    92
+                ]
+            },
+            "name": "Count"
+        },
+        "label": "Histogram - AgeGroup"
     }
 ]

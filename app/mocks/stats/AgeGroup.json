@@ -9,7 +9,7 @@
         "dataType": "DatasetStatistic",
         "dataset": {
             "data": {
-                "category": [],
+                "categories": [],
                 "header": [
                     "-50y",
                     "50-59y",
@@ -29,5 +29,268 @@
             "name": "Count"
         },
         "label": "Histogram"
+    },
+    {
+        "code": "AgeGroup",
+        "dataType": "DatasetStatistic",
+        "dataset": {
+            "data": {
+                "categories": [
+                    "Male",
+                    "Male",
+                    "Male",
+                    "Male",
+                    "Male",
+                    "Female",
+                    "Female",
+                    "Female",
+                    "Female",
+                    "Female"
+                ],
+                "header": [
+                    "-50y",
+                    "50-59y",
+                    "60-69y",
+                    "70-79y",
+                    "+80y",
+                    "-50y",
+                    "50-59y",
+                    "60-69y",
+                    "70-79y",
+                    "+80y"
+                ],
+                "shape": "vector",
+                "value": [
+                    0,
+                    18,
+                    124,
+                    312,
+                    150,
+                    0,
+                    29,
+                    142,
+                    254,
+                    86
+                ]
+            },
+            "name": "Count"
+        },
+        "label": "Histogram - PTGENDER"
+    },
+    {
+        "code": "AgeGroup",
+        "dataType": "DatasetStatistic",
+        "dataset": {
+            "data": {
+                "categories": [
+                    "CN",
+                    "CN",
+                    "CN",
+                    "CN",
+                    "CN",
+                    "MCI",
+                    "MCI",
+                    "MCI",
+                    "MCI",
+                    "MCI",
+                    "AD",
+                    "AD",
+                    "AD",
+                    "AD",
+                    "AD"
+                ],
+                "header": [
+                    "-50y",
+                    "50-59y",
+                    "60-69y",
+                    "70-79y",
+                    "+80y",
+                    "-50y",
+                    "50-59y",
+                    "60-69y",
+                    "70-79y",
+                    "+80y",
+                    "-50y",
+                    "50-59y",
+                    "60-69y",
+                    "70-79y",
+                    "+80y"
+                ],
+                "shape": "vector",
+                "value": [
+                    0,
+                    3,
+                    35,
+                    194,
+                    51,
+                    0,
+                    31,
+                    189,
+                    259,
+                    121,
+                    0,
+                    13,
+                    42,
+                    113,
+                    64
+                ]
+            },
+            "name": "Count"
+        },
+        "label": "Histogram - DX"
+    },
+    {
+        "code": "AgeGroup",
+        "dataType": "DatasetStatistic",
+        "dataset": {
+            "data": {
+                "categories": [
+                    "0",
+                    "0",
+                    "0",
+                    "0",
+                    "0",
+                    "1",
+                    "1",
+                    "1",
+                    "1",
+                    "1",
+                    "2",
+                    "2",
+                    "2",
+                    "2",
+                    "2"
+                ],
+                "header": [
+                    "-50y",
+                    "50-59y",
+                    "60-69y",
+                    "70-79y",
+                    "+80y",
+                    "-50y",
+                    "50-59y",
+                    "60-69y",
+                    "70-79y",
+                    "+80y",
+                    "-50y",
+                    "50-59y",
+                    "60-69y",
+                    "70-79y",
+                    "+80y"
+                ],
+                "shape": "vector",
+                "value": [
+                    0,
+                    27,
+                    113,
+                    291,
+                    133,
+                    0,
+                    13,
+                    101,
+                    208,
+                    90,
+                    0,
+                    6,
+                    50,
+                    66,
+                    12
+                ]
+            },
+            "name": "Count"
+        },
+        "label": "Histogram - APOE4"
+    },
+    {
+        "code": "AgeGroup",
+        "dataType": "DatasetStatistic",
+        "dataset": {
+            "data": {
+                "categories": [
+                    "-50y",
+                    "-50y",
+                    "-50y",
+                    "-50y",
+                    "-50y",
+                    "50-59y",
+                    "50-59y",
+                    "50-59y",
+                    "50-59y",
+                    "50-59y",
+                    "60-69y",
+                    "60-69y",
+                    "60-69y",
+                    "60-69y",
+                    "60-69y",
+                    "70-79y",
+                    "70-79y",
+                    "70-79y",
+                    "70-79y",
+                    "70-79y",
+                    "+80y",
+                    "+80y",
+                    "+80y",
+                    "+80y",
+                    "+80y"
+                ],
+                "header": [
+                    "-50y",
+                    "50-59y",
+                    "60-69y",
+                    "70-79y",
+                    "+80y",
+                    "-50y",
+                    "50-59y",
+                    "60-69y",
+                    "70-79y",
+                    "+80y",
+                    "-50y",
+                    "50-59y",
+                    "60-69y",
+                    "70-79y",
+                    "+80y",
+                    "-50y",
+                    "50-59y",
+                    "60-69y",
+                    "70-79y",
+                    "+80y",
+                    "-50y",
+                    "50-59y",
+                    "60-69y",
+                    "70-79y",
+                    "+80y"
+                ],
+                "shape": "vector",
+                "value": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    47,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    266,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    566,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    236
+                ]
+            },
+            "name": "Count"
+        },
+        "label": "Histogram - AgeGroup"
     }
 ]

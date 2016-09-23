@@ -13,11 +13,11 @@
         "dataType": "DatasetStatistic",
         "dataset": {
             "data": {
-                "category": [],
+                "categories": [],
                 "header": [
-                    1.0,
-                    2.0,
-                    3.0
+                    1,
+                    2,
+                    3
                 ],
                 "shape": "vector",
                 "value": [
@@ -28,5 +28,177 @@
             "name": "Count"
         },
         "label": "Histogram"
+    },
+    {
+        "code": "VisitNumber",
+        "dataType": "DatasetStatistic",
+        "dataset": {
+            "data": {
+                "categories": [
+                    "Male",
+                    "Male",
+                    "Male",
+                    "Female",
+                    "Female",
+                    "Female"
+                ],
+                "header": [
+                    1,
+                    2,
+                    3,
+                    1,
+                    2,
+                    3
+                ],
+                "shape": "vector",
+                "value": [
+                    575,
+                    29,
+                    479,
+                    32
+                ]
+            },
+            "name": "Count"
+        },
+        "label": "Histogram - PTGENDER"
+    },
+    {
+        "code": "VisitNumber",
+        "dataType": "DatasetStatistic",
+        "dataset": {
+            "data": {
+                "categories": [
+                    "CN",
+                    "CN",
+                    "CN",
+                    "MCI",
+                    "MCI",
+                    "MCI",
+                    "AD",
+                    "AD",
+                    "AD"
+                ],
+                "header": [
+                    1,
+                    2,
+                    3,
+                    1,
+                    2,
+                    3,
+                    1,
+                    2,
+                    3
+                ],
+                "shape": "vector",
+                "value": [
+                    265,
+                    18,
+                    570,
+                    30,
+                    219,
+                    13
+                ]
+            },
+            "name": "Count"
+        },
+        "label": "Histogram - DX"
+    },
+    {
+        "code": "VisitNumber",
+        "dataType": "DatasetStatistic",
+        "dataset": {
+            "data": {
+                "categories": [
+                    "0",
+                    "0",
+                    "0",
+                    "1",
+                    "1",
+                    "1",
+                    "2",
+                    "2",
+                    "2"
+                ],
+                "header": [
+                    1,
+                    2,
+                    3,
+                    1,
+                    2,
+                    3,
+                    1,
+                    2,
+                    3
+                ],
+                "shape": "vector",
+                "value": [
+                    534,
+                    30,
+                    392,
+                    20,
+                    123,
+                    11
+                ]
+            },
+            "name": "Count"
+        },
+        "label": "Histogram - APOE4"
+    },
+    {
+        "code": "VisitNumber",
+        "dataType": "DatasetStatistic",
+        "dataset": {
+            "data": {
+                "categories": [
+                    "-50y",
+                    "-50y",
+                    "-50y",
+                    "50-59y",
+                    "50-59y",
+                    "50-59y",
+                    "60-69y",
+                    "60-69y",
+                    "60-69y",
+                    "70-79y",
+                    "70-79y",
+                    "70-79y",
+                    "+80y",
+                    "+80y",
+                    "+80y"
+                ],
+                "header": [
+                    1,
+                    2,
+                    3,
+                    1,
+                    2,
+                    3,
+                    1,
+                    2,
+                    3,
+                    1,
+                    2,
+                    3,
+                    1,
+                    2,
+                    3
+                ],
+                "shape": "vector",
+                "value": [
+                    0,
+                    0,
+                    44,
+                    3,
+                    257,
+                    9,
+                    533,
+                    33,
+                    220,
+                    16
+                ]
+            },
+            "name": "Count"
+        },
+        "label": "Histogram - AgeGroup"
     }
 ]
