@@ -1,17 +1,17 @@
 # Verified with http://hadolint.lukasmartinelli.ch/
 
-FROM nginx:1.11
+FROM nginx:1.11.4-alpine
 
 MAINTAINER arnaud.jutzeler@chuv.ch
 
 ENV DOCKERIZE_VERSION=v0.2.0
 
-RUN apt-get update \
-    && apt-get install --no-install-recommends --no-install-suggests -y wget=1.16-1 \
+RUN apk add --no-cache --update-cache ca-certificates openssl \
+    && update-ca-certificates \
     && wget -O /tmp/dockerize.tar.gz "https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-${DOCKERIZE_VERSION}.tar.gz" \
     && tar -C /usr/local/bin -xzvf /tmp/dockerize.tar.gz \
     && rm -f /tmp/dockerize.tar.gz \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/cache/apk/*
 
 # Add nginx config
 COPY ./docker/runner/conf/nginx.conf.tmpl \
