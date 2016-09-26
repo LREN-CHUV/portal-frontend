@@ -270,7 +270,7 @@ angular.module('chuvApp.util')
             if (!xSortingByString) {
               result = result.map(function (point) {
                 return [+point[0], point[1]];
-              });
+              }).sortBy(0);
             }
 
             return result.value()
