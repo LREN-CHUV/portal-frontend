@@ -362,6 +362,29 @@ angular.module('chuvApp.util')
       if (!dataset) {
         return null;
       }
+
+      // *** Remove null values ***
+      var nullIndices = new Array();
+      _.each(dataset.data, function(varData) {
+        for(var i=0; i<varData.length; i++) {
+          if (varData[i] == "null") {
+            nullIndices.push(i);
+          }
+        }
+      });
+      nullIndices = _.uniq(nullIndices);
+      for (var varCode in dataset.data)
+      {
+        if(dataset.data.hasOwnProperty(varCode))
+        {
+          for (var i of nullIndices) {
+            delete dataset.data[varCode][i];
+          }
+          dataset.data[varCode] = _.compact(dataset.data[varCode]);
+        }
+      }
+      // **************************
+
       if (!angular.isArray(config.yAxisVariables)) {
         config.yAxisVariables = _.clone(dataset.header);
       }
