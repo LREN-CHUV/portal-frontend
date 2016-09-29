@@ -410,7 +410,8 @@ angular.module('chuvApp.util')
     ChartUtil.canUseAsXAxis = function (axeCode, chartType, dataArray) {
       return ({
         boxplot: function () { return _.uniq(dataArray).length <= 8; },
-        designmatrix: function () { return ChartUtil.canUseAsYAxis(axeCode, chartType, dataArray) }
+        designmatrix: function () { return ChartUtil.canUseAsYAxis(axeCode, chartType, dataArray) },
+        line: function () { return ChartUtil.canUseAsYAxis(axeCode, chartType, dataArray) }
       }[chartType] || function () { return true; })();
     };
 
