@@ -287,7 +287,7 @@ angular.module('chuvApp.models').controller('ReviewController',
           )
         })
         .slice(0, 5);
-      $scope.hcConfig = ChartUtil($scope.chartConfig, $scope.dataset);
+      $scope.hcConfig = ChartUtil($scope.chartConfig, $scope.dataset, true);
     }
 
     /**

@@ -3,7 +3,7 @@
  */
 
 angular.module('chuvApp.util')
-  .factory('ChartUtil', ['$filter', function ($filter) {
+  .factory('ChartUtil', ['$filter', 'notifications', function ($filter, notifications) {
 
     var number = $filter("number");
 
@@ -357,7 +357,7 @@ angular.module('chuvApp.util')
       }
     }
 
-    var ChartUtil = function ChartUtil(config, dataset) {
+    var ChartUtil = function ChartUtil(config, dataset, notify=false) {
 
       if (!dataset) {
         return null;
@@ -382,6 +382,10 @@ angular.module('chuvApp.util')
           }
           dataset.data[varCode] = _.compact(dataset.data[varCode]);
         }
+      }
+      var nbDiscardedRows = nullIndices.length;
+      if (notify && nbDiscardedRows > 0) {
+        notifications.warning(nbDiscardedRows + " rows have been discarded");
       }
       // **************************
 
