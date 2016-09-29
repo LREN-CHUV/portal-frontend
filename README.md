@@ -1,4 +1,6 @@
-# CHUV frontend v0.0.1
+# MIP portal frontend
+
+[![License](https://img.shields.io/badge/license-AGPL--3.0-blue.svg)](https://www.gnu.org/licenses/agpl-3.0.html)
 
 ## Libraries
 - AngularJS v1.4.3
