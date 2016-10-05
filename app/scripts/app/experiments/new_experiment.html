@@ -63,7 +63,7 @@
                   <p ng-repeat="method in ml_methods | filter:{type:'features_extraction'}  | orderBy:'-label'">
                     <label class="btn btn-primary-alt col-xs-12"
                            ng-model="shared.chosen_method"
-                           ng-disabled="!method.available"
+                           ng-disabled="true"
                            ng-click="method.available? shared.method_parameters = [] :  angular.noop"
                            btn-radio="method"
                            uncheckable
