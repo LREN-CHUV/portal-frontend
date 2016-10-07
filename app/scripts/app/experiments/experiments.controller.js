@@ -71,12 +71,10 @@ angular.module('chuvApp.experiments')
             }
 
             // Covariable constraints
-            var cov_nb = 0;
-            var grp_nb = 0;
+            var cov_nb = $scope.dataset.header.length;
+            var grp_nb = $scope.dataset.grouping.length;
+
             if (method.constraints.covariables) {
-
-              var cov_nb = $scope.dataset.header.length;
-
               if (method.constraints.covariables.min_count && cov_nb < method.constraints.covariables.min_count) {
                 return false;
               }
@@ -88,9 +86,6 @@ angular.module('chuvApp.experiments')
 
             // Grouping constraints
             if (method.constraints.grouping) {
-
-              var grp_nb = $scope.dataset.grouping.length;
-
               if (method.constraints.grouping.min_count && grp_nb < method.constraints.grouping.min_count) {
                 return false;
               }
