@@ -44,12 +44,6 @@ angular.module('chuvApp.experiments')
             if (exareme.length > 0) {
               exareme[0].disable = true;
             }
-
-            var tSNE = $scope.ml_methods.filter(function(m){return m.code === "tSNE"});
-            if (tSNE.length > 0) {
-              tSNE[0].disable = true;
-            }
-
           }
         );
 
