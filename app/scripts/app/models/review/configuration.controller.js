@@ -12,28 +12,18 @@ angular.module('chuvApp.models')
       maxYAxisVariableCount = 5;
 
     $scope.changeGraphType = function(type){
-      if (type == 'boxplot') {
-        axisConfiguration = {
-          x: angular.copy($scope.chartConfig.xAxisVariable),
-          y: angular.copy($scope.chartConfig.yAxisVariables)
-        };
-        $scope.chartConfig.yAxisVariables = _.filter(
-          $scope.chartConfig.yAxisVariables,
-          function (variableCode) {
-            return ChartUtil.canUseAsXAxis(variableCode, 'boxplot', $scope.dataset.data[variableCode]);
-          }
-        );
-      } else if ($scope.chartConfig.type == 'boxplot') {
-        $scope.chartConfig.xAxisVariable = axisConfiguration
-          ? axisConfiguration.x
-          : ChartUtil.canUseAsXAxis($scope.chartConfig.xAxisVariable, type, $scope.dataset.data[$scope.chartConfig.xAxisVariable])
-            ? $scope.chartConfig.xAxisVariable
-            : undefined;
-        $scope.chartConfig.yAxisVariables = axisConfiguration
-          ? axisConfiguration.y
-          : _.filter($scope.chartConfig.yAxisVariables, function (code) { return ChartUtil.canUseAsYAxis(code, type, $scope.dataset.data[code]) });
-      }
       $scope.chartConfig.type = type;
+
+      var xAxisVars = _.filter(_.union($scope.dataset.variable, $scope.dataset.grouping, $scope.dataset.header), $scope.canUseAsPrimaryAxis);
+      var yAxisVars = _.filter(_.union($scope.dataset.variable, $scope.dataset.grouping, $scope.dataset.header), $scope.canUseAsSecondaryAxis);
+
+      if(!_.contains(xAxisVars, $scope.chartConfig.xAxisVariable)) {
+        $scope.chartConfig.xAxisVariable = (xAxisVars.length > 0 && type == 'boxplot') ? xAxisVars[0] : undefined;
+      }
+      if(!_.contains(yAxisVars, $scope.chartConfig.yAxisVariables)) {
+        $scope.chartConfig.yAxisVariables = yAxisVars.length > 0 ? _.first(yAxisVars, Math.min(maxYAxisVariableCount, yAxisVars.length)) : undefined;
+      }
+
       $scope.$emit("chartConfigChanged");
     };
 
