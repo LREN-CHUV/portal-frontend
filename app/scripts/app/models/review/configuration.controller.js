@@ -90,4 +90,8 @@ angular.module('chuvApp.models')
       $scope.$emit("chartConfigChanged");
     };
 
+    $scope.needXAxis = function() {
+      return $scope.chartConfig.type == "boxplot";
+    }
+
   }]);

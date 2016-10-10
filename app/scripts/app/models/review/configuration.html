@@ -38,7 +38,7 @@
           <li>
             <span ng-bind="mainAxisTitle()"></span>
             <ul>
-              <li>
+              <li ng-if="!needXAxis()">
                 <a href="" ng-click="changeMainAxis(null)" ng-class="chartConfig.xAxisVariable == null ? 'active' : ''">
                   <span>No sorting</span>
                   <i class="ti ti-check"></i>
