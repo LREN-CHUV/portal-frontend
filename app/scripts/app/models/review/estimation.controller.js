@@ -23,15 +23,12 @@ angular.module('chuvApp.models').controller('EstimationController',['$scope', '$
       variables: unmap_category("variables"),
       coVariables: unmap_category("coVariables"),
       groupings: unmap_category("groupings"),
-      filters: unmap_category("filters")
+      filters: unmap_category("filters"),
+      graph_config: $scope.chartConfig
     };
 
-    $location.url(
-      "/experiment/?"
-      + Object.keys(query).map(function (category) {
-        return category + "=" + query[category]
-      }).join("&"));
-  }
+    return $state.go("new_experiment", query);
+  };
 
   //$scope.shared = {
   //  chosen_estimation: null

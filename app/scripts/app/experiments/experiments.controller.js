@@ -166,15 +166,18 @@ angular.module('chuvApp.experiments')
               controller: ['$scope', '$state', function (child_scope, $state) {
                 child_scope.do_save_model = function() {
 
-                  $scope.model = {
-                    title: child_scope.name,
-                    config: {
+                  var config = $stateParams.graph_config || {
                       type: 'designmatrix',
                       height: 480,
                       yAxisVariables: $scope.dataset.header.slice(0, 5),
-                      xAxisVariable: null,
-                      title: {text: child_scope.name }
-                    },
+                      xAxisVariable: null
+                  };
+
+                  config.title = {text: child_scope.name };
+
+                  $scope.model = {
+                    title: child_scope.name,
+                    config: config,
                     dataset: $scope.dataset,
                     valid: child_scope.share,
                     query: $scope.query

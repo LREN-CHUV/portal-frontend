@@ -4,7 +4,17 @@
 'use strict';
 
 angular.module('chuvApp.users')
-  .factory('User', ['$rootScope','backendUrl','$http', function ($rootScope,backendUrl,$http) {
+  .factory('User', [
+    '$rootScope',
+    'backendUrl',
+    '$http',
+    '$cookies',
+    function (
+      $rootScope,
+      backendUrl,
+      $http,
+      $cookies
+    ) {
 
     var user_oauth_obj,
       user_backend_obj,
@@ -28,7 +38,7 @@ angular.module('chuvApp.users')
                 promise.then(function (user_data) {
                   user_backend_obj = user_data.data;
                   $rootScope.hasAgreedTos = user_backend_obj.agreeNDA;
-                })
+                });
                 return promise;
               })
           );
@@ -48,7 +58,7 @@ angular.module('chuvApp.users')
       logout: function () {
         $rootScope.user = null;
         user_promise = user_backend_obj = $rootScope.hasAgreedTos = false;
-        $http.post(backendUrl+'/logout');
+        $http.post(backendUrl + "/logout");
       }
 
     };
