@@ -87,7 +87,7 @@ angular.module('chuvApp.models').controller('ReviewController',
      * @returns {boolean}
      */
     $scope.isMine = function () {
-      return $scope.model.id == null || $scope.model.createdBy.username == User.current().username;
+      return $scope.model.slug == null || $scope.model.createdBy.username == User.current().username;
     };
 
     /**
@@ -95,7 +95,7 @@ angular.module('chuvApp.models').controller('ReviewController',
      * @returns {boolean}
      */
     $scope.isNew = function () {
-      return $scope.model.id == null;
+      return $scope.model.slug == null;
     };
 
     /**
@@ -115,7 +115,7 @@ angular.module('chuvApp.models').controller('ReviewController',
       $scope.model.query = angular.copy($scope.query); // will be modified, therefore we do a deep copy
       delete $scope.model.query.filterQuery;
 
-      if ($scope.model.slug == null) {
+      if ($scope.isNew()) {
         // save new model
         Model.save($scope.model, function (model) {
           $state.go('models-edit', {slug: model.slug});
@@ -124,6 +124,13 @@ angular.module('chuvApp.models').controller('ReviewController',
           notifications.error("An error occurred when trying to save the model!");
         });
       } else {
+
+        // if this model does not belong to the user
+        if (!$scope.isMine()) {
+          notifications.warning("You cannot modify a model owned by someone else!");
+          return;
+        }
+
         // save existing model
         Model.update({slug: $scope.model.slug}, $scope.model, function (model) {
           $state.go('models-edit', {slug: model.slug});
