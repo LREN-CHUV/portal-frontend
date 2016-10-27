@@ -12,8 +12,9 @@ angular.module('chuvApp.experiments')
 
         $scope.run_experiment = function () {
 
+          // Ensure that the associated model is saved
           if (!$scope.model) {
-            $scope.save_model();
+            $scope.save_model($scope.run_experiment);
             return;
           }
 

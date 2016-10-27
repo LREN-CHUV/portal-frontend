@@ -190,6 +190,9 @@ angular.module('chuvApp.experiments')
                     $scope.query = result.query;
                     notifications.success("The model was successfully saved!");
                     child_scope.$close();
+                    if (callback) {
+                      callback();
+                    }
                   }, function(){
                     // TODO Add a notification service...
                     notifications.error("An error occurred when trying to save the model!");
@@ -288,19 +291,10 @@ angular.module('chuvApp.experiments')
     var refresh_rate = 10000; // ms
     var cancel_timeout;
     var cancelled = false;
-    var is_waiting_for_finish = false;
     $scope.loading = true;
     $scope.model_slug = $stateParams.model_slug;
 
     $scope.get_display_type = MLUtils.get_display_type;
-
-    function refresh_experiment_until_done () {
-      if (!cancelled && !$scope.experiment.finished) {
-        is_waiting_for_finish = true;
-        cancel_timeout = $timeout(refresh_experiment_until_done, refresh_rate);
-        get_experiment();
-      }
-    }
 
     function compute_overview_graph(overview) {
       return {
@@ -377,8 +371,11 @@ angular.module('chuvApp.experiments')
           $scope.experiment.algorithms = JSON.parse(response.data.algorithms);
           $scope.experiment.results = JSON.parse(response.data.result);
 
-          if (!is_waiting_for_finish)
-            refresh_experiment_until_done();
+          // Refresh experiment until done
+          if (!cancelled && !$scope.experiment.finished) {
+            cancel_timeout = $timeout(get_experiment, refresh_rate);
+            return
+          }
 
           // Parse the results
           try {

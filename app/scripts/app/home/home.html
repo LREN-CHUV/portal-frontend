@@ -44,7 +44,30 @@
     </div>
   </div>
 
-  <div>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="panel" data-widget='{"draggable": "false"}'>
+          <div class="panel-heading">
+            <h2>Recent Models</h2>
+            <div class="panel-ctrls button-icon-bg"
+                 data-actions-container=""
+                 data-action-collapse='{"target": ".panel-body"}'
+                 data-action-refresh-demo='{"type": "circular"}'
+            >
+            </div>
+          </div>
+          <div class="panel-body scroll-pane" style="height: 320px;">
+            <div class="custom-scrollbar" scrollbar>
+              <div ng-include="'scripts/app/models/models.html'" ng-controller="ModelsController" params='{"limit":10,"team":1,"valid":1}'></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div ng-include="'scripts/app/articles/articles.html'" ng-controller="ArticlesController"></div>
+      </div>
+    </div>
+
     <div class="row">
 
       <div class="col-md-4" ng-repeat="model in models">
@@ -82,29 +105,4 @@
       </div>
 
     </div>
-    <div class="row">
-      <div class="col-md-6">
-        <div ng-include="'scripts/app/articles/articles.html'" ng-controller="ArticlesController"></div>
-      </div>
-      <div class="col-md-6">
-        <div class="panel" data-widget='{"draggable": "false"}'>
-          <div class="panel-heading">
-            <h2>Recent Models</h2>
-            <div class="panel-ctrls button-icon-bg"
-                 data-actions-container=""
-                 data-action-collapse='{"target": ".panel-body"}'
-                 data-action-refresh-demo='{"type": "circular"}'
-            >
-            </div>
-          </div>
-          <div class="panel-body scroll-pane" style="height: 320px;">
-            <div class="custom-scrollbar" scrollbar>
-              <div ng-include="'scripts/app/models/models.html'" ng-controller="ModelsController" params='{"limit":10,"team":1,"valid":1}'></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-  </div>
 </div>
