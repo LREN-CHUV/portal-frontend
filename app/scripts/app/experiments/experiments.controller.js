@@ -365,12 +365,6 @@ angular.module('chuvApp.experiments')
           $scope.experiment = response.data;
           $scope.loading = false;
 
-          // TODO Workaround while backend give us string instead of JSON objects...
-          // TODO To be removed!
-          $scope.experiment.validations = JSON.parse(response.data.validations);
-          $scope.experiment.algorithms = JSON.parse(response.data.algorithms);
-          $scope.experiment.results = JSON.parse(response.data.result);
-
           // Refresh experiment until done
           if (!cancelled && !$scope.experiment.finished) {
             cancel_timeout = $timeout(get_experiment, refresh_rate);
