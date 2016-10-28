@@ -370,7 +370,7 @@ angular.module('chuvApp.experiments')
             cancel_timeout = $timeout(get_experiment, refresh_rate);
             return
           }
-          
+
           // Parse the results
           try {
             $scope.experiment.display = MLUtils.parse_results($scope.experiment.result);

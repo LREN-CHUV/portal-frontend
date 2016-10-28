@@ -357,7 +357,7 @@ angular.module('chuvApp.util')
       }
     }
 
-    var ChartUtil = function ChartUtil(config, dataset, notify=false) {
+    var ChartUtil = function ChartUtil(config, dataset, notify) {
 
       if (!dataset) {
         return null;
@@ -377,7 +377,7 @@ angular.module('chuvApp.util')
       {
         if(dataset.data.hasOwnProperty(varCode))
         {
-          for (var i of nullIndices) {
+          for (var i = 0; i < nullIndices.length; i++) {
             delete dataset.data[varCode][i];
           }
           dataset.data[varCode] = _.compact(dataset.data[varCode]);
