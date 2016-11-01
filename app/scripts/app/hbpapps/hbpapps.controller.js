@@ -23,7 +23,7 @@ angular.module('chuvApp.hbpapps').controller('HBPAppsController',
         $scope.error = true;
         $scope.loading = false;
       }
-    )
+    );
 
     function setup_rating_watches() {
       $scope.all_apps.forEach(function (app) {

@@ -1,8 +1,34 @@
 /**
  * Created by Michael DESIGAUD on 11/08/2015.
  */
-angular.module('chuvApp.home').controller('HomeController',['$scope','$translatePartialLoader','$translate','WidgetService','$rootScope','User','$cookies','Model','ChartUtil','$q','$http', 'backendUrl',
-  function($scope,$translatePartialLoader,$translate,WidgetService,$rootScope,User,$cookies,Model,ChartUtil,$q,$http, backendUrl){
+angular.module('chuvApp.home').controller('HomeController',
+  [
+    '$scope',
+    '$translatePartialLoader',
+    '$translate','WidgetService',
+    '$rootScope',
+    'User',
+    '$cookies',
+    'Model',
+    'ChartUtil',
+    '$q',
+    '$http',
+    'backendUrl',
+    'notifications',
+  function(
+    $scope,
+    $translatePartialLoader,
+    $translate,
+    WidgetService,
+    $rootScope,
+    User,
+    $cookies,
+    Model,
+    ChartUtil,
+    $q,
+    $http,
+    backendUrl,
+    notifications){
 
     $translatePartialLoader.addPart('home');
     $translatePartialLoader.addPart('articles');

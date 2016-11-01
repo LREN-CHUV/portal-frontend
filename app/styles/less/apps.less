@@ -676,12 +676,17 @@ body.sidebar-collapsed .widget-body > ul.acc-menu {
 #notifications {
 
   position: fixed;
-  z-index: 10000;
-  top: 10px;
+  z-index: 1500;
+  top: 50px;
   .transition(left, 0.5s, ease;);
 
-  .alert {
+  .alert, .fixed .alert-discrete {
+    //height: 50px;
+    padding: 15px 15px 15px 15px;
+    margin-top: -40px;
     margin-bottom: 0;
+    border-width: 1px;
+    border-radius: 5px;
   }
 
   @media (min-width: 768px) {
@@ -697,6 +702,55 @@ body.sidebar-collapsed .widget-body > ul.acc-menu {
   #wrapper.toggled #notifications {
     left: 260px;
   }
+}
+
+#announces {
+  visibility: visible;
+  opacity: 1;
+  transition: visibility 0s, opacity 0.3s linear;
+  position: fixed;
+  z-index: 1500;
+  top: -100px;
+
+  .alert, .fixed .alert-discrete {
+    position: relative;
+    height: 50px;
+    padding: 15px 15px 15px 15px;
+    top: 150px;
+    margin-top: -40px;
+    margin-bottom: 0;
+    border-width: 1px;
+    border-radius: 5px;
+  }
+
+  .alert-discrete {
+    height: 80px;
+    margin-top: -40px;
+    background-color: white;
+    color: black;
+    border-color: black;
+    opacity: 0.5;
+    font-size: 12px;
+  }
+
+  @media (min-width: 768px) {
+    width: ~"calc(100%)";
+  }
+
+  @media (max-width: 768px) {
+    width: ~"calc(100%)";
+    left: 60px;
+  }
+}
+@media (max-width: 768px) {
+  #wrapper.toggled #notifications {
+    left: 260px;
+  }
+}
+
+#announces.fixed {
+  visibility: hidden;
+  opacity: 0;
 }
 
 

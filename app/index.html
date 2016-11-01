@@ -52,7 +52,7 @@
 
 <!-- I have to ng-show instead of ng-if because I need the logout link to logout if i get 401s -->
 <header id="topnav"
-        class="navbar navbar-default navbar-fixed-top fixed"
+        class="navbar navbar-default navbar-fixed-top"
         change-on-scroll
         role="banner"
         ng-cloak
@@ -80,16 +80,28 @@
     </div>
   </div>
 </div>
+<div change-on-scroll id="announces">
+  <div class="hidden-xs hidden-sm hidden-md col-lg-offset-4 col-lg-4">
+    <div class="alert alert-dismissable alert-discrete" role="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">×</span>
+        <span class="sr-only">Close</span>
+      </button>
+      <h5><span style="margin-right: 5px;" class="fa fa-exclamation-triangle"></span>This platform is still under heavy deployment</h5>
+      <p>As a consequence, your data might be reset periodically.</p>
+    </div>
+  </div>
+</div>
 <div id="notifications" ng-controller="NotificationCtrl">
-  <div ng-repeat="notification in notifications" class="col-xs-12 col-sm-offset-4 col-sm-8 col-md-offset-6 col-md-6 col-lg-offset-7 col-md-5">
-    <div class="alert alert-dismissable" ng-class="'alert-' + (notification.type || 'warning')" role="alert">
+  <div ng-repeat="notification in notifications" class="col-xs-12 col-sm-offset-4 col-sm-8 col-md-offset-6 col-md-6 col-lg-offset-8 col-md-4">
+    <div class="alert alert-dismissable" ng-class="'alert-' + (notification.type || 'info')" role="alert">
       <button type="button" class="close" ng-click="notification.dismiss()">
           <span aria-hidden="true">&times;</span>
           <span class="sr-only">Close</span>
       </button>
       <div ng-bind="notification.message"></div>
     </div>
-  </div>
+
 </div>
 
 

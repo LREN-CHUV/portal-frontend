@@ -4,7 +4,7 @@
 angular.module("chuvApp.components.notifications").provider('notifications', [function NotificationService() {
     "use strict";
     var provider = this,
-        notification_timeout = 5000; // 5 seconds
+        default_timeout = 5000; // 5 seconds
     this.notifications = [];
 
     this.$get = ['$timeout', function ($timeout) {
@@ -24,7 +24,7 @@ angular.module("chuvApp.components.notifications").provider('notifications', [fu
             notify: function notify(message, level) {
                 var promise = $timeout(function () {
                     provider.notifications.pop();
-                }, notification_timeout);
+                }, default_timeout);
 
                 provider.notifications.unshift({ // prepend
                     message: message,
