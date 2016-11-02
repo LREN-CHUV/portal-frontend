@@ -377,8 +377,8 @@ angular.module('chuvApp.util')
       {
         if(dataset.data.hasOwnProperty(varCode))
         {
-          for (var i of nullIndices) {
-            delete dataset.data[varCode][i];
+          for (var i = 0; i < nullIndices.length; i++) {
+            delete dataset.data[varCode][nullIndices[i]];
           }
           dataset.data[varCode] = _.compact(dataset.data[varCode]);
         }
