@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>2D Biological Rules</title>
+	<script type="text/javascript" src="../node_modules/vis/dist/vis.min.js"></script>
+	<script type="text/javascript" src="../node_modules/jquery/dist/jquery.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="../node_modules/vis/dist/vis.css" />
+	<link rel="stylesheet" type="text/css" href="styles/main.css">
+	<link rel="stylesheet" type="text/css" href="styles/w3.css">
+</head>
+<body>
+	<div class="w3-container">
+
+		<h1>2D Biological Rules</h1>
+		
+		<div id="network" class="w3-container w3-col s10 w3-border"></div>
+
+		<div id="right-panel" class="w3-container w3-col s2">
+			<div class="w3-container w3-border w3-margin-bottom legend info-box">
+				<h2>Network Legends</h2>
+				<div class="legend-scale">
+				  <ul class="legend-labels">
+				    <li><span style='background:#FFFF80;'></span>Genetic</li>
+				    <li><span style='background:#80FF80;'></span>Brain Anatomy</li>
+				    <li><span style='background:#809900;'></span>Brain Metabolism</li>
+				    <li><span style='background:#FF8080;'></span>AD</li>
+				    <li><span style='background:#0066FF;'></span>Control</li>
+				    <li><span style='background:#00CCCC;'></span>CSF Protein</li>
+				    <li><span style='background:#CC00FF;'></span>Blood Protein</li>
+				  </ul>
+				</div>
+			</div>
+
+			<div class="w3-container w3-border info-box">
+				<h2>Information</h2>
+				<h3 id="node-info-init">Select a node...</h3>
+				<p id="node-info-content"></p>
+			</div>
+		</div>
+
+	</div>
+	<script type="text/javascript" src="scripts/network.js"></script>
+</body>
+</html>

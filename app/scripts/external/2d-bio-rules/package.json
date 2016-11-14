@@ -1,0 +1,16 @@
+{
+  "name": "2d-biological-rules",
+  "version": "1.0.0",
+  "description": "2D graphical view of biological rules",
+  "repository": "http://hbps1.intranet.chuv:7000/mirco/2d-biological-rules.git",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Mirco Nasuti",
+  "license": "ISC",
+  "dependencies": {
+    "jquery": "^3.0.0",
+    "vis": "^4.16.1"
+  }
+}
