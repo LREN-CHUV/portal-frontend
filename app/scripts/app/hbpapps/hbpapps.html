@@ -27,7 +27,7 @@
     <div class="panel" target="_blank">
       <div class="panel-heading">
         <h5 class="pull-left">
-          <a ng-href="{{ app.link }}" ng-bind="app.name" target="_blank"></a>
+          <a ng-href="{{apps_base_url}}{{ app.link }}" ng-bind="app.name" target="_blank"></a>
         </h5>
         &nbsp;
         by
@@ -36,8 +36,8 @@
       </div>
       <div class="panel-body">
         <div>
-          <a ng-href="{{ app.link }}" target="_blank">
-            <img ng-src="{{ app.image }}" class="pull-left" width="80px" style="margin: 5px 15px 10px 5px">
+          <a ng-href="{{apps_base_url}}{{ app.link }}" target="_blank">
+            <img ng-src="{{logo_base_url}}{{ app.image }}" class="pull-left" width="80px" style="margin: 5px 15px 10px 5px">
           </a>
           <span ng-bind="app.description"></span>
         </div>

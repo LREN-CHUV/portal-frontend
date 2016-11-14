@@ -1,8 +1,11 @@
 angular.module('chuvApp.hbpapps').controller('HBPAppsController',
-  ['$scope', '$http', '$filter', 'backendUrl', function($scope, $http, $filter, backendUrl){
+  ['$scope', '$http', '$filter', '$location', 'backendUrl', function($scope, $http, $filter, $location, backendUrl){
 
     var filterFilter = $filter('filter');
 
+    var base_url = $location.protocol() + '://' + $location.host();
+    $scope.logo_base_url = base_url + '/images/apps';
+    $scope.apps_base_url = base_url + '/scripts/external';
     $scope.loading = true;
     $scope.all_apps = [];
     $scope.apps_by_categories = [];
