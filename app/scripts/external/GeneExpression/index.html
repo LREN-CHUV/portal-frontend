@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Correlated expression and brain evolution</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="css/style.css" />
+<link rel="stylesheet" type="text/css" href="css/d3.css" />
+<link rel="stylesheet" type="text/css" href="css/nouislider.min.css" />
+<link rel="stylesheet" type="text/css" href="css/nouislider.pips.css" />
+<link rel="stylesheet" type="text/css" href="css/hbp-mip.css" />
+<script type="text/javascript" src="js/script.js"></script>
+<script type="text/javascript" src="js/jquery-1.11.1.js"></script>
+<script type="text/javascript" src="js/d3.min.js"></script>
+<script type="text/javascript" src="js/graphics.js"></script>
+<script type="text/javascript" src="js/brain-atlas.js"></script>
+<script type="text/javascript" src="js/nouislider.min.js"></script>
+<script type="text/javascript" src="js/timeFrameSlider.js"></script>
+</head>
+
+<body>
+	<div class="centeredDiv">
+		<h1>Correlated expression and brain evolution</h1>
+		<br /> <br />
+
+		<div class="inputDiv">
+
+			<div id="selectBrain">
+				<br />
+				<h2>1. Select a brain region</h2>
+				<br />
+				<object id="svgObj" type="image/svg+xml"
+					data="images/brain-atlas.svg" class="brain-atlas"><h3>Cannot load the brain atlas !</h3></object>
+				<div id="AllenBrainCR">
+					<a href="http://www.brain-map.org/">Allen Brain Atlas</a>
+				</div>
+				<div class="searchform">
+					<input name="editbox_search" class="editbox_search"
+						id="editbox_search_structure_id" maxlength="80" value="A1C"
+						type="text" />
+				</div>
+			</div>
+
+			<br />
+
+			<div id="selectGene">
+				<br />
+				<h2>2. Select a gene using Ensembl Id</h2>
+				<br />
+				<div class="searchform">
+					<br /> <input name="editbox_search" class="editbox_search"
+						id="editbox_search_gene_id" maxlength="80" value="ENSG00000101337"
+						type="text" />
+				</div>
+			</div>
+
+			<br />
+
+			<div id="selectTime">
+				<br />
+				<h2>3. Select time frame</h2>
+				<br /> <br />
+				<div class="tf">
+					<div id="timeFrameSliderPips"></div>
+					<div id="timeFrameSlider"></div>
+					<br />
+					<div class="tfLabels">
+						<label>Start=</label><label id="timeStart"></label><label>
+							weeks</label> <br /> <label>Stop=</label><label id="timeStop"></label><label>
+							weeks</label> <br />
+					</div>
+				</div>
+			</div>
+
+			<div class="searchButtonDiv">
+				<br /> <br />
+				<button id="searchButton" type="button" class="searchButton">Search</button>
+				<br /> <br />
+			</div>
+		</div>
+
+		<div class="outputDiv">
+			<br /> <br />
+			<h1>Results</h1>
+			<br /> <br />
+
+			<div id="genExpContainer">
+				<div id="genExp">
+					<br /> <br />
+					<h2>Gene Expression</h2>
+
+					<br /> <a href="http://www.brain-map.org/">Download</a> <br />
+					<br />
+				</div>
+				<br />
+			</div>
+
+			<div id="correlAllContainer">
+				<div id="correlAll">
+					<br /> <br />
+					<h2>Correlation across all ages</h2>
+					<button id="correlAllButton" title="Alzheimer subjects classification" class="checkButton"></button>
+					<br /> <a href="http://www.brain-map.org/">Download</a> <br />
+					<br />
+				</div>
+				<br />
+			</div>
+
+			<div id="correlTimeContainer">
+				<div id="correlTime">
+					<br /> <br />
+					<h2>Time frame specific correlation</h2>
+					<button id="correlAgeButton" title="Alzheimer subjects classification" class="checkButton"></button>
+					<br /> <a href="http://www.brain-map.org/">Download</a> <br /> <br />
+				</div>
+				<br />
+			</div>
+		</div>
+
+	</div>
+
+	<div id="openModal" class="modalDialog">
+		<div>
+			<a href="#close" title="Close" class="close">X</a>
+			<h1 class="modalTitle">Alzheimer Subjects Classification</h1>
+			<br /> <br /> <img id="ldaImg" class="modalImage"
+				src="images/LDA1.png" width="600" height="800" alt="" />
+			<div class="labelsColors">
+				<div id="ColorMCI"></div>
+				<br />
+				<div id="ColorNL"></div>
+				<br />
+				<div id="ColorAD"></div>
+			</div>
+			<div class="legend">
+				<p class="legendLabels">
+					MCI<br />NL<br />AD
+				</p>
+			</div>
+			<div class="descrLDA">
+				<p class="descrLDAText"></p>
+			</div>
+		</div>
+	</div>
+
+	<br />
+	<br />
+
+</body>
+</html>

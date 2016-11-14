@@ -1,0 +1,244 @@
+/* Design by http://www.dreamtemplate.com */
+@charset "utf-8";
+
+body {
+	margin:0;
+	padding:0;
+	width:100%;
+	color:#6d6d6d;
+	font:normal 12px/1.5em "Liberation sans", Arial, Helvetica, sans-serif;
+	min-width: 1600px;
+}
+
+h1 {
+	margin:0;
+	padding:32px 0 0;
+	font-size:38px;
+	font-weight:bold;
+	line-height:1.2em;
+	text-transform:none;
+	text-align:center;
+}
+
+h2 {
+	margin:0px 0;
+	padding:0px 0;
+	font-size:24px;
+	font-weight:normal;
+	color:#6e6e6e;
+}
+
+a:visited {
+	color:#6e6e6e;
+}
+
+.inputDiv {
+	background-color:#f0f0f0;
+	border-radius: 25px;
+    padding: 20px;
+}
+.outputDiv {
+	display:none;
+}
+
+#timeFrameSlider {
+    margin-left: 15.5%;
+    width: 67.5%;
+}
+
+.searchButton{
+    background-color:#f6f6f6;
+}
+
+.searchButtonDiv{
+    text-align:center;
+}
+
+#genExpContainer{
+    background-color:#fdae61;
+    height:100%;
+    border-radius: 25px;
+    padding: 20px;
+}
+
+#correlAllContainer{
+    background-color:#ffffbf;
+    height:100%;
+    border-radius: 25px;
+    padding: 20px;
+}
+
+#correlTimeContainer{
+    background-color:#abd9e9;
+    height:100%;
+    border-radius: 25px;
+    padding: 20px;
+}
+
+.centeredDiv{
+	margin-left:20%;
+	width:60%;
+}
+
+
+.modalDialog {
+	position: fixed;
+	font-family: Arial, Helvetica, sans-serif;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	background: rgba(0,0,0,0.8);
+	z-index: 99999;
+	opacity:0;
+	-webkit-transition: opacity 400ms ease-in;
+	-moz-transition: opacity 400ms ease-in;
+	transition: opacity 400ms ease-in;
+	pointer-events: none;
+}
+
+.modalDialog:target {
+	opacity:1;
+	pointer-events: auto;
+	height:100%;
+    width:100%;
+}
+
+.modalDialog > div {
+	min-width: 1000px;
+	min-height: 600px;
+    height: 80%;
+    width:60%;
+	position: relative;
+	margin: 5% auto;
+	padding: 5px 20px 13px 20px;
+	border-radius: 10px;
+	background-color:#f0f0f0;
+}
+
+.close {
+	background: #606061;
+	color: #FFFFFF;
+	line-height: 25px;
+	position: absolute;
+	right: -12px;
+	text-align: center;
+	top: -10px;
+	width: 24px;
+	text-decoration: none;
+	font-weight: bold;
+	-webkit-border-radius: 12px;
+	-moz-border-radius: 12px;
+	border-radius: 12px;
+	-moz-box-shadow: 1px 1px 3px #000;
+	-webkit-box-shadow: 1px 1px 3px #000;
+	box-shadow: 1px 1px 3px #000;
+}
+
+.close:hover { background: #6e6e6e; }
+
+.modalTitle {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+	color:#6e6e6e;
+}
+
+.modalImage {
+    float:left;
+    display: block;
+    height: 80%;
+}
+
+.brain-atlas {
+	margin-left: 10%;
+    display: block;
+    height: 80%;
+	border-radius: 25px;
+    padding: 20px;
+}
+
+.searchform {
+	margin-left: 10%;
+    display: block;
+    height: 80%;
+	border-radius: 25px;
+    padding: 20px;
+}
+
+.tfLabels {
+	margin-left: 10%;
+    display: block;
+    height: 80%;
+	border-radius: 25px;
+    padding: 20px;
+}
+
+#AllenBrainCR
+{
+	float:right;
+	margin-right: 10%;
+}
+
+.legend {
+	margin-left: 620px;
+    display: block;
+    height: 20%;
+    margin-top:2.3%;
+	border-radius: 25px;
+    padding: 20px;
+    font-size:20px;
+    line-height:1.2em;
+}
+
+.labelsColors {
+	float:left;
+    display: block;
+    height: 20%;
+    margin-top:5%;
+    margin-left: -20px;
+	border-radius: 25px;
+    padding: 16px;
+}
+
+#ColorMCI {
+	width: 20px; height: 5px;
+    background: black;
+    border-radius: 3px;
+    padding: 3px;
+}
+
+#ColorAD {
+	width: 20px; height: 5px;
+    background: red;
+    border-radius: 3px;
+    padding: 3px;
+}
+
+#ColorNL {
+	width: 20px; height: 5px;
+    background: green;
+    border-radius: 3px;
+    padding: 3px;
+}
+
+.checkButton {
+	height:30px;
+	width : 60px;
+	background: url(../images/checkButtonLogo.png) no-repeat;
+	background-size: 56px 28px;
+	float: right;
+}
+
+.descrLDA
+{
+	display: block;
+	width:30%;
+	margin-left: 700px;
+}
+
+.descrLDAText
+{
+	font-size:1.5em;
+}
+
