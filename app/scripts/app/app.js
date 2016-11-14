@@ -66,6 +66,9 @@ angular
     'chuvApp.experiments',
     'chuvApp.components.toolbar',
     'chuvApp.intro',
+    // analytics
+    'angulartics',
+    'angulartics.google.analytics',
   ])
   .config(['$translateProvider','tmhDynamicLocaleProvider','backendExportChartUrl', function ($translateProvider,tmhDynamicLocaleProvider,backendExportChartUrl) {
     $translateProvider.useLoader('$translatePartialLoader', {
