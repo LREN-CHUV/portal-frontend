@@ -21,6 +21,8 @@ module.exports = function (grunt) {
     dist: 'dist'
   };
 
+  var production = grunt.option('production');
+
   // Define the configuration for all the tasks
   grunt.initConfig({
 
@@ -201,7 +203,7 @@ module.exports = function (grunt) {
     // Automatically inject Bower components into the app
     wiredep: {
       app: {
-        src: ['<%= yeoman.app %>/index.html'],
+        src: ['<%= yeoman.app %>/index-tmpl.html'],
         ignorePath:  /\.\.\//
       },
       test: {
@@ -238,7 +240,7 @@ module.exports = function (grunt) {
     // concat, minify and revision files. Creates configurations in memory so
     // additional tasks can operate on them
     useminPrepare: {
-      html: '<%= yeoman.app %>/index.html',
+      html: '<%= yeoman.app %>/index-tmpl.html',
       options: {
         dest: '<%= yeoman.dist %>',
         flow: {
@@ -373,7 +375,7 @@ module.exports = function (grunt) {
     'string-replace': {
       inline: {
         files: {
-          '<%= yeoman.dist %>/': '<%= yeoman.dist %>/index.html'
+          '<%= yeoman.dist %>/': '<%= yeoman.dist %>/index-tmpl.html'
         },
         options: {
           replacements: [
@@ -386,8 +388,8 @@ module.exports = function (grunt) {
       },
       dev: {
         files: {
-          '<%= yeoman.app %>/': '<%= yeoman.app %>/index.html',
-          '<%= yeoman.dist %>/': '<%= yeoman.dist %>/index.html'
+          '<%= yeoman.app %>/': '<%= yeoman.app %>/index-tmpl.html',
+          '<%= yeoman.dist %>/': '<%= yeoman.dist %>/index-tmpl.html'
         },
         options: {
           replacements: [
@@ -400,7 +402,7 @@ module.exports = function (grunt) {
       },
       int: {
         files: {
-          '<%= yeoman.dist %>/': '<%= yeoman.dist %>/index.html'
+          '<%= yeoman.dist %>/': '<%= yeoman.dist %>/index-tmpl.html'
         },
         options: {
           replacements: [
@@ -413,7 +415,7 @@ module.exports = function (grunt) {
       },
       demo: {
         files: {
-          '<%= yeoman.dist %>/': '<%= yeoman.dist %>/index.html'
+          '<%= yeoman.dist %>/': '<%= yeoman.dist %>/index-tmpl.html'
         },
         options: {
           replacements: [
@@ -426,7 +428,7 @@ module.exports = function (grunt) {
       },
       prod: {
         files: {
-          '<%= yeoman.dist %>/': '<%= yeoman.dist %>/index.html'
+          '<%= yeoman.dist %>/': '<%= yeoman.dist %>/index-tmpl.html'
         },
         options: {
           replacements: [
@@ -526,7 +528,12 @@ module.exports = function (grunt) {
       },
       dist: {
           files: {
-              '<%= yeoman.dist %>/index.html': ['<%= yeoman.dist %>/index.html']
+              '<%= yeoman.dist %>/index-tmpl.html': ['<%= yeoman.dist %>/index-tmpl.html']
+          }
+      },
+      dev: {
+          files: {
+              '<%= yeoman.dist %>/index-tmpl.html': ['<%= yeoman.dist %>/index-tmpl.html']
           }
       }
     },
@@ -590,7 +597,6 @@ module.exports = function (grunt) {
     }
   });
 
-
   grunt.registerTask('serve', 'Compile then start a connect web server', function (target) {
     if (target === 'dist') {
       return grunt.task.run(['build', 'connect:dist:keepalive']);
@@ -636,7 +642,7 @@ module.exports = function (grunt) {
     'filerev',
     'usemin',
     'imagemin',
-    'processhtml:dist',
+    'processhtml:' + (production? 'dist': 'dev'),
     'htmlmin'
   ]);
 

@@ -9,7 +9,7 @@ builder:
   post:
     - echo "Finished building frontend builder image"
     - echo "Building project..."
-    - docker run -ti --rm -v $WORKSPACE:/frontend/ -v $HOME/.npm:/home/build/.npm/ frontend-builder
+    - docker run -ti --rm -v $WORKSPACE:/frontend/ -v $HOME/.npm:/home/build/.npm/ -e 'production=true' frontend-builder
     - echo "Finished building project"
 
 portal-frontend:
