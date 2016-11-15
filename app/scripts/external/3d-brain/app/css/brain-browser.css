@@ -1,0 +1,14 @@
+body {
+  background: #f5f5f5 url("../images/body-bg.jpg") top center no-repeat;
+  background-size: 100% auto;
+  background-attachment: fixed;
+}
+
+h1 {
+	text-align: center;
+}
+
+#web-service {
+	width:80%;
+	margin-left: 10%;
+}
