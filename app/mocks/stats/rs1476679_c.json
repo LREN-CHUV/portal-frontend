@@ -1,0 +1,214 @@
+[
+    {
+        "code": "rs1476679_c",
+        "count": 1115,
+        "dataType": "SummaryStatistics"
+    },
+    {
+        "code": "rs1476679_c",
+        "dataType": "DatasetStatistic",
+        "dataset": {
+            "data": {
+                "categories": [],
+                "header": [
+                    "0",
+                    "1",
+                    "2"
+                ],
+                "shape": "vector",
+                "value": [
+                    293,
+                    218,
+                    47
+                ]
+            },
+            "name": "Count"
+        },
+        "label": "Histogram"
+    },
+    {
+        "code": "rs1476679_c",
+        "dataType": "DatasetStatistic",
+        "dataset": {
+            "data": {
+                "categories": [
+                    "Male",
+                    "Male",
+                    "Male",
+                    "Female",
+                    "Female",
+                    "Female"
+                ],
+                "header": [
+                    "0",
+                    "1",
+                    "2",
+                    "0",
+                    "1",
+                    "2"
+                ],
+                "shape": "vector",
+                "value": [
+                    149,
+                    129,
+                    27,
+                    144,
+                    89,
+                    20
+                ]
+            },
+            "name": "Count"
+        },
+        "label": "Histogram - ptgender"
+    },
+    {
+        "code": "rs1476679_c",
+        "dataType": "DatasetStatistic",
+        "dataset": {
+            "data": {
+                "categories": [
+                    "CN",
+                    "CN",
+                    "CN",
+                    "MCI",
+                    "MCI",
+                    "MCI",
+                    "AD",
+                    "AD",
+                    "AD"
+                ],
+                "header": [
+                    "0",
+                    "1",
+                    "2",
+                    "0",
+                    "1",
+                    "2",
+                    "0",
+                    "1",
+                    "2"
+                ],
+                "shape": "vector",
+                "value": [
+                    112,
+                    68,
+                    16,
+                    163,
+                    143,
+                    29,
+                    18,
+                    7,
+                    2
+                ]
+            },
+            "name": "Count"
+        },
+        "label": "Histogram - dx"
+    },
+    {
+        "code": "rs1476679_c",
+        "dataType": "DatasetStatistic",
+        "dataset": {
+            "data": {
+                "categories": [
+                    "0",
+                    "0",
+                    "0",
+                    "1",
+                    "1",
+                    "1",
+                    "2",
+                    "2",
+                    "2"
+                ],
+                "header": [
+                    "0",
+                    "1",
+                    "2",
+                    "0",
+                    "1",
+                    "2",
+                    "0",
+                    "1",
+                    "2"
+                ],
+                "shape": "vector",
+                "value": [
+                    176,
+                    127,
+                    29,
+                    94,
+                    76,
+                    16,
+                    23,
+                    15,
+                    2
+                ]
+            },
+            "name": "Count"
+        },
+        "label": "Histogram - apoe4"
+    },
+    {
+        "code": "rs1476679_c",
+        "dataType": "DatasetStatistic",
+        "dataset": {
+            "data": {
+                "categories": [
+                    "-50y",
+                    "-50y",
+                    "-50y",
+                    "50-59y",
+                    "50-59y",
+                    "50-59y",
+                    "60-69y",
+                    "60-69y",
+                    "60-69y",
+                    "70-79y",
+                    "70-79y",
+                    "70-79y",
+                    "+80y",
+                    "+80y",
+                    "+80y"
+                ],
+                "header": [
+                    "0",
+                    "1",
+                    "2",
+                    "0",
+                    "1",
+                    "2",
+                    "0",
+                    "1",
+                    "2",
+                    "0",
+                    "1",
+                    "2",
+                    "0",
+                    "1",
+                    "2"
+                ],
+                "shape": "vector",
+                "value": [
+                    0,
+                    0,
+                    0,
+                    14,
+                    6,
+                    1,
+                    84,
+                    54,
+                    11,
+                    150,
+                    109,
+                    29,
+                    45,
+                    49,
+                    6
+                ]
+            },
+            "name": "Count"
+        },
+        "label": "Histogram - agegroup"
+    }
+]

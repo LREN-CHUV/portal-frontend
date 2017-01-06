@@ -1,0 +1,214 @@
+[
+    {
+        "code": "ptethcat",
+        "count": 1115,
+        "dataType": "SummaryStatistics"
+    },
+    {
+        "code": "ptethcat",
+        "dataType": "DatasetStatistic",
+        "dataset": {
+            "data": {
+                "categories": [],
+                "header": [
+                    "Hisp/Latino",
+                    "Not Hisp/Latino",
+                    "Unknown"
+                ],
+                "shape": "vector",
+                "value": [
+                    28,
+                    1080,
+                    7
+                ]
+            },
+            "name": "Count"
+        },
+        "label": "Histogram"
+    },
+    {
+        "code": "ptethcat",
+        "dataType": "DatasetStatistic",
+        "dataset": {
+            "data": {
+                "categories": [
+                    "Male",
+                    "Male",
+                    "Male",
+                    "Female",
+                    "Female",
+                    "Female"
+                ],
+                "header": [
+                    "Hisp/Latino",
+                    "Not Hisp/Latino",
+                    "Unknown",
+                    "Hisp/Latino",
+                    "Not Hisp/Latino",
+                    "Unknown"
+                ],
+                "shape": "vector",
+                "value": [
+                    13,
+                    590,
+                    1,
+                    15,
+                    490,
+                    6
+                ]
+            },
+            "name": "Count"
+        },
+        "label": "Histogram - ptgender"
+    },
+    {
+        "code": "ptethcat",
+        "dataType": "DatasetStatistic",
+        "dataset": {
+            "data": {
+                "categories": [
+                    "CN",
+                    "CN",
+                    "CN",
+                    "MCI",
+                    "MCI",
+                    "MCI",
+                    "AD",
+                    "AD",
+                    "AD"
+                ],
+                "header": [
+                    "Hisp/Latino",
+                    "Not Hisp/Latino",
+                    "Unknown",
+                    "Hisp/Latino",
+                    "Not Hisp/Latino",
+                    "Unknown",
+                    "Hisp/Latino",
+                    "Not Hisp/Latino",
+                    "Unknown"
+                ],
+                "shape": "vector",
+                "value": [
+                    3,
+                    279,
+                    1,
+                    21,
+                    575,
+                    4,
+                    4,
+                    226,
+                    2
+                ]
+            },
+            "name": "Count"
+        },
+        "label": "Histogram - dx"
+    },
+    {
+        "code": "ptethcat",
+        "dataType": "DatasetStatistic",
+        "dataset": {
+            "data": {
+                "categories": [
+                    "0",
+                    "0",
+                    "0",
+                    "1",
+                    "1",
+                    "1",
+                    "2",
+                    "2",
+                    "2"
+                ],
+                "header": [
+                    "Hisp/Latino",
+                    "Not Hisp/Latino",
+                    "Unknown",
+                    "Hisp/Latino",
+                    "Not Hisp/Latino",
+                    "Unknown",
+                    "Hisp/Latino",
+                    "Not Hisp/Latino",
+                    "Unknown"
+                ],
+                "shape": "vector",
+                "value": [
+                    16,
+                    545,
+                    3,
+                    10,
+                    399,
+                    3,
+                    1,
+                    132,
+                    1
+                ]
+            },
+            "name": "Count"
+        },
+        "label": "Histogram - apoe4"
+    },
+    {
+        "code": "ptethcat",
+        "dataType": "DatasetStatistic",
+        "dataset": {
+            "data": {
+                "categories": [
+                    "-50y",
+                    "-50y",
+                    "-50y",
+                    "50-59y",
+                    "50-59y",
+                    "50-59y",
+                    "60-69y",
+                    "60-69y",
+                    "60-69y",
+                    "70-79y",
+                    "70-79y",
+                    "70-79y",
+                    "+80y",
+                    "+80y",
+                    "+80y"
+                ],
+                "header": [
+                    "Hisp/Latino",
+                    "Not Hisp/Latino",
+                    "Unknown",
+                    "Hisp/Latino",
+                    "Not Hisp/Latino",
+                    "Unknown",
+                    "Hisp/Latino",
+                    "Not Hisp/Latino",
+                    "Unknown",
+                    "Hisp/Latino",
+                    "Not Hisp/Latino",
+                    "Unknown",
+                    "Hisp/Latino",
+                    "Not Hisp/Latino",
+                    "Unknown"
+                ],
+                "shape": "vector",
+                "value": [
+                    0,
+                    0,
+                    0,
+                    6,
+                    41,
+                    0,
+                    10,
+                    250,
+                    2,
+                    11,
+                    556,
+                    3,
+                    1,
+                    233,
+                    2
+                ]
+            },
+            "name": "Count"
+        },
+        "label": "Histogram - agegroup"
+    }
+]

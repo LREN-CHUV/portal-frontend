@@ -1,0 +1,173 @@
+[
+    {
+        "code": "mriscanner",
+        "count": 1115,
+        "dataType": "SummaryStatistics"
+    },
+    {
+        "code": "mriscanner",
+        "dataType": "DatasetStatistic",
+        "dataset": {
+            "data": {
+                "categories": [],
+                "header": [
+                    "1.5",
+                    "3.0"
+                ],
+                "shape": "vector",
+                "value": [
+                    575,
+                    540
+                ]
+            },
+            "name": "Count"
+        },
+        "label": "Histogram"
+    },
+    {
+        "code": "mriscanner",
+        "dataType": "DatasetStatistic",
+        "dataset": {
+            "data": {
+                "categories": [
+                    "Male",
+                    "Male",
+                    "Female",
+                    "Female"
+                ],
+                "header": [
+                    "1.5",
+                    "3.0",
+                    "1.5",
+                    "3.0"
+                ],
+                "shape": "vector",
+                "value": [
+                    328,
+                    276,
+                    247,
+                    264
+                ]
+            },
+            "name": "Count"
+        },
+        "label": "Histogram - ptgender"
+    },
+    {
+        "code": "mriscanner",
+        "dataType": "DatasetStatistic",
+        "dataset": {
+            "data": {
+                "categories": [
+                    "CN",
+                    "CN",
+                    "MCI",
+                    "MCI",
+                    "AD",
+                    "AD"
+                ],
+                "header": [
+                    "1.5",
+                    "3.0",
+                    "1.5",
+                    "3.0",
+                    "1.5",
+                    "3.0"
+                ],
+                "shape": "vector",
+                "value": [
+                    157,
+                    126,
+                    282,
+                    318,
+                    136,
+                    96
+                ]
+            },
+            "name": "Count"
+        },
+        "label": "Histogram - dx"
+    },
+    {
+        "code": "mriscanner",
+        "dataType": "DatasetStatistic",
+        "dataset": {
+            "data": {
+                "categories": [
+                    "0",
+                    "0",
+                    "1",
+                    "1",
+                    "2",
+                    "2"
+                ],
+                "header": [
+                    "1.5",
+                    "3.0",
+                    "1.5",
+                    "3.0",
+                    "1.5",
+                    "3.0"
+                ],
+                "shape": "vector",
+                "value": [
+                    284,
+                    280,
+                    221,
+                    191,
+                    70,
+                    64
+                ]
+            },
+            "name": "Count"
+        },
+        "label": "Histogram - apoe4"
+    },
+    {
+        "code": "mriscanner",
+        "dataType": "DatasetStatistic",
+        "dataset": {
+            "data": {
+                "categories": [
+                    "-50y",
+                    "-50y",
+                    "50-59y",
+                    "50-59y",
+                    "60-69y",
+                    "60-69y",
+                    "70-79y",
+                    "70-79y",
+                    "+80y",
+                    "+80y"
+                ],
+                "header": [
+                    "1.5",
+                    "3.0",
+                    "1.5",
+                    "3.0",
+                    "1.5",
+                    "3.0",
+                    "1.5",
+                    "3.0",
+                    "1.5",
+                    "3.0"
+                ],
+                "shape": "vector",
+                "value": [
+                    0,
+                    0,
+                    18,
+                    29,
+                    93,
+                    169,
+                    320,
+                    250,
+                    144,
+                    92
+                ]
+            },
+            "name": "Count"
+        },
+        "label": "Histogram - agegroup"
+    }
+]
