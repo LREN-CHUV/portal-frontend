@@ -359,17 +359,18 @@ angular.module('chuvApp.models')
             $scope.variable_description = focused_variable.description;
 
             Variable
-              .get_stats(focused_variable.code)
+              .get_histo(focused_variable.code)
               .then(function (response) {
                 if (current_request_id != request_id) return;
                 $scope.focused_variable_loaded = true;
-                $scope.stats = response.data;
+
+                $scope.stats = response.data.cells.data.init;
 
                 if (!angular.isArray($scope.stats)) {
                   $scope.stats = [$scope.stats];
                 }
 
-                $scope.measurement_count = ($scope.stats.length && $scope.stats[0].count) || "??";
+                // $scope.measurement_count = ($scope.stats.length && $scope.stats[0].count) || "??";
 
               }, function () {
                 if (current_request_id != request_id) return;
