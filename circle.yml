@@ -5,8 +5,9 @@ dependencies:
   override:
     - docker info
     - docker build -f Dockerfile.builder -t portal-frontend-builder .
-    - docker run --rm -v $HOME/portal-frontend:/build/ -v $HOME/.m2:/home/build/.m2/ portal-frontend-builder:latest
+    - docker run --rm -v $HOME/portal-frontend:/frontend/ -v $HOME/.npm:/home/build/.npm/ -e 'production=true' portal-frontend-builder:latest
     - docker build -t hbpmip/portal-frontend .
+
 #test:
 #  pre:
 #    - ./tests/pre-test-run.sh
