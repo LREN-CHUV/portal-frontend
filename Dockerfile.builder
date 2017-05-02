@@ -1,4 +1,4 @@
-FROM digitallyseamless/nodejs-bower-grunt
+FROM digitallyseamless/nodejs-bower-grunt:4
 
 MAINTAINER mirco.nasuti@chuv.ch
 

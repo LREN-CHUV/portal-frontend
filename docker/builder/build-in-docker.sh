@@ -1,4 +1,5 @@
 #!/bin/sh
+set -e
 
 echo ">>> Building inside Docker"
 cd /frontend

@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -e
 
 export USE_GZIP=${USE_GZIP:-false}
 OPTS="-template /portal/conf/nginx.conf.tmpl:/etc/nginx/nginx.conf"
