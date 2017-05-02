@@ -3,24 +3,24 @@
  * Modified by Arnaud Jutzeler on 05/08/2016
  */
 
-'use strict';
-angular.module('chuvApp.models').controller('ReviewController',
-  ['$scope',
-    '$translatePartialLoader',
-    '$translate',
-    'Model',
-    '$stateParams',
-    'ChartUtil',
-    "$state",
-    '$log',
-    'User',
-    '$location',
-    '$modal',
-    '$timeout',
-    '$filter',
-    'Variable',
-    'Group',
-    'notifications',
+"use strict";
+angular.module("chuvApp.models").controller("ReviewController", [
+  "$scope",
+  "$translatePartialLoader",
+  "$translate",
+  "Model",
+  "$stateParams",
+  "ChartUtil",
+  "$state",
+  "$log",
+  "User",
+  "$location",
+  "$modal",
+  "$timeout",
+  "$filter",
+  "Variable",
+  "Group",
+  "notifications",
   function(
     $scope,
     $translatePartialLoader,
@@ -39,10 +39,9 @@ angular.module('chuvApp.models').controller('ReviewController',
     Group,
     notifications
   ) {
-
     var filterFilter = $filter("filter");
 
-    $translatePartialLoader.addPart('model');
+    $translatePartialLoader.addPart("model");
     $translate.refresh();
 
     $scope.model = {};
@@ -50,7 +49,7 @@ angular.module('chuvApp.models').controller('ReviewController',
     $scope.dataset = null;
 
     $scope.chartConfig = {
-      type: 'designmatrix',
+      type: "designmatrix",
       height: 480,
       yAxisVariables: null,
       xAxisVariable: null
@@ -60,18 +59,18 @@ angular.module('chuvApp.models').controller('ReviewController',
      * load model by slug
      * @param slug
      */
-    $scope.load = function (slug) {
-      Model.get({slug: slug}, function(result) {
+    $scope.load = function(slug) {
+      Model.get({ slug: slug }, function(result) {
         $scope.model = result;
         $scope.dataset = result.dataset;
-        if($stateParams.isCopy === "true"){
-          $scope.model.title = "Copy of "+$scope.model.title;
+        if ($stateParams.isCopy === "true") {
+          $scope.model.title = "Copy of " + $scope.model.title;
         }
         $scope.chartConfig = result.config;
         $scope.hcConfig = ChartUtil($scope.chartConfig, $scope.dataset);
         $scope.query = result.query;
 
-        $scope.$emit('event:loadModel',result);
+        $scope.$emit("event:loadModel", result);
         $scope.executeBtnAnimate();
         $scope.executed = true;
       });
@@ -81,20 +80,22 @@ angular.module('chuvApp.models').controller('ReviewController',
       $scope.load($stateParams.slug);
     }
 
-
     /**
      * Return true if object has been created by current user
      * @returns {boolean}
      */
-    $scope.isMine = function () {
-      return $scope.model.slug == null || $scope.model.createdBy.username == User.current().username;
+    $scope.isMine = function() {
+      return (
+        $scope.model.slug == null ||
+        $scope.model.createdBy.username == User.current().username
+      );
     };
 
     /**
      * Return true if the model has not been saved yet
      * @returns {boolean}
      */
-    $scope.isNew = function () {
+    $scope.isNew = function() {
       return $scope.model.slug == null;
     };
 
@@ -102,8 +103,6 @@ angular.module('chuvApp.models').controller('ReviewController',
      * save or update model
      */
     $scope.saveModel = function() {
-
-
       if (!($scope.chartConfig.title && $scope.chartConfig.title.text)) {
         notifications.warning("You need a name for your model!");
         return;
@@ -117,43 +116,75 @@ angular.module('chuvApp.models').controller('ReviewController',
 
       if ($scope.isNew()) {
         // save new model
-        Model.save($scope.model, function (model) {
-          $state.go('models-edit', {slug: model.slug});
-          notifications.success("The model was successfully saved!");
-        },function(){
-          notifications.error("An error occurred when trying to save the model!");
-        });
+        Model.save(
+          $scope.model,
+          function(model) {
+            $state.go("models-edit", { slug: model.slug });
+            notifications.success("The model was successfully saved!");
+          },
+          function() {
+            notifications.error(
+              "An error occurred when trying to save the model!"
+            );
+          }
+        );
       } else {
-
         // if this model does not belong to the user
         if (!$scope.isMine()) {
-          notifications.warning("You cannot modify a model owned by someone else!");
+          notifications.warning(
+            "You cannot modify a model owned by someone else!"
+          );
           return;
         }
 
         // save existing model
-        Model.update({slug: $scope.model.slug}, $scope.model, function (model) {
-          $state.go('models-edit', {slug: model.slug});
-          notifications.success("The model was successfully updated!");
-        },function(){
-          notifications.error("An error occurred when trying to update the model!");
-        });
+        Model.update(
+          { slug: $scope.model.slug },
+          $scope.model,
+          function(model) {
+            $state.go("models-edit", { slug: model.slug });
+            notifications.success("The model was successfully updated!");
+          },
+          function() {
+            notifications.error(
+              "An error occurred when trying to update the model!"
+            );
+          }
+        );
       }
     };
 
     /**
      * Execute animation
      */
-    $scope.executeBtnAnimate = function () {
-      var searchHelpSelector = $('.search-help-container');
-      var searchResultSelector = $('.search-result');
-      new TimelineMax({ paused: true, onComplete: function () {
-        TweenMax.set(searchHelpSelector, { position: 'absolute'});
-        TweenMax.set(searchResultSelector, { position: 'relative', left: 0, x: 0, y: 0 });
-      } })
+    $scope.executeBtnAnimate = function() {
+      var searchHelpSelector = $(".search-help-container");
+      var searchResultSelector = $(".search-result");
+      new TimelineMax({
+        paused: true,
+        onComplete: function() {
+          TweenMax.set(searchHelpSelector, { position: "absolute" });
+          TweenMax.set(searchResultSelector, {
+            position: "relative",
+            left: 0,
+            x: 0,
+            y: 0
+          });
+        }
+      })
         .fromTo(searchHelpSelector, 0.3, { scale: 1 }, { scale: 0.8 })
-        .fromTo(searchHelpSelector, 0.3, {  autoAlpha: 1, x: '0%' }, { autoAlpha: 0, x: '40%' })
-        .fromTo(searchResultSelector, 0.3, { scale: 0.8, autoAlpha: 0 }, { scale: 1, autoAlpha: 1 })
+        .fromTo(
+          searchHelpSelector,
+          0.3,
+          { autoAlpha: 1, x: "0%" },
+          { autoAlpha: 0, x: "40%" }
+        )
+        .fromTo(
+          searchResultSelector,
+          0.3,
+          { scale: 0.8, autoAlpha: 0 },
+          { scale: 1, autoAlpha: 1 }
+        )
         .play();
     };
 
@@ -163,9 +194,9 @@ angular.module('chuvApp.models').controller('ReviewController',
      * @param value
      * @returns {boolean}
      */
-    $scope.contains = function (list, value) {
-      var findFunction = function (item) {
-        return angular.equals(item, value)
+    $scope.contains = function(list, value) {
+      var findFunction = function(item) {
+        return angular.equals(item, value);
       };
 
       return _.find(list, findFunction) !== undefined;
@@ -174,31 +205,37 @@ angular.module('chuvApp.models').controller('ReviewController',
     /**
      * Returns a promise that resolves when filterQuery is set.
      */
-    $scope.configureFilterQuery = function () {
+    $scope.configureFilterQuery = function() {
       var childScope = $scope.$new();
 
       var modal = $modal.open({
-        templateUrl: 'scripts/app/models/review/filter-query-modal.html',
+        templateUrl: "scripts/app/models/review/filter-query-modal.html",
         scope: childScope,
-        size: 'lg',
-        controller: function () {
-          childScope.contructQB = function () {
-
+        size: "lg",
+        controller: function() {
+          childScope.contructQB = function() {
             var filterVariables = $scope.query.filters
               .concat($scope.query.coVariables)
               .concat($scope.query.groupings)
-              .map(function (variable) {
+              .map(function(variable) {
                 variable = $scope.allVariables[variable.code];
                 return {
                   id: variable.code,
                   label: variable.label,
-                  type: 'double',
-                  operators: ['equal', 'not_equal', 'less', 'greater', 'between', 'not_between']
-                }
+                  type: "double",
+                  operators: [
+                    "equal",
+                    "not_equal",
+                    "less",
+                    "greater",
+                    "between",
+                    "not_between"
+                  ]
+                };
               });
 
             $(".query-builder").queryBuilder({
-              plugins: ['bt-tooltip-errors'],
+              plugins: ["bt-tooltip-errors"],
               filters: filterVariables,
               allow_empty: true,
               inputs_separator: " - ",
@@ -213,20 +250,27 @@ angular.module('chuvApp.models').controller('ReviewController',
             });
 
             if (!$scope.query.filterQuery && $scope.query.textQuery) {
-              $(".query-builder").queryBuilder('setRulesFromSQL', $scope.query.textQuery)
+              $(".query-builder").queryBuilder(
+                "setRulesFromSQL",
+                $scope.query.textQuery
+              );
             }
           };
 
-          childScope.validateQuery = function () {
+          childScope.validateQuery = function() {
             var qb = $(".query-builder");
-            if(qb.queryBuilder('validate')) {
-              $scope.query.filterQuery = qb.queryBuilder('getRules');
+            if (qb.queryBuilder("validate")) {
+              $scope.query.filterQuery = qb.queryBuilder("getRules");
               // ok this is not to be used in the DB, but is intented as a textual representation
-              $scope.query.textQuery = qb.queryBuilder('getSQL', false, false).sql;
-              qb.queryBuilder('destroy');
+              $scope.query.textQuery = qb.queryBuilder(
+                "getSQL",
+                false,
+                false
+              ).sql;
+              qb.queryBuilder("destroy");
               modal.close();
             }
-          }
+          };
         }
       });
 
@@ -234,31 +278,31 @@ angular.module('chuvApp.models').controller('ReviewController',
       modal.result.then($scope.executeQuery);
 
       // do not unwrap this: childScope.contructQB is set later.
-      modal.opened.then(function () {
-        $timeout(
-          childScope.contructQB,
-          300
-        )
+      modal.opened.then(function() {
+        $timeout(childScope.contructQB, 300);
       });
-
 
       return modal.result;
     };
 
     var axeCodeUsability = {};
-    $scope.canUseAxis = function (isXAxis, axeCode) {
-
+    $scope.canUseAxis = function(isXAxis, axeCode) {
       // if boxplot and isYAxis or not boxplot and isXAxis
-      if (isXAxis !== ($scope.chartConfig.type === 'boxplot')) {
+      if (isXAxis !== ($scope.chartConfig.type === "boxplot")) {
         if (!axeCodeUsability.hasOwnProperty(axeCode)) {
           axeCodeUsability[axeCode] = !_.any(
             $scope.dataset.data[axeCode],
-            function (datapoint) { return !isFinite(datapoint); }
+            function(datapoint) {
+              return !isFinite(datapoint);
+            }
           );
         }
         return axeCodeUsability[axeCode];
       } else {
-        return ChartUtil.canUseAsMainAxis($scope.dataset.data[axeCode], $scope.chartConfig.type);
+        return ChartUtil.canUseAsMainAxis(
+          $scope.dataset.data[axeCode],
+          $scope.chartConfig.type
+        );
       }
     };
 
@@ -266,32 +310,37 @@ angular.module('chuvApp.models').controller('ReviewController',
      *
      * @param model
      */
-    $scope.loadResources = function (model) {
+    $scope.loadResources = function(model) {
       Variable.query()
-        .$promise.then(function (allVariables) {
-          allVariables = _.sortBy(allVariables,"label");
-          $scope.variables = filterFilter(allVariables, {isVariable: true});
-          $scope.groupingVariables = allVariables.filter(function(v) {return ["polynominal", "binominal"].indexOf(v.type) != -1});
-          $scope.coVariables = allVariables.filter(function(v) {return ["real", "continuous"].indexOf(v.type) != -1});
-          $scope.filterVariables = filterFilter(allVariables, {isFilter: true});
+        .$promise.then(function(allVariables) {
+          allVariables = _.sortBy(allVariables, "label");
+          $scope.variables = filterFilter(allVariables, { isVariable: true });
+          $scope.groupingVariables = allVariables.filter(function(v) {
+            return ["polynominal", "binominal"].indexOf(v.type) != -1;
+          });
+          $scope.coVariables = allVariables.filter(function(v) {
+            return ["real", "continuous"].indexOf(v.type) != -1;
+          });
+          $scope.filterVariables = filterFilter(allVariables, {
+            isFilter: true
+          });
 
-          $scope.allVariables = _.indexBy(allVariables, 'code');
+          $scope.allVariables = _.indexBy(allVariables, "code");
           return Group.get().$promise;
         })
-        .then(function (group) {
+        .then(function(group) {
           $scope.groups = group.groups;
           _.extend($scope.query, model.query);
         });
     };
 
     function reload_hc_config() {
-      $scope.chartConfig.yAxisVariables = ($scope.chartConfig.yAxisVariables || [])
-        .filter(function (code) {
+      $scope.chartConfig.yAxisVariables = ($scope.chartConfig
+        .yAxisVariables || [])
+        .filter(function(code) {
           return (ChartUtil.isXAxisMain($scope.chartConfig.type)
             ? ChartUtil.canUseAsYAxis
-            : ChartUtil.canUseAsXAxis)(
-            code, $scope.chartConfig.type, $scope.dataset.data[code]
-          )
+            : ChartUtil.canUseAsXAxis)(code, $scope.chartConfig.type, $scope.dataset.data[code]);
         })
         .slice(0, 5);
       $scope.hcConfig = ChartUtil($scope.chartConfig, $scope.dataset, true);
@@ -309,7 +358,7 @@ angular.module('chuvApp.models').controller('ReviewController',
         error += "The query must have at least a Variable.\n";
       }
       // check if grouping is complete
-      if ($scope.contains(query.groupings, {code: undefined})) {
+      if ($scope.contains(query.groupings, { code: undefined })) {
         error += "A grouping is not complete yet.\n";
       }
 
@@ -317,12 +366,12 @@ angular.module('chuvApp.models').controller('ReviewController',
         error += "The query must have at least a covariable.\n";
       }
       // check if coVariables is complete
-      if ($scope.contains(query.coVariables, {code: undefined})) {
+      if ($scope.contains(query.coVariables, { code: undefined })) {
         error += "A covariable is not complete yet.\n";
       }
 
       // check if filter is complete
-      if ($scope.contains(query.filters, {operator: '', values: []})) {
+      if ($scope.contains(query.filters, { operator: "", values: [] })) {
         error += "A filter is not complete yet.\n";
       }
       if (error.length > 0) {
@@ -332,12 +381,15 @@ angular.module('chuvApp.models').controller('ReviewController',
 
       $scope.loading_model = true;
 
-      Model.executeQuery(query).success(function (queryResult) {
+      Model.executeQuery(query).success(function(queryResult) {
         $scope.executeBtnAnimate();
         $scope.executed = true;
         $scope.loading_model = false;
         $scope.dataset = queryResult;
-        $scope.chartConfig.yAxisVariables = _.filter($scope.dataset.header, $scope.canUseAxis).slice(0, 5);
+        $scope.chartConfig.yAxisVariables = _.filter(
+          $scope.dataset.header,
+          $scope.canUseAxis
+        ).slice(0, 5);
         update_location_search();
         reload_hc_config();
       });
@@ -346,11 +398,15 @@ angular.module('chuvApp.models').controller('ReviewController',
     $scope.$on("chartConfigChanged", reload_hc_config);
 
     if ($location.search().execute) {
-
       // wait for data to be there before executing query.
       var watchOnce = $scope.$watchGroup(
-        ["query.variables", "query.groupings", "query.coVariables", "variables"],
-        function (newValue) {
+        [
+          "query.variables",
+          "query.groupings",
+          "query.coVariables",
+          "variables"
+        ],
+        function(newValue) {
           if (!_.all(newValue)) return;
 
           // unbind watch
@@ -359,14 +415,14 @@ angular.module('chuvApp.models').controller('ReviewController',
           $scope.executeQuery();
         }
       );
-
     }
 
     function update_location_search() {
-
       function unmap_category(category) {
         return $scope.query[category]
-          .map(function (variable) { return variable.code; })
+          .map(function(variable) {
+            return variable.code;
+          })
           .join(",");
       }
 
@@ -387,23 +443,26 @@ angular.module('chuvApp.models').controller('ReviewController',
     /**
      * programmatically redirects to the review model, with the current model.
      */
-    $scope.go_to_explore = function () {
-      var should_configure = $scope.query.variables &&
+    $scope.go_to_explore = function() {
+      var should_configure =
+        $scope.query.variables &&
         $scope.query.groupings &&
         $scope.query.coVariables &&
         $scope.query.filters &&
         ($scope.query.variables.length ||
-        $scope.query.groupings.length ||
-        $scope.query.filters.length ||
-        $scope.query.coVariables.length);
+          $scope.query.groupings.length ||
+          $scope.query.filters.length ||
+          $scope.query.coVariables.length);
 
       if (!should_configure) {
-        return $location.url("/explore")
+        return $location.url("/explore");
       }
 
       function unmap_category(category) {
         return $scope.query[category]
-          .map(function (variable) { return variable.code; })
+          .map(function(variable) {
+            return variable.code;
+          })
           .join(",");
       }
 
@@ -415,12 +474,13 @@ angular.module('chuvApp.models').controller('ReviewController',
       };
 
       $location.url(
-        "/explore?configure=true&"
-        + Object.keys(query).map(function (category) {
-          return category + "=" + query[category]
-        }).join("&"));
+        "/explore?configure=true&" +
+          Object.keys(query)
+            .map(function(category) {
+              return category + "=" + query[category];
+            })
+            .join("&")
+      );
     };
-
-
   }
 ]);

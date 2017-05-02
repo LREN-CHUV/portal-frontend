@@ -31,123 +31,108 @@ either expressed or implied, of the Blue Brain Project.
 */
 
 (function() {
-
-if (window.BB === undefined) {
+  if (window.BB === undefined) {
     BB = {};
-}
+  }
 
-BB.Mapper = function() {
+  BB.Mapper = function() {
     this.needsUpdate = false;
     this.childrenMappers = [];
     this.parentMapper = null;
-}
+  };
 
-BB.Mapper.prototype.init = function(cb) {
+  BB.Mapper.prototype.init = function(cb) {
     if (cb !== undefined) {
-        cb();
+      cb();
     }
-}
+  };
 
-BB.Mapper.prototype.map = function(obj, el, cb) {
+  BB.Mapper.prototype.map = function(obj, el, cb) {
     if (cb !== undefined) {
-        cb();
+      cb();
     }
-}
+  };
 
-BB.Mapper.prototype.unmap = function(obj, el) {
-}
+  BB.Mapper.prototype.unmap = function(obj, el) {};
 
-BB.Mapper.prototype.dispose = function() {
-}
+  BB.Mapper.prototype.dispose = function() {};
 
-BB.Mapper.prototype.pick = function(raycaster) {
-}
+  BB.Mapper.prototype.pick = function(raycaster) {};
 
-BB.Mapper.prototype.highlight = function(active) {
-}
+  BB.Mapper.prototype.highlight = function(active) {};
 
-BB.Mapper.prototype.update = function(scene) {
-}
+  BB.Mapper.prototype.update = function(scene) {};
 
-BB.Mapper.prototype.lateUpdate = function(scene) {
-}
+  BB.Mapper.prototype.lateUpdate = function(scene) {};
 
-BB.Mapper.prototype.fixedUpdate = function(scene) {
-}
+  BB.Mapper.prototype.fixedUpdate = function(scene) {};
 
-BB.Mapper.prototype.camUpdate = function(cam) {
-}
+  BB.Mapper.prototype.camUpdate = function(cam) {};
 
-BB.Mapper.prototype.onclick = function(e) {
-}
+  BB.Mapper.prototype.onclick = function(e) {};
 
-BB.Mapper.prototype.ondblclick = function(e) {
-}
+  BB.Mapper.prototype.ondblclick = function(e) {};
 
-BB.Mapper.prototype.oncontextmenu = function(e) {
-}
+  BB.Mapper.prototype.oncontextmenu = function(e) {};
 
-BB.Mapper.prototype.onmousemove = function(e) {
-}
+  BB.Mapper.prototype.onmousemove = function(e) {};
 
-BB.Mapper.prototype.interactiveCtor = function(cb) {
+  BB.Mapper.prototype.interactiveCtor = function(cb) {
     if (cb !== undefined) {
-        cb();
+      cb();
     }
-}
+  };
 
-BB.Mapper.prototype.getUserFriendlyName = function() {
+  BB.Mapper.prototype.getUserFriendlyName = function() {
     return "Mapper";
-}
+  };
 
-BB.Mapper.prototype.serialize = function() {
+  BB.Mapper.prototype.serialize = function() {
     var obj = {};
     for (var i in this) {
-        try {
-            JSON.stringify(this[i]);
-            obj[i] = this[i];
-        } catch (e) {
-            // Nothing
-        }
+      try {
+        JSON.stringify(this[i]);
+        obj[i] = this[i];
+      } catch (e) {
+        // Nothing
+      }
     }
     // console.log(this.getClassName() + ': serialize() not Implemented');
     return obj;
-}
+  };
 
-BB.Mapper.prototype.deserialize = function(obj) {
+  BB.Mapper.prototype.deserialize = function(obj) {
     // console.log(this.getClassName() + ': deserialize() not Implemented');
     for (var i in obj) {
-        this[i] = obj[i];
+      this[i] = obj[i];
     }
-}
+  };
 
-BB.Mapper.prototype.getClassName = function() {
+  BB.Mapper.prototype.getClassName = function() {
     return "BB.Mapper";
-}
+  };
 
-BB.Mapper.prototype.setPath = function(p) {
+  BB.Mapper.prototype.setPath = function(p) {
     this.path = p;
-}
+  };
 
-BB.Mapper.prototype.getPath = function() {
-    return this.path || '';
-}
+  BB.Mapper.prototype.getPath = function() {
+    return this.path || "";
+  };
 
-var zeroVector = new THREE.Vector3();
+  var zeroVector = new THREE.Vector3();
 
-BB.Mapper.prototype.getCenter = function() {
+  BB.Mapper.prototype.getCenter = function() {
     return zeroVector;
-}
+  };
 
-// var defaultBox = new THREE.Box3(new THREE.Vector3(1, 1, 1).multiplyScalar(-100), new THREE.Vector3(1, 1, 1).multiplyScalar(100));
+  // var defaultBox = new THREE.Box3(new THREE.Vector3(1, 1, 1).multiplyScalar(-100), new THREE.Vector3(1, 1, 1).multiplyScalar(100));
 
-BB.Mapper.prototype.getBox = function() {
+  BB.Mapper.prototype.getBox = function() {
     return null;
-}
+  };
 
-BB.Mapper.prototype.renderOverlay = function(rend, cam) {
-}
+  BB.Mapper.prototype.renderOverlay = function(rend, cam) {};
 
-BB.Mapper.subclasses = [];
-
+  BB.Mapper.subclasses = [];
 })();

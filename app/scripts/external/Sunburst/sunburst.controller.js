@@ -1,4 +1,3 @@
-
-angular.module('chuvApp.sunburst').controller('sunburstController',[
-  function(){
-}]);
+angular
+  .module("chuvApp.sunburst")
+  .controller("sunburstController", [function() {}]);

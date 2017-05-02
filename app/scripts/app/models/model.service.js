@@ -1,22 +1,28 @@
 /**
  * Created by Michael DESIGAUD on 31/08/2015.
  */
-'use strict';
+"use strict";
 
-angular.module('chuvApp.models')
-  .factory('Model',['$resource','backendUrl','$http',function ($resource,backendUrl,$http) {
-
-    var resource = $resource(backendUrl+'/models/:slug/:format',{slug:'@slug',format:'@format'},{
-      update:{
-        method:'PUT'
-      },
-      remove:{
-        method: "DELETE"
+angular.module("chuvApp.models").factory("Model", [
+  "$resource",
+  "backendUrl",
+  "$http",
+  function($resource, backendUrl, $http) {
+    var resource = $resource(
+      backendUrl + "/models/:slug/:format",
+      { slug: "@slug", format: "@format" },
+      {
+        update: {
+          method: "PUT"
+        },
+        remove: {
+          method: "DELETE"
+        }
       }
-    });
+    );
 
-    resource.executeQuery = function(data){
-      return $http.post(backendUrl+"/queries/requests.json",data);
+    resource.executeQuery = function(data) {
+      return $http.post(backendUrl + "/queries/requests.json", data);
     };
 
     /**
@@ -25,22 +31,25 @@ angular.module('chuvApp.models')
      * @param {Object} data the query
      * @returns {HttpPromise}
      */
-    resource.estimateQuery = function(estimation_model, data){
-      return $http.post(backendUrl+"/mining", data);
+    resource.estimateQuery = function(estimation_model, data) {
+      return $http.post(backendUrl + "/mining", data);
     };
 
-    resource.getList = function(params){
-      return $http.get(backendUrl+"/models", {params:params});
+    resource.getList = function(params) {
+      return $http.get(backendUrl + "/models", { params: params });
     };
 
-    resource.getSvg = function(slug){
-      return $http.get(backendUrl+"/models/"+slug+".svg");
+    resource.getSvg = function(slug) {
+      return $http.get(backendUrl + "/models/" + slug + ".svg");
     };
 
-    resource.copy = function(model){
-      return $http.post(backendUrl+"/models/"+model.slug+"/copies",model);
+    resource.copy = function(model) {
+      return $http.post(
+        backendUrl + "/models/" + model.slug + "/copies",
+        model
+      );
     };
 
     return resource;
-
-  }]);
+  }
+]);

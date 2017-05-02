@@ -2,7 +2,7 @@
 .inline {display: inline !important;}
 
 
-// 
+//
 .button-variant(@color; @background; @border) {
   color: @color;
   background-color: @background !important;
@@ -81,13 +81,13 @@
 	@ieAlphaColour: argb(@alphaColour);
 
   background-color: @colour; // Fallback for older browsers
-  background-color: @alphaColour; 
-  
+  background-color: @alphaColour;
+
   // IE hacks
   zoom: 1; // hasLayout
   background-color: transparent\9;
   -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=@{ieAlphaColour}, endColorstr=@{ieAlphaColour})"; // IE 8+
-      filter:  ~"progid:DXImageTransform.Microsoft.gradient(startColorstr=@{ieAlphaColour}, endColorstr=@{ieAlphaColour})";  // IE 6 & 7 
+      filter:  ~"progid:DXImageTransform.Microsoft.gradient(startColorstr=@{ieAlphaColour}, endColorstr=@{ieAlphaColour})";  // IE 6 & 7
   }
 
 // Alternative Button Styles
@@ -183,7 +183,7 @@
 	padding: 0 20px !important;
 
 	.nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
-		border: 1px solid transparent !important;  
+		border: 1px solid transparent !important;
 	}
 
 	.nav-tabs > li > a:hover {
