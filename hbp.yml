@@ -55,7 +55,7 @@ code_repositories:
 
 code_quality_checks:
   codacy:
-    badge: https://api.codacy.com/project/badge/Grade/TODO
+    badge: https://api.codacy.com/project/badge/Grade/9143f566eca64ffbb06258c61fb64ea0
     url: "https://www.codacy.com/app/hbp-mip/portal-frontend?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=LREN-CHUV/portal-frontend&amp;utm_campaign=Badge_Grade"
 
 testing:
