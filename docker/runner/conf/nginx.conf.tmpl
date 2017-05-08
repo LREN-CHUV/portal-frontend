@@ -69,7 +69,12 @@ http {
       root /usr/share/nginx/html;
       location / {
         index index.html;
-        error_page 404 /index.html;
+        error_page 404 401 /index.html;
+      }
+
+      location /protected/ {
+        internal;
+        alias   /protected/;
       }
 
 {{ if .Env.PORTAL_BACKEND_SERVER }}
