@@ -81,6 +81,7 @@ http {
       location /services {
         proxy_pass http://portal-backend/{{ default .Env.PORTAL_BACKEND_CONTEXT "services" }};
         proxy_redirect off;
+        error_page 401 /index.html;
       }
 {{ end }}
 
