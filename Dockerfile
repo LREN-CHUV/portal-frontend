@@ -26,6 +26,9 @@ COPY ./docker/runner/conf/nginx.conf.tmpl \
      ./docker/runner/conf/portal-backend-upstream.conf.tmpl \
          /portal/conf/
 
+# Add custom mime.types
+COPY docker/runner/conf/mime.types /etc/nginx/
+
 COPY docker/runner/run.sh /
 
 # Add front end resources
