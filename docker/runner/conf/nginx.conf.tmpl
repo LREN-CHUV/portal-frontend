@@ -82,8 +82,7 @@ http {
         proxy_pass http://portal-backend/{{ default .Env.PORTAL_BACKEND_CONTEXT "services" }};
         proxy_redirect off;
         proxy_intercept_errors on;
-        # Catch 401 unauthorised, redirect to index.html page and show the result as 200 ok.
-        error_page 401 =200 /index.html;
+        error_page 401 /index.html;
       }
 {{ end }}
 
