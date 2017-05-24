@@ -26,7 +26,7 @@ angular.module('chuvApp.components.criteria')
             var data = {
                       	variables: [{code: code}],
                       	covariables: [],
-                      	grouping: [{code:"gender"},{code:"diagnosiscategories"},{code:"agegroup"}],
+                      	grouping: [{code:"gender"},{code:"alzheimerbroadcategory"},{code:"agegroup"}],
                       	filters: [],
                       	algorithm: {
                           validation:false,code:"histograms",name:"Histograms",parameters:[]
