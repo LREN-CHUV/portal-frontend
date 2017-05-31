@@ -365,13 +365,6 @@ module.exports = function (grunt) {
           }
       },
 
-    // Replace Google CDN references
-    cdnify: {
-      dist: {
-        html: ['<%= yeoman.dist %>/*.html']
-      }
-    },
-
     'string-replace': {
       inline: {
         files: {
@@ -637,7 +630,6 @@ module.exports = function (grunt) {
     'ngAnnotate',
     'uglify',
     'copy:dist',
-    'cdnify',
     'cssmin',
     'filerev',
     'usemin',
