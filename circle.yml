@@ -1,0 +1,24 @@
+machine:
+  services:
+    - docker
+dependencies:
+  cache_directories:
+    - "~/.npm"
+  override:
+    - docker info
+    - docker build -f Dockerfile.builder -t portal-frontend-builder .
+    - docker run --rm -v $HOME/portal-frontend:/frontend/ -v $HOME/.npm:/home/build/.npm/ -e 'production=true' portal-frontend-builder:latest
+    - docker build -t hbpmip/portal-frontend .
+
+#test:
+#  pre:
+#    - ./tests/pre-test-run.sh
+#  override:
+#    - ./tests/test-run.sh
+# deployment:
+#   hub:
+#     branch: master
+#     commands:
+#       - docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PASS -e $DOCKER_HUB_EMAIL
+#       - docker push --branch-tags=false --commit-tags=true
+#       - mvn sonar:sonar -Dsonar.login=$SONAR_KEY  # Need SonarQube back on a public URL

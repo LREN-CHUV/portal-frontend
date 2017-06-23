@@ -2,8 +2,9 @@
  * Created by Michael DESIGAUD on 26/08/2015.
  */
 
-angular.module('chuvApp.util',['ui.bootstrap'])
-  .config(['$httpProvider',function ($httpProvider) {
+angular.module("chuvApp.util", ["ui.bootstrap"]).config([
+  "$httpProvider",
+  function($httpProvider) {
     //Default timeout
     $httpProvider.defaults.timeout = 5000;
 
@@ -13,26 +14,34 @@ angular.module('chuvApp.util',['ui.bootstrap'])
      * @param {number} status
      */
     function logoutOnForbidden(data, status) {
-      if (status === 401 && document.getElementById("logout-link") !== undefined) {
+      if (
+        status === 401 && document.getElementById("logout-link") !== undefined
+      ) {
         //forces logout-login redirect;
-        setTimeout(function () {
+        setTimeout(function() {
           document.getElementById("logout-link").click();
         }, 0);
       }
     }
 
-    $httpProvider.interceptors.unshift(['$q', function ($q) {
-      return {
-        responseError: function (rejection) {
-          if ((rejection.status === 401 || rejection.status === 403) && document.getElementById("logout-link") !== undefined) {
-            //forces logout-login redirect;
-            setTimeout(function () {
-              document.getElementById("logout-link").click();
-            }, 0);
+    $httpProvider.interceptors.unshift([
+      "$q",
+      function($q) {
+        return {
+          responseError: function(rejection) {
+            if (
+              (rejection.status === 401 || rejection.status === 403) &&
+              document.getElementById("logout-link") !== undefined
+            ) {
+              //forces logout-login redirect;
+              setTimeout(function() {
+                document.getElementById("logout-link").click();
+              }, 0);
+            }
+            return $q.reject(rejection);
           }
-          return $q.reject(rejection);
-        }
-      };
-    }]);
-
-  }]);
+        };
+      }
+    ]);
+  }
+]);

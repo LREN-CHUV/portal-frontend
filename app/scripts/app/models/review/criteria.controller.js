@@ -1,16 +1,39 @@
-'use strict'
+"use strict";
 
 /**
  * Created by Michael DESIGAUD on 14/08/2015.
  */
-angular.module('chuvApp.models').controller('CriteriaController', ['$scope', '$stateParams', 'Model', 'ChartUtil', 'filterFilter', 'Variable', 'Group', '$rootScope','$log','$timeout', '$location',
-  function ($scope, $stateParams, Model, ChartUtil, filterFilter, Variable, Group, $rootScope, $log, $timeout, $location) {
-
-
+angular.module("chuvApp.models").controller("CriteriaController", [
+  "$scope",
+  "$stateParams",
+  "Model",
+  "ChartUtil",
+  "filterFilter",
+  "Variable",
+  "Group",
+  "$rootScope",
+  "$log",
+  "$timeout",
+  "$location",
+  function(
+    $scope,
+    $stateParams,
+    Model,
+    ChartUtil,
+    filterFilter,
+    Variable,
+    Group,
+    $rootScope,
+    $log,
+    $timeout,
+    $location
+  ) {
     var search = $location.search();
     function map_query(category) {
       return search[category]
-        ? search[category].split(",").map(function (code) { return {code: code}})
+        ? search[category].split(",").map(function(code) {
+            return { code: code };
+          })
         : [];
     }
 
@@ -23,8 +46,8 @@ angular.module('chuvApp.models').controller('CriteriaController', ['$scope', '$s
     /**
      * load jquery decorator
      */
-    $scope.initDesign = function () {
-      if ($('.custom-scrollbar').size() > 0) {
+    $scope.initDesign = function() {
+      if ($(".custom-scrollbar").size() > 0) {
         $(".custom-scrollbar").mCustomScrollbar();
       }
     };
@@ -32,17 +55,17 @@ angular.module('chuvApp.models').controller('CriteriaController', ['$scope', '$s
     /**
      * add item in list
      */
-    $scope.addItem = function (list,object,classList) {
+    $scope.addItem = function(list, object, classList) {
       if (!$scope.contains(list, object)) {
         list.push(object);
-        $("."+classList).removeClass("active");
+        $("." + classList).removeClass("active");
       }
     };
 
     /**
      * remove an item in list
      */
-    $scope.removeItem = function (list, index) {
+    $scope.removeItem = function(list, index) {
       list.splice(index, 1);
     };
 
@@ -52,29 +75,29 @@ angular.module('chuvApp.models').controller('CriteriaController', ['$scope', '$s
      * @param code
      * @returns {*}
      */
-    $scope.getDataByCode = function (list, code) {
-      var finded = _.find(list, function (variable) {
+    $scope.getDataByCode = function(list, code) {
+      var finded = _.find(list, function(variable) {
         return variable.code === code;
       });
-      return finded === undefined ? {label: "select a new entry"} : finded;
+      return finded === undefined ? { label: "select a new entry" } : finded;
     };
 
     /**
      * return coVariable by code
      * @param code
      */
-    $scope.getCoVariableByCode = function (code) {
-      var finded = _.find($scope.coVariables, function (coVariable) {
+    $scope.getCoVariableByCode = function(code) {
+      var finded = _.find($scope.coVariables, function(coVariable) {
         return coVariable.code === code;
       });
-      return finded === undefined ? {label: "select a new entry"} : finded;
+      return finded === undefined ? { label: "select a new entry" } : finded;
     };
 
     /**
      * get input type of variable
      */
-    $scope.getInputType = function (variable, list) {
-      var type = 'text';
+    $scope.getInputType = function(variable, list) {
+      var type = "text";
       if (variable === undefined) {
         return type;
       }
@@ -82,14 +105,14 @@ angular.module('chuvApp.models').controller('CriteriaController', ['$scope', '$s
 
       switch (variableTmp.type) {
         case "T":
-          type = 'text';
+          type = "text";
           break;
         case "D":
-          type = 'date';
+          type = "date";
           break;
         case "I":
         case "N":
-          type = 'number';
+          type = "number";
           break;
         default:
           break;
@@ -102,7 +125,7 @@ angular.module('chuvApp.models').controller('CriteriaController', ['$scope', '$s
      * @param filter
      * @param index
      */
-    $scope.setFilterValue = function (filter, index) {
+    $scope.setFilterValue = function(filter, index) {
       if (filter.values === undefined || filter.values.length == 0) {
         return;
       }
@@ -116,7 +139,7 @@ angular.module('chuvApp.models').controller('CriteriaController', ['$scope', '$s
      * set Operator of filter
      * @param filter
      */
-    $scope.setOperator = function (filter) {
+    $scope.setOperator = function(filter) {
       if (filter.values === undefined || filter.values.length == 0) {
         return;
       }
@@ -124,7 +147,10 @@ angular.module('chuvApp.models').controller('CriteriaController', ['$scope', '$s
         filter.operator = "eq";
         return;
       }
-      var variableTmp = $scope.getDataByCode($scope.filterVariables, filter.variable.code);
+      var variableTmp = $scope.getDataByCode(
+        $scope.filterVariables,
+        filter.variable.code
+      );
       switch (variableTmp.type) {
         case "T":
           filter.operator = "in";
@@ -146,9 +172,9 @@ angular.module('chuvApp.models').controller('CriteriaController', ['$scope', '$s
      * @param value
      * @returns {boolean}
      */
-    $scope.contains = function (list, value) {
-      var findFunction = function (item) {
-        return angular.equals(item, value)
+    $scope.contains = function(list, value) {
+      var findFunction = function(item) {
+        return angular.equals(item, value);
       };
 
       return _.find(list, findFunction) !== undefined;
@@ -159,7 +185,7 @@ angular.module('chuvApp.models').controller('CriteriaController', ['$scope', '$s
      * @param color new color theme
      * @param event current click event
      */
-    $scope.activateGroup = function (event) {
+    $scope.activateGroup = function(event) {
       var parent = $(event.currentTarget).parent();
       $scope.activateItem(parent);
     };
@@ -168,7 +194,7 @@ angular.module('chuvApp.models').controller('CriteriaController', ['$scope', '$s
      * active class of item
      * @param item jquery object
      */
-    $scope.activateItem = function (item) {
+    $scope.activateItem = function(item) {
       if (item.hasClass("active")) {
         item.removeClass("active");
       } else {
@@ -177,7 +203,7 @@ angular.module('chuvApp.models').controller('CriteriaController', ['$scope', '$s
     };
 
     // load criteria's resources after model
-    $rootScope.$on('event:loadModel', function (evt, model) {
+    $rootScope.$on("event:loadModel", function(evt, model) {
       $scope.loadResources(model);
     });
 
@@ -191,9 +217,9 @@ angular.module('chuvApp.models').controller('CriteriaController', ['$scope', '$s
      * @param evtName
      * @param item
      */
-    $scope.emitEventFocus = function(evtName,item){
-      if(item){
-        $scope.activateItem($('#'+item));
+    $scope.emitEventFocus = function(evtName, item) {
+      if (item) {
+        $scope.activateItem($("#" + item));
       }
       $rootScope.$broadcast(evtName);
     };
@@ -201,91 +227,93 @@ angular.module('chuvApp.models').controller('CriteriaController', ['$scope', '$s
     /**
      * init scolling on searching criteria
      */
-    $scope.initSearchFor = function(){
+    $scope.initSearchFor = function() {
       // ---------------------------------- //
       // --------- SEARCH REUME CONFIG
       // ---------------------------------- //
-      var $searchResume = $('.container-ee-search-resume');
+      var $searchResume = $(".container-ee-search-resume");
       // Init the search resume
-      var $listSearch = $searchResume.find('.search-list'),
+      var $listSearch = $searchResume.find(".search-list"),
         $wrapperListSearch = $listSearch.find(".wrapper-search-list"),
-        $arrows = $searchResume.find('.search-list-arrows'),
+        $arrows = $searchResume.find(".search-list-arrows"),
         leftWrapper = 0;
-      $arrows.find('.prev').addClass('active');
-      $arrows.find('.next').addClass('active');
+      $arrows.find(".prev").addClass("active");
+      $arrows.find(".next").addClass("active");
 
       $arrows
-        .find('.next')
-        .on('click', function(e) {
+        .find(".next")
+        .on("click", function(e) {
           e.preventDefault();
           goToList(-1);
         })
         .end()
-        .find('.prev')
-        .on('click', function(e) {
+        .find(".prev")
+        .on("click", function(e) {
           e.preventDefault();
           goToList(1);
         });
 
       // Update list width
-      var updateListWidth =function () {
+      var updateListWidth = function() {
         var wList = 0;
-        $wrapperListSearch.find('a').each(function() {
+        $wrapperListSearch.find("a").each(function() {
           wList += $(this).outerWidth(true);
         });
         $wrapperListSearch.css({
-          width : wList
+          width: wList
         });
       };
 
       // Show or not the arrows
       var updateSearchArrows = function(leftWrapper) {
-        if( $wrapperListSearch.width() > $listSearch.width() ) {
-
+        if ($wrapperListSearch.width() > $listSearch.width()) {
           // Prev
-          if( leftWrapper < 0 ) {
-            $arrows.find('.prev').addClass('active');
+          if (leftWrapper < 0) {
+            $arrows.find(".prev").addClass("active");
           } else {
-            $arrows.find('.prev').removeClass('active');
+            $arrows.find(".prev").removeClass("active");
           }
 
           // Next
-          if( leftWrapper <= 0 && -leftWrapper + $listSearch.width() < $wrapperListSearch.width() ) {
-            $arrows.find('.next').addClass('active');
+          if (
+            leftWrapper <= 0 &&
+            -leftWrapper + $listSearch.width() < $wrapperListSearch.width()
+          ) {
+            $arrows.find(".next").addClass("active");
           } else {
-            $arrows.find('.next').removeClass('active');
+            $arrows.find(".next").removeClass("active");
           }
-        }
-        else {
-          $arrows.find('a').removeClass('active');
+        } else {
+          $arrows.find("a").removeClass("active");
         }
       };
 
-
-      var  goToList = function(direction) {
+      var goToList = function(direction) {
         leftWrapper = 0;
         updateListWidth();
-        var offset = 100,
-          left = 0;
+        var offset = 100, left = 0;
 
-        leftWrapper = parseFloat($wrapperListSearch.css('left'));
+        leftWrapper = parseFloat($wrapperListSearch.css("left"));
 
         left = leftWrapper + offset * direction;
 
-        if( direction > 0 && left >= 0) {
+        if (direction > 0 && left >= 0) {
           left = 0;
-        } else if( direction <= 0 && -left + $listSearch.width() >= $wrapperListSearch.width() ) {
+        } else if (
+          direction <= 0 &&
+          -left + $listSearch.width() >= $wrapperListSearch.width()
+        ) {
           left = $listSearch.width() - $wrapperListSearch.width();
         }
 
         //updateSearchArrows(left);
 
-        $wrapperListSearch.stop().animate({ left : left });
+        $wrapperListSearch.stop().animate({ left: left });
       };
     };
 
     $timeout(function() {
       $scope.initSearchFor();
     }, 500);
-
-  }]);
+  }
+]);
