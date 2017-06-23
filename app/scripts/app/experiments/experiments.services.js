@@ -30,7 +30,7 @@ angular.module("chuvApp.util").factory("MLUtils", [
       var diff_count = _.uniq(dataset).length;
       if (diff_count > 10) {
         if (
-          _.any(function(val) {
+          _.some(dataset, function(val) {
             return isNaN(+val);
           })
         ) {

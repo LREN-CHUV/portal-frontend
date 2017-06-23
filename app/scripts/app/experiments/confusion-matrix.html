@@ -5,6 +5,6 @@
   </tr>
   <tr ng-repeat="row in values">
     <th ng-bind="labels[$index]"></th>
-    <td ng-repeat="elem in row" ng-bind="elem.toFixed()"></td>
+    <td ng-repeat="elem in row track by $index" ng-bind="elem.toFixed()"></td>
   </tr>
 </table>
