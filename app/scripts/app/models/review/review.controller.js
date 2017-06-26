@@ -400,6 +400,9 @@ angular.module("chuvApp.models").controller("ReviewController", [
         return;
       }
 
+      //TODO Temporary solution. We need to pass JSON instead of SQL and parse it backend for security reasons.
+      query.filters = query.textQuery;
+
       $scope.loading_model = true;
 
       Model.executeQuery(query).success(function(queryResult) {
