@@ -35,7 +35,7 @@ angular.module("chuvApp.components.criteria").factory("Variable", [
           {code:"agegroup"},
           {code:"alzheimerbroadcategory"}
         ],
-        filters: [],
+        filters: "",
         algorithm: {
         validation:false,code:"histograms",name:"Histograms",parameters:[]
         }
