@@ -42,7 +42,7 @@
     "jquery.ui": "~1.10.4",
     "angular-utf8-base64": "~0.0.5",
     "angular-markdown-directive": "0.3.1",
-    "jQuery-QueryBuilder": "2.3.1",
+    "jQuery-QueryBuilder": "2.4.3",
     "sql-parser": "1.0.0",
     "image-map-resizer": "1.0.0",
     "ng-csv": "0.3.6",

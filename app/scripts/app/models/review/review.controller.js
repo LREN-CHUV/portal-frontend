@@ -215,11 +215,13 @@ angular.module("chuvApp.models").controller("ReviewController", [
         controller: function() {
           childScope.contructQB = function() {
             var filterVariables = $scope.query.filters
+              .concat($scope.query.variables)
               .concat($scope.query.coVariables)
               .concat($scope.query.groupings)
               .map(function(variable) {
                 variable = $scope.allVariables[variable.code];
-                return {
+
+                var var_config = {
                   id: variable.code,
                   label: variable.label,
                   type: "double",
@@ -232,6 +234,25 @@ angular.module("chuvApp.models").controller("ReviewController", [
                     "not_between"
                   ]
                 };
+
+                if (variable.type === "integer") {
+                   var_config.type = "integer";
+                } else if (variable.type !== "real") {
+                  var_config.type = "string";
+                  var_config.input = "select";
+                  var_config.operators = [
+                    "equal",
+                    "not_equal",
+                    "in",
+                    "not_in"
+                  ];
+                  var_config.values = {};
+                  variable.enumerations.forEach(function (e, index) {
+                    var_config.values[e.code] = e.label;
+                  });
+                }
+
+                return var_config;
               });
 
             $(".query-builder").queryBuilder({
@@ -313,21 +334,21 @@ angular.module("chuvApp.models").controller("ReviewController", [
     $scope.loadResources = function(model) {
       Variable.query()
         .$promise.then(function(allVariables) {
-          allVariables = _.sortBy(allVariables, "label");
-          $scope.variables = filterFilter(allVariables, { isVariable: true });
-          $scope.groupingVariables = allVariables.filter(function(v) {
-            return ["polynominal", "binominal"].indexOf(v.type) != -1;
-          });
-          $scope.coVariables = allVariables.filter(function(v) {
-            return ["real", "continuous"].indexOf(v.type) != -1;
-          });
-          $scope.filterVariables = filterFilter(allVariables, {
-            isFilter: true
-          });
+        allVariables = _.sortBy(allVariables, "label");
+        $scope.variables = filterFilter(allVariables, { isVariable: true });
+        $scope.groupingVariables = allVariables.filter(function(v) {
+          return ["polynominal", "binominal"].indexOf(v.type) != -1;
+        });
+        $scope.coVariables = allVariables.filter(function(v) {
+          return ["real", "continuous"].indexOf(v.type) != -1;
+        });
+        $scope.filterVariables = filterFilter(allVariables, {
+          isFilter: true
+        });
 
-          $scope.allVariables = _.indexBy(allVariables, "code");
-          return Group.get().$promise;
-        })
+        $scope.allVariables = _.indexBy(allVariables, "code");
+        return Group.get().$promise;
+      })
         .then(function(group) {
           $scope.groups = group.groups;
           _.extend($scope.query, model.query);
@@ -450,9 +471,9 @@ angular.module("chuvApp.models").controller("ReviewController", [
         $scope.query.coVariables &&
         $scope.query.filters &&
         ($scope.query.variables.length ||
-          $scope.query.groupings.length ||
-          $scope.query.filters.length ||
-          $scope.query.coVariables.length);
+        $scope.query.groupings.length ||
+        $scope.query.filters.length ||
+        $scope.query.coVariables.length);
 
       if (!should_configure) {
         return $location.url("/explore");
@@ -475,11 +496,11 @@ angular.module("chuvApp.models").controller("ReviewController", [
 
       $location.url(
         "/explore?configure=true&" +
-          Object.keys(query)
-            .map(function(category) {
-              return category + "=" + query[category];
-            })
-            .join("&")
+        Object.keys(query)
+          .map(function(category) {
+            return category + "=" + query[category];
+          })
+          .join("&")
       );
     };
   }

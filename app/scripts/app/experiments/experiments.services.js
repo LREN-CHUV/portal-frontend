@@ -114,6 +114,7 @@ angular.module("chuvApp.util").factory("MLUtils", [
       },
       get_datatype: function(code, dataArray) {
         if (!datatypes_per_code.hasOwnProperty(code)) {
+          // TODO Use variable's meta-data instead!
           datatypes_per_code[code] = compute_data_types(dataArray);
         }
         return datatypes_per_code[code];
