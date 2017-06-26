@@ -27,6 +27,7 @@ angular.module("chuvApp.models").controller("EstimationController", [
         coVariables: unmap_category("coVariables"),
         groupings: unmap_category("groupings"),
         filters: unmap_category("filters"),
+        textQuery: $location.search().textQuery,
         graph_config: $scope.chartConfig
       };
 

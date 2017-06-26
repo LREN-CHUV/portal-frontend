@@ -158,13 +158,14 @@ angular
           groupings: map_query("groupings"),
           coVariables: map_query("coVariables"),
           filters: map_query("filters"),
-          textQuery: search.query
+          textQuery: search.textQuery
         };
 
         // step 2: load dataset
         var query = angular.copy($scope.query);
-        //TODO Temporary solution. We need to pass JSON instead of SQL and parse it backend for security reasons.
-        query.filters = $scope.textQuery;
+
+        //TODO Remove this temporary solution
+        query.filters = query.textQuery;
 
         Model.executeQuery(query).success(function(queryResult) {
           $scope.loading_model = false;
@@ -196,7 +197,7 @@ angular
                     config: config,
                     dataset: $scope.dataset,
                     valid: child_scope.share,
-                    query: $scope.query
+                    query: query
                   };
 
                   // save new model

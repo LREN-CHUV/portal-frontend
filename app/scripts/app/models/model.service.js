@@ -22,6 +22,8 @@ angular.module("chuvApp.models").factory("Model", [
     );
 
     resource.executeQuery = function(data) {
+      //TODO Temporary solution. We need to pass JSON instead of SQL and parse it backend for security reasons.
+      data.filters = data.textQuery;
       return $http.post(backendUrl + "/queries/requests.json", data);
     };
 
