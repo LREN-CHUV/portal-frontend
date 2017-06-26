@@ -163,6 +163,8 @@ angular
 
         // step 2: load dataset
         var query = angular.copy($scope.query);
+        //TODO Temporary solution. We need to pass JSON instead of SQL and parse it backend for security reasons.
+        query.filters = $scope.textQuery;
 
         Model.executeQuery(query).success(function(queryResult) {
           $scope.loading_model = false;

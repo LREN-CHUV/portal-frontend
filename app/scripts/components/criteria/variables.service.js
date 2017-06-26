@@ -30,17 +30,17 @@ angular.module("chuvApp.components.criteria").factory("Variable", [
         variables: [{code: code}],
         covariables: [],
         grouping: [
-          {code:"dataset"},
-          {code:"gender"},
-          {code:"agegroup"},
-          {code:"alzheimerbroadcategory"}
+          {code: "dataset"},
+          {code: "gender"},
+          {code: "agegroup"},
+          {code: "alzheimerbroadcategory"}
         ],
         filters: "",
         algorithm: {
-        validation:false,code:"histograms",name:"Histograms",parameters:[]
+        validation:false, code: "histograms", name: "Histograms", parameters: []
         }
       };
-      return $http.post(backendUrl+"/mining", data);
+      return $http.post(backendUrl + "/mining", data);
     };
 
     return resource;
