@@ -112,6 +112,7 @@ angular.module("chuvApp.models").controller("ReviewController", [
       $scope.model.config = $scope.chartConfig;
       $scope.model.dataset = $scope.dataset;
       $scope.model.query = angular.copy($scope.query); // will be modified, therefore we do a deep copy
+      $scope.model.query.filters = angular.copy($scope.query.textQuery);
       delete $scope.model.query.filterQuery;
 
       if ($scope.isNew()) {
