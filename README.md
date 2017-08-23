@@ -6,6 +6,20 @@
 - AngularJS v1.4.3
 - Bootstrap v3.2.0
 
+## Frontend development
+This is a minimal setup to do frontend development in this project:
+1. Remove the frontend section from the `compose-everything-locally/docker-compose.yml` file. You will have the MIP backend running on your computer with no frontend.
+2. Run the `portal-frontend`:
+..* `npm install`
+..* `npm install -g grunt-cli` (might require `sudo`)
+..* `bower install`
+..* In `app/scripts/app/app.config.js`, edit the `backendUrl` constant to `http://localhost:8080/services`
+..* `cp app/index-tmpl.html app/index.html` (creates an `index.html` file in the `app` directory based on the `index-tmpl.html` template)
+..* `grunt watch &` (watches all JS/CSS files and automatically creates a bundle when a file is edited)
+..* `cd app`
+..* `php -S localhost:8000 &` (runs a development server from the `app` folder. PHP is not required, other development server should work, as long as it runs on port 8000 and supports .htaccess)
+..* `google-chrome --disable-web-security --user-data-dir http://localhost:8000` (opens the frontend in Chrome with flags to ignore CORS issues. CORS must be disabled for development because the backend runs on a different domain name than the frontend)
+
 ## Build & development
 
 - Run npm install to retrieve all node dependencies
