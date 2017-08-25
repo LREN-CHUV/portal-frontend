@@ -1,29 +1,50 @@
 <div>
   <accordion close-others="false">
 
-    <accordion-group ng-if="data.raw.data.cells.anova" is-open="true">
+    <accordion-group ng-if="true" is-open="true">
       <accordion-heading>
         <span class="ti ti-check-box"></span>
         Results: ANOVA
       </accordion-heading>
-
       <div style="margin: -16px" class="table-responsive">
         <table class="table table-striped">
           <tr>
             <th>Variable</th>
-            <th>Mean&sup2;</th>
             <th>Sum&sup2;</th>
-            <th>P-value</th>
-            <th>F-Value</th>
+          </tr>
+          <tr ng-repeat="(name, value) in data.raw.data.cells.data.init.sum_sq">
+            <td ng-bind="variable_title(name)"></td>
+            <td ng-bind="value | number"></td>
+          </tr>
+        </table>
+        <table class="table table-striped">
+          <tr>
+            <th>Variable</th>
             <th>Degrees of freedom</th>
           </tr>
-          <tr ng-repeat="(name, value) in data.raw.data.cells.anova.init">
+          <tr ng-repeat="(name, value) in data.raw.data.cells.data.init.df">
             <td ng-bind="variable_title(name)"></td>
-            <td ng-bind="value.mean_sq | number"></td>
-            <td ng-bind="value.sum_sq | number"></td>
-            <td ng-bind="value.p_value | number"></td>
-            <td ng-bind="value.f_value | number"></td>
-            <td ng-bind="value.degree_freedom | number"></td>
+            <td ng-bind="value | number"></td>
+          </tr>
+        </table>
+        <table class="table table-striped">
+          <tr>
+            <th>Variable</th>
+            <th>F-Value</th>
+          </tr>
+          <tr ng-repeat="(name, value) in data.raw.data.cells.data.init.F">
+            <td ng-bind="variable_title(name)"></td>
+            <td ng-bind="value | number"></td>
+          </tr>
+        </table>
+        <table class="table table-striped">
+          <tr>
+            <th>Variable</th>
+            <th>P-Value</th>
+          </tr>
+          <tr ng-repeat="(name, value) in data.raw.data.cells.data.init['PR(>F)']">
+            <td ng-bind="variable_title(name)"></td>
+            <td ng-bind="value | number"></td>
           </tr>
         </table>
       </div>
