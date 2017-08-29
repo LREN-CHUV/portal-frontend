@@ -8,10 +8,10 @@
       <div class="col-xs-4">
         <h3 class="search-title"><a ui-sref="models-edit({ slug: model.slug })">{{model.title}}</a></h3>
         <div class="author-box">
-          <a ui-sref="user-show({username: article.createdBy.username })" class="avatar">
+          <span class="avatar">
             <img ng-src="{{model.createdBy.picture}}" alt="" class="avatar" />
-          </a>
-          by <a ui-sref="user-show({username: article.createdBy.username })">{{model.createdBy.fullname}}</a><br />
+          </span>
+          by <span>{{model.createdBy.fullname}}</span><br />
           <span class="time">{{model.createdAt | fromNow}}</span>
         </div>
       </div>

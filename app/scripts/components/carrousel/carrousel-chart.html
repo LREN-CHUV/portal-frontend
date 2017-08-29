@@ -10,10 +10,10 @@
     </div>
   </span>
   <div class="author-box">
-    <a ui-sref="user-show({username: model.createdBy.id })" class="avatar">
+    <span class="avatar">
       <img ng-src="{{model.createdBy.picture}}" alt="" class="avatar" />
-    </a>
-    by <a ui-sref="user-show({username: model.createdBy.id })">{{model.createdBy.fullname}}</a><br />
+    </span>
+    by <span>{{model.createdBy.fullname}}</span><br />
     <span class="time">{{model.createdAt | fromNow}}</span>
     <other-experiments model-slug="model.slug" only-positive="true" minimal="true"></other-experiments>
   </div>

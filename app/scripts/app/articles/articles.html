@@ -17,10 +17,10 @@
             <div class="timeline-content">
               <a href="" ng-click="showModal(article)" class="name">{{article.title}}</a>
               <div class="author-box">
-                <a ui-sref="usershow({username: article.createdBy.username })" class="avatar">
+                <span class="avatar">
                   <img ng-src="{{article.createdBy.picture}}" alt="" class="avatar" />
-                </a>
-                by <a ui-sref="user-show({username: article.createdBy.username })">{{article.createdBy.fullname}}</a><br />
+                </span>
+                by <span>{{article.createdBy.fullname}}</span><br />
                 <span class="time">{{article.createdAt | fromNow}}</span>
               </div>
             </div>
