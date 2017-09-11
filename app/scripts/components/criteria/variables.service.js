@@ -25,19 +25,22 @@ angular.module("chuvApp.components.criteria").factory("Variable", [
     };
 
     /* TODO: do not hard code grouping variables */
-    resource.get_histo = function (code) {
+    resource.get_histo = function(code) {
       var data = {
-        variables: [{code: code}],
+        variables: [{ code: code }],
         covariables: [],
         grouping: [
-          {code: "dataset"},
-          {code: "gender"},
-          {code: "agegroup"},
-          {code: "alzheimerbroadcategory"}
+          { code: "dataset" },
+          { code: "gender" },
+          { code: "agegroup" },
+          { code: "alzheimerbroadcategory" }
         ],
         filters: "",
         algorithm: {
-        validation:false, code: "histograms", name: "Histograms", parameters: []
+          validation: false,
+          code: "histograms",
+          name: "Histograms",
+          parameters: []
         }
       };
       return $http.post(backendUrl + "/mining", data);

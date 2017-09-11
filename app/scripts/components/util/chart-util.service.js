@@ -475,7 +475,7 @@ angular.module("chuvApp.util").factory("ChartUtil", [
     ChartUtil.canUseAsYAxis = function(axeCode, chartType, dataArray) {
       if (!axisUsability.hasOwnProperty(axeCode)) {
         axisUsability[axeCode] = !_.any(dataArray, function(datapoint) {
-          return !isFinite(datapoint) && datapoint!="null";
+          return !isFinite(datapoint) && datapoint != "null";
         });
       }
       return axisUsability[axeCode];
