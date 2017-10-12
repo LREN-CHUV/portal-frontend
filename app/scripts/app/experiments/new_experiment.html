@@ -102,19 +102,40 @@
                     <span class="ti ti-panel"></span>
                     Configure The Method's Parameters
                   </accordion-heading>
-
                   <div ng-if="shared.chosen_method.parameters.length" class="form-group">
                     <div ng-repeat="parameter in shared.chosen_method.parameters" class="form-inline">
                       <label for="{{parameter.name}}">
                         <b ng-bind="parameter.label + ': '"></b>
                       </label>
-                      <input type="number"
-                             step="1"
-                             id="{{parameter.name}}"
-                             class="form-control"
-                             ng-model="shared.method_parameters[$index].value"
-                             value="{{shared.method_parameters[$index].value}}"
-                             ng-init="shared.method_parameters[$index] = {code: parameter.code, label: parameter.label, value: parseInt(parameter.default_value)}">
+                      <div ng-switch on="parameter.type">
+                        <div ng-switch-when="int">
+                          <input type="number"
+                                step="1"
+                                id="{{parameter.name}}"
+                                class="form-control"
+                                ng-model="shared.method_parameters[$index].value"
+                                value="{{shared.method_parameters[$index].value}}"
+                                ng-init="shared.method_parameters[$index] = {code: parameter.code, label: parameter.label, value: parseInt(parameter.default_value)}">
+                        </div>
+                        <div ng-switch-when="enumeration">
+                          <select
+                                id="{{parameter.name}}"
+                                class="form-control"
+                                ng-model="shared.method_parameters[$index].value"
+                                ng-options="value for value in parameter.values"
+                                ng-init="shared.method_parameters[$index] = {code: parameter.code, label: parameter.label, value: parameter.default_value}"
+                          ></select>
+                        </div>
+                        <div ng-switch-default>
+                          <p ng-bind="{{shared.chosen_method.parameters | json}}"></p>
+                          <input
+                            id="{{parameter.name}}"
+                            class="form-control"
+                            ng-model="shared.method_parameters[$index].value"
+                            value="{{shared.method_parameters[$index].value}}"
+                            ng-init="shared.method_parameters[$index] = {code: parameter.code, label: parameter.label, value: parameter.default_value}">
+                        </div>
+                      </div>
                       <p ng-bind="parameter.description"></p>
                     </div>
                   </div>

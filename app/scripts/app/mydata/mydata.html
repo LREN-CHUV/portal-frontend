@@ -15,10 +15,10 @@
 
 
           <div class="author-box">
-            <a ui-sref="user-show({username: item.data.createdBy.username })" class="avatar">
+            <span class="avatar">
               <img ng-src="{{item.data.createdBy.picture}}" alt="" class="avatar" />
-            </a>
-            by <a ui-sref="user-show({username: item.data.createdBy.username })">{{item.data.createdBy.fullname}}</a><br />
+            </span>
+            by <span>{{item.data.createdBy.fullname}}</span><br />
             <span class="time">{{item.data.createdAt | fromNow}}</span>
           </div>
           <div class="action">
@@ -40,10 +40,10 @@
           </div>
 
           <div class="author-box">
-            <a ui-sref="user-show({username: item.data.createdBy.username })" class="avatar">
+            <span class="avatar">
               <img ng-src="{{item.data.createdBy.picture}}" alt="" class="avatar" />
-            </a>
-            by <a ui-sref="user-show({username: item.data.createdBy.username })">{{item.data.createdBy.fullname}}</a><br />
+            </span>
+            by <span>{{item.data.createdBy.fullname}}</span><br />
             <span class="time">{{item.data.createdAt | fromNow}}</span>
           </div>
 

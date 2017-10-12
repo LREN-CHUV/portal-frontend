@@ -109,17 +109,24 @@ angular.module("chuvApp.util").factory("ChartUtil", [
           .value(),
           array_data,
           idx;
-
+        [1, 2, 3, 4];
         for (idx = 0; idx < data.length; idx++) {
           array_data = _.sortBy(data[idx][1]);
 
-          result.push([
-            array_data[Math.floor(array_data.length / 10.0)], // 1st decile
-            array_data[Math.floor(array_data.length / 4.0)], // Q1
-            array_data[Math.floor(array_data.length / 2.0)], // Q2
-            array_data[Math.floor(array_data.length * 3.0 / 4.0)], // Q3
-            array_data[Math.floor(array_data.length * 9.0 / 10.0)] // 9th decile
-          ]);
+          // Boxplot requires min/max values, median, q1 and q3
+          var min = array_data[0];
+          var max = array_data[array_data.length - 1];
+          var lowMedian = array_data[Math.floor((array_data.length - 1) / 2)];
+          var highMedian = array_data[Math.ceil((array_data.length - 1) / 2)];
+          var median = (lowMedian + highMedian) / 2;
+          var lowQ1 = array_data[Math.floor((array_data.length - 1) / 4)];
+          var highQ1 = array_data[Math.ceil((array_data.length - 1) / 4)];
+          var Q1 = (lowQ1 + highQ1) / 2;
+          var lowQ3 = array_data[Math.floor((array_data.length - 1) * 3 / 4)];
+          var highQ3 = array_data[Math.ceil((array_data.length - 1) * 3 / 4)];
+          var Q3 = (lowQ3 + highQ3) / 2;
+
+          result.push([min, Q1, median, Q3, max]);
         }
 
         categories = _.map(data, 0);

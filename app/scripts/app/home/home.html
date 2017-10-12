@@ -84,10 +84,10 @@
             <highchart config="model.chartConfig"></highchart>
 
             <div class="author-box">
-              <a ui-sref="user-show({username: model.createdBy.username })" class="avatar">
+              <span class="avatar">
                 <img ng-src="{{model.createdBy.picture}}" alt="" class="avatar" />
-              </a>
-              by <a ui-sref="user-show({username: model.createdBy.username })">{{model.createdBy.fullname}}</a><br />
+              </span>
+              by <span>{{model.createdBy.fullname}}</span><br />
               <span class="time">{{model.createdAt | fromNow}}</span>
             </div>
             <div class="action">
