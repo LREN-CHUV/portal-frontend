@@ -12,7 +12,7 @@
             <th>Variable</th>
             <th>Sum&sup2;</th>
           </tr>
-          <tr ng-repeat="(name, value) in data.raw.data.cells.data.init.sum_sq">
+          <tr ng-repeat="(name, value) in data.raw.data['sum_sq']">
             <td ng-bind="variable_title(name)"></td>
             <td ng-bind="value | number"></td>
           </tr>
@@ -22,7 +22,7 @@
             <th>Variable</th>
             <th>Degrees of freedom</th>
           </tr>
-          <tr ng-repeat="(name, value) in data.raw.data.cells.data.init.df">
+          <tr ng-repeat="(name, value) in data.raw.data['df']">
             <td ng-bind="variable_title(name)"></td>
             <td ng-bind="value | number"></td>
           </tr>
@@ -32,7 +32,7 @@
             <th>Variable</th>
             <th>F-Value</th>
           </tr>
-          <tr ng-repeat="(name, value) in data.raw.data.cells.data.init.F">
+          <tr ng-repeat="(name, value) in data.raw.data['F']">
             <td ng-bind="variable_title(name)"></td>
             <td ng-bind="value | number"></td>
           </tr>
@@ -42,7 +42,7 @@
             <th>Variable</th>
             <th>P-Value</th>
           </tr>
-          <tr ng-repeat="(name, value) in data.raw.data.cells.data.init['PR(>F)']">
+          <tr ng-repeat="(name, value) in data.raw.data['PR(>F)']">
             <td ng-bind="variable_title(name)"></td>
             <td ng-bind="value | number"></td>
           </tr>
