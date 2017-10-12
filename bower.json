@@ -1,8 +1,8 @@
 {
   "name": "portal-frontend",
-  "version": "2.2.4",
+  "version": "2.2.5",
   "dependencies": {
-    "jquery": "2.2.4",
+    "jquery": "2.2.5",
     "angular": "1.4.3",
     "bootstrap": "3.2.0",
     "angular-animate": "1.4.3",
