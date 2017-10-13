@@ -2,7 +2,7 @@
   "name": "portal-frontend",
   "version": "2.2.6",
   "dependencies": {
-    "jquery": "3.2.1",
+    "jquery": "2.2.4",
     "angular": "1.4.3",
     "bootstrap": "3.2.0",
     "angular-animate": "1.4.3",
