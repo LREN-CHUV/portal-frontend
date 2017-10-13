@@ -219,6 +219,9 @@ angular.module("chuvApp.util").factory("MLUtils", [
         // Update validation type
         if (
           !validation_type &&
+          result.data &&
+          result.data.cells &&
+          result.data.cells.validations &&
           result.data.cells.validations.length &&
           (output.type === "regression" || output.type === "classification")
         ) {
