@@ -1,6 +1,6 @@
 {
   "name": "portal-frontend",
-  "version": "2.2.5",
+  "version": "2.2.6",
   "dependencies": {
     "jquery": "3.2.1",
     "angular": "1.4.3",
