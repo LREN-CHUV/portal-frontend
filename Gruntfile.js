@@ -341,7 +341,7 @@ module.exports = function(grunt) {
       test: {},
       dev: {
         constants: {
-          backendUrl: "http://localhost:8000",
+          backendUrl: "http://localhost:8080/services",
           backendExportChartUrl: "<%= ngconstant.dev.constants.backendUrl %>/exportingChart.php",
           dropboxAppkey: "7wew0rj0gh2qcik"
         }
