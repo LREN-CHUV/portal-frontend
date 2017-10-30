@@ -1,68 +1,51 @@
 <div>
   <accordion close-others="false">
 
-    <accordion-group ng-if="data.raw.data.cells.summary" is-open="true">
+    <accordion-group ng-if="true" is-open="true">
       <accordion-heading>
         <span class="ti ti-check-box"></span>
         Results: Linear Regression
       </accordion-heading>
 
-      <div style="margin: -16px -16px -8px -16px" class="table-responsive">
+      <div style="margin: -16px" class="table-responsive">
         <table class="table table-striped">
           <tr>
             <th>Variable</th>
-            <th>Coefficients</th>
-            <th>Standard Error</th>
-            <th>T-statistic</th>
-            <th>P-value</th>
+            <th>Coefficient</th>
           </tr>
-          <tr ng-repeat="(name, value) in data.raw.data.cells.summary.init.coefficients">
+          <tr ng-repeat="(name, value) in data.raw.data['coef']">
             <td ng-bind="variable_title(name)"></td>
-            <td ng-bind="value.estimate | number"></td>
-            <td ng-bind="value.std_error | number"></td>
-            <td ng-bind="value.t_value | number"></td>
-            <td>
-              <span ng-bind="value.p_value | number"></span>
-              <span ng-bind="pvalue_quality(value.p_value)"></span>
-            </td>
+            <td ng-bind="value | number"></td>
           </tr>
         </table>
-      </div>
-
-      <div style="margin-left: -8px">
-        <p>
-          <b>Degrees of freedom: </b>
-          <span ng-bind="data.raw.data.cells.summary.init.degrees_freedom[1]"></span>
-        </p>
-      </div>
-
-      <div style="margin-left: -8px">
-        <p>
-          <b>Residuals </b>
-        </p>
-        <table class="table table-bordered">
+        <table class="table table-striped">
           <tr>
-            <th>Min</th>
-            <th>Q1</th>
-            <th>Median</th>
-            <th>Q3</th>
-            <th>Max</th>
+            <th>Variable</th>
+            <th>Standard Error</th>
           </tr>
-          <tr>
-            <td ng-bind="data.raw.data.cells.summary.init.residuals.min | number"></td>
-            <td ng-bind="data.raw.data.cells.summary.init.residuals.q1 | number"></td>
-            <td ng-bind="data.raw.data.cells.summary.init.residuals.median | number"></td>
-            <td ng-bind="data.raw.data.cells.summary.init.residuals.q3 | number"></td>
-            <td ng-bind="data.raw.data.cells.summary.init.residuals.max | number"></td>
+          <tr ng-repeat="(name, value) in data.raw.data['std_err']">
+            <td ng-bind="variable_title(name)"></td>
+            <td ng-bind="value | number"></td>
           </tr>
         </table>
-      </div>
-
-      <div style="margin-left: -8px">
-        <p><b>Covariance matrix</b></p>
-        <table class="table table-condensed table-bordered">
-          <tr ng-repeat="row in data.raw.data.cells.summary.init.cov_unscaled">
-            <td ng-repeat="cell in row" ng-bind="cell | number"></td>
+        <table class="table table-striped">
+          <tr>
+            <th>Variable</th>
+            <th>T-Value</th>
+          </tr>
+          <tr ng-repeat="(name, value) in data.raw.data['t_values']">
+            <td ng-bind="variable_title(name)"></td>
+            <td ng-bind="value | number"></td>
+          </tr>
+        </table>
+        <table class="table table-striped">
+          <tr>
+            <th>Variable</th>
+            <th>P-Value</th>
+          </tr>
+          <tr ng-repeat="(name, value) in data.raw.data['p_values']">
+            <td ng-bind="variable_title(name)"></td>
+            <td ng-bind="value | number"></td>
           </tr>
         </table>
       </div>
