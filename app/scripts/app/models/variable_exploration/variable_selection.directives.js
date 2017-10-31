@@ -310,105 +310,17 @@ angular
           // so that two simultaneous requests don't clash.
           var request_id = 0;
 
-          // maps the input data into an array containing:
-          // - the list of x coordinates to display
-          // - the data series
-          // - whether or not there are multiple series.
-          function map_data_to_hc_series(data, fallback_category_name) {
-            var has_multiple_series = data.hasOwnProperty("categories"),
-              value_matrix = {},
-              ordered_categories = [],
-              known_x_values = {},
-              ordered_x_values = [];
-
-            // first pass: reference and map all values
-            var idx, category, x_value;
-            for (idx = 0; idx < data.value.length; idx++) {
-              category = has_multiple_series
-                ? data.categories[idx]
-                : fallback_category_name;
-              x_value = data.header[idx];
-
-              if (!value_matrix.hasOwnProperty(category)) {
-                value_matrix[category] = {};
-                ordered_categories.push(category);
-              }
-              if (!known_x_values.hasOwnProperty(x_value)) {
-                known_x_values[x_value] = null;
-                ordered_x_values.push(x_value);
-              }
-              value_matrix[category][x_value] = data.value[idx];
-            }
-
-            // second pass: create data structure
-            var series = ordered_categories.map(function(category) {
-              return {
-                name: category,
-                data: ordered_x_values.map(function(x_value) {
-                  return value_matrix[category][x_value] || 0;
-                })
-              };
-            });
-
-            return [ordered_x_values, series, has_multiple_series];
-          }
-
-          var f_number = $filter("number");
-
           $scope.init_hc_config = function(statistic) {
             if (statistic.hc_config) return;
 
-            var categories_and_data = map_data_to_hc_series(
-              statistic.dataset.data,
-              statistic.dataset.name
-            );
-
             statistic.hc_config = {
               options: {
-                chart: {
-                  type: "column"
-                },
-                tooltip: {
-                  formatter: function() {
-                    return (
-                      '<span style="font-weight:bold">' +
-                      (angular.isNumber(this.x)
-                        ? f_number(this.x, 2)
-                        : this.x) +
-                      "</span><table>" +
-                      '<tr><td style="color:{series.color};padding:0">' +
-                      this.series.name +
-                      ":</td>" +
-                      '<td style="padding:0"><b>' +
-                      this.point.y +
-                      "</b></td></tr>" +
-                      "</table>"
-                    );
-                  },
-                  useHTML: true
-                }
+                chart: statistic.chart
               },
-              xAxis: {
-                categories: categories_and_data[0],
-                labels: {
-                  formatter: function() {
-                    return angular.isNumber(this.value)
-                      ? f_number(this.value, 2)
-                      : this.value;
-                  }
-                }
-              },
-
-              series: categories_and_data[1],
-
-              title: {
-                text: categories_and_data[2] ? statistic.dataset.name : null
-              },
-
-              size: {
-                width: null,
-                height: 350
-              }
+              xAxis: statistic.xAxis,
+              yAxis: statistic.yAxis,
+              series: statistic.series,
+              title: statistic.title
             };
           };
 
@@ -428,7 +340,7 @@ angular
                 if (current_request_id != request_id) return;
                 $scope.focused_variable_loaded = true;
 
-                $scope.stats = response.data.cells.data.init;
+                $scope.stats = response.data;
 
                 if (!angular.isArray($scope.stats)) {
                   $scope.stats = [$scope.stats];
