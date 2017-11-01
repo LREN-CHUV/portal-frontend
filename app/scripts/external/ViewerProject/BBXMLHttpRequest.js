@@ -31,56 +31,66 @@ either expressed or implied, of the Blue Brain Project.
 */
 
 (function() {
-if (window.BB === undefined) {
+  if (window.BB === undefined) {
     BB = {};
-}
+  }
 
-// BB.XMLHttpRequest
-BB.XMLHttpRequest = function() {
+  // BB.XMLHttpRequest
+  BB.XMLHttpRequest = function() {
     this.xhr = new XMLHttpRequest();
-    this.url = '';
-}
+    this.url = "";
+  };
 
-var static = BB.XMLHttpRequest;
-var proto = static.prototype; // = Object.create(XMLHttpRequest.prototype);
+  var staticRequest = BB.XMLHttpRequest;
+  var proto = staticRequest.prototype; // = Object.create(XMLHttpRequest.prototype);
 
-// Copy methods & properties
-var parent = new XMLHttpRequest();
-for (var p in parent) {
-    if (typeof(parent[p]) == 'function') { // method
-        proto[p] = (function(p) { return function() {
-            // console.log(p);
-            this.xhr[p].apply(this.xhr, arguments);
-        }; })(p);
-    } else { // property
-        Object.defineProperty(proto, p, { get: (function(p) { return function() {
+  // Copy methods & properties
+  var parent = new XMLHttpRequest();
+  for (var p in parent) {
+    if (typeof parent[p] == "function") {
+      // method
+      proto[p] = (function(p) {
+        return function() {
+          // console.log(p);
+          this.xhr[p].apply(this.xhr, arguments);
+        };
+      })(p);
+    } else {
+      // property
+      Object.defineProperty(proto, p, {
+        get: (function(p) {
+          return function() {
             return this.xhr[p];
-        }})(p), set: (function(p) { return function(val) {
+          };
+        })(p),
+        set: (function(p) {
+          return function(val) {
             // console.log(p + '=' + val);
             this.xhr[p] = val;
-        }})(p) });
+          };
+        })(p)
+      });
     }
-}
+  }
 
-// Overload open()
-var orig_open = proto.open;
-proto.open = function(meth, url, sync) {
+  // Overload open()
+  var orig_open = proto.open;
+  proto.open = function(meth, url, sync) {
     this.url = url;
     orig_open.call(this, meth, url, sync);
-}
+  };
 
-// Overload send()
-var orig_send = proto.send;
-proto.send = function(data) {
-    if (static.token) {
-        this.setRequestHeader('Authorization', 'Bearer ' + static.token);
+  // Overload send()
+  var orig_send = proto.send;
+  proto.send = function(data) {
+    if (staticRequest.token) {
+      this.setRequestHeader("Authorization", "Bearer " + staticRequest.token);
     }
     orig_send.call(this, data);
-}
+  };
 
-// Add static setToken()
-static.setToken = function(token) {
-    static.token = token;
-}
-
+  // Add staticRequest setToken()
+  staticRequest.setToken = function(token) {
+    staticRequest.token = token;
+  };
 })();
