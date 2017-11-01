@@ -74,7 +74,13 @@ module.exports = function(config) {
     ],
 
     // list of files / patterns to exclude
-    exclude: ["app/tests/e2e/**"],
+    exclude: [
+      "app/tests/e2e/**",
+      "app/tests/app/requests/**",
+      "app/tests/app/models/variable_select.test.js",
+      "app/tests/app/header/header.controller.test.js",
+      "app/scripts/external/**"
+    ],
 
     preprocessors: {
       "app/views/**/!(*test).js": "coverage",
