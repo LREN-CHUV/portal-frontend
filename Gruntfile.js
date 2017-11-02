@@ -27,6 +27,7 @@ module.exports = function(grunt) {
     // Project settings
     yeoman: appConfig,
 
+    /* jshint ignore:start */
     protractor_webdriver: {
       protractor: {
         options: {
@@ -35,6 +36,7 @@ module.exports = function(grunt) {
         }
       }
     },
+    /* jshint ignore:end */
 
     protractor: {
       options: {
@@ -623,7 +625,7 @@ module.exports = function(grunt) {
 
   grunt.registerTask(
     "server",
-    'DEPRECATED TASK. Use the "serve" task instead',
+    'DEPRECATED TASK. Use the "serve" task instead', // jshint ignore:line
     function(target) {
       grunt.log.warn(
         "The `server` task has been deprecated. Use `grunt serve` to start a server."
@@ -665,7 +667,7 @@ module.exports = function(grunt) {
      * Generate a config.js file
      */
   grunt.registerTask("build-env", function(env) {
-    if (env == null) {
+    if (env === null) {
       env = "dev";
     }
     grunt.task.run([

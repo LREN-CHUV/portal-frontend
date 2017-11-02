@@ -73,12 +73,7 @@ angular
   .config([
     "$translateProvider",
     "tmhDynamicLocaleProvider",
-    "backendExportChartUrl",
-    function(
-      $translateProvider,
-      tmhDynamicLocaleProvider,
-      backendExportChartUrl
-    ) {
+    function($translateProvider, tmhDynamicLocaleProvider) {
       $translateProvider.useLoader("$translatePartialLoader", {
         urlTemplate: "i18n/{lang}/{part}.json"
       });
@@ -95,6 +90,7 @@ angular
       tmhDynamicLocaleProvider.useCookieStorage("NG_TRANSLATE_LANG_KEY");
 
       // set global configuration highcharts
+      /*
       Highcharts.setOptions({
         exporting: {
           chartOptions: {
@@ -111,6 +107,7 @@ angular
           fallbackToExportServer: false
         }
       });
+      */
     }
   ])
   .run([
@@ -125,7 +122,6 @@ angular
   .config([
     "$locationProvider",
     function($locationProvider) {
-      "use strict";
       $locationProvider.html5Mode(true);
     }
   ])
@@ -159,7 +155,7 @@ angular
         return backendUrl + "/articles/" + slug + ".pdf";
       };
 
-      User.get().then(function(data) {
+      User.get().then(function() {
         $rootScope.user = User.current();
 
         if (!User.hasAgreedTos()) {
@@ -185,6 +181,6 @@ angular
       };
 
       editableOptions.theme = "bs3";
-      editableOptions.icon_set = "font-awesome";
+      editableOptions.icon_set = "font-awesome"; // jshint ignore:line
     }
   ]);
