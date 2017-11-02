@@ -180,6 +180,8 @@ angular.module("chuvApp.util").factory("MLUtils", [
           default:
             // Check if cross-validation and prediction type
             if (
+              result.data &&
+              result.data.cells &&
               result.data.cells.validations &&
               result.data.cells.validations.length
             ) {
