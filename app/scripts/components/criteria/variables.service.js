@@ -20,10 +20,6 @@ angular.module("chuvApp.components.criteria").factory("Variable", [
       }
     );
 
-    resource.get_stats = function(code) {
-      return $http.get("/mocks/stats/" + code + ".json");
-    };
-
     resource.get_histo = function(code) {
       var data = $http.get("/" + code + "/histogram_query.json");
       return $http.post(backendUrl + "/mining", data);
