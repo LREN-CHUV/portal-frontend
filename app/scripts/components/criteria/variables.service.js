@@ -24,25 +24,8 @@ angular.module("chuvApp.components.criteria").factory("Variable", [
       return $http.get("/mocks/stats/" + code + ".json");
     };
 
-    /* TODO: do not hard code grouping variables */
     resource.get_histo = function(code) {
-      var data = {
-        variables: [{ code: code }],
-        covariables: [],
-        grouping: [
-          { code: "dataset" },
-          { code: "gender" },
-          { code: "agegroup" },
-          { code: "alzheimerbroadcategory" }
-        ],
-        filters: "",
-        algorithm: {
-          validation: false,
-          code: "histograms",
-          name: "Histograms",
-          parameters: []
-        }
-      };
+      var data = $http.get("/" + code + "/histogram_query.json");
       return $http.post(backendUrl + "/mining", data);
     };
 
