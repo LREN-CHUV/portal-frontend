@@ -30,17 +30,39 @@ angular
           case "regression":
             templateUrl = "default-regression-results.html";
             break;
+          case "histograms":
+            templateUrl = "highchart-results.html";
+            break;
         }
 
         return $http.get("scripts/app/experiments/results/" + templateUrl);
       };
 
       var linker = function($scope, element) {
+
+        // FIXME: type !== "unknown"
+        var name = $scope.data.type !== "unknown" ? $scope.data.type : $scope.data.name.toLowerCase()
+
         // TODO package all the templates at once...
-        getTemplate($scope.data.type).then(function(response) {
+        getTemplate(name).then(function(response) {
           element.html(response.data).show();
           $compile(element.contents())($scope);
         });
+
+        // Histogram utility function
+        $scope.init_hc_config = function(statistic) {
+          if (statistic.hc_config) return;
+
+          statistic.hc_config = {
+            options: {
+              chart: statistic.chart
+            },
+            xAxis: statistic.xAxis,
+            yAxis: statistic.yAxis,
+            series: statistic.series,
+            title: statistic.title
+          };
+        };
 
         // Linear regression & ANOVA utility functions...
         // TODO Put somewhere

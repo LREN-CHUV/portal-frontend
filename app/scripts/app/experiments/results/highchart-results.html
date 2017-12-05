@@ -1,0 +1,23 @@
+<div>
+    <accordion close-others="false">
+  
+    <accordion-group ng-if="data.raw.data.length" is-open="true">
+      <accordion-heading>
+        <span class="ti ti-check-box"></span>
+        Results
+      </accordion-heading>
+      <div ng-init="init_hc_config(data.raw.data[0])">
+        <highchart config="hc_config"></highchart>
+      </div>
+    </accordion-group>
+  
+    <accordion-group is-open="help_is_open">
+      <accordion-heading>
+        <span class="ti ti-help-alt"></span>
+        Help
+      </accordion-heading>
+  
+      <div class="panel-body" btf-markdown="estimation.help"></div>
+    </accordion-group>
+  </div>
+  
