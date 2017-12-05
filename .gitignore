@@ -6,3 +6,5 @@ node_modules/
 app/index.html
 reports/
 *.log
+serve.sh
+package-lock.json
