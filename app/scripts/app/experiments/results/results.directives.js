@@ -55,12 +55,20 @@ angular
         var stats = data.raw
           && data.raw.data;
 
-        $scope.highchartdata = stats ? stats.map(stat => ({
-          ...stat,
-            options: {
-              chart: stat.chart
-            },
-          })) : null;
+        $scope.highchartdata = stats ?
+          stats.map(function(stat) {
+            return {
+              options: {
+                chart: stat.chart
+              },
+              xAxis: stat.xAxis,
+              yAxis: stat.yAxis,
+              series: stat.series,
+              title: stat.title,
+              label: stat.label
+            }
+          })
+          : null;
 
 
         // Linear regression & ANOVA utility functions...
