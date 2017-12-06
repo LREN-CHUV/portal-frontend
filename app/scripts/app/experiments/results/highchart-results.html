@@ -1,13 +1,13 @@
 <div>
     <accordion close-others="false">
   
-    <accordion-group ng-if="data.raw.data.length" is-open="true">
+    <accordion-group is-open="true">
       <accordion-heading>
         <span class="ti ti-check-box"></span>
         Results
       </accordion-heading>
-      <div ng-init="init_hc_config(data.raw.data[0])">
-        <highchart config="hc_config"></highchart>
+      <div ng-if="highchartdata">
+        <highchart config="highchartdata"></highchart>
       </div>
     </accordion-group>
   

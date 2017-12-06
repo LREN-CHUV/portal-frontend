@@ -40,29 +40,28 @@ angular
 
       var linker = function($scope, element) {
 
-        // FIXME: type !== "unknown"
-        var name = $scope.data.type !== "unknown" ? $scope.data.type : $scope.data.name.toLowerCase()
+        // FIXME: type should not be "unknown"
+        var data = $scope.data;
+        var type = data.type !== "unknown" ? data.type : data.name.toLowerCase()
 
         // TODO package all the templates at once...
-        getTemplate(name).then(function(response) {
+        getTemplate(type).then(function(response) {
           element.html(response.data).show();
           $compile(element.contents())($scope);
         });
 
-        // Histogram utility function
-        $scope.init_hc_config = function(statistic) {
-          if (statistic.hc_config) return;
+        // reformat Histogram data
+        var stats = data.raw
+          && data.raw.data
+          && data.raw.data.length
+          && data.raw.data[0];
 
-          statistic.hc_config = {
+        $scope.highchartdata = stats ? {
+          ...stats,
             options: {
-              chart: statistic.chart
+              chart: stats.chart
             },
-            xAxis: statistic.xAxis,
-            yAxis: statistic.yAxis,
-            series: statistic.series,
-            title: statistic.title
-          };
-        };
+          } : null;
 
         // Linear regression & ANOVA utility functions...
         // TODO Put somewhere
