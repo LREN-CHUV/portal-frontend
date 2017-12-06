@@ -50,18 +50,18 @@ angular
           $compile(element.contents())($scope);
         });
 
+        console.log($scope.data.raw)
         // reformat Histogram data
         var stats = data.raw
-          && data.raw.data
-          && data.raw.data.length
-          && data.raw.data[0];
+          && data.raw.data;
 
-        $scope.highchartdata = stats ? {
-          ...stats,
+        $scope.highchartdata = stats ? stats.map(stat => ({
+          ...stat,
             options: {
-              chart: stats.chart
+              chart: stat.chart
             },
-          } : null;
+          })) : null;
+
 
         // Linear regression & ANOVA utility functions...
         // TODO Put somewhere

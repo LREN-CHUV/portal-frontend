@@ -1,16 +1,22 @@
 <div>
-    <accordion close-others="false">
-  
+  <accordion close-others="false">
+
     <accordion-group is-open="true">
       <accordion-heading>
         <span class="ti ti-check-box"></span>
         Results
       </accordion-heading>
-      <div ng-if="highchartdata">
-        <highchart config="highchartdata"></highchart>
-      </div>
+      <tabset active="0">
+        <tab ng-repeat="chart in highchartdata" heading="{{ chart.label }}">
+          <div class="panel">
+            <div class="panel-body">
+                <highchart config="chart"></highchart>
+            </div>
+          </div>
+        </tab>
+      </tabset>
     </accordion-group>
-  
+
     <accordion-group is-open="help_is_open">
       <accordion-heading>
         <span class="ti ti-help-alt"></span>
@@ -19,5 +25,6 @@
   
       <div class="panel-body" btf-markdown="estimation.help"></div>
     </accordion-group>
-  </div>
+  </accordion>
+</div>
   
