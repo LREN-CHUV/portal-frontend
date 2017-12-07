@@ -28,6 +28,12 @@ h6.copyright {
   background: url("../images/pictos-graph-2.png") -248px 0;
 }
 
+.highcharts-container {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+}
+
 .panelLeft {
 	width: 60%;
 	float: left;

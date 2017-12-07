@@ -52,9 +52,7 @@ angular
 
         // TODO refactor template + data switch case for types
         // reformat Histogram data
-        var stats = data.raw
-          && data.raw.data;
-
+        var stats = data.raw && data.raw.data;
         $scope.highchartdata = Array.isArray(stats) ?
           stats.map(function(stat) {
             return {
