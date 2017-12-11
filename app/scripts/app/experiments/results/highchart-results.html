@@ -6,15 +6,33 @@
         <span class="ti ti-check-box"></span>
         Results
       </accordion-heading>
-      <tabset active="0">
-        <tab ng-repeat="chart in highchartdata" heading="{{ chart.label }}">
+
+      <highchart ng-if="highchartdata" config="highchartdata"></highchart>
+      <accordion-group is-open="false" ng-if="highchartdata">
+        <accordion-heading>
+          <span class="ti ti-list"></span>
+          Raw JSON
+        </accordion-heading>
+        <pretty-json collapse="hideJson" data="highchartdata"></pretty-json>
+      </accordion-group>
+
+      <tabset active="0" ng-if="highchartdatas">
+        <tab ng-repeat="chart in highchartdatas" heading="{{ chart.label }}">
           <div class="panel">
             <div class="panel-body">
                 <highchart config="chart"></highchart>
+                <accordion-group is-open="false">
+                  <accordion-heading>
+                    <span class="ti ti-list"></span>
+                    Raw JSON
+                  </accordion-heading>
+                  <pretty-json collapse="hideJson" data="chart"></pretty-json>
+                </accordion-group>
             </div>
           </div>
         </tab>
       </tabset>
+
     </accordion-group>
 
     <accordion-group is-open="help_is_open">

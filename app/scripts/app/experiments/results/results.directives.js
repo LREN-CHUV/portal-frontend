@@ -31,6 +31,7 @@ angular
             templateUrl = "default-regression-results.html";
             break;
           case "histograms":
+          case "tsne":
             templateUrl = "highchart-results.html";
             break;
         }
@@ -51,22 +52,26 @@ angular
         });
 
         // TODO refactor template + data switch case for types
-        // reformat Histogram data
+        // reformat data
         var stats = data.raw && data.raw.data;
-        $scope.highchartdata = Array.isArray(stats) ?
-          stats.map(function(stat) {
-            return {
-              options: {
-                chart: stat.chart
-              },
-              xAxis: stat.xAxis,
-              yAxis: stat.yAxis,
-              series: stat.series,
-              title: stat.title,
-              label: stat.label
-            }
-          })
-          : null;
+        var objectType = (typeof stats === 'object' && stats !== null);
+        var arrayType = Array.isArray(stats);
+
+        var formatFunc = function(stat) {
+          return {
+            options: {
+              chart: stat.chart
+            },
+            xAxis: stat.xAxis,
+            yAxis: stat.yAxis,
+            series: stat.series,
+            title: stat.title,
+            label: stat.label
+          }
+        }
+
+        $scope.highchartdatas = arrayType ? stats.map(formatFunc) : null;
+        $scope.highchartdata = objectType ? formatFunc(stats) : null;
 
 
         // Linear regression & ANOVA utility functions...
