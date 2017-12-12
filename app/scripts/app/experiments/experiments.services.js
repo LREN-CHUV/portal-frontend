@@ -52,55 +52,22 @@ angular.module("chuvApp.util").factory("MLUtils", [
       return uuid;
     }
 
-    //TODO One call only!
-    ml_methods = $resource(
-      backendUrl + "/experiments/methods",
-      {},
-      {
-        query: {
-          transformResponse: [
-            angular.fromJson,
-            function(response) {
-              return response.algorithms;
-            }
-          ],
-          isArray: true
-        }
-      }
-    ).query();
-    ml_validations = $resource(
-      backendUrl + "/experiments/methods",
-      {},
-      {
-        query: {
-          transformResponse: [
-            angular.fromJson,
-            function(response) {
-              return response.validations;
-            }
-          ],
-          isArray: true
-        }
-      }
-    ).query();
-    $resource(
-      backendUrl + "/experiments/methods",
-      {},
-      {
-        get: {
-          transformResponse: [
-            angular.fromJson,
-            function(response) {
-              return response.metrics;
-            }
-          ]
-        }
-      }
-    )
-      .get()
-      .$promise.then(function(data) {
-        ml_metrics = data;
-      });
+    // TODO: add exareme methods to backend
+    ml_methods = Promise.all([
+      $resource(backendUrl + "/experiments/methods").get().$promise,
+      $resource("/scripts/app/mock/exareme-methods.json").get().$promise
+    ])
+    .then(function(responses) {
+      if (!responses.length) return []
+
+      var data1 = angular.fromJson(responses[0])
+      var data2 = angular.fromJson(responses[1])
+
+      ml_validations = data1.validations // [].concat(data1.validations, data2.validations)
+      ml_metrics =  data1.metrics//Object.apply({}, data1.metrics, data2.metrics)
+
+      return [].concat(data1.algorithms, data2.algorithms)
+    })
 
     var MLUtils = {
       list_ml_methods: function() {

@@ -34,17 +34,14 @@ angular
       };
 
       // Get all the ml methods
-      MLUtils.list_ml_methods().$promise.then(function(data) {
-        $scope.ml_methods = data;
+      MLUtils.list_ml_methods().then(function(data) {
 
-        // TODO Quick and dirty fix!
-        // TODO to be added in the backend instead
-        var exareme = $scope.ml_methods.filter(function(m) {
-          return m.code === "glm_exareme";
-        });
-        if (exareme.length > 0) {
-          exareme[0].disable = true;
-        }
+        // FIXME Quick and dirty fix!
+        var newData = data.filter(function(m) {
+          return m.code !== 'glm_exareme'
+        })
+        
+        $scope.ml_methods = newData;
       });
 
       // Check if the method can be applied to the model
@@ -98,7 +95,6 @@ angular
               return false;
             }
           }
-
           if (grp_nb > 0 && cov_nb > 0 && !method.constraints.mixed) {
             return false;
           }
@@ -172,6 +168,17 @@ angular
           $scope.dataset = queryResult;
           on_data_loaded();
         });
+
+        $scope.mode = {
+          local: { active: true },
+          exareme: { active: false }
+        }
+
+        $scope.set_mode = function(mode) {
+          console.log('set_mode', mode)
+          $scope.mode.local.active = !$scope.mode.local.active;
+          $scope.mode.exareme.active = !$scope.mode.exareme.active;
+        };
 
         $scope.save_model = function(callback) {
           // pass

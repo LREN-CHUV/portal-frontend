@@ -1,0 +1,130 @@
+{
+  "algorithms": [{
+    "description": "K_MEANS...",
+    "label": "K-MEANS",
+    "code": "K_MEANS",
+    "constraints": {
+      "variable": {
+        "real": true,
+        "integer": true,
+        "binominal": false,
+        "polynominal": false
+      }
+    },
+    "source": "exareme",
+    "type": ["predictive_model"]
+  }, {
+    "description": "WP LINEAR REGRESSION...",
+    "label": "WP LINEAR REGRESSION",
+    "code": "WP_LINEAR_REGRESSION",
+    "constraints": {
+      "variable": {
+        "real": true,
+        "integer": true,
+        "binominal": false,
+        "polynominal": false
+      },
+      "groupings": {
+        "min_count": 1
+      },
+      "covariables": {
+        "min_count": 1
+      }
+    },
+    "source": "exareme",
+    "type": ["predictive_model"]
+  }, {
+    "description": "WP_PFA_PIPELINE...",
+    "label": "WP_PFA_PIPELINE",
+    "code": "anova",
+    "constraints": {
+      "variable": {
+        "real": true,
+        "integer": true,
+        "binominal": false,
+        "polynominal": false
+      },
+      "groupings": {
+        "min_count": 1
+      },
+      "covariables": {
+        "min_count": 0
+      },
+      "mixed": true
+    },
+    "source": "exareme",
+    "type": ["predictive_model"],
+    "parameters": [{
+      "description": "The type of multi-factors design. Choose \u0027factorial\u0027 to enable interactions analysis or \u0027additive\u0027 for a model without no interaction at all.",
+      "label": "design",
+      "code": "design",
+      "default_value": "factorial",
+      "values": ["factorial", "additive"],
+      "type": "enumeration"
+    }]
+  }, {
+    "description": "WP_STATISTICS...",
+    "label": "WP_STATISTICS",
+    "code": "knn",
+    "docker_image": "hbpmip/java-rapidminer-knn:latest",
+    "constraints": {
+      "variable": {
+        "real": true,
+        "integer": true,
+        "binominal": true,
+        "polynominal": true
+      },
+      "groupings": {
+        "min_count": 0,
+        "max_count": 0
+      },
+      "covariables": {
+        "min_count": "1"
+      },
+      "mixed": false
+    },
+    "environment": "Java/RapidMiner",
+    "source": "exareme",
+    "type": ["statistics"],
+    "parameters": [{
+      "description": "The number of closest neighbours to take into consideration. Typical values range from 2 to 10.",
+      "label": "k",
+      "code": "k",
+      "constraints": {
+        "min": 1
+      },
+      "default_value": 5,
+      "type": "int"
+    }]
+  }, {
+    "label": "WP_VARIABLES_HISTOGRAM",
+    "code": "gpr",
+    "environment": "Java/GPJ",
+    "disable": true,
+    "source": "exareme",
+    "type": ["statistics"]
+  }, {
+    "label": "WP_VARIABLE_HISTOGRAM",
+    "code": "svm",
+    "environment": "Java/RapidMiner",
+    "disable": true,
+    "source": "exareme",
+    "type": ["statistics"]
+  }, {
+    "label": "WP_VARIABLE_PROFILE",
+    "code": "ffneuralnet",
+    "environment": "Java/RapidMiner",
+    "disable": true,
+    "source": "exareme",
+    "type": ["statistics"]
+  }, {
+    "label": "WP_VARIABLE_SUMMARY",
+    "code": "randomforest",
+    "environment": "Java/RapidMiner",
+    "disable": true,
+    "source": "exareme",
+    "type": ["statistics"]
+  }],
+  "validations": [],
+  "metrics": {}
+}
