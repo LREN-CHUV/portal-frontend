@@ -1,5 +1,19 @@
 # Verified with http://hadolint.lukasmartinelli.ch/
 
+FROM digitallyseamless/nodejs-bower-grunt:4 as builder
+
+MAINTAINER mirco.nasuti@chuv.ch
+
+# User 1000 already exists
+USER 1000
+
+COPY ./docker/builder/build-in-docker.sh /
+
+VOLUME /frontend
+
+CMD ["/build-in-docker.sh"]
+
+
 FROM nginx:1.13.0-alpine
 
 MAINTAINER arnaud.jutzeler@chuv.ch
