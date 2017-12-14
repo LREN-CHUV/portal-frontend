@@ -32,11 +32,13 @@
 
       <button class="btn btn-primary"
         ng-class="{active: mode.local.active}"
+        ng-disabled="mode.local.disabled"
         ng-click="set_mode('local')">
         Local
       </button>
       <button class="btn btn-primary"
         ng-class="{active: !mode.local.active}"
+        ng-disabled="mode.exareme.disabled"
         ng-click="set_mode('exareme')">
         Exareme
       </button>
@@ -164,7 +166,7 @@
                   </div>
 
                   <button class="btn btn-primary pull-right"
-                          ng-class="{'disabled': method_already_configured() || configuration_not_valid()}"
+                          ng-class="{'disabled': method_already_configured() || configuration_not_valid() || exareme_method_disabled()}"
                           ng-click="add_to_experiment()">
                     Add to experiment
                   </button>

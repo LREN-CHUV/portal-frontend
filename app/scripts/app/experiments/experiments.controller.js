@@ -22,7 +22,7 @@ angular
 
       var ml_all_methods = [];
       $scope.ml_methods = [];
-      $scope.mode = { local: { active: true } }
+      $scope.mode = { local: { active: true, disabled: false }, exareme: { disabled: false} }
       $scope.shared = {
         chosen_method: null,
         method_parameters: [],
@@ -137,6 +137,11 @@ angular
         $scope.mode.local.active = local ? true : false;
         on_data_loaded()
       };
+
+      // FIXME: exareme can run only 1 method at the moment
+      $scope.exareme_method_disabled = function() {
+        return !$scope.mode.local.active && $scope.shared.experiment_configuration.length
+      }
 
       if ($stateParams.model_slug) {
         // we have a slug: load model
@@ -315,6 +320,14 @@ angular
 
         $scope.shared.experiment_configuration.push(method_to_be_added);
         $scope.shared.cross_validation |= is_predictive_model;
+
+        // FIXME: hack to disallow cross source selection between local/exareme - nyi
+        if ($scope.mode.local.active) {
+          $scope.mode.exareme.disabled = true;
+        } else {
+          $scope.mode.local.disabled = true;
+        }
+
       };
 
       $scope.remove_from_experiment = function(index) {
@@ -329,6 +342,12 @@ angular
         }
 
         $scope.shared.experiment_configuration.splice(index, 1);
+
+        // FIXME: hack to disallow cross source selection between local/exareme - nyi
+        if (!$scope.shared.experiment_configuration.length) {
+          $scope.mode.exareme.disabled = false;
+          $scope.mode.local.disabled = false;
+        }
       };
     }
   ])
