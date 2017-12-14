@@ -108,8 +108,8 @@ angular
         $scope.loaded = true;
 
         $scope.ml_methods = $scope.mode.local.active 
-          ? ml_all_methods.filter(function(m) { return m.source !== "exareme" })
-          : ml_all_methods.filter(function(m) { return m.source === "exareme" })
+          ? ml_all_methods.filter(function(m) { return m.code.substr(0, 3) !== "WP_" })
+          : ml_all_methods.filter(function(m) { return m.code.substr(0, 3) === "WP_" })
 
         var variable_data = $scope.dataset.data[$scope.dataset.variable[0]];
 

@@ -11,7 +11,6 @@
         "polynominal": false
       }
     },
-    "source": "exareme",
     "type": ["predictive_model"]
   }, {
     "description": "WP LINEAR REGRESSION...",
@@ -31,7 +30,6 @@
         "min_count": 0
       }
     },
-    "source": "exareme",
     "type": ["predictive_model"]
   }, {
     "description": "WP_PFA_PIPELINE...",
@@ -52,7 +50,6 @@
       },
       "mixed": true
     },
-    "source": "exareme",
     "type": ["predictive_model"],
     "parameters": [{
       "description": "The type of multi-factors design. Choose \u0027factorial\u0027 to enable interactions analysis or \u0027additive\u0027 for a model without no interaction at all.",
@@ -83,7 +80,6 @@
       "mixed": false
     },
     "environment": "Java/RapidMiner",
-    "source": "exareme",
     "type": ["statistics"],
     "parameters": [{
       "description": "The number of closest neighbours to take into consideration. Typical values range from 2 to 10.",
@@ -100,28 +96,24 @@
     "code": "WP_VARIABLES_HISTOGRAM",
     "environment": "Java/GPJ",
     "disable": true,
-    "source": "exareme",
     "type": ["statistics"]
   }, {
     "label": "WP_VARIABLE_HISTOGRAM",
     "code": "WP_VARIABLE_HISTOGRAM",
     "environment": "Java/RapidMiner",
     "disable": true,
-    "source": "exareme",
     "type": ["statistics"]
   }, {
     "label": "WP_VARIABLE_PROFILE",
     "code": "WP_VARIABLE_PROFILE",
     "environment": "Java/RapidMiner",
     "disable": true,
-    "source": "exareme",
     "type": ["statistics"]
   }, {
     "label": "WP_VARIABLE_SUMMARY",
     "code": "WP_VARIABLE_SUMMARY",
     "environment": "Java/RapidMiner",
     "disable": true,
-    "source": "exareme",
     "type": ["statistics"]
   }],
   "validations": [],
