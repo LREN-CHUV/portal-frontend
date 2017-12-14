@@ -20,7 +20,9 @@ angular
       $scope.loaded = false;
       $scope.parseInt = parseInt;
 
+      var ml_all_methods = [];
       $scope.ml_methods = [];
+      $scope.mode = { local: { active: true } }
       $scope.shared = {
         chosen_method: null,
         method_parameters: [],
@@ -37,11 +39,9 @@ angular
       MLUtils.list_ml_methods().then(function(data) {
 
         // FIXME Quick and dirty fix!
-        var newData = data.filter(function(m) {
+        ml_all_methods = data.filter(function(m) {
           return m.code !== 'glm_exareme'
         })
-        
-        $scope.ml_methods = newData;
       });
 
       // Check if the method can be applied to the model
@@ -107,6 +107,10 @@ angular
       function on_data_loaded() {
         $scope.loaded = true;
 
+        $scope.ml_methods = $scope.mode.local.active 
+          ? ml_all_methods.filter(function(m) { return m.source !== "exareme" })
+          : ml_all_methods.filter(function(m) { return m.source === "exareme" })
+
         var variable_data = $scope.dataset.data[$scope.dataset.variable[0]];
 
         $scope.predicting_type = MLUtils.get_datatype(
@@ -125,6 +129,14 @@ angular
           predictive_model: true
         };
       }
+
+      $scope.set_mode = function(mode) {
+        var local = (mode === 'local')
+        if (local === $scope.mode.local.active) return
+
+        $scope.mode.local.active = local ? true : false;
+        on_data_loaded()
+      };
 
       if ($stateParams.model_slug) {
         // we have a slug: load model
@@ -168,17 +180,6 @@ angular
           $scope.dataset = queryResult;
           on_data_loaded();
         });
-
-        $scope.mode = {
-          local: { active: true },
-          exareme: { active: false }
-        }
-
-        $scope.set_mode = function(mode) {
-          console.log('set_mode', mode)
-          $scope.mode.local.active = !$scope.mode.local.active;
-          $scope.mode.exareme.active = !$scope.mode.exareme.active;
-        };
 
         $scope.save_model = function(callback) {
           // pass

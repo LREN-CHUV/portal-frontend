@@ -25,10 +25,10 @@
         "polynominal": false
       },
       "groupings": {
-        "min_count": 1
+        "min_count": 0
       },
       "covariables": {
-        "min_count": 1
+        "min_count": 0
       }
     },
     "source": "exareme",
@@ -36,7 +36,7 @@
   }, {
     "description": "WP_PFA_PIPELINE...",
     "label": "WP_PFA_PIPELINE",
-    "code": "anova",
+    "code": "WP_PFA_PIPELINE",
     "constraints": {
       "variable": {
         "real": true,
@@ -65,8 +65,7 @@
   }, {
     "description": "WP_STATISTICS...",
     "label": "WP_STATISTICS",
-    "code": "knn",
-    "docker_image": "hbpmip/java-rapidminer-knn:latest",
+    "code": "WP_STATISTICS",
     "constraints": {
       "variable": {
         "real": true,
@@ -79,7 +78,7 @@
         "max_count": 0
       },
       "covariables": {
-        "min_count": "1"
+        "min_count": 0
       },
       "mixed": false
     },
@@ -98,28 +97,28 @@
     }]
   }, {
     "label": "WP_VARIABLES_HISTOGRAM",
-    "code": "gpr",
+    "code": "WP_VARIABLES_HISTOGRAM",
     "environment": "Java/GPJ",
     "disable": true,
     "source": "exareme",
     "type": ["statistics"]
   }, {
     "label": "WP_VARIABLE_HISTOGRAM",
-    "code": "svm",
+    "code": "WP_VARIABLE_HISTOGRAM",
     "environment": "Java/RapidMiner",
     "disable": true,
     "source": "exareme",
     "type": ["statistics"]
   }, {
     "label": "WP_VARIABLE_PROFILE",
-    "code": "ffneuralnet",
+    "code": "WP_VARIABLE_PROFILE",
     "environment": "Java/RapidMiner",
     "disable": true,
     "source": "exareme",
     "type": ["statistics"]
   }, {
     "label": "WP_VARIABLE_SUMMARY",
-    "code": "randomforest",
+    "code": "WP_VARIABLE_SUMMARY",
     "environment": "Java/RapidMiner",
     "disable": true,
     "source": "exareme",

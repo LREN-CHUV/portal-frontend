@@ -30,8 +30,16 @@
         </div>
       </div>
 
-      <button class="btn btn-primary col-bottom" ng-class="{active: mode.local.active}" ng-click="set_mode('local')">Local</button>
-      <button class="btn btn-primary col-bottom" ng-class="{active: mode.exareme.active}" ng-click="set_mode('exareme')">Exareme</button>
+      <button class="btn btn-primary"
+        ng-class="{active: mode.local.active}"
+        ng-click="set_mode('local')">
+        Local
+      </button>
+      <button class="btn btn-primary"
+        ng-class="{active: !mode.local.active}"
+        ng-click="set_mode('exareme')">
+        Exareme
+      </button>
 
       <div class="row">
 
