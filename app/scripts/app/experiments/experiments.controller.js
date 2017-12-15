@@ -488,8 +488,10 @@ angular
             $scope.loading = false;
             $scope.experiment = {
               hasError: true,
-              result: "This experiment doesn't exist"
+              result: response.data ? response.status + " " + response.data.error + "\n" + response.data.message : "This experiment doesn't exist",
+              finished: true
             };
+            MLUtils.mark_as_read($scope.experiment);
           }
         );
       }

@@ -32,34 +32,6 @@
     },
     "type": ["predictive_model"]
   }, {
-    "description": "WP_PFA_PIPELINE...",
-    "label": "WP_PFA_PIPELINE",
-    "code": "WP_PFA_PIPELINE",
-    "constraints": {
-      "variable": {
-        "real": true,
-        "integer": true,
-        "binominal": false,
-        "polynominal": false
-      },
-      "groupings": {
-        "min_count": 1
-      },
-      "covariables": {
-        "min_count": 0
-      },
-      "mixed": true
-    },
-    "type": ["predictive_model"],
-    "parameters": [{
-      "description": "The type of multi-factors design. Choose \u0027factorial\u0027 to enable interactions analysis or \u0027additive\u0027 for a model without no interaction at all.",
-      "label": "design",
-      "code": "design",
-      "default_value": "factorial",
-      "values": ["factorial", "additive"],
-      "type": "enumeration"
-    }]
-  }, {
     "description": "WP_STATISTICS...",
     "label": "WP_STATISTICS",
     "code": "WP_STATISTICS",
@@ -79,40 +51,25 @@
       },
       "mixed": false
     },
-    "environment": "Java/RapidMiner",
-    "type": ["statistics"],
-    "parameters": [{
-      "description": "The number of closest neighbours to take into consideration. Typical values range from 2 to 10.",
-      "label": "k",
-      "code": "k",
-      "constraints": {
-        "min": 1
-      },
-      "default_value": 5,
-      "type": "int"
-    }]
+    "type": ["statistics"]
   }, {
     "label": "WP_VARIABLES_HISTOGRAM",
     "code": "WP_VARIABLES_HISTOGRAM",
-    "environment": "Java/GPJ",
     "disable": true,
     "type": ["statistics"]
   }, {
     "label": "WP_VARIABLE_HISTOGRAM",
     "code": "WP_VARIABLE_HISTOGRAM",
-    "environment": "Java/RapidMiner",
     "disable": true,
     "type": ["statistics"]
   }, {
     "label": "WP_VARIABLE_PROFILE",
     "code": "WP_VARIABLE_PROFILE",
-    "environment": "Java/RapidMiner",
     "disable": true,
     "type": ["statistics"]
   }, {
     "label": "WP_VARIABLE_SUMMARY",
     "code": "WP_VARIABLE_SUMMARY",
-    "environment": "Java/RapidMiner",
     "disable": true,
     "type": ["statistics"]
   }],

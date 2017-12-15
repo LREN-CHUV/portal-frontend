@@ -43,7 +43,7 @@ angular
 
         // FIXME: type should not be "unknown"
         var data = $scope.data;
-        var type = data.type !== "unknown" ? data.type : data.name.split(' ')[0].toLowerCase()
+        var type = data.type !== "unknown" ? data.type : data.name && data.name.split(' ')[0].toLowerCase() || "Result"
 
         // TODO package all the templates at once...
         getTemplate(type).then(function(response) {
@@ -65,7 +65,7 @@ angular
             xAxis: stat.xAxis,
             yAxis: stat.yAxis,
             series: stat.series,
-            title: {text: stat.title.text.split(' ').slice(0, 5).join(' ').slice(0, -1) + '...'},
+            title: {text: stat.title && stat.title.text && stat.title.text.split(' ').slice(0, 5).join(' ').slice(0, -1) + '...'},
             label: stat.label
           }
         }

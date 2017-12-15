@@ -8,13 +8,13 @@
       </accordion-heading>
 
       <highchart ng-if="highchartdata" config="highchartdata"></highchart>
-      <accordion-group is-open="false" ng-if="highchartdata">
+      <!-- <accordion-group is-open="false" ng-if="highchartdata">
         <accordion-heading>
           <span class="ti ti-list"></span>
           Raw JSON
         </accordion-heading>
         <pretty-json collapse="hideJson" data="highchartdata"></pretty-json>
-      </accordion-group>
+      </accordion-group> -->
 
       <tabset active="0" ng-if="highchartdatas">
         <tab ng-repeat="chart in highchartdatas" heading="{{ chart.label }}">

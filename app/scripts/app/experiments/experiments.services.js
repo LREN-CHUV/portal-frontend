@@ -63,8 +63,8 @@ angular.module("chuvApp.util").factory("MLUtils", [
       var backendData = angular.fromJson(responses[0])
       var staticData = angular.fromJson(responses[1])
 
-      ml_validations = [].concat(backendData.validations, staticData.validations)
-      ml_metrics =  staticData.metrics
+      ml_validations = backendData.validations //[].concat(backendData.validations, staticData.validations)
+      ml_metrics =  backendData.metrics
 
       return [].concat(backendData.algorithms, staticData.algorithms)
     })

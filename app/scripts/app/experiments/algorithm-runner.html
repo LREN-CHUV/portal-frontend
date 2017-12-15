@@ -30,7 +30,7 @@
         <ul>
           <li ng-repeat="experiment in shared.experiment_configuration track by $index">
             <div style="max-width: calc(100% - 20px); display: inline-block; vertical-align: top">
-              <a href="#" editable-text="experiment.name">{{ experiment.name || "yolo" }}</a>
+              <a href="#">{{ experiment.name || "Unknown" }}</a>
             </div>
 
             <a ng-click="remove_from_experiment($index)"
