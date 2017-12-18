@@ -340,13 +340,11 @@ angular
                 if (current_request_id != request_id) return;
                 $scope.focused_variable_loaded = true;
 
-                $scope.stats = response.data.data;
+                $scope.stats = response.data && response.data.data;
 
                 if (!angular.isArray($scope.stats)) {
                   $scope.stats = [$scope.stats];
                 }
-
-                // $scope.measurement_count = ($scope.stats.length && $scope.stats[0].count) || "??";
               },
               function() {
                 if (current_request_id != request_id) return;
