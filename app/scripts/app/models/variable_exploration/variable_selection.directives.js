@@ -340,7 +340,7 @@ angular
                 if (current_request_id != request_id) return;
                 $scope.focused_variable_loaded = true;
 
-                $scope.stats = response.data;
+                $scope.stats = response.data.data;
 
                 if (!angular.isArray($scope.stats)) {
                   $scope.stats = [$scope.stats];
