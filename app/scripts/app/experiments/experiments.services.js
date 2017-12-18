@@ -176,6 +176,7 @@ angular.module("chuvApp.util").factory("MLUtils", [
      * @returns {{validations, algorithms, validation_type: *, methods: *, overview: Array, raw}}
      */
     function parse_results(results) {
+
       var overview = [], validation_type = null;
 
       // Prepare every algorithms output for display

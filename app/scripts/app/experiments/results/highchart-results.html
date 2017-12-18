@@ -7,31 +7,27 @@
         Results
       </accordion-heading>
 
-      <highchart ng-if="highchartdata" config="highchartdata"></highchart>
-      <!-- <accordion-group is-open="false" ng-if="highchartdata">
-        <accordion-heading>
-          <span class="ti ti-list"></span>
-          Raw JSON
-        </accordion-heading>
-        <pretty-json collapse="hideJson" data="highchartdata"></pretty-json>
-      </accordion-group> -->
+      <highchart ng-if="!highchartdata.isArray" config="highchartdata.data"></highchart>
 
-      <tabset active="0" ng-if="highchartdatas">
-        <tab ng-repeat="chart in highchartdatas" heading="{{ chart.label }}">
-          <div class="panel">
-            <div class="panel-body">
-                <highchart config="chart"></highchart>
-                <accordion-group is-open="false">
-                  <accordion-heading>
-                    <span class="ti ti-list"></span>
-                    Raw JSON
-                  </accordion-heading>
-                  <pretty-json collapse="hideJson" data="chart"></pretty-json>
-                </accordion-group>
+
+      <div ng-if="highchartdata.isArray">
+        <tabset active="0">
+          <tab ng-repeat="chart in highchartdata.data" heading="{{ chart.label }}">
+            <div class="panel">
+              <div class="panel-body">
+                  <highchart config="chart"></highchart>
+                  <accordion-group is-open="false">
+                    <accordion-heading>
+                      <span class="ti ti-list"></span>
+                      Raw JSON
+                    </accordion-heading>
+                    <pretty-json collapse="hideJson" data="chart"></pretty-json>
+                  </accordion-group>
+              </div>
             </div>
-          </div>
-        </tab>
-      </tabset>
+          </tab>
+        </tabset>
+      </div>
 
     </accordion-group>
 

@@ -1,7 +1,7 @@
 <div>
   <accordion close-others="false">
 
-  <accordion-group ng-if="data.raw" is-open="true">
+  <accordion-group ng-if="data" is-open="true">
     <accordion-heading>
       <span class="ti ti-check-box"></span>
       Results
@@ -11,7 +11,7 @@
       <br>
       Here's the raw output:
       <br><br>
-      <pretty-json data="data.raw"></pretty-json>
+      <pretty-json data="data"></pretty-json>
     </div>
   </accordion-group>
 

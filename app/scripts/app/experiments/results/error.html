@@ -1,0 +1,27 @@
+<div>
+        <accordion close-others="false">
+      
+        <accordion-group ng-if="data" is-open="true">
+          <accordion-heading>
+            <span class="ti ti-check-box"></span>
+            Results
+          </accordion-heading>
+          <div>
+            There was an error perfoming the method
+            <br>
+            Here's the raw output:
+            <br><br>
+            <pretty-json data="data"></pretty-json>
+          </div>
+        </accordion-group>
+      
+        <accordion-group is-open="help_is_open">
+          <accordion-heading>
+            <span class="ti ti-help-alt"></span>
+            Help
+          </accordion-heading>
+      
+          <div class="panel-body" btf-markdown="estimation.help"></div>
+        </accordion-group>
+      </div>
+      
