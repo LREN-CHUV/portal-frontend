@@ -1,17 +1,102 @@
 {
   "algorithms": [{
-    "description": "K_MEANS...",
-    "label": "K-MEANS",
-    "code": "K_MEANS",
+    "description": "WP LIST VARIABLES...",
+    "label": "WP LIST VARIABLES",
+    "code": "WP_LIST_VARIABLES",
     "constraints": {
       "variable": {
         "real": true,
         "integer": true,
         "binominal": false,
         "polynominal": false
+      },
+      "groupings": {
+        "min_count": 0
+      },
+      "covariables": {
+        "min_count": 0
       }
     },
-    "type": ["predictive_model"]
+    "type": ["statistics"]
+  }, {
+    "label": "WP VARIABLE SUMMARY",
+    "code": "WP_VARIABLE_SUMMARY",
+    "constraints": {
+      "variable": {
+        "real": true,
+        "integer": true,
+        "binominal": true,
+        "polynominal": true
+      },
+      "groupings": {
+        "min_count": 0
+      },
+      "covariables": {
+        "min_count": 0
+      },
+      "mixed": false
+    },
+    "type": ["statistics"]
+  }, {
+    "description": "WP_STATISTICS...",
+    "label": "WP STATISTICS",
+    "code": "WP_STATISTICS",
+    "constraints": {
+      "variable": {
+        "real": true,
+        "integer": true,
+        "binominal": false,
+        "polynominal": false
+      },
+      "groupings": {
+        "min_count": 0
+      },
+      "covariables": {
+        "min_count": 0
+      },
+      "mixed": false
+    },
+    "type": ["statistics"]
+  }, {
+    "description": "WP VARIABLE PROFILE...",
+    "label": "WP VARIABLE PROFILE",
+    "code": "WP_VARIABLE_PROFILE",
+    "constraints": {
+      "variable": {
+        "real": true,
+        "integer": true,
+        "binominal": false,
+        "polynominal": false
+      },
+      "groupings": {
+        "min_count": 0
+      },
+      "covariables": {
+        "min_count": 0
+      },
+      "mixed": false
+    },
+    "type": ["statistics"]
+  }, {
+    "description": "WP LIST DATASET...",
+    "label": "WP LIST DATASET",
+    "code": "WP_LIST_DATASET",
+    "constraints": {
+      "variable": {
+        "real": true,
+        "integer": true,
+        "binominal": false,
+        "polynominal": false
+      },
+      "groupings": {
+        "min_count": 0
+      },
+      "covariables": {
+        "min_count": 0
+      },
+      "mixed": false
+    },
+    "type": ["statistics"]
   }, {
     "description": "WP LINEAR REGRESSION...",
     "label": "WP LINEAR REGRESSION",
@@ -31,47 +116,6 @@
       }
     },
     "type": ["predictive_model"]
-  }, {
-    "description": "WP_STATISTICS...",
-    "label": "WP_STATISTICS",
-    "code": "WP_STATISTICS",
-    "constraints": {
-      "variable": {
-        "real": true,
-        "integer": true,
-        "binominal": true,
-        "polynominal": true
-      },
-      "groupings": {
-        "min_count": 0,
-        "max_count": 0
-      },
-      "covariables": {
-        "min_count": 0
-      },
-      "mixed": false
-    },
-    "type": ["statistics"]
-  }, {
-    "label": "WP_VARIABLES_HISTOGRAM",
-    "code": "WP_VARIABLES_HISTOGRAM",
-    "disable": true,
-    "type": ["statistics"]
-  }, {
-    "label": "WP_VARIABLE_HISTOGRAM",
-    "code": "WP_VARIABLE_HISTOGRAM",
-    "disable": true,
-    "type": ["statistics"]
-  }, {
-    "label": "WP_VARIABLE_PROFILE",
-    "code": "WP_VARIABLE_PROFILE",
-    "disable": true,
-    "type": ["statistics"]
-  }, {
-    "label": "WP_VARIABLE_SUMMARY",
-    "code": "WP_VARIABLE_SUMMARY",
-    "disable": true,
-    "type": ["statistics"]
   }],
   "validations": [],
   "metrics": {}
