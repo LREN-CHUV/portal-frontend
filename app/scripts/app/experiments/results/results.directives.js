@@ -82,7 +82,11 @@ angular
 
             var subData = data && data.data;
             $scope.highchartdata = {
-              data: subData.length > 2 ? subData.map(formatFunc) : formatFunc(subData[0]),
+              data: subData.length > 2
+                ? subData.map(formatFunc) 
+                : angular.isArray(subData)
+                  ? formatFunc(subData[0])
+                  : formatFunc(subData),
               isArray: subData.length > 2 ? true : false
             };
             break;

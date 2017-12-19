@@ -86,6 +86,7 @@
                 </accordion-group>
                 <accordion-group heading="Predictive Model" ng-init="acc_pm.open = true" is-open="acc_pm.open" ng-click="!acc_pm.open">
                   <p ng-repeat="method in ml_methods | filter:{type:'predictive_model'}  | orderBy:'-label'">
+                    <span class="label label-default" ng-if="method.nyi">Coming soon</span>
                     <label class="btn btn-primary-alt col-xs-12"
                            ng-model="shared.chosen_method"
                            ng-disabled="!method.available"

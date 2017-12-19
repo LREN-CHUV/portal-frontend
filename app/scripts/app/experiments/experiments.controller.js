@@ -50,6 +50,12 @@ angular
           return false;
         }
 
+        if (method.code === "statisticsSummary") {
+          console.warn("FIXME statisticsSummary disabled in frontend")
+          method.disable = true;
+          return false;
+        }
+
         // Check constraints
         if (method.constraints) {
           // Output constraints
@@ -120,6 +126,7 @@ angular
 
         $scope.ml_methods.forEach(function(method) {
           method.available = available_method(method);
+          method.nyi = ['statisticsSummary', 'svm', 'randomforest', 'gpr', 'ffneuralnet'].includes(method.code)
         });
 
         // Open methods menu accordion
