@@ -16,7 +16,7 @@
             <th>F-value</th>
             <th>P-value</th>
           </tr>
-          <tr ng-repeat="(name, value) in data.raw.data">
+          <tr ng-repeat="(name, value) in data.data">
             <td ng-bind="variable_title(name)"></td>
             <td ng-bind="value.sum_sq | number"></td>
             <td ng-bind="value.df | number"></td>

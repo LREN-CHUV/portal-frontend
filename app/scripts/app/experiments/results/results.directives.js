@@ -19,27 +19,25 @@ angular
         var type = data && data.type;
 
         // Linear regression & ANOVA utility functions
-        function buildTable() {
-          $scope.variable_title = function(variable_code) {
-            // capitalize
-            return variable_code
-              .split(/[ _\-]/)
-              .map(function(code_part) {
-                return code_part.replace(/^[a-z]/, function(str) {
-                  return str.toUpperCase();
-                });
-              })
-              .join(" ");
-          };
+        $scope.variable_title = function(variable_code) {
+          // capitalize
+          return variable_code
+            .split(/[ _\-]/)
+            .map(function(code_part) {
+              return code_part.replace(/^[a-z]/, function(str) {
+                return str.toUpperCase();
+              });
+            })
+            .join(" ");
+        };
 
-          $scope.pvalue_quality = function(pvalue) {
-            pvalue = Math.abs(pvalue);
-            if (pvalue <= 0.001) return "(★★★)";
-            if (pvalue <= 0.01) return "(★★)";
-            if (pvalue <= 0.1) return "(★)";
-            return "";
-          };
-        }
+        $scope.pvalue_quality = function(pvalue) {
+          pvalue = Math.abs(pvalue);
+          if (pvalue <= 0.001) return "(★★★)";
+          if (pvalue <= 0.01) return "(★★)";
+          if (pvalue <= 0.1) return "(★)";
+          return "";
+        };
 
         var templateUrl = "default-results.html";
         switch (type) {
@@ -47,12 +45,10 @@ angular
             switch(func) {
               case "python-linear-regression":
                 templateUrl = "linear-regression-results.html";
-                buildTable();
                 break;
 
               case "python-anova":
                 templateUrl = "anova-results.html";
-                buildTable();
                 break;
 
               case "binary_classification":
