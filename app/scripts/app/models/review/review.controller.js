@@ -439,11 +439,14 @@ angular.module("chuvApp.models").controller("ReviewController", [
 
     function update_location_search() {
       function unmap_category(category) {
-        return $scope.query[category] && $scope.query[category]
-          .map(function(variable) {
-            return variable.code;
-          })
-          .join(",");
+        return (
+          $scope.query[category] &&
+          $scope.query[category]
+            .map(function(variable) {
+              return variable.code;
+            })
+            .join(",")
+        );
       }
 
       var query = {

@@ -56,18 +56,17 @@ angular.module("chuvApp.util").factory("MLUtils", [
     ml_methods = Promise.all([
       $resource(backendUrl + "/experiments/methods").get().$promise,
       $resource("/scripts/app/mock/exareme-methods.json").get().$promise
-    ])
-    .then(function(responses) {
-      if (!responses.length) return []
+    ]).then(function(responses) {
+      if (!responses.length) return [];
 
-      var backendData = angular.fromJson(responses[0])
-      var staticData = angular.fromJson(responses[1])
+      var backendData = angular.fromJson(responses[0]);
+      var staticData = angular.fromJson(responses[1]);
 
-      ml_validations = backendData.validations //[].concat(backendData.validations, staticData.validations)
-      ml_metrics =  backendData.metrics
+      ml_validations = backendData.validations; //[].concat(backendData.validations, staticData.validations)
+      ml_metrics = backendData.metrics;
 
-      return [].concat(backendData.algorithms, staticData.algorithms)
-    })
+      return [].concat(backendData.algorithms, staticData.algorithms);
+    });
 
     var MLUtils = {
       list_ml_methods: function() {
@@ -176,7 +175,6 @@ angular.module("chuvApp.util").factory("MLUtils", [
      * @returns {{validations, algorithms, validation_type: *, methods: *, overview: Array, raw}}
      */
     function parse_results(results) {
-
       var overview = [], validation_type = null;
 
       // Prepare every algorithms output for display

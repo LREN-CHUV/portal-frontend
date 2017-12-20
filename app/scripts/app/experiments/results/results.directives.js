@@ -13,7 +13,6 @@ angular
     function($compile, $http) {
       "use strict";
       var linker = function($scope, element) {
-
         var data = $scope.data;
         var func = data && data.function;
         var type = data && data.type;
@@ -42,7 +41,7 @@ angular
         var templateUrl = "default-results.html";
         switch (type) {
           case "application/json":
-            switch(func) {
+            switch (func) {
               case "python-linear-regression":
                 templateUrl = "linear-regression-results.html";
                 break;
@@ -54,7 +53,7 @@ angular
               case "binary_classification":
                 templateUrl = "binary-classification-results.html";
                 break;
-                
+
               case "classification":
                 templateUrl = "default-classification-results.html";
                 break;
@@ -64,7 +63,7 @@ angular
                 break;
             }
             break;
-            
+
           case "application/highcharts+json":
             templateUrl = "highchart-results.html";
             var formatFunc = function(stat) {
@@ -75,7 +74,15 @@ angular
                 xAxis: stat.xAxis,
                 yAxis: stat.yAxis,
                 series: stat.series,
-                title: {text: stat.title && stat.title.text && stat.title.text.split(' ').slice(0, 5).join(' ').slice(0, -1) + '...'},
+                title: {
+                  text: stat.title &&
+                    stat.title.text &&
+                    stat.title.text
+                      .split(" ")
+                      .slice(0, 5)
+                      .join(" ")
+                      .slice(0, -1) + "..."
+                },
                 label: stat.label
               };
             };
@@ -83,10 +90,10 @@ angular
             var subData = data && data.data;
             $scope.highchartdata = {
               data: subData.length > 2
-                ? subData.map(formatFunc) 
+                ? subData.map(formatFunc)
                 : angular.isArray(subData)
-                  ? formatFunc(subData[0])
-                  : formatFunc(subData),
+                    ? formatFunc(subData[0])
+                    : formatFunc(subData),
               isArray: subData.length > 2 ? true : false
             };
             break;
@@ -96,11 +103,12 @@ angular
             break;
         }
 
-        $http.get("scripts/app/experiments/results/" + templateUrl)
-        .then(function(response) {
-          element.html(response.data).show();
-          $compile(element.contents())($scope);
-        });
+        $http
+          .get("scripts/app/experiments/results/" + templateUrl)
+          .then(function(response) {
+            element.html(response.data).show();
+            $compile(element.contents())($scope);
+          });
       };
 
       return {

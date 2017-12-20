@@ -21,12 +21,14 @@ angular.module("chuvApp.components.criteria").factory("Variable", [
     );
 
     resource.get_histo = function(code) {
-      return $http.get(backendUrl + "/variables/" + code + "/histogram_query.json")
-      .then(
-        function(response) {
-          return $http.post(backendUrl + "/mining", JSON.stringify(response.data));
-        }
-      )
+      return $http
+        .get(backendUrl + "/variables/" + code + "/histogram_query.json")
+        .then(function(response) {
+          return $http.post(
+            backendUrl + "/mining",
+            JSON.stringify(response.data)
+          );
+        });
     };
 
     return resource;

@@ -22,7 +22,10 @@ angular
 
       var ml_all_methods = [];
       $scope.ml_methods = [];
-      $scope.mode = { local: { active: true, disabled: false }, exareme: { disabled: false} }
+      $scope.mode = {
+        local: { active: true, disabled: false },
+        exareme: { disabled: false }
+      };
       $scope.shared = {
         chosen_method: null,
         method_parameters: [],
@@ -37,11 +40,10 @@ angular
 
       // Get all the ml methods
       MLUtils.list_ml_methods().then(function(data) {
-
         // FIXME Quick and dirty fix!
         ml_all_methods = data.filter(function(m) {
-          return m.code !== 'glm_exareme'
-        })
+          return m.code !== "glm_exareme";
+        });
       });
 
       // Check if the method can be applied to the model
@@ -51,7 +53,7 @@ angular
         }
 
         if (method.code === "statisticsSummary") {
-          console.warn("FIXME statisticsSummary disabled in frontend")
+          console.warn("FIXME statisticsSummary disabled in frontend");
           method.disable = true;
           return false;
         }
@@ -113,9 +115,13 @@ angular
       function on_data_loaded() {
         $scope.loaded = true;
 
-        $scope.ml_methods = $scope.mode.local.active 
-          ? ml_all_methods.filter(function(m) { return m.code.substr(0, 3) !== "WP_" })
-          : ml_all_methods.filter(function(m) { return m.code.substr(0, 3) === "WP_" })
+        $scope.ml_methods = $scope.mode.local.active
+          ? ml_all_methods.filter(function(m) {
+              return m.code.substr(0, 3) !== "WP_";
+            })
+          : ml_all_methods.filter(function(m) {
+              return m.code.substr(0, 3) === "WP_";
+            });
 
         var variable_data = $scope.dataset.data[$scope.dataset.variable[0]];
 
@@ -126,7 +132,13 @@ angular
 
         $scope.ml_methods.forEach(function(method) {
           method.available = available_method(method);
-          method.nyi = ['statisticsSummary', 'svm', 'randomforest', 'gpr', 'ffneuralnet'].includes(method.code)
+          method.nyi = [
+            "statisticsSummary",
+            "svm",
+            "randomforest",
+            "gpr",
+            "ffneuralnet"
+          ].includes(method.code);
         });
 
         // Open methods menu accordion
@@ -138,17 +150,20 @@ angular
       }
 
       $scope.set_mode = function(mode) {
-        var local = (mode === 'local')
-        if (local === $scope.mode.local.active) return
+        var local = mode === "local";
+        if (local === $scope.mode.local.active) return;
 
         $scope.mode.local.active = local ? true : false;
-        on_data_loaded()
+        on_data_loaded();
       };
 
       // FIXME: exareme can run only 1 method at the moment
       $scope.exareme_method_disabled = function() {
-        return !$scope.mode.local.active && $scope.shared.experiment_configuration.length
-      }
+        return (
+          !$scope.mode.local.active &&
+          $scope.shared.experiment_configuration.length
+        );
+      };
 
       if ($stateParams.model_slug) {
         // we have a slug: load model
@@ -334,7 +349,6 @@ angular
         } else {
           $scope.mode.local.disabled = true;
         }
-
       };
 
       $scope.remove_from_experiment = function(index) {
@@ -495,7 +509,13 @@ angular
             $scope.loading = false;
             $scope.experiment = {
               hasError: true,
-              result: response.data ? response.status + " " + response.data.error + "\n" + response.data.message : "This experiment doesn't exist",
+              result: response.data
+                ? response.status +
+                    " " +
+                    response.data.error +
+                    "\n" +
+                    response.data.message
+                : "This experiment doesn't exist",
               finished: true
             };
             MLUtils.mark_as_read($scope.experiment);
