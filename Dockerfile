@@ -1,17 +1,19 @@
 # Verified with http://hadolint.lukasmartinelli.ch/
 
-FROM digitallyseamless/nodejs-bower-grunt:4 as builder
+FROM digitallyseamless/nodejs-bower-grunt:6 as builder
 
 MAINTAINER mirco.nasuti@chuv.ch
 
-# User 1000 already exists
-USER 1000
+ENV production=true
 
-COPY ./docker/builder/build-in-docker.sh /
+COPY . /frontend
 
-VOLUME /frontend
+WORKDIR /frontend
 
-CMD ["/build-in-docker.sh"]
+RUN npm install
+RUN bower install
+RUN if [ "$production" = true ] ; then export build_option=--production; fi
+RUN grunt build $build_option
 
 
 FROM nginx:1.13.0-alpine
@@ -43,7 +45,8 @@ COPY ./docker/runner/conf/nginx.conf.tmpl \
 COPY docker/runner/run.sh /
 
 # Add front end resources
-COPY ./dist/ /usr/share/nginx/html/
+# COPY ./dist/ /usr/share/nginx/html/
+COPY --from=builder /frontend/dist /usr/share/nginx/html/
 
 # Protected files folder
 ENV PROTECTED_DIR /protected
