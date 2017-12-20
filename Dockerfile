@@ -6,12 +6,16 @@ MAINTAINER mirco.nasuti@chuv.ch
 
 ENV production=true
 
-COPY . /frontend
-
 WORKDIR /frontend
+
+COPY package.json /frontend
+COPY bower.json /frontend
+COPY .bowerrc /frontend
 
 RUN npm install
 RUN bower install
+
+COPY . /frontend
 RUN if [ "$production" = true ] ; then export build_option=--production; fi
 RUN grunt build $build_option
 
