@@ -6,8 +6,6 @@ dependencies:
     - "~/.npm"
   override:
     - docker info
-    - docker build -t portal-frontend-builder .
-    - docker run --rm -e 'production=true' portal-frontend-builder:latest
     - docker build -t hbpmip/portal-frontend .
 
 #test:
