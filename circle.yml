@@ -11,15 +11,10 @@ jobs:
           name: "Install requirements"
           command: |
             docker --version
-            pre-commit install
-      - run:
-          name: "Validate code quality"
-          command: |
-            pre-commit run --all-files
       - run:
           name: "Build the project"
           command: |
-            PATH=$PATH:/$HOME/.captain/bin/ ./build.sh
+            docker build -t hbpmip/portal-frontend .
 
     notify:
       webhooks:
