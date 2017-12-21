@@ -41,7 +41,6 @@ angular
     "app.config",
     "ab-base64",
     "btford.markdown",
-    "ang-drag-drop",
     "xeditable",
     //components
     "chuvApp.components.filters",
