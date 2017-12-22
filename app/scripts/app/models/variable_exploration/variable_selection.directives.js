@@ -215,7 +215,11 @@ angular
               if ($scope.focused_variable !== d.original) {
                 $scope.set_focused_variable(d !== groups && d.original);
                 $scope.search.value = null;
-                $scope.$apply();
+                $scope.search.group = null;
+
+                if (!d.is_group) {
+                  $scope.$apply();
+                }
               }
             }
 
@@ -239,6 +243,21 @@ angular
             ) {
               if (variable && variable.code && group_dict[variable.code])
                 zoom(group_dict[variable.code]);
+            });
+
+            $scope.$watch("search.group", function(code) {
+              if (!code) {
+                return;
+              }
+
+              var groupNode = nodes.find(function(node) {
+                return node.code === code;
+              });
+
+              if (!groupNode) {
+                return;
+              }
+              zoom(groupNode);
             });
           }
 
@@ -270,6 +289,7 @@ angular
           //redraw the whole stuff when resizing.
           //every circle changes size and position, so I might as well...
           var prev_dimension = element.width();
+
           function resize_handler() {
             if ($scope.groups != null && element.width !== prev_dimension) {
               prev_dimension = element.width();

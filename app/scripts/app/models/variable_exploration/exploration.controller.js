@@ -112,8 +112,8 @@ angular.module("chuvApp.models").controller("ExploreController", [
     };
 
     /**
-       * Returns whether the configuration is valid for going to the next step (review).
-       */
+     * Returns whether the configuration is valid for going to the next step (review).
+     */
     $scope.has_valid_configuration = function() {
       return (
         Object.keys($scope.configuration.variable).length > 0 &&
@@ -124,8 +124,8 @@ angular.module("chuvApp.models").controller("ExploreController", [
     };
 
     /**
-       * programmatically redirects to the review model, with the current model.
-       */
+     * programmatically redirects to the review model, with the current model.
+     */
     $scope.go_to_review = function() {
       $location.url(
         "/review?execute=true&" +

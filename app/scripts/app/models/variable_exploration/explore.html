@@ -1,7 +1,61 @@
 <div class="explore">
   <div class="row" ng-if="loaded">
-    <div class="col-md-6">
-      <circle-packing></circle-packing>
+    <div class="col-md-6 panel" style="background: white">
+      <div class="row">
+        <h5 class="col-md-5">View available variables in: </h5>
+        <div class="col-md-7" style="vertical-align: bottom; margin-top: 10px">
+            <button
+            class="btn btn-primary active ng-click-active"
+            ng-class="{active: mode.local.active}"
+            ng-click="">
+            CHUV
+          </button>
+          <button
+            class="btn btn-primary active ng-click-active"
+            ng-class="{active: mode.local.active}"
+            ng-click="">
+            CHRU
+          </button>
+          <button
+            class="btn btn-primary active ng-click-active"
+            ng-class="{active: mode.local.active}"
+            ng-click="">
+            ADNI
+          </button>
+          <button
+            class="btn btn-primary active ng-click-active"
+            ng-class="{active: mode.local.active}"
+            ng-click=""></button>
+            PPMI
+          </button>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12" style="background: white">
+          <h5 style="display: inline">Shortcuts:&nbsp;&nbsp;</h5>
+          <span ng-repeat="group in groups">
+            <a href="" ng-click="search.group = group.code">{{group.label}}</a>&nbsp;&nbsp;
+          </span>
+          <br /><br />
+          <input
+            placeholder="search"
+            typeahead="variable as (variable.label || '') for variable in allVariables | filter:$viewValue | limitTo:8"
+            ng-model="search.value">
+          <span ng-if="search_history.length">History: </span>
+          <a ng-repeat="variable in search_history"
+            ng-bind="variable.label"
+            class="btn btn-sm btn-sm btn-default"
+            style="margin-top: -3px"
+            ng-click="search.value = variable">
+          </a>
+        </div>
+      </div>
+
+      <div class="row" style="margin-top: 1em">
+        <circle-packing></circle-packing>
+      </div>
+
     </div>
     <div class="col-md-6">
       <variable-statistics></variable-statistics>
