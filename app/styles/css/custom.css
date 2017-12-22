@@ -65,3 +65,8 @@ h6.copyright {
     border-radius: 25px;
     padding: 20px;
 }
+
+.explore .variable-statistics {
+  min-height: 530px;
+  background: white !important;
+}

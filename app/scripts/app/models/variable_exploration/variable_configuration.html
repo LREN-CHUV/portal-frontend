@@ -1,23 +1,37 @@
-<button ng-if="!do_configure" ng-click="set_configure();" class="center-block btn-round" style="display: block">
-  <span class="ng-binding">Configure</span>
-</button>
-<div class="configuration panel closed" ng-class="do_configure ? '' : 'closed'">
 
-  <div class="row panel-heading">
-    <button ng-click="setVariableSelectedAs('variable', getFocusedVariable())"
-            ng-class="!getFocusedVariable() || !getFocusedVariable().isVariable ? 'disabled' : ''"
-            ng-bind="get_button_label('variable')"
-            class="col-sm-3 btn variable"></button>
-    <button ng-click="setVariableSelectedAs('covariable', getFocusedVariable())"
-            ng-class="!getFocusedVariable() && ['real', 'integer'].indexOf(getFocusedVariable().type) === -1 ? 'disabled' : ''"
-            ng-bind="get_button_label('covariable')"
-            class="col-sm-6 btn covariable"></button>
-    <button ng-click="setVariableSelectedAs('filter', getFocusedVariable())"
-            ng-class="!getFocusedVariable() ? 'disabled' : ''"
-            ng-bind="get_button_label('filter')"
-            class="col-sm-3 btn filter"></button>
+<div class="panel">
+
+  <div class="row" style="margin: 0.2em; background: white">
+    <h5 class="col-md-3">Add to model: </h5>
+    <div class="col-md-9" style="vertical-align: bottom; margin-top: 10px">
+      <button
+        class="btn btn-primary active ng-click-active"
+        ng-class="!getFocusedVariable() || !getFocusedVariable().isVariable ? 'disabled' : ''"
+
+        ng-bind="get_button_label('variable')"
+        ng-click="setVariableSelectedAs('variable', getFocusedVariable())">
+        as variable
+      </button>
+      <button
+        class="btn btn-primary active ng-click-active"
+        ng-class="!getFocusedVariable() || !getFocusedVariable().isVariable ? 'disabled' : ''"
+
+        ng-bind="get_button_label('covariable')"
+        ng-click="setVariableSelectedAs('covariable', getFocusedVariable())">
+        as covariable
+      </button>
+      <button
+        class="btn btn-primary active ng-click-active"
+        ng-class="!getFocusedVariable() ? 'disabled' : ''"
+        ng-bind="get_button_label('filter')"
+        ng-click="setVariableSelectedAs('filter', getFocusedVariable())">
+        as filter
+      </button>
+    </div>
   </div>
+</div>
 
+<div class="panel">
   <div class="panel-body">
     <div class="row" style="margin: -16px">
 
