@@ -111,10 +111,10 @@ angular
   ])
   .run([
     "$rootScope",
-    "$modalStack",
-    function($rootScope, $modalStack) {
+    "$uibModal",
+    function($rootScope, $uibModal) {
       $rootScope.$on("$stateChangeStart", function() {
-        $modalStack.dismissAll();
+        $uibModal.dismissAll();
       });
     }
   ])

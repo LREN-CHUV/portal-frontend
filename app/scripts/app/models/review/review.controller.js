@@ -15,7 +15,7 @@ angular.module("chuvApp.models").controller("ReviewController", [
   "$log",
   "User",
   "$location",
-  "$modal",
+  "$uibModal",
   "$timeout",
   "$filter",
   "Variable",
@@ -32,7 +32,7 @@ angular.module("chuvApp.models").controller("ReviewController", [
     $log,
     User,
     $location,
-    $modal,
+    $uibModal,
     $timeout,
     $filter,
     Variable,
@@ -209,7 +209,7 @@ angular.module("chuvApp.models").controller("ReviewController", [
     $scope.configureFilterQuery = function() {
       var childScope = $scope.$new();
 
-      var modal = $modal.open({
+      var modal = $uibModal.open({
         templateUrl: "scripts/app/models/review/filter-query-modal.html",
         scope: childScope,
         size: "lg",
@@ -285,13 +285,13 @@ angular.module("chuvApp.models").controller("ReviewController", [
                 false
               ).sql;
               qb.queryBuilder("destroy");
-              modal.close();
+              uibModal.close();
             }
           };
         }
       });
 
-      $scope.$on("$stateChangeStart", modal.dismiss);
+      $scope.$on("$stateChangeStart", uibModal.dismiss);
       modal.result.then($scope.executeQuery);
 
       // do not unwrap this: childScope.contructQB is set later.
@@ -401,11 +401,11 @@ angular.module("chuvApp.models").controller("ReviewController", [
 
       $scope.loading_model = true;
 
-      Model.executeQuery(query).success(function(queryResult) {
+      Model.executeQuery(query).then(function(queryResult) {
         $scope.executeBtnAnimate();
         $scope.executed = true;
         $scope.loading_model = false;
-        $scope.dataset = queryResult;
+        $scope.dataset = queryResult.data;
         $scope.chartConfig.yAxisVariables = _.filter(
           $scope.dataset.header,
           $scope.canUseAxis

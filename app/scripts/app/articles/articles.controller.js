@@ -201,14 +201,14 @@ angular
 
 angular.module("chuvApp.articles").controller("ArticleModalController", [
   "$scope",
-  "$modalInstance",
-  "$modal",
+  "$uibModalInstance",
+  "$uibModal",
   "item",
-  function($scope, $modalInstance, $modal, item) {
+  function($scope, $modalInstance, $uibModal, item) {
     $scope.article = item.article;
 
     $scope.closeModal = function() {
-      $modalInstance.dismiss("cancel");
+      $uibModalInstance.dismiss("cancel");
     };
   }
 ]);

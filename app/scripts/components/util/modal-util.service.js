@@ -2,8 +2,8 @@
  * Created by Michael DESIGAUD on 10/09/2015.
  */
 angular.module("chuvApp.util").factory("ModalUtil", [
-  "$modal",
-  function($modal) {
+  "$uibModal",
+  function($uibModal) {
     return {
       showModal: function(scope, article, okCallback) {
         scope.opts = {
@@ -21,7 +21,7 @@ angular.module("chuvApp.util").factory("ModalUtil", [
           // pass resident to Dialog
           return angular.copy({ article: article, okCallback: okCallback });
         };
-        $modal.open(scope.opts);
+        $uibModal.open(scope.opts);
       }
     };
   }

@@ -6,7 +6,7 @@ angular
     "$stateParams",
     "Model",
     "$location",
-    "$modal",
+    "$uibModal",
     "notifications",
     function(
       $scope,
@@ -14,7 +14,7 @@ angular
       $stateParams,
       Model,
       $location,
-      $modal,
+      $uibModal,
       notifications
     ) {
       $scope.loaded = false;
@@ -211,7 +211,7 @@ angular
         $scope.save_model = function(callback) {
           // pass
 
-          $modal.open({
+          $uibModal.open({
             templateUrl: "/scripts/app/experiments/save-model-modal.html",
             controller: [
               "$scope",

@@ -49,7 +49,7 @@ angular.module("chuvApp.home").controller("HomeController", [
      */
     $scope.init = function() {
       $http.get(backendUrl + "/user");
-      $http.get(backendUrl + "/stats").success(function(response) {
+      $http.get(backendUrl + "/stats").then(function(response) {
         $scope.datas = response;
       });
       var introTxtSelector = ".intro-txt";
