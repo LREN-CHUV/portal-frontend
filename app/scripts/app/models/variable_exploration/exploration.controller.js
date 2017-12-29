@@ -33,6 +33,7 @@ angular.module("chuvApp.models").controller("ExploreController", [
 
     $scope.focused_variable = null;
     $scope.groups = null;
+    $scope.sources = ["CHUV", "CHRU", "ADNI", "PPMI"];
     $scope.allVariables = null;
     $scope.loaded = false;
 
@@ -127,18 +128,19 @@ angular.module("chuvApp.models").controller("ExploreController", [
      * programmatically redirects to the review model, with the current model.
      */
     $scope.go_to_review = function() {
-      $location.url(
+      var url =
         "/review?execute=true&" +
-          Object.keys($scope.configuration)
-            .map(function(category) {
-              return (
-                category +
-                "=" +
-                Object.keys($scope.configuration[category]).join(",")
-              );
-            })
-            .join("&")
-      );
+        Object.keys($scope.configuration)
+          .map(function(category) {
+            return (
+              category +
+              "=" +
+              Object.keys($scope.configuration[category]).join(",")
+            );
+          })
+          .join("&");
+      debugger;
+      $location.url(url);
     };
 
     var config_keys = Object.keys($scope.configuration);

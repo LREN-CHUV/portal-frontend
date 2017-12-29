@@ -464,7 +464,7 @@ angular
                 focusedVariable.code in $scope.configuration[type];
 
             return (
-              [["+", "-"], ["Add all", "Remove all"]][+is_group][+is_used_as] +
+              [["+", "-"], ["+ all", "- all"]][+is_group][+is_used_as] +
               " as " +
               type
             );
