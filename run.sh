@@ -1,5 +1,21 @@
-#!/bin/bash -e
+#!/usr/bin/env bash
 
-docker run --rm -i -t \
-          -p 8082:8082 \
-          hbpmip/frontend:latest /bin/bash
+set -e
+
+for param in "$@"
+do
+  if [ "--no-cache" == "$param" ]; then
+    no_cache=0
+    break;
+  fi
+done
+
+if [ $no_cache ] ; then
+    echo "INFO: --no-cache"
+    docker build --no-cache -f ./Dockerfile-dev.yml -t hbpmip/portal-frontend-dev .
+else
+    docker build -f ./Dockerfile-dev.yml -t hbpmip/portal-frontend-dev .
+fi
+cp app/index-tmpl.html app/index.html
+docker run -v $(pwd)/app:/frontend/app -it --rm -p8000:8000 --name portal_frontend_dev hbpmip/portal-frontend-dev
+#google-chrome --disable-web-security --user-data-dir http://localhost:8000 &

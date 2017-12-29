@@ -4,6 +4,11 @@ long_description: |
   Frontend for the MIP portal
 
 authors:
+  - author: Manuel Spuhler
+    author_email:
+      - manuel.spuhler@chuv.ch
+    organisation: LREN-CHUV
+    organisation_badge: https://img.shields.io/badge/CHUV-LREN-AF4C64.svg
   - author: Mirco Nasuti
     author_email:
       - mirco.nasuti@chuv.ch

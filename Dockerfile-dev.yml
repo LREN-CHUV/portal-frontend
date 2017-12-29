@@ -1,0 +1,26 @@
+FROM node:latest
+
+WORKDIR /frontend
+
+RUN npm install -g grunt-cli
+RUN npm install -g bower
+RUN npm install -g angular-http-server
+
+ADD package.json /frontend/package.json
+RUN npm config set registry http://registry.npmjs.org
+RUN npm install && npm ls
+
+RUN mkdir -p /frontend/app/bower_components
+ADD bower.json /frontend/bower.json
+ADD .bowerrc /frontend/.bowerrc
+RUN bower install --allow-root
+VOLUME /frontend/app/bower_components
+
+ADD Gruntfile.js  /frontend/Gruntfile.js
+RUN grunt ngconstant:dev &
+
+EXPOSE 8000
+
+ADD ./dev/serve.sh  /frontend/serve.sh
+
+CMD ["sh", "serve.sh"]
