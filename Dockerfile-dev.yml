@@ -17,7 +17,6 @@ RUN bower install --allow-root
 VOLUME /frontend/app/bower_components
 
 ADD Gruntfile.js  /frontend/Gruntfile.js
-RUN grunt ngconstant:dev &
 
 EXPOSE 8000
 
