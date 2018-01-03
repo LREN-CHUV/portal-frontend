@@ -1,55 +1,60 @@
 <div class="explore">
+    <div class="row" ng-if="loaded">
+      <div class="col-md-6">
 
-  <div class="row" ng-if="loaded">
-    <div class="col-md-12" style="background: white">
-        <h5 style="display: inline">Available variables in:&nbsp;&nbsp;</h5>
-        <span ng-repeat="dataset in datasets">
-          <a>{{dataset}}</a>&nbsp;&nbsp;
-        </span>
-      <h5 style="display: inline">Shortcuts:&nbsp;&nbsp;</h5>
-      <span ng-repeat="group in groups">
-        <a ng-click="search.group = group.code">{{group.label}}</a>&nbsp;&nbsp;
-      </span>
-      <!-- <input placeholder="search" typeahead="variable as (variable.label || '') for variable in allVariables | filter:$viewValue | limitTo:8"
-        ng-model="search.value">
-      <span ng-if="search_history.length">History: </span>
-      <a ng-repeat="variable in search_history" ng-bind="variable.label" class="btn btn-sm btn-sm btn-default" style="margin-top: -3px"
-        ng-click="search.value = variable">
-      </a> -->
-    </div>
-  </div>
+        <div class="row">
+          <div class="col-md-12 panel-body" style="margin-top: 0.25em; margin-bottom: 0.25em; padding: 0.45em">
+            <h5 style="display: inline;">View available variables in: </h5>
+            <span ng-repeat="dataset in sources">
+              <a>{{dataset}}</a>&nbsp;
+            </span>
+            <br />
+            <h5 style="display: inline">Shortcuts:&nbsp;&nbsp;</h5>
+            <span ng-repeat="group in groups">
+              <a href="" ng-click="search.group = group.code">{{group.label}}</a>&nbsp;&nbsp;
+            </span>
+            <br />
+            <input
+              placeholder="search"
+              typeahead="variable as (variable.label || '') for variable in allVariables | filter:$viewValue | limitTo:8"
+              ng-model="search.value">
+            <span ng-if="search_history.length">History: </span>
+            <a ng-repeat="variable in search_history"
+              ng-bind="variable.label"
+              class="btn btn-sm btn-sm btn-default"
+              style="margin-top: -3px"
+              ng-click="search.value = variable">
+            </a>
+          </div>
+        </div>
 
-  <div class="row" ng-if="loaded">
-
-    <div class="col-md-6 panel" style="background: white">
-      <div class="row">
+        <div class="row">
+          <circle-packing></circle-packing>
+        </div>
 
       </div>
-
-      <div class="row" style="margin-top: 1em">
-        <circle-packing></circle-packing>
+      <div class="col-md-6">
+        <variable-statistics></variable-statistics>
+        <variable-configuration
+            set-focused-variable="set_focused_variable"
+            set-variable-selected-as="use_variable_as"
+            get-focused-variable="get_focused_variable"
+            configuration="configuration"></variable-configuration>
+      </div>
+      <div class="col-xs-12" style="margin-top: -60px">
+        <button ng-if="has_valid_configuration()" ng-click="go_to_review();" class="center-block btn-round" style="display: block">
+          <span style="margin-top: 5px">
+            <span class="ng-binding">Review model</span>
+            <i class="ti ti-arrow-down"></i>
+          </span>
+        </button>
       </div>
 
     </div>
-    <div class="col-md-6">
-      <variable-statistics></variable-statistics>
-      <variable-configuration set-focused-variable="set_focused_variable" set-variable-selected-as="use_variable_as" get-focused-variable="get_focused_variable"
-        configuration="configuration"></variable-configuration>
-    </div>
-    <div class="col-xs-12" style="margin-top: -60px">
-      <button ng-if="has_valid_configuration()" ng-click="go_to_review();" class="center-block btn-round" style="display: block">
-        <span style="margin-top: 5px">
-          <span class="ng-binding">Review model</span>
-          <i class="ti ti-arrow-down"></i>
-        </span>
-      </button>
+    <div ng-if="!loaded" class="text-center">
+      <h1>
+        <span class="fa fa-spin fa-spinner"></span>
+        Loading data...
+      </h1>
     </div>
   </div>
-
-  <div ng-if="!loaded" class="text-center">
-    <h1>
-      <span class="fa fa-spin fa-spinner"></span>
-      Loading data...
-    </h1>
-  </div>
-</div>
