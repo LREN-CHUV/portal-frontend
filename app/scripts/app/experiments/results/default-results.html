@@ -1,11 +1,11 @@
 <div>
-  <accordion close-others="false">
+  <uib-accordion close-others="false">
 
-  <accordion-group ng-if="data" is-open="true">
-    <accordion-heading>
+  <div uib-accordion-group ng-if="data" is-open="true">
+    <uib-accordion-heading>
       <span class="ti ti-check-box"></span>
       Results
-    </accordion-heading>
+    </uib-accordion-heading>
     <div>
       The methods ran successfully but unfortunately we are not yet able to display the results in a nicely way.
       <br>
@@ -13,14 +13,14 @@
       <br><br>
       <pretty-json data="data"></pretty-json>
     </div>
-  </accordion-group>
+  </div>
 
-  <accordion-group is-open="help_is_open">
-    <accordion-heading>
+  <div uib-accordion-group is-open="help_is_open">
+    <uib-accordion-heading>
       <span class="ti ti-help-alt"></span>
       Help
-    </accordion-heading>
+    </uib-accordion-heading>
 
     <div class="panel-body" btf-markdown="estimation.help"></div>
-  </accordion-group>
+  </div>
 </div>

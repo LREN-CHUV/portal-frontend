@@ -1,11 +1,11 @@
 <div>
-  <accordion close-others="false">
+  <uib-accordion close-others="false">
 
-    <accordion-group is-open="true">
-      <accordion-heading>
+    <div uib-accordion-group is-open="true">
+      <uib-accordion-heading>
         <span class="ti ti-check-box"></span>
         Results
-      </accordion-heading>
+      </uib-accordion-heading>
 
       <div ng-if="!highchartdata.isArray">
         <highchart config="highchartdata.data"></highchart>
@@ -17,38 +17,38 @@
             <div class="panel">
               <div class="panel-body">
                   <highchart config="chart"></highchart>
-                  <accordion-group is-open="false">
-                    <accordion-heading>
+                  <div uib-accordion-group is-open="false">
+                    <uib-accordion-heading>
                       <span class="ti ti-list"></span>
                       Raw JSON
-                    </accordion-heading>
+                    </uib-accordion-heading>
                     <pretty-json collapse="hideJson" data="chart"></pretty-json>
-                  </accordion-group>
+                  </div>
               </div>
             </div>
           </tab>
         </tabset>
       </div>
 
-    </accordion-group>
-
-    <div ng-if="!highchartdata.isArray">
-      <accordion-group is-open="false">
-        <accordion-heading>
-          <span class="ti ti-list"></span>
-          Raw JSON
-        </accordion-heading>
-        <pretty-json collapse="hideJson" data="highchartdata.data"></pretty-json>
-      </accordion-group>
     </div>
 
-    <accordion-group is-open="help_is_open">
-      <accordion-heading>
+    <div ng-if="!highchartdata.isArray">
+      <div uib-accordion-group is-open="false">
+        <uib-accordion-heading>
+          <span class="ti ti-list"></span>
+          Raw JSON
+        </uib-accordion-heading>
+        <pretty-json collapse="hideJson" data="highchartdata.data"></pretty-json>
+      </div>
+    </div>
+
+    <div uib-accordion-group is-open="help_is_open">
+      <uib-accordion-heading>
         <span class="ti ti-help-alt"></span>
         Help
-      </accordion-heading>
+      </uib-accordion-heading>
 
       <div class="panel-body" btf-markdown="estimation.help"></div>
-    </accordion-group>
-  </accordion>
+    </div>
+  </uib-accordion>
 </div>

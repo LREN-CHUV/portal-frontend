@@ -1,11 +1,11 @@
 <div>
-  <accordion close-others="false">
+  <uib-accordion close-others="false">
 
-    <accordion-group ng-if="data.metrics" is-open="true">
-      <accordion-heading>
+    <div uib-accordion-group ng-if="data.metrics" is-open="true">
+      <uib-accordion-heading>
         <span class="ti ti-check-box"></span>
         Results: Cross-Validation (Binary Classification)
-      </accordion-heading>
+      </uib-accordion-heading>
 
       <div class="row">
         <div ng-repeat="metric in data.metrics | filter: {type: 'numeric'}" class="col-sm-4">
@@ -20,16 +20,16 @@
           <confusion-matrix data="data.metrics[0].value"></confusion-matrix>
         </div>
       </div>
-    </accordion-group>
+    </div>
 
-    <accordion-group is-open="help_is_open">
-      <accordion-heading>
+    <div uib-accordion-group is-open="help_is_open">
+      <uib-accordion-heading>
         <span class="ti ti-help-alt"></span>
         Help
-      </accordion-heading>
+      </uib-accordion-heading>
 
       <div class="panel-body" btf-markdown="estimation.help"></div>
-    </accordion-group>
+    </div>
 
-  </accordion>
+  </uib-accordion>
 </div>

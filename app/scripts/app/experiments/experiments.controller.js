@@ -114,7 +114,6 @@ angular
       // function to be called when query and dataset are ready
       function on_data_loaded() {
         $scope.loaded = true;
-
         $scope.ml_methods = $scope.mode.local.active
           ? ml_all_methods.filter(function(m) {
               return m.code.substr(0, 3) !== "WP_";
@@ -165,6 +164,10 @@ angular
         );
       };
 
+      $scope.set_selected_method = function(method) {
+        $scope.shared.chosen_method = method;
+      };
+
       if ($stateParams.model_slug) {
         // we have a slug: load model
         Model.get({ slug: $stateParams.model_slug }, function(result) {
@@ -202,7 +205,8 @@ angular
         //TODO Remove this temporary solution
         query.filters = query.textQuery;
 
-        Model.executeQuery(query).success(function(queryResult) {
+        Model.executeQuery(query).then(function(response) {
+          var queryResult = response.data;
           $scope.loading_model = false;
           $scope.dataset = queryResult;
           on_data_loaded();
