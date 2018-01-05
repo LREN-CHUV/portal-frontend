@@ -6,6 +6,11 @@
       Explore
     </span>
   </a>
+    <div
+      ng-controller="DatasetController"
+      ng-include="'scripts/app/models/review/dataset.html'">
+    </div>
+
     <div ng-if="isMine()"
          ng-controller="CriteriaController"
          class="col-xs-12"

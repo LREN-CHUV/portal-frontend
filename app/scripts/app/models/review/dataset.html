@@ -1,0 +1,86 @@
+<div class="dataset-box">
+  <div class="dataset-container">
+    <div class="panel">
+      <div class="panel-heading">Datasets</div>
+      <div class="panel-body">
+        <ul class="list-group">
+          <li class="list-group-item active">All</li>
+          <li class="list-group-item">CHUV</li>
+          <li class="list-group-item">CHRU</li>
+          <li class="list-group-item">GOMN</li>
+          <li class="list-group-item">ADNI</li>
+        </ul>
+      </div>
+    </div>
+    <div class="panel" style="flex-grow: 1">
+      <div class="panel-heading">Model</div>
+      <div class="panel-body">
+        <h5>Variables: </h5>
+        <span>
+          <a
+            ng-repeat="var in query.variables"
+            ng-click="setVariable(var)"
+        >
+            {{var}}
+        </a>
+        </span>
+        <h5>CoVariables: </h5>
+        <span>
+          <a ng-repeat="var in query.coVariables">{{var}}</a>
+        </span>
+      </div>
+    </div>
+    <div class="panel" style="flex-grow: 2">
+      <uib-tabset active="active">
+        <uib-tab index="0" class="panel-heading" heading="Table">
+          <div class="panel-body">
+            {{stats}}
+          </div>
+        </uib-tab>
+        <uib-tab index="1" class="panel-heading" heading="Histogram">
+          <div class="panel-body">
+                <div ng-if="stats.length">
+                        <tabset>
+                          <tab ng-repeat="statistic in stats"
+                               select="show_stats_after_timeout(statistic)"
+                               heading="{{ statistic.label }}">
+                            <div>Hi</div>
+                               <div ng-if="statistic.active">
+                              <div ng-if="statistic.dataType !== 'SummaryStatistics'" ng-init="init_hc_config(statistic)">
+                                <highchart config="statistic.hc_config" ng-if="show"></highchart>
+                                <div style="height: 350px" ng-if="!show"></div>
+                              </div>
+                              <div ng-if="statistic.dataType === 'SummaryStatistics'">
+                                <table class="table table-striped">
+                                  <tr>
+                                    <th>Measurement count</th>
+                                    <th>Min</th>
+                                    <th>Max</th>
+                                    <th>Average</th>
+                                    <th>Standard dev.</th>
+                                  </tr>
+                                  <tr>
+                                    <td ng-bind="statistic.count | number"></td>
+                                    <td ng-bind="statistic.min | number"></td>
+                                    <td ng-bind="statistic.max | number"></td>
+                                    <td ng-bind="statistic.average | number"></td>
+                                    <td ng-bind="statistic.std | number"></td>
+                                  </tr>
+                                </table>
+                              </div>
+                            </div>
+                          </tab>
+                        </tabset>
+                      </div>
+          </div>
+        </uib-tab>
+      </uib-tabset>
+    </div>
+  </div>
+  <div class="dataset-footer panel">
+    You currently have 2 active filters
+  </div>
+</div>
+
+<br />
+<br />
