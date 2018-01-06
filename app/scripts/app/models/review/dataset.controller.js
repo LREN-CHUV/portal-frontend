@@ -25,17 +25,39 @@ angular.module("chuvApp.models").controller("DatasetController", [
     $timeout,
     $location
   ) {
-    $scope.stats = [];
+    $scope.dataset = {};
 
-    $scope.setVariable = function(focusedVariable) {
-      console.log(focusedVariable);
+    // params key/values
+    var params = $location.search();
+    Object.keys(params).map(function(param) {
+      var value = params[param];
+      $scope.dataset[param] = /,/.test(value) 
+      ? value.split(",").map(function(code) {
+          return { code: code };
+        })
+      : { code: value }
+    })
+
+    $scope.setfocusedVariable = function(focusedVariable) {
       Variable.get_histo(focusedVariable.code).then(
         function(response) {
-          $scope.stats = response.data && response.data.data;
-
-          if (!angular.isArray($scope.stats)) {
-            $scope.stats = [$scope.stats];
+          var stats = response.data && response.data.data;
+          
+          if (!angular.isArray(stats)) {
+            stats = [stats];
           }
+
+          $scope.stats = stats.map(function(stat){
+            return {
+              options: {
+                chart: stat.chart
+              },
+              xAxis: stat.xAxis,
+              yAxis: stat.yAxis,
+              series: stat.series,
+              title: stat.title
+            };
+          })
         },
         function() {
           $scope.hasError = true;
@@ -43,17 +65,8 @@ angular.module("chuvApp.models").controller("DatasetController", [
       );
     };
 
-    // this is to overcome a ng-highcharts sizing bug.
-    $scope.show_stats_after_timeout = function(statistics) {
-      $scope.stats.forEach(function(stat) {
-        stat.active = false;
-      });
-
-      statistics.active = true;
-      $scope.show = false;
-      $timeout(function() {
-        $scope.show = true;
-      }, 0);
-    };
+    // init
+    var dependantVariable = $scope.dataset.variable;
+    $scope.setfocusedVariable(dependantVariable);
   }
 ]);
