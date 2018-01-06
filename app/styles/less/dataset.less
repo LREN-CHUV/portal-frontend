@@ -2,8 +2,8 @@
     display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    overflow: hidden;
     flex-direction: column;
+    overflow: hidden;
 
     .panel { margin: 0px }
 
@@ -11,7 +11,13 @@
         display: -webkit-flex;
         display: -ms-flexbox;
         display: flex;
+        height: 480px;
         overflow: hidden;
+
+        .tab-content {
+            overflow-y: auto;
+            height: 480px;
+        }
     }
 
     .dataset-column {

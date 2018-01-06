@@ -12,66 +12,48 @@
         </ul>
       </div>
     </div>
-    <div class="panel" style="flex-grow: 1">
+    <div class="panel" style="flex-basis: 1">
       <div class="panel-heading">Model</div>
       <div class="panel-body">
-        <h5>Variables: </h5>
+        <h5>Variable: </h5>
         <span>
-          <a
-            ng-repeat="var in query.variables"
-            ng-click="setVariable(var)"
-        >
-            {{var}}
-        </a>
+          <a ng-click="setfocusedVariable(dataset.variable)">
+            {{dataset.variable}}
+          </a>
         </span>
         <h5>CoVariables: </h5>
         <span>
-          <a ng-repeat="var in query.coVariables">{{var}}</a>
+          <a ng-repeat="var in dataset.covariable" ng-click="setfocusedVariable(var)">
+            {{var}}
+          </a>
         </span>
       </div>
     </div>
     <div class="panel" style="flex-grow: 2">
       <uib-tabset active="active">
         <uib-tab index="0" class="panel-heading" heading="Table">
-          <div class="panel-body">
-            {{stats}}
+          <div class="panel-body scrollable">
+            <table class="table table-striped">
+              <tr>
+                <th>Measurement count</th>
+                <th>Min</th>
+                <th>Max</th>
+                <th>Average</th>
+                <th>Standard dev.</th>
+              </tr>
+              <tr>
+                <td ng-bind="statistic.count | number"></td>
+                <td ng-bind="statistic.min | number"></td>
+                <td ng-bind="statistic.max | number"></td>
+                <td ng-bind="statistic.average | number"></td>
+                <td ng-bind="statistic.std | number"></td>
+              </tr>
+            </table>
           </div>
         </uib-tab>
         <uib-tab index="1" class="panel-heading" heading="Histogram">
-          <div class="panel-body">
-                <div ng-if="stats.length">
-                        <tabset>
-                          <tab ng-repeat="statistic in stats"
-                               select="show_stats_after_timeout(statistic)"
-                               heading="{{ statistic.label }}">
-                            <div>Hi</div>
-                               <div ng-if="statistic.active">
-                              <div ng-if="statistic.dataType !== 'SummaryStatistics'" ng-init="init_hc_config(statistic)">
-                                <highchart config="statistic.hc_config" ng-if="show"></highchart>
-                                <div style="height: 350px" ng-if="!show"></div>
-                              </div>
-                              <div ng-if="statistic.dataType === 'SummaryStatistics'">
-                                <table class="table table-striped">
-                                  <tr>
-                                    <th>Measurement count</th>
-                                    <th>Min</th>
-                                    <th>Max</th>
-                                    <th>Average</th>
-                                    <th>Standard dev.</th>
-                                  </tr>
-                                  <tr>
-                                    <td ng-bind="statistic.count | number"></td>
-                                    <td ng-bind="statistic.min | number"></td>
-                                    <td ng-bind="statistic.max | number"></td>
-                                    <td ng-bind="statistic.average | number"></td>
-                                    <td ng-bind="statistic.std | number"></td>
-                                  </tr>
-                                </table>
-                              </div>
-                            </div>
-                          </tab>
-                        </tabset>
-                      </div>
+          <div ng-if="stats.length" ng-repeat="stat in stats" class="panel-body">
+            <highchart config="stat"></highchart>
           </div>
         </uib-tab>
       </uib-tabset>
