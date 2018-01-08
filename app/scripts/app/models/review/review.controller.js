@@ -213,7 +213,7 @@ angular.module("chuvApp.models").controller("ReviewController", [
         templateUrl: "scripts/app/models/review/filter-query-modal.html",
         scope: childScope,
         size: "lg",
-        controller: function() {
+        controller: function($uibModalInstance) {
           childScope.contructQB = function() {
             var filterVariables = $scope.query.filters
               .concat($scope.query.variables)
@@ -285,13 +285,13 @@ angular.module("chuvApp.models").controller("ReviewController", [
                 false
               ).sql;
               qb.queryBuilder("destroy");
-              uibModal.close();
+              $uibModalInstance.close();
             }
           };
         }
       });
 
-      $scope.$on("$stateChangeStart", uibModal.dismiss);
+      $scope.$on("$stateChangeStart", $uibModal.dismiss);
       modal.result.then($scope.executeQuery);
 
       // do not unwrap this: childScope.contructQB is set later.
