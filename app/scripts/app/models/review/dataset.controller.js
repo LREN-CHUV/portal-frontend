@@ -12,6 +12,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
   "$log",
   "$timeout",
   "$location",
+  "$uibModal",
   function(
     $scope,
     $stateParams,
@@ -23,50 +24,105 @@ angular.module("chuvApp.models").controller("DatasetController", [
     $rootScope,
     $log,
     $timeout,
-    $location
+    $location,
+    $uibModal
   ) {
-    $scope.dataset = {};
+    $scope.selectedVariables = [];
 
     // params key/values
-    var params = $location.search();
-    Object.keys(params).map(function(param) {
-      var value = params[param];
-      $scope.dataset[param] = /,/.test(value) 
-      ? value.split(",").map(function(code) {
-          return { code: code };
-        })
-      : { code: value }
-    })
-
-    $scope.setfocusedVariable = function(focusedVariable) {
-      Variable.get_histo(focusedVariable.code).then(
-        function(response) {
-          var stats = response.data && response.data.data;
-          
-          if (!angular.isArray(stats)) {
-            stats = [stats];
-          }
-
-          $scope.stats = stats.map(function(stat){
-            return {
-              options: {
-                chart: stat.chart
-              },
-              xAxis: stat.xAxis,
-              yAxis: stat.yAxis,
-              series: stat.series,
-              title: stat.title
-            };
+    var search = $location.search();
+    function map_query(category) {
+      return search[category]
+        ? search[category].split(",").map(function(code) {
+            return { code: code };
           })
-        },
-        function() {
-          $scope.hasError = true;
-        }
+        : [];
+    }
+
+    $scope.query.variables = map_query("variable");
+    $scope.query.groupings = map_query("grouping");
+    $scope.query.coVariables = map_query("covariable");
+    $scope.query.filters = map_query("filter");
+    $scope.query.textQuery = search.query;
+
+    var dependantVariable = $scope.query.variables[0];
+
+    var getHistogram = function(variable) {
+      return Variable.get_histo(variable.code);
+    };
+
+    var getCustomHistogram = function(variable, groupings) {
+      return Variable.getCustomHistogram(
+        variable.code,
+        groupings,
+        $scope.query.textQuery
       );
     };
 
+    $scope.isSelected = function(variable) {
+      return $scope.selectedVariables.includes(variable);
+    };
+
+    $scope.selectVariable = function(focusedVariable) {
+      // keep a book of selected variables, minus the dependant one
+      if (focusedVariable.code !== dependantVariable.code) {
+        var selected = $scope.selectedVariables;
+        if (selected.includes(focusedVariable)) {
+          var index = selected.findIndex(function(v) {
+            return v.code === focusedVariable.code;
+          });
+          $scope.selectedVariables.splice(index, 1);
+        } else {
+          $scope.selectedVariables.push(focusedVariable);
+        }
+      }
+
+      var format = function(response) {
+        var data = response.data && response.data.data;
+
+        if (!angular.isArray(data)) {
+          data = [data];
+        }
+
+        $scope.plots = data.map(function(stat) {
+          var series =
+            stat && stat.series && stat.series.length && stat.series[0].data;
+          return {
+            stats: {
+              count: series && series.length,
+              min: Math.min(...series),
+              max: Math.max(...series),
+              av: series.reduce(function(a, b) {
+                return a + b;
+              }) / series.length
+            },
+            options: {
+              chart: stat.chart
+            },
+            xAxis: stat.xAxis,
+            yAxis: stat.yAxis,
+            series: stat.series,
+            title: stat.title
+          };
+        });
+      };
+
+      var error = function() {
+        $scope.hasError = true;
+      };
+
+      if ($scope.selectedVariables.length) {
+        getCustomHistogram(dependantVariable, $scope.selectedVariables).then(
+          format,
+          error
+        );
+        return;
+      }
+
+      getHistogram(focusedVariable).then(format, error);
+    };
+
     // init
-    var dependantVariable = $scope.dataset.variable;
-    $scope.setfocusedVariable(dependantVariable);
+    $scope.selectVariable(dependantVariable);
   }
 ]);
