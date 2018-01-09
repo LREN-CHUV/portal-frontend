@@ -28,6 +28,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
     $uibModal
   ) {
     $scope.selectedVariables = [];
+    $scope.loading = true;
 
     // params key/values
     var search = $location.search();
@@ -45,7 +46,26 @@ angular.module("chuvApp.models").controller("DatasetController", [
     $scope.query.filters = map_query("filter");
     $scope.query.textQuery = search.query;
 
-    var dependantVariable = $scope.query.variables[0];
+    var getDependantVariable = function() {
+      return (
+        ($scope.query &&
+          $scope.query.variables &&
+          $scope.query.variables.length &&
+          $scope.query.variables[0]) ||
+        null
+      );
+    };
+
+    var dependantVariable = getDependantVariable();
+    $scope.$on("event:loadModel", function(evt, model) {
+      $scope.loadResources(model);
+      dependantVariable = getDependantVariable();
+      if (dependantVariable) $scope.selectVariable(dependantVariable);
+    });
+
+    if ($stateParams.slug === undefined) {
+      $scope.loadResources({});
+    }
 
     var getHistogram = function(variable) {
       return Variable.get_histo(variable.code);
@@ -64,8 +84,11 @@ angular.module("chuvApp.models").controller("DatasetController", [
     };
 
     $scope.selectVariable = function(focusedVariable) {
+      $scope.loading = true;
       // keep a book of selected variables, minus the dependant one
-      if (focusedVariable.code !== dependantVariable.code) {
+      if (
+        dependantVariable && focusedVariable.code !== dependantVariable.code
+      ) {
         var selected = $scope.selectedVariables;
         if (selected.includes(focusedVariable)) {
           var index = selected.findIndex(function(v) {
@@ -105,6 +128,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
             title: stat.title
           };
         });
+        $scope.loading = false;
       };
 
       var error = function() {
@@ -120,6 +144,15 @@ angular.module("chuvApp.models").controller("DatasetController", [
       }
 
       getHistogram(focusedVariable).then(format, error);
+
+      Variable.getStatistics(focusedVariable.code).then(
+        function(response) {
+          console.log("getStatistics", response);
+        },
+        function() {
+          console.log("Error");
+        }
+      );
     };
 
     // init

@@ -19,7 +19,7 @@ angular.module("chuvApp.models").config([
         controller: "ReviewController"
       })
       .state("models-edit", {
-        url: "/models/:slug/:isCopy",
+        url: "/models/:slug",
         templateUrl: "scripts/app/models/review/review.html",
         controller: "ReviewController",
         resolve: {

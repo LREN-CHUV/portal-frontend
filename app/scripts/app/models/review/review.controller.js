@@ -70,7 +70,7 @@ angular.module("chuvApp.models").controller("ReviewController", [
         $scope.hcConfig = ChartUtil($scope.chartConfig, $scope.dataset);
         $scope.query = result.query;
 
-        $scope.$emit("event:loadModel", result);
+        $scope.$broadcast("event:loadModel", result);
         $scope.executeBtnAnimate();
         $scope.executed = true;
       });
