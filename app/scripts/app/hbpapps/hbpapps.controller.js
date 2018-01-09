@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module("chuvApp.hbpapps").controller("HBPAppsController", [
   "$scope",
   "$http",
@@ -38,8 +40,9 @@ angular.module("chuvApp.hbpapps").controller("HBPAppsController", [
         $scope.$watch(
           "shared.rating[" + app.id + "]",
           function update_user_rating_on_rating_change(rating) {
-            if (!!rating && rating != app.ratingSum * 1.0 / app.ratingCount)
+            if (!!rating && rating != app.ratingSum * 1.0 / app.ratingCount) {
               $http.post(backendUrl + "/apps/" + app.id + "/vote/" + rating);
+            }
           }
         );
       });

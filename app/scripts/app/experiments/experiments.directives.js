@@ -84,7 +84,7 @@ angular
             });
 
             function refresh_running_experiments() {
-              if (!User.hasCurrent()) return;
+              if (!User.hasCurrent()) {return;}
 
               MLUtils.list_my_experiments().then(function(response) {
                 $scope.experiments = response.data;
@@ -105,8 +105,9 @@ angular
 
             function repeat_refresh_running_experiments() {
               refresh_running_experiments();
-              if (repeat_running)
+              if (repeat_running) {
                 $timeout(repeat_refresh_running_experiments, 20000); //TODO Remove this hardcoded value!
+              }
             }
 
             User.get().then(repeat_refresh_running_experiments);
@@ -118,9 +119,7 @@ angular
   //TODO Useful?
   .directive("otherExperiments", [
     "MLUtils",
-    "$http",
-    "$compile",
-    function(MLUtils, $http, $compile) {
+    function(MLUtils) {
       return {
         templateUrl: "/scripts/app/experiments/other-experiments.html",
         replace: true,

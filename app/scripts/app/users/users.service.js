@@ -7,8 +7,8 @@ angular.module("chuvApp.users").factory("User", [
   "$rootScope",
   "backendUrl",
   "$http",
-  "$cookies",
-  function($rootScope, backendUrl, $http, $cookies) {
+  // "$cookies",
+  function($rootScope, backendUrl, $http/*, $cookies*/) { // TODO: var isn't used, commented to jshint warning detection
     var user_oauth_obj, user_backend_obj, user_promise;
 
     return {

@@ -4,6 +4,8 @@
 /**
  * Created by David JAY on 06/09/2015.
  */
+'use strict';
+
 angular
   .module("chuvApp.components.criteria")
   .directive("criteriaChainedSelect", function() {
@@ -49,7 +51,7 @@ angular
               variable = variable[0];
             }
 
-            var variable = $scope.getDataByCode(
+            variable = $scope.getDataByCode(
               $scope.variables,
               variable.code
             );
@@ -109,7 +111,7 @@ angular
           $scope.getNbVariablesOfGroup = function(group) {
             if (group.groups.length == 0) {
               var nb = 0;
-              angular.forEach($scope.variables, function(variable, index) {
+              angular.forEach($scope.variables, function(variable/*, index*/) { // TODO: argument isn't used, commented to jshint warning detection
                 if (variable.group) {
                   var code = variable.group.code;
                   var currentGroup = variable.group.groups;
@@ -150,14 +152,14 @@ angular
          * @returns {*}
          */
           $scope.getVariablesOfGroupSubGroup = function(group) {
-            var treeGrp = _.pick(_.first($scope.selectedList), "code", "label");
+            // var treeGrp = _.pick(_.first($scope.selectedList), "code", "label"); // TODO: variable isn't used, commented to jshint warning detection
             var currentGrp = _.first($scope.selectedList);
             var parentGroup = currentGrp;
             var targetGrp = _.pick(currentGrp, "code", "label");
 
             while (parentGroup) {
               targetGrp.groups = [];
-              var currentGrp = filterFilter(parentGroup.groups, {
+              currentGrp = filterFilter(parentGroup.groups, {
                 code: group.code
               });
               if (currentGrp) {
@@ -166,7 +168,7 @@ angular
               }
             }
 
-            angular.forEach(groups, function(currentGroup, index) {
+            angular.forEach(groups, function(currentGroup/*, index*/) { // TODO: argument isn't used, commented to jshint warning detection
               if (currentGroup.isVariable === undefined) {
                 if (selectedGroup === undefined) {
                   selectedGroup = _.pick(currentGroup, "code", "label");
@@ -231,7 +233,7 @@ angular
           var groupMap = {};
 
           function buildGroupMap(baseGroup, parentGroupCode) {
-            if (!baseGroup || !baseGroup.code) return;
+            if (!baseGroup || !baseGroup.code) {return;}
 
             baseGroup.parent = parentGroupCode;
             groupMap[baseGroup.code] = baseGroup;
@@ -245,7 +247,7 @@ angular
           var watchOnce = $scope.$watchGroup(
             ["variables", "groups", "coVariables", "filters"],
             function(newValue) {
-              if (!newValue[0] || !newValue[1]) return;
+              if (!newValue[0] || !newValue[1]) {return;}
 
               // unbind watch
               watchOnce();

@@ -1,6 +1,8 @@
 /**
  * Created by Michael DESIGAUD on 03/09/2015.
  */
+'use strict';
+
 angular.module("chuvApp.components.header").directive("changeOnScroll", [
   "$window",
   function($window) {

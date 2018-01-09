@@ -475,11 +475,20 @@ gulp.task("develop", function () {
     [
       "index-html:dev",
       "styles:dev"
+<<<<<<< d460a35b0b45f2591f02ec8353ba4a5d141d0de3
     ]
+=======
+    ],
+    "browser-sync"
+>>>>>>> creation gulp build system
   );
 });
 
 
 // Main task, start develop proccess.
 // Type "gulp" in command line
+<<<<<<< d460a35b0b45f2591f02ec8353ba4a5d141d0de3
 gulp.task("default", ["develop", "browser-sync"]);
+=======
+gulp.task("default", ["develop"]);
+>>>>>>> creation gulp build system

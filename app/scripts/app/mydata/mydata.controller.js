@@ -72,7 +72,8 @@ angular.module("chuvApp.mydata").controller("MyDataController", [
                 type: "A",
                 data: article,
                 size: 2,
-                row: index + 1,
+                // TODO: seems like "index" must be defined in function arguments
+                row: index + 1, // jshint ignore:line
                 col: 2
               });
             });
@@ -111,7 +112,7 @@ angular.module("chuvApp.mydata").controller("MyDataController", [
                   });
                 $timeout(function() {
                   _.each($scope.rows, function(row) {
-                    if (row.showChart === false) row.showChart = true;
+                    if (row.showChart === false) {row.showChart = true;}
                   });
                 });
 
@@ -135,7 +136,7 @@ angular.module("chuvApp.mydata").controller("MyDataController", [
     };
 
     $scope.getModel = function(slug) {
-      if (!slug) return;
+      if (!slug) {return;}
 
       var deferred = $q.defer();
       Model.get({ slug: slug }).$promise.then(function(model) {

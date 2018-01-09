@@ -1,6 +1,8 @@
 /**
  * Created by Michael DESIGAUD on 11/08/2015.
  */
+'use strict';
+
 angular.module("chuvApp.home").config([
   "$stateProvider",
   function($stateProvider) {
