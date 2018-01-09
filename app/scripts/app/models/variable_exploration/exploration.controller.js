@@ -46,8 +46,8 @@ angular.module("chuvApp.models").controller("ExploreController", [
     };
 
     $scope.set_focused_variable = function(variable) {
-      if (variable && variable.code) $scope.focused_variable = variable;
-      else if (variable === false) $scope.focused_variable = null;
+      if (variable && variable.code) {$scope.focused_variable = variable;}
+      else if (variable === false) {$scope.focused_variable = null;}
     };
 
     $scope.get_focused_variable = function() {
@@ -161,8 +161,9 @@ angular.module("chuvApp.models").controller("ExploreController", [
 
         $scope.allVariables.forEach(function(variable) {
           config_keys.forEach(function(config_name) {
-            if (variable.code in $scope.configuration[config_name])
+            if (variable.code in $scope.configuration[config_name]) {
               $scope.configuration[config_name][variable.code] = variable;
+            }
           });
         });
 

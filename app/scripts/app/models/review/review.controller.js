@@ -243,7 +243,7 @@ angular.module("chuvApp.models").controller("ReviewController", [
                   var_config.input = "select";
                   var_config.operators = ["equal", "not_equal", "in", "not_in"];
                   var_config.values = {};
-                  variable.enumerations.forEach(function(e, index) {
+                  variable.enumerations.forEach(function(e/*, index*/) { // TODO: var isn't used, commented to jshint warning detection
                     var_config.values[e.code] = e.label;
                   });
                 }
@@ -357,9 +357,9 @@ angular.module("chuvApp.models").controller("ReviewController", [
       $scope.chartConfig.yAxisVariables = ($scope.chartConfig
         .yAxisVariables || [])
         .filter(function(code) {
-          return (ChartUtil.isXAxisMain($scope.chartConfig.type)
-            ? ChartUtil.canUseAsYAxis
-            : ChartUtil.canUseAsXAxis)(code, $scope.chartConfig.type, $scope.dataset.data[code]);
+          return (ChartUtil.isXAxisMain($scope.chartConfig.type) ?
+            ChartUtil.canUseAsYAxis :
+            ChartUtil.canUseAsXAxis)(code, $scope.chartConfig.type, $scope.dataset.data[code]);
         })
         .slice(0, 5);
       $scope.hcConfig = ChartUtil($scope.chartConfig, $scope.dataset, true);
@@ -429,7 +429,7 @@ angular.module("chuvApp.models").controller("ReviewController", [
           "variables"
         ],
         function(newValue) {
-          if (!_.all(newValue)) return;
+          if (!_.all(newValue)) {return;}
 
           // unbind watch
           watchOnce();

@@ -1,6 +1,8 @@
 /**
  * Created by Michael DESIGAUD on 10/09/2015.
  */
+'use strict';
+
 angular.module("chuvApp.util").factory("ModalUtil", [
   "$uibModal",
   function($uibModal) {

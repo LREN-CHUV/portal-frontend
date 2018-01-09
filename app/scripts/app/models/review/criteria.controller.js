@@ -30,11 +30,10 @@ angular.module("chuvApp.models").controller("CriteriaController", [
   ) {
     var search = $location.search();
     function map_query(category) {
-      return search[category]
-        ? search[category].split(",").map(function(code) {
+      return search[category] ?
+        search[category].split(",").map(function(code) {
             return { code: code };
-          })
-        : [];
+          }) : [];
     }
 
     $scope.query.variables = map_query("variable");
@@ -288,7 +287,7 @@ angular.module("chuvApp.models").controller("CriteriaController", [
         }
       };
 
-      var goToList = function(direction) {
+      function goToList(direction) {
         leftWrapper = 0;
         updateListWidth();
         var offset = 100, left = 0;
@@ -309,7 +308,7 @@ angular.module("chuvApp.models").controller("CriteriaController", [
         //updateSearchArrows(left);
 
         $wrapperListSearch.stop().animate({ left: left });
-      };
+      }
     };
 
     $timeout(function() {

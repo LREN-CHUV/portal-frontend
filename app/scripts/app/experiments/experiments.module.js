@@ -1,6 +1,8 @@
 /**
  * Modified by Arnaud Jutzeler on 05/08/2016.
  */
+'use strict';
+
 angular
   .module("chuvApp.experiments", [
     "ngResource",

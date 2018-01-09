@@ -1,3 +1,5 @@
+'use strict';
+
 angular
   .module("chuvApp.experiments")
   /**
@@ -11,7 +13,6 @@ angular
     "$compile",
     "$http",
     function($compile, $http) {
-      "use strict";
       var linker = function($scope, element) {
         var data = $scope.data;
         var func = data && data.function;
@@ -32,9 +33,9 @@ angular
 
         $scope.pvalue_quality = function(pvalue) {
           pvalue = Math.abs(pvalue);
-          if (pvalue <= 0.001) return "(★★★)";
-          if (pvalue <= 0.01) return "(★★)";
-          if (pvalue <= 0.1) return "(★)";
+          if (pvalue <= 0.001) {return "(★★★)";}
+          if (pvalue <= 0.01) {return "(★★)";}
+          if (pvalue <= 0.1) {return "(★)";}
           return "";
         };
 
@@ -89,11 +90,11 @@ angular
 
             var subData = data && data.data;
             $scope.highchartdata = {
-              data: subData.length > 2
-                ? subData.map(formatFunc)
-                : angular.isArray(subData)
-                    ? formatFunc(subData[0])
-                    : formatFunc(subData),
+              data: subData.length > 2 ?
+                subData.map(formatFunc) :
+                angular.isArray(subData) ?
+                    formatFunc(subData[0]) :
+                    formatFunc(subData),
               isArray: subData.length > 2 ? true : false
             };
             break;

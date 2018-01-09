@@ -1,6 +1,8 @@
 /**
  * Created by Michael DESIGAUD on 08/09/2015.
  */
+'use strict';
+
 angular.module("chuvApp.components.carrousel").directive("carrousel", [
   function() {
     return {
@@ -121,7 +123,7 @@ angular.module("chuvApp.components.carrousel").directive("carrouselChart", [
         };
 
         scope.get_drag_data = function() {
-          if (scope.is_model)
+          if (scope.is_model) {
             return (
               '<img src="' +
               scope.largeSvg +
@@ -133,6 +135,7 @@ angular.module("chuvApp.components.carrousel").directive("carrouselChart", [
               scope.model.title +
               "</a>"
             );
+          }
           return "<table></table>";
         };
 
@@ -141,7 +144,7 @@ angular.module("chuvApp.components.carrousel").directive("carrouselChart", [
             Model.get({ slug: scope.model.slug }).$promise,
             $templateRequest("./scripts/app/articles/article-table.html")
           ])
-          .then(function(data) {
+          .then(function(/*data*/) { // TODO: var isn't used, commented to jshint warning detection
             var config = angular.copy(scope.model.config);
             config.height = 200;
             config.title = { text: "" };
@@ -150,10 +153,10 @@ angular.module("chuvApp.components.carrousel").directive("carrouselChart", [
 
             $timeout(function() {
               var chart = _.find(Highcharts.charts, function(chart) {
-                if (!chart) return false;
+                if (!chart) {return false;}
                 return $(chart.renderTo).parents().index(element[0]) >= 0;
               });
-              if (!chart) return;
+              if (!chart) {return;}
               scope.svg =
                 "data:image/svg+xml," + encodeURIComponent(chart.getSVG());
               chart.userOptions.chart.width = chart.options.chart.width = chart.chartWidth = 700;

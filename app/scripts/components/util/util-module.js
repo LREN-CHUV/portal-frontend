@@ -1,6 +1,7 @@
 /**
  * Created by Michael DESIGAUD on 26/08/2015.
  */
+'use strict';
 
 angular.module("chuvApp.util", ["ui.bootstrap"]).config([
   "$httpProvider",
@@ -8,21 +9,23 @@ angular.module("chuvApp.util", ["ui.bootstrap"]).config([
     //Default timeout
     $httpProvider.defaults.timeout = 5000;
 
+
+    // TODO: function logoutOnForbidden is defined but never used, commented to jshint warning detection, seems it should be deleted
     /**
      * Send the user to the login page if he tried to access a forbidden service
      * @param {object} data
      * @param {number} status
      */
-    function logoutOnForbidden(data, status) {
-      if (
-        status === 401 && document.getElementById("logout-link") !== undefined
-      ) {
-        //forces logout-login redirect;
-        setTimeout(function() {
-          document.getElementById("logout-link").click();
-        }, 0);
-      }
-    }
+    // function logoutOnForbidden(data, status) {
+    //   if (
+    //     status === 401 && document.getElementById("logout-link") !== undefined
+    //   ) {
+    //     //forces logout-login redirect;
+    //     setTimeout(function() {
+    //       document.getElementById("logout-link").click();
+    //     }, 0);
+    //   }
+    // }
 
     $httpProvider.interceptors.unshift([
       "$q",

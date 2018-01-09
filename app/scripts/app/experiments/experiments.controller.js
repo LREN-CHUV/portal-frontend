@@ -1,3 +1,5 @@
+'use strict';
+
 angular
   .module("chuvApp.experiments")
   .controller("NewExperimentController", [
@@ -117,8 +119,8 @@ angular
       // function to be called when query and dataset are ready
       function on_data_loaded() {
         $scope.loaded = true;
-        $scope.ml_methods = $scope.mode.local.active
-          ? ml_all_methods.filter(function(m) {
+        $scope.ml_methods = $scope.mode.local.active ?
+          ml_all_methods.filter(function(m) {
               return m.code.substr(0, 3) !== "WP_";
             })
           : ml_all_methods.filter(function(m) {
@@ -153,7 +155,7 @@ angular
 
       $scope.set_mode = function(mode) {
         var local = mode === "local";
-        if (local === $scope.mode.local.active) return;
+        if (local === $scope.mode.local.active) {return;}
 
         $scope.mode.local.active = local ? true : false;
         on_data_loaded();
@@ -186,13 +188,13 @@ angular
 
         // step 1: load query
         var search = $location.search();
-        function map_query(category) {
-          return search[category]
-            ? search[category].split(",").map(function(code) {
+        
+        var map_query = function(category) {
+          return search[category] ?
+            search[category].split(",").map(function(code) {
                 return { code: code };
-              })
-            : [];
-        }
+              }) : [];
+        };
 
         $scope.query = {
           variables: map_query("variables"),
@@ -222,8 +224,8 @@ angular
             templateUrl: "/scripts/app/experiments/save-model-modal.html",
             controller: [
               "$scope",
-              "$state",
-              function(child_scope, $state) {
+              // "$state",
+              function(child_scope/*, $state*/) { // TODO: var isn't used, commented to jshint warning detection
                 child_scope.do_save_model = function() {
                   var config = $stateParams.graph_config || {
                     type: "designmatrix",
@@ -278,7 +280,7 @@ angular
          * @returns {boolean}
          */
       $scope.method_already_configured = function() {
-        var method_idx, chosen_parameter_idx, other_parameter_idx, method;
+        /*var method_idx, chosen_parameter_idx, other_parameter_idx, method;*/ // TODO: vars aren't used, commented to jshint warning detection
 
         return _.any($scope.shared.experiment_configuration, function(method) {
           return (
@@ -328,9 +330,7 @@ angular
                 parameter.label +
                 "=" +
                 parameter.value +
-                (index !== $scope.shared.method_parameters.length - 1
-                  ? ", "
-                  : "")
+                (index !== $scope.shared.method_parameters.length - 1 ? ", " : "")
               );
             });
         }
@@ -366,7 +366,7 @@ angular
               return m.validation;
             }
           );
-          $scope.shared.cross_validation = !!(predictive_models.length - 1);
+          $scope.shared.cross_validation = !!(predictive_models.length - 1); // jshint ignore:line
         }
 
         $scope.shared.experiment_configuration.splice(index, 1);
@@ -466,7 +466,7 @@ angular
       function get_experiment() {
         MLUtils.get_experiment($stateParams.experiment_uuid).then(
           function on_get_experiment_success(response) {
-            if (cancelled) return;
+            if (cancelled) {return;}
 
             $scope.experiment = response.data;
             $scope.loading = false;
@@ -495,6 +495,8 @@ angular
                 link_charts_legend($scope.overview_charts[0]);
               }
             } catch (e) {
+              // TODO: seems like "throw e;" must be replaced in the end of "catch (e) {}"" block
+              /* jshint ignore:start */
               throw e;
               if (
                 !($scope.experiment.hasError ||
@@ -504,6 +506,7 @@ angular
                 $scope.experiment.result =
                   "Invalid JSON: \n" + $scope.experiment.result;
               }
+              /* jshint ignore:end */
             } finally {
               // Mark as read
               if (!$scope.experiment.resultsViewed) {
@@ -512,12 +515,12 @@ angular
             }
           },
           function on_get_experiment_fail(response) {
-            if (cancelled) return;
+            if (cancelled) {return;}
             $scope.loading = false;
             $scope.experiment = {
               hasError: true,
-              result: response.data
-                ? response.status +
+              result: response.data ?
+                response.status +
                     " " +
                     response.data.error +
                     "\n" +
