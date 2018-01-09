@@ -1,0 +1,35 @@
+.explore-box {
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    flex-direction: column;
+
+    .panel { margin: 0px }
+
+    .explore-container {
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-evenly;
+
+        h3 {
+            font-size: small;
+            font-weight: bold;
+            text-align: center;
+        }
+
+    }
+
+    .column {
+        flex: 1 1 auto;
+        overflow-wrap: break-word;
+        width: 25%;
+        padding: 0.5em;
+    }
+
+    .footer {
+        flex: 1;
+        padding: 0.2em;
+    }
+}
