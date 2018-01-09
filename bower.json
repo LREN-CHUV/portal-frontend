@@ -69,7 +69,32 @@
       ]
     },
     "themify-icons": {
-      "main": "themify-icons.css"
+      "main": [
+        "css/themify-icons.css",
+        "ie7/ie7.css",
+        "ie7/ie7.js"
+      ]
+    },
+    "font-awesome": {
+      "main": "css/font-awesome.css"
+    },
+    "iCheck": {
+      "main": [
+        "icheck.min.js",
+        "skins/all.css"
+      ]
+    },
+    "javascript-detect-element-resize": {
+      "main": "jquery.resize.js"
+    },
+    "highmaps": {
+      "main": "modules/map.js"
+    },
+    "jQuery-QueryBuilder": {
+      "main": [
+        "dist/js/query-builder.standalone.js",
+        "dist/css/query-builder.default.css"
+      ]
     }
   },
   "appPath": "app",
