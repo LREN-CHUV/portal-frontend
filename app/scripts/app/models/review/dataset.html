@@ -14,7 +14,7 @@
     </div>
     <div class="panel" style="flex: 0 0 1">
       <div class="panel-heading">Model</div>
-      <div class="panel-body">
+      <div class="panel-body dataset-list">
         <h5>Variable </h5>
         <p ng-repeat="variable in query.variables">
           <a
@@ -57,7 +57,10 @@
       <uib-tabset active="active">
         <uib-tab index="0" class="panel-heading" heading="Table">
           <div class="panel-body scrollable">
-            <table class="table table-striped">
+              <div ng-if="loading" class="loading">
+                <div class="fa fa-spin fa-spinner"></div>
+              </div>
+              <table class="table table-striped">
               <tr>
                 <th>Measurement count</th>
                 <th>Min</th>
@@ -76,8 +79,13 @@
           </div>
         </uib-tab>
         <uib-tab index="1" class="panel-heading" heading="Histogram">
-          <div ng-if="plots.length" ng-repeat="plot in plots" class="panel-body">
-            <highchart config="plot"></highchart>
+          <div class="panel-body scrollable">
+            <div ng-if="loading" class="loading">
+              <div class="fa fa-spin fa-spinner"></div>
+            </div>
+            <div ng-if="plots.length" ng-repeat="plot in plots" class="panel-body">
+              <highchart config="plot"></highchart>
+            </div>
           </div>
         </uib-tab>
       </uib-tabset>
@@ -86,7 +94,12 @@
   <div class="dataset-footer panel">
     Some statistical data
   </div>
-</div>
 
-<br />
-<br />
+  <div class="execute">
+  <rounded-button
+    label="{{'common.button.execute' | translate}}"
+    icon-class="ti {{ loading_model ? 'ti-reload ti-spin reverse-direction' : 'ti-arrow-down' }}"
+    on-click="executeQuery()">
+  </rounded-button>
+  </div>
+</div>

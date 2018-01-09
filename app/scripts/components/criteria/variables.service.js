@@ -42,6 +42,22 @@ angular.module("chuvApp.components.criteria").factory("Variable", [
         });
     };
 
+    resource.getStatistics = function(code) {
+      return $http
+        .get(backendUrl + "/variables/" + code + "/histogram_query.json")
+        .then(function(response) {
+          var data = response.data;
+          data.grouping = [];
+          data.algorithm = {
+            code: "statisticsSummary",
+            name: "Statistics Summary",
+            parameters: [],
+            validation: false
+          };
+          return $http.post(backendUrl + "/mining", JSON.stringify(data));
+        });
+    };
+
     return resource;
   }
 ]);

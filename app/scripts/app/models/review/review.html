@@ -7,15 +7,12 @@
     </span>
   </a>
     <div
+      ng-if="isMine()"
       ng-controller="DatasetController"
       ng-include="'scripts/app/models/review/dataset.html'">
     </div>
-
-    <div ng-if="isMine()"
-         ng-controller="CriteriaController"
-         class="col-xs-12"
-         style="float: none"
-         ng-include="'scripts/app/models/review/criteria.html'"></div>
     <div ng-include="'scripts/app/models/review/chart.html'"></div>
     <div ng-include="'scripts/app/models/review/footer.html'"></div>
+
+
 </div>
