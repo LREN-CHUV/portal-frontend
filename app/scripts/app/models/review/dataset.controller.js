@@ -123,6 +123,8 @@ angular.module("chuvApp.models").controller("DatasetController", [
     };
 
     // init
-    $scope.selectVariable(dependantVariable);
+    if (dependantVariable) {
+      $scope.selectVariable(dependantVariable);
+    }
   }
 ]);

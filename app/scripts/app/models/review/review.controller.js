@@ -251,6 +251,8 @@ angular.module("chuvApp.models").controller("ReviewController", [
                 return var_config;
               });
 
+            if (!filterVariables.length) return;
+
             $(".query-builder").queryBuilder({
               plugins: ["bt-tooltip-errors"],
               filters: filterVariables,
