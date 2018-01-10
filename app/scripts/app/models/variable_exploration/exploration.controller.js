@@ -9,9 +9,8 @@ angular.module("chuvApp.models").controller("ExploreController", [
   "$state",
   "$timeout",
   "Variable",
-  "Dataset",
   "Group",
-  function($scope, $location, $state, $timeout, Variable, Dataset, Group) {
+  function($scope, $location, $state, $timeout, Variable, Group) {
     function make_configuration(config_name) {
       var config = {},
         url_config = $location.search()[config_name],
@@ -35,7 +34,7 @@ angular.module("chuvApp.models").controller("ExploreController", [
     $scope.focused_variable = null;
     $scope.groups = null;
     $scope.allVariables = null;
-    $scope.datasets = Dataset;
+    $scope.datasets = null;
     $scope.loaded = false;
 
     $scope.configuration = {
@@ -145,8 +144,15 @@ angular.module("chuvApp.models").controller("ExploreController", [
 
     var config_keys = Object.keys($scope.configuration);
 
-    Variable.query()
+    Variable.mockup()
       .$promise.then(function(allVariables) {
+        $scope.datasets = _.uniq(
+          _.flatten(
+            allVariables.map(function(v) {
+              return v.datasets;
+            })
+          )
+        ).sort();
         $scope.allVariables = _.sortBy(allVariables, "label")
           // TODO For the moment we do not make available variable of type 'text' (Visit ID, etc)
           .filter(function(variable) {

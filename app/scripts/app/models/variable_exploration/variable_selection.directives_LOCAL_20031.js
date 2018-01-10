@@ -13,21 +13,16 @@ angular
         link: function($scope, element) {
           $scope.search_history = [];
           $scope.search = {};
-          $scope.selectedDatasets = [];
 
-          $scope.isDatasetSelected = function(dataset) {
-            return $scope.selectedDatasets.includes(dataset);
-          };
-
-          var groups;
-          var disableLastWatch = function() {};
-          var group_dict;
-          var color = d3.scale
-            .linear()
-            .domain([-1, 5])
-            .range(["hsl(152,80%,80%)", "hsl(228,30%,40%)"])
-            .interpolate(d3.interpolateHcl);
-          var svg;
+          var groups,
+            disableLastWatch = function() {},
+            group_dict,
+            color = d3.scale
+              .linear()
+              .domain([-1, 5])
+              .range(["hsl(152,80%,80%)", "hsl(228,30%,40%)"])
+              .interpolate(d3.interpolateHcl),
+            svg;
 
           function createCirclePackingDataStructure() {
             // all groups by code
@@ -51,30 +46,17 @@ angular
 
             // and then all the variables in all the right groups
             $scope.allVariables.forEach(function(variable) {
-<<<<<<< ad75c9dbaf17b31d505e67d26ff5ccb940c9c5af
               var group = group_dict[variable.group.code],
                 description = variable.label;
               if (variable.description) {
                 description += "\n" + variable.description;
               }
               if (!group) {return;}
-=======
-              var group = group_dict[variable.group.code];
-              var description = variable.label;
-
-              if (variable.description) {
-                description += "\n" + variable.description;
-              }
-
-              if (!group) return;
-
->>>>>>> Dataset selection + layout
               group.children.push(
                 (group_dict[variable.code] = {
                   code: variable.code,
                   label: variable.label,
                   is_group: false,
-                  datasets: variable.datasets,
                   description: description,
                   original: variable,
                   children: []
@@ -334,36 +316,6 @@ angular
                 }
               }
             }
-          });
-
-          $scope.$watch("search.dataset", function(dataset) {
-            if (!dataset) return;
-
-            if ($scope.selectedDatasets.includes(dataset)) {
-              $scope.selectedDatasets.splice(
-                $scope.selectedDatasets.indexOf(dataset),
-                1
-              );
-            } else {
-              $scope.selectedDatasets.push(dataset);
-            }
-
-            svg
-              .selectAll("circle")
-              .style("opacity", 1)
-              .filter(function(data) {
-                return (
-                  !data.is_group &&
-                  !$scope.selectedDatasets
-                    .map(function(d) {
-                      return data.datasets.includes(d);
-                    })
-                    .every(function(op) {
-                      return !op;
-                    })
-                );
-              })
-              .style("opacity", 0.2);
           });
         }
       };

@@ -20,6 +20,10 @@ angular.module("chuvApp.components.criteria").factory("Variable", [
       }
     );
 
+    resource.mockup = function() {
+      return $resource("/scripts/app/mock/variables.json").query();
+    };
+
     resource.get_histo = function(code) {
       return $http
         .get(backendUrl + "/variables/" + code + "/histogram_query.json")
