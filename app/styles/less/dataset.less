@@ -5,8 +5,6 @@
     flex-direction: column;
     overflow: hidden;
 
-    .panel { margin: 0px }
-
     .dataset-container {
         display: -webkit-flex;
         display: -ms-flexbox;
@@ -17,23 +15,6 @@
         .tab-content {
             overflow-y: auto;
             height: 480px;
-        }
-
-        .dataset-list {
-            .active {
-                line-height: 25px;
-                display: inline-block;
-                border: 1px solid @blue-gray-500;
-                border-radius: 13px;
-                font-size: 12px;
-                color: @blue-gray-500;
-                padding-left: 12px;
-                padding-right: 30px;
-                position: relative;
-                margin: 0 3px;
-                transition: all 0.1s ease;
-                vertical-align: middle;
-            }
         }
 
         .loading {
@@ -61,3 +42,22 @@
         padding: 0.2em;
     }
 }
+
+.dataset-list {
+    .active {
+        line-height: 25px;
+        display: inline-block;
+        border: 1px solid @blue-gray-500;
+        border-radius: 13px;
+        font-size: 12px;
+        color: @blue-gray-500;
+        padding-left: 5px;
+        padding-right: 5px;
+        position: relative;
+        margin: 0 3px;
+        transition: all 0.1s ease;
+        vertical-align: middle;
+    }
+}
+
+.panel { margin: 5px 0 }

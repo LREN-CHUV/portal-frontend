@@ -3,12 +3,21 @@
       <div class="col-md-6">
 
         <div class="row">
-          <div class="col-md-12 panel-body" style="margin-top: 0.25em; margin-bottom: 0.25em; padding: 0.5em">
+          <div class=" background-color: white; col-md-12 panel-body" style="margin-top: 0.25em; margin-bottom: 0.25em; padding: 0.5em">
             <h5 style="display: inline;">View available variables in: </h5>
-            <span ng-repeat="dataset in datasets">
-              <a>{{dataset}}</a>&nbsp;
+            <span class="dataset-list">
+              <span ng-repeat="dataset in datasets">
+                <a href=""
+                  ng-click="search.dataset = dataset"
+                  ng-class="{active: isDatasetSelected(dataset)}">
+                {{dataset}}</a>&nbsp;
+              </span>
             </span>
-            <br />
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-12 panel-body" style="margin-top: 0.25em; margin-bottom: 0.25em; padding: 0.5em">
             <h5 style="display: inline">Shortcuts:&nbsp;&nbsp;</h5>
             <span ng-repeat="group in groups">
               <a href="" ng-click="search.group = group.code">{{group.label}}</a>&nbsp;&nbsp;
@@ -29,17 +38,30 @@
         </div>
 
         <div class="row">
-          <circle-packing></circle-packing>
+            <circle-packing></circle-packing>
         </div>
 
       </div>
+
       <div class="col-md-6">
-        <variable-statistics></variable-statistics>
+
         <variable-configuration
             set-focused-variable="set_focused_variable"
             set-variable-selected-as="use_variable_as"
             get-focused-variable="get_focused_variable"
             configuration="configuration"></variable-configuration>
+        <div style="display: flex; justify-content: space-between;">
+          <button
+            class="btn btn-primary ng-click-active"
+            ng-class="{disabled: !has_valid_configuration() }"
+            ng-click="go_to_review();"
+            >Review Model</button>
+          <button
+            class="btn btn-primary disabled ng-click-active"
+            ng-class="{disabled: !has_valid_configuration() }"
+            >Run Machine learning experiment</button>
+        </div>
+        <variable-statistics></variable-statistics>
       </div>
       <div class="col-xs-12" style="margin-top: -60px">
         <button ng-if="has_valid_configuration()" ng-click="go_to_review();" class="center-block btn-round" style="display: block">
