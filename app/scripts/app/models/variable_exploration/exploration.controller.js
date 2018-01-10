@@ -9,8 +9,9 @@ angular.module("chuvApp.models").controller("ExploreController", [
   "$state",
   "$timeout",
   "Variable",
+  "Dataset",
   "Group",
-  function($scope, $location, $state, $timeout, Variable, Group) {
+  function($scope, $location, $state, $timeout, Variable, Dataset, Group) {
     function make_configuration(config_name) {
       var config = {},
         url_config = $location.search()[config_name],
@@ -34,7 +35,7 @@ angular.module("chuvApp.models").controller("ExploreController", [
     $scope.focused_variable = null;
     $scope.groups = null;
     $scope.allVariables = null;
-    $scope.sources = ["CHUV", "CHRU", "ADNI", "PPMI"];
+    $scope.datasets = Dataset;
     $scope.loaded = false;
 
     $scope.configuration = {
@@ -176,8 +177,17 @@ angular.module("chuvApp.models").controller("ExploreController", [
           "$state",
           "$timeout",
           "Variable",
+          "Dataset",
           "Group",
-          function($scope, $location, $state, $timeout, Variable, Group) {
+          function(
+            $scope,
+            $location,
+            $state,
+            $timeout,
+            Variable,
+            Dataset,
+            Group
+          ) {
             function make_configuration(config_name) {
               var config = {},
                 url_config = $location.search()[config_name],
@@ -201,7 +211,7 @@ angular.module("chuvApp.models").controller("ExploreController", [
             $scope.focused_variable = null;
             $scope.groups = null;
             $scope.allVariables = null;
-            $scope.sources = ["CHUV", "CHRU", "ADNI", "PPMI"];
+            $scope.datasets = Dataset;
             $scope.loaded = false;
 
             $scope.configuration = {

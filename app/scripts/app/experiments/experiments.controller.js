@@ -5,6 +5,7 @@ angular
     "MLUtils",
     "$stateParams",
     "Model",
+    "Dataset",
     "$location",
     "$uibModal",
     "notifications",
@@ -13,12 +14,14 @@ angular
       MLUtils,
       $stateParams,
       Model,
+      Dataset,
       $location,
       $uibModal,
       notifications
     ) {
       $scope.loaded = false;
       $scope.parseInt = parseInt;
+      $scope.datasets = Dataset;
 
       var ml_all_methods = [];
       $scope.ml_methods = [];

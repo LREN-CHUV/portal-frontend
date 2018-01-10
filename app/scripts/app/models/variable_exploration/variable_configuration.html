@@ -6,15 +6,15 @@
 
   <div class="panel-body" style="flex: 1">
     <div class="explore-container">
-      <button style="flex: 1 1 25%" class="btn btn-primary active ng-click-active" ng-class="!getFocusedVariable() || !getFocusedVariable().isVariable ? 'disabled' : ''"
+      <button style="flex: 1 1 25%; margin: 0 0.2em" class="btn btn-primary active ng-click-active" ng-class="!getFocusedVariable() || !getFocusedVariable().isVariable ? 'disabled' : ''"
         ng-bind="get_button_label('variable')" ng-click="setVariableSelectedAs('variable', getFocusedVariable())">
         as variable
       </button>
-      <button style="flex: 1 2 50%" class="btn btn-primary active ng-click-active" ng-class="!getFocusedVariable() || !getFocusedVariable().isVariable ? 'disabled' : ''"
+      <button style="flex: 1 2 50%; margin: 0 0.2em" class="btn btn-primary active ng-click-active" ng-class="!getFocusedVariable() || !getFocusedVariable().isVariable ? 'disabled' : ''"
         ng-bind="get_button_label('covariable')" ng-click="setVariableSelectedAs('covariable', getFocusedVariable())">
         as covariable
       </button>
-      <button style="flex: 1 1 25%" class="btn btn-primary active ng-click-active" ng-class="!getFocusedVariable() ? 'disabled' : ''"
+      <button style="flex: 1 1 25%; margin: 0 0.2em" class="btn btn-primary active ng-click-active" ng-class="!getFocusedVariable() ? 'disabled' : ''"
         ng-bind="get_button_label('filter')" ng-click="setVariableSelectedAs('filter', getFocusedVariable())">
         as filter
       </button>
