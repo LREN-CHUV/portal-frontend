@@ -336,7 +336,7 @@ angular
             }
           });
 
-          $scope.$watch("search.dataset", function(dataset) {
+          $scope.setDataset = function(dataset) {
             if (!dataset) return;
 
             if ($scope.selectedDatasets.includes(dataset)) {
@@ -359,12 +359,12 @@ angular
                       return data.datasets.includes(d);
                     })
                     .every(function(op) {
-                      return !op;
+                      return op;
                     })
                 );
               })
               .style("opacity", 0.2);
-          });
+          };
         }
       };
     }
