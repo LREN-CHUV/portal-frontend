@@ -80,6 +80,7 @@ var appPath = {
         appConfig.app + "/scripts/components/criteria/criteria.module.js",
         appConfig.app + "/scripts/components/criteria/criteria.service.js",
         appConfig.app + "/scripts/components/criteria/groups.service.js",
+        appConfig.app + "/scripts/components/criteria/datasets.service.js",
         appConfig.app + "/scripts/components/criteria/variables.service.js",
         appConfig.app + "/scripts/components/criteria/chained-select.directive.js",
         appConfig.app + "/scripts/components/util/util-module.js",
