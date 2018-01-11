@@ -7,10 +7,12 @@
             <h5 style="display: inline;">View available variables in: </h5>
             <span class="dataset-list">
               <span ng-repeat="dataset in datasets">
-                <a href=""
-                  ng-click="search.dataset = dataset"
+                <a
+                  ng-click="setDataset(dataset)"
                   ng-class="{active: isDatasetSelected(dataset)}">
-                {{dataset}}</a>&nbsp;
+                  {{dataset}}
+                </a>
+                &nbsp;
               </span>
             </span>
           </div>
