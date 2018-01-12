@@ -396,9 +396,7 @@ angular
             }
 
             statistic.hc_config = {
-              options: {
-                chart: statistic.chart
-              },
+              chart: statistic.chart,
               xAxis: statistic.xAxis,
               yAxis: statistic.yAxis,
               series: statistic.series,
