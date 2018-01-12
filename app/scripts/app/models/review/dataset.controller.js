@@ -113,8 +113,8 @@ angular.module("chuvApp.models").controller("DatasetController", [
           return {
             stats: {
               count: series && series.length,
-              min: Math.min(...series),
-              max: Math.max(...series),
+              min: 0,
+              max: 1,
               av: series.reduce(function(a, b) {
                 return a + b;
               }) / series.length
