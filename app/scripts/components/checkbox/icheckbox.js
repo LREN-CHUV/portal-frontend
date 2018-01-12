@@ -1,6 +1,8 @@
 /**
  * Created by Michael DESIGAUD on 07/09/2015.
  */
+'use strict';
+
 angular
   .module("chuvApp.components.checkbox")
   .directive("icheckbox", [
@@ -27,7 +29,6 @@ angular
   .directive("icheck", [
     "$timeout",
     function($timeout) {
-      "use strict";
       return {
         require: "?ngModel",
         link: function($scope, element, $attrs, ngModel) {
@@ -46,12 +47,12 @@ angular
             return angular
               .element(element)
               .iCheck({
-                checkboxClass: $attrs.icheck.length
-                  ? "icheckbox_" + $attrs.icheck
-                  : "icheckbox_minimal-blue",
-                radioClass: $attrs.icheck.length
-                  ? "iradio_" + $attrs.icheck
-                  : "iradio_minimal-blue"
+                checkboxClass: $attrs.icheck.length ?
+                  "icheckbox_" + $attrs.icheck :
+                  "icheckbox_minimal-blue",
+                radioClass: $attrs.icheck.length ?
+                  "iradio_" + $attrs.icheck :
+                  "iradio_minimal-blue"
               })
               .on("ifChanged", function(event) {
                 if (

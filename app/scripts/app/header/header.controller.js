@@ -1,6 +1,8 @@
 /**
  * Created by Michael DESIGAUD on 11/08/2015.
  */
+'use strict';
+
 angular.module("chuvApp.header").controller("HeaderController", [
   "$scope",
   "$translate",
@@ -8,19 +10,19 @@ angular.module("chuvApp.header").controller("HeaderController", [
   "$state",
   "tmhDynamicLocale",
   "User",
-  "$rootScope",
-  "$http",
-  "backendUrl",
+  // "$rootScope",
+  // "$http",
+  // "backendUrl",
   function(
     $scope,
     $translate,
     $translatePartialLoader,
     $state,
     tmhDynamicLocale,
-    User,
-    $rootScope,
+    User/*,
+    $rootScope, // TODO: vars aren't used, commented to jshint warning detection
     $http,
-    backendUrl
+    backendUrl*/
   ) {
     $translatePartialLoader.addPart("header");
     $translate.refresh();

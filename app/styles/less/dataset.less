@@ -1,0 +1,63 @@
+.dataset-box {
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+
+    .panel { margin: 0px }
+
+    .dataset-container {
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+        height: 480px;
+        overflow: hidden;
+
+        .tab-content {
+            overflow-y: auto;
+            height: 480px;
+        }
+
+        .dataset-list {
+            .active {
+                line-height: 25px;
+                display: inline-block;
+                border: 1px solid @blue-gray-500;
+                border-radius: 13px;
+                font-size: 12px;
+                color: @blue-gray-500;
+                padding-left: 12px;
+                padding-right: 30px;
+                position: relative;
+                margin: 0 3px;
+                transition: all 0.1s ease;
+                vertical-align: middle;
+            }
+        }
+
+        .loading {
+            flex: 1;
+            text-align: center;
+            align-items: center;
+        }
+    }
+
+    .dataset-column {
+        flex: 1;
+    }
+
+    .execute {
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+        flex: 0 1 auto;
+        justify-content: center;
+        margin-top: -20px;
+}
+
+    .dataset-footer {
+        flex: 1;
+        padding: 0.2em;
+    }
+}

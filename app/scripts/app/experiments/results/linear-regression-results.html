@@ -1,11 +1,11 @@
 <div>
-  <accordion close-others="false">
+  <uib-accordion close-others="false">
 
-    <accordion-group ng-if="true" is-open="true">
-      <accordion-heading>
+    <div uib-accordion-group ng-if="true" is-open="true">
+      <uib-accordion-heading>
         <span class="ti ti-check-box"></span>
         Results: Linear Regression
-      </accordion-heading>
+      </uib-accordion-heading>
 
       <div style="margin: -16px -16px -8px -16px" class="table-responsive">
         <table class="table table-striped">
@@ -29,15 +29,15 @@
         </table>
       </div>
 
-    </accordion-group>
+    </div>
 
-    <accordion-group is-open="help_is_open">
-      <accordion-heading>
+    <div uib-accordion-group is-open="help_is_open">
+      <uib-accordion-heading>
         <span class="ti ti-help-alt"></span>
         Help
-      </accordion-heading>
+      </uib-accordion-heading>
 
       <div class="panel-body" btf-markdown="estimation.help"></div>
-    </accordion-group>
-  </accordion>
+    </div>
+  </uib-accordion>
 </div>

@@ -30,7 +30,7 @@ angular
 
             function map_groups(group) {
               var description = group.label;
-              if (group.description) description += "\n" + group.description;
+              if (group.description) {description += "\n" + group.description;}
               return (group_dict[group.code] = {
                 label: group.label,
                 code: group.code,
@@ -48,9 +48,10 @@ angular
             $scope.allVariables.forEach(function(variable) {
               var group = group_dict[variable.group.code],
                 description = variable.label;
-              if (variable.description)
+              if (variable.description) {
                 description += "\n" + variable.description;
-              if (!group) return;
+              }
+              if (!group) {return;}
               group.children.push(
                 (group_dict[variable.code] = {
                   code: variable.code,
@@ -127,8 +128,8 @@ angular
                   return !d.is_group || d.children;
                 }) // Do not display enpty groups
                 .attr("class", function(d) {
-                  return d.parent
-                    ? d.children ? "node" : "node node--leaf"
+                  return d.parent ?
+                    d.children ? "node" : "node node--leaf"
                     : "node node--root";
                 })
                 .style("fill", color_for_node)
@@ -153,14 +154,15 @@ angular
                   return d.parent === root ? "inline" : "none";
                 })
                 .text(function(d) {
-                  if (!d.parent) return d.label;
+                  if (!d.parent) {return d.label;}
 
                   // magic function to cut off text that's too long.
                   // I came up with this after a little trial and error
                   var max_length = 5 + d.r * 100 / d.parent.r;
 
-                  if (d.label.length > max_length)
+                  if (d.label.length > max_length) {
                     return d.label.substr(0, max_length - 3) + "...";
+                  }
                   return d.label;
                 }),
               node = svg.selectAll("circle,text");
@@ -204,10 +206,10 @@ angular
                   return condition(d) ? 1 : 0;
                 })
                 .each("start", function(d) {
-                  if (condition(d)) this.style.display = "inline";
+                  if (condition(d)) {this.style.display = "inline";}
                 })
                 .each("end", function(d) {
-                  if (!condition(d)) this.style.display = "none";
+                  if (!condition(d)) {this.style.display = "none";}
                 });
 
               // this happens when a circle is clicked: bind the variable
@@ -241,8 +243,9 @@ angular
             disableLastWatch = $scope.$watch("focused_variable", function(
               variable
             ) {
-              if (variable && variable.code && group_dict[variable.code])
+              if (variable && variable.code && group_dict[variable.code]) {
                 zoom(group_dict[variable.code]);
+              }
             });
 
             $scope.$watch("search.group", function(code) {
@@ -322,16 +325,16 @@ angular
     "$timeout",
     "$filter",
     "Variable",
-    "$stateParams",
-    function($timeout, $filter, Variable, $stateParams) {
+    // "$stateParams",
+    function($timeout, $filter, Variable/*, $stateParams*/) { // TODO: var isn't used, commented to jshint warning detection
       return {
         templateUrl: "scripts/app/models/variable_exploration/variable_statistics.html",
-        link: function($scope, element) {
+        link: function($scope/*, element*/) { // TODO: var isn't used, commented to jshint warning detection
           // so that two simultaneous requests don't clash.
           var request_id = 0;
 
           $scope.init_hc_config = function(statistic) {
-            if (statistic.hc_config) return;
+            if (statistic.hc_config) {return;}
 
             statistic.hc_config = {
               options: {
@@ -345,7 +348,7 @@ angular
           };
 
           $scope.$watch("focused_variable", function(focused_variable) {
-            if (!focused_variable || !focused_variable.code) return;
+            if (!focused_variable || !focused_variable.code) {return;}
 
             $scope.focused_variable_loaded = false;
             $scope.has_error = false;
@@ -357,7 +360,7 @@ angular
 
             Variable.get_histo(focused_variable.code).then(
               function(response) {
-                if (current_request_id != request_id) return;
+                if (current_request_id != request_id) {return;}
                 $scope.focused_variable_loaded = true;
 
                 $scope.stats = response.data && response.data.data;
@@ -367,7 +370,7 @@ angular
                 }
               },
               function() {
-                if (current_request_id != request_id) return;
+                  if (current_request_id != request_id) {return;}
                 $scope.has_error = true;
                 $scope.focused_variable_loaded = true;
               }

@@ -1,6 +1,8 @@
 /**
  * Created by Michael DESIGAUD on 15/09/2015.
  */
+'use strict';
+
 angular.module("chuvApp.components.toolbar").directive("toolbar", [
   "$timeout",
   function($timeout) {

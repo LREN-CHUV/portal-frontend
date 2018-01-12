@@ -31195,6 +31195,155 @@ body.sidebar-collapsed .widget-body > ul.acc-menu li:hover > ul {
 .method-panel p {
   overflow: hidden;
 }
+.algorithm-validation-panel {
+  display: -webkit-box;
+  display: flex;
+  display: -ms-flexbox;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;
+}
+.algorithm-validation-panel .flexrow {
+  display: -webkit-box;
+  display: flex;
+  display: -ms-flexbox;
+  -webkit-box-pack: justify;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+.algorithm-validation-panel .flexrow h3 {
+  -webkit-box-flex: 0;
+  -ms-flex: 0 1 auto;
+  flex: 0 1 auto;
+  font-size: 13px;
+  color: #666666;
+  font-weight: 700;
+}
+.algorithm-validation-panel .flexrow .item {
+  -webkit-box-flex: 0;
+  -ms-flex: 0 1 auto;
+  flex: 0 1 auto;
+  text-align: center;
+}
+.dataset-box {
+  display: -ms-flexbox;
+  display: -webkit-box;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  overflow: hidden;
+}
+.dataset-box .panel {
+  margin: 0px;
+}
+.dataset-box .dataset-container {
+  display: -ms-flexbox;
+  display: -webkit-box;
+  display: flex;
+  height: 480px;
+  overflow: hidden;
+}
+.dataset-box .dataset-container .tab-content {
+  overflow-y: auto;
+  height: 480px;
+}
+.dataset-box .dataset-container .dataset-list .active {
+  line-height: 25px;
+  display: inline-block;
+  border: 1px solid #607d8b;
+  border-radius: 13px;
+  font-size: 12px;
+  color: #607d8b;
+  padding-left: 12px;
+  padding-right: 30px;
+  position: relative;
+  margin: 0 3px;
+  -webkit-transition: all 0.1s ease;
+  -o-transition: all 0.1s ease;
+  transition: all 0.1s ease;
+  vertical-align: middle;
+}
+.dataset-box .dataset-container .loading {
+  -webkit-box-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+  text-align: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+.dataset-box .dataset-column {
+  -webkit-box-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+}
+.dataset-box .execute {
+  display: -ms-flexbox;
+  display: -webkit-box;
+  display: flex;
+  -webkit-box-flex: 0;
+  -ms-flex: 0 1 auto;
+  flex: 0 1 auto;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  margin-top: -20px;
+}
+.dataset-box .dataset-footer {
+  -webkit-box-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+  padding: 0.2em;
+}
+.explore-box {
+  display: -ms-flexbox;
+  display: -webkit-box;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;
+}
+.explore-box .panel {
+  margin: 0px;
+}
+.explore-box .explore-container {
+  display: -ms-flexbox;
+  display: -webkit-box;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: space-evenly;
+  -ms-flex-pack: space-evenly;
+  justify-content: space-evenly;
+}
+.explore-box .explore-container h3 {
+  font-size: small;
+  font-weight: bold;
+  text-align: center;
+}
+.explore-box .column {
+  -webkit-box-flex: 1;
+  -ms-flex: 1 1 auto;
+  flex: 1 1 auto;
+  overflow-wrap: break-word;
+  width: 25%;
+  padding: 0.5em;
+}
+.explore-box .footer {
+  -webkit-box-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+  padding: 0.2em;
+}
 .modal-backdrop {
   position: fixed;
   bottom: 0;

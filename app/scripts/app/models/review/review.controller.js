@@ -70,7 +70,7 @@ angular.module("chuvApp.models").controller("ReviewController", [
         $scope.hcConfig = ChartUtil($scope.chartConfig, $scope.dataset);
         $scope.query = result.query;
 
-        $scope.$emit("event:loadModel", result);
+        $scope.$broadcast("event:loadModel", result);
         $scope.executeBtnAnimate();
         $scope.executed = true;
       });
@@ -113,7 +113,7 @@ angular.module("chuvApp.models").controller("ReviewController", [
       $scope.model.dataset = $scope.dataset;
       $scope.model.query = angular.copy($scope.query); // will be modified, therefore we do a deep copy
       $scope.model.query.filters = angular.copy($scope.query.textQuery);
-      delete $scope.model.query.filterQuery;
+      // delete $scope.model.query.filterQuery;
 
       if ($scope.isNew()) {
         // save new model
@@ -213,7 +213,7 @@ angular.module("chuvApp.models").controller("ReviewController", [
         templateUrl: "scripts/app/models/review/filter-query-modal.html",
         scope: childScope,
         size: "lg",
-        controller: function() {
+        controller: function($uibModalInstance) {
           childScope.contructQB = function() {
             var filterVariables = $scope.query.filters
               .concat($scope.query.variables)
@@ -243,13 +243,15 @@ angular.module("chuvApp.models").controller("ReviewController", [
                   var_config.input = "select";
                   var_config.operators = ["equal", "not_equal", "in", "not_in"];
                   var_config.values = {};
-                  variable.enumerations.forEach(function(e, index) {
+                  variable.enumerations.forEach(function(e/*, index*/) { // TODO: var isn't used, commented to jshint warning detection
                     var_config.values[e.code] = e.label;
                   });
                 }
 
                 return var_config;
               });
+
+            if (!filterVariables.length) return;
 
             $(".query-builder").queryBuilder({
               plugins: ["bt-tooltip-errors"],
@@ -285,13 +287,13 @@ angular.module("chuvApp.models").controller("ReviewController", [
                 false
               ).sql;
               qb.queryBuilder("destroy");
-              uibModal.close();
+              $uibModalInstance.close();
             }
           };
         }
       });
 
-      $scope.$on("$stateChangeStart", uibModal.dismiss);
+      $scope.$on("$stateChangeStart", $uibModal.dismiss);
       modal.result.then($scope.executeQuery);
 
       // do not unwrap this: childScope.contructQB is set later.
@@ -355,9 +357,9 @@ angular.module("chuvApp.models").controller("ReviewController", [
       $scope.chartConfig.yAxisVariables = ($scope.chartConfig
         .yAxisVariables || [])
         .filter(function(code) {
-          return (ChartUtil.isXAxisMain($scope.chartConfig.type)
-            ? ChartUtil.canUseAsYAxis
-            : ChartUtil.canUseAsXAxis)(code, $scope.chartConfig.type, $scope.dataset.data[code]);
+          return (ChartUtil.isXAxisMain($scope.chartConfig.type) ?
+            ChartUtil.canUseAsYAxis :
+            ChartUtil.canUseAsXAxis)(code, $scope.chartConfig.type, $scope.dataset.data[code]);
         })
         .slice(0, 5);
       $scope.hcConfig = ChartUtil($scope.chartConfig, $scope.dataset, true);
@@ -427,7 +429,7 @@ angular.module("chuvApp.models").controller("ReviewController", [
           "variables"
         ],
         function(newValue) {
-          if (!_.all(newValue)) return;
+          if (!_.all(newValue)) {return;}
 
           // unbind watch
           watchOnce();

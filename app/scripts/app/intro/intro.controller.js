@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module("chuvApp.intro").controller("IntroController", [
   "$scope",
   "$translatePartialLoader",

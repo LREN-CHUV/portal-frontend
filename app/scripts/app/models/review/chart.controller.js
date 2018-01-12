@@ -1,9 +1,9 @@
-"use_strict";
+'use strict';
 
 angular.module("chuvApp.models").controller("ChartController", [
   "$scope",
-  "$timeout",
-  function($scope, $timeout) {
+  // "$timeout",
+  function($scope/*, $timeout*/) { // TODO: var isn't used, commented to jshint warning detection
     $scope.showTable = true;
 
     $scope.hiddenData = true;

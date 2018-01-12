@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module("chuvApp.util").factory("MLUtils", [
   "$http",
   "ChartUtil",
@@ -7,8 +9,8 @@ angular.module("chuvApp.util").factory("MLUtils", [
     var datatypes_per_code = {},
       ml_methods,
       ml_validations,
-      ml_metrics,
-      ml_methods_promise;
+      ml_metrics/*,
+      ml_methods_promise*/; // TODO: var isn't used, commented to jshint warning detection
 
     function map_experiment_for_backend(experiment) {
       function map_parameters_values_to_string(algo) {
@@ -44,10 +46,10 @@ angular.module("chuvApp.util").factory("MLUtils", [
 
     function get_uuid(experiment) {
       var uuid;
-      if (angular.isObject(experiment)) uuid = experiment.uuid;
-      else uuid = experiment;
+      if (angular.isObject(experiment)) {uuid = experiment.uuid;}
+      else {uuid = experiment;}
 
-      if (!angular.isString(uuid)) return;
+      if (!angular.isString(uuid)) {return;}
 
       return uuid;
     }
@@ -57,7 +59,7 @@ angular.module("chuvApp.util").factory("MLUtils", [
       $resource(backendUrl + "/experiments/methods").get().$promise,
       $resource("/scripts/app/mock/exareme-methods.json").get().$promise
     ]).then(function(responses) {
-      if (!responses.length) return [];
+      if (!responses.length) {return [];}
 
       var backendData = angular.fromJson(responses[0]);
       var staticData = angular.fromJson(responses[1]);
@@ -85,7 +87,7 @@ angular.module("chuvApp.util").factory("MLUtils", [
         }
         return datatypes_per_code[code];
       },
-      can_use_datatype_for_method_as_feature: function(datatype, method_name) {
+      can_use_datatype_for_method_as_feature: function(/*datatype, method_name*/) { // TODO: arguments aren't used, commented to jshint warning detection
         // for now feature don't matter, everything is possible
         return true;
       },
@@ -100,19 +102,19 @@ angular.module("chuvApp.util").factory("MLUtils", [
       },
       mark_as_read: function(experiment) {
         var uuid = get_uuid(experiment);
-        if (!uuid) return;
+        if (!uuid) {return;}
 
         return $http.get(backendUrl + "/experiments/" + uuid + "/markAsViewed");
       },
       mark_as_shared: function(experiment) {
         var uuid = get_uuid(experiment);
-        if (!uuid) return;
+        if (!uuid) {return;}
 
         return $http.get(backendUrl + "/experiments/" + uuid + "/markAsShared");
       },
       mark_as_unshared: function(experiment) {
         var uuid = get_uuid(experiment);
-        if (!uuid) return;
+        if (!uuid) {return;}
 
         return $http.get(
           backendUrl + "/experiments/" + uuid + "/markAsUnshared"
@@ -139,10 +141,8 @@ angular.module("chuvApp.util").factory("MLUtils", [
         switch (result.code) {
           case "linearRegression":
             return "linearRegression";
-            break;
           case "anova":
             return "anova";
-            break;
           default:
             // Check if cross-validation and prediction type
             if (

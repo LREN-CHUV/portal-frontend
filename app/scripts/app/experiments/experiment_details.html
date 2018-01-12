@@ -101,13 +101,13 @@
                 <div class="panel">
                   <div class="panel-body">
 
-                    <accordion close-others="false">
+                    <uib-accordion close-others="false">
 
-                      <accordion-group ng-if="overview_charts" is-open="true">
-                        <accordion-heading>
+                      <div uib-accordion-group ng-if="overview_charts" is-open="true">
+                        <uib-accordion-heading>
                           <span class="ti ti-check-box"></span>
                           Results: Cross-validation
-                        </accordion-heading>
+                        </uib-accordion-heading>
 
                         <div class="row">
                           <div class="single-legend col-sm-12"></div>
@@ -118,17 +118,17 @@
                             <highchart config="chart_config"></highchart>
                           </div>
                         </div>
-                      </accordion-group>
+                      </div>
 
-                      <accordion-group is-open="false">
-                        <accordion-heading>
+                      <div uib-accordion-group is-open="false">
+                        <uib-accordion-heading>
                           <span class="ti ti-list"></span>
                           Raw JSON
-                        </accordion-heading>
+                        </uib-accordion-heading>
                         <pretty-json collapse="hideJson" data="experiment.display.raw"></pretty-json>
-                      </accordion-group>
+                      </div>
 
-                    </accordion>
+                    </uib-accordion>
                   </div>
                 </div>
               </tab>

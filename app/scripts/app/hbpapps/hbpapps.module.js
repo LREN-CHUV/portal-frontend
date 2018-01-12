@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module("chuvApp.hbpapps", ["ngResource", "ui.router"]).config([
   "$stateProvider",
   function($stateProvider) {

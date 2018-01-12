@@ -34,13 +34,13 @@ angular.module("chuvApp.models").controller("ConfigurationController", [
 
       if (!_.contains(xAxisVars, $scope.chartConfig.xAxisVariable)) {
         $scope.chartConfig.xAxisVariable = xAxisVars.length > 0 &&
-          type == "boxplot"
-          ? xAxisVars[0]
-          : undefined;
+          type == "boxplot" ?
+          xAxisVars[0] :
+          undefined;
       }
       if (!_.contains(yAxisVars, $scope.chartConfig.yAxisVariables)) {
-        $scope.chartConfig.yAxisVariables = yAxisVars.length > 0
-          ? _.first(
+        $scope.chartConfig.yAxisVariables = yAxisVars.length > 0 ?
+          _.first(
               yAxisVars,
               Math.min(maxYAxisVariableCount, yAxisVars.length)
             )
@@ -66,9 +66,9 @@ angular.module("chuvApp.models").controller("ConfigurationController", [
     };
 
     $scope.canUseAsPrimaryAxis = function(axeCode) {
-      return (ChartUtil.isXAxisMain($scope.chartConfig.type)
-        ? ChartUtil.canUseAsXAxis
-        : ChartUtil.canUseAsYAxis)(
+      return (ChartUtil.isXAxisMain($scope.chartConfig.type) ?
+        ChartUtil.canUseAsXAxis :
+        ChartUtil.canUseAsYAxis)(
         axeCode,
         $scope.chartConfig.type,
         $scope.dataset.data[axeCode]
@@ -76,9 +76,9 @@ angular.module("chuvApp.models").controller("ConfigurationController", [
     };
 
     $scope.canUseAsSecondaryAxis = function(axeCode) {
-      return (ChartUtil.isXAxisMain($scope.chartConfig.type)
-        ? ChartUtil.canUseAsYAxis
-        : ChartUtil.canUseAsXAxis)(
+      return (ChartUtil.isXAxisMain($scope.chartConfig.type) ?
+        ChartUtil.canUseAsYAxis :
+        ChartUtil.canUseAsXAxis)(
         axeCode,
         $scope.chartConfig.type,
         $scope.dataset.data[axeCode]

@@ -1,0 +1,105 @@
+<div class="dataset-box">
+  <div class="dataset-container">
+    <div class="panel style="flex: 0 0 0">
+      <div class="panel-heading">Datasets</div>
+      <div class="panel-body">
+        <ul class="list-group">
+          <li class="list-group-item active">All</li>
+          <li class="list-group-item">CHUV</li>
+          <li class="list-group-item">CHRU</li>
+          <li class="list-group-item">GOMN</li>
+          <li class="list-group-item">ADNI</li>
+        </ul>
+      </div>
+    </div>
+    <div class="panel" style="flex: 0 0 1">
+      <div class="panel-heading">Model</div>
+      <div class="panel-body dataset-list">
+        <h5>Variable </h5>
+        <p ng-repeat="variable in query.variables">
+          <a
+            ng-click="selectVariable(variable)"
+            ng-class="{active: isSelected(covariable)}">
+            {{variable.code}}
+          </a>
+        </p>
+        <h5>CoVariables</h5>
+        <p ng-repeat="covariable in query.coVariables">
+          <a
+            ng-click="selectVariable(covariable)"
+            ng-class="{active: isSelected(covariable)}">
+            {{covariable.code}}
+          </a>
+        </p>
+        <h5>Groupings</h5>
+        <p ng-repeat="covariable in query.groupings">
+          <a
+            ng-click="selectVariable(covariable)"
+            ng-class="{active: isSelected(covariable)}">
+            {{covariable.code}}
+          </a>
+        </p>
+        <h5>
+            <a ng-click="configureFilterQuery()">
+                <i class="ti ti-panel"></i>
+            </a>
+            Filter variable
+        </h5>
+        <p ng-repeat="filter in query.filters">
+            <a ng-click="configureFilterQuery()">
+                {{filter.code}}
+            </a>
+        </p>
+        <div class="query" ng-bind="query.textQuery"></div>
+      </div>
+    </div>
+    <div class="panel" style="flex-grow: 2">
+      <uib-tabset active="active">
+        <uib-tab index="0" class="panel-heading" heading="Table">
+          <div class="panel-body scrollable">
+              <div ng-if="loading" class="loading">
+                <div class="fa fa-spin fa-spinner"></div>
+              </div>
+              <table class="table table-striped">
+              <tr>
+                <th>Measurement count</th>
+                <th>Min</th>
+                <th>Max</th>
+                <th>Average</th>
+                <th>Standard dev.</th>
+              </tr>
+              <tr ng-repeat="plot in plots">
+                <td ng-bind="plot.stats.count | number"></td>
+                <td ng-bind="plot.stats.min | number"></td>
+                <td ng-bind="plot.stats.max | number"></td>
+                <td ng-bind="plot.stats.av | number"></td>
+                <td ng-bind="0 | number"></td>
+              </tr>
+            </table>
+          </div>
+        </uib-tab>
+        <uib-tab index="1" class="panel-heading" heading="Histogram">
+          <div class="panel-body scrollable">
+            <div ng-if="loading" class="loading">
+              <div class="fa fa-spin fa-spinner"></div>
+            </div>
+            <div ng-if="plots.length" ng-repeat="plot in plots" class="panel-body">
+              <highchart config="plot"></highchart>
+            </div>
+          </div>
+        </uib-tab>
+      </uib-tabset>
+    </div>
+  </div>
+  <div class="dataset-footer panel">
+    Some statistical data
+  </div>
+
+  <div class="execute">
+  <rounded-button
+    label="{{'common.button.execute' | translate}}"
+    icon-class="ti {{ loading_model ? 'ti-reload ti-spin reverse-direction' : 'ti-arrow-down' }}"
+    on-click="executeQuery()">
+  </rounded-button>
+  </div>
+</div>

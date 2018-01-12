@@ -1,6 +1,8 @@
 /**
  * Created by Michael DESIGAUD on 11/08/2015.
  */
+'use strict';
+
 angular.module("chuvApp.home").controller("HomeController", [
   "$scope",
   "$translatePartialLoader",
@@ -14,7 +16,7 @@ angular.module("chuvApp.home").controller("HomeController", [
   "$q",
   "$http",
   "backendUrl",
-  "notifications",
+  // "notifications",
   function(
     $scope,
     $translatePartialLoader,
@@ -27,8 +29,8 @@ angular.module("chuvApp.home").controller("HomeController", [
     ChartUtil,
     $q,
     $http,
-    backendUrl,
-    notifications
+    backendUrl/*,
+    notifications*/ // TODO: var isn't used, commented to jshint warning detection
   ) {
     $translatePartialLoader.addPart("home");
     $translatePartialLoader.addPart("articles");

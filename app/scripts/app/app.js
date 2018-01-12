@@ -148,7 +148,7 @@ angular
       $translatePartialLoader.addPart("common");
       $translate.refresh();
       amMoment.changeLocale("en");
-      $state.go("intro");
+      // $state.go("intro"); // FIXME
 
       $rootScope.getPdfUrl = function(slug) {
         return backendUrl + "/articles/" + slug + ".pdf";

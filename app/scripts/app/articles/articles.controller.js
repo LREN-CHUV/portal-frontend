@@ -22,6 +22,7 @@ angular
     "MLUtils",
     "$q",
     "notifications",
+    "$filter",
     function(
       $scope,
       $translatePartialLoader,
@@ -35,7 +36,8 @@ angular
       ModalUtil,
       MLUtils,
       $q,
-      notifications
+      notifications,
+      $filter
     ) {
       /**
        * Initialize controller
@@ -150,7 +152,7 @@ angular
                 experiment.createdAt = Date.parse(experiment.created);
                 return experiment;
               })
-              .concat($cope.models)
+              .concat($scope.models)
           );
         });
       };
@@ -204,7 +206,7 @@ angular.module("chuvApp.articles").controller("ArticleModalController", [
   "$uibModalInstance",
   "$uibModal",
   "item",
-  function($scope, $modalInstance, $uibModal, item) {
+  function($scope, $uibModalInstance, $uibModal, item) {
     $scope.article = item.article;
 
     $scope.closeModal = function() {
@@ -236,9 +238,9 @@ angular.module("chuvApp.articles").controller("ArticlesController", [
      * @returns {boolean}
      */
     $scope.isMine = function(obj) {
-      return User.hasCurrent()
-        ? obj.createdBy.username == User.current().username
-        : false;
+      return User.hasCurrent() ?
+        obj.createdBy.username == User.current().username :
+        false;
     };
 
     $scope.isAuthorized = function(article) {
