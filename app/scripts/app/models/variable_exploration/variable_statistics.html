@@ -39,8 +39,8 @@
             <b>Description</b>: <variable-description text="variable_description"></variable-description>
           </div>
           <div ng-if="stats.length">
-            <tabset>
-              <tab ng-repeat="statistic in stats"
+            <uib-tabset>
+              <uib-tab ng-repeat="statistic in stats"
                    select="show_stats_after_timeout(statistic)"
                    heading="{{ statistic.dataType == 'SummaryStatistics' ? 'Summary' : statistic.label }}">
                 <div ng-if="statistic.active">
@@ -67,8 +67,8 @@
                     </table>
                   </div>
                 </div>
-              </tab>
-            </tabset>
+              </uib-tab>
+            </uib-tabset>
           </div>
 
         </div>
