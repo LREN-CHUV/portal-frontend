@@ -35,7 +35,9 @@ angular
 
             function map_groups(group) {
               var description = group.label;
-              if (group.description) {description += "\n" + group.description;}
+              if (group.description) {
+                description += "\n" + group.description;
+              }
               return (group_dict[group.code] = {
                 label: group.label,
                 code: group.code,
@@ -51,14 +53,14 @@ angular
 
             // and then all the variables in all the right groups
             $scope.allVariables.forEach(function(variable) {
-<<<<<<< ad75c9dbaf17b31d505e67d26ff5ccb940c9c5af
               var group = group_dict[variable.group.code],
                 description = variable.label;
               if (variable.description) {
                 description += "\n" + variable.description;
               }
-              if (!group) {return;}
-=======
+              if (!group) {
+                return;
+              }
               var group = group_dict[variable.group.code];
               var description = variable.label;
 
@@ -68,7 +70,6 @@ angular
 
               if (!group) return;
 
->>>>>>> Dataset selection + layout
               group.children.push(
                 (group_dict[variable.code] = {
                   code: variable.code,
@@ -146,8 +147,8 @@ angular
                   return !d.is_group || d.children;
                 }) // Do not display enpty groups
                 .attr("class", function(d) {
-                  return d.parent ?
-                    d.children ? "node" : "node node--leaf"
+                  return d.parent
+                    ? d.children ? "node" : "node node--leaf"
                     : "node node--root";
                 })
                 .style("fill", color_for_node)
@@ -172,7 +173,9 @@ angular
                   return d.parent === root ? "inline" : "none";
                 })
                 .text(function(d) {
-                  if (!d.parent) {return d.label;}
+                  if (!d.parent) {
+                    return d.label;
+                  }
 
                   // magic function to cut off text that's too long.
                   // I came up with this after a little trial and error
@@ -224,10 +227,14 @@ angular
                   return condition(d) ? 1 : 0;
                 })
                 .each("start", function(d) {
-                  if (condition(d)) {this.style.display = "inline";}
+                  if (condition(d)) {
+                    this.style.display = "inline";
+                  }
                 })
                 .each("end", function(d) {
-                  if (!condition(d)) {this.style.display = "none";}
+                  if (!condition(d)) {
+                    this.style.display = "none";
+                  }
                 });
 
               // this happens when a circle is clicked: bind the variable
@@ -374,15 +381,19 @@ angular
     "$filter",
     "Variable",
     // "$stateParams",
-    function($timeout, $filter, Variable/*, $stateParams*/) { // TODO: var isn't used, commented to jshint warning detection
+    function($timeout, $filter, Variable /*, $stateParams*/) {
+      // TODO: var isn't used, commented to jshint warning detection
       return {
         templateUrl: "scripts/app/models/variable_exploration/variable_statistics.html",
-        link: function($scope/*, element*/) { // TODO: var isn't used, commented to jshint warning detection
+        link: function($scope /*, element*/) {
+          // TODO: var isn't used, commented to jshint warning detection
           // so that two simultaneous requests don't clash.
           var request_id = 0;
 
           $scope.init_hc_config = function(statistic) {
-            if (statistic.hc_config) {return;}
+            if (statistic.hc_config) {
+              return;
+            }
 
             statistic.hc_config = {
               options: {
@@ -396,7 +407,9 @@ angular
           };
 
           $scope.$watch("focused_variable", function(focused_variable) {
-            if (!focused_variable || !focused_variable.code) {return;}
+            if (!focused_variable || !focused_variable.code) {
+              return;
+            }
 
             $scope.focused_variable_loaded = false;
             $scope.has_error = false;
@@ -408,7 +421,9 @@ angular
 
             Variable.get_histo(focused_variable.code).then(
               function(response) {
-                if (current_request_id != request_id) {return;}
+                if (current_request_id != request_id) {
+                  return;
+                }
                 $scope.focused_variable_loaded = true;
 
                 $scope.stats = response.data && response.data.data;
@@ -418,7 +433,9 @@ angular
                 }
               },
               function() {
-                  if (current_request_id != request_id) {return;}
+                if (current_request_id != request_id) {
+                  return;
+                }
                 $scope.has_error = true;
                 $scope.focused_variable_loaded = true;
               }
