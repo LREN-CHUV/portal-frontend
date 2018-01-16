@@ -5,9 +5,9 @@ const json = JSON.parse(data);
 let newJson;
 
 const randomDatasets = datasets =>
-[...Array(parseInt(Math.random() * datasets.length + 1)).keys()]
-.map(() => datasets[parseInt(Math.random() * datasets.length)])
-.filter((v, index, self) => self.indexOf(v) === index);
+  [...Array(parseInt(Math.random() * datasets.length + 1)).keys()]
+    .map(() => datasets[parseInt(Math.random() * datasets.length)])
+    .filter((v, index, self) => self.indexOf(v) === index);
 
 if (process.argv[2] === "random") {
   // all random variables and datasets with uniques values
@@ -28,9 +28,9 @@ if (process.argv[2] === "random") {
   newJson = newJson.map(o => ({
     ...o,
     datasets: notInDataset2.includes(o.code)
-    ? o.datasets
-    : o.datasets.concat("CHUV2")
-}));
+      ? o.datasets
+      : o.datasets.concat("CHUV2")
+  }));
 
   // 3rd dataset - 2nd - some identifed vars
   const notInDataset3 = [
@@ -44,9 +44,9 @@ if (process.argv[2] === "random") {
   newJson = newJson.map(o => ({
     ...o,
     datasets: notInDataset3.includes(o.code)
-    ? o.datasets
-    : o.datasets.concat("CHUV3")
-}));
+      ? o.datasets
+      : o.datasets.concat("CHUV3")
+  }));
 
   // 4th = 2nd - 2 vars + 3rd - 1 var
   const addInDataset4 = [
@@ -58,16 +58,16 @@ if (process.argv[2] === "random") {
   newJson = newJson.map(o => ({
     ...o,
     datasets: (o.datasets.includes("CHUV2") && o.datasets.includes("CHUV3")) ||
-  !addInDataset4.includes(o.code)
-    ? o.datasets.concat("CHUV4")
-    : o.datasets
-}));
+      !addInDataset4.includes(o.code)
+      ? o.datasets.concat("CHUV4")
+      : o.datasets
+  }));
 
   // 5 random
   newJson = newJson.map(o => ({
     ...o,
     datasets: Math.random() > 0.5 ? o.datasets.concat("CHUV5") : o.datasets
-}));
+  }));
 }
 
 fs.writeFileSync(
