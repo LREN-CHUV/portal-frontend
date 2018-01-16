@@ -12,10 +12,8 @@ done
 
 if [ $no_cache ] ; then
     echo "INFO: --no-cache"
-    docker build --no-cache -f ./Dockerfile-dev.yml -t hbpmip/portal-frontend-dev .
+    docker build --no-cache -t portal-frontend-dev -f ./Dockerfile-dev.yml .
 else
     docker build -f ./Dockerfile-dev.yml -t hbpmip/portal-frontend-dev .
 fi
-cp app/index-tmpl.html app/index.html
-docker run -v $(pwd)/app:/frontend/app -it --rm -p8000:8000 --name portal_frontend_dev hbpmip/portal-frontend-dev
-#google-chrome --disable-web-security --user-data-dir http://localhost:8000 &
+docker run -it --rm -p8000:8000 --name portal_frontend_dev hbpmip/portal-frontend-dev
