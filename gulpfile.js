@@ -512,6 +512,14 @@ gulp.task("develop", function() {
   );
 });
 
+gulp.task("develop-doc", function() {
+  runSequence(
+    "clean:dev",
+    "config:dev",
+    ["index-html:dev", "styles:dev"]
+  );
+});
+
 // Main task, start develop proccess.
 // Type "gulp" in command line
 gulp.task("default", ["develop"]);
