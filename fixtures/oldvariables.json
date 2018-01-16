@@ -5,7 +5,7 @@
     "label": "ApoE4",
     "sql_type": "int",
     "description":
-    "Apolipoprotein E (APOE) e4 allele: is the strongest risk factor for Late Onset Alzheimer Disease (LOAD). At least one copy of APOE-e4 ",
+      "Apolipoprotein E (APOE) e4 allele: is the strongest risk factor for Late Onset Alzheimer Disease (LOAD). At least one copy of APOE-e4 ",
     "methodology": "adni-merge",
     "enumerations": [
       { "code": 0.0, "label": 0.0 },
@@ -215,7 +215,7 @@
     "type": "real",
     "label": "FDG-PET",
     "description":
-    " Average FDG-PET of angular, temporal, and posterior cingulate. Most important hypometabolic regions that are indicative of pathological metabolic change in MCI and AD.",
+      " Average FDG-PET of angular, temporal, and posterior cingulate. Most important hypometabolic regions that are indicative of pathological metabolic change in MCI and AD.",
     "methodology": "adni-merge",
     "group": { "code": "pet", "label": "PET" },
     "isVariable": true
@@ -225,7 +225,7 @@
     "type": "real",
     "label": "PIB",
     "description":
-    "Average PIB SUVR of frontal cortex, anterior cingulate, precuneus cortex, and parietal cortex. ",
+      "Average PIB SUVR of frontal cortex, anterior cingulate, precuneus cortex, and parietal cortex. ",
     "methodology": "adni-merge",
     "group": { "code": "pet", "label": "PET" },
     "isVariable": true
@@ -235,7 +235,7 @@
     "type": "real",
     "label": "AV45",
     "description":
-    "AV45 Average AV45 SUVR of frontal, anterior cingulate, precuneus, and parietal cortex\nrelative to the cerebellum",
+      "AV45 Average AV45 SUVR of frontal, anterior cingulate, precuneus, and parietal cortex\nrelative to the cerebellum",
     "methodology": "adni-merge",
     "group": { "code": "pet", "label": "PET" },
     "isVariable": true
@@ -1612,7 +1612,7 @@
     "maxValue": 11.0,
     "minValue": 0.0,
     "description":
-    "Exact age of the subject, for datasets that allow such precision.",
+      "Exact age of the subject, for datasets that allow such precision.",
     "methodology": "mip-cde",
     "group": { "code": "demographics", "label": "Demographics" },
     "isVariable": true
@@ -1653,7 +1653,7 @@
     "label": "Handedness",
     "length": 1.0,
     "description":
-    "Describes the tendency of the patient to use either the right or the left hand more naturally than the other.",
+      "Describes the tendency of the patient to use either the right or the left hand more naturally than the other.",
     "methodology": "mip-cde",
     "enumerations": [
       { "code": "R", "label": "Right" },
@@ -1670,7 +1670,7 @@
     "maxValue": 30.0,
     "minValue": 0.0,
     "description":
-    "The Mini–Mental State Examination (MMSE) or Folstein test is a 30-point questionnaire that is used extensively in clinical and research settings to measure cognitive impairment. It is commonly used to screen for dementia.",
+      "The Mini–Mental State Examination (MMSE) or Folstein test is a 30-point questionnaire that is used extensively in clinical and research settings to measure cognitive impairment. It is commonly used to screen for dementia.",
     "methodology": "mip-cde",
     "group": { "code": "mmse", "label": "MMSE" },
     "isVariable": true
@@ -1682,7 +1682,7 @@
     "maxValue": 30.0,
     "minValue": 0.0,
     "description":
-    "The Montreal Cognitive Assessment (MoCA) was designed as a rapid screening instrument for mild cognitive dysfunction. It assesses different cognitive domains: attention and concentration, executive functions, memory, language, visuoconstructional skills, conceptual thinking, calculations, and orientation. MoCA Total Scores refer to the final count obtained by patients after the complete test is performed.",
+      "The Montreal Cognitive Assessment (MoCA) was designed as a rapid screening instrument for mild cognitive dysfunction. It assesses different cognitive domains: attention and concentration, executive functions, memory, language, visuoconstructional skills, conceptual thinking, calculations, and orientation. MoCA Total Scores refer to the final count obtained by patients after the complete test is performed.",
     "methodology": "mip-cde",
     "group": { "code": "moca", "label": "MoCA" },
     "isVariable": true
@@ -1694,7 +1694,7 @@
     "maxValue": 172.0,
     "minValue": 0.0,
     "description":
-    "The unified Parkinson's disease rating scale (UPDRS) is used to follow the longitudinal course of Parkinson's disease. The UPD rating scale is the most commonly used scale in the clinical study of Parkinson's disease.",
+      "The unified Parkinson's disease rating scale (UPDRS) is used to follow the longitudinal course of Parkinson's disease. The UPD rating scale is the most commonly used scale in the clinical study of Parkinson's disease.",
     "methodology": "mip-cde",
     "group": { "code": "updrs", "label": "UPDRS" },
     "isVariable": true
@@ -1706,7 +1706,7 @@
     "maxValue": 5.0,
     "minValue": 0.0,
     "description":
-    "The Hoehn and Yahr scale (HY) is a widely used clinical rating scale, which defines broad categories of motor function in Parkinson’s disease (PD). It captures typical patterns of progressive motor impairment.",
+      "The Hoehn and Yahr scale (HY) is a widely used clinical rating scale, which defines broad categories of motor function in Parkinson’s disease (PD). It captures typical patterns of progressive motor impairment.",
     "methodology": "mip-cde",
     "group": { "code": "updrs", "label": "UPDRS" },
     "isVariable": true
@@ -1716,7 +1716,7 @@
     "type": "polynominal",
     "label": "Alzheimer Broad Category",
     "description":
-    "There will be two broad categories taken into account. Alzheimer's disease (AD) in which the diagnostic is 100% certain and \"Other\" comprising the rest of Alzheimer's related categories. The \"Other\" category refers to Alzheime's related diagnosis which origin can be traced to other pathology eg. vascular. In this category MCI diagnosis can also be found. In summary, all Alzheimer's related diagnosis that are not pure.",
+      "There will be two broad categories taken into account. Alzheimer's disease (AD) in which the diagnostic is 100% certain and \"Other\" comprising the rest of Alzheimer's related categories. The \"Other\" category refers to Alzheime's related diagnosis which origin can be traced to other pathology eg. vascular. In this category MCI diagnosis can also be found. In summary, all Alzheimer's related diagnosis that are not pure.",
     "methodology": "mip-cde",
     "enumerations": [
       { "code": "AD", "label": "Alzheimer's disease" },
@@ -1731,7 +1731,7 @@
     "type": "polynominal",
     "label": "Parkinson Broad Category",
     "description":
-    "There will be two broad categories taken into account. Parkinson's disease without disability or light disability: Without fluctuation of the effect. Dementia in Parkinson's disease",
+      "There will be two broad categories taken into account. Parkinson's disease without disability or light disability: Without fluctuation of the effect. Dementia in Parkinson's disease",
     "methodology": "mip-cde",
     "enumerations": [
       { "code": "PD", "label": "Dementia in Parkinson's disease" },
@@ -1739,7 +1739,7 @@
       {
         "code": "Other",
         "label":
-        "Parkinson's disease without disability or light disability: Without fluctuation of the effect"
+          "Parkinson's disease without disability or light disability: Without fluctuation of the effect"
       }
     ],
     "group": { "code": "diagnosis", "label": "Diagnosis" },
@@ -1750,7 +1750,7 @@
     "type": "polynominal",
     "label": "Neurogeneratives categories",
     "description":
-    "There will be two broad categories taken into account. Parkinson's disease without disability or light disability: Without fluctuation of the effect. Dementia in Parkinson's disease",
+      "There will be two broad categories taken into account. Parkinson's disease without disability or light disability: Without fluctuation of the effect. Dementia in Parkinson's disease",
     "methodology": "mip-cde",
     "enumerations": [
       { "code": "PD", "label": "Parkinson's disease" },
@@ -1770,7 +1770,7 @@
     "type": "polynominal",
     "label": "ADNI category",
     "description":
-    "Terms aggregating illnesses into classes. Note that the diagnosis in this categories are given only for the ADNI data set.",
+      "Terms aggregating illnesses into classes. Note that the diagnosis in this categories are given only for the ADNI data set.",
     "methodology": "mip-cde",
     "enumerations": [
       { "code": "AD", "label": "Alzheimer's Disease" },
@@ -1785,7 +1785,7 @@
     "type": "polynominal",
     "label": "EDSD category",
     "description":
-    "Terms aggregating illnesses into classes. Note that the diagnosis in this categories are given only for the EDSD data set.",
+      "Terms aggregating illnesses into classes. Note that the diagnosis in this categories are given only for the EDSD data set.",
     "methodology": "mip-cde",
     "enumerations": [
       { "code": "AD", "label": "Alzheimer's Disease" },
@@ -1800,7 +1800,7 @@
     "type": "polynominal",
     "label": "PPMI category",
     "description":
-    "Terms aggregating the Parkinson's diseases into classes. For this instance the diagnosis given at enrollment is taken as the clinical diagnosis. Note that the diagnosis in this categories are given only for the PPMI data set.",
+      "Terms aggregating the Parkinson's diseases into classes. For this instance the diagnosis given at enrollment is taken as the clinical diagnosis. Note that the diagnosis in this categories are given only for the PPMI data set.",
     "methodology": "mip-cde",
     "enumerations": [
       { "code": "PD", "label": "Parkinson disease" },
@@ -1813,17 +1813,17 @@
       {
         "code": "REGUN",
         "label":
-        "Genetic Unaffected patients with a mutation (LRRK2, GBA or SNCA)"
+          "Genetic Unaffected patients with a mutation (LRRK2, GBA or SNCA)"
       },
       {
         "code": "REGPD",
         "label":
-        "Genetic registry PD subjects with a mutation (LRRK2, GBA, or SNCA)"
+          "Genetic registry PD subjects with a mutation (LRRK2, GBA, or SNCA)"
       },
       {
         "code": "REGUN",
         "label":
-        "Genetic registry unaffected subjects with a mutation (LRRK2, GBA, or SNCA)"
+          "Genetic registry unaffected subjects with a mutation (LRRK2, GBA, or SNCA)"
       }
     ],
     "group": { "code": "diagnosis", "label": "Diagnosis" },
