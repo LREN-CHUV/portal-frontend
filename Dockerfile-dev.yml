@@ -17,9 +17,7 @@ COPY bower.json /frontend
 COPY .bowerrc /frontend
 RUN bower install --allow-root
 
-COPY ./app /frontend
-COPY config.json /frontend
-COPY gulpfile.js /frontend
+COPY . /frontend
 RUN gulp develop-doc
 
-CMD gulp
+CMD ["http-server", "./app", "-P", "http://localhost:8080/", "-p", "8000"]

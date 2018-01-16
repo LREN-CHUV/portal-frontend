@@ -23,3 +23,4 @@ if [ $no_cache ] ; then
 else
     docker run -v $(pwd)/app:/frontend/app -it --rm -p8000:8000 --name portal_frontend_dev hbpmip/portal-frontend-dev
 fi
+docker run -it --rm -p8000:8000 --name portal_frontend_dev hbpmip/portal-frontend-dev
