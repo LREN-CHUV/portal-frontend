@@ -14,6 +14,6 @@ if [ $no_cache ] ; then
     echo "INFO: --no-cache"
     docker build --no-cache -t portal-frontend-dev -f ./Dockerfile-dev.yml .
 else
-    docker build -f ./Dockerfile-dev.yml -t hbpmip/portal-frontend-dev .
+    docker build -t hbpmip/portal-frontend-dev -f ./Dockerfile-dev.yml .
 fi
 docker run -it --rm -p8000:8000 --name portal_frontend_dev hbpmip/portal-frontend-dev
