@@ -52,6 +52,7 @@
       </div>
 
       <div class="col-md-6">
+        <variable-statistics></variable-statistics>
 
         <variable-configuration
             set-focused-variable="set_focused_variable"
@@ -62,11 +63,6 @@
 
         <div class="panel">
           <div class="panel-heading explore-container">
-            <h2 style="margin-right: 20px">4. RUN Model</h2>
-            <button
-              class="btn btn-primary disabled"
-              ng-class="{disabled: !has_valid_configuration() }"
-              >Machine learning experiment</button>
             <button
               class="btn btn-primary"
               ng-class="{disabled: !has_valid_configuration() }"
@@ -74,7 +70,6 @@
               >Review Model</button>
           </div>
         </div>
-        <variable-statistics></variable-statistics>
       </div>
       <div class="col-xs-12" style="margin-top: -60px">
         <button ng-if="has_valid_configuration()" ng-click="go_to_review();" class="center-block btn-round" style="display: block">
