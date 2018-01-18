@@ -19,7 +19,7 @@
         <p ng-repeat="variable in query.variables">
           <a
             ng-click="selectVariable(variable)"
-            ng-class="{active: isSelected(covariable)}">
+            class="active">
             {{variable.code}}
           </a>
         </p>
@@ -99,7 +99,7 @@
   <rounded-button
     label="{{'common.button.execute' | translate}}"
     icon-class="ti {{ loading_model ? 'ti-reload ti-spin reverse-direction' : 'ti-arrow-down' }}"
-    on-click="executeQuery()">
+    on-click="open_experiment()">
   </rounded-button>
   </div>
 </div>
