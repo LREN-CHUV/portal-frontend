@@ -471,8 +471,10 @@ gulp.task("browser-sync", function() {
   gulp
     .watch(appConfig.app + "/scripts/**/*.js")
     .on("change", browserSync.reload);
+  gulp.watch("./bower.json", ["index-html:dev"]);
   gulp.watch(appConfig.app + "/index-gulp.html", ["index-html:dev"]);
   gulp.watch(appConfig.app + "/index.html").on("change", browserSync.reload);
+  gulp.watch(appConfig.app + "/scripts/**/*.html").on("change", browserSync.reload);
 });
 
 // Lint js files in "app/scripts"
@@ -509,6 +511,14 @@ gulp.task("develop", function() {
     "config:dev",
     ["index-html:dev", "styles:dev"],
     "browser-sync"
+  );
+});
+
+gulp.task("develop-doc", function() {
+  runSequence(
+    "clean:dev",
+    "config:dev",
+    ["index-html:dev", "styles:dev"]
   );
 });
 

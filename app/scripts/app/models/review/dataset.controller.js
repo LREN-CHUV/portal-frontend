@@ -122,9 +122,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
                 return a + b;
               }) / series.length
             },
-            options: {
-              chart: stat.chart
-            },
+            chart: stat.chart,
             xAxis: stat.xAxis,
             yAxis: stat.yAxis,
             series: stat.series,
