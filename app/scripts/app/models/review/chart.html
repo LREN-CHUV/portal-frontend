@@ -7,9 +7,9 @@
             <div class="panel-heading">
               <h2>{{chartConfig.title.text}}</h2>
             </div>
-            <div class="panel-body panel-charts-graph" style="height: 520px;">
+            <div ng-if="startChart" class="panel-body panel-charts-graph" style="height: 520px;">
               <div class="panel-body-graph" data-graph-type="column" >
-                <highchart config="hcConfig"></highchart>
+                <highchart config="hcConfig" class="highchart-width"></highchart>
               </div>
             </div>
             <div class="panel-body panel-data-graph" style="height:520px;overflow-y:scroll;">
