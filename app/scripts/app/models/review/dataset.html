@@ -88,6 +88,26 @@
             </div>
           </div>
         </uib-tab>
+        <uib-tab index="1" class="panel-heading" heading="Boxplot">
+          <div class="panel-body scrollable">
+            <div ng-if="loading" class="loading">
+              <div class="fa fa-spin fa-spinner"></div>
+            </div>
+            <div ng-if="plots.length" ng-repeat="plot in plots" class="panel-body">
+              <highchart config="plot"></highchart>
+            </div>
+          </div>
+        </uib-tab>
+        <uib-tab index="1" class="panel-heading" heading="t-SNE">
+          <div class="panel-body scrollable">
+            <div ng-if="loading" class="loading">
+              <div class="fa fa-spin fa-spinner"></div>
+            </div>
+            <div ng-if="plots.length" ng-repeat="plot in plots" class="panel-body">
+              <highchart config="plot"></highchart>
+            </div>
+          </div>
+        </uib-tab>
       </uib-tabset>
     </div>
   </div>

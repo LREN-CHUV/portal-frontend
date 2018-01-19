@@ -47,6 +47,7 @@ angular.module("chuvApp.models").controller("ReviewController", [
     $scope.model = {};
     $scope.query = {};
     $scope.dataset = null;
+    $scope.datasets = null; // sources of the data
 
     $scope.chartConfig = {
       type: "designmatrix",
@@ -346,6 +347,8 @@ angular.module("chuvApp.models").controller("ReviewController", [
           });
 
           $scope.allVariables = _.indexBy(allVariables, "code");
+          $scope.datasets = allVariables.find(function(v) {});
+
           return Group.get().$promise;
         })
         .then(function(group) {

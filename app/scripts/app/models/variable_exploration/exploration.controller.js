@@ -176,7 +176,7 @@ angular.module("chuvApp.models").controller("ExploreController", [
         return Group.get().$promise;
       })
       .then(function(group) {
-        // Do not display no-group group
+        // Do not display no-group groupdatasets
         $scope.groups = group.groups.filter(function(g) {
           return g.code !== "no-group";
         });
