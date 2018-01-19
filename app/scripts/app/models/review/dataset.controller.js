@@ -146,18 +146,14 @@ angular.module("chuvApp.models").controller("DatasetController", [
 
       getHistogram(focusedVariable).then(format, error);
 
-      // TODO: I comment this because this request returns the error
-      // {"error":"Cannot complete job 35785dcc-ba69-4221-aebf-19ccb7dfab8c using hbpmip/r-summary-stats:2afe249, timeout while waiting for job results.
-      // Does the algorithm store its results or errors in the output database?"}
-
-      // Variable.getStatistics(focusedVariable.code).then(
-      //   function(response) {
-      //     console.log("getStatistics", response);
-      //   },
-      //   function() {
-      //     console.log("Error");
-      //   }
-      // );
+      Variable.getStatistics(focusedVariable.code).then(
+        function(response) {
+          console.log("getStatistics", response);
+        },
+        function() {
+          console.log("Error");
+        }
+      );
     };
 
     $scope.open_experiment = function() {
