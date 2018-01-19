@@ -436,9 +436,13 @@ gulp.task("browser-sync", function() {
 
   gulp.watch(appConfig.app + "/styles/**/*.less", ["styles:dev"]);
   gulp.watch(appConfig.app + "/scripts/**/*.js", ["index-html:dev"]);
-  gulp.watch(appConfig.app + "/scripts/**/*.js").on("change", browserSync.reload);
+  gulp
+    .watch(appConfig.app + "/scripts/**/*.js")
+    .on("change", browserSync.reload);
+  gulp.watch("./bower.json", ["index-html:dev"]);
   gulp.watch(appConfig.app + "/index-gulp.html", ["index-html:dev"]);
   gulp.watch(appConfig.app + "/index.html").on("change", browserSync.reload);
+  gulp.watch(appConfig.app + "/scripts/**/*.html").on("change", browserSync.reload);
 });
 
 
