@@ -414,6 +414,7 @@ angular.module("chuvApp.models").controller("ReviewController", [
         ).slice(0, 5);
         update_location_search();
         reload_hc_config();
+        $scope.startChart = true;
       });
     };
 

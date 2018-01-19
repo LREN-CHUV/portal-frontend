@@ -135,10 +135,8 @@ angular.module("chuvApp.util").factory("ChartUtil", [
       }
 
       return {
-        options: {
-          chart: {
-            type: "boxplot"
-          }
+        chart: {
+          type: "boxplot"
         },
         title: config.title || {
           text: null,
@@ -207,23 +205,21 @@ angular.module("chuvApp.util").factory("ChartUtil", [
       dm_maxes.length = 0;
 
       return {
-        options: {
-          chart: {
-            type: "heatmap",
-            zoomType: "y"
-          },
-          colorAxis: {
-            minColor: "#FFFFFF",
-            maxColor: "#000000"
-          },
-          tooltip: {
-            formatter: function() {
-              return number(
-                this.point.value *
-                  (dm_maxes[this.point.x] - dm_mins[this.point.x]) +
-                  dm_mins[this.point.x]
-              );
-            }
+        chart: {
+          type: "heatmap",
+          zoomType: "y"
+        },
+        colorAxis: {
+          minColor: "#FFFFFF",
+          maxColor: "#000000"
+        },
+        tooltip: {
+          formatter: function() {
+            return number(
+              this.point.value *
+              (dm_maxes[this.point.x] - dm_mins[this.point.x]) +
+              dm_mins[this.point.x]
+            );
           }
         },
         title: angular.isDefined(config.title) ?
@@ -234,7 +230,7 @@ angular.module("chuvApp.util").factory("ChartUtil", [
           title: null
         },
         yAxis: {
-          title: null,
+          title: {text: null},
           labels: { enabled: false }
         },
         size: {
@@ -397,13 +393,11 @@ angular.module("chuvApp.util").factory("ChartUtil", [
             height: config.height,
             width: config.width
           },
-          options: {
-            chart: {
-              type: type
-            },
-            legend: {
-              enabled: config.showLegend !== false
-            }
+          chart: {
+            type: type
+          },
+          legend: {
+            enabled: config.showLegend !== false
           },
           series: config.yAxisVariables.map(function(code, index) {
             return {
