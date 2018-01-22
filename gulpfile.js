@@ -175,6 +175,14 @@ var appPath = {
 
 // Wiredep module options, wiredep includes bower components into index.html(dev) or index-tmpl.html(prod)
 var wiredepOptions = {
+  fileTypes:{
+     html: {
+       replace: {
+         js: '<script src="{{filePath}}"></script>',
+         css: '<link rel="stylesheet" href="{{filePath}}" />'
+       }
+     }
+   },
   ignorePath: /\.\.\//,
   exclude: [ /angular-gridster/, /less/, /SHA-1/, /ng-csv/, /doT/, /jquery-extendext/, /jquery-mousewheel/, /jquery.ui.draggable.js/, /jquery.ui.resizable.js/ ] //exclude libraries, wich wasn't in Grunt
 };

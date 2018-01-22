@@ -34209,9 +34209,9 @@ div.modal-body img {
   }
 }
 .intro #login_btn {
-  position: absolute;
-  bottom: 20px;
-  left: calc(50% - 40px);
+  position: fixed;
+  top: 20px;
+  right: 20px;
 }
 .intro #login_btn span {
   color: black;
