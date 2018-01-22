@@ -4,11 +4,9 @@
       <div class="panel-heading">Datasets</div>
       <div class="panel-body">
         <ul class="list-group">
-          <li class="list-group-item active">All</li>
-          <li class="list-group-item">CHUV</li>
-          <li class="list-group-item">CHRU</li>
-          <li class="list-group-item">GOMN</li>
-          <li class="list-group-item">ADNI</li>
+          <li ng-repeat="dataset in datasets" class="list-group-item">
+            <a href="">{{dataset.label}}</a>
+          </li>
         </ul>
       </div>
     </div>
@@ -57,23 +55,18 @@
       <uib-tabset active="active">
         <uib-tab index="0" class="panel-heading" heading="Table">
           <div class="panel-body scrollable">
-              <div ng-if="loading" class="loading">
-                <div class="fa fa-spin fa-spinner"></div>
-              </div>
-              <table class="table table-striped">
+            <div ng-if="loading" class="loading">
+              <div class="fa fa-spin fa-spinner"></div>
+            </div>
+            <table class="table table-striped">
               <tr>
-                <th>Measurement count</th>
-                <th>Min</th>
-                <th>Max</th>
-                <th>Average</th>
-                <th>Standard dev.</th>
+                <th>Variables</th>
+                <th ng-repeat="dataset in datasets">
+                  {{dataset.label}}
+                </th>
               </tr>
-              <tr ng-repeat="plot in plots">
-                <td ng-bind="plot.stats.count | number"></td>
-                <td ng-bind="plot.stats.min | number"></td>
-                <td ng-bind="plot.stats.max | number"></td>
-                <td ng-bind="plot.stats.av | number"></td>
-                <td ng-bind="0 | number"></td>
+              <tr ng-repeat="row in table">
+                <td ng-repeat="column in row">{{column}}</td>
               </tr>
             </table>
           </div>

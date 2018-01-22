@@ -29,6 +29,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
     $state,
     $uibModal
   ) {
+    var hierarchy = {};
     $scope.selectedVariables = [];
     $scope.loading = true;
     $scope.datasets = [];
@@ -49,6 +50,10 @@ angular.module("chuvApp.models").controller("DatasetController", [
     $scope.query.filters = map_query("filter");
     $scope.query.textQuery = search.query;
 
+    Variable.datasets().then(function(datasets) {
+      $scope.datasets = datasets;
+    });
+
     var getDependantVariable = function() {
       return (
         ($scope.query &&
@@ -60,6 +65,8 @@ angular.module("chuvApp.models").controller("DatasetController", [
     };
 
     var dependantVariable = getDependantVariable();
+
+    //
     $scope.$on("event:loadModel", function(evt, model) {
       $scope.loadResources(model);
       dependantVariable = getDependantVariable();
@@ -70,6 +77,80 @@ angular.module("chuvApp.models").controller("DatasetController", [
       $scope.loadResources({});
     }
 
+    // Table resources
+    Variable.hierarchy().then(function(hierarchy) {
+      // var findParent = function(nodes, child) {
+      //   if (!angular.isArray(nodes)) {
+      //     //
+      //     console.log(nodes)
+      //   }
+      //   var node = nodes.find(function(n) {
+      //     return n.code === child.code;
+      //   });
+
+      //   if (node) {
+      //     return node.code;
+      //   } else {
+      //     nodes.forEach(function(n) {
+      //       if (n.groups || n.variables) {
+      //         findParent(n.groups ? n.groups : n.variables, child);
+      //       }
+      //     });
+      //   }
+      // };
+      var node;
+      var findParent = function(child) {
+        var ii;
+
+        var stack = hierarchy.groups;
+        while (stack.length > 0) {
+          node = stack.pop();
+          if (node.code === child.code) {
+            break;
+          } else if (node.groups) {
+            for (ii = 0; ii < node.groups.length; ii += 1) {
+              stack.push(node.groups[ii]);
+            }
+          } else if (node.variables) {
+            for (ii = 0; ii < node.variables.length; ii += 1) {
+              stack.push(node.variables[ii]);
+            }
+          }
+        }
+      };
+
+      var parent = findParent(hierarchy.groups, dependantVariable);
+
+      var rows = [
+        [node],
+        [
+          dependantVariable.code,
+          "76.5 (SD 3.32)",
+          "71.5 (SD 3.34)",
+          "72.1 (SD 3.28)"
+        ]
+      ];
+      $scope.query.coVariables.forEach(function(c) {
+        rows.push([
+          c.code,
+          "76.5 (SD 3.32)",
+          "71.5 (SD 3.34)",
+          "72.1 (SD 3.28)"
+        ]);
+      });
+      $scope.query.groupings.forEach(function(c) {
+        rows.push([
+          c.code,
+          "76.5 (SD 3.32)",
+          "71.5 (SD 3.34)",
+          "72.1 (SD 3.28)"
+        ]);
+      });
+
+      $scope.table = rows;
+    });
+
+    // Charts ressources
     var getHistogram = function(variable) {
       return Variable.get_histo(variable.code);
     };

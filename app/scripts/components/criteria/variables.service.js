@@ -7,7 +7,8 @@ angular.module("chuvApp.components.criteria").factory("Variable", [
   "$resource",
   "backendUrl",
   "$http",
-  function($resource, backendUrl, $http) {
+  "$rootScope",
+  function($resource, backendUrl, $http, $rootScope) {
     var resource = $resource(
       backendUrl + "/variables",
       {},
@@ -19,6 +20,30 @@ angular.module("chuvApp.components.criteria").factory("Variable", [
         }
       }
     );
+
+    resource.datasets = function() {
+      return $http
+        .get(backendUrl + "/variables/dataset")
+        .then(function(response) {
+          var data = response.data.enumerations;
+          return data;
+        });
+    };
+
+    resource.hierarchy = function() {
+      var hierarchy = $rootScope.hierarchy;
+      if (hierarchy) {
+        return Promise.resolve(hierarchy);
+      }
+
+      return $http
+        .get(backendUrl + "/variables/hierarchy")
+        .then(function(response) {
+          var data = response.data;
+          $rootScope.hierarchy = data;
+          return data;
+        });
+    };
 
     resource.mockup = function() {
       return $resource("/scripts/app/mock/variables.json").query();
