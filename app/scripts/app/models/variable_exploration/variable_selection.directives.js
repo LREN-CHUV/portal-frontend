@@ -564,11 +564,11 @@ angular
           };
 
           $scope.get_button_label = function(type) {
-            var focusedVariable = $scope.getFocusedVariable(),
-              is_group = focusedVariable && !!focusedVariable.groups,
-              is_used_as =
-                focusedVariable &&
-                focusedVariable.code in $scope.configuration[type];
+            var focusedVariable = $scope.getFocusedVariable();
+            var is_group = focusedVariable && !!focusedVariable.groups;
+            var is_used_as =
+              focusedVariable &&
+              focusedVariable.code in $scope.configuration[type];
 
             return (
               [["+", "-"], ["+ all", "- all"]][+is_group][+is_used_as] +
