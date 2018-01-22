@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 angular
   .module("chuvApp.experiments")
@@ -7,7 +7,6 @@ angular
     "MLUtils",
     "$stateParams",
     "Model",
-    "Dataset",
     "$location",
     "$uibModal",
     "notifications",
@@ -16,14 +15,12 @@ angular
       MLUtils,
       $stateParams,
       Model,
-      Dataset,
       $location,
       $uibModal,
       notifications
     ) {
       $scope.loaded = false;
       $scope.parseInt = parseInt;
-      $scope.datasets = Dataset;
 
       var ml_all_methods = [];
       $scope.ml_methods = [];
@@ -119,8 +116,8 @@ angular
       // function to be called when query and dataset are ready
       function on_data_loaded() {
         $scope.loaded = true;
-        $scope.ml_methods = $scope.mode.local.active ?
-          ml_all_methods.filter(function(m) {
+        $scope.ml_methods = $scope.mode.local.active
+          ? ml_all_methods.filter(function(m) {
               return m.code.substr(0, 3) !== "WP_";
             })
           : ml_all_methods.filter(function(m) {
@@ -155,7 +152,9 @@ angular
 
       $scope.set_mode = function(mode) {
         var local = mode === "local";
-        if (local === $scope.mode.local.active) {return;}
+        if (local === $scope.mode.local.active) {
+          return;
+        }
 
         $scope.mode.local.active = local ? true : false;
         on_data_loaded();
@@ -188,12 +187,13 @@ angular
 
         // step 1: load query
         var search = $location.search();
-        
+
         var map_query = function(category) {
-          return search[category] ?
-            search[category].split(",").map(function(code) {
+          return search[category]
+            ? search[category].split(",").map(function(code) {
                 return { code: code };
-              }) : [];
+              })
+            : [];
         };
 
         $scope.query = {
@@ -225,7 +225,8 @@ angular
             controller: [
               "$scope",
               // "$state",
-              function(child_scope/*, $state*/) { // TODO: var isn't used, commented to jshint warning detection
+              function(child_scope /*, $state*/) {
+                // TODO: var isn't used, commented to jshint warning detection
                 child_scope.do_save_model = function() {
                   var config = $stateParams.graph_config || {
                     type: "designmatrix",
@@ -330,7 +331,9 @@ angular
                 parameter.label +
                 "=" +
                 parameter.value +
-                (index !== $scope.shared.method_parameters.length - 1 ? ", " : "")
+                (index !== $scope.shared.method_parameters.length - 1
+                  ? ", "
+                  : "")
               );
             });
         }
@@ -466,7 +469,9 @@ angular
       function get_experiment() {
         MLUtils.get_experiment($stateParams.experiment_uuid).then(
           function on_get_experiment_success(response) {
-            if (cancelled) {return;}
+            if (cancelled) {
+              return;
+            }
 
             $scope.experiment = response.data;
             $scope.loading = false;
@@ -515,12 +520,14 @@ angular
             }
           },
           function on_get_experiment_fail(response) {
-            if (cancelled) {return;}
+            if (cancelled) {
+              return;
+            }
             $scope.loading = false;
             $scope.experiment = {
               hasError: true,
-              result: response.data ?
-                response.status +
+              result: response.data
+                ? response.status +
                     " " +
                     response.data.error +
                     "\n" +
