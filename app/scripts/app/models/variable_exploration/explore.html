@@ -61,15 +61,6 @@
             configuration="configuration">
         </variable-configuration>
 
-        <div class="panel">
-          <div class="panel-heading explore-container">
-            <button
-              class="btn btn-primary"
-              ng-class="{disabled: !has_valid_configuration() }"
-              ng-click="go_to_review();"
-              >Review Model</button>
-          </div>
-        </div>
       </div>
       <div class="col-xs-12" style="margin-top: -60px">
         <button ng-if="has_valid_configuration()" ng-click="go_to_review();" class="center-block btn-round" style="display: block">
