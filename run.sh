@@ -18,8 +18,7 @@ else
 fi
 
 if [ $no_cache ] ; then
-    echo "INFO: --no-cache"
-    docker run -v $(pwd)/app:/frontend/app -it --rm -p8000:8000 --name portal_frontend_dev portal-frontend-dev
+    docker run -it --rm -p8000:8000 --name portal_frontend_dev portal-frontend-dev
 else
-    docker run -v $(pwd)/app:/frontend/app -it --rm -p8000:8000 --name portal_frontend_dev hbpmip/portal-frontend-dev
+    docker run -it --rm -p8000:8000 --name portal_frontend_dev hbpmip/portal-frontend-dev
 fi

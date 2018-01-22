@@ -180,6 +180,14 @@ var appPath = {
 
 // Wiredep module options, wiredep includes bower components into index.html(dev) or index-tmpl.html(prod)
 var wiredepOptions = {
+  fileTypes:{
+     html: {
+       replace: {
+         js: '<script src="{{filePath}}"></script>',
+         css: '<link rel="stylesheet" href="{{filePath}}" />'
+       }
+     }
+   },
   ignorePath: /\.\.\//,
   exclude: [
     /angular-gridster/,

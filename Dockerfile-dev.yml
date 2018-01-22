@@ -1,25 +1,19 @@
 FROM node:7.10.1
 
-RUN mkdir -p /frontend
-
 WORKDIR /frontend
+RUN cd /frontend
 
 RUN npm install -g gulp
 RUN npm install -g bower
 RUN npm install -g http-server
 
-
 COPY package.json /frontend
 RUN npm install --silent
 
-RUN mkdir -p /frontend/app/bower_components
 COPY bower.json /frontend
 COPY .bowerrc /frontend
-RUN bower install --allow-root
+RUN bower --allow-root install
 
-COPY ./app /frontend
-COPY config.json /frontend
-COPY gulpfile.js /frontend
-RUN gulp develop-doc
+COPY . /frontend
 
 CMD gulp
