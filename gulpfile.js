@@ -180,6 +180,14 @@ var appPath = {
 
 // Wiredep module options, wiredep includes bower components into index.html(dev) or index-tmpl.html(prod)
 var wiredepOptions = {
+  fileTypes:{
+     html: {
+       replace: {
+         js: '<script src="{{filePath}}"></script>',
+         css: '<link rel="stylesheet" href="{{filePath}}" />'
+       }
+     }
+   },
   ignorePath: /\.\.\//,
   exclude: [
     /angular-gridster/,
@@ -471,8 +479,10 @@ gulp.task("browser-sync", function() {
   gulp
     .watch(appConfig.app + "/scripts/**/*.js")
     .on("change", browserSync.reload);
+  gulp.watch("./bower.json", ["index-html:dev"]);
   gulp.watch(appConfig.app + "/index-gulp.html", ["index-html:dev"]);
   gulp.watch(appConfig.app + "/index.html").on("change", browserSync.reload);
+  gulp.watch(appConfig.app + "/scripts/**/*.html").on("change", browserSync.reload);
 });
 
 // Lint js files in "app/scripts"

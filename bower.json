@@ -19,7 +19,6 @@
     "angular-ui-tinymce": "^0.0.19",
     "angular-xeditable": "^0.8.1",
     "highcharts": "^6.0.4",
-    "highmaps": "https://github.com/highslide-software/highmaps-release/archive/v4.2.6.zip",
     "highcharts-ng": "^1.2.0",
     "underscore": "^1.8.3",
     "angular-i18n": "^1.6.8",
@@ -87,9 +86,19 @@
     "javascript-detect-element-resize": {
       "main": "jquery.resize.js"
     },
-    "highmaps": {
-      "main": "modules/map.js"
+    "highcharts": {
+      "main": [
+        "highstock.js",
+        "highcharts-more.js",
+        "modules/heatmap.js",
+        "modules/exporting.js",
+        "modules/data.js",
+        "modules/boost-canvas.js",
+        "modules/boost.js",
+        "modules/map.js"
+      ]
     },
+
     "jQuery-QueryBuilder": {
       "main": [
         "dist/js/query-builder.standalone.js",
