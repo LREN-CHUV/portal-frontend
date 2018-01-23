@@ -7,8 +7,10 @@ angular.module("chuvApp.components.criteria").factory("Variable", [
   "$resource",
   "backendUrl",
   "$http",
-  "$rootScope",
-  function($resource, backendUrl, $http, $rootScope) {
+  "$cacheFactory",
+  function($resource, backendUrl, $http, $cacheFactory) {
+    var cache = $cacheFactory("hbp-sp8");
+
     var resource = $resource(
       backendUrl + "/variables",
       {},
@@ -31,8 +33,8 @@ angular.module("chuvApp.components.criteria").factory("Variable", [
     };
 
     resource.hierarchy = function() {
-      var hierarchy = $rootScope.hierarchy;
-      if (hierarchy) {
+      var hierarchy = cache.get("hierarchy");
+      if (!angular.isUndefined(hierarchy)) {
         return Promise.resolve(hierarchy);
       }
 
@@ -40,9 +42,31 @@ angular.module("chuvApp.components.criteria").factory("Variable", [
         .get(backendUrl + "/variables/hierarchy")
         .then(function(response) {
           var data = response.data;
-          $rootScope.hierarchy = data;
+
+          if (!angular.isUndefined(data)) {
+            cache.put("hierarchy", data);
+          }
+
           return data;
         });
+    };
+
+    resource.parent = function(child) {
+      return resource.hierarchy().then(function(data) {
+        var node;
+        function iterate(current, depth) {
+          var children = current.groups || current.variables;
+          if (children.code === child.code) {
+            node = current;
+          }
+          for (var i = 0, len = children.length; i < len; i++) {
+            iterate(children[i], depth + 1);
+          }
+        }
+        iterate(data, 0);
+
+        return "node";
+      });
     };
 
     resource.mockup = function() {
