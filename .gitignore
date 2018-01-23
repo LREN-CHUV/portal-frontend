@@ -4,6 +4,7 @@ app/scripts/app/app.config.js
 dist/
 node_modules/
 app/index.html
+app/tmp/
 reports/
 *.log
 package-lock.json
