@@ -12,6 +12,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
   "$log",
   "$timeout",
   "$location",
+  "$state",
   "$uibModal",
   function(
     $scope,
@@ -25,10 +26,12 @@ angular.module("chuvApp.models").controller("DatasetController", [
     $log,
     $timeout,
     $location,
+    $state,
     $uibModal
   ) {
     $scope.selectedVariables = [];
     $scope.loading = true;
+    $scope.datasets = [];
 
     // params key/values
     var search = $location.search();
@@ -153,6 +156,32 @@ angular.module("chuvApp.models").controller("DatasetController", [
           console.log("Error");
         }
       );
+    };
+
+    $scope.open_experiment = function() {
+      if ($scope.model && $scope.model.slug) {
+        return $state.go("new_experiment", { model_slug: $scope.model.slug });
+      }
+
+      function unmap_category(category) {
+        return $scope.query[category]
+          .map(function(variable) {
+            return variable.code;
+          })
+          .join(",");
+      }
+
+      var query = {
+        variables: unmap_category("variables"),
+        coVariables: unmap_category("coVariables"),
+        groupings: unmap_category("groupings"),
+        filters: unmap_category("filters"),
+        textQuery: $location.search().textQuery,
+        graph_config: $scope.chartConfig,
+        model_slug: ""
+      };
+
+      return $state.go("new_experiment", query);
     };
 
     // init

@@ -14,6 +14,7 @@ angular
           $scope.search_history = [];
           $scope.search = {};
           $scope.selectedDatasets = [];
+          $scope.populatedGroups = {}; // FIXME: bad scope
 
           $scope.isDatasetSelected = function(dataset) {
             return $scope.selectedDatasets.includes(dataset);
@@ -50,7 +51,7 @@ angular
 
             // put groups in datastructure
             groups = map_groups($scope);
-
+            $scope.populatedGroups = groups;
             // and then all the variables in all the right groups
             $scope.allVariables.forEach(function(variable) {
               var group = group_dict[variable.group.code],
@@ -239,14 +240,18 @@ angular
 
               // this happens when a circle is clicked: bind the variable
               // and notify angular, since the event doesn't happen within angular.
-              if ($scope.focused_variable !== d.original) {
-                $scope.set_focused_variable(d !== groups && d.original);
+              if (
+                !$scope.focused_variable ||
+                $scope.focused_variable.code !== d.original.code
+              ) {
+                var variable = d.is_group
+                  ? Object.assign({ is_group: true }, d.original)
+                  : d.original;
+                $scope.set_focused_variable(variable);
                 $scope.search.value = null;
                 $scope.search.group = null;
 
-                if (!d.is_group) {
-                  $scope.$apply();
-                }
+                $scope.$apply();
               }
             }
 
@@ -285,6 +290,7 @@ angular
               if (!groupNode) {
                 return;
               }
+
               zoom(groupNode);
             });
           }
@@ -405,7 +411,42 @@ angular
           };
 
           $scope.$watch("focused_variable", function(focused_variable) {
-            if (!focused_variable || !focused_variable.code) {
+            if (!focused_variable || focused_variable.is_group) {
+              var node;
+
+              if (focused_variable && focused_variable.code) {
+                var ii;
+                var stack = $scope.populatedGroups.children.slice(0);
+                while (stack.length > 0) {
+                  node = stack.pop();
+                  if (node.code == focused_variable.code) {
+                    // Found it!
+                    break;
+                  } else if (node.children && node.children.length) {
+                    for (ii = 0; ii < node.children.length; ii += 1) {
+                      stack.push(node.children[ii]);
+                    }
+                  }
+                }
+              } else {
+                node = $scope.populatedGroups;
+              }
+
+              var length = 0;
+              var recNodeCalc = function(node) {
+                if (!node || !node.children) return;
+                node.children.map(function(c) {
+                  length = c.is_group ? length : length + 1;
+                  recNodeCalc(c);
+                });
+              };
+              recNodeCalc(node);
+
+              $scope.stats = {
+                variables: length
+              };
+              $scope.focused_variable_loaded = true;
+
               return;
             }
 
