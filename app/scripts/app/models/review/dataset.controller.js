@@ -179,18 +179,40 @@ angular.module("chuvApp.models").controller("DatasetController", [
 
       getHistogram(focusedVariable).then(format, error);
 
-      // TODO: I comment this because this request returns the error
-      // {"error":"Cannot complete job 35785dcc-ba69-4221-aebf-19ccb7dfab8c using hbpmip/r-summary-stats:2afe249, timeout while waiting for job results.
-      // Does the algorithm store its results or errors in the output database?"}
+      Variable.getStatistics(focusedVariable.code).then(
+        function(response) {
+          console.log("getStatistics", response);
+        },
+        function() {
+          console.log("Error");
+        }
+      );
+    };
 
-      // Variable.getStatistics(focusedVariable.code).then(
-      //   function(response) {
-      //     console.log("getStatistics", response);
-      //   },
-      //   function() {
-      //     console.log("Error");
-      //   }
-      // );
+    $scope.open_experiment = function() {
+      if ($scope.model && $scope.model.slug) {
+        return $state.go("new_experiment", { model_slug: $scope.model.slug });
+      }
+
+      function unmap_category(category) {
+        return $scope.query[category]
+          .map(function(variable) {
+            return variable.code;
+          })
+          .join(",");
+      }
+
+      var query = {
+        variables: unmap_category("variables"),
+        coVariables: unmap_category("coVariables"),
+        groupings: unmap_category("groupings"),
+        filters: unmap_category("filters"),
+        textQuery: $location.search().textQuery,
+        graph_config: $scope.chartConfig,
+        model_slug: ""
+      };
+
+      return $state.go("new_experiment", query);
     };
 
     $scope.open_experiment = function() {
