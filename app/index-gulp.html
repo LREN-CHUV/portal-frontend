@@ -18,23 +18,13 @@
   <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
   <!-- build:css styles/vendor.css -->
   <!-- bower:css -->
-  <link rel="stylesheet" href="bower_components/angular-xeditable/dist/css/xeditable.css" />
-  <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.css" />
-  <link rel="stylesheet" href="bower_components/themify-icons/css/themify-icons.css" />
-  <link rel="stylesheet" href="bower_components/themify-icons/ie7/ie7.css" />
-  <link rel="stylesheet" href="bower_components/angular-bootstrap-colorpicker/css/colorpicker.css" />
-  <link rel="stylesheet" href="bower_components/iCheck/skins/all.css" />
-  <link rel="stylesheet" href="bower_components/angular-ui-select/dist/select.css" />
-  <link rel="stylesheet" href="bower_components/gridster/dist/jquery.gridster.min.css" />
-  <link rel="stylesheet" href="bower_components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css" />
-  <link rel="stylesheet" href="bower_components/jQuery-QueryBuilder/dist/css/query-builder.default.css" />
   <!-- endbower -->
   <!-- /build -->
 
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/select2/3.4.5/select2.css">
 
   <!-- build:css styles/main.css -->
-  <link rel="stylesheet" href="styles/css/styles.css" />
+  <link rel="stylesheet" href="tmp/main.css" />
   <!-- /build -->
 
 </head>
@@ -112,83 +102,12 @@
 </div>
 
 <!-- build:js scripts/vendor.js -->
-<!-- bower:js -->
-<!-- endbower -->
-<script type='text/javascript' src='styles/plugins/wijets/wijets.js'></script>
+<script src="/tmp/vendor.js"></script>
 <!-- /build -->
 
 
 <!-- build:js scripts/scripts.js -->
-<!-- inject:js -->
-<script src="/scripts/app/app.js"></script>
-<script src="/scripts/app/app.config.js"></script>
-<script src="/scripts/components/hightlight/hightlight.filter.js"></script>
-<script src="/scripts/app/header/header.module.js"></script>
-<script src="/scripts/app/header/header.controller.js"></script>
-<script src="/scripts/app/home/home.module.js"></script>
-<script src="/scripts/app/home/home.router.js"></script>
-<script src="/scripts/app/home/home.controller.js"></script>
-<script src="/scripts/app/home/tos.controller.js"></script>
-<script src="/scripts/app/hbpapps/hbpapps.module.js"></script>
-<script src="/scripts/app/hbpapps/hbpapps.controller.js"></script>
-<script src="/scripts/app/articles/articles.module.js"></script>
-<script src="/scripts/app/articles/articles.service.js"></script>
-<script src="/scripts/app/users/users.module.js"></script>
-<script src="/scripts/app/users/users.controller.js"></script>
-<script src="/scripts/app/users/users.service.js"></script>
-<script src="/scripts/app/requests/requests.module.js"></script>
-<script src="/scripts/app/requests/requests.service.js"></script>
-<script src="/scripts/app/requests/requests.controller.js"></script>
-<script src="/scripts/app/models/model.module.js"></script>
-<script src="/scripts/app/models/model.router.js"></script>
-<script src="/scripts/app/models/model.controller.js"></script>
-<script src="/scripts/app/models/model.service.js"></script>
-<script src="/scripts/app/models/variable_exploration/exploration.controller.js"></script>
-<script src="/scripts/app/models/variable_exploration/variable_selection.directives.js"></script>
-<script src="/scripts/app/models/review/review.controller.js"></script>
-<script src="/scripts/app/models/review/chart.controller.js"></script>
-<script src="/scripts/app/models/review/configuration.controller.js"></script>
-<script src="/scripts/app/models/review/criteria.controller.js"></script>
-<script src="/scripts/app/models/review/estimation.controller.js"></script>
-<script src="/scripts/app/models/review/footer.controller.js"></script>
-<script src="/scripts/components/criteria/criteria.module.js"></script>
-<script src="/scripts/components/criteria/criteria.service.js"></script>
-<script src="/scripts/components/criteria/groups.service.js"></script>
-<script src="/scripts/components/criteria/variables.service.js"></script>
-<script src="/scripts/components/criteria/chained-select.directive.js"></script>
-<script src="/scripts/components/util/util-module.js"></script>
-<script src="/scripts/components/util/chart-util.service.js"></script>
-<script src="/scripts/components/util/modal-util.service.js"></script>
-<script src="/scripts/components/header/header-module.js"></script>
-<script src="/scripts/components/header/header-scroll.js"></script>
-<script src="/scripts/app/experiments/experiments.module.js"></script>
-<script src="/scripts/app/experiments/experiments.controller.js"></script>
-<script src="/scripts/app/experiments/experiments.services.js"></script>
-<script src="/scripts/app/experiments/experiments.directives.js"></script>
-<script src="/scripts/app/experiments/results/results.directives.js"></script>
-<script src="/scripts/components/button/button-module.js"></script>
-<script src="/scripts/components/button/button-rounded.js"></script>
-<script src="/scripts/components/button/carrousel-button.js"></script>
-<script src="/scripts/components/checkbox/checkbox-module.js"></script>
-<script src="/scripts/components/checkbox/icheckbox.js"></script>
-<script src="/scripts/components/date/from-now.filter.js"></script>
-<script src="/scripts/components/carrousel/carrousel-module.js"></script>
-<script src="/scripts/components/carrousel/carrousel.js"></script>
-<script src="/scripts/components/notifications/notifications-module.js"></script>
-<script src="/scripts/components/notifications/notifications.js"></script>
-<script src="/scripts/app/mydata/mydata.module.js"></script>
-<script src="/scripts/app/mydata/mydata.controller.js"></script>
-<script src="/scripts/app/profile/profile.module.js"></script>
-<script src="/scripts/app/profile/profile.controller.js"></script>
-<script src="/scripts/components/scrollbar/scrollbar-module.js"></script>
-<script src="/scripts/components/scrollbar/scrollbar.js"></script>
-<script src="/scripts/app/intro/intro.module.js"></script>
-<script src="/scripts/app/intro/intro.controller.js"></script>
-<script src="/scripts/components/widget/widget.module.js"></script>
-<script src="/scripts/components/widget/widget.service.js"></script>
-<script src="/scripts/components/toolbar/toolbar.module.js"></script>
-<script src="/scripts/components/toolbar/toolbar.js"></script>
-<!-- endinject -->
+<script src="/tmp/scripts.js"></script>
 <!-- /build -->
 
 <script type="text/javascript" src="//www.dropbox.com/static/api/2/dropins.js" id="dropboxjs" data-app-key="7wew0rj0gh2qcik"></script>

@@ -183,3 +183,10 @@ angular
       editableOptions.icon_set = "font-awesome"; // jshint ignore:line
     }
   ]);
+
+let testVar = "Hello!";
+showtest => {
+  testVar += ' test';
+  console.log(testVar);
+};
+// showtest();
