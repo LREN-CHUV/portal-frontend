@@ -1,14 +1,13 @@
 FROM node:7.10.1
 
 WORKDIR /frontend
-RUN cd /frontend
 
 RUN npm install -g gulp
 RUN npm install -g bower
 RUN npm install -g http-server
 
 COPY package.json /frontend
-RUN npm install --silent
+RUN npm install
 
 COPY bower.json /frontend
 COPY .bowerrc /frontend
