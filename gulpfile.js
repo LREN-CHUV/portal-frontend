@@ -406,7 +406,7 @@ gulp.task("js-app:dev", function() {
     .pipe(plugins.sourcemaps.init())
     .pipe(plugins.ngAnnotate())
     .pipe(plugins.concat("scripts.js"))
-    .pipe(plugins.uglify())
+    // .pipe(plugins.uglify())
     .pipe(plugins.sourcemaps.write("."))
     .pipe(gulp.dest(appPath.src.tmp))
     .pipe(browserSync.stream());
