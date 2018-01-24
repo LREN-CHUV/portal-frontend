@@ -27,7 +27,6 @@ var appConfig = {
 // Application's srtucture paths
 var appPath = {
   src: {
-    html: appConfig.app + "/*.html",
     html404: appConfig.app + "/404.html",
     scripts: {
       html: [appConfig.app + "/scripts/!(external)/**/*.html"],
@@ -35,14 +34,6 @@ var appPath = {
     },
     less: appConfig.app + "/styles/less/styles.less",
     js: {
-      app: [
-        appConfig.app + "/scripts/app/app.js",
-        appConfig.app + "/scripts/app/app.config.js",
-        appConfig.app + "/scripts/app/**/**.module.js",
-        appConfig.app + "/scripts/components/**/**.module.js",
-        appConfig.app + "/scripts/app/**/**.js",
-        appConfig.app + "/scripts/components/**/**.js"
-      ],
       appScripts: [
         appConfig.app + "/scripts/app/app.js",
         appConfig.app + "/scripts/app/app.config.js",
@@ -124,7 +115,7 @@ var appPath = {
       ]
     },
     images: appConfig.app + "/images/**/*",
-    tmp: appConfig.app + "/../.tmp",
+    tmp: appConfig.app + "/tmp",
     other: {
       font: appConfig.app + "/font/**/*",
       fonts: [
@@ -149,7 +140,6 @@ var appPath = {
       html: appConfig.dist + "/scripts",
       external: appConfig.dist + "/scripts/external"
     },
-    cssDev: appConfig.app + "/styles/css",
     cssProd: appConfig.dist + "/styles",
     appConfig: appConfig.app + "/scripts/app",
     js: {
@@ -178,16 +168,9 @@ var appPath = {
   }
 };
 
-// Wiredep module options, wiredep includes bower components into index.html(dev) or index-tmpl.html(prod)
+// Wiredep module options, wiredep includes bower components
+// into index.html(dev) or index-tmpl.html(prod)
 var wiredepOptions = {
-  fileTypes: {
-    html: {
-      replace: {
-        js: '<script src="{{filePath}}"></script>',
-        css: '<link rel="stylesheet" href="{{filePath}}" />'
-      }
-    }
-  },
   ignorePath: /\.\.\//,
   exclude: [
     /angular-gridster/,
@@ -202,7 +185,6 @@ var wiredepOptions = {
   ] //exclude libraries, wich wasn't in Grunt
 };
 
-// Cleaning .tmp(dev) or dist(prod)
 gulp.task("clean:dev", function(cb) {
   return rimraf(appPath.src.tmp, cb);
 });
@@ -327,11 +309,6 @@ gulp.task("index-html:dev", function() {
   return gulp
     .src(appConfig.app + "/index-gulp.html")
     .pipe(wiredep(wiredepOptions))
-    .pipe(
-      plugins.inject(gulp.src(appPath.src.js.appScripts, { read: false }), {
-        ignorePath: "app"
-      })
-    )
     .pipe(rename("index.html"))
     .pipe(gulp.dest(appConfig.app));
 });
@@ -339,12 +316,6 @@ gulp.task("index-html:dev", function() {
 gulp.task("index-html:prod", function() {
   return gulp
     .src(appConfig.app + "/index-gulp.html")
-    .pipe(wiredep(wiredepOptions))
-    .pipe(
-      plugins.inject(gulp.src(appPath.src.js.appScripts, { read: false }), {
-        ignorePath: "app"
-      })
-    )
     .pipe(processhtml())
     .pipe(rename("index-tmpl.html"))
     .pipe(
@@ -370,8 +341,9 @@ gulp.task("styles:dev", function() {
           cascade: false
         })
       )
-      // .pipe(plugins.cssmin())
-      .pipe(gulp.dest(appPath.dist.cssDev))
+      .pipe(plugins.cssmin())
+      .pipe(rename("main.css"))
+      .pipe(gulp.dest(appPath.src.tmp))
       .pipe(browserSync.stream()) );
 });
 
@@ -391,8 +363,10 @@ gulp.task("styles:prod", function() {
 });
 
 gulp.task("styles-vendor:prod", function() {
+  var cssArr = require("wiredep")(wiredepOptions).css;
+
   return gulp
-    .src(require("wiredep")(wiredepOptions).css)
+    .src(cssArr)
     .pipe(plugins.importCss())
     .pipe(plugins.cssmin())
     .pipe(plugins.concat("vendor.css"))
@@ -400,20 +374,48 @@ gulp.task("styles-vendor:prod", function() {
 });
 
 // Concatenate js and copy it in dist folder
-gulp.task("js-vendor:prod", function() {
+gulp.task("js-vendor:dev", function() {
   var jsArr = require("wiredep")(wiredepOptions).js;
   jsArr.push(appConfig.app + "/styles/plugins/wijets/wijets.js");
 
   return gulp
     .src(jsArr)
+    .pipe(plugins.sourcemaps.init())
+    .pipe(plugins.babel())
+    .pipe(plugins.uglify())
+    .pipe(plugins.concat("vendor.js"))
+    .pipe(plugins.sourcemaps.write("."))
+    .pipe(gulp.dest(appPath.src.tmp));
+});
+
+gulp.task("js-vendor:prod", function() {
+  var jsArr = require("wiredep")(wiredepOptions).js;
+  jsArr.push(appConfig.app + "/styles/plugins/wijets/wijets.js");
+
+  return gulp.src(jsArr)
+    .pipe(plugins.babel())
     .pipe(plugins.uglify())
     .pipe(plugins.concat("vendor.js"))
     .pipe(gulp.dest(appPath.dist.js.vendorsPath));
 });
 
+gulp.task("js-app:dev", function() {
+  return gulp
+    .src(appPath.src.js.appScripts)
+    .pipe(plugins.babel({presets: ["es2015"]}))
+    .pipe(plugins.sourcemaps.init())
+    .pipe(plugins.ngAnnotate())
+    .pipe(plugins.concat("scripts.js"))
+    // .pipe(plugins.uglify())
+    .pipe(plugins.sourcemaps.write("."))
+    .pipe(gulp.dest(appPath.src.tmp))
+    .pipe(browserSync.stream());
+});
+
 gulp.task("js-app:prod", function() {
   return gulp
     .src(appPath.src.js.appScripts)
+    .pipe(plugins.babel({presets: ["es2015"]}))
     .pipe(plugins.ngAnnotate())
     .pipe(plugins.concat("scripts.js"))
     .pipe(plugins.uglify())
@@ -426,24 +428,20 @@ gulp.task("caching", function() {
 });
 
 gulp.task("revision", function() {
-  var htmlFilter = filter("*.html"),
-    jsFilter = filter("**/*.js"),
+  var jsFilter = filter("**/*.js"),
     cssFilter = filter("**/*.css");
 
-  var test = gulp.src(appPath.dist.revision).pipe(rev());
+  var revFiles = gulp.src(appPath.dist.revision).pipe(rev());
 
   return gulp
     .src(appPath.dist.revision)
     .pipe(rev())
     .pipe(jsFilter)
     .pipe(gulp.dest(appConfig.dist + "/scripts"))
-    .pipe(test)
+    .pipe(revFiles)
     .pipe(cssFilter)
     .pipe(gulp.dest(appConfig.dist + "/styles"))
-    .pipe(test)
-    .pipe(htmlFilter)
-    .pipe(gulp.dest(appConfig.dist))
-    .pipe(test)
+    .pipe(revFiles)
     .pipe(rev.manifest())
     .pipe(gulp.dest(appConfig.dist));
 });
@@ -463,10 +461,6 @@ gulp.task("replace-clean", function() {
 
 // Use Browser-sync instead of Livereload
 // Browser-sync watchs for less, js and index-gulp.html
-gulp.task("browser-sync-reload", function() {
-  return browserSync.reload();
-});
-
 gulp.task("browser-sync", function() {
   browserSync.init({
     server: "./app",
@@ -475,10 +469,7 @@ gulp.task("browser-sync", function() {
   });
 
   gulp.watch(appConfig.app + "/styles/**/*.less", ["styles:dev"]);
-  gulp.watch(appConfig.app + "/scripts/**/*.js", ["index-html:dev"]);
-  gulp
-    .watch(appConfig.app + "/scripts/**/*.js")
-    .on("change", browserSync.reload);
+  gulp.watch(appConfig.app + "/scripts/**/*.js", ["js-app:dev"]);
   gulp.watch("./bower.json", ["index-html:dev"]);
   gulp.watch(appConfig.app + "/index-gulp.html", ["index-html:dev"]);
   gulp.watch(appConfig.app + "/index.html").on("change", browserSync.reload);
@@ -519,13 +510,27 @@ gulp.task("develop", function() {
   runSequence(
     "clean:dev",
     "config:dev",
-    ["index-html:dev", "styles:dev"],
+    [
+      "styles:dev",
+      "js-app:dev",
+      "js-vendor:dev"
+    ],
+    "index-html:dev",
     "browser-sync"
   );
 });
 
 gulp.task("develop-doc", function() {
-  runSequence("clean:dev", "config:dev", ["index-html:dev", "styles:dev"]);
+  runSequence(
+    "clean:dev",
+    "config:dev",
+    [
+      "styles:dev",
+      "js-app:dev",
+      "js-vendor:dev"
+    ],
+    "index-html:dev"
+  );
 });
 
 // Main task, start develop proccess.
