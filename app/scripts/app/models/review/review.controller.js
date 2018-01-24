@@ -470,6 +470,11 @@ angular.module("chuvApp.models").controller("ReviewController", [
      * programmatically redirects to the review model, with the current model.
      */
     $scope.go_to_explore = function() {
+      // TODO: Temporary solution. $scope.query.filters came as a string, while we work with it as an array
+      if (!$scope.query.filters) {
+        $scope.query.filters = [];
+      }
+
       var should_configure =
         $scope.query.variables &&
         $scope.query.groupings &&
