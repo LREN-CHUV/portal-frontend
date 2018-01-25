@@ -1,23 +1,22 @@
 # Verified with http://hadolint.lukasmartinelli.ch/
-
-FROM digitallyseamless/nodejs-bower-grunt:6 as builder
-
-MAINTAINER mirco.nasuti@chuv.ch
-
-ENV production=true
+FROM node:7.10.1 as builder
 
 WORKDIR /frontend
 
+RUN npm install -g gulp
+RUN npm install -g bower
+RUN npm install -g http-server
+
 COPY package.json /frontend
+RUN npm install
+
 COPY bower.json /frontend
 COPY .bowerrc /frontend
-
-RUN npm install
-RUN bower install
+RUN bower --allow-root install
 
 COPY . /frontend
-RUN if [ "$production" = true ] ; then export build_option=--production; fi
-RUN grunt build $build_option
+
+RUN gulp build
 
 
 FROM nginx:1.13.0-alpine
