@@ -5,10 +5,10 @@
 
 angular
   .module("chuvApp.header")
-  .factory("App", [
+  .factory("Config", [
     "$resource",
     function($resource) {
-      return $resource("/scripts/app/version.json").get();
+      return $resource("/scripts/app/config.js").get();
     }
   ])
   .controller("HeaderController", [
@@ -18,7 +18,7 @@ angular
     "$state",
     "tmhDynamicLocale",
     "User",
-    "App",
+    "Config",
     // "$rootScope",
     // "$http",
     // "backendUrl",
@@ -29,7 +29,7 @@ angular
       $state,
       tmhDynamicLocale,
       User,
-      App /*,
+      Config /*,
     $rootScope, // TODO: vars aren't used, commented to jshint warning detection
     $http,
     backendUrl*/
@@ -70,9 +70,8 @@ angular
         User.logout();
       };
 
-      App.$promise.then(function(version) {
-        $scope.versionNumber = version.number;
-        $scope.name = version.name;
+      Config.$promise.then(function(config) {
+        $scope.name = config.name || "dev";
       });
     }
   ]);

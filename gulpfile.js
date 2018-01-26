@@ -126,7 +126,6 @@ var appPath = {
       ],
       i18n: appConfig.app + "/i18n/**/*",
       mocks: appConfig.app + "/mocks/**/*",
-      version: appConfig.app + "/version.json",
       libs: appConfig.app + "/libs/**/*",
       rootItems: [
         appConfig.app + "/.htaccess",
@@ -152,7 +151,6 @@ var appPath = {
       fonts: appConfig.dist + "/fonts",
       i18n: appConfig.dist + "/i18n",
       mocks: appConfig.dist + "/mocks",
-      version: appConfig.dist + "/version.json",
       libs: appConfig.dist + "/libs",
       rootItems: appConfig.dist
     },
@@ -231,7 +229,6 @@ gulp.task("copy-all", function() {
     "copy-fonts",
     "copy-i18n",
     "copy-mocks",
-    "copy-version",
     "copy-libs",
     "copy-rootItems",
     "copy-scripts-html",
@@ -262,12 +259,6 @@ gulp.task("copy-mocks", function() {
   return gulp
     .src(appPath.src.other.mocks)
     .pipe(gulp.dest(appPath.dist.other.mocks));
-});
-
-gulp.task("copy-version", function() {
-  return gulp
-    .src(appPath.src.other.version)
-    .pipe(gulp.dest(appPath.dist.other.version));
 });
 
 gulp.task("copy-libs", function() {

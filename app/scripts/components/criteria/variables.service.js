@@ -65,7 +65,7 @@ angular.module("chuvApp.components.criteria").factory("Variable", [
         }
         iterate(data, 0);
 
-        return "node";
+        return "node"; // FIXME: where is the commit?
       });
     };
 
