@@ -126,6 +126,7 @@ var appPath = {
       ],
       i18n: appConfig.app + "/i18n/**/*",
       mocks: appConfig.app + "/mocks/**/*",
+      version: appConfig.app + "/version.json",
       libs: appConfig.app + "/libs/**/*",
       rootItems: [
         appConfig.app + "/.htaccess",
@@ -151,6 +152,7 @@ var appPath = {
       fonts: appConfig.dist + "/fonts",
       i18n: appConfig.dist + "/i18n",
       mocks: appConfig.dist + "/mocks",
+      version: appConfig.dist + "/version.json",
       libs: appConfig.dist + "/libs",
       rootItems: appConfig.dist
     },
@@ -229,6 +231,7 @@ gulp.task("copy-all", function() {
     "copy-fonts",
     "copy-i18n",
     "copy-mocks",
+    "copy-version",
     "copy-libs",
     "copy-rootItems",
     "copy-scripts-html",
@@ -259,6 +262,12 @@ gulp.task("copy-mocks", function() {
   return gulp
     .src(appPath.src.other.mocks)
     .pipe(gulp.dest(appPath.dist.other.mocks));
+});
+
+gulp.task("copy-version", function() {
+  return gulp
+    .src(appPath.src.other.version)
+    .pipe(gulp.dest(appPath.dist.other.version));
 });
 
 gulp.task("copy-libs", function() {
@@ -332,19 +341,19 @@ gulp.task("index-html:prod", function() {
 
 // Compile less to css (dev) minify css (prod)
 gulp.task("styles:dev", function() {
-  return (gulp
-      .src(appPath.src.less)
-      .pipe(plugins.less())
-      .pipe(
-        plugins.autoprefixer({
-          browsers: ["last 3 versions"],
-          cascade: false
-        })
-      )
-      .pipe(plugins.cssmin())
-      .pipe(rename("main.css"))
-      .pipe(gulp.dest(appPath.src.tmp))
-      .pipe(browserSync.stream()) );
+  return gulp
+    .src(appPath.src.less)
+    .pipe(plugins.less())
+    .pipe(
+      plugins.autoprefixer({
+        browsers: ["last 3 versions"],
+        cascade: false
+      })
+    )
+    .pipe(plugins.cssmin())
+    .pipe(rename("main.css"))
+    .pipe(gulp.dest(appPath.src.tmp))
+    .pipe(browserSync.stream());
 });
 
 gulp.task("styles:prod", function() {
@@ -392,7 +401,8 @@ gulp.task("js-vendor:prod", function() {
   var jsArr = require("wiredep")(wiredepOptions).js;
   jsArr.push(appConfig.app + "/styles/plugins/wijets/wijets.js");
 
-  return gulp.src(jsArr)
+  return gulp
+    .src(jsArr)
     .pipe(plugins.babel())
     .pipe(plugins.uglify())
     .pipe(plugins.concat("vendor.js"))
@@ -400,22 +410,22 @@ gulp.task("js-vendor:prod", function() {
 });
 
 gulp.task("js-app:dev", function() {
-  return gulp
-    .src(appPath.src.js.appScripts)
-    .pipe(plugins.babel({presets: ["es2015"]}))
-    .pipe(plugins.sourcemaps.init())
-    .pipe(plugins.ngAnnotate())
-    .pipe(plugins.concat("scripts.js"))
-    // .pipe(plugins.uglify())
-    .pipe(plugins.sourcemaps.write("."))
-    .pipe(gulp.dest(appPath.src.tmp))
-    .pipe(browserSync.stream());
+  return (gulp
+      .src(appPath.src.js.appScripts)
+      .pipe(plugins.babel({ presets: ["es2015"] }))
+      .pipe(plugins.sourcemaps.init())
+      .pipe(plugins.ngAnnotate())
+      .pipe(plugins.concat("scripts.js"))
+      // .pipe(plugins.uglify())
+      .pipe(plugins.sourcemaps.write("."))
+      .pipe(gulp.dest(appPath.src.tmp))
+      .pipe(browserSync.stream()) );
 });
 
 gulp.task("js-app:prod", function() {
   return gulp
     .src(appPath.src.js.appScripts)
-    .pipe(plugins.babel({presets: ["es2015"]}))
+    .pipe(plugins.babel({ presets: ["es2015"] }))
     .pipe(plugins.ngAnnotate())
     .pipe(plugins.concat("scripts.js"))
     .pipe(plugins.uglify())
@@ -428,8 +438,7 @@ gulp.task("caching", function() {
 });
 
 gulp.task("revision", function() {
-  var jsFilter = filter("**/*.js"),
-    cssFilter = filter("**/*.css");
+  var jsFilter = filter("**/*.js"), cssFilter = filter("**/*.css");
 
   var revFiles = gulp.src(appPath.dist.revision).pipe(rev());
 
@@ -510,11 +519,7 @@ gulp.task("develop", function() {
   runSequence(
     "clean:dev",
     "config:dev",
-    [
-      "styles:dev",
-      "js-app:dev",
-      "js-vendor:dev"
-    ],
+    ["styles:dev", "js-app:dev", "js-vendor:dev"],
     "index-html:dev",
     "browser-sync"
   );
@@ -524,11 +529,7 @@ gulp.task("develop-doc", function() {
   runSequence(
     "clean:dev",
     "config:dev",
-    [
-      "styles:dev",
-      "js-app:dev",
-      "js-vendor:dev"
-    ],
+    ["styles:dev", "js-app:dev", "js-vendor:dev"],
     "index-html:dev"
   );
 });

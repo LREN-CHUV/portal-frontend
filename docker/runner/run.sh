@@ -21,4 +21,6 @@ fi
 
 rm -f /etc/nginx/conf.d/default.conf
 
+echo "{\"version\": $VERSION, \"name\": $NAME}" > /usr/share/nginx/html/dist/scripts/app/version.json
+
 eval "exec dockerize $OPTS nginx -g 'daemon off;'"
