@@ -50,9 +50,33 @@ angular.module("chuvApp.models").controller("DatasetController", [
     $scope.query.filters = map_query("filter");
     $scope.query.textQuery = search.query;
 
-    Variable.datasets().then(function(datasets) {
-      $scope.datasets = datasets;
-    });
+    Variable.datasets()
+      .then(function(datasets) {
+        $scope.datasets = datasets;
+
+        const allVariables = [
+          ...$scope.query.variables,
+          ...$scope.query.groupings,
+          ...$scope.query.coVariables
+        ];
+
+        return Promise.all(
+          allVariables.map(a =>
+            Model.mining({
+              algorithm: {
+                code: "WP_VARIABLE_SUMMARY",
+                name: "WP_VARIABLE_SUMMARY",
+                parameters: [],
+                validation: false
+              },
+              variables: [a],
+              grouping: [],
+              coVariables: [] /* TODO: dataset */
+            })
+          )
+        );
+      })
+      .then(console.log);
 
     var getDependantVariable = function() {
       return (
@@ -81,22 +105,22 @@ angular.module("chuvApp.models").controller("DatasetController", [
     // Variable.parent(dependantVariable)
     // .then(function(parent) {
 
-    var rows = [
-      [
-        dependantVariable.code,
-        "76.5 (SD 3.32)",
-        "71.5 (SD 3.34)",
-        "72.1 (SD 3.28)"
-      ]
-    ];
-    $scope.query.coVariables.forEach(function(c) {
-      rows.push([c.code, "76.5 (SD 3.32)", "71.5 (SD 3.34)", "72.1 (SD 3.28)"]);
-    });
-    $scope.query.groupings.forEach(function(c) {
-      rows.push([c.code, "76.5 (SD 3.32)", "71.5 (SD 3.34)", "72.1 (SD 3.28)"]);
-    });
+    // var rows = [
+    //   [
+    //     dependantVariable.code,
+    //     "76.5 (SD 3.32)",
+    //     "71.5 (SD 3.34)",
+    //     "72.1 (SD 3.28)"
+    //   ]
+    // ];
+    // $scope.query.coVariables.forEach(function(c) {
+    //   rows.push([c.code, "76.5 (SD 3.32)", "71.5 (SD 3.34)", "72.1 (SD 3.28)"]);
+    // });
+    // $scope.query.groupings.forEach(function(c) {
+    //   rows.push([c.code, "76.5 (SD 3.32)", "71.5 (SD 3.34)", "72.1 (SD 3.28)"]);
+    // });
 
-    $scope.table = rows;
+    // $scope.table = rows;
     // })
     // .catch(function(e) {
     //   console.log(e);

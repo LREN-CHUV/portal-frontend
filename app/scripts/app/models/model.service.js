@@ -33,7 +33,12 @@ angular.module("chuvApp.models").factory("Model", [
      * @param {Object} data the query
      * @returns {HttpPromise}
      */
+    // TODO: estimation_model?
     resource.estimateQuery = function(estimation_model, data) {
+      return $http.post(backendUrl + "/mining", data);
+    };
+
+    resource.mining = function(data) {
       return $http.post(backendUrl + "/mining", data);
     };
 
