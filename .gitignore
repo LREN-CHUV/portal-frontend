@@ -8,3 +8,4 @@ app/tmp/
 reports/
 *.log
 package-lock.json
+.vscode
