@@ -30,6 +30,6 @@ angular
   .factory("Config", [
     "$resource",
     function($resource) {
-      return $resource("/scripts/app/config.js").get();
+      return $resource("/scripts/app/config.json").get();
     }
   ]);

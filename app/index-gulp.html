@@ -88,7 +88,8 @@
 
   <script type="text/javascript" src="//www.dropbox.com/static/api/2/dropins.js" id="dropboxjs" data-app-key="7wew0rj0gh2qcik"></script>
   <script type="text/javascript" src="//code.highcharts.com/mapdata/custom/world.js"></script>
-  <script type="text/javascript" src="/scripts/app/config.js"></script> {{ if .Env.ANALYTICS }}
+
+  {{ if .Env.ANALYTICS }}
   <script>
     (function (i, s, o, g, r, a, m) {
       i['GoogleAnalyticsObject'] = r;

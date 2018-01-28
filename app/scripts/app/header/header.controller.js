@@ -63,7 +63,7 @@ angular.module("chuvApp.header").controller("HeaderController", [
     };
 
     Config.$promise.then(function(config) {
-      $scope.name = config.name || "Federation";
+      $scope.name = config.instanceName;
     });
   }
 ]);
