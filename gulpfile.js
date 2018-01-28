@@ -40,6 +40,8 @@ var appPath = {
         appConfig.app + "/scripts/components/hightlight/hightlight.filter.js",
         appConfig.app + "/scripts/app/header/header.module.js",
         appConfig.app + "/scripts/app/header/header.controller.js",
+        appConfig.app + "/scripts/app/footer/footer.module.js",
+        appConfig.app + "/scripts/app/footer/footer.controller.js",
         appConfig.app + "/scripts/app/home/home.module.js",
         appConfig.app + "/scripts/app/home/home.router.js",
         appConfig.app + "/scripts/app/home/home.controller.js",
