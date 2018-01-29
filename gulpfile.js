@@ -135,7 +135,8 @@ var appPath = {
         appConfig.app + "/*.ico",
         appConfig.app + "/*.txt"
       ]
-    }
+    },
+    mockJson: appConfig.app + "/scripts/app/mock/**/*.json"
   },
   dist: {
     scripts: {
@@ -166,7 +167,8 @@ var appPath = {
       appConfig.dist + "/styles/main.css",
       appConfig.dist + "/styles/vendor.css",
       appConfig.dist + "/rev-manifest.json"
-    ]
+    ],
+    mockJson: appConfig.dist + "/scripts/app/mock"
   }
 };
 
@@ -336,7 +338,11 @@ gulp.task("index-html:prod", function() {
 gulp.task("styles:dev", function() {
   return gulp
     .src(appPath.src.less)
+    .pipe(plugins.sourcemaps.init())
     .pipe(plugins.less())
+    .on("error", function(err) {
+      console.error("Error!", err.message);
+    })
     .pipe(
       plugins.autoprefixer({
         browsers: ["last 3 versions"],
@@ -345,6 +351,7 @@ gulp.task("styles:dev", function() {
     )
     .pipe(plugins.cssmin())
     .pipe(rename("main.css"))
+    .pipe(plugins.sourcemaps.write())
     .pipe(gulp.dest(appPath.src.tmp))
     .pipe(browserSync.stream());
 });
@@ -353,6 +360,9 @@ gulp.task("styles:prod", function() {
   return gulp
     .src(appPath.src.less)
     .pipe(plugins.less())
+    .on("error", function(err) {
+      console.error("Error!", err.message);
+    })
     .pipe(
       plugins.autoprefixer({
         browsers: ["last 3 versions"],
@@ -383,7 +393,6 @@ gulp.task("js-vendor:dev", function() {
   return gulp
     .src(jsArr)
     .pipe(plugins.sourcemaps.init())
-    .pipe(plugins.babel())
     .pipe(plugins.uglify())
     .pipe(plugins.concat("vendor.js"))
     .pipe(plugins.sourcemaps.write("."))
@@ -396,23 +405,25 @@ gulp.task("js-vendor:prod", function() {
 
   return gulp
     .src(jsArr)
-    .pipe(plugins.babel())
     .pipe(plugins.uglify())
     .pipe(plugins.concat("vendor.js"))
     .pipe(gulp.dest(appPath.dist.js.vendorsPath));
 });
 
 gulp.task("js-app:dev", function() {
-  return (gulp
-      .src(appPath.src.js.appScripts)
-      .pipe(plugins.babel({ presets: ["es2015"] }))
-      .pipe(plugins.sourcemaps.init())
-      .pipe(plugins.ngAnnotate())
-      .pipe(plugins.concat("scripts.js"))
-      // .pipe(plugins.uglify())
-      .pipe(plugins.sourcemaps.write("."))
-      .pipe(gulp.dest(appPath.src.tmp))
-      .pipe(browserSync.stream()) );
+  return gulp
+    .src(appPath.src.js.appScripts)
+    .pipe(plugins.babel({ presets: ["es2015"] }))
+    .on("error", err => {
+      plugins.gutil.log(gutil.colors.red("[Compilation Error]"));
+      plugins.gutil.log(gutil.colors.red(err.message));
+    })
+    .pipe(plugins.sourcemaps.init())
+    .pipe(plugins.ngAnnotate())
+    .pipe(plugins.concat("scripts.js"))
+    .pipe(plugins.sourcemaps.write("."))
+    .pipe(gulp.dest(appPath.src.tmp))
+    .pipe(browserSync.stream());
 });
 
 gulp.task("js-app:prod", function() {
@@ -423,6 +434,10 @@ gulp.task("js-app:prod", function() {
     .pipe(plugins.concat("scripts.js"))
     .pipe(plugins.uglify())
     .pipe(gulp.dest(appPath.dist.js.vendorsPath));
+});
+
+gulp.task("copy-mock-json", function() {
+  return gulp.src(appPath.src.mockJson).pipe(gulp.dest(appPath.dist.mockJson));
 });
 
 // Renaming main js and css files for browser caching
@@ -503,6 +518,7 @@ gulp.task("build", function() {
       "js-app:prod",
       "js-vendor:prod"
     ],
+    "copy-mock-json",
     "index-html:prod",
     "caching"
   );
