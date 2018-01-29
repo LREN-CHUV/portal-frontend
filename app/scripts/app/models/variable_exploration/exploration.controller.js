@@ -41,7 +41,8 @@ angular.module("chuvApp.models").controller("ExploreController", [
       variable: make_configuration("variable"),
       covariable: make_configuration("covariable"),
       grouping: make_configuration("grouping"),
-      filter: make_configuration("filter")
+      filter: make_configuration("filter"),
+      datasets: make_configuration("dataset")
     };
 
     $scope.set_focused_variable = function(variable) {

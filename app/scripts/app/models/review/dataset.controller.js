@@ -50,33 +50,73 @@ angular.module("chuvApp.models").controller("DatasetController", [
     $scope.query.filters = map_query("filter");
     $scope.query.textQuery = search.query;
 
-    Variable.datasets()
-      .then(function(datasets) {
-        $scope.datasets = datasets;
+    const init = () => {
+      let allVariables;
+      Variable.datasets()
+        .then(function(datasets) {
+          $scope.datasets = datasets;
 
-        const allVariables = [
-          ...$scope.query.variables,
-          ...$scope.query.groupings,
-          ...$scope.query.coVariables
-        ];
+          allVariables = [
+            ...$scope.query.variables,
+            ...$scope.query.groupings,
+            ...$scope.query.coVariables
+          ];
 
-        return Promise.all(
-          allVariables.map(a =>
-            Model.mining({
-              algorithm: {
-                code: "WP_VARIABLE_SUMMARY",
-                name: "WP_VARIABLE_SUMMARY",
-                parameters: [],
-                validation: false
-              },
-              variables: [a],
-              grouping: [],
-              coVariables: [] /* TODO: dataset */
-            })
-          )
-        );
-      })
-      .then(console.log);
+          return Promise.all(
+            datasets.map(d =>
+              allVariables.map(a =>
+                Model.mining({
+                  algorithm: {
+                    code: "WP_VARIABLE_SUMMARY",
+                    name: "WP_VARIABLE_SUMMARY",
+                    parameters: [],
+                    validation: false
+                  },
+                  variables: [a],
+                  grouping: [],
+                  coVariables: [],
+                  datasets: [d.code]
+                })
+              )
+            )
+          );
+        })
+        .then(results => {
+          console.log(results);
+
+          const data = results.map(r => {
+            r.map(v => {
+              return {
+                dataset: "",
+                variable: "",
+                data: {
+                  average: 0,
+                  min: 0,
+                  max: 0
+                }
+              };
+            });
+          });
+
+          console.log(data);
+          // var rows = results.map((r, index) => {
+          //   const data = r.data.data;
+          //   const average = data.average && parseFloat(data.average).toFixed(2);
+          //   const min = data.min && parseFloat(data.min).toFixed(2);
+          //   const max = data.max && parseFloat(data.max).toFixed(2);
+
+          //   return [data.code, `${average} (${min} - ${max})`];
+          // });
+
+          $scope.table = data;
+          $scope.loading = false;
+        })
+        .catch(e => {
+          console.log(e);
+        });
+    };
+
+    init();
 
     var getDependantVariable = function() {
       return (
@@ -101,31 +141,6 @@ angular.module("chuvApp.models").controller("DatasetController", [
       $scope.loadResources({});
     }
 
-    // Table resources
-    // Variable.parent(dependantVariable)
-    // .then(function(parent) {
-
-    // var rows = [
-    //   [
-    //     dependantVariable.code,
-    //     "76.5 (SD 3.32)",
-    //     "71.5 (SD 3.34)",
-    //     "72.1 (SD 3.28)"
-    //   ]
-    // ];
-    // $scope.query.coVariables.forEach(function(c) {
-    //   rows.push([c.code, "76.5 (SD 3.32)", "71.5 (SD 3.34)", "72.1 (SD 3.28)"]);
-    // });
-    // $scope.query.groupings.forEach(function(c) {
-    //   rows.push([c.code, "76.5 (SD 3.32)", "71.5 (SD 3.34)", "72.1 (SD 3.28)"]);
-    // });
-
-    // $scope.table = rows;
-    // })
-    // .catch(function(e) {
-    //   console.log(e);
-    // });
-
     // Charts ressources
     var getHistogram = function(variable) {
       return Variable.get_histo(variable.code);
@@ -144,73 +159,68 @@ angular.module("chuvApp.models").controller("DatasetController", [
     };
 
     $scope.selectVariable = function(focusedVariable) {
-      $scope.loading = true;
-      // keep a book of selected variables, minus the dependant one
-      if (
-        dependantVariable && focusedVariable.code !== dependantVariable.code
-      ) {
-        var selected = $scope.selectedVariables;
-        if (selected.includes(focusedVariable)) {
-          var index = selected.findIndex(function(v) {
-            return v.code === focusedVariable.code;
-          });
-          $scope.selectedVariables.splice(index, 1);
-        } else {
-          $scope.selectedVariables.push(focusedVariable);
-        }
-      }
-
-      var format = function(response) {
-        var data = response.data && response.data.data;
-
-        if (!angular.isArray(data)) {
-          data = [data];
-        }
-
-        $scope.plots = data.map(function(stat) {
-          var series =
-            stat && stat.series && stat.series.length && stat.series[0].data;
-          return {
-            stats: {
-              count: series && series.length,
-              min: 0,
-              max: 1,
-              av: series.reduce(function(a, b) {
-                return a + b;
-              }) / series.length
-            },
-            chart: stat.chart,
-            xAxis: stat.xAxis,
-            yAxis: stat.yAxis,
-            series: stat.series,
-            title: stat.title
-          };
-        });
-        $scope.loading = false;
-      };
-
-      var error = function() {
-        $scope.hasError = true;
-      };
-
-      if ($scope.selectedVariables.length) {
-        getCustomHistogram(dependantVariable, $scope.selectedVariables).then(
-          format,
-          error
-        );
-        return;
-      }
-
-      getHistogram(focusedVariable).then(format, error);
-
-      Variable.getStatistics(focusedVariable.code).then(
-        function(response) {
-          console.log("getStatistics", response);
-        },
-        function() {
-          console.log("Error");
-        }
-      );
+      // $scope.loading = true;
+      // // keep a book of selected variables, minus the dependant one
+      // if (
+      //   dependantVariable &&
+      //   focusedVariable.code !== dependantVariable.code
+      // ) {
+      //   var selected = $scope.selectedVariables;
+      //   if (selected.includes(focusedVariable)) {
+      //     var index = selected.findIndex(function(v) {
+      //       return v.code === focusedVariable.code;
+      //     });
+      //     $scope.selectedVariables.splice(index, 1);
+      //   } else {
+      //     $scope.selectedVariables.push(focusedVariable);
+      //   }
+      // }
+      // var format = function(response) {
+      //   var data = response.data && response.data.data;
+      //   if (!angular.isArray(data)) {
+      //     data = [data];
+      //   }
+      //   $scope.plots = data.map(function(stat) {
+      //     var series =
+      //       stat && stat.series && stat.series.length && stat.series[0].data;
+      //     return {
+      //       stats: {
+      //         count: series && series.length,
+      //         min: 0,
+      //         max: 1,
+      //         av:
+      //           series.reduce(function(a, b) {
+      //             return a + b;
+      //           }) / series.length
+      //       },
+      //       chart: stat.chart,
+      //       xAxis: stat.xAxis,
+      //       yAxis: stat.yAxis,
+      //       series: stat.series,
+      //       title: stat.title
+      //     };
+      //   });
+      //   $scope.loading = false;
+      // };
+      // var error = function() {
+      //   $scope.hasError = true;
+      // };
+      // if ($scope.selectedVariables.length) {
+      //   getCustomHistogram(dependantVariable, $scope.selectedVariables).then(
+      //     format,
+      //     error
+      //   );
+      //   return;
+      // }
+      // getHistogram(focusedVariable).then(format, error);
+      // Variable.getStatistics(focusedVariable.code).then(
+      //   function(response) {
+      //     console.log("getStatistics", response);
+      //   },
+      //   function() {
+      //     console.log("Error");
+      //   }
+      // );
     };
 
     $scope.open_experiment = function() {
@@ -238,36 +248,5 @@ angular.module("chuvApp.models").controller("DatasetController", [
 
       return $state.go("new_experiment", query);
     };
-
-    $scope.open_experiment = function() {
-      if ($scope.model && $scope.model.slug) {
-        return $state.go("new_experiment", { model_slug: $scope.model.slug });
-      }
-
-      function unmap_category(category) {
-        return $scope.query[category]
-          .map(function(variable) {
-            return variable.code;
-          })
-          .join(",");
-      }
-
-      var query = {
-        variables: unmap_category("variables"),
-        coVariables: unmap_category("coVariables"),
-        groupings: unmap_category("groupings"),
-        filters: unmap_category("filters"),
-        textQuery: $location.search().textQuery,
-        graph_config: $scope.chartConfig,
-        model_slug: ""
-      };
-
-      return $state.go("new_experiment", query);
-    };
-
-    // init
-    if (dependantVariable) {
-      $scope.selectVariable(dependantVariable);
-    }
   }
 ]);
