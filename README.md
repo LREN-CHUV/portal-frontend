@@ -3,46 +3,25 @@
 # MIP portal frontend
 
 ## Libraries
-- AngularJS v1.4.3
-- Bootstrap v3.2.0
+- AngularJS v1.6.8
+- Bootstrap v3.3.7
 
 ## Frontend development
 This is a minimal setup to do frontend development in this project:
 1. Checkout the frontend_dev branch of the `compose-everything-locally` project and run it. You will have the MIP backend running on your computer with no frontend.
-2. Install npm and php (or any server that supports .htaccess)
+2. Install npm
 3. Run the `portal-frontend`:
   * `npm install` (might require `sudo`)
-  * `npm install -g grunt-cli` (might require `sudo`)
+  * `npm install -g gulp` (might require `sudo`)
   * `npm install -g bower` (might require `sudo`)
   * `bower install`
-  * `grunt ngconstant:dev`
-  * `cp app/index-tmpl.html app/index.html` (creates an `index.html` file in the `app` directory based on the `index-tmpl.html` template)
-  * `grunt watch &` (watches all JS/CSS files and automatically creates a bundle when a file is edited)
+  * `gulp`
   * `cd app`
   * `php -S localhost:8000 &` (runs a development server from the `app` folder. PHP is not required, other development server should work, as long as it runs on port 8000 and supports .htaccess)
   * `google-chrome --disable-web-security --user-data-dir http://localhost:8000` (opens the frontend in Chrome with flags to ignore CORS issues. CORS must be disabled for development because the backend runs on a different domain name than the frontend)
 
-## Build & development
-
-* Run npm install to retrieve all node dependencies
-* Run "bower install" to retrieve all bower dependencies
-* Run "grunt build" to build the project
-* Run "grunt serve" to run the local server
-* Run "npm install -g protractor" to install protractor and webdriver-manager
-* Run "node ./node_modules/grunt-protractor-runner/node_modules/protractor/bin/webdriver-manager update --standalone"
-
-## Errors
-* If "unable to locate grunt" => Run "npm install -g grunt-cli", "npm install", "grunt build", "grunt serve"
-* If "Task "karma" not found" => Run "npm install grunt-karma --save-dev"
-
-
-## Testing
-
-Running `grunt test` will run the unit tests with karma.
-
-
 ## Develop & debug
-One may use Dockerfile-dev.yml
+One may use Dockerfile-dev
 Run: `./run.sh`
 
 ## Build
