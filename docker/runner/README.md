@@ -15,5 +15,5 @@ Environment variables:
 * PORTAL_VIRTUAL_HOST: virtual host for the portal application, for example PORTAL_VIRTUAL_HOST="mip.humanbrainproject.eu". Defaults to 'frontend'
 * PORTAL_BACKEND_SERVER: address of the portal backend server, for example PORTAL_BACKEND_SERVER="backend:8080"
 * PORTAL_BACKEND_CONTEXT: context path for the portal backend server, defaults to 'services'.
-* VERSION: version number of the deployed frontend.
-* INSTANCE_NAME: title of the frontend, eg. CHUV, FEDERATION.
+* VERSION: Version of MIP
+* INSTANCE_NAME: Name of the instance deployed

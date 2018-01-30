@@ -43,6 +43,7 @@ COPY ./docker/runner/conf/nginx.conf.tmpl \
      ./docker/runner/conf/proxy.conf.tmpl \
      ./docker/runner/conf/gzip.conf.tmpl \
      ./docker/runner/conf/portal-backend-upstream.conf.tmpl \
+     ./docker/runner/conf/config.json.tmpl \
          /portal/conf/
 
 COPY docker/runner/run.sh /
