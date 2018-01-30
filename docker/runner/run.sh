@@ -3,6 +3,7 @@ set -e
 
 export USE_GZIP=${USE_GZIP:-false}
 OPTS="-template /portal/conf/nginx.conf.tmpl:/etc/nginx/nginx.conf"
+OPTS="$OPTS -template /portal/conf/config.json.tmpl:/usr/share/nginx/html/scripts/app/config.json"
 OPTS="$OPTS -template /usr/share/nginx/html/index-tmpl.html:/usr/share/nginx/html/index.html"
 
 if [ ! -z "$PORTAL_BACKEND_SERVER" ]; then

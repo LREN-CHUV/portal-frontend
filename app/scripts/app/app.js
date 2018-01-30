@@ -47,6 +47,7 @@ angular
     "chuvApp.components.criteria",
     //ui modules
     "chuvApp.header",
+    "chuvApp.footer",
     "chuvApp.home",
     "chuvApp.hbpapps",
     "chuvApp.articles",

@@ -1,17 +1,18 @@
 <!doctype html>
 <html class="no-js">
+
 <head>
   <meta charset="utf-8">
   <title>Brain Project Portal</title>
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <meta name="viewport"
-        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-touch-fullscreen" content="yes">
   <meta name="description" content="Human Brain Project">
   <base href="/">
 
-  <link href='//fonts.googleapis.com/css?family=Open+Sans:400,700|EB+Garamond|Open+Sans+Condensed:300,700' rel='stylesheet' type='text/css'>
+  <link href='//fonts.googleapis.com/css?family=Open+Sans:400,700|EB+Garamond|Open+Sans+Condensed:300,700' rel='stylesheet'
+    type='text/css'>
   <link href='//fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
 
@@ -28,100 +29,83 @@
   <!-- /build -->
 
 </head>
+
 <body ng-app="chuvApp" class="ng-cloak" ng-cloak to-top-on-load>
 
-<!-- I have to ng-show instead of ng-if because I need the logout link to logout if i get 401s -->
-<header id="topnav"
-        class="navbar navbar-default navbar-fixed-top"
-        change-on-scroll
-        role="banner"
-        ng-cloak
-        ng-show="isLoggedIn() && hasAgreedTos"
-        ng-include="'scripts/app/header/header.html'"
-        ng-controller="HeaderController"></header>
-<div id="wrapper">
-  <div id="layout-static">
-    <div class="static-content-wrapper">
-      <div class="static-content">
-        <div class="page-content" ui-view class="mainview-animation animated"></div>
-      </div>
-      <footer id="footer" role="contentinfo" ng-cloak ng-show="!isNewVisitor()">
-        <div class="clearfix container-fluid">
-          <div class="row">
-            <ul class="list-unstyled list-inline col-md-6">
-              <li><h6 class="copyright">&copy; 2015 Human Brain Project. All right reserved</h6></li>
-            </ul>
-            <div class="col-md-6 text-right">
-            </div>
-          </div>
+  <!-- I have to ng-show instead of ng-if because I need the logout link to logout if i get 401s -->
+  <header id="topnav" class="navbar navbar-default navbar-fixed-top" change-on-scroll role="banner" ng-cloak ng-show="isLoggedIn() && hasAgreedTos"
+    ng-include="'scripts/app/header/header.html'" ng-controller="HeaderController"></header>
+  <div id="wrapper">
+    <div id="layout-static">
+      <div class="static-content-wrapper">
+        <div class="static-content">
+          <div class="page-content" ui-view class="mainview-animation animated"></div>
         </div>
-      </footer>
+        <footer id="footer" role="contentinfo"
+          ng-cloak ng-include="'scripts/app/footer/footer.html'"
+          ng-controller="FooterController">
+        </footer>
+      </div>
     </div>
   </div>
-</div>
-<div change-on-scroll id="announces">
-  <div class="hidden-xs hidden-sm hidden-md col-lg-offset-4 col-lg-4">
-    <div class="alert alert-dismissable alert-discrete" role="alert">
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">×</span>
-        <span class="sr-only">Close</span>
-      </button>
-      <h5><span style="margin-right: 5px;" class="fa fa-exclamation-triangle"></span>This platform is still under heavy development</h5>
-      <p>As a consequence, your data might be reset periodically.</p>
+  <div change-on-scroll id="announces">
+    <div class="hidden-xs hidden-sm hidden-md col-lg-offset-4 col-lg-4">
+      <div class="alert alert-dismissable alert-discrete" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">×</span>
+          <span class="sr-only">Close</span>
+        </button>
+        <h5>
+          <span style="margin-right: 5px;" class="fa fa-exclamation-triangle"></span>Get started</h5>
+        <p>
+          Have a look at those two videos
+          <a href="https://www.youtube.com/watch?v=MNWExzouMJw" target="_blank">MIP introduction</a> and
+          <a href="https://www.youtube.com/watch?v=2jMbEIcwKnA" target="_blank">how to use the MIP</a>!
+        </p>
+      </div>
     </div>
-    <div class="alert alert-dismissable alert-discrete" role="alert">
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">×</span>
-        <span class="sr-only">Close</span>
-      </button>
-      <h5><span style="margin-right: 5px;" class="fa fa-exclamation-triangle"></span>Get started</h5>
-      <p>
-        Have a look at those two videos <a href="https://www.youtube.com/watch?v=MNWExzouMJw" target="_blank">MIP introduction</a> and <a href="https://www.youtube.com/watch?v=2jMbEIcwKnA" target="_blank">how to use the MIP</a>!
-      </p>
-    </div>
-    <!--<div class="alert alert-dismissable alert-discrete" role="alert">
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">×</span>
-        <span class="sr-only">Close</span>
-      </button>
-      <h5><span style="margin-right: 5px;" class="fa fa-exclamation-triangle"></span>Welcome to the version 2 of the MIP Platform!</h5>
-      <p>It was released the 14th of November. We invite you to clear your browser cache to ensure that new functionalities are enabled. Close this notification to show the next one</p>
-    </div>-->
   </div>
-</div>
-<div id="notifications" ng-controller="NotificationCtrl">
-  <div ng-repeat="notification in notifications" class="col-xs-12 col-sm-offset-4 col-sm-8 col-md-offset-6 col-md-6 col-lg-offset-8 col-md-4">
-    <div class="alert alert-dismissable" ng-class="'alert-' + (notification.type || 'info')" role="alert">
-      <button type="button" class="close" ng-click="notification.dismiss()">
+  <div id="notifications" ng-controller="NotificationCtrl">
+    <div ng-repeat="notification in notifications" class="col-xs-12 col-sm-offset-4 col-sm-8 col-md-offset-6 col-md-6 col-lg-offset-8 col-md-4">
+      <div class="alert alert-dismissable" ng-class="'alert-' + (notification.type || 'info')" role="alert">
+        <button type="button" class="close" ng-click="notification.dismiss()">
           <span aria-hidden="true">&times;</span>
           <span class="sr-only">Close</span>
-      </button>
-      <div ng-bind="notification.message"></div>
+        </button>
+        <div ng-bind="notification.message"></div>
+      </div>
     </div>
   </div>
-</div>
 
-<!-- build:js scripts/vendor.js -->
-<script src="/tmp/vendor.js"></script>
-<!-- /build -->
+  <!-- build:js scripts/vendor.js -->
+  <script src="/tmp/vendor.js"></script>
+  <!-- /build -->
 
 
-<!-- build:js scripts/scripts.js -->
-<script src="/tmp/scripts.js"></script>
-<!-- /build -->
+  <!-- build:js scripts/scripts.js -->
+  <script src="/tmp/scripts.js"></script>
+  <!-- /build -->
 
-<script type="text/javascript" src="//www.dropbox.com/static/api/2/dropins.js" id="dropboxjs" data-app-key="7wew0rj0gh2qcik"></script>
-<script type="text/javascript" src="//code.highcharts.com/mapdata/custom/world.js"></script>
+  <script type="text/javascript" src="//www.dropbox.com/static/api/2/dropins.js" id="dropboxjs" data-app-key="7wew0rj0gh2qcik"></script>
+  <script type="text/javascript" src="//code.highcharts.com/mapdata/custom/world.js"></script>
 
-{{ if .Env.ANALYTICS }}
-<script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-  ga('create', '{{ .Env.TRACKER_ID }}', 'auto');
-</script>
-{{ end }}
+  {{ if .Env.ANALYTICS }}
+  <script>
+    (function (i, s, o, g, r, a, m) {
+      i['GoogleAnalyticsObject'] = r;
+      i[r] = i[r] || function () {
+        (i[r].q = i[r].q || []).push(arguments)
+      }, i[r].l = 1 * new Date();
+      a = s.createElement(o),
+        m = s.getElementsByTagName(o)[0];
+      a.async = 1;
+      a.src = g;
+      m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+    ga('create', '{{ .Env.TRACKER_ID }}', 'auto');
+
+  </script> {{ end }}
 
 </body>
+
 </html>

@@ -56,6 +56,7 @@ angular.module("chuvApp.components.criteria").factory("Variable", [
         var node;
         function iterate(current, depth) {
           var children = current.groups || current.variables;
+          if (!children) return;
           if (children.code === child.code) {
             node = current;
           }
@@ -65,7 +66,7 @@ angular.module("chuvApp.components.criteria").factory("Variable", [
         }
         iterate(data, 0);
 
-        return "node";
+        return node; // FIXME: where is the commit?
       });
     };
 

@@ -40,6 +40,8 @@ var appPath = {
         appConfig.app + "/scripts/components/hightlight/hightlight.filter.js",
         appConfig.app + "/scripts/app/header/header.module.js",
         appConfig.app + "/scripts/app/header/header.controller.js",
+        appConfig.app + "/scripts/app/footer/footer.module.js",
+        appConfig.app + "/scripts/app/footer/footer.controller.js",
         appConfig.app + "/scripts/app/home/home.module.js",
         appConfig.app + "/scripts/app/home/home.router.js",
         appConfig.app + "/scripts/app/home/home.controller.js",
@@ -133,7 +135,8 @@ var appPath = {
         appConfig.app + "/*.ico",
         appConfig.app + "/*.txt"
       ]
-    }
+    },
+    mockJson: appConfig.app + "/scripts/app/mock/**/*.json"
   },
   dist: {
     scripts: {
@@ -164,7 +167,8 @@ var appPath = {
       appConfig.dist + "/styles/main.css",
       appConfig.dist + "/styles/vendor.css",
       appConfig.dist + "/rev-manifest.json"
-    ]
+    ],
+    mockJson: appConfig.dist + "/scripts/app/mock"
   }
 };
 
@@ -332,25 +336,33 @@ gulp.task("index-html:prod", function() {
 
 // Compile less to css (dev) minify css (prod)
 gulp.task("styles:dev", function() {
-  return (gulp
-      .src(appPath.src.less)
-      .pipe(plugins.less())
-      .pipe(
-        plugins.autoprefixer({
-          browsers: ["last 3 versions"],
-          cascade: false
-        })
-      )
-      .pipe(plugins.cssmin())
-      .pipe(rename("main.css"))
-      .pipe(gulp.dest(appPath.src.tmp))
-      .pipe(browserSync.stream()) );
+  return gulp
+    .src(appPath.src.less)
+    .pipe(plugins.sourcemaps.init())
+    .pipe(plugins.less())
+    .on("error", function(err) {
+      console.error("Error!", err.message);
+    })
+    .pipe(
+      plugins.autoprefixer({
+        browsers: ["last 3 versions"],
+        cascade: false
+      })
+    )
+    .pipe(plugins.cssmin())
+    .pipe(rename("main.css"))
+    .pipe(plugins.sourcemaps.write())
+    .pipe(gulp.dest(appPath.src.tmp))
+    .pipe(browserSync.stream());
 });
 
 gulp.task("styles:prod", function() {
   return gulp
     .src(appPath.src.less)
     .pipe(plugins.less())
+    .on("error", function(err) {
+      console.error("Error!", err.message);
+    })
     .pipe(
       plugins.autoprefixer({
         browsers: ["last 3 versions"],
@@ -381,7 +393,6 @@ gulp.task("js-vendor:dev", function() {
   return gulp
     .src(jsArr)
     .pipe(plugins.sourcemaps.init())
-    .pipe(plugins.babel())
     .pipe(plugins.uglify())
     .pipe(plugins.concat("vendor.js"))
     .pipe(plugins.sourcemaps.write("."))
@@ -392,8 +403,8 @@ gulp.task("js-vendor:prod", function() {
   var jsArr = require("wiredep")(wiredepOptions).js;
   jsArr.push(appConfig.app + "/styles/plugins/wijets/wijets.js");
 
-  return gulp.src(jsArr)
-    .pipe(plugins.babel())
+  return gulp
+    .src(jsArr)
     .pipe(plugins.uglify())
     .pipe(plugins.concat("vendor.js"))
     .pipe(gulp.dest(appPath.dist.js.vendorsPath));
@@ -403,10 +414,13 @@ gulp.task("js-app:dev", function() {
   return gulp
     .src(appPath.src.js.appScripts)
     .pipe(plugins.babel({presets: ["es2015"]}))
+    .on('error', function(e) {
+      console.error(e);
+      this.emit('end');
+    })
     .pipe(plugins.sourcemaps.init())
     .pipe(plugins.ngAnnotate())
     .pipe(plugins.concat("scripts.js"))
-    // .pipe(plugins.uglify())
     .pipe(plugins.sourcemaps.write("."))
     .pipe(gulp.dest(appPath.src.tmp))
     .pipe(browserSync.stream());
@@ -416,10 +430,18 @@ gulp.task("js-app:prod", function() {
   return gulp
     .src(appPath.src.js.appScripts)
     .pipe(plugins.babel({presets: ["es2015"]}))
+    .on('error', function(e) {
+      console.error(e);
+      this.emit('end');
+    })
     .pipe(plugins.ngAnnotate())
     .pipe(plugins.concat("scripts.js"))
     .pipe(plugins.uglify())
     .pipe(gulp.dest(appPath.dist.js.vendorsPath));
+});
+
+gulp.task("copy-mock-json", function() {
+  return gulp.src(appPath.src.mockJson).pipe(gulp.dest(appPath.dist.mockJson));
 });
 
 // Renaming main js and css files for browser caching
@@ -428,8 +450,7 @@ gulp.task("caching", function() {
 });
 
 gulp.task("revision", function() {
-  var jsFilter = filter("**/*.js"),
-    cssFilter = filter("**/*.css");
+  var jsFilter = filter("**/*.js"), cssFilter = filter("**/*.css");
 
   var revFiles = gulp.src(appPath.dist.revision).pipe(rev());
 
@@ -501,6 +522,7 @@ gulp.task("build", function() {
       "js-app:prod",
       "js-vendor:prod"
     ],
+    "copy-mock-json",
     "index-html:prod",
     "caching"
   );
@@ -510,11 +532,7 @@ gulp.task("develop", function() {
   runSequence(
     "clean:dev",
     "config:dev",
-    [
-      "styles:dev",
-      "js-app:dev",
-      "js-vendor:dev"
-    ],
+    ["styles:dev", "js-app:dev", "js-vendor:dev"],
     "index-html:dev",
     "browser-sync"
   );
@@ -524,11 +542,7 @@ gulp.task("develop-doc", function() {
   runSequence(
     "clean:dev",
     "config:dev",
-    [
-      "styles:dev",
-      "js-app:dev",
-      "js-vendor:dev"
-    ],
+    ["styles:dev", "js-app:dev", "js-vendor:dev"],
     "index-html:dev"
   );
 });
