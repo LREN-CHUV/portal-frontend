@@ -51,64 +51,85 @@ angular.module("chuvApp.models").controller("DatasetController", [
     $scope.query.textQuery = search.query;
 
     const init = () => {
-      let allVariables;
-      Variable.datasets()
-        .then(function(datasets) {
-          $scope.datasets = datasets;
+      let datasets = [
+        { code: "adni" },
+        { code: "epfl_adni" },
+        { code: "chuv_adni" }
+      ];
+      let dataRows = []; // [{ variable, data: [] }, ]
 
-          allVariables = [
-            ...$scope.query.variables,
-            ...$scope.query.groupings,
-            ...$scope.query.coVariables
-          ];
+      $scope.datasets = datasets;
+      $scope.tableHeader = ["Variables", ...datasets.map(d => d.code)];
 
-          return Promise.all(
-            datasets.map(d =>
-              allVariables.map(a =>
-                Model.mining({
-                  algorithm: {
-                    code: "WP_VARIABLE_SUMMARY",
-                    name: "WP_VARIABLE_SUMMARY",
-                    parameters: [],
-                    validation: false
-                  },
-                  variables: [a],
-                  grouping: [],
-                  coVariables: [],
-                  datasets: [d.code]
-                })
-              )
-            )
-          );
-        })
+      const allVariables = [
+        ...$scope.query.variables,
+        ...$scope.query.groupings,
+        ...$scope.query.coVariables
+      ];
+
+      let promises = [];
+      allVariables.forEach(a => {
+        datasets.forEach(d =>
+          promises.push(
+            Model.mining({
+              algorithm: {
+                code: "WP_VARIABLE_SUMMARY",
+                name: "WP_VARIABLE_SUMMARY",
+                parameters: [],
+                validation: false
+              },
+              variables: [a],
+              grouping: [],
+              coVariables: [],
+              datasets: [d.code]
+            })
+          )
+        );
+      });
+
+      Promise.all(promises) // constructs table by variable
         .then(results => {
-          console.log(results);
+          results.forEach(r => {
+            const data = r.data.data;
+            const variable = data.code;
+            const average = data.average && parseFloat(data.average).toFixed(2);
+            const min = data.min && parseFloat(data.min).toFixed(2);
+            const max = data.max && parseFloat(data.max).toFixed(2);
 
-          const data = results.map(r => {
-            r.map(v => {
-              return {
-                dataset: "",
-                variable: "",
-                data: {
-                  average: 0,
-                  min: 0,
-                  max: 0
-                }
-              };
-            });
+            const value = `${average} (${min}-${max})`;
+            const row = dataRows.find(d => d.variable === variable);
+            if (row) {
+              row.data.push(value);
+            } else {
+              dataRows.push({ variable, data: [value] });
+            }
           });
 
-          console.log(data);
-          // var rows = results.map((r, index) => {
-          //   const data = r.data.data;
-          //   const average = data.average && parseFloat(data.average).toFixed(2);
-          //   const min = data.min && parseFloat(data.min).toFixed(2);
-          //   const max = data.max && parseFloat(data.max).toFixed(2);
+          return Promise.all(
+            dataRows.map(d => ({ code: Variable.parent(d.variable) }))
+          );
+        })
+        .then(rows => {
+          // add parent row for Each Variable
+          rows = [{ code: "Occipital" }, { code: "Occipital" }];
+          let dataRowsWithParent = [];
 
-          //   return [data.code, `${average} (${min} - ${max})`];
-          // });
+          rows.forEach((d, index) => {
+            const parent = dataRowsWithParent.find(p => p.variable === d.code);
+            if (parent) {
+              dataRowsWithParent.push(dataRows[index]);
+            } else {
+              dataRowsWithParent.push({
+                variable: d.code,
+                data: $scope.tableHeader.map(_ => ""),
+                type: "header"
+              });
+              dataRowsWithParent.push(dataRows[index]);
+            }
+          });
 
-          $scope.table = data;
+          console.log(dataRowsWithParent);
+          $scope.tableRows = dataRowsWithParent;
           $scope.loading = false;
         })
         .catch(e => {
