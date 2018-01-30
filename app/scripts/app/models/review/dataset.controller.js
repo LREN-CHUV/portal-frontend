@@ -29,10 +29,12 @@ angular.module("chuvApp.models").controller("DatasetController", [
     $state,
     $uibModal
   ) {
-    var hierarchy = {};
-    $scope.selectedVariables = [];
     $scope.loading = true;
-    $scope.datasets = [];
+    $scope.datasets = ["adni", "epfl_adni", "chuv_adni"];
+
+    let hierarchy = {};
+    let selectedVariables = [];
+    let selectedDatasets = [...$scope.datasets];
 
     // params key/values
     var search = $location.search();
@@ -50,16 +52,11 @@ angular.module("chuvApp.models").controller("DatasetController", [
     $scope.query.filters = map_query("filter");
     $scope.query.textQuery = search.query;
 
-    const init = () => {
-      let datasets = [
-        { code: "adni" },
-        { code: "epfl_adni" },
-        { code: "chuv_adni" }
-      ];
+    const statistics = () => {
+      $scope.loading = true;
       let dataRows = []; // [{ variable, data: [] }, ]
 
-      $scope.datasets = datasets;
-      $scope.tableHeader = ["Variables", ...datasets.map(d => d.code)];
+      $scope.tableHeader = ["Variables", ...selectedDatasets];
 
       const allVariables = [
         ...$scope.query.variables,
@@ -69,7 +66,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
 
       let promises = [];
       allVariables.forEach(a => {
-        datasets.forEach(d =>
+        selectedDatasets.forEach(d =>
           promises.push(
             Model.mining({
               algorithm: {
@@ -81,7 +78,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
               variables: [a],
               grouping: [],
               coVariables: [],
-              datasets: [d.code]
+              datasets: [d]
             })
           )
         );
@@ -137,7 +134,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
         });
     };
 
-    init();
+    statistics();
 
     var getDependantVariable = function() {
       return (
@@ -149,13 +146,9 @@ angular.module("chuvApp.models").controller("DatasetController", [
       );
     };
 
-    var dependantVariable = getDependantVariable();
-
     //
     $scope.$on("event:loadModel", function(evt, model) {
       $scope.loadResources(model);
-      dependantVariable = getDependantVariable();
-      if (dependantVariable) $scope.selectVariable(dependantVariable);
     });
 
     if ($stateParams.slug === undefined) {
@@ -176,7 +169,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
     };
 
     $scope.isSelected = function(variable) {
-      return $scope.selectedVariables.includes(variable);
+      return selectedVariables.includes(variable);
     };
 
     $scope.selectVariable = function(focusedVariable) {
@@ -186,14 +179,14 @@ angular.module("chuvApp.models").controller("DatasetController", [
       //   dependantVariable &&
       //   focusedVariable.code !== dependantVariable.code
       // ) {
-      //   var selected = $scope.selectedVariables;
+      //   var selected = selectedVariables;
       //   if (selected.includes(focusedVariable)) {
       //     var index = selected.findIndex(function(v) {
       //       return v.code === focusedVariable.code;
       //     });
-      //     $scope.selectedVariables.splice(index, 1);
+      //     selectedVariables.splice(index, 1);
       //   } else {
-      //     $scope.selectedVariables.push(focusedVariable);
+      //     selectedVariables.push(focusedVariable);
       //   }
       // }
       // var format = function(response) {
@@ -226,8 +219,8 @@ angular.module("chuvApp.models").controller("DatasetController", [
       // var error = function() {
       //   $scope.hasError = true;
       // };
-      // if ($scope.selectedVariables.length) {
-      //   getCustomHistogram(dependantVariable, $scope.selectedVariables).then(
+      // if (selectedVariables.length) {
+      //   getCustomHistogram(dependantVariable, selectedVariables).then(
       //     format,
       //     error
       //   );
@@ -242,6 +235,20 @@ angular.module("chuvApp.models").controller("DatasetController", [
       //     console.log("Error");
       //   }
       // );
+    };
+
+    $scope.selectDataset = dataset => {
+      if (selectedDatasets.includes(dataset)) {
+        const index = selectedDatasets.indexOf(dataset);
+        selectedDatasets.splice(index, 1);
+      } else {
+        selectedDatasets.push(dataset);
+      }
+      statistics();
+    };
+
+    $scope.isDatasetSelected = dataset => {
+      return selectedDatasets.includes(dataset);
     };
 
     $scope.open_experiment = function() {

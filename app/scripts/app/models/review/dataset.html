@@ -5,7 +5,11 @@
       <div class="panel-body">
         <ul class="list-group">
           <li ng-repeat="dataset in datasets" class="list-group-item">
-            <a href="">{{dataset.label || dataset.code }}</a>
+            <a
+              href=""
+              ng-click="selectDataset(dataset)"
+              ng-class="{active: isDatasetSelected(dataset)}"
+            >{{dataset}}</a>
           </li>
         </ul>
       </div>
@@ -59,8 +63,9 @@
             <div ng-if="loading" class="loading">
               <div class="fa fa-spin fa-spinner"></div>
             </div>
-            <div style="background-color: #a9c7d4; padding: 0.5em">
-              <table class="table table-striped">
+            <div ng-if="!loading"
+              style="background-color: #a9c7d4; padding: 0.5em">
+              <table class="table">
                 <tr style="background-color: transparent">
                   <th ng-repeat="column in tableHeader">
                     <h6 style="text-transform: uppercase">{{column}}</h6>
