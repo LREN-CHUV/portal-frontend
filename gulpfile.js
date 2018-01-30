@@ -413,10 +413,10 @@ gulp.task("js-vendor:prod", function() {
 gulp.task("js-app:dev", function() {
   return gulp
     .src(appPath.src.js.appScripts)
-    .pipe(plugins.babel({ presets: ["es2015"] }))
-    .on("error", err => {
-      plugins.gutil.log(gutil.colors.red("[Compilation Error]"));
-      plugins.gutil.log(gutil.colors.red(err.message));
+    .pipe(plugins.babel({presets: ["es2015"]}))
+    .on('error', function(e) {
+      console.error(e);
+      this.emit('end');
     })
     .pipe(plugins.sourcemaps.init())
     .pipe(plugins.ngAnnotate())
@@ -429,7 +429,11 @@ gulp.task("js-app:dev", function() {
 gulp.task("js-app:prod", function() {
   return gulp
     .src(appPath.src.js.appScripts)
-    .pipe(plugins.babel({ presets: ["es2015"] }))
+    .pipe(plugins.babel({presets: ["es2015"]}))
+    .on('error', function(e) {
+      console.error(e);
+      this.emit('end');
+    })
     .pipe(plugins.ngAnnotate())
     .pipe(plugins.concat("scripts.js"))
     .pipe(plugins.uglify())
