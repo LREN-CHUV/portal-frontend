@@ -11,11 +11,11 @@ const randomDatasets = datasets =>
 
 if (process.argv[2] === "random") {
   // all random variables and datasets with uniques values
-  const datasets = ["CHUV1", "CHUV2", "CHUV3", "CHUV4", "CHUV5"];
+  const datasets = ["chuv", "brescia", "plovdiv", "adni", "ppmi"];
   newJson = json.map(o => ({ ...o, datasets: [...randomDatasets(datasets)] }));
 } else {
   // 1st dataset - all variables
-  newJson = json.map(o => ({ ...o, datasets: ["CHUV1"] }));
+  newJson = json.map(o => ({ ...o, datasets: ["chuv"] }));
 
   // 2nd dataset - all expect some identified variables
   const notInDataset2 = [
@@ -29,7 +29,7 @@ if (process.argv[2] === "random") {
     ...o,
     datasets: notInDataset2.includes(o.code)
       ? o.datasets
-      : o.datasets.concat("CHUV2")
+      : o.datasets.concat("brescia")
   }));
 
   // 3rd dataset - 2nd - some identifed vars
@@ -45,7 +45,7 @@ if (process.argv[2] === "random") {
     ...o,
     datasets: notInDataset3.includes(o.code)
       ? o.datasets
-      : o.datasets.concat("CHUV3")
+      : o.datasets.concat("plovdiv")
   }));
 
   // 4th = 2nd - 2 vars + 3rd - 1 var
@@ -57,16 +57,16 @@ if (process.argv[2] === "random") {
 
   newJson = newJson.map(o => ({
     ...o,
-    datasets: (o.datasets.includes("CHUV2") && o.datasets.includes("CHUV3")) ||
+    datasets: (o.datasets.includes("adni") && o.datasets.includes("chuv")) ||
       !addInDataset4.includes(o.code)
-      ? o.datasets.concat("CHUV4")
+      ? o.datasets.concat("adni")
       : o.datasets
   }));
 
   // 5 random
   newJson = newJson.map(o => ({
     ...o,
-    datasets: Math.random() > 0.5 ? o.datasets.concat("CHUV5") : o.datasets
+    datasets: Math.random() > 0.5 ? o.datasets.concat("ppmi") : o.datasets
   }));
 }
 
