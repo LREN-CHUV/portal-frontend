@@ -51,19 +51,21 @@ angular.module("chuvApp.components.criteria").factory("Variable", [
         });
     };
 
-    resource.parent = child =>
+    resource.getData = variableCode =>
       resource.hierarchy().then(
         data =>
           new Promise(resolve => {
+            // find variable in the tree
             const iterate = current => {
               let children = current.groups || current.variables;
               if (!children) {
                 return;
               }
 
-              if (children.map(c => c.code).includes(child.code)) {
+              if (children.map(c => c.code).includes(variableCode)) {
                 const { code, label } = current;
-                resolve({ code, label });
+                const self = children.find(c => c.code === variableCode);
+                resolve({ self, parent: { code, label } });
               }
 
               for (let i = 0, len = children.length; i < len; i++) {

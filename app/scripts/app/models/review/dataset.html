@@ -65,7 +65,10 @@
             <div ng-if="loading" class="loading">
               <div class="fa fa-spin fa-spinner"></div>
             </div>
-            <div ng-if="!loading"
+            <div ng-if="error">
+              <div>{{error}}</div>
+            </div>
+            <div ng-if="tableRows"
               style="background-color: #d5e5fd; padding: 0.5em">
               <table class="table">
                 <tr style="background-color: transparent">

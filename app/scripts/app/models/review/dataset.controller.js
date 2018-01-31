@@ -28,8 +28,14 @@ angular.module("chuvApp.models").controller("DatasetController", [
     $state
   ) {
     $scope.loading = true;
+    $scope.error = undefined;
+    $scope.tableHeader = undefined;
+    $scope.tableRows = undefined;
+
     $scope.tsneLoading = true;
-    $scope.tsneData = null;
+    $scope.tsneError = undefined;
+    $scope.tsneData = undefined;
+
     $scope.datasets = [
       { label: "chuv", code: "chuv_adni" },
       { label: "brescia", code: "brescia" },
@@ -68,12 +74,14 @@ angular.module("chuvApp.models").controller("DatasetController", [
         )
       ];
 
+      // stack variables
       const allVariables = [
         ...$scope.query.variables,
         ...$scope.query.groupings,
         ...$scope.query.coVariables
       ];
 
+      // forge queries
       let promises = [];
       allVariables.forEach(a => {
         selectedDatasets.forEach(d =>
@@ -95,18 +103,19 @@ angular.module("chuvApp.models").controller("DatasetController", [
         );
       });
 
-      // constructs table by variable
+      // constructs table by variable | dataset
       Promise.all(promises)
         .then(results => {
           results.forEach(r => {
             const data = r.data.data;
-            const variable = data.code;
+            const variable = data.code; // FIXME: code, label in  Variable.getData
             const average = data.average && parseFloat(data.average).toFixed(2);
             const min = data.min && parseFloat(data.min).toFixed(2);
             const max = data.max && parseFloat(data.max).toFixed(2);
 
             const value = `${average} (${min}-${max})`;
             const row = dataRows.find(d => d.variable === variable);
+
             if (row) {
               row.data.push(value);
             } else {
@@ -114,22 +123,22 @@ angular.module("chuvApp.models").controller("DatasetController", [
             }
           });
 
-          return Promise.all(
-            dataRows.map(d => Variable.parent({ code: d.variable }))
-          );
+          return Promise.all(dataRows.map(d => Variable.getData(d.variable)));
         })
         .then(rows => {
           // add parent row for Each Variable
           let dataRowsWithParent = [];
 
-          rows.forEach((d, index) => {
-            const parent = dataRowsWithParent.find(p => p.variable === d.code);
+          rows.forEach((row, index) => {
+            const parent = dataRowsWithParent.find(
+              p => p.variable === row.parent.code
+            );
             if (parent) {
               dataRowsWithParent.push(dataRows[index]);
             } else {
               dataRowsWithParent.push({
-                variable: d.label,
-                data: $scope.tableHeader.map(_ => ""),
+                variable: row.parent.label,
+                data: $scope.tableHeader.map(_ => ""), // hack for colspan
                 type: "header"
               });
               dataRowsWithParent.push(dataRows[index]);
@@ -141,6 +150,8 @@ angular.module("chuvApp.models").controller("DatasetController", [
         })
         .catch(e => {
           console.log(e);
+          $scope.loading = false;
+          $scope.error = `${JSON.stringify(e)}`;
         });
     };
 
