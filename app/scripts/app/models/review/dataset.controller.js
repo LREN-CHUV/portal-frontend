@@ -13,7 +13,6 @@ angular.module("chuvApp.models").controller("DatasetController", [
   "$timeout",
   "$location",
   "$state",
-  "$uibModal",
   function(
     $scope,
     $stateParams,
@@ -26,15 +25,21 @@ angular.module("chuvApp.models").controller("DatasetController", [
     $log,
     $timeout,
     $location,
-    $state,
-    $uibModal
+    $state
   ) {
     $scope.loading = true;
-    $scope.datasets = ["adni", "epfl_adni", "chuv_adni"];
+    $scope.tsneLoading = true;
+    $scope.tsneData = null;
+    $scope.datasets = [
+      { label: "chuv", code: "chuv_adni" },
+      { label: "brescia", code: "brescia" },
+      { label: "plovdiv", code: "plovdiv" },
+      { label: "adni", code: "epfl_adni" },
+      { label: "ppmi", code: "ppmi" }
+    ];
 
-    let hierarchy = {};
     let selectedVariables = [];
-    let selectedDatasets = [...$scope.datasets];
+    let selectedDatasets = [...$scope.datasets.map(d => d.code)];
 
     // params key/values
     var search = $location.search();
@@ -56,7 +61,12 @@ angular.module("chuvApp.models").controller("DatasetController", [
       $scope.loading = true;
       let dataRows = []; // [{ variable, data: [] }, ]
 
-      $scope.tableHeader = ["Variables", ...selectedDatasets];
+      $scope.tableHeader = [
+        "Variables",
+        ...selectedDatasets.map(
+          s => $scope.datasets.find(d => s === d.code).label
+        )
+      ];
 
       const allVariables = [
         ...$scope.query.variables,
@@ -78,13 +88,15 @@ angular.module("chuvApp.models").controller("DatasetController", [
               variables: [a],
               grouping: [],
               coVariables: [],
-              datasets: [d]
+              datasets: [d],
+              filters: ""
             })
           )
         );
       });
 
-      Promise.all(promises) // constructs table by variable
+      // constructs table by variable
+      Promise.all(promises)
         .then(results => {
           results.forEach(r => {
             const data = r.data.data;
@@ -103,12 +115,11 @@ angular.module("chuvApp.models").controller("DatasetController", [
           });
 
           return Promise.all(
-            dataRows.map(d => ({ code: Variable.parent(d.variable) }))
+            dataRows.map(d => Variable.parent({ code: d.variable }))
           );
         })
         .then(rows => {
           // add parent row for Each Variable
-          rows = [{ code: "Occipital" }, { code: "Occipital" }];
           let dataRowsWithParent = [];
 
           rows.forEach((d, index) => {
@@ -117,7 +128,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
               dataRowsWithParent.push(dataRows[index]);
             } else {
               dataRowsWithParent.push({
-                variable: d.code,
+                variable: d.label,
                 data: $scope.tableHeader.map(_ => ""),
                 type: "header"
               });
@@ -125,7 +136,6 @@ angular.module("chuvApp.models").controller("DatasetController", [
             }
           });
 
-          console.log(dataRowsWithParent);
           $scope.tableRows = dataRowsWithParent;
           $scope.loading = false;
         })
@@ -135,6 +145,31 @@ angular.module("chuvApp.models").controller("DatasetController", [
     };
 
     statistics();
+
+    const tsne = () =>
+      Model.mining({
+        algorithm: {
+          code: "tSNE",
+          name: "tSNE",
+          parameters: [],
+          validation: false
+        },
+        variables: $scope.query.variables,
+        grouping: $scope.query.groupings,
+        coVariables: $scope.query.coVariables,
+        datasets: selectedDatasets,
+        filters: ""
+      })
+        .then(result => {
+          $scope.tsneLoading = false;
+          $scope.tsneData = result;
+        })
+        .catch(e => {
+          $scope.tsneError = `Error: ${JSON.stringify(e)}`;
+          $scope.tsneLoading = false;
+        });
+
+    tsne();
 
     var getDependantVariable = function() {
       return (
