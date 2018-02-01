@@ -480,7 +480,12 @@ angular
               return;
             }
 
-            $scope.experiment = response.data;
+            const data = response.data;
+            $scope.experiment = data;
+            $scope.experiment.name =
+              data.algorithms &&
+              data.algorithms.length &&
+              data.algorithms[0].name;
             $scope.loading = false;
 
             // Refresh experiment until done

@@ -94,10 +94,10 @@
               <pre ng-bind="experiment.result"></pre>
             </div>
           </div>
-          <div class="experiment-details" ng-if="experiment.finished && !experiment.hasError" ng-cloak>
-            <tabset active="0">
 
-              <tab heading="Overview" ng-if="overview_charts.length">
+          <div class="experiment-details" ng-if="experiment.finished && !experiment.hasError" ng-cloak>
+            <uib-tabset active="0">
+              <uib-tab heading="Overview" ng-if="overview_charts.length">
                 <div class="panel">
                   <div class="panel-body">
 
@@ -114,7 +114,8 @@
                         </div>
 
                         <div class="row overview-charts">
-                          <div class="col-sm-3" ng-repeat="chart_config in overview_charts"  style="width: 200px; height: 400px; margin: 0 auto">
+                          <div class="col-sm-3 highcharts-container" ng-repeat="chart_config in overview_charts"
+                          style="width: 200px; height: 400px; margin: 0 auto">
                             <highchart config="chart_config"></highchart>
                           </div>
                         </div>
@@ -131,15 +132,15 @@
                     </uib-accordion>
                   </div>
                 </div>
-              </tab>
-              <tab ng-repeat="method in experiment.result" heading="{{ method.name }}">
+              </uib-tab>
+              <uib-tab ng-repeat="method in experiment.result" heading="{{ experiment.name }}">
                 <div class="panel">
                   <div class="panel-body">
                     <method-result data="method"></method-result>
                   </div>
                 </div>
-              </tab>
-            </tabset>
+              </uib-tab>
+            </uib-tabset>
           </div>
         </div>
       </div>
