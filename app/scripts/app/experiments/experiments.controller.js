@@ -410,7 +410,7 @@ angular
           options: {
             chart: {
               type: "column",
-              height: 250
+              height: 400
             },
             plotOptions: {
               column: {}
