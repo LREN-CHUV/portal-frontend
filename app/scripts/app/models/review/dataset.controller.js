@@ -142,7 +142,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
               dataRowsWithParent.push(dataRows[index]);
             } else {
               dataRowsWithParent.push({
-                variable: row.parent.label,
+                variable: row.parent.code,
                 data: $scope.tableHeader.map(_ => ""), // hack for colspan
                 type: "header"
               });
