@@ -4,8 +4,14 @@
       <div class="panel-heading">Datasets</div>
       <div class="panel-body">
         <ul class="list-group">
-          <li ng-repeat="dataset in datasets" class="list-group-item">
-            <a href="">{{dataset.label || dataset.code }}</a>
+          <li
+            ng-repeat="dataset in datasets"
+            class="list-group-item"
+            ng-class="{active: isDatasetSelected(dataset.code)}">
+            <a
+              href=""
+              ng-click="selectDataset(dataset.code)"
+            >{{dataset.label}}</a>
           </li>
         </ul>
       </div>
@@ -59,15 +65,19 @@
             <div ng-if="loading" class="loading">
               <div class="fa fa-spin fa-spinner"></div>
             </div>
-            <div style="background-color: #a9c7d4; padding: 0.5em">
-              <table class="table table-striped">
+            <div ng-if="error">
+              <div>{{error}}</div>
+            </div>
+            <div ng-if="tableRows"
+              style="background-color: #d5e5fd; padding: 0.5em">
+              <table class="table">
                 <tr style="background-color: transparent">
-                  <th ng-repeat="column in tableHeader">
+                  <th ng-repeat="column in tableHeader track by $index">
                     <h6 style="text-transform: uppercase">{{column}}</h6>
                   </th>
                 </tr>
                 <tr
-                  ng-repeat="row in tableRows"
+                  ng-repeat="row in tableRows track by $index"
                   ng-class="{ 'white-row': row.type !== 'header' }">
                   <td class="header-row">{{row.variable}}</td>
                   <td ng-repeat="column in row.data track by $index">{{column}}</td>
@@ -78,26 +88,31 @@
         </uib-tab>
 
         <uib-tab index="1" class="panel-heading" heading="Histogram">
+            <div class="panel-body scrollable">
+                <div ng-if="histogramLoading" class="loading">
+                  <div class="fa fa-spin fa-spinner"></div>
+                </div>
+                <div ng-if="histogramError">
+                    <div>{{histogramError}}</div>
+                </div>
+                <div ng-if="histogramData" ng-repeat="data in histogramData">
+                    <highchart config="data"></highchart>
+                </div>
+              </div>
+        </uib-tab>
+
+        <uib-tab index="2" class="panel-heading" heading="t-SNE">
           <div class="panel-body scrollable">
-            <div ng-if="loading" class="loading">
+            <div ng-if="tsneLoading" class="loading">
               <div class="fa fa-spin fa-spinner"></div>
             </div>
-            <div ng-if="plots.length" ng-repeat="plot in plots" class="panel-body">
-              <p>chart</p>
+            <div ng-if="tsneError">
+                <div>{{tsneError}}</div>
             </div>
+            <highchart ng-if="tsneData" config="tsneData"></highchart>
           </div>
         </uib-tab>
 
-        <uib-tab index="1" class="panel-heading" heading="t-SNE">
-          <div class="panel-body scrollable">
-            <div ng-if="loading" class="loading">
-              <div class="fa fa-spin fa-spinner"></div>
-            </div>
-            <!-- <div ng-if="plots.length" ng-repeat="plot in plots" class="panel-body">
-              <p>plot</p>
-            </div> -->
-          </div>
-        </uib-tab>
       </uib-tabset>
     </div>
   </div>

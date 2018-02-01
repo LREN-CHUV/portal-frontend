@@ -36,6 +36,7 @@ angular
                 validations: validations,
                 algorithms: $scope.shared.experiment_configuration,
                 name: $scope.shared.experiment_name
+                //trainingDataset: ['brescia']
               });
 
               promise.then(
@@ -84,7 +85,9 @@ angular
             });
 
             function refresh_running_experiments() {
-              if (!User.hasCurrent()) {return;}
+              if (!User.hasCurrent()) {
+                return;
+              }
 
               MLUtils.list_my_experiments().then(function(response) {
                 $scope.experiments = response.data;
