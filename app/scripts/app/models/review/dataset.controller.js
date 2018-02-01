@@ -32,6 +32,10 @@ angular.module("chuvApp.models").controller("DatasetController", [
     $scope.tableHeader = undefined;
     $scope.tableRows = undefined;
 
+    $scope.histogramLoading = true;
+    $scope.histogramError = undefined;
+    $scope.histogramData = undefined;
+
     $scope.tsneLoading = true;
     $scope.tsneError = undefined;
     $scope.tsneData = undefined;
@@ -179,18 +183,6 @@ angular.module("chuvApp.models").controller("DatasetController", [
           $scope.tsneLoading = false;
         });
 
-    $scope.$on("event:loadModel", function(evt, model) {
-      $scope.loadResources(model);
-      statistics();
-      tsne();
-    });
-
-    if ($stateParams.slug === undefined) {
-      $scope.loadResources({});
-      statistics();
-      tsne();
-    }
-
     var getDependantVariable = function() {
       return (
         ($scope.query &&
@@ -206,82 +198,84 @@ angular.module("chuvApp.models").controller("DatasetController", [
       return Variable.get_histo(variable.code);
     };
 
-    var getCustomHistogram = function(variable, groupings) {
-      return Variable.getCustomHistogram(
-        variable.code,
-        groupings,
-        $scope.query.textQuery
-      );
-    };
+    // var getCustomHistogram = function(variable, groupings) {
+    //   return Variable.getCustomHistogram(
+    //     variable.code,
+    //     groupings,
+    //     $scope.query.textQuery
+    //   );
+    // };
 
     $scope.isSelected = function(variable) {
       return selectedVariables.includes(variable);
     };
 
-    $scope.selectVariable = function(focusedVariable) {
-      // $scope.loading = true;
-      // // keep a book of selected variables, minus the dependant one
-      // if (
-      //   dependantVariable &&
-      //   focusedVariable.code !== dependantVariable.code
-      // ) {
-      //   var selected = selectedVariables;
-      //   if (selected.includes(focusedVariable)) {
-      //     var index = selected.findIndex(function(v) {
-      //       return v.code === focusedVariable.code;
-      //     });
-      //     selectedVariables.splice(index, 1);
-      //   } else {
-      //     selectedVariables.push(focusedVariable);
-      //   }
-      // }
-      // var format = function(response) {
-      //   var data = response.data && response.data.data;
-      //   if (!angular.isArray(data)) {
-      //     data = [data];
-      //   }
-      //   $scope.plots = data.map(function(stat) {
-      //     var series =
-      //       stat && stat.series && stat.series.length && stat.series[0].data;
-      //     return {
-      //       stats: {
-      //         count: series && series.length,
-      //         min: 0,
-      //         max: 1,
-      //         av:
-      //           series.reduce(function(a, b) {
-      //             return a + b;
-      //           }) / series.length
-      //       },
-      //       chart: stat.chart,
-      //       xAxis: stat.xAxis,
-      //       yAxis: stat.yAxis,
-      //       series: stat.series,
-      //       title: stat.title
-      //     };
-      //   });
-      //   $scope.loading = false;
-      // };
-      // var error = function() {
-      //   $scope.hasError = true;
-      // };
-      // if (selectedVariables.length) {
-      //   getCustomHistogram(dependantVariable, selectedVariables).then(
-      //     format,
-      //     error
-      //   );
-      //   return;
-      // }
-      // getHistogram(focusedVariable).then(format, error);
-      // Variable.getStatistics(focusedVariable.code).then(
-      //   function(response) {
-      //     console.log("getStatistics", response);
-      //   },
-      //   function() {
-      //     console.log("Error");
-      //   }
-      // );
+    // $scope.selectVariable = function(focusedVariable) {
+    // $scope.loading = true;
+    // keep a book of selected variables, minus the dependant one
+    // if (
+    //   dependantVariable &&
+    //   focusedVariable.code !== dependantVariable.code
+    // ) {
+    //   var selected = selectedVariables;
+    //   if (selected.includes(focusedVariable)) {
+    //     var index = selected.findIndex(function(v) {
+    //       return v.code === focusedVariable.code;
+    //     });
+    //     selectedVariables.splice(index, 1);
+    //   } else {
+    //     selectedVariables.push(focusedVariable);
+    //   }
+    // }
+
+    var format = function(response) {
+      var data = response.data && response.data.data;
+      if (!angular.isArray(data)) {
+        data = [data];
+      }
+      $scope.histogramData = data.map(function(stat) {
+        var series =
+          stat && stat.series && stat.series.length && stat.series[0].data;
+        return {
+          stats: {
+            count: series && series.length,
+            min: 0,
+            max: 1,
+            av: series.reduce(function(a, b) {
+              return a + b;
+            }) / series.length
+          },
+          chart: stat.chart,
+          xAxis: stat.xAxis,
+          yAxis: stat.yAxis,
+          series: stat.series,
+          title: stat.title
+        };
+      });
+      $scope.histogramLoading = false;
     };
+
+    var error = function(e) {
+      $scope.histogramError = `Error: ${e}`;
+    };
+
+    // if (selectedVariables.length) {
+    //   getCustomHistogram($scope.variables[0], $scope.groupings || $scope.coVariables).then(
+    //     format,
+    //     error
+    //   );
+    //   return;
+    // }
+    // getHistogram(getDependantVariable()).then(format, error);
+    // Variable.getStatistics(focusedVariable.code).then(
+    //   function(response) {
+    //     console.log("getStatistics", response);
+    //   },
+    //   function() {
+    //     console.log("Error");
+    //   }
+    // );
+    // };
 
     $scope.selectDataset = dataset => {
       if (selectedDatasets.includes(dataset)) {
@@ -322,5 +316,20 @@ angular.module("chuvApp.models").controller("DatasetController", [
 
       return $state.go("new_experiment", query);
     };
+
+    // init
+    $scope.$on("event:loadModel", function(evt, model) {
+      $scope.loadResources(model);
+      statistics();
+      tsne();
+      getHistogram(getDependantVariable()).then(format, error);
+    });
+
+    if ($stateParams.slug === undefined) {
+      $scope.loadResources({});
+      statistics();
+      tsne();
+      getHistogram(getDependantVariable()).then(format, error);
+    }
   }
 ]);

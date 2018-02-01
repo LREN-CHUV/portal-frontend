@@ -88,17 +88,20 @@
         </uib-tab>
 
         <uib-tab index="1" class="panel-heading" heading="Histogram">
-          <div class="panel-body scrollable">
-            <div ng-if="loading" class="loading">
-              <div class="fa fa-spin fa-spinner"></div>
-            </div>
-            <div ng-if="plots.length" ng-repeat="plot in plots" class="panel-body">
-              <p>chart</p>
-            </div>
-          </div>
+            <div class="panel-body scrollable">
+                <div ng-if="histogramLoading" class="loading">
+                  <div class="fa fa-spin fa-spinner"></div>
+                </div>
+                <div ng-if="histogramError">
+                    <div>{{histogramError}}</div>
+                </div>
+                <div ng-if="histogramData" ng-repeat="data in histogramData">
+                    <highchart config="data"></highchart>
+                </div>
+              </div>
         </uib-tab>
 
-        <uib-tab index="1" class="panel-heading" heading="t-SNE">
+        <uib-tab index="2" class="panel-heading" heading="t-SNE">
           <div class="panel-body scrollable">
             <div ng-if="tsneLoading" class="loading">
               <div class="fa fa-spin fa-spinner"></div>
@@ -109,6 +112,7 @@
             <highchart ng-if="tsneData" config="tsneData"></highchart>
           </div>
         </uib-tab>
+
       </uib-tabset>
     </div>
   </div>
