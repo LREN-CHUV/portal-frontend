@@ -35,6 +35,13 @@ angular
         experiment_configuration: []
       };
       $scope.help_is_open = true;
+      $scope.datasets = [
+        { label: "chuv", code: "chuv_adni" },
+        { label: "brescia", code: "brescia" },
+        { label: "plovdiv", code: "plovdiv" },
+        { label: "adni", code: "epfl_adni" },
+        { label: "ppmi", code: "ppmi" }
+      ];
 
       $scope.type_name = function(method_name) {
         return method_name.charAt(0).toUpperCase() + method_name.slice(1) + "s";

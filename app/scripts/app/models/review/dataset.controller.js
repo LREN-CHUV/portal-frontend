@@ -61,6 +61,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
     $scope.query.groupings = map_query("grouping");
     $scope.query.coVariables = map_query("covariable");
     $scope.query.filters = map_query("filter");
+    $scope.query.datasets = map_query("datasets");
     $scope.query.textQuery = search.query;
 
     const statistics = () => {
@@ -155,8 +156,6 @@ angular.module("chuvApp.models").controller("DatasetController", [
         });
     };
 
-    statistics();
-
     const tsne = () =>
       Model.mining({
         algorithm: {
@@ -180,7 +179,17 @@ angular.module("chuvApp.models").controller("DatasetController", [
           $scope.tsneLoading = false;
         });
 
-    tsne();
+    $scope.$on("event:loadModel", function(evt, model) {
+      $scope.loadResources(model);
+      statistics();
+      tsne();
+    });
+
+    if ($stateParams.slug === undefined) {
+      $scope.loadResources({});
+      statistics();
+      tsne();
+    }
 
     var getDependantVariable = function() {
       return (
@@ -191,15 +200,6 @@ angular.module("chuvApp.models").controller("DatasetController", [
         null
       );
     };
-
-    //
-    $scope.$on("event:loadModel", function(evt, model) {
-      $scope.loadResources(model);
-    });
-
-    if ($stateParams.slug === undefined) {
-      $scope.loadResources({});
-    }
 
     // Charts ressources
     var getHistogram = function(variable) {

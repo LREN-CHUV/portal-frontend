@@ -53,23 +53,23 @@
                    popover="Defines the number of folds used in the cross-validation. Typical numbers are 2 or 10. More information: https://en.wikipedia.org/wiki/Cross-validation_(statistics)"></div>
             </div>
           </div>
-          <div class="algorithm-validation-panel">
-            <div class="flexrow">
-              <h3>Dataset</h3>
-              <h3>Training</h3>
-              <h3>Validation</h3>
-            </div>
+        </div>
 
-            <div class="flexrow" ng-repeat="dataset in datasets">
-              <h3>{{dataset}}</h3>
-              <div class="item">
-                <input type="radio" name="{{dataset}}">
-              </div>
-              <div class="item">
-                  <input type="radio" name="{{dataset}}">
-                </div>
-            </div>
+        <div class="algorithm-validation-panel">
+          <div class="flexrow">
+            <h3>Dataset</h3>
+            <h3>Training</h3>
+            <h3>Validation</h3>
+          </div>
 
+          <div class="flexrow" ng-repeat="dataset in datasets">
+            <h3>{{dataset.label}}</h3>
+            <div class="item">
+              <input type="radio" name="{{dataset.code}}">
+            </div>
+            <div class="item">
+              <input type="radio" name="{{dataset.code}}">
+            </div>
           </div>
         </div>
 
