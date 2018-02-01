@@ -16,7 +16,7 @@
       <div ng-if="!focused_variable.isVariable">
         <div tooltip-placement="left" tooltip="The name of the group">
           <b>Name</b>: <span ng-bind="focused_variable.label || 'Root'"></span>
-          <p>{{stats}}</p>
+          <p>{{count ? "Variables count: " + count : stats }}</p>
         </div>
       </div>
       <div ng-if="focused_variable.isVariable && (has_error && !variable_description)">

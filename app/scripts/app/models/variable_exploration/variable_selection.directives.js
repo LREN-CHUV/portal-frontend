@@ -442,9 +442,7 @@ angular
               };
               recNodeCalc(node);
 
-              $scope.stats = {
-                variables: length
-              };
+              $scope.count = length;
               $scope.focused_variable_loaded = true;
 
               return;

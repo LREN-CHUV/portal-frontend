@@ -127,6 +127,7 @@ angular
   ])
   .run([
     "$state",
+    "$location",
     "$translatePartialLoader",
     "$translate",
     "amMoment",
@@ -137,6 +138,7 @@ angular
     "editableOptions",
     function(
       $state,
+      $location,
       $translatePartialLoader,
       $translate,
       amMoment,
@@ -149,7 +151,6 @@ angular
       $translatePartialLoader.addPart("common");
       $translate.refresh();
       amMoment.changeLocale("en");
-      // $state.go("intro"); // FIXME
 
       $rootScope.getPdfUrl = function(slug) {
         return backendUrl + "/articles/" + slug + ".pdf";
@@ -160,6 +161,10 @@ angular
 
         if (!User.hasAgreedTos()) {
           $state.go("tos_agreement");
+        }
+
+        if ($location.path() === "/") {
+          $state.go("home");
         }
       });
 

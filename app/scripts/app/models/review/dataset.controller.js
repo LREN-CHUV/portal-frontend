@@ -171,7 +171,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
         variables: $scope.query.variables,
         grouping: $scope.query.groupings,
         coVariables: $scope.query.coVariables,
-        datasets: selectedDatasets,
+        // datasets: selectedDatasets,
         filters: ""
       })
         .then(result => {

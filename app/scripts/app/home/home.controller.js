@@ -1,7 +1,7 @@
 /**
  * Created by Michael DESIGAUD on 11/08/2015.
  */
-'use strict';
+"use strict";
 
 angular.module("chuvApp.home").controller("HomeController", [
   "$scope",
@@ -29,20 +29,13 @@ angular.module("chuvApp.home").controller("HomeController", [
     ChartUtil,
     $q,
     $http,
-    backendUrl/*,
+    backendUrl /*,
     notifications*/ // TODO: var isn't used, commented to jshint warning detection
   ) {
     $translatePartialLoader.addPart("home");
     $translatePartialLoader.addPart("articles");
     $translatePartialLoader.addPart("requests");
     $translate.refresh();
-
-    /*$scope.datas = {
-      scientists: 14,
-      articles: 73,
-      patients: 3721,
-      teams: 126
-    };*/
 
     $scope.models = [];
 
@@ -52,7 +45,7 @@ angular.module("chuvApp.home").controller("HomeController", [
     $scope.init = function() {
       $http.get(backendUrl + "/user");
       $http.get(backendUrl + "/stats").then(function(response) {
-        $scope.datas = response;
+        $scope.datas = (response && response.data) || null;
       });
       var introTxtSelector = ".intro-txt";
       $scope.tlIntro = new TimelineMax({ paused: true });
