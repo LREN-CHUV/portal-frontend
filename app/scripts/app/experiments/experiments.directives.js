@@ -35,9 +35,13 @@ angular
                 model: $scope.model.slug,
                 validations: validations,
                 algorithms: $scope.shared.experiment_configuration,
-                name: $scope.shared.experiment_name
-                //trainingDataset: ['brescia']
+                name: $scope.shared.experiment_name,
+                datasets: $scope.datasets.filter(
+                  (d, i) => $scope.shared.experiment_datasets[i]
+                )
               });
+
+              debugger;
 
               promise.then(
                 function(result) {

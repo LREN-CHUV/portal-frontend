@@ -309,20 +309,33 @@
     display: flex;
     display: -webkit-flex;
     display: -ms-flexbox;
-    justify-content: space-between;
+    justify-content: space-around;
     align-items: center;
 
     h3 {
-      flex: 0 1 auto;
-      font-size: 13px;
+      font-size: 1px;
       color: #666666;
       font-weight: 700;
     }
 
     .item {
-      flex: 0 1 auto;
       text-align: center;
     }
+  }
+
+  table {
+    font-size: 13px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+
+  tbody {
+    margin-bottom: 10px
+  }
+
+  td {
+    padding: 8px;
+    text-align: center
   }
 
 }

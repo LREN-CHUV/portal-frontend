@@ -32,15 +32,16 @@ angular
         chosen_method: null,
         method_parameters: [],
         cross_validation: false,
-        experiment_configuration: []
+        experiment_configuration: [],
+        experiment_datasets: []
       };
       $scope.help_is_open = true;
       $scope.datasets = [
         { label: "chuv", code: "chuv_adni" },
-        { label: "brescia", code: "brescia" },
-        { label: "plovdiv", code: "plovdiv" },
-        { label: "adni", code: "epfl_adni" },
-        { label: "ppmi", code: "ppmi" }
+        { label: "brescia", code: "brescia" }
+        // { label: "plovdiv", code: "plovdiv" },
+        // { label: "adni", code: "epfl_adni" },
+        // { label: "ppmi", code: "ppmi" }
       ];
 
       $scope.type_name = function(method_name) {
