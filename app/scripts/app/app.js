@@ -152,6 +152,10 @@ angular
       $translate.refresh();
       amMoment.changeLocale("en");
 
+      // if ($location.path() === "/") {
+      $state.go("intro"); // FIXME, again
+      // }
+
       $rootScope.getPdfUrl = function(slug) {
         return backendUrl + "/articles/" + slug + ".pdf";
       };
@@ -161,10 +165,6 @@ angular
 
         if (!User.hasAgreedTos()) {
           $state.go("tos_agreement");
-        }
-
-        if ($location.path() === "/") {
-          $state.go("home");
         }
       });
 

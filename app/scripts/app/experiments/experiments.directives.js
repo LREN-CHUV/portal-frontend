@@ -41,8 +41,6 @@ angular
                 )
               });
 
-              debugger;
-
               promise.then(
                 function(result) {
                   //$state.go(result.data.uuid);

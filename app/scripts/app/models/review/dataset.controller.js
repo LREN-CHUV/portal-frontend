@@ -42,10 +42,10 @@ angular.module("chuvApp.models").controller("DatasetController", [
 
     $scope.datasets = [
       { label: "chuv", code: "chuv_adni" },
-      { label: "brescia", code: "brescia" },
-      { label: "plovdiv", code: "plovdiv" },
-      { label: "adni", code: "epfl_adni" },
-      { label: "ppmi", code: "ppmi" }
+      { label: "brescia", code: "brescia" }
+      // { label: "plovdiv", code: "plovdiv" },
+      // { label: "adni", code: "epfl_adni" },
+      // { label: "ppmi", code: "ppmi" }
     ];
 
     let selectedVariables = [];
@@ -89,7 +89,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
       // forge queries
       let promises = [];
       allVariables.forEach(a => {
-        selectedDatasets.forEach(d =>
+        selectedDatasets.forEach(d => {
           promises.push(
             Model.mining({
               algorithm: {
@@ -101,11 +101,11 @@ angular.module("chuvApp.models").controller("DatasetController", [
               variables: [a],
               grouping: [],
               coVariables: [],
-              datasets: [d],
+              datasets: [{ code: d }],
               filters: ""
             })
-          )
-        );
+          );
+        });
       });
 
       // constructs table by variable | dataset
@@ -154,9 +154,8 @@ angular.module("chuvApp.models").controller("DatasetController", [
           $scope.loading = false;
         })
         .catch(e => {
-          console.log(e);
           $scope.loading = false;
-          $scope.error = `${JSON.stringify(e)}`;
+          $scope.error = e;
         });
     };
 
@@ -179,7 +178,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
           $scope.tsneData = result;
         })
         .catch(e => {
-          $scope.tsneError = `Error: ${JSON.stringify(e)}`;
+          $scope.tsneError = e;
           $scope.tsneLoading = false;
         });
 
@@ -198,35 +197,9 @@ angular.module("chuvApp.models").controller("DatasetController", [
       return Variable.get_histo(variable.code);
     };
 
-    // var getCustomHistogram = function(variable, groupings) {
-    //   return Variable.getCustomHistogram(
-    //     variable.code,
-    //     groupings,
-    //     $scope.query.textQuery
-    //   );
-    // };
-
     $scope.isSelected = function(variable) {
       return selectedVariables.includes(variable);
     };
-
-    // $scope.selectVariable = function(focusedVariable) {
-    // $scope.loading = true;
-    // keep a book of selected variables, minus the dependant one
-    // if (
-    //   dependantVariable &&
-    //   focusedVariable.code !== dependantVariable.code
-    // ) {
-    //   var selected = selectedVariables;
-    //   if (selected.includes(focusedVariable)) {
-    //     var index = selected.findIndex(function(v) {
-    //       return v.code === focusedVariable.code;
-    //     });
-    //     selectedVariables.splice(index, 1);
-    //   } else {
-    //     selectedVariables.push(focusedVariable);
-    //   }
-    // }
 
     var format = function(response) {
       var data = response.data && response.data.data;
@@ -256,26 +229,9 @@ angular.module("chuvApp.models").controller("DatasetController", [
     };
 
     var error = function(e) {
-      $scope.histogramError = `Error: ${e}`;
+      $scope.histogramLoading = false;
+      $scope.histogramError = e;
     };
-
-    // if (selectedVariables.length) {
-    //   getCustomHistogram($scope.variables[0], $scope.groupings || $scope.coVariables).then(
-    //     format,
-    //     error
-    //   );
-    //   return;
-    // }
-    // getHistogram(getDependantVariable()).then(format, error);
-    // Variable.getStatistics(focusedVariable.code).then(
-    //   function(response) {
-    //     console.log("getStatistics", response);
-    //   },
-    //   function() {
-    //     console.log("Error");
-    //   }
-    // );
-    // };
 
     $scope.selectDataset = dataset => {
       if (selectedDatasets.includes(dataset)) {
