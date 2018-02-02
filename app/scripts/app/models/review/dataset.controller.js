@@ -41,7 +41,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
     $scope.tsneData = undefined;
 
     $scope.datasets = [
-      { label: "chuv", code: "chuv_adni" },
+      { label: "chuv", code: "chuv" },
       { label: "brescia", code: "brescia" }
       // { label: "plovdiv", code: "plovdiv" },
       // { label: "adni", code: "epfl_adni" },
