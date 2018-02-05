@@ -15,4 +15,4 @@ RUN bower --allow-root install
 
 COPY . /frontend
 
-CMD gulp
+RUN gulp
