@@ -1,0 +1,15 @@
+<!--div>{{$ctrl.getFocusedVariable.group.label}} > {{$ctrl.getFocusedVariable.label}}</div>
+$ctrl.breadcrumb: {{$ctrl.breadcrumb}}<br-->
+<div class="panel explore-box">
+    <div class="panel-heading">
+        <h2>breadcrumb</h2>
+    </div>
+    <div class="panel-body">
+        <span ng-repeat-start="node in $ctrl.breadcrumb">
+            {{node}}
+        </span>
+        <span ng-repeat-end ng-if="!$last">
+            >
+        </span>
+    </div>
+</div>

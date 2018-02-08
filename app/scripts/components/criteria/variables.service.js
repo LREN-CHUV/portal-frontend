@@ -51,6 +51,41 @@ angular.module("chuvApp.components.criteria").factory("Variable", [
         });
     };
 
+    resource.getBreadcrumb = variableCode =>
+      resource.hierarchy().then(
+        data => {
+          let found = false;
+          return new Promise(resolve => {
+            const breadcrumb = [];
+            const iterate = current => {           
+              let children = current.groups || current.variables;
+              if (!children) {
+                return;
+              }
+
+              breadcrumb.push(current.code);
+              let foundNode = _.filter(children, (child) => child.code === variableCode);
+              if (foundNode.length > 0){
+                found = true;
+                breadcrumb.push(foundNode[0].code);
+                resolve(breadcrumb);
+              }
+
+              for (let i = 0, len = children.length; i < len; i++) {
+                if (found) break;
+                iterate(children[i]);
+                if ((i === len - 1) && (!found)){
+                  breadcrumb.pop();
+                }
+              }
+            };
+
+            iterate(data);
+          })          
+        }
+
+      );
+
     resource.getData = variableCode =>
       resource.hierarchy().then(
         data =>
