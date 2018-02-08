@@ -507,7 +507,7 @@ gulp.task("copy-mock-json", function() {
   return gulp.src(appPath.src.mockJson).pipe(gulp.dest(appPath.dist.mockJson));
 });
 
-// Renaming main js and css files for browser caching
+// Renaming main js and css files to exclude caching
 gulp.task("caching", function() {
   runSequence("revision", "replace", "replace-clean");
 });
