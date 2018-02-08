@@ -37,7 +37,7 @@ angular
       };
       $scope.help_is_open = true;
       $scope.datasets = [
-        { label: "chuv", code: "chuv_adni" },
+        { label: "chuv", code: "chuv" },
         { label: "brescia", code: "brescia" }
         // { label: "plovdiv", code: "plovdiv" },
         // { label: "adni", code: "epfl_adni" },
@@ -59,12 +59,6 @@ angular
       // Check if the method can be applied to the model
       function available_method(method) {
         if (method.disable) {
-          return false;
-        }
-
-        if (method.code === "statisticsSummary") {
-          console.warn("FIXME statisticsSummary disabled in frontend");
-          method.disable = true;
           return false;
         }
 

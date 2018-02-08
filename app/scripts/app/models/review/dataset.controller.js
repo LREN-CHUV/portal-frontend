@@ -8,6 +8,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
   "filterFilter",
   "Variable",
   "Group",
+  "Config",
   "$rootScope",
   "$log",
   "$timeout",
@@ -21,6 +22,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
     filterFilter,
     Variable,
     Group,
+    Config,
     $rootScope,
     $log,
     $timeout,
@@ -41,13 +43,14 @@ angular.module("chuvApp.models").controller("DatasetController", [
     $scope.tsneData = undefined;
 
     $scope.datasets = [
-      { label: "chuv", code: "chuv" },
-      { label: "brescia", code: "brescia" }
+      { label: "chuv", code: "chuv" }
+      // { label: "brescia", code: "brescia" }
       // { label: "plovdiv", code: "plovdiv" },
       // { label: "adni", code: "epfl_adni" },
       // { label: "ppmi", code: "ppmi" }
     ];
 
+    let mode;
     let selectedVariables = [];
     let selectedDatasets = [...$scope.datasets.map(d => d.code)];
 
@@ -87,75 +90,89 @@ angular.module("chuvApp.models").controller("DatasetController", [
       ];
 
       // forge queries
-      let promises = [];
-      allVariables.forEach(a => {
-        selectedDatasets.forEach(d => {
-          promises.push(
-            Model.mining({
-              algorithm: {
-                code: "WP_VARIABLE_SUMMARY",
-                name: "WP_VARIABLE_SUMMARY",
-                parameters: [],
-                validation: false
-              },
-              variables: [a],
-              grouping: [],
-              coVariables: [],
-              datasets: [{ code: d }],
-              filters: ""
-            })
-          );
-        });
-      });
-
-      // constructs table by variable | dataset
-      Promise.all(promises)
-        .then(results => {
-          results.forEach(r => {
-            const data = r.data.data;
-            const variable = data.code; // FIXME: code, label in  Variable.getData
-            const average = data.average && parseFloat(data.average).toFixed(2);
-            const min = data.min && parseFloat(data.min).toFixed(2);
-            const max = data.max && parseFloat(data.max).toFixed(2);
-
-            const value = `${average} (${min}-${max})`;
-            const row = dataRows.find(d => d.variable === variable);
-
-            if (row) {
-              row.data.push(value);
-            } else {
-              dataRows.push({ variable, data: [value] });
-            }
+      Config.then(config => {
+        mode = config.mode;
+        console.log({ mode });
+        return mode;
+      })
+        .then(mode => {
+          const local = mode === "local";
+          let promises = [];
+          allVariables.forEach(a => {
+            selectedDatasets.forEach(d => {
+              promises.push(
+                Model.mining({
+                  algorithm: {
+                    code: local ? "statisticsSummary" : "WP_VARIABLE_SUMMARY",
+                    name: local ? "statisticsSummary" : "WP_VARIABLE_SUMMARY",
+                    parameters: [],
+                    validation: false
+                  },
+                  variables: [a],
+                  grouping: [],
+                  coVariables: [],
+                  datasets: [{ code: d }],
+                  filters: ""
+                })
+              );
+            });
           });
 
-          return Promise.all(dataRows.map(d => Variable.getData(d.variable)));
+          return promises;
         })
-        .then(rows => {
-          // add parent row for Each Variable
-          let dataRowsWithParent = [];
+        .then(promises => {
+          // constructs table by variable | dataset
+          Promise.all(promises)
+            .then(results => {
+              results.forEach(r => {
+                const data = r.data.data;
+                const variable = data.code; // FIXME: code, label in  Variable.getData
+                const average =
+                  data.average && parseFloat(data.average).toFixed(2);
+                const min = data.min && parseFloat(data.min).toFixed(2);
+                const max = data.max && parseFloat(data.max).toFixed(2);
 
-          rows.forEach((row, index) => {
-            const parent = dataRowsWithParent.find(
-              p => p.variable === row.parent.code
-            );
-            if (parent) {
-              dataRowsWithParent.push(dataRows[index]);
-            } else {
-              dataRowsWithParent.push({
-                variable: row.parent.code,
-                data: $scope.tableHeader.map(_ => ""), // hack for colspan
-                type: "header"
+                const value = `${average} (${min}-${max})`;
+                const row = dataRows.find(d => d.variable === variable);
+
+                if (row) {
+                  row.data.push(value);
+                } else {
+                  dataRows.push({ variable, data: [value] });
+                }
               });
-              dataRowsWithParent.push(dataRows[index]);
-            }
-          });
 
-          $scope.tableRows = dataRowsWithParent;
-          $scope.loading = false;
-        })
-        .catch(e => {
-          $scope.loading = false;
-          $scope.error = e;
+              return Promise.all(
+                dataRows.map(d => Variable.getData(d.variable))
+              );
+            })
+            .then(rows => {
+              // add parent row for Each Variable
+              let dataRowsWithParent = [];
+
+              rows.forEach((row, index) => {
+                const parent = dataRowsWithParent.find(
+                  p => p.variable === row.parent.code
+                );
+                if (parent) {
+                  dataRowsWithParent.push(dataRows[index]);
+                } else {
+                  dataRowsWithParent.push({
+                    variable: row.parent.code,
+                    data: $scope.tableHeader.map(_ => ""), // hack for colspan
+                    type: "header"
+                  });
+                  dataRowsWithParent.push(dataRows[index]);
+                }
+              });
+
+              $scope.tableRows = dataRowsWithParent;
+              $scope.loading = false;
+            })
+            .catch(e => {
+              $scope.loading = false;
+              $scope.error = e;
+            });
         });
     };
 
@@ -277,14 +294,14 @@ angular.module("chuvApp.models").controller("DatasetController", [
     $scope.$on("event:loadModel", function(evt, model) {
       $scope.loadResources(model);
       statistics();
-      tsne();
+      // tsne();
       getHistogram(getDependantVariable()).then(format, error);
     });
 
     if ($stateParams.slug === undefined) {
       $scope.loadResources({});
       statistics();
-      tsne();
+      // tsne();
       getHistogram(getDependantVariable()).then(format, error);
     }
   }

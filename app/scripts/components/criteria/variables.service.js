@@ -9,8 +9,6 @@ angular.module("chuvApp.components.criteria").factory("Variable", [
   "$http",
   "$cacheFactory",
   function($resource, backendUrl, $http, $cacheFactory) {
-    var cache = $cacheFactory("hbp-sp8");
-
     var resource = $resource(
       backendUrl + "/variables",
       {},
@@ -33,19 +31,10 @@ angular.module("chuvApp.components.criteria").factory("Variable", [
     };
 
     resource.hierarchy = function() {
-      var hierarchy = cache.get("hierarchy");
-      if (!angular.isUndefined(hierarchy)) {
-        return Promise.resolve(hierarchy);
-      }
-
       return $http
         .get(backendUrl + "/variables/hierarchy")
         .then(function(response) {
           var data = response.data;
-
-          if (!angular.isUndefined(data)) {
-            cache.put("hierarchy", data);
-          }
 
           return data;
         });
