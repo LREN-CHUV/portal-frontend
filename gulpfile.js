@@ -6,7 +6,6 @@ var gulp = require("gulp"),
   runSequence = require("run-sequence"),
   gulpLoadPlugins = require("gulp-load-plugins"),
   plugins = gulpLoadPlugins(),
-  wiredep = require("wiredep").stream,
   pngquant = require("imagemin-pngquant"),
   processhtml = require("gulp-processhtml"),
   browserSync = require("browser-sync").create(),
@@ -33,6 +32,18 @@ var appPath = {
       external: [appConfig.app + "/scripts/external/**/*"]
     },
     less: appConfig.app + "/styles/less/styles.less",
+    vendorCss: [
+      "./node_modules/angular-xeditable/dist/css/xeditable.css",
+      "./node_modules/font-awesome/css/font-awesome.css",
+      "./app/styles/plugins/themify-icons/css/themify-icons.css",
+      "./app/styles/plugins/themify-icons/ie7/ie7.css",
+      "./node_modules/angular-bootstrap-colorpicker/css/colorpicker.css",
+      "./node_modules/icheck/skins/all.css",
+      "./node_modules/ui-select/dist/select.css",
+      "./node_modules/gridster/dist/jquery.gridster.css",
+      "./node_modules/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css",
+      "./node_modules/jQuery-QueryBuilder/dist/css/query-builder.default.css"
+    ],
     js: {
       appScripts: [
         appConfig.app + "/scripts/app/app.js",
@@ -114,17 +125,73 @@ var appPath = {
         appConfig.app + "/scripts/components/widget/widget.service.js",
         appConfig.app + "/scripts/components/toolbar/toolbar.module.js",
         appConfig.app + "/scripts/components/toolbar/toolbar.js"
+      ],
+      vendorScripts: [
+        "./node_modules/jquery/dist/jquery.js",
+        "./node_modules/angular/angular.js",
+        "./node_modules/bootstrap/dist/js/bootstrap.js",
+        "./node_modules/angular-animate/angular-animate.js",
+        "./node_modules/angular-cookies/angular-cookies.js",
+        "./node_modules/angular-resource/angular-resource.js",
+        "./node_modules/angular-route/angular-route.js",
+        "./node_modules/angular-sanitize/angular-sanitize.js",
+        "./node_modules/angular-touch/angular-touch.js",
+        "./node_modules/angular-translate/dist/angular-translate.js",
+        "./node_modules/angular-translate-loader-partial/angular-translate-loader-partial.js",
+        "./node_modules/angular-translate-loader-static-files/angular-translate-loader-static-files.js",
+        "./node_modules/angular-translate-storage-cookie/angular-translate-storage-cookie.js",
+        "./node_modules/@uirouter/angularjs/release/angular-ui-router.js",
+        "./node_modules/tinymce/tinymce.js",
+        "./node_modules/angular-ui-tinymce/src/tinymce.js",
+        "./node_modules/angular-xeditable/dist/js/xeditable.js",
+        "./node_modules/highcharts/highstock.js",
+        "./node_modules/highcharts/highcharts-more.js",
+        "./node_modules/highcharts/modules/heatmap.js",
+        "./node_modules/highcharts/modules/exporting.js",
+        "./node_modules/highcharts/modules/data.js",
+        "./node_modules/highcharts/modules/boost-canvas.js",
+        "./node_modules/highcharts/modules/boost.js",
+        "./node_modules/highcharts/modules/map.js",
+        "./node_modules/highcharts-ng/dist/highcharts-ng.js",
+        "./node_modules/underscore/underscore.js",
+        "./node_modules/angular-dynamic-locale/src/tmhDynamicLocale.js",
+        "./app/styles/plugins/themify-icons/ie7/ie7.js",
+        "./node_modules/moment/moment.js",
+        "./node_modules/angular-moment/angular-moment.js",
+        "./node_modules/angular-bootstrap-colorpicker/js/bootstrap-colorpicker-module.js",
+        "./node_modules/javascript-detect-element-resize/jquery.resize.js",
+        "./node_modules/d3/d3.js",
+        "./node_modules/gsap/src/uncompressed/TweenMax.js",
+        "./node_modules/icheck/icheck.min.js",
+        "./node_modules/ui-select/dist/select.js",
+        "./node_modules/gridster/dist/jquery.gridster.with-extras.min.js",
+        "./node_modules/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.js",
+        "./node_modules/angular-ui-bootstrap/dist/ui-bootstrap-tpls.js",
+        "./node_modules/angular-utf8-base64/angular-utf8-base64.js",
+        "./node_modules/showdown/src/options.js",
+        "./node_modules/showdown/src/showdown.js",
+        "./node_modules/angular-markdown-directive/markdown.js",
+        "./node_modules/jQuery-QueryBuilder/dist/js/query-builder.standalone.js",
+        "./node_modules/sql-parser/browser/sql-parser.js",
+        "./node_modules/image-map-resizer/js/imageMapResizer.min.js",
+        "./node_modules/angulartics/src/angulartics.js",
+        "./node_modules/angulartics-google-analytics/lib/angulartics-ga.js",
+        "./node_modules/jquery-ui/ucore.js",
+        "./node_modules/jquery-ui/widget.js",
+        "./node_modules/jquery-ui/mouse.js",
+        "./node_modules/jquery-ui/sortable.js",
+        appConfig.app + "/styles/plugins/wijets/wijets.js"
       ]
     },
     images: appConfig.app + "/images/**/*",
     tmp: appConfig.app + "/tmp",
+    tmpFonts: appConfig.app + "/fonts",
     other: {
       font: appConfig.app + "/font/**/*",
       fonts: [
-        appConfig.app + "/bower_components/bootstrap/dist/fonts/**/*",
-        appConfig.app + "/bower_components/themify-icons/fonts/**/*",
-        appConfig.app + "/bower_components/font-awesome/fonts/**/*",
-        appConfig.app + "/bower_components/font-awesome/fonts/**/*"
+        "./node_modules/bootstrap/dist/fonts/**/*",
+        "./app/styles/plugins/themify-icons/fonts/**/*",
+        "./node_modules/font-awesome/fonts/**/*"
       ],
       i18n: appConfig.app + "/i18n/**/*",
       mocks: appConfig.app + "/mocks/**/*",
@@ -172,25 +239,13 @@ var appPath = {
   }
 };
 
-// Wiredep module options, wiredep includes bower components
-// into index.html(dev) or index-tmpl.html(prod)
-var wiredepOptions = {
-  ignorePath: /\.\.\//,
-  exclude: [
-    /angular-gridster/,
-    /less/,
-    /SHA-1/,
-    /ng-csv/,
-    /doT/,
-    /jquery-extendext/,
-    /jquery-mousewheel/,
-    /jquery.ui.draggable.js/,
-    /jquery.ui.resizable.js/
-  ] //exclude libraries, wich wasn't in Grunt
-};
 
 gulp.task("clean:dev", function(cb) {
   return rimraf(appPath.src.tmp, cb);
+});
+
+gulp.task("clean-fonts:dev", function(cb) {
+  return rimraf(appPath.src.tmpFonts, cb);
 });
 
 gulp.task("clean:prod", function(cb) {
@@ -245,6 +300,12 @@ gulp.task("copy-font", function() {
   return gulp
     .src(appPath.src.other.font)
     .pipe(gulp.dest(appPath.dist.other.font));
+});
+
+gulp.task("copy-fonts:dev", function() {
+  return gulp
+    .src(appPath.src.other.fonts)
+    .pipe(gulp.dest(appConfig.app + "/fonts"));
 });
 
 gulp.task("copy-fonts", function() {
@@ -312,7 +373,6 @@ gulp.task("images", function() {
 gulp.task("index-html:dev", function() {
   return gulp
     .src(appConfig.app + "/index-gulp.html")
-    .pipe(wiredep(wiredepOptions))
     .pipe(rename("index.html"))
     .pipe(gulp.dest(appConfig.app));
 });
@@ -374,24 +434,30 @@ gulp.task("styles:prod", function() {
     .pipe(gulp.dest(appPath.dist.cssProd));
 });
 
-gulp.task("styles-vendor:prod", function() {
-  var cssArr = require("wiredep")(wiredepOptions).css;
 
+gulp.task("styles-vendor:dev", function() {
   return gulp
-    .src(cssArr)
+    .src(appPath.src.vendorCss)
+    .pipe(plugins.sourcemaps.init())
+    .pipe(plugins.importCss())
+    .pipe(plugins.cssmin())
+    .pipe(plugins.concat("vendor.css"))
+    .pipe(plugins.sourcemaps.write())
+    .pipe(gulp.dest(appPath.src.tmp));
+});
+
+gulp.task("styles-vendor:prod", function() {
+  return gulp
+    .src(appPath.src.vendorCss)
     .pipe(plugins.importCss())
     .pipe(plugins.cssmin())
     .pipe(plugins.concat("vendor.css"))
     .pipe(gulp.dest(appPath.dist.cssProd));
 });
 
-// Concatenate js and copy it in dist folder
 gulp.task("js-vendor:dev", function() {
-  var jsArr = require("wiredep")(wiredepOptions).js;
-  jsArr.push(appConfig.app + "/styles/plugins/wijets/wijets.js");
-
   return gulp
-    .src(jsArr)
+    .src(appPath.src.js.vendorScripts)
     .pipe(plugins.sourcemaps.init())
     .pipe(plugins.uglify())
     .pipe(plugins.concat("vendor.js"))
@@ -400,11 +466,8 @@ gulp.task("js-vendor:dev", function() {
 });
 
 gulp.task("js-vendor:prod", function() {
-  var jsArr = require("wiredep")(wiredepOptions).js;
-  jsArr.push(appConfig.app + "/styles/plugins/wijets/wijets.js");
-
   return gulp
-    .src(jsArr)
+    .src(appPath.src.js.vendorScripts)
     .pipe(plugins.uglify())
     .pipe(plugins.concat("vendor.js"))
     .pipe(gulp.dest(appPath.dist.js.vendorsPath));
@@ -531,8 +594,10 @@ gulp.task("build", function() {
 gulp.task("develop", function() {
   runSequence(
     "clean:dev",
+    "clean-fonts:dev",
     "config:dev",
-    ["styles:dev", "js-app:dev", "js-vendor:dev"],
+    "copy-fonts:dev",
+    ["styles:dev", "styles-vendor:dev", "js-app:dev", "js-vendor:dev"],
     "index-html:dev",
     "browser-sync"
   );
@@ -541,8 +606,10 @@ gulp.task("develop", function() {
 gulp.task("develop-doc", function() {
   runSequence(
     "clean:dev",
+    "clean-fonts:dev",
     "config:dev",
-    ["styles:dev", "js-app:dev", "js-vendor:dev"],
+    "copy-fonts:dev",
+    ["styles:dev", "styles-vendor:dev", "js-app:dev", "js-vendor:dev"],
     "index-html:dev"
   );
 });
