@@ -6,7 +6,7 @@ $ctrl.breadcrumb: {{$ctrl.breadcrumb}}<br-->
     </div>
     <div class="panel-body">
         <span ng-repeat-start="node in $ctrl.breadcrumb">
-            {{node}}
+            {{node.label}} ({{node.childsLength}})
         </span>
         <span ng-repeat-end ng-if="!$last">
             >
