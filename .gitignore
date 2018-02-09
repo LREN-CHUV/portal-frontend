@@ -1,6 +1,7 @@
 .tmp/
 app/bower_components/
 app/scripts/app/app.config.js
+app/fonts
 dist/
 node_modules/
 app/index.html
@@ -9,3 +10,4 @@ reports/
 *.log
 package-lock.json
 .vscode
+yarn-error.log
