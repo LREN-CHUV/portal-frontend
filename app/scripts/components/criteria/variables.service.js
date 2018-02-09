@@ -62,13 +62,11 @@ angular.module("chuvApp.components.criteria").factory("Variable", [
               if (!children) {
                 return;
               }
-              //console.log('current has groups ? ', _.has(current, 'groups'));
               let len = _.has(current, 'groups') ? current.groups.length : 0;
               breadcrumb.push({label: current.label, childsLength: len});
               let foundNode = _.filter(children, (child) => child.code === variableCode);
               if (foundNode.length > 0){
                 found = true;
-                //console.log('foundNode[0] has groups ? ', _.has(foundNode[0], 'groups'));
                 let len = _.has(foundNode[0], 'groups') ? foundNode[0].groups.length : 0;
                 breadcrumb.push({label: foundNode[0].label, childsLength: len});
                 resolve(breadcrumb);
