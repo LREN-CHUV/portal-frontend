@@ -43,14 +43,13 @@ angular.module("chuvApp.models").controller("DatasetController", [
     $scope.tsneData = undefined;
 
     $scope.datasets = [
-      { label: "chuv", code: "chuv" }
-      // { label: "brescia", code: "brescia" }
+      { label: "chuv", code: "chuv" },
+      { label: "brescia", code: "brescia" }
       // { label: "plovdiv", code: "plovdiv" },
       // { label: "adni", code: "epfl_adni" },
       // { label: "ppmi", code: "ppmi" }
     ];
 
-    let mode;
     let selectedVariables = [];
     let selectedDatasets = [...$scope.datasets.map(d => d.code)];
 
@@ -73,7 +72,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
 
     const statistics = () => {
       $scope.loading = true;
-      let dataRows = []; // [{ variable, data: [] }, ]
+      let dataRows = []; // [{ index, label, data: [], type: "" }, ]
 
       $scope.tableHeader = [
         "Variables",
@@ -82,19 +81,19 @@ angular.module("chuvApp.models").controller("DatasetController", [
         )
       ];
 
-      // stack variables
+      // stack all variables
       const allVariables = [
         ...$scope.query.variables,
         ...$scope.query.groupings,
         ...$scope.query.coVariables
       ];
 
-      // forge queries
+      // Get local or federation mode
       Config.then(config => {
-        mode = config.mode;
-        console.log({ mode });
+        const { mode } = config;
         return mode;
       })
+        // Forge queries for variable's statistics by dataset
         .then(mode => {
           const local = mode === "local";
           let promises = [];
@@ -118,61 +117,66 @@ angular.module("chuvApp.models").controller("DatasetController", [
             });
           });
 
-          return promises;
+          return Promise.all(promises);
         })
-        .then(promises => {
-          // constructs table by variable | dataset
-          Promise.all(promises)
-            .then(results => {
-              results.forEach(r => {
-                const data = r.data.data;
-                const variable = data.code; // FIXME: code, label in  Variable.getData
-                const average =
-                  data.average && parseFloat(data.average).toFixed(2);
-                const min = data.min && parseFloat(data.min).toFixed(2);
-                const max = data.max && parseFloat(data.max).toFixed(2);
+        .then(response => response.map(r => r.data))
+        .then(data => {
+          // reduce each variable in a dict {index, label, type: null, data: [col1, col2]}
+          data.forEach(item => {
+            const dataRow =
+              item.data &&
+              item.data.data &&
+              item.data.data.length &&
+              item.data.data[0];
+            const index = dataRow.index;
+            const mean = dataRow.mean && parseFloat(dataRow.mean).toFixed(2);
+            const min = dataRow.min && parseFloat(dataRow.min).toFixed(2);
+            const max = dataRow.max && parseFloat(dataRow.max).toFixed(2);
+            const value = `${mean} (${min}-${max})`;
 
-                const value = `${average} (${min}-${max})`;
-                const row = dataRows.find(d => d.variable === variable);
+            const row = dataRows.find(d => d.index === index);
+            if (row) {
+              row.data.push(value);
+            } else {
+              dataRows.push({ index, data: [value], type: null });
+            }
+          });
 
-                if (row) {
-                  row.data.push(value);
-                } else {
-                  dataRows.push({ variable, data: [value] });
-                }
+          $scope.tableRows = dataRows;
+          $scope.loading = false;
+
+          return Promise.all(dataRows.map(d => Variable.getData(d.index)));
+        })
+        .then(rows => {
+          // add parent row for Each Variable
+          let dataRowsWithParent = [];
+          rows.forEach((row, i) => {
+            const parent = dataRowsWithParent.find(
+              p => p.index === row.parent.code
+            );
+            const dataRow = dataRows[i];
+            dataRow.label = row.self.label;
+
+            if (parent) {
+              dataRowsWithParent.push(dataRow);
+            } else {
+              // push parent and 1st children
+              dataRowsWithParent.push({
+                index: row.parent.code,
+                label: row.parent.label,
+                data: $scope.tableHeader.map(_ => ""), // hack for colspan
+                type: "header"
               });
+              dataRowsWithParent.push(dataRow);
+            }
+          });
 
-              return Promise.all(
-                dataRows.map(d => Variable.getData(d.variable))
-              );
-            })
-            .then(rows => {
-              // add parent row for Each Variable
-              let dataRowsWithParent = [];
-
-              rows.forEach((row, index) => {
-                const parent = dataRowsWithParent.find(
-                  p => p.variable === row.parent.code
-                );
-                if (parent) {
-                  dataRowsWithParent.push(dataRows[index]);
-                } else {
-                  dataRowsWithParent.push({
-                    variable: row.parent.code,
-                    data: $scope.tableHeader.map(_ => ""), // hack for colspan
-                    type: "header"
-                  });
-                  dataRowsWithParent.push(dataRows[index]);
-                }
-              });
-
-              $scope.tableRows = dataRowsWithParent;
-              $scope.loading = false;
-            })
-            .catch(e => {
-              $scope.loading = false;
-              $scope.error = e;
-            });
+          $scope.tableRows = dataRowsWithParent;
+          $scope.loading = false;
+        })
+        .catch(e => {
+          $scope.loading = false;
+          $scope.error = e;
         });
     };
 
@@ -291,18 +295,19 @@ angular.module("chuvApp.models").controller("DatasetController", [
     };
 
     // init
-    $scope.$on("event:loadModel", function(evt, model) {
+    const init = (model = {}) => {
       $scope.loadResources(model);
       statistics();
       // tsne();
       getHistogram(getDependantVariable()).then(format, error);
+    };
+
+    $scope.$on("event:loadModel", function(evt, model) {
+      init(model);
     });
 
     if ($stateParams.slug === undefined) {
-      $scope.loadResources({});
-      statistics();
-      // tsne();
-      getHistogram(getDependantVariable()).then(format, error);
+      init();
     }
   }
 ]);

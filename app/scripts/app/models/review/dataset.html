@@ -18,7 +18,7 @@
     </div>
     <div class="panel" style="flex: 0 0 1">
       <div class="panel-heading">Model</div>
-      <div class="panel-body dataset-list">
+      <div class="panel-body dataset-list scrollable">
         <h5>Variable </h5>
         <p ng-repeat="variable in query.variables">
           <a
@@ -69,7 +69,7 @@
               There was an error perfoming the method
               <pretty-json data="error"></pretty-json>
             </div>
-            <div ng-if="tableRows"
+            <div ng-if="tableHeader"
               style="background-color: #d5e5fd; padding: 0.5em">
               <table class="table">
                 <tr style="background-color: transparent">
@@ -80,7 +80,7 @@
                 <tr
                   ng-repeat="row in tableRows track by $index"
                   ng-class="{ 'white-row': row.type !== 'header' }">
-                  <td class="header-row">{{row.variable}}</td>
+                  <td class="header-row">{{row.label}}</td>
                   <td ng-repeat="column in row.data track by $index">{{column}}</td>
                 </tr>
               </table>
