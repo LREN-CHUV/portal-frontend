@@ -15,6 +15,7 @@ angular
           $scope.search = {};
           $scope.selectedDatasets = [];
           $scope.populatedGroups = {}; // FIXME: bad scope
+          var api = {};
 
           $scope.isDatasetSelected = function(dataset) {
             return $scope.selectedDatasets.includes(dataset);
@@ -39,6 +40,7 @@ angular
               if (group.description) {
                 description += "\n" + group.description;
               }
+
               return (group_dict[group.code] = {
                 label: group.label,
                 code: group.code,
@@ -49,7 +51,7 @@ angular
               });
             }
 
-            // put groups in datastructure
+            // put groups in datastructure 
             groups = map_groups($scope);
             $scope.populatedGroups = groups;
             // and then all the variables in all the right groups
@@ -196,9 +198,11 @@ angular
             zoomTo([root.x, root.y, root.r * 2 + margin]);
             applyNodeColors();
 
-            function zoom(d) {
+            function zoom(d, calledFromAngular) {          
+              if (typeof d === 'string'){
+                var d = nodes.find((node) => node.code === d);
+              }
               focus = d;
-
               var transition = d3
                 .transition()
                 .duration(750)
@@ -219,6 +223,7 @@ angular
                   d && (d.parent === focus || (!d.children && d === focus))
                 );
               };
+
               transition
                 .selectAll("text")
                 .filter(function(d) {
@@ -247,12 +252,14 @@ angular
                 var variable = d.is_group
                   ? Object.assign({ is_group: true }, d.original)
                   : d.original;
+
                 $scope.set_focused_variable(variable);
                 $scope.search.value = null;
                 $scope.search.group = null;
-
-                $scope.$apply();
+                if (!calledFromAngular) $scope.$apply();//$apply trigger a digest cycle, necessary for a click on a svg el
               }
+
+
             }
 
             function zoomTo(v) {
@@ -290,9 +297,10 @@ angular
               if (!groupNode) {
                 return;
               }
-
               zoom(groupNode);
             });
+
+            return {zoom: (d) => zoom(d, true)};
           }
 
           function color_for_node(node) {
@@ -316,7 +324,8 @@ angular
           $scope.$watch("groups", function(groups) {
             if (groups != null) {
               createCirclePackingDataStructure();
-              updateCirclePacking();
+              var api = updateCirclePacking();
+              $scope.zoom = api.zoom;            
             }
           });
 
@@ -327,8 +336,9 @@ angular
           function resize_handler() {
             if ($scope.groups != null && element.width !== prev_dimension) {
               prev_dimension = element.width();
-              updateCirclePacking();
-              $scope.$apply();
+              
+              api = updateCirclePacking();
+              $scope.zoom = api.zoom;
             }
           }
           angular.element(window).bind("resize", resize_handler);
@@ -455,7 +465,7 @@ angular
             var current_request_id = request_id;
 
             $scope.variable_description = focused_variable.description;
-
+            
             Variable.get_histo(focused_variable.code).then(
               function(response) {
                 if (current_request_id != request_id) {

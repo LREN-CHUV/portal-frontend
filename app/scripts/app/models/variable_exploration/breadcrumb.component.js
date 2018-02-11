@@ -3,23 +3,25 @@ angular
     .module("chuvApp.models")
     .component("breadcrumb", {
         bindings: {
-            getFocusedVariable: '<'
+            getFocusedVariable: '<',
+            zoom: '='
         },
         require: {
         },
         controller:[
             'Variable',
             function(Variable){
+
+                this.breadcrumb = [];
                 this.$onChanges = () => {
                     if (_.has(this.getFocusedVariable, 'code')){
                         Variable
                             .getBreadcrumb(this.getFocusedVariable.code)
                             .then(breadcrumb => {
-                                //breadcrumb.shift();//removes "root" node
+                                breadcrumb.shift();//removes "root" node
                                 this.breadcrumb = breadcrumb;
                             });
                     }
-
                 }
             }    
         ],       

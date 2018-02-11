@@ -64,6 +64,8 @@ var appPath = {
         appConfig.app +
           "/scripts/app/models/variable_exploration/exploration.controller.js",
         appConfig.app +
+          "/scripts/app/models/variable_exploration/breadcrumb.component.js",
+          appConfig.app +
           "/scripts/app/models/variable_exploration/variable_selection.directives.js",
         appConfig.app + "/scripts/app/models/review/review.controller.js",
         appConfig.app + "/scripts/app/models/review/chart.controller.js",
