@@ -82,7 +82,7 @@ angular.module("chuvApp.components.criteria").factory("Variable", [
 
     resource.getData = variableCode =>
       resource.hierarchy().then(
-        data => {
+        data => 
           new Promise(resolve => {
             // find variable in the tree
             const iterate = current => {
@@ -104,7 +104,6 @@ angular.module("chuvApp.components.criteria").factory("Variable", [
 
             iterate(data);
           })
-        }
       );
 
     resource.mockup = function() {
