@@ -8,7 +8,9 @@ angular.module("chuvApp.components.criteria").factory("Variable", [
   "backendUrl",
   "$http",
   "$cacheFactory",
-  function($resource, backendUrl, $http, $cacheFactory) {
+  "$q",
+  function($resource, backendUrl, $http, $cacheFactory, $q) {
+    var cache = $cacheFactory("hbp-sp8");
     var resource = $resource(
       backendUrl + "/variables",
       {},
@@ -31,6 +33,11 @@ angular.module("chuvApp.components.criteria").factory("Variable", [
     };
 
     resource.hierarchy = function() {
+      var hierarchy = cache.get("hierarchy");
+      if (!angular.isUndefined(hierarchy)) {
+        return $q.resolve(hierarchy);
+      }
+
       return $http
         .get(backendUrl + "/variables/hierarchy")
         .then(function(response) {
@@ -40,9 +47,42 @@ angular.module("chuvApp.components.criteria").factory("Variable", [
         });
     };
 
+    resource.getBreadcrumb = variableCode =>
+      resource.hierarchy().then(
+        data => {
+          let found = false;
+          const breadcrumb = [];
+          const iterate = current => {          
+            let children = current.groups || current.variables;
+            if (!children) {
+              return [];
+            }
+            let len = _.has(current, 'groups') ? current.groups.length : 0;
+            breadcrumb.push({label: current.label, code: current.code, childsLength: len});
+            let foundNode = _.filter(children, (child) => child.code === variableCode);
+            if (foundNode.length){
+              found = true;
+              let len = _.has(foundNode[0], 'groups') ? foundNode[0].groups.length : 0;
+              breadcrumb.push({label: foundNode[0].label, code: foundNode[0].code, childsLength: len});
+            }
+
+            for (let i = 0, len = children.length; i < len; i++) {
+              if (found) break;
+              iterate(children[i]);
+              if ((i === len - 1) && (!found)){
+                breadcrumb.pop();
+              }
+            }
+          };
+          
+          iterate(data);
+          return breadcrumb;         
+        }
+      );
+
     resource.getData = variableCode =>
       resource.hierarchy().then(
-        data =>
+        data => 
           new Promise(resolve => {
             // find variable in the tree
             const iterate = current => {
