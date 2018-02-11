@@ -1,4 +1,5 @@
 {
     "version": "{{ default .Env.VERSION "DEV" }}",
-    "instanceName": "{{ default .Env.INSTANCE_NAME "HBP MIP Federation" }}"
+    "instanceName": "{{ default .Env.INSTANCE_NAME "HBP MIP Federation" }}",
+    "mode": "{{ default .Env.MODE "federation" }}"
 }

@@ -75,6 +75,8 @@ var appPath = {
         appConfig.app +
           "/scripts/app/models/variable_exploration/exploration.controller.js",
         appConfig.app +
+          "/scripts/app/models/variable_exploration/breadcrumb.component.js",
+        appConfig.app +
           "/scripts/app/models/variable_exploration/variable_selection.directives.js",
         appConfig.app + "/scripts/app/models/review/review.controller.js",
         appConfig.app + "/scripts/app/models/review/chart.controller.js",
@@ -89,6 +91,8 @@ var appPath = {
         appConfig.app + "/scripts/components/criteria/groups.service.js",
         appConfig.app + "/scripts/components/criteria/datasets.service.js",
         appConfig.app + "/scripts/components/criteria/variables.service.js",
+        appConfig.app + "/scripts/components/config/config.module.js",
+        appConfig.app + "/scripts/components/config/config.service.js",
         appConfig.app +
           "/scripts/components/criteria/chained-select.directive.js",
         appConfig.app + "/scripts/components/util/util-module.js",
@@ -238,7 +242,6 @@ var appPath = {
     mockJson: appConfig.dist + "/scripts/app/mock"
   }
 };
-
 
 gulp.task("clean:dev", function(cb) {
   return rimraf(appPath.src.tmp, cb);
@@ -434,7 +437,6 @@ gulp.task("styles:prod", function() {
     .pipe(gulp.dest(appPath.dist.cssProd));
 });
 
-
 gulp.task("styles-vendor:dev", function() {
   return gulp
     .src(appPath.src.vendorCss)
@@ -476,10 +478,10 @@ gulp.task("js-vendor:prod", function() {
 gulp.task("js-app:dev", function() {
   return gulp
     .src(appPath.src.js.appScripts)
-    .pipe(plugins.babel({presets: ["es2015"]}))
-    .on('error', function(e) {
+    .pipe(plugins.babel({ presets: ["es2015"] }))
+    .on("error", function(e) {
       console.error(e);
-      this.emit('end');
+      this.emit("end");
     })
     .pipe(plugins.sourcemaps.init())
     .pipe(plugins.ngAnnotate())
@@ -492,10 +494,10 @@ gulp.task("js-app:dev", function() {
 gulp.task("js-app:prod", function() {
   return gulp
     .src(appPath.src.js.appScripts)
-    .pipe(plugins.babel({presets: ["es2015"]}))
-    .on('error', function(e) {
+    .pipe(plugins.babel({ presets: ["es2015"] }))
+    .on("error", function(e) {
       console.error(e);
-      this.emit('end');
+      this.emit("end");
     })
     .pipe(plugins.ngAnnotate())
     .pipe(plugins.concat("scripts.js"))
