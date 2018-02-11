@@ -10,6 +10,7 @@ angular
     "$location",
     "$uibModal",
     "notifications",
+    "Config",
     function(
       $scope,
       MLUtils,
@@ -17,7 +18,8 @@ angular
       Model,
       $location,
       $uibModal,
-      notifications
+      notifications,
+      Config
     ) {
       $scope.loaded = false;
       $scope.parseInt = parseInt;
@@ -43,6 +45,9 @@ angular
         // { label: "adni", code: "epfl_adni" },
         // { label: "ppmi", code: "ppmi" }
       ];
+      Config.then(function(config) {
+        $scope.federationmode = config.mode === "federation";
+      });
 
       $scope.type_name = function(method_name) {
         return method_name.charAt(0).toUpperCase() + method_name.slice(1) + "s";
