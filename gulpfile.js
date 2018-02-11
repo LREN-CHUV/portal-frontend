@@ -80,6 +80,8 @@ var appPath = {
         appConfig.app + "/scripts/components/criteria/groups.service.js",
         appConfig.app + "/scripts/components/criteria/datasets.service.js",
         appConfig.app + "/scripts/components/criteria/variables.service.js",
+        appConfig.app + "/scripts/components/config/config.module.js",
+        appConfig.app + "/scripts/components/config/config.service.js",
         appConfig.app +
           "/scripts/components/criteria/chained-select.directive.js",
         appConfig.app + "/scripts/components/util/util-module.js",
@@ -415,10 +417,10 @@ gulp.task("js-vendor:prod", function() {
 gulp.task("js-app:dev", function() {
   return gulp
     .src(appPath.src.js.appScripts)
-    .pipe(plugins.babel({presets: ["es2015"]}))
-    .on('error', function(e) {
+    .pipe(plugins.babel({ presets: ["es2015"] }))
+    .on("error", function(e) {
       console.error(e);
-      this.emit('end');
+      this.emit("end");
     })
     .pipe(plugins.sourcemaps.init())
     .pipe(plugins.ngAnnotate())
@@ -431,10 +433,10 @@ gulp.task("js-app:dev", function() {
 gulp.task("js-app:prod", function() {
   return gulp
     .src(appPath.src.js.appScripts)
-    .pipe(plugins.babel({presets: ["es2015"]}))
-    .on('error', function(e) {
+    .pipe(plugins.babel({ presets: ["es2015"] }))
+    .on("error", function(e) {
       console.error(e);
-      this.emit('end');
+      this.emit("end");
     })
     .pipe(plugins.ngAnnotate())
     .pipe(plugins.concat("scripts.js"))

@@ -17,3 +17,4 @@ Environment variables:
 * PORTAL_BACKEND_CONTEXT: context path for the portal backend server, defaults to 'services'.
 * VERSION: Version of MIP
 * INSTANCE_NAME: Name of the instance deployed
+* MODE: Either "local" or "federation", default to "federation"
