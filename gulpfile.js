@@ -79,12 +79,7 @@ var appPath = {
         appConfig.app +
           "/scripts/app/models/variable_exploration/variable_selection.directives.js",
         appConfig.app + "/scripts/app/models/review/review.controller.js",
-        appConfig.app + "/scripts/app/models/review/chart.controller.js",
-        appConfig.app +
-          "/scripts/app/models/review/configuration.controller.js",
-        appConfig.app + "/scripts/app/models/review/criteria.controller.js",
         appConfig.app + "/scripts/app/models/review/dataset.controller.js",
-        appConfig.app + "/scripts/app/models/review/estimation.controller.js",
         appConfig.app + "/scripts/app/models/review/footer.controller.js",
         appConfig.app + "/scripts/components/criteria/criteria.module.js",
         appConfig.app + "/scripts/components/criteria/criteria.service.js",
