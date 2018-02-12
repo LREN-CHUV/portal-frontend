@@ -31,6 +31,18 @@ Run: `./build.sh`
 
 Run: `./publish.sh`
 
+
+## Tests
+This is a setup to run unit-tests in this project:
+1. Install karma-cli & phantomjs global
+  * `npm install karma-cli phantomjs -g` (might require `sudo`)
+3. Install npm`:
+  * `yarn install` (might require `sudo`)
+4. Run the `portal-frontend`:
+  * `gulp`
+  * `google-chrome --disable-web-security --user-data-dir http://localhost:8000` (opens the frontend in Chrome with flags to ignore CORS issues. CORS must be disabled for development because the backend runs on a different domain name than the frontend)
+
+
 ## License
 
 Copyright © 2016-2017 LREN CHUV

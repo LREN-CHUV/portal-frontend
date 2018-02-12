@@ -23,6 +23,7 @@ module.exports = function(config) {
       // Vendor js files
       "./node_modules/jquery/dist/jquery.js",
       "./node_modules/angular/angular.js",
+      "./node_modules/angular-mocks/angular-mocks.js",
       "./node_modules/bootstrap/dist/js/bootstrap.js",
       "./node_modules/angular-animate/angular-animate.js",
       "./node_modules/angular-cookies/angular-cookies.js",
@@ -80,7 +81,7 @@ module.exports = function(config) {
       "app/scripts/**/*module.js",
       "app/scripts/**/*.js",
       //Load tests
-      "app/tests/**/*.js",
+      "app/tests/**/*.test.js",
 
       // load templates for preprocessing
       "app/scripts/**/*.html"
@@ -90,14 +91,22 @@ module.exports = function(config) {
     exclude: [
       "app/tests/e2e/**",
       "app/tests/app/requests/**",
-      "app/tests/app/models/variable_select.test.js",
-      "app/tests/app/header/header.controller.test.js",
+      // "app/tests/app/models/variable_select.test.js",
+      // "app/tests/app/header/header.controller.test.js",
       "app/scripts/external/**"
     ],
 
     preprocessors: {
-      "app/views/**/!(*test).js": "coverage",
-      "app/**/*.html": "ng-html2js"
+      "app/scripts/**/*.js": ["babel"]
+      // "app/views/**/!(*test).js": "coverage",
+      // "app/**/*.html": "ng-html2js"
+    },
+
+    babelPreprocessor: {
+      options: {
+        presets: ["es2015"],
+        sourceMap: "inline"
+      }
     },
 
     ngHtml2JsPreprocessor: {
@@ -118,25 +127,26 @@ module.exports = function(config) {
     // - PhantomJS
     // - IE (only Windows)
     browsers: ["PhantomJS"],
-    reporters: ["junit", "dots", "coverage"],
-    junitReporter: {
-      outputDir: "reports",
-      outputFile: "test-results.xml"
-    },
-    coverageReporter: {
-      type: "cobertura",
-      dir: "reports/",
-      file: "coverage-results.xml"
-    },
+    // reporters: ["junit", "dots", "coverage"],
+    reporters: ["progress"],
+    // junitReporter: {
+    //   outputDir: "reports",
+    //   outputFile: "test-results.xml"
+    // },
+    // coverageReporter: {
+    //   type: "cobertura",
+    //   dir: "reports/",
+    //   file: "coverage-results.xml"
+    // },
 
     // Which plugins to enable
-    plugins: [
-      "karma-phantomjs-launcher",
-      "karma-jasmine",
-      "karma-junit-reporter",
-      "karma-coverage",
-      "karma-ng-html2js-preprocessor"
-    ],
+    // plugins: [
+    //   "karma-phantomjs-launcher",
+    //   "karma-jasmine",
+    //   "karma-junit-reporter",
+    //   "karma-coverage",
+    //   "karma-ng-html2js-preprocessor"
+    // ],
 
     // Continuous Integration mode
     // if true, it capture browsers, run tests and exit

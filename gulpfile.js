@@ -571,6 +571,10 @@ gulp.task("js-hint", function() {
     .pipe(jshint.reporter("jshint-stylish", { beep: true }));
 });
 
+
+// Run unit tests
+gulp.task("unit-test")
+
 // Main build task, create dist folder
 // Type "gulp build" in command line
 gulp.task("build", function() {
@@ -611,6 +615,13 @@ gulp.task("develop-doc", function() {
     "copy-fonts:dev",
     ["styles:dev", "styles-vendor:dev", "js-app:dev", "js-vendor:dev"],
     "index-html:dev"
+  );
+});
+
+gulp.task("test", function() {
+  runSequence(
+    "clean:dev",
+
   );
 });
 
