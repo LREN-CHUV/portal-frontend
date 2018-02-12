@@ -9,20 +9,19 @@
 ## Frontend development
 This is a minimal setup to do frontend development in this project:
 1. Checkout the frontend_dev branch of the `compose-everything-locally` project and run it. You will have the MIP backend running on your computer with no frontend.
-2. Install npm
-3. Run the `portal-frontend`:
-  * `npm install` (might require `sudo`)
+2. Install gulp & yarn global
   * `npm install -g gulp` (might require `sudo`)
-  * `npm install -g bower` (might require `sudo`)
-  * `bower install`
+  * `npm install -g yarn` (might require `sudo`)
+3. Install npm`:
+  * `yarn install` (might require `sudo`)
+4. Run the `portal-frontend`:
   * `gulp`
-  * `cd app`
-  * `php -S localhost:8000 &` (runs a development server from the `app` folder. PHP is not required, other development server should work, as long as it runs on port 8000 and supports .htaccess)
   * `google-chrome --disable-web-security --user-data-dir http://localhost:8000` (opens the frontend in Chrome with flags to ignore CORS issues. CORS must be disabled for development because the backend runs on a different domain name than the frontend)
 
 ## Develop & debug
-One may use Dockerfile-dev
-Run: `./run.sh`
+1. Run: `./run.sh`
+2. Open Browsersync External Access URL `google-chrome --disable-web-security --user-data-dir http://localhost:8000`
+(might be another access URL)
 
 ## Build
 

@@ -39,7 +39,7 @@ angular
     "ui.select",
     "ui.bootstrap",
     "app.config",
-    "ab-base64",
+    "utf8-base64",
     "btford.markdown",
     "xeditable",
     //components
