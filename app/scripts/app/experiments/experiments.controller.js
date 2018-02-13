@@ -200,15 +200,11 @@ angular
           variables: map_query("variables"),
           groupings: map_query("groupings"),
           coVariables: map_query("coVariables"),
-          filters: map_query("filters"),
-          textQuery: search.textQuery
+          filters: map_query("filters")
         };
 
         // step 2: load dataset
         var query = angular.copy($scope.query);
-
-        //TODO Remove this temporary solution
-        query.filters = query.textQuery;
 
         Model.executeQuery(query).then(function(response) {
           var queryResult = response.data;

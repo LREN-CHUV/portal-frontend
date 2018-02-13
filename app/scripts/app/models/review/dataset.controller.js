@@ -54,7 +54,6 @@ angular.module("chuvApp.models").controller("DatasetController", [
     $scope.query.coVariables = map_query("covariable");
     $scope.query.filters = map_query("filter");
     $scope.query.datasets = map_query("datasets");
-    $scope.query.textQuery = search.query;
 
     let selectedVariables = [];
     let selectedDatasets = [...$scope.query.datasets.map(d => d.code)];
@@ -65,14 +64,8 @@ angular.module("chuvApp.models").controller("DatasetController", [
 
       let dataRows = []; // [{ index, label, data: [], type: "" }, ]
 
-      // stack all variables
-      const allVariables = [
-        ...$scope.query.variables,
-        ...$scope.query.groupings,
-        ...$scope.query.coVariables
-      ];
-
       // Get local or federation mode
+      let datasets = [];
       Config.then(config => {
         const { mode } = config;
         return mode;
@@ -81,48 +74,66 @@ angular.module("chuvApp.models").controller("DatasetController", [
         .then(mode => {
           const local = mode === "local";
           let promises = [];
-          allVariables.forEach(a => {
-            selectedDatasets.forEach(d => {
-              promises.push(
-                Model.mining({
-                  algorithm: {
-                    code: local ? "statisticsSummary" : "WP_VARIABLE_SUMMARY",
-                    name: local ? "statisticsSummary" : "WP_VARIABLE_SUMMARY",
-                    parameters: [],
-                    validation: false
-                  },
-                  variables: [a],
-                  grouping: [],
-                  coVariables: [],
-                  datasets: [{ code: d }],
-                  filters: ""
-                })
-              );
-            });
+          selectedDatasets.forEach(d => {
+            promises.push(
+              Model.mining({
+                algorithm: {
+                  code: local ? "statisticsSummary" : "WP_VARIABLE_SUMMARY",
+                  name: local ? "statisticsSummary" : "WP_VARIABLE_SUMMARY",
+                  parameters: [],
+                  validation: false
+                },
+                variables: $scope.query.variables,
+                grouping: $scope.query.groupings,
+                covariables: $scope.query.coVariables,
+                datasets: [{ code: d }],
+                filters: ""
+              })
+            );
           });
 
           return Promise.all(promises);
         })
         .then(response => response.map(r => r.data))
         .then(data => {
+          datasets = data;
+          return datasets;
+        })
+        .then(datasets =>
+          [].concat.apply(
+            [],
+            datasets.map(dataset => dataset.data.data.map(d => d))
+          )
+        )
+        .then(data => {
           // reduce each variable in a dict {index, label, type: null, data: [col1, col2]}
-          data.forEach(item => {
-            const dataRow =
-              item.data &&
-              item.data.data &&
-              item.data.data.length &&
-              item.data.data[0];
+          data.forEach(dataRow => {
             const index = dataRow.index;
             const mean = dataRow.mean && parseFloat(dataRow.mean).toFixed(2);
             const min = dataRow.min && parseFloat(dataRow.min).toFixed(2);
             const max = dataRow.max && parseFloat(dataRow.max).toFixed(2);
-            const value = `${mean} (${min}-${max})`;
+            const countKeys = Object.keys(dataRow.count);
 
-            const row = dataRows.find(d => d.index === index);
-            if (row) {
-              row.data.push(value);
+            if (countKeys.length === 1) {
+              // continuous values
+              const value = `${mean} (${min}-${max})`;
+              const row = dataRows.find(d => d.index === index);
+              if (row) {
+                row.data.push(value);
+              } else {
+                dataRows.push({ index, data: [value], type: null });
+              }
             } else {
-              dataRows.push({ index, data: [value], type: null });
+              // nominal
+              const row = dataRows.find(d => d.index === index);
+              const value = countKeys
+                .map(k => `${k}: ${dataRow.count[k]}`)
+                .join("<br>");
+              if (row) {
+                row.data.push(value);
+              } else {
+                dataRows.push({ index, data: [value], type: null });
+              }
             }
           });
 
@@ -161,6 +172,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
         .catch(e => {
           $scope.loading = false;
           $scope.error = e;
+          console.log(e);
         });
     };
 
@@ -270,8 +282,6 @@ angular.module("chuvApp.models").controller("DatasetController", [
         coVariables: unmap_category("coVariables"),
         groupings: unmap_category("groupings"),
         filters: unmap_category("filters"),
-        datasets: unmap_category("datasets"),
-        textQuery: $location.search().textQuery,
         graph_config: $scope.chartConfig,
         model_slug: ""
       };
@@ -284,7 +294,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
       $scope.loadResources(model);
       statistics();
       // tsne();
-      getHistogram(getDependantVariable()).then(format, error);
+      // getHistogram(getDependantVariable()).then(format, error);
     };
 
     $scope.$on("event:loadModel", function(evt, model) {

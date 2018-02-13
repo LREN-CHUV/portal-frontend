@@ -80,8 +80,8 @@
                 <tr
                   ng-repeat="row in tableRows track by $index"
                   ng-class="{ 'white-row': row.type !== 'header' }">
-                  <td class="header-row">{{row.label}}</td>
-                  <td ng-repeat="column in row.data track by $index">{{column}}</td>
+                  <td class="header-row">{{row.label || row.index}}</td>
+                  <td ng-repeat="column in row.data track by $index" ng-bind-html="column"></td>
                 </tr>
               </table>
             </div>
