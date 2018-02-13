@@ -14,7 +14,7 @@ angular
         link: function($scope, element) {
           $scope.search_history = [];
           $scope.search = {};
-          $scope.selectedDatasets = ($location.search()['datasets'] || '').split(',');
+          $scope.selectedDatasets = ($location.search()['datasets']) ? $location.search()['datasets'].split(',') : [];
           $scope.populatedGroups = {}; // FIXME: bad scope
           var api = {};
 
