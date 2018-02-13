@@ -6,14 +6,15 @@
 angular
   .module("chuvApp.models")
   .directive("circlePacking", [
-    function() {
+    "$location",
+    function($location) {
       return {
         templateUrl: "scripts/app/models/variable_exploration/circle_packing.html",
         replace: true,
         link: function($scope, element) {
           $scope.search_history = [];
           $scope.search = {};
-          $scope.selectedDatasets = [];
+          $scope.selectedDatasets = ($location.search()['datasets'] || '').split(',');
           $scope.populatedGroups = {}; // FIXME: bad scope
           var api = {};
 
@@ -370,6 +371,10 @@ angular
             } else {
               $scope.selectedDatasets.push(dataset);
             }
+
+            const selectedDatasetsObj = {};
+            $scope.selectedDatasets.forEach((datasetName) => selectedDatasetsObj[datasetName] = {});
+            $scope.configuration['datasets'] = selectedDatasetsObj;
 
             svg
               .selectAll("circle")

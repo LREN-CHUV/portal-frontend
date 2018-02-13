@@ -68,7 +68,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
     $scope.query.groupings = map_query("grouping");
     $scope.query.coVariables = map_query("covariable");
     $scope.query.filters = map_query("filter");
-    $scope.query.datasets = map_query("datasets");
+    $scope.query.trainingDatasets = map_query("datasets");
     $scope.query.textQuery = search.query;
 
     const statistics = () => {
@@ -92,7 +92,6 @@ angular.module("chuvApp.models").controller("DatasetController", [
       // forge queries
       Config.then(config => {
         mode = config.mode;
-        console.log({ mode });
         return mode;
       })
         .then(mode => {
@@ -257,6 +256,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
       } else {
         selectedDatasets.push(dataset);
       }
+      //add selectedDatasets to url
       statistics();
     };
 

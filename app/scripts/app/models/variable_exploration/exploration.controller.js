@@ -27,7 +27,6 @@ angular.module("chuvApp.models").controller("ExploreController", [
           config[splitted_url_config[i]] = null;
         }
       }
-
       return config;
     }
 
@@ -42,7 +41,7 @@ angular.module("chuvApp.models").controller("ExploreController", [
       covariable: make_configuration("covariable"),
       grouping: make_configuration("grouping"),
       filter: make_configuration("filter"),
-      datasets: make_configuration("dataset")
+      datasets: make_configuration("datasets")
     };
 
     $scope.set_focused_variable = function(variable) {
@@ -97,7 +96,7 @@ angular.module("chuvApp.models").controller("ExploreController", [
             }
           });
           config[variable.code] = variable;
-        }
+        }        
       }
 
       if (!dont_broadcast) {
