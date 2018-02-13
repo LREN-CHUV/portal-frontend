@@ -42,44 +42,28 @@ angular.module("chuvApp.models").controller("DatasetController", [
     $scope.tsneError = undefined;
     $scope.tsneData = undefined;
 
-    $scope.datasets = [
-      { label: "chuv", code: "chuv" },
-      { label: "brescia", code: "brescia" }
-      // { label: "plovdiv", code: "plovdiv" },
-      // { label: "adni", code: "epfl_adni" },
-      // { label: "ppmi", code: "ppmi" }
-    ];
-
-    let selectedVariables = [];
-    let selectedDatasets = [...$scope.datasets.map(d => d.code)];
-
     // params key/values
     var search = $location.search();
-    function map_query(category) {
-      return search[category]
-        ? search[category].split(",").map(function(code) {
-            return { code: code };
-          })
-        : [];
-    }
+    const map_query = category =>
+      (search[category]
+        ? search[category].split(",").map(code => ({ code }))
+        : []);
 
     $scope.query.variables = map_query("variable");
     $scope.query.groupings = map_query("grouping");
     $scope.query.coVariables = map_query("covariable");
     $scope.query.filters = map_query("filter");
-    $scope.query.trainingDatasets = map_query("datasets");
+    $scope.query.datasets = map_query("datasets");
     $scope.query.textQuery = search.query;
+
+    let selectedVariables = [];
+    let selectedDatasets = [...$scope.query.datasets.map(d => d.code)];
 
     const statistics = () => {
       $scope.loading = true;
-      let dataRows = []; // [{ index, label, data: [], type: "" }, ]
+      $scope.tableHeader = ["Variables", ...selectedDatasets];
 
-      $scope.tableHeader = [
-        "Variables",
-        ...selectedDatasets.map(
-          s => $scope.datasets.find(d => s === d.code).label
-        )
-      ];
+      let dataRows = []; // [{ index, label, data: [], type: "" }, ]
 
       // stack all variables
       const allVariables = [
@@ -286,6 +270,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
         coVariables: unmap_category("coVariables"),
         groupings: unmap_category("groupings"),
         filters: unmap_category("filters"),
+        datasets: unmap_category("datasets"),
         textQuery: $location.search().textQuery,
         graph_config: $scope.chartConfig,
         model_slug: ""

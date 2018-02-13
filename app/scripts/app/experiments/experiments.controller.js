@@ -38,13 +38,6 @@ angular
         experiment_datasets: []
       };
       $scope.help_is_open = true;
-      $scope.datasets = [
-        { label: "chuv", code: "chuv" },
-        { label: "brescia", code: "brescia" }
-        // { label: "plovdiv", code: "plovdiv" },
-        // { label: "adni", code: "epfl_adni" },
-        // { label: "ppmi", code: "ppmi" }
-      ];
       Config.then(function(config) {
         $scope.federationmode = config.mode === "federation";
       });

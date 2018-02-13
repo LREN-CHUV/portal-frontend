@@ -5,13 +5,13 @@
       <div class="panel-body">
         <ul class="list-group">
           <li
-            ng-repeat="dataset in datasets"
+            ng-repeat="dataset in query.datasets"
             class="list-group-item"
             ng-class="{active: isDatasetSelected(dataset.code)}">
             <a
               href=""
               ng-click="selectDataset(dataset.code)"
-            >{{dataset.label}}</a>
+            >{{dataset.code}}</a>
           </li>
         </ul>
       </div>
