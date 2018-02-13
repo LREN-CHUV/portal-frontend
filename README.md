@@ -32,15 +32,20 @@ Run: `./build.sh`
 Run: `./publish.sh`
 
 
-## Tests
-This is a setup to run unit-tests in this project:
+## Tests 
+###using gulp
+This is a setup to run unit-tests in this project using gulp:
+1. To run unit-tests ones:
+  * `gulp unit-tests`
+2. Start karma unit tests:
+  * `gulp unit-tests:auto`
+
+### using karma-cli
+This is a setup to run unit-tests in this project using karma-cli:
 1. Install karma-cli & phantomjs global
   * `npm install karma-cli phantomjs -g` (might require `sudo`)
-3. Install npm`:
-  * `yarn install` (might require `sudo`)
-4. Run the `portal-frontend`:
-  * `gulp`
-  * `google-chrome --disable-web-security --user-data-dir http://localhost:8000` (opens the frontend in Chrome with flags to ignore CORS issues. CORS must be disabled for development because the backend runs on a different domain name than the frontend)
+2. Start karma unit tests:
+  * `karma start karma.conf.js` (might require `sudo`)
 
 
 ## License
