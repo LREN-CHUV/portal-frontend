@@ -261,7 +261,6 @@ angular.module("chuvApp.models").controller("DatasetController", [
       } else {
         selectedDatasets.push(dataset);
       }
-      //add selectedDatasets to url
       statistics();
     };
 
