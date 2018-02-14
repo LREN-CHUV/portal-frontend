@@ -57,6 +57,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
 
     let selectedVariables = [];
     let selectedDatasets = [...$scope.query.datasets.map(d => d.code)];
+    console.log('selectedDatasets : ', selectedDatasets);
 
     // TODO: refactor this
     const statistics = () => {
@@ -243,6 +244,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
     };
 
     $scope.selectDataset = code => {
+      console.log('code : ', code, $scope);
       if (selectedDatasets.includes(code)) {
         const index = selectedDatasets.indexOf(code);
         selectedDatasets.splice(index, 1);
@@ -254,6 +256,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
     };
 
     $scope.isDatasetSelected = code => {
+      console.log('datasets CTRL : ', selectedDatasets, code);
       return selectedDatasets.includes(code);
     };
 
@@ -288,7 +291,6 @@ angular.module("chuvApp.models").controller("DatasetController", [
       $scope.loadResources(model);
       Variable.datasets().then(data => {
         $scope.allDatasets = data;
-        selectedDatasets = [...data.map(d => d.code)];
 
         statistics();
         // tsne();
