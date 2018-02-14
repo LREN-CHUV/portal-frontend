@@ -37,7 +37,10 @@ angular
         method_parameters: [],
         cross_validation: false,
         experiment_configuration: [],
-        experiment_datasets: []
+        experiment_datasets: {
+          training: {},
+          validation: {}
+        }
       };
       $scope.help_is_open = true;
       Config.then(function(config) {
@@ -206,7 +209,8 @@ angular
           variables: map_query("variables"),
           groupings: map_query("groupings"),
           coVariables: map_query("coVariables"),
-          filters: map_query("filters")
+          filters: map_query("filters"),
+          datasets: map_query("datasets")
         };
 
         // step 2: load dataset
