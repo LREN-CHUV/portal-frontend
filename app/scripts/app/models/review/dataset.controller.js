@@ -249,7 +249,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
       } else {
         selectedDatasets.push(code);
       }
-      $location.search('datasets', selectedDatasets.join(','));
+      $location.search("datasets", selectedDatasets.join(","));
 
       statistics();
     };
@@ -292,7 +292,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
 
         statistics();
         // tsne();
-        // getHistogram(getDependantVariable()).then(format, error);
+        getHistogram(getDependantVariable()).then(format, error);
       });
     };
 
