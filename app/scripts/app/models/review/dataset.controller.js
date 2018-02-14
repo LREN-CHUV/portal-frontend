@@ -56,30 +56,17 @@ angular.module("chuvApp.models").controller("DatasetController", [
     $scope.query.datasets = map_query("datasets");
 
     let selectedVariables = [];
-    let selectedDatasets = [];
+    let selectedDatasets = [...$scope.query.datasets.map(d => d.code)];
 
+    // TODO: refactor this
     const statistics = () => {
       $scope.loading = true;
       $scope.tableHeader = ["Variables", ...selectedDatasets];
 
       let dataRows = []; // [{ index, label, data: [], type: "" }, ]
-      const tableRows = [
-        // {
-        //   id,
-        //   variable: { code, label, parent, children },
-        //   datasets: [{
-        //     code,
-        //     label,
-        //     continuous: { mean, min, max },
-        //     discrete: [
-        //       { key, count }
-        //     ]
-        //   }]
-        // }
-      ];
 
       // Get local or federation mode
-      const datasets = [];
+      let datasets = [];
       Config.then(config => config.mode === "local")
         // Forge queries for variable's statistics by dataset
         .then(isLocal =>
@@ -102,7 +89,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
           )
         )
         .then(response => response.map(r => r.data))
-        .then(datasets =>
+        .then(datasets => // flatten [[]]
           [].concat.apply(
             [],
             datasets.map(dataset => dataset.data.data.map(d => d))
@@ -143,7 +130,9 @@ angular.module("chuvApp.models").controller("DatasetController", [
           $scope.tableRows = dataRows;
           $scope.loading = false;
 
-          return Promise.all(dataRows.map(d => Variable.getData(d.index)));
+          return Promise.all(
+            dataRows.map(d => Variable.getVariableData(d.index))
+          );
         })
         .then(rows => {
           // add parent row for Each Variable
@@ -153,7 +142,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
               p => p.index === row.parent.code
             );
             const dataRow = dataRows[i];
-            dataRow.label = row.self.label;
+            dataRow.label = row.data.label;
 
             if (parent) {
               dataRowsWithParent.push(dataRow);
@@ -260,6 +249,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
       } else {
         selectedDatasets.push(code);
       }
+
       statistics();
     };
 
@@ -285,6 +275,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
         coVariables: unmap_category("coVariables"),
         groupings: unmap_category("groupings"),
         filters: unmap_category("filters"),
+        datasets: unmap_category("datasets"),
         graph_config: $scope.chartConfig,
         model_slug: ""
       };
@@ -297,11 +288,11 @@ angular.module("chuvApp.models").controller("DatasetController", [
       $scope.loadResources(model);
       Variable.datasets().then(data => {
         $scope.allDatasets = data;
-        selectedDatasets = [...data.map(d => d.code)]; // FIXME, should come from parameters
+        selectedDatasets = [...data.map(d => d.code)];
 
         statistics();
         // tsne();
-        getHistogram(getDependantVariable()).then(format, error);
+        // getHistogram(getDependantVariable()).then(format, error);
       });
     };
 
