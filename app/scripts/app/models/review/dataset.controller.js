@@ -288,7 +288,6 @@ angular.module("chuvApp.models").controller("DatasetController", [
       $scope.loadResources(model);
       Variable.datasets().then(data => {
         $scope.allDatasets = data;
-        selectedDatasets = [...data.map(d => d.code)];
 
         statistics();
         // tsne();
