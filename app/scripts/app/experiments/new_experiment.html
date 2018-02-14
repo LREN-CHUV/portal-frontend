@@ -96,6 +96,31 @@
 
               <uib-accordion close-others="false">
 
+                  <div uib-accordion-group is-open="true">
+                      <uib-accordion-heading>
+                        <span class="ti ti-panel"></span>
+                        Datasets
+                      </uib-accordion-heading>
+                      <div ng-repeat="dataset in query.datasets" class="datasets-types">
+                        <label>
+                            <span class="code">{{dataset.code}}</span>
+                        </label>
+                        <input 
+                          type="checkbox"
+                          class="training"
+                          name="{{dataset.code}}" 
+                          ng-model="shared.experiment_datasets.training[dataset.code]" 
+                        />
+                        <input 
+                          type="checkbox" 
+                          class="validation"
+                          name="{{dataset.code}}"
+                          ng-model="shared.experiment_datasets.validation[dataset.code]" 
+                        />  
+                      </div>
+                  </div>
+
+
                 <div uib-accordion-group is-open="true">
                   <uib-accordion-heading>
                     <span class="ti ti-panel"></span>
