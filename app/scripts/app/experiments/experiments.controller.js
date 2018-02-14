@@ -11,6 +11,7 @@ angular
     "$uibModal",
     "notifications",
     "Config",
+    "Variable",
     function(
       $scope,
       MLUtils,
@@ -19,7 +20,8 @@ angular
       $location,
       $uibModal,
       notifications,
-      Config
+      Config,
+      Variable
     ) {
       $scope.loaded = false;
       $scope.parseInt = parseInt;
@@ -45,6 +47,10 @@ angular
       $scope.type_name = function(method_name) {
         return method_name.charAt(0).toUpperCase() + method_name.slice(1) + "s";
       };
+
+      Variable.datasets().then(data => {
+        $scope.datasets = data;
+      });
 
       // Get all the ml methods
       MLUtils.list_ml_methods().then(function(data) {
