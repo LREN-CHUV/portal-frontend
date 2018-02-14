@@ -15,7 +15,7 @@ angular
     function($stateProvider) {
       $stateProvider
         .state("new_experiment", {
-          url: "/experiment/:model_slug?variables&coVariables&groupings&filters&datasets",
+          url: "/experiment/:model_slug?variables&coVariables&groupings&filters",
           templateUrl: "scripts/app/experiments/new_experiment.html",
           controller: "NewExperimentController",
           params: {
