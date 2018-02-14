@@ -249,6 +249,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
       } else {
         selectedDatasets.push(code);
       }
+      $location.search('datasets', selectedDatasets.join(','));
 
       statistics();
     };
