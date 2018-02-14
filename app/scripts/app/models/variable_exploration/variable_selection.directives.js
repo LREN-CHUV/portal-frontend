@@ -250,8 +250,6 @@ angular
                 $scope.set_focused_variable(variable);
                 $scope.search.value = null;
                 $scope.search.group = null;
-
-                $scope.$apply();
               }
             }
 

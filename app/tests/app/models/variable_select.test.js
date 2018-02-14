@@ -1,5 +1,5 @@
 describe("Unit testing great quotes", function() {
-  var $compile, $rootScope, $httpBackend, _backendUrl;
+  var $compile, $rootScope, $httpBackend, _backendUrl, scope, element;
 
   var variableMock = [
     {
@@ -111,6 +111,7 @@ describe("Unit testing great quotes", function() {
       $rootScope = _$rootScope_;
       $httpBackend = _$httpBackend_;
       _backendUrl = backendUrl;
+      scope = _$rootScope_.$new();
 
       $httpBackend.when("GET", "i18n/en/common.json").respond(200);
       $httpBackend.when("GET", "i18n/fr/common.json").respond(200);
@@ -125,9 +126,7 @@ describe("Unit testing great quotes", function() {
 
   it("Replaces the element with the appropriate content", function() {
     // Compile a piece of HTML containing the directive
-    var scope = $rootScope.$new();
-
-    var element = $compile("<variable-selection></variable-selection>")(scope);
+    element = $compile("<variable-selection></variable-selection>")(scope);
 
     $httpBackend.expectGET(_backendUrl + "/variables").respond(variableMock);
     $httpBackend.expectGET(_backendUrl + "/groups").respond(groupMock);

@@ -1,20 +1,15 @@
 # Verified with http://hadolint.lukasmartinelli.ch/
-FROM node:7.10.1 as builder
+FROM node:8.9.1 as builder
 
 WORKDIR /frontend
 
 RUN npm install -g gulp
-RUN npm install -g bower
-RUN npm install -g http-server
-
-COPY package.json /frontend
-RUN npm install
-
-COPY bower.json /frontend
-COPY .bowerrc /frontend
-RUN bower --allow-root install
+RUN npm install -g yarn
 
 COPY . /frontend
+
+COPY package.json /frontend
+RUN yarn install
 
 RUN gulp build
 

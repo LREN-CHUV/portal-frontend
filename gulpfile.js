@@ -6,7 +6,6 @@ var gulp = require("gulp"),
   runSequence = require("run-sequence"),
   gulpLoadPlugins = require("gulp-load-plugins"),
   plugins = gulpLoadPlugins(),
-  wiredep = require("wiredep").stream,
   pngquant = require("imagemin-pngquant"),
   processhtml = require("gulp-processhtml"),
   browserSync = require("browser-sync").create(),
@@ -16,13 +15,20 @@ var gulp = require("gulp"),
   rev = require("gulp-rev"),
   revReplace = require("gulp-rev-replace"),
   del = require("del"),
-  rename = require("gulp-rename");
+  rename = require("gulp-rename"),
+  protractor = require("gulp-protractor").protractor,
+  webdriver_standalone = require("gulp-protractor").webdriver_standalone,
+  webdriver_update = require("gulp-protractor").webdriver_update_specific;
+
 
 // Application's main directories constants
-var appConfig = {
-  app: require("./bower.json").appPath || "app",
-  dist: "dist"
-};
+var appConfig = require("./app-config.json");
+// Application's application scripts directories
+var appScripts = require("./scripts-app");
+// Application's vendor scripts directories
+var vendorScripts = require("./scripts-vendor");
+// Application's vendor styles directories
+var vendorCss = require("./styles-vendor");
 
 // Application's srtucture paths
 var appPath = {
@@ -33,98 +39,20 @@ var appPath = {
       external: [appConfig.app + "/scripts/external/**/*"]
     },
     less: appConfig.app + "/styles/less/styles.less",
+    vendorCss: vendorCss,
     js: {
-      appScripts: [
-        appConfig.app + "/scripts/app/app.js",
-        appConfig.app + "/scripts/app/app.config.js",
-        appConfig.app + "/scripts/components/hightlight/hightlight.filter.js",
-        appConfig.app + "/scripts/app/header/header.module.js",
-        appConfig.app + "/scripts/app/header/header.controller.js",
-        appConfig.app + "/scripts/app/footer/footer.module.js",
-        appConfig.app + "/scripts/app/footer/footer.controller.js",
-        appConfig.app + "/scripts/app/home/home.module.js",
-        appConfig.app + "/scripts/app/home/home.router.js",
-        appConfig.app + "/scripts/app/home/home.controller.js",
-        appConfig.app + "/scripts/app/home/tos.controller.js",
-        appConfig.app + "/scripts/app/hbpapps/hbpapps.module.js",
-        appConfig.app + "/scripts/app/hbpapps/hbpapps.controller.js",
-        appConfig.app + "/scripts/app/articles/articles.module.js",
-        appConfig.app + "/scripts/app/articles/articles.service.js",
-        appConfig.app + "/scripts/app/articles/articles.controller.js",
-        appConfig.app + "/scripts/app/users/users.module.js",
-        appConfig.app + "/scripts/app/users/users.controller.js",
-        appConfig.app + "/scripts/app/users/users.service.js",
-        appConfig.app + "/scripts/app/requests/requests.module.js",
-        appConfig.app + "/scripts/app/requests/requests.service.js",
-        appConfig.app + "/scripts/app/requests/requests.controller.js",
-        appConfig.app + "/scripts/app/models/model.module.js",
-        appConfig.app + "/scripts/app/models/model.router.js",
-        appConfig.app + "/scripts/app/models/model.controller.js",
-        appConfig.app + "/scripts/app/models/model.service.js",
-        appConfig.app +
-          "/scripts/app/models/variable_exploration/exploration.controller.js",
-        appConfig.app +
-          "/scripts/app/models/variable_exploration/variable_selection.directives.js",
-        appConfig.app + "/scripts/app/models/review/review.controller.js",
-        appConfig.app + "/scripts/app/models/review/chart.controller.js",
-        appConfig.app +
-          "/scripts/app/models/review/configuration.controller.js",
-        appConfig.app + "/scripts/app/models/review/criteria.controller.js",
-        appConfig.app + "/scripts/app/models/review/dataset.controller.js",
-        appConfig.app + "/scripts/app/models/review/estimation.controller.js",
-        appConfig.app + "/scripts/app/models/review/footer.controller.js",
-        appConfig.app + "/scripts/components/criteria/criteria.module.js",
-        appConfig.app + "/scripts/components/criteria/criteria.service.js",
-        appConfig.app + "/scripts/components/criteria/groups.service.js",
-        appConfig.app + "/scripts/components/criteria/datasets.service.js",
-        appConfig.app + "/scripts/components/criteria/variables.service.js",
-        appConfig.app +
-          "/scripts/components/criteria/chained-select.directive.js",
-        appConfig.app + "/scripts/components/util/util-module.js",
-        appConfig.app + "/scripts/components/util/chart-util.service.js",
-        appConfig.app + "/scripts/components/util/modal-util.service.js",
-        appConfig.app + "/scripts/components/header/header-module.js",
-        appConfig.app + "/scripts/components/header/header-scroll.js",
-        appConfig.app + "/scripts/app/experiments/experiments.module.js",
-        appConfig.app + "/scripts/app/experiments/experiments.controller.js",
-        appConfig.app + "/scripts/app/experiments/experiments.services.js",
-        appConfig.app + "/scripts/app/experiments/experiments.directives.js",
-        appConfig.app +
-          "/scripts/app/experiments/results/results.directives.js",
-        appConfig.app + "/scripts/components/button/button-module.js",
-        appConfig.app + "/scripts/components/button/button-rounded.js",
-        appConfig.app + "/scripts/components/button/carrousel-button.js",
-        appConfig.app + "/scripts/components/checkbox/checkbox-module.js",
-        appConfig.app + "/scripts/components/checkbox/icheckbox.js",
-        appConfig.app + "/scripts/components/date/from-now.filter.js",
-        appConfig.app + "/scripts/components/carrousel/carrousel-module.js",
-        appConfig.app + "/scripts/components/carrousel/carrousel.js",
-        appConfig.app +
-          "/scripts/components/notifications/notifications-module.js",
-        appConfig.app + "/scripts/components/notifications/notifications.js",
-        appConfig.app + "/scripts/app/mydata/mydata.module.js",
-        appConfig.app + "/scripts/app/mydata/mydata.controller.js",
-        appConfig.app + "/scripts/app/profile/profile.module.js",
-        appConfig.app + "/scripts/app/profile/profile.controller.js",
-        appConfig.app + "/scripts/components/scrollbar/scrollbar-module.js",
-        appConfig.app + "/scripts/components/scrollbar/scrollbar.js",
-        appConfig.app + "/scripts/app/intro/intro.module.js",
-        appConfig.app + "/scripts/app/intro/intro.controller.js",
-        appConfig.app + "/scripts/components/widget/widget.module.js",
-        appConfig.app + "/scripts/components/widget/widget.service.js",
-        appConfig.app + "/scripts/components/toolbar/toolbar.module.js",
-        appConfig.app + "/scripts/components/toolbar/toolbar.js"
-      ]
+      appScripts: appScripts,
+      vendorScripts: vendorScripts,
     },
     images: appConfig.app + "/images/**/*",
     tmp: appConfig.app + "/tmp",
+    tmpFonts: appConfig.app + "/fonts",
     other: {
       font: appConfig.app + "/font/**/*",
       fonts: [
-        appConfig.app + "/bower_components/bootstrap/dist/fonts/**/*",
-        appConfig.app + "/bower_components/themify-icons/fonts/**/*",
-        appConfig.app + "/bower_components/font-awesome/fonts/**/*",
-        appConfig.app + "/bower_components/font-awesome/fonts/**/*"
+        "./node_modules/bootstrap/dist/fonts/**/*",
+        "./app/styles/plugins/themify-icons/fonts/**/*",
+        "./node_modules/font-awesome/fonts/**/*"
       ],
       i18n: appConfig.app + "/i18n/**/*",
       mocks: appConfig.app + "/mocks/**/*",
@@ -136,7 +64,12 @@ var appPath = {
         appConfig.app + "/*.txt"
       ]
     },
-    mockJson: appConfig.app + "/scripts/app/mock/**/*.json"
+    mockJson: appConfig.app + "/scripts/app/mock/**/*.json",
+    tests: {
+      screenshots: "./screenshots",
+      reports: "./reports"
+    },
+    // tests: "./screenshots",
   },
   dist: {
     scripts: {
@@ -172,29 +105,25 @@ var appPath = {
   }
 };
 
-// Wiredep module options, wiredep includes bower components
-// into index.html(dev) or index-tmpl.html(prod)
-var wiredepOptions = {
-  ignorePath: /\.\.\//,
-  exclude: [
-    /angular-gridster/,
-    /less/,
-    /SHA-1/,
-    /ng-csv/,
-    /doT/,
-    /jquery-extendext/,
-    /jquery-mousewheel/,
-    /jquery.ui.draggable.js/,
-    /jquery.ui.resizable.js/
-  ] //exclude libraries, wich wasn't in Grunt
-};
 
 gulp.task("clean:dev", function(cb) {
   return rimraf(appPath.src.tmp, cb);
 });
 
+gulp.task("clean-fonts:dev", function(cb) {
+  return rimraf(appPath.src.tmpFonts, cb);
+});
+
 gulp.task("clean:prod", function(cb) {
   return rimraf(appConfig.dist, cb);
+});
+
+gulp.task("clean:test-screenshots", function(cb) {
+  return rimraf(appPath.src.tests.screenshots, cb);
+});
+
+gulp.task("clean:test-reports", function(cb) {
+  return rimraf(appPath.src.tests.reports, cb);
 });
 
 // Creating "app.config.js" in app folder
@@ -245,6 +174,12 @@ gulp.task("copy-font", function() {
   return gulp
     .src(appPath.src.other.font)
     .pipe(gulp.dest(appPath.dist.other.font));
+});
+
+gulp.task("copy-fonts:dev", function() {
+  return gulp
+    .src(appPath.src.other.fonts)
+    .pipe(gulp.dest(appConfig.app + "/fonts"));
 });
 
 gulp.task("copy-fonts", function() {
@@ -312,7 +247,6 @@ gulp.task("images", function() {
 gulp.task("index-html:dev", function() {
   return gulp
     .src(appConfig.app + "/index-gulp.html")
-    .pipe(wiredep(wiredepOptions))
     .pipe(rename("index.html"))
     .pipe(gulp.dest(appConfig.app));
 });
@@ -322,6 +256,23 @@ gulp.task("index-html:prod", function() {
     .src(appConfig.app + "/index-gulp.html")
     .pipe(processhtml())
     .pipe(rename("index-tmpl.html"))
+    .pipe(
+      plugins.htmlmin({
+        collapseWhitespace: true,
+        conservativeCollapse: true,
+        collapseBooleanAttributes: true,
+        removeCommentsFromCDATA: true,
+        removeOptionalTags: true
+      })
+    )
+    .pipe(gulp.dest(appConfig.dist));
+});
+
+gulp.task("index-html:test", function() {
+  return gulp
+    .src(appConfig.app + "/index-gulp.html")
+    .pipe(processhtml())
+    .pipe(rename("index.html"))
     .pipe(
       plugins.htmlmin({
         collapseWhitespace: true,
@@ -349,7 +300,7 @@ gulp.task("styles:dev", function() {
         cascade: false
       })
     )
-    .pipe(plugins.cssmin())
+    // .pipe(plugins.cssmin())
     .pipe(rename("main.css"))
     .pipe(plugins.sourcemaps.write())
     .pipe(gulp.dest(appPath.src.tmp))
@@ -374,24 +325,30 @@ gulp.task("styles:prod", function() {
     .pipe(gulp.dest(appPath.dist.cssProd));
 });
 
-gulp.task("styles-vendor:prod", function() {
-  var cssArr = require("wiredep")(wiredepOptions).css;
 
+gulp.task("styles-vendor:dev", function() {
   return gulp
-    .src(cssArr)
+    .src(appPath.src.vendorCss)
+    .pipe(plugins.sourcemaps.init())
+    .pipe(plugins.importCss())
+    .pipe(plugins.cssmin())
+    .pipe(plugins.concat("vendor.css"))
+    .pipe(plugins.sourcemaps.write())
+    .pipe(gulp.dest(appPath.src.tmp));
+});
+
+gulp.task("styles-vendor:prod", function() {
+  return gulp
+    .src(appPath.src.vendorCss)
     .pipe(plugins.importCss())
     .pipe(plugins.cssmin())
     .pipe(plugins.concat("vendor.css"))
     .pipe(gulp.dest(appPath.dist.cssProd));
 });
 
-// Concatenate js and copy it in dist folder
 gulp.task("js-vendor:dev", function() {
-  var jsArr = require("wiredep")(wiredepOptions).js;
-  jsArr.push(appConfig.app + "/styles/plugins/wijets/wijets.js");
-
   return gulp
-    .src(jsArr)
+    .src(appPath.src.js.vendorScripts)
     .pipe(plugins.sourcemaps.init())
     .pipe(plugins.uglify())
     .pipe(plugins.concat("vendor.js"))
@@ -400,11 +357,8 @@ gulp.task("js-vendor:dev", function() {
 });
 
 gulp.task("js-vendor:prod", function() {
-  var jsArr = require("wiredep")(wiredepOptions).js;
-  jsArr.push(appConfig.app + "/styles/plugins/wijets/wijets.js");
-
   return gulp
-    .src(jsArr)
+    .src(appPath.src.js.vendorScripts)
     .pipe(plugins.uglify())
     .pipe(plugins.concat("vendor.js"))
     .pipe(gulp.dest(appPath.dist.js.vendorsPath));
@@ -444,9 +398,13 @@ gulp.task("copy-mock-json", function() {
   return gulp.src(appPath.src.mockJson).pipe(gulp.dest(appPath.dist.mockJson));
 });
 
-// Renaming main js and css files for browser caching
+// Renaming main js and css files to exclude caching
 gulp.task("caching", function() {
   runSequence("revision", "replace", "replace-clean");
+});
+
+gulp.task("caching:test", function() {
+  runSequence("revision", "replace:test", "replace-clean");
 });
 
 gulp.task("revision", function() {
@@ -476,6 +434,15 @@ gulp.task("replace", function() {
     .pipe(gulp.dest(appConfig.dist));
 });
 
+gulp.task("replace:test", function() {
+  var manifest = gulp.src(appConfig.dist + "/rev-manifest.json");
+
+  return gulp
+    .src(appConfig.dist + "/index.html")
+    .pipe(revReplace({ manifest: manifest }))
+    .pipe(gulp.dest(appConfig.dist));
+});
+
 gulp.task("replace-clean", function() {
   return del(appPath.dist.replaceClean);
 });
@@ -499,6 +466,15 @@ gulp.task("browser-sync", function() {
     .on("change", browserSync.reload);
 });
 
+gulp.task("browser-sync:test", function() {
+  browserSync.init({
+    open: false,
+    server: "./dist",
+    port: 8000,
+    middleware: [historyApiFallback()]
+  });
+});
+
 // Lint js files in "app/scripts"
 // to lint js files you should type "gulp js-hint" in command line
 gulp.task("js-hint", function() {
@@ -507,6 +483,53 @@ gulp.task("js-hint", function() {
     .pipe(jshint(".jshintrc"))
     .pipe(jshint.reporter("jshint-stylish", { beep: true }));
 });
+
+
+// Run unit-test with Karma
+function runTests (singleRun, done) {
+  var testFiles = appPath.src.js.vendorScripts
+    .concat(["./node_modules/angular-mocks/angular-mocks.js"])
+    .concat(appPath.src.js.appScripts)
+    .concat([
+      "./app/tests/**/*.test.js",
+      "./app/scripts/**/*.html"
+    ]);
+
+  gulp.src(testFiles)
+    .pipe(plugins.karma({
+      configFile: "karma.conf.js",
+      action: (singleRun)? "run": "watch"
+    }))
+    .on("error", function (err) {
+      // Make sure failed tests cause gulp to exit non-zero
+      throw err;
+    })
+}
+
+// Run unit tests
+gulp.task("unit-tests", function(done) { runTests(true /*singleRun*/, done) });
+gulp.task("unit-tests:auto", function(done) { runTests(false /*singleRun*/, done) });
+
+
+// Downloads the selenium webdriver
+gulp.task("webdriver_update", webdriver_update({
+  browsers: ["ignore_ssl"]
+}));
+
+// Start the standalone selenium server
+gulp.task("webdriver_standalone", webdriver_standalone);
+
+gulp.task("protractor-go", ["clean:test-reports", "clean:test-screenshots", "webdriver_update"], function(cb) {
+  gulp.src([])
+    .pipe(protractor({
+      configFile: "./app/tests/e2e/e2e-conf.js"
+    }))
+    .on("error", function(e) {
+      console.log(e);
+    })
+    .on("end", cb);
+});
+
 
 // Main build task, create dist folder
 // Type "gulp build" in command line
@@ -531,8 +554,10 @@ gulp.task("build", function() {
 gulp.task("develop", function() {
   runSequence(
     "clean:dev",
+    "clean-fonts:dev",
     "config:dev",
-    ["styles:dev", "js-app:dev", "js-vendor:dev"],
+    "copy-fonts:dev",
+    ["styles:dev", "styles-vendor:dev", "js-app:dev", "js-vendor:dev"],
     "index-html:dev",
     "browser-sync"
   );
@@ -541,9 +566,31 @@ gulp.task("develop", function() {
 gulp.task("develop-doc", function() {
   runSequence(
     "clean:dev",
+    "clean-fonts:dev",
     "config:dev",
-    ["styles:dev", "js-app:dev", "js-vendor:dev"],
+    "copy-fonts:dev",
+    ["styles:dev", "styles-vendor:dev", "js-app:dev", "js-vendor:dev"],
     "index-html:dev"
+  );
+});
+
+gulp.task("e2e-test", function() {
+  runSequence(
+    "clean:prod",
+    "config:dev",
+    [
+      "copy-all",
+      "styles:prod",
+      "styles-vendor:prod",
+      "images",
+      "js-app:prod",
+      "js-vendor:prod"
+    ],
+    "copy-mock-json",
+    "index-html:test",
+    "caching:test",
+    "browser-sync:test",
+    "protractor-go"
   );
 });
 
