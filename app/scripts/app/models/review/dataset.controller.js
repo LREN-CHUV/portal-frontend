@@ -297,11 +297,11 @@ angular.module("chuvApp.models").controller("DatasetController", [
       $scope.loadResources(model);
       Variable.datasets().then(data => {
         $scope.allDatasets = data;
-        selectedDatasets = [...data.map(d => d.code)];
+        selectedDatasets = [...data.map(d => d.code)]; // FIXME, should come from parameters
 
         statistics();
         // tsne();
-        // getHistogram(getDependantVariable()).then(format, error);
+        getHistogram(getDependantVariable()).then(format, error);
       });
     };
 
