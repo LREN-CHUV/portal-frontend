@@ -14,12 +14,14 @@ angular
         link: function($scope, element) {
           $scope.search_history = [];
           $scope.search = {};
-          $scope.selectedDatasets = ($location.search()['datasets']) ? $location.search()['datasets'].split(',') : [];
+          $scope.selectedDatasets = $location.search()["datasets"]
+            ? $location.search()["datasets"].split(",")
+            : [];
           $scope.populatedGroups = {}; // FIXME: bad scope
           var api = {};
 
-          $scope.isDatasetSelected = function(dataset) {
-            return $scope.selectedDatasets.includes(dataset);
+          $scope.isDatasetSelected = function(code) {
+            return $scope.selectedDatasets.includes(code);
           };
 
           var groups;
@@ -358,38 +360,41 @@ angular
             }
           });
 
-          $scope.setDataset = function(dataset) {
-            if (!dataset) return;
+          $scope.setDataset = function(code) {
+            if (!code) return;
 
-            if ($scope.selectedDatasets.includes(dataset)) {
+            if ($scope.selectedDatasets.includes(code)) {
               $scope.selectedDatasets.splice(
-                $scope.selectedDatasets.indexOf(dataset),
+                $scope.selectedDatasets.indexOf(code),
                 1
               );
             } else {
-              $scope.selectedDatasets.push(dataset);
+              $scope.selectedDatasets.push(code);
             }
 
             const selectedDatasetsObj = {};
-            $scope.selectedDatasets.forEach((datasetName) => selectedDatasetsObj[datasetName] = {});
-            $scope.configuration['datasets'] = selectedDatasetsObj;
+            $scope.selectedDatasets.forEach(
+              datasetName => selectedDatasetsObj[datasetName] = {}
+            );
+            $scope.configuration["datasets"] = selectedDatasetsObj;
 
-            svg
-              .selectAll("circle")
-              .style("opacity", 1)
-              .filter(function(data) {
-                return (
-                  !data.is_group &&
-                  !$scope.selectedDatasets
-                    .map(function(d) {
-                      return data.datasets.includes(d);
-                    })
-                    .every(function(op) {
-                      return op;
-                    })
-                );
-              })
-              .style("opacity", 0.2);
+            // TODO
+            // svg
+            //   .selectAll("circle")
+            //   .style("opacity", 1)
+            //   .filter(function(data) {
+            //     return (
+            //       !data.is_group &&
+            //       !$scope.selectedDatasets
+            //         .map(function(d) {
+            //           return data.datasets.includes(d);
+            //         })
+            //         .every(function(op) {
+            //           return op;
+            //         })
+            //     );
+            //   })
+            //   .style("opacity", 0.2);
           };
         }
       };

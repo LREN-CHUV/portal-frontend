@@ -23,14 +23,17 @@ angular.module("chuvApp.components.criteria").factory("Variable", [
       }
     );
 
-    resource.datasets = function() {
-      return $http
-        .get(backendUrl + "/variables/dataset")
-        .then(function(response) {
-          var data = response.data.enumerations;
-          return data;
-        });
-    };
+    resource.datasets = () =>
+      Promise.resolve([
+        {
+          code: "chuv",
+          label: "CHUV"
+        },
+        {
+          code: "adni",
+          label: "ADNI"
+        }
+      ]);
 
     resource.hierarchy = function() {
       var hierarchy = cache.get("hierarchy");
@@ -48,57 +51,68 @@ angular.module("chuvApp.components.criteria").factory("Variable", [
     };
 
     resource.getBreadcrumb = variableCode =>
-      resource.hierarchy().then(
-        data => {
-          let found = false;
-          const breadcrumb = [];
-          const iterate = current => {          
-            let children = current.groups || current.variables;
-            if (!children) {
-              return [];
-            }
-            let len = _.has(current, 'groups') ? current.groups.length : 0;
-            breadcrumb.push({label: current.label, code: current.code, childsLength: len});
-            let foundNode = _.filter(children, (child) => child.code === variableCode);
-            if (foundNode.length){
-              found = true;
-              let len = _.has(foundNode[0], 'groups') ? foundNode[0].groups.length : 0;
-              breadcrumb.push({label: foundNode[0].label, code: foundNode[0].code, childsLength: len});
-            }
+      resource.hierarchy().then(data => {
+        let found = false;
+        const breadcrumb = [];
+        const iterate = current => {
+          let children = current.groups || current.variables;
+          if (!children) {
+            return [];
+          }
+          let len = _.has(current, "groups") ? current.groups.length : 0;
+          breadcrumb.push({
+            label: current.label,
+            code: current.code,
+            childsLength: len
+          });
+          let foundNode = _.filter(
+            children,
+            child => child.code === variableCode
+          );
+          if (foundNode.length) {
+            found = true;
+            let len = _.has(foundNode[0], "groups")
+              ? foundNode[0].groups.length
+              : 0;
+            breadcrumb.push({
+              label: foundNode[0].label,
+              code: foundNode[0].code,
+              childsLength: len
+            });
+          }
 
-            for (let i = 0, len = children.length; i < len; i++) {
-              if (found) break;
-              iterate(children[i]);
-              if ((i === len - 1) && (!found)){
-                breadcrumb.pop();
-              }
+          for (let i = 0, len = children.length; i < len; i++) {
+            if (found) break;
+            iterate(children[i]);
+            if (i === len - 1 && !found) {
+              breadcrumb.pop();
             }
-          };
-          
-          iterate(data);
-          return breadcrumb;         
-        }
-      );
+          }
+        };
 
-    resource.getData = variableCode =>
+        iterate(data);
+        return breadcrumb;
+      });
+
+    resource.getVariableData = variableCode =>
       resource.hierarchy().then(
-        data => 
+        data =>
           new Promise(resolve => {
             // find variable in the tree
             const iterate = current => {
-              let children = current.groups || current.variables;
+              const children = current.groups || current.variables;
               if (!children) {
                 return;
               }
 
               if (children.map(c => c.code).includes(variableCode)) {
                 const { code, label } = current;
-                const self = children.find(c => c.code === variableCode);
-                resolve({ self, parent: { code, label } });
+                const data = children.find(c => c.code === variableCode);
+                resolve({ data, parent: { code, label } });
               }
 
-              for (let i = 0, len = children.length; i < len; i++) {
-                iterate(children[i]);
+              for (let i of children) {
+                iterate(i);
               }
             };
 

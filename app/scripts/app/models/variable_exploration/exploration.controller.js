@@ -33,7 +33,7 @@ angular.module("chuvApp.models").controller("ExploreController", [
     $scope.focused_variable = null;
     $scope.groups = null;
     $scope.allVariables = null;
-    $scope.datasets = null;
+    $scope.allDatasets = null;
     $scope.loaded = false;
 
     $scope.configuration = {
@@ -96,7 +96,7 @@ angular.module("chuvApp.models").controller("ExploreController", [
             }
           });
           config[variable.code] = variable;
-        }        
+        }
       }
 
       if (!dont_broadcast) {
@@ -143,16 +143,8 @@ angular.module("chuvApp.models").controller("ExploreController", [
 
     var config_keys = Object.keys($scope.configuration);
 
-    Variable.mockup()
+    Variable.query()
       .$promise.then(function(allVariables) {
-        $scope.datasets = _.uniq(
-          _.flatten(
-            allVariables.map(function(v) {
-              return v.datasets;
-            })
-          )
-        ).sort();
-
         $scope.allVariables = _.sortBy(allVariables, "label")
           // TODO For the moment we do not make available variable of type 'text' (Visit ID, etc)
           .filter(function(variable) {
@@ -175,12 +167,20 @@ angular.module("chuvApp.models").controller("ExploreController", [
 
         return Group.get().$promise;
       })
-      .then(function(group) {
+      .then(group => {
         // Do not display no-group groupdatasets
         $scope.groups = group.groups.filter(function(g) {
           return g.code !== "no-group";
         });
         $scope.loaded = true;
+
+        return Variable.datasets();
+      })
+      .then(data => {
+        $scope.allDatasets = data;
+      })
+      .catch(e => {
+        console.log(e);
       });
 
     config_keys.forEach(function(config_name) {

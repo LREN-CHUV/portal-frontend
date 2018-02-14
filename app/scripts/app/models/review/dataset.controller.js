@@ -56,30 +56,39 @@ angular.module("chuvApp.models").controller("DatasetController", [
     $scope.query.datasets = map_query("datasets");
 
     let selectedVariables = [];
-    let selectedDatasets = [...$scope.query.datasets.map(d => d.code)];
+    let selectedDatasets = [];
 
     const statistics = () => {
       $scope.loading = true;
       $scope.tableHeader = ["Variables", ...selectedDatasets];
 
       let dataRows = []; // [{ index, label, data: [], type: "" }, ]
+      const tableRows = [
+        // {
+        //   id,
+        //   variable: { code, label, parent, children },
+        //   datasets: [{
+        //     code,
+        //     label,
+        //     continuous: { mean, min, max },
+        //     discrete: [
+        //       { key, count }
+        //     ]
+        //   }]
+        // }
+      ];
 
       // Get local or federation mode
-      let datasets = [];
-      Config.then(config => {
-        const { mode } = config;
-        return mode;
-      })
+      const datasets = [];
+      Config.then(config => config.mode === "local")
         // Forge queries for variable's statistics by dataset
-        .then(mode => {
-          const local = mode === "local";
-          let promises = [];
-          selectedDatasets.forEach(d => {
-            promises.push(
+        .then(isLocal =>
+          Promise.all(
+            selectedDatasets.map(d =>
               Model.mining({
                 algorithm: {
-                  code: local ? "statisticsSummary" : "WP_VARIABLE_SUMMARY",
-                  name: local ? "statisticsSummary" : "WP_VARIABLE_SUMMARY",
+                  code: isLocal ? "statisticsSummary" : "WP_VARIABLE_SUMMARY",
+                  name: isLocal ? "statisticsSummary" : "WP_VARIABLE_SUMMARY",
                   parameters: [],
                   validation: false
                 },
@@ -89,16 +98,10 @@ angular.module("chuvApp.models").controller("DatasetController", [
                 datasets: [{ code: d }],
                 filters: ""
               })
-            );
-          });
-
-          return Promise.all(promises);
-        })
+            )
+          )
+        )
         .then(response => response.map(r => r.data))
-        .then(data => {
-          datasets = data;
-          return datasets;
-        })
         .then(datasets =>
           [].concat.apply(
             [],
@@ -250,18 +253,19 @@ angular.module("chuvApp.models").controller("DatasetController", [
       $scope.histogramError = e;
     };
 
-    $scope.selectDataset = dataset => {
-      if (selectedDatasets.includes(dataset)) {
-        const index = selectedDatasets.indexOf(dataset);
+    $scope.selectDataset = code => {
+      if (selectedDatasets.includes(code)) {
+        const index = selectedDatasets.indexOf(code);
         selectedDatasets.splice(index, 1);
       } else {
-        selectedDatasets.push(dataset);
+        selectedDatasets.push(code);
       }
+
       statistics();
     };
 
-    $scope.isDatasetSelected = dataset => {
-      return selectedDatasets.includes(dataset);
+    $scope.isDatasetSelected = code => {
+      return selectedDatasets.includes(code);
     };
 
     $scope.open_experiment = function() {
@@ -292,9 +296,14 @@ angular.module("chuvApp.models").controller("DatasetController", [
     // init
     const init = (model = {}) => {
       $scope.loadResources(model);
-      statistics();
-      // tsne();
-      // getHistogram(getDependantVariable()).then(format, error);
+      Variable.datasets().then(data => {
+        $scope.allDatasets = data;
+        selectedDatasets = [...data.map(d => d.code)];
+
+        statistics();
+        // tsne();
+        // getHistogram(getDependantVariable()).then(format, error);
+      });
     };
 
     $scope.$on("event:loadModel", function(evt, model) {
