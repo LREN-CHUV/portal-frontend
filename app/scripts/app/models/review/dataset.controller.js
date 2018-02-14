@@ -260,7 +260,6 @@ angular.module("chuvApp.models").controller("DatasetController", [
       } else {
         selectedDatasets.push(code);
       }
-
       statistics();
     };
 
