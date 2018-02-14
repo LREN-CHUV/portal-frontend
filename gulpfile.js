@@ -15,7 +15,11 @@ var gulp = require("gulp"),
   rev = require("gulp-rev"),
   revReplace = require("gulp-rev-replace"),
   del = require("del"),
-  rename = require("gulp-rename");
+  rename = require("gulp-rename"),
+  protractor = require("gulp-protractor").protractor,
+  webdriver_standalone = require("gulp-protractor").webdriver_standalone,
+  webdriver_update = require("gulp-protractor").webdriver_update_specific;
+
 
 // Application's main directories constants
 var appConfig = require("./app-config.json");
@@ -60,7 +64,12 @@ var appPath = {
         appConfig.app + "/*.txt"
       ]
     },
-    mockJson: appConfig.app + "/scripts/app/mock/**/*.json"
+    mockJson: appConfig.app + "/scripts/app/mock/**/*.json",
+    tests: {
+      screenshots: "./screenshots",
+      reports: "./reports"
+    },
+    // tests: "./screenshots",
   },
   dist: {
     scripts: {
@@ -107,6 +116,14 @@ gulp.task("clean-fonts:dev", function(cb) {
 
 gulp.task("clean:prod", function(cb) {
   return rimraf(appConfig.dist, cb);
+});
+
+gulp.task("clean:test-screenshots", function(cb) {
+  return rimraf(appPath.src.tests.screenshots, cb);
+});
+
+gulp.task("clean:test-reports", function(cb) {
+  return rimraf(appPath.src.tests.reports, cb);
 });
 
 // Creating "app.config.js" in app folder
@@ -251,6 +268,23 @@ gulp.task("index-html:prod", function() {
     .pipe(gulp.dest(appConfig.dist));
 });
 
+gulp.task("index-html:test", function() {
+  return gulp
+    .src(appConfig.app + "/index-gulp.html")
+    .pipe(processhtml())
+    .pipe(rename("index.html"))
+    .pipe(
+      plugins.htmlmin({
+        collapseWhitespace: true,
+        conservativeCollapse: true,
+        collapseBooleanAttributes: true,
+        removeCommentsFromCDATA: true,
+        removeOptionalTags: true
+      })
+    )
+    .pipe(gulp.dest(appConfig.dist));
+});
+
 // Compile less to css (dev) minify css (prod)
 gulp.task("styles:dev", function() {
   return gulp
@@ -266,7 +300,7 @@ gulp.task("styles:dev", function() {
         cascade: false
       })
     )
-    .pipe(plugins.cssmin())
+    // .pipe(plugins.cssmin())
     .pipe(rename("main.css"))
     .pipe(plugins.sourcemaps.write())
     .pipe(gulp.dest(appPath.src.tmp))
@@ -369,6 +403,10 @@ gulp.task("caching", function() {
   runSequence("revision", "replace", "replace-clean");
 });
 
+gulp.task("caching:test", function() {
+  runSequence("revision", "replace:test", "replace-clean");
+});
+
 gulp.task("revision", function() {
   var jsFilter = filter("**/*.js"), cssFilter = filter("**/*.css");
 
@@ -396,6 +434,15 @@ gulp.task("replace", function() {
     .pipe(gulp.dest(appConfig.dist));
 });
 
+gulp.task("replace:test", function() {
+  var manifest = gulp.src(appConfig.dist + "/rev-manifest.json");
+
+  return gulp
+    .src(appConfig.dist + "/index.html")
+    .pipe(revReplace({ manifest: manifest }))
+    .pipe(gulp.dest(appConfig.dist));
+});
+
 gulp.task("replace-clean", function() {
   return del(appPath.dist.replaceClean);
 });
@@ -417,6 +464,15 @@ gulp.task("browser-sync", function() {
   gulp
     .watch(appConfig.app + "/scripts/**/*.html")
     .on("change", browserSync.reload);
+});
+
+gulp.task("browser-sync:test", function() {
+  browserSync.init({
+    open: false,
+    server: "./dist",
+    port: 8000,
+    middleware: [historyApiFallback()]
+  });
 });
 
 // Lint js files in "app/scripts"
@@ -453,6 +509,26 @@ function runTests (singleRun, done) {
 // Run unit tests
 gulp.task("unit-tests", function(done) { runTests(true /*singleRun*/, done) });
 gulp.task("unit-tests:auto", function(done) { runTests(false /*singleRun*/, done) });
+
+
+// Downloads the selenium webdriver
+gulp.task("webdriver_update", webdriver_update({
+  browsers: ["ignore_ssl"]
+}));
+
+// Start the standalone selenium server
+gulp.task("webdriver_standalone", webdriver_standalone);
+
+gulp.task("protractor-go", ["clean:test-reports", "clean:test-screenshots", "webdriver_update"], function(cb) {
+  gulp.src([])
+    .pipe(protractor({
+      configFile: "./app/tests/e2e/e2e-conf.js"
+    }))
+    .on("error", function(e) {
+      console.log(e);
+    })
+    .on("end", cb);
+});
 
 
 // Main build task, create dist folder
@@ -498,10 +574,23 @@ gulp.task("develop-doc", function() {
   );
 });
 
-gulp.task("test", function() {
+gulp.task("e2e-test", function() {
   runSequence(
-    "clean:dev",
-
+    "clean:prod",
+    "config:dev",
+    [
+      "copy-all",
+      "styles:prod",
+      "styles-vendor:prod",
+      "images",
+      "js-app:prod",
+      "js-vendor:prod"
+    ],
+    "copy-mock-json",
+    "index-html:test",
+    "caching:test",
+    "browser-sync:test",
+    "protractor-go"
   );
 });
 

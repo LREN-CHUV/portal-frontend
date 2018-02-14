@@ -7,6 +7,7 @@ node_modules/
 app/index.html
 app/tmp/
 reports/
+screenshots/
 *.log
 package-lock.json
 .vscode
