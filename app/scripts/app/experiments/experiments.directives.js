@@ -62,9 +62,9 @@ angular
   .directive("runningExperiments", [
     "MLUtils",
     "$state",
-    "$timeout",
+    "$interval",
     "User",
-    function(MLUtils, $state, $timeout, User) {
+    function(MLUtils, $state, $interval, User) {
       return {
         templateUrl: "/scripts/app/experiments/running-experiments.html",
         replace: true,
@@ -106,7 +106,10 @@ angular
               });
             }
 
-            $interval(refresh_running_experiments, 2000);//TODO Remove this hardcoded value!
+            function repeat_refresh_running_experiments() {
+              refresh_running_experiments();
+              $interval(refresh_running_experiments, 2000);//TODO Remove this hardcoded value!
+            }
 
             User.get().then(repeat_refresh_running_experiments);
           }
