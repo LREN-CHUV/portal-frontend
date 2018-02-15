@@ -10,6 +10,8 @@ angular
     "$location",
     "$uibModal",
     "notifications",
+    "Config",
+    "Variable",
     function(
       $scope,
       MLUtils,
@@ -17,7 +19,9 @@ angular
       Model,
       $location,
       $uibModal,
-      notifications
+      notifications,
+      Config,
+      Variable
     ) {
       $scope.loaded = false;
       $scope.parseInt = parseInt;
@@ -36,17 +40,17 @@ angular
         experiment_datasets: []
       };
       $scope.help_is_open = true;
-      $scope.datasets = [
-        { label: "chuv", code: "chuv_adni" },
-        { label: "brescia", code: "brescia" }
-        // { label: "plovdiv", code: "plovdiv" },
-        // { label: "adni", code: "epfl_adni" },
-        // { label: "ppmi", code: "ppmi" }
-      ];
+      Config.then(function(config) {
+        $scope.federationmode = config.mode === "federation";
+      });
 
       $scope.type_name = function(method_name) {
         return method_name.charAt(0).toUpperCase() + method_name.slice(1) + "s";
       };
+
+      Variable.datasets().then(data => {
+        $scope.datasets = data;
+      });
 
       // Get all the ml methods
       MLUtils.list_ml_methods().then(function(data) {
@@ -59,12 +63,6 @@ angular
       // Check if the method can be applied to the model
       function available_method(method) {
         if (method.disable) {
-          return false;
-        }
-
-        if (method.code === "statisticsSummary") {
-          console.warn("FIXME statisticsSummary disabled in frontend");
-          method.disable = true;
           return false;
         }
 
@@ -208,15 +206,11 @@ angular
           variables: map_query("variables"),
           groupings: map_query("groupings"),
           coVariables: map_query("coVariables"),
-          filters: map_query("filters"),
-          textQuery: search.textQuery
+          filters: map_query("filters")
         };
 
         // step 2: load dataset
         var query = angular.copy($scope.query);
-
-        //TODO Remove this temporary solution
-        query.filters = query.textQuery;
 
         Model.executeQuery(query).then(function(response) {
           var queryResult = response.data;

@@ -10,7 +10,6 @@ angular.module("chuvApp.models").controller("ReviewController", [
   "$translate",
   "Model",
   "$stateParams",
-  "ChartUtil",
   "$state",
   "$log",
   "User",
@@ -27,7 +26,6 @@ angular.module("chuvApp.models").controller("ReviewController", [
     $translate,
     Model,
     $stateParams,
-    ChartUtil,
     $state,
     $log,
     User,
@@ -49,13 +47,6 @@ angular.module("chuvApp.models").controller("ReviewController", [
     $scope.dataset = null;
     $scope.datasets = null; // sources of the data
 
-    $scope.chartConfig = {
-      type: "designmatrix",
-      height: 480,
-      yAxisVariables: null,
-      xAxisVariable: null
-    };
-
     /**
      * load model by slug
      * @param slug
@@ -67,8 +58,6 @@ angular.module("chuvApp.models").controller("ReviewController", [
         if ($stateParams.isCopy === "true") {
           $scope.model.title = "Copy of " + $scope.model.title;
         }
-        $scope.chartConfig = result.config;
-        $scope.hcConfig = ChartUtil($scope.chartConfig, $scope.dataset);
         $scope.query = result.query;
 
         $scope.$broadcast("event:loadModel", result);
@@ -104,17 +93,15 @@ angular.module("chuvApp.models").controller("ReviewController", [
      * save or update model
      */
     $scope.saveModel = function() {
-      if (!($scope.chartConfig.title && $scope.chartConfig.title.text)) {
+      if (!$scope.model.title) {
         notifications.warning("You need a name for your model!");
         return;
       }
-      $scope.model.title = $scope.chartConfig.title.text;
 
       $scope.model.config = $scope.chartConfig;
       $scope.model.dataset = $scope.dataset;
       $scope.model.query = angular.copy($scope.query); // will be modified, therefore we do a deep copy
-      $scope.model.query.filters = angular.copy($scope.query.textQuery);
-      // delete $scope.model.query.filterQuery;
+      $scope.model.query.filters = $scope.filter;
 
       if ($scope.isNew()) {
         // save new model
@@ -357,18 +344,6 @@ angular.module("chuvApp.models").controller("ReviewController", [
         });
     };
 
-    function reload_hc_config() {
-      $scope.chartConfig.yAxisVariables = ($scope.chartConfig
-        .yAxisVariables || [])
-        .filter(function(code) {
-          return (ChartUtil.isXAxisMain($scope.chartConfig.type)
-            ? ChartUtil.canUseAsYAxis
-            : ChartUtil.canUseAsXAxis)(code, $scope.chartConfig.type, $scope.dataset.data[code]);
-        })
-        .slice(0, 5);
-      $scope.hcConfig = ChartUtil($scope.chartConfig, $scope.dataset, true);
-    }
-
     /**
      * Execute a search query
      */
@@ -401,25 +376,7 @@ angular.module("chuvApp.models").controller("ReviewController", [
         notifications.error(error);
         return;
       }
-
-      //TODO Temporary solution. We need to pass JSON instead of SQL and parse it backend for security reasons.
-      query.filters = query.textQuery;
-
-      $scope.loading_model = true;
-
-      Model.executeQuery(query).then(function(queryResult) {
-        $scope.executeBtnAnimate();
-        $scope.executed = true;
-        $scope.loading_model = false;
-        $scope.dataset = queryResult.data;
-
-        update_location_search();
-        reload_hc_config();
-        $scope.startChart = true;
-      });
     };
-
-    $scope.$on("chartConfigChanged", reload_hc_config);
 
     if ($location.search().execute) {
       // wait for data to be there before executing query.
@@ -460,7 +417,6 @@ angular.module("chuvApp.models").controller("ReviewController", [
         covariable: unmap_category("coVariables"),
         grouping: unmap_category("groupings"),
         filter: unmap_category("filters"),
-        textQuery: $scope.query.textQuery,
         execute: true
       };
 

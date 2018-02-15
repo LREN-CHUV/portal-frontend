@@ -30,18 +30,14 @@
         </div>
       </div>
 
-      <button class="btn btn-primary"
-        ng-class="{active: mode.local.active}"
-        ng-disabled="mode.local.disabled"
-        ng-click="set_mode('local')">
-        Local
-      </button>
-      <button class="btn btn-primary"
-        ng-class="{active: !mode.local.active}"
-        ng-disabled="mode.exareme.disabled"
-        ng-click="set_mode('exareme')">
-        Exareme
-      </button>
+      <span ng-if="federationmode">
+        <button class="btn btn-primary" ng-class="{active: mode.local.active}" ng-disabled="mode.local.disabled" ng-click="set_mode('local')">
+          Local
+        </button>
+        <button class="btn btn-primary" ng-class="{active: !mode.local.active}" ng-disabled="mode.exareme.disabled" ng-click="set_mode('exareme')">
+          Exareme
+        </button>
+      </span>
 
       <div class="row">
 
@@ -53,42 +49,37 @@
             <div class="panel-body">
 
               <div ng-if="!ml_methods.length">
-              <h4>Note:</h4>
+                <h4>Note:</h4>
                 <p>
                   No method available at the moment...
                 </p>
               </div>
 
               <uib-accordion ng-if="ml_methods.length" close-others="false">
-                <div uib-accordion-group heading="Statistical Analysis" ng-init="acc_stats.open = true" is-open="acc_stats.open" ng-click="!acc_stats.open">
-                  <p ng-repeat="method in ml_methods | filter:{type:'statistics'}  | orderBy:'-label'">
-                    <button class="btn btn-primary-alt col-xs-12"
-                      ng-disabled="!method.available"
-                      ng-click="shared.chosen_method = method"
-                      ng-bind="method.label">
-                    </button>
-                    <br><br>
-                  </p>
-                </div>
-                <div uib-accordion-group heading="Features Extraction" ng-init="acc_fe.open = true" is-open="acc_fe.open" ng-click="!acc_fe.open">
-                  <p ng-repeat="method in ml_methods | filter:{type:'features_extraction'}  | orderBy:'-label'">
-                    <button class="btn btn-primary-alt col-xs-12"
-                      ng-disabled="!method.available"
-                      ng-click="shared.chosen_method = method"
-                      ng-bind="method.label">
-                    </button>
-                    <br><br>
-                  </p>
-                </div>
                 <div uib-accordion-group heading="Predictive Model" ng-init="acc_pm.open = true" is-open="acc_pm.open" ng-click="!acc_pm.open">
                   <p ng-repeat="method in ml_methods | filter:{type:'predictive_model'}  | orderBy:'-label'">
                     <span class="label label-default" ng-if="method.nyi">Coming soon</span>
-                    <button class="btn btn-primary-alt col-xs-12"
-                      ng-disabled="!method.available"
-                      ng-click="shared.chosen_method = method"
-                      ng-bind="method.label">
+                    <button class="btn btn-primary-alt col-xs-12" ng-disabled="!method.available" ng-click="shared.chosen_method = method" ng-bind="method.label">
                     </button>
-                    <br><br>
+                    <br>
+                    <br>
+                  </p>
+                </div>
+
+                <div uib-accordion-group heading="Features Extraction" ng-init="acc_fe.open = true" is-open="acc_fe.open" ng-click="!acc_fe.open">
+                  <p ng-repeat="method in ml_methods | filter:{type:'features_extraction'}  | orderBy:'-label'">
+                    <button class="btn btn-primary-alt col-xs-12" ng-disabled="!method.available" ng-click="shared.chosen_method = method" ng-bind="method.label">
+                    </button>
+                    <br>
+                    <br>
+                  </p>
+                </div>
+                <div uib-accordion-group heading="Statistical Analysis" ng-init="acc_stats.open = true" is-open="acc_stats.open" ng-click="!acc_stats.open">
+                  <p ng-repeat="method in ml_methods | filter:{type:'statistics'}  | orderBy:'-label'">
+                    <button class="btn btn-primary-alt col-xs-12" ng-disabled="!method.available" ng-click="shared.chosen_method = method" ng-bind="method.label">
+                    </button>
+                    <br>
+                    <br>
                   </p>
                 </div>
               </uib-accordion>
@@ -117,39 +108,20 @@
                       </label>
                       <div ng-switch on="parameter.type">
                         <div ng-switch-when="int">
-                          <input type="number"
-                                step="1"
-                                id="{{parameter.name}}"
-                                class="form-control"
-                                ng-model="shared.method_parameters[$index].value"
-                                value="{{shared.method_parameters[$index].value}}"
-                                ng-init="shared.method_parameters[$index] = {code: parameter.code, label: parameter.label, value: parseInt(parameter.default_value)}">
+                          <input type="number" step="1" id="{{parameter.name}}" class="form-control" ng-model="shared.method_parameters[$index].value"
+                            value="{{shared.method_parameters[$index].value}}" ng-init="shared.method_parameters[$index] = {code: parameter.code, label: parameter.label, value: parseInt(parameter.default_value)}">
                         </div>
                         <div ng-switch-when="real">
-                          <input type="number"
-                                step="0.1"
-                                id="{{parameter.name}}"
-                                class="form-control"
-                                ng-model="shared.method_parameters[$index].value"
-                                value="{{shared.method_parameters[$index].value}}"
-                                ng-init="shared.method_parameters[$index] = {code: parameter.code, label: parameter.label, value: parameter.default_value}">
+                          <input type="number" step="0.1" id="{{parameter.name}}" class="form-control" ng-model="shared.method_parameters[$index].value"
+                            value="{{shared.method_parameters[$index].value}}" ng-init="shared.method_parameters[$index] = {code: parameter.code, label: parameter.label, value: parameter.default_value}">
                         </div>
                         <div ng-switch-when="enumeration">
-                          <select
-                                id="{{parameter.name}}"
-                                class="form-control"
-                                ng-model="shared.method_parameters[$index].value"
-                                ng-options="value for value in parameter.values"
-                                ng-init="shared.method_parameters[$index] = {code: parameter.code, label: parameter.label, value: parameter.default_value}"
-                          ></select>
+                          <select id="{{parameter.name}}" class="form-control" ng-model="shared.method_parameters[$index].value" ng-options="value for value in parameter.values"
+                            ng-init="shared.method_parameters[$index] = {code: parameter.code, label: parameter.label, value: parameter.default_value}"></select>
                         </div>
                         <div ng-switch-default>
                           <p ng-bind="{{shared.chosen_method.parameters | json}}"></p>
-                          <input
-                            id="{{parameter.name}}"
-                            class="form-control"
-                            ng-model="shared.method_parameters[$index].value"
-                            value="{{shared.method_parameters[$index].value}}"
+                          <input id="{{parameter.name}}" class="form-control" ng-model="shared.method_parameters[$index].value" value="{{shared.method_parameters[$index].value}}"
                             ng-init="shared.method_parameters[$index] = {code: parameter.code, label: parameter.label, value: parameter.default_value}">
                         </div>
                       </div>
@@ -157,12 +129,12 @@
                     </div>
                   </div>
                   <div ng-if="!shared.chosen_method.parameters.length">
-                    There are no parameters for <span ng-bind="shared.chosen_method.label"></span>.
+                    There are no parameters for
+                    <span ng-bind="shared.chosen_method.label"></span>.
                   </div>
 
-                  <button class="btn btn-primary pull-right"
-                          ng-class="{'disabled': method_already_configured() || configuration_not_valid() || exareme_method_disabled()}"
-                          ng-click="add_to_experiment()">
+                  <button class="btn btn-primary pull-right" ng-class="{'disabled': method_already_configured() || configuration_not_valid() || exareme_method_disabled()}"
+                    ng-click="add_to_experiment()">
                     Add to experiment
                   </button>
 
@@ -192,10 +164,10 @@
                   About Running Experiments
                 </div>
                 <div class="panel-body">
-                  An experiment is a set of algorithm(s) and their configuration applied to the variables already selected. You may choose same algorithms more than once providing that you change the configuration parameters.
+                  An experiment is a set of algorithm(s) and their configuration applied to the variables already selected. You may choose
+                  same algorithms more than once providing that you change the configuration parameters.
                   <br />
-                  <br />
-                  You can design your own MIP Experiment by doing the following:
+                  <br /> You can design your own MIP Experiment by doing the following:
                   <br />
                   <ol>
                     <li>Select a Machine Learning method on the left</li>

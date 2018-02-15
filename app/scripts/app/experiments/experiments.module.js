@@ -1,7 +1,7 @@
 /**
  * Modified by Arnaud Jutzeler on 05/08/2016.
  */
-'use strict';
+"use strict";
 
 angular
   .module("chuvApp.experiments", [
@@ -15,7 +15,7 @@ angular
     function($stateProvider) {
       $stateProvider
         .state("new_experiment", {
-          url: "/experiment/:model_slug?variables&coVariables&groupings&filters&textQuery", //TODO Remove textQuery temporary solution
+          url: "/experiment/:model_slug?variables&coVariables&groupings&filters&datasets",
           templateUrl: "scripts/app/experiments/new_experiment.html",
           controller: "NewExperimentController",
           params: {

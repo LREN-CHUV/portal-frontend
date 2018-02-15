@@ -1,4 +1,5 @@
 {
     "version": "beta 0.0",
-    "instanceName": "CHUV-DEV"
+    "instanceName": "CHUV-DEV",
+    "mode": "local"
 }

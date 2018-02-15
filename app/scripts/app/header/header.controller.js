@@ -62,7 +62,7 @@ angular.module("chuvApp.header").controller("HeaderController", [
       User.logout();
     };
 
-    Config.$promise.then(function(config) {
+    Config.then(function(config) {
       $scope.name = config.instanceName;
     });
   }

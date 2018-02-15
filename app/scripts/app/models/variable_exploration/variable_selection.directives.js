@@ -6,18 +6,22 @@
 angular
   .module("chuvApp.models")
   .directive("circlePacking", [
-    function() {
+    "$location",
+    function($location) {
       return {
         templateUrl: "scripts/app/models/variable_exploration/circle_packing.html",
         replace: true,
         link: function($scope, element) {
           $scope.search_history = [];
           $scope.search = {};
-          $scope.selectedDatasets = [];
+          $scope.selectedDatasets = $location.search()["datasets"]
+            ? $location.search()["datasets"].split(",")
+            : [];
           $scope.populatedGroups = {}; // FIXME: bad scope
+          var api = {};
 
-          $scope.isDatasetSelected = function(dataset) {
-            return $scope.selectedDatasets.includes(dataset);
+          $scope.isDatasetSelected = function(code) {
+            return $scope.selectedDatasets.includes(code);
           };
 
           var groups;
@@ -39,6 +43,7 @@ angular
               if (group.description) {
                 description += "\n" + group.description;
               }
+
               return (group_dict[group.code] = {
                 label: group.label,
                 code: group.code,
@@ -196,9 +201,11 @@ angular
             zoomTo([root.x, root.y, root.r * 2 + margin]);
             applyNodeColors();
 
-            function zoom(d) {
+            function zoom(d, calledFromAngular) {
+              if (typeof d === "string") {
+                var d = nodes.find(node => node.code === d);
+              }
               focus = d;
-
               var transition = d3
                 .transition()
                 .duration(750)
@@ -219,6 +226,7 @@ angular
                   d && (d.parent === focus || (!d.children && d === focus))
                 );
               };
+
               transition
                 .selectAll("text")
                 .filter(function(d) {
@@ -247,9 +255,11 @@ angular
                 var variable = d.is_group
                   ? Object.assign({ is_group: true }, d.original)
                   : d.original;
+
                 $scope.set_focused_variable(variable);
                 $scope.search.value = null;
                 $scope.search.group = null;
+                if (!calledFromAngular) $scope.$apply(); //$apply trigger a digest cycle, necessary for a click on a svg el
               }
             }
 
@@ -288,9 +298,10 @@ angular
               if (!groupNode) {
                 return;
               }
-
               zoom(groupNode);
             });
+
+            return { zoom: d => zoom(d, true) };
           }
 
           function color_for_node(node) {
@@ -314,7 +325,8 @@ angular
           $scope.$watch("groups", function(groups) {
             if (groups != null) {
               createCirclePackingDataStructure();
-              updateCirclePacking();
+              var api = updateCirclePacking();
+              $scope.zoom = api.zoom;
             }
           });
 
@@ -325,8 +337,9 @@ angular
           function resize_handler() {
             if ($scope.groups != null && element.width !== prev_dimension) {
               prev_dimension = element.width();
-              updateCirclePacking();
-              $scope.$apply();
+
+              api = updateCirclePacking();
+              $scope.zoom = api.zoom;
             }
           }
           angular.element(window).bind("resize", resize_handler);
@@ -347,34 +360,41 @@ angular
             }
           });
 
-          $scope.setDataset = function(dataset) {
-            if (!dataset) return;
+          $scope.setDataset = function(code) {
+            if (!code) return;
 
-            if ($scope.selectedDatasets.includes(dataset)) {
+            if ($scope.selectedDatasets.includes(code)) {
               $scope.selectedDatasets.splice(
-                $scope.selectedDatasets.indexOf(dataset),
+                $scope.selectedDatasets.indexOf(code),
                 1
               );
             } else {
-              $scope.selectedDatasets.push(dataset);
+              $scope.selectedDatasets.push(code);
             }
 
-            svg
-              .selectAll("circle")
-              .style("opacity", 1)
-              .filter(function(data) {
-                return (
-                  !data.is_group &&
-                  !$scope.selectedDatasets
-                    .map(function(d) {
-                      return data.datasets.includes(d);
-                    })
-                    .every(function(op) {
-                      return op;
-                    })
-                );
-              })
-              .style("opacity", 0.2);
+            const selectedDatasetsObj = {};
+            $scope.selectedDatasets.forEach(
+              datasetName => selectedDatasetsObj[datasetName] = {}
+            );
+            $scope.configuration["datasets"] = selectedDatasetsObj;
+
+            // TODO
+            // svg
+            //   .selectAll("circle")
+            //   .style("opacity", 1)
+            //   .filter(function(data) {
+            //     return (
+            //       !data.is_group &&
+            //       !$scope.selectedDatasets
+            //         .map(function(d) {
+            //           return data.datasets.includes(d);
+            //         })
+            //         .every(function(op) {
+            //           return op;
+            //         })
+            //     );
+            //   })
+            //   .style("opacity", 0.2);
           };
         }
       };

@@ -1,27 +1,36 @@
-[![CHUV](https://img.shields.io/badge/CHUV-LREN-AF4C64.svg)](https://www.unil.ch/lren/en/home.html) [![License](https://img.shields.io/badge/license-AGPL--3.0-blue.svg)](https://www.gnu.org/licenses/agpl-3.0.html) [![DockerHub](https://img.shields.io/badge/docker-hbpmip%2Fportal--frontend-008bb8.svg)](https://hub.docker.com/r/hbpmip/portal-frontend/) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/9143f566eca64ffbb06258c61fb64ea0)](https://www.codacy.com/app/hbp-mip/portal-frontend?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=LREN-CHUV/portal-frontend&amp;utm_campaign=Badge_Grade) [![CircleCI](https://circleci.com/gh/LREN-CHUV/portal-frontend/tree/master.svg?style=svg)](https://circleci.com/gh/LREN-CHUV/portal-frontend/tree/master)
+[![CHUV](https://img.shields.io/badge/CHUV-LREN-AF4C64.svg)](https://www.unil.ch/lren/en/home.html) [![License](https://img.shields.io/badge/license-AGPL--3.0-blue.svg)](https://www.gnu.org/licenses/agpl-3.0.html) [![DockerHub](https://img.shields.io/badge/docker-hbpmip%2Fportal--frontend-008bb8.svg)](https://hub.docker.com/r/hbpmip/portal-frontend/) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/9143f566eca64ffbb06258c61fb64ea0)](https://www.codacy.com/app/hbp-mip/portal-frontend?utm_source=github.com&utm_medium=referral&utm_content=LREN-CHUV/portal-frontend&utm_campaign=Badge_Grade) [![CircleCI](https://circleci.com/gh/LREN-CHUV/portal-frontend/tree/master.svg?style=svg)](https://circleci.com/gh/LREN-CHUV/portal-frontend/tree/master)
 
 # MIP portal frontend
 
 ## Libraries
-- AngularJS v1.6.8
-- Bootstrap v3.3.7
+
+* AngularJS v1.6.8
+* Bootstrap v3.3.7
 
 ## Frontend development
+
 This is a minimal setup to do frontend development in this project:
-1. Checkout the frontend_dev branch of the `compose-everything-locally` project and run it. You will have the MIP backend running on your computer with no frontend.
+
+1. Checkout the master branch of the [backend web-analytics-starter](https://github.com/LREN-CHUV/web-analytics-starter) project and run it. You will have the MIP backend running on your computer with no frontend.
 2. Install gulp & yarn global
-  * `npm install -g gulp` (might require `sudo`)
-  * `npm install -g yarn` (might require `sudo`)
+
+* `npm install -g gulp` (might require `sudo`)
+* `npm install -g yarn` (might require `sudo`)  (Debian/Ubuntu users should use `sudo apt-get install yarn`)
+
 3. Install npm`:
-  * `yarn install` (might require `sudo`)
+
+* `yarn install` (might require `sudo`)
+
 4. Run the `portal-frontend`:
-  * `gulp`
-  * `google-chrome --disable-web-security --user-data-dir http://localhost:8000` (opens the frontend in Chrome with flags to ignore CORS issues. CORS must be disabled for development because the backend runs on a different domain name than the frontend)
+
+* `gulp`
+* `google-chrome --disable-web-security --user-data-dir http://localhost:8000` (opens the frontend in Chrome with flags to ignore CORS issues. CORS must be disabled for development because the backend runs on a different domain name than the frontend)
 
 ## Develop & debug
+
 1. Run: `./run.sh`
 2. Open Browsersync External Access URL `google-chrome --disable-web-security --user-data-dir http://localhost:8000`
-(might be another access URL)
+   (might be another access URL)
 
 ## Build
 
@@ -77,7 +86,7 @@ Licensed under the GNU Affero General Public License, Version 3.0 (the "License"
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-   [https://www.gnu.org/licenses/agpl-3.0.html](https://www.gnu.org/licenses/agpl-3.0.html)
+[https://www.gnu.org/licenses/agpl-3.0.html](https://www.gnu.org/licenses/agpl-3.0.html)
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

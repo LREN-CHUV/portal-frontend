@@ -5,20 +5,20 @@
       <div class="panel-body">
         <ul class="list-group">
           <li
-            ng-repeat="dataset in datasets"
+            ng-repeat="dataset in allDatasets"
             class="list-group-item"
             ng-class="{active: isDatasetSelected(dataset.code)}">
             <a
               href=""
               ng-click="selectDataset(dataset.code)"
-            >{{dataset.label}}</a>
+            >{{dataset.code}}</a>
           </li>
         </ul>
       </div>
     </div>
     <div class="panel" style="flex: 0 0 1">
       <div class="panel-heading">Model</div>
-      <div class="panel-body dataset-list">
+      <div class="panel-body dataset-list scrollable">
         <h5>Variable </h5>
         <p ng-repeat="variable in query.variables">
           <a
@@ -60,7 +60,7 @@
     <div class="panel" style="flex-grow: 2">
       <uib-tabset active="active">
 
-        <uib-tab index="0" class="panel-heading" heading="Table">
+        <uib-tab index="0" heading="Table">
           <div class="panel-body scrollable">
             <div ng-if="loading" class="loading">
               <div class="fa fa-spin fa-spinner"></div>
@@ -69,7 +69,7 @@
               There was an error perfoming the method
               <pretty-json data="error"></pretty-json>
             </div>
-            <div ng-if="tableRows"
+            <div ng-if="tableHeader"
               style="background-color: #d5e5fd; padding: 0.5em">
               <table class="table">
                 <tr style="background-color: transparent">
@@ -80,15 +80,15 @@
                 <tr
                   ng-repeat="row in tableRows track by $index"
                   ng-class="{ 'white-row': row.type !== 'header' }">
-                  <td class="header-row">{{row.variable}}</td>
-                  <td ng-repeat="column in row.data track by $index">{{column}}</td>
+                  <td class="header-row">{{row.label || row.index}}</td>
+                  <td ng-repeat="column in row.data track by $index" ng-bind-html="column"></td>
                 </tr>
               </table>
             </div>
           </div>
         </uib-tab>
 
-        <uib-tab index="1" class="panel-heading" heading="Histogram">
+        <uib-tab index="1" heading="Histogram">
             <div class="panel-body scrollable">
                 <div ng-if="histogramLoading" class="loading">
                   <div class="fa fa-spin fa-spinner"></div>
@@ -103,7 +103,7 @@
               </div>
         </uib-tab>
 
-        <uib-tab index="2" class="panel-heading" heading="t-SNE">
+        <!-- <uib-tab index="2" heading="t-SNE">
           <div class="panel-body scrollable">
             <div ng-if="tsneLoading" class="loading">
               <div class="fa fa-spin fa-spinner"></div>
@@ -114,7 +114,7 @@
             </div>
             <highchart ng-if="tsneData" config="tsneData"></highchart>
           </div>
-        </uib-tab>
+        </uib-tab> -->
 
       </uib-tabset>
     </div>
