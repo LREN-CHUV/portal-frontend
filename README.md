@@ -9,20 +9,19 @@
 ## Frontend development
 This is a minimal setup to do frontend development in this project:
 1. Checkout the frontend_dev branch of the `compose-everything-locally` project and run it. You will have the MIP backend running on your computer with no frontend.
-2. Install npm
-3. Run the `portal-frontend`:
-  * `npm install` (might require `sudo`)
+2. Install gulp & yarn global
   * `npm install -g gulp` (might require `sudo`)
-  * `npm install -g bower` (might require `sudo`)
-  * `bower install`
+  * `npm install -g yarn` (might require `sudo`)
+3. Install npm`:
+  * `yarn install` (might require `sudo`)
+4. Run the `portal-frontend`:
   * `gulp`
-  * `cd app`
-  * `php -S localhost:8000 &` (runs a development server from the `app` folder. PHP is not required, other development server should work, as long as it runs on port 8000 and supports .htaccess)
   * `google-chrome --disable-web-security --user-data-dir http://localhost:8000` (opens the frontend in Chrome with flags to ignore CORS issues. CORS must be disabled for development because the backend runs on a different domain name than the frontend)
 
 ## Develop & debug
-One may use Dockerfile-dev
-Run: `./run.sh`
+1. Run: `./run.sh`
+2. Open Browsersync External Access URL `google-chrome --disable-web-security --user-data-dir http://localhost:8000`
+(might be another access URL)
 
 ## Build
 
@@ -31,6 +30,44 @@ Run: `./build.sh`
 ## Publish on Docker Hub
 
 Run: `./publish.sh`
+
+
+## Unit-tests 
+### using gulp
+This is a setup to run unit-tests in this project using gulp:
+1. To run unit-tests ones:
+  * `gulp unit-tests`
+2. Start running karma unit tests:
+  * `gulp unit-tests:auto`
+
+### using karma-cli
+This is a setup to run unit-tests in this project using karma-cli:
+1. Install karma-cli & phantomjs global
+  * `npm install karma-cli phantomjs -g` (might require `sudo`)
+2. Start karma unit tests:
+  * `karma start karma.conf.js` (might require `sudo`)
+  
+  
+## e2e-tests 
+e2e-testing works in chrome browser
+### using gulp
+This is a setup to run unit-tests in this project using gulp:
+1. To run e2e-tests:
+  * `gulp e2e-test` (it starts serve "dist" folder with dev config)
+  To run e2e test without rebuild dist folder use `gulp protractor-go` command in new terminal window
+
+
+### using protractor global
+This is a setup to run e2e-tests in this project using protractor:
+1. Install protractor global, webdriver-manager
+  * `npm install -g protractor` (might require `sudo`) This will install two command line tools, protractor and webdriver-manager
+  * `webdriver-manager update` (might require `sudo`)
+  * `webdriver-manager start` (might require `sudo`)
+2. Start karma unit tests:
+  * `protractor app/tests/e2e/e2e-conf.js` (might require `sudo`)
+(If you have a java error, try to install java: `sudo apt-get install default-jdk`).
+
+
 
 ## License
 

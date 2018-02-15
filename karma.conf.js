@@ -6,6 +6,23 @@
 // Generated on 2015-08-11 using
 // generator-karma 0.9.0
 
+
+// Application's main directories constants
+var appConfig = require("./app-config.json");
+// Application's application scripts directories
+var appScripts = require("./scripts-app");
+// Application's vendor scripts directories
+var vendorScripts = require("./scripts-vendor");
+// Application's vendor styles directories
+
+var testFiles = vendorScripts
+  .concat(["./node_modules/angular-mocks/angular-mocks.js"])
+  .concat(appScripts)
+  .concat([
+    "./" + appConfig.app + "/tests/**/*.test.js",
+    "./" + appConfig.app + "/scripts/**/*.html"
+  ]);
+
 module.exports = function(config) {
   "use strict";
   config.set({
@@ -19,72 +36,27 @@ module.exports = function(config) {
     frameworks: ["jasmine"],
 
     // list of files / patterns to load in the browser
-    files: [
-      // bower:js
-      "app/bower_components/jquery/dist/jquery.js",
-      "app/bower_components/angular/angular.js",
-      "app/bower_components/bootstrap/dist/js/bootstrap.js",
-      "app/bower_components/angular-animate/angular-animate.js",
-      "app/bower_components/angular-cookies/angular-cookies.js",
-      "app/bower_components/angular-resource/angular-resource.js",
-      "app/bower_components/angular-route/angular-route.js",
-      "app/bower_components/angular-sanitize/angular-sanitize.js",
-      "app/bower_components/angular-touch/angular-touch.js",
-      "app/bower_components/angular-translate/angular-translate.js",
-      "app/bower_components/angular-translate-loader-partial/angular-translate-loader-partial.js",
-      "app/bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.js",
-      "app/bower_components/angular-translate-storage-cookie/angular-translate-storage-cookie.js",
-      "app/bower_components/angular-ui-router/release/angular-ui-router.js",
-      "app/bower_components/tinymce-dist/tinymce.min.js",
-      "app/bower_components/angular-ui-tinymce/src/tinymce.js",
-      "app/bower_components/highcharts-ng/dist/highcharts-ng.js",
-      "app/bower_components/highcharts/highcharts.js",
-      "app/bower_components/highcharts/highcharts-more.js",
-      "app/bower_components/highcharts/modules/exporting.js",
-      "app/bower_components/underscore/underscore.js",
-      "app/bower_components/angular-dynamic-locale/src/tmhDynamicLocale.js",
-      "app/bower_components/themify-icons/ie7/ie7.js",
-      "app/bower_components/moment/moment.js",
-      "app/bower_components/angular-moment/angular-moment.js",
-      "app/bower_components/angular-bootstrap-colorpicker/js/bootstrap-colorpicker-module.js",
-      "app/bower_components/angular-mocks/angular-mocks.js",
-      "app/bower_components/angular-gridster/dist/angular-gridster.min.js",
-      "app/bower_components/gsap/src/uncompressed/TweenMax.js",
-      "app/bower_components/iCheck/icheck.js",
-      "app/bower_components/angular-ui-select/dist/select.js",
-      "app/bower_components/gridster/dist/jquery.gridster.with-extras.js",
-      "app/bower_components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.js",
-      "app/bower_components/angular-bootstrap/ui-bootstrap-tpls.js",
-      "app/bower_components/jquery.ui/ui/jquery.ui.core.js",
-      "app/bower_components/jquery.ui/ui/jquery.ui.widget.js",
-      "app/bower_components/jquery.ui/ui/jquery.ui.mouse.js",
-      "app/bower_components/jquery.ui/ui/jquery.ui.sortable.js",
-      "app/bower_components/angular-utf8-base64/angular-utf8-base64.min.js",
-      "app/bower_components/d3/d3.js",
-      // endbower
-      //Always load modules first
-      "app/scripts/app/app.js",
-      "app/scripts/**/*module.js",
-      "app/scripts/**/*.js",
-      //Load tests
-      "app/tests/**/*.js",
-
-      // load templates for preprocessing
-      "app/scripts/**/*.html"
-    ],
+    files: testFiles,
 
     // list of files / patterns to exclude
     exclude: [
       "app/tests/e2e/**",
       "app/tests/app/requests/**",
-      "app/tests/app/models/variable_select.test.js",
-      "app/tests/app/header/header.controller.test.js",
+      // "app/tests/app/models/variable_select.test.js",
+      // "app/tests/app/header/header.controller.test.js",
       "app/scripts/external/**"
     ],
 
     preprocessors: {
-      "app/views/**/!(*test).js": "coverage",
-      "app/**/*.html": "ng-html2js"
+      "app/scripts/**/*.js": ["babel"],
+      "app/**/*.html": ["ng-html2js"]
+    },
+
+    babelPreprocessor: {
+      options: {
+        presets: ["es2015"],
+        sourceMap: "inline"
+      }
     },
 
     ngHtml2JsPreprocessor: {
@@ -105,6 +77,7 @@ module.exports = function(config) {
     // - PhantomJS
     // - IE (only Windows)
     browsers: ["PhantomJS"],
+    // reporters: ["junit", "dots", "coverage"],
     reporters: ["junit", "dots", "coverage"],
     junitReporter: {
       outputDir: "reports",
@@ -117,13 +90,13 @@ module.exports = function(config) {
     },
 
     // Which plugins to enable
-    plugins: [
-      "karma-phantomjs-launcher",
-      "karma-jasmine",
-      "karma-junit-reporter",
-      "karma-coverage",
-      "karma-ng-html2js-preprocessor"
-    ],
+    // plugins: [
+    //   "karma-phantomjs-launcher",
+    //   "karma-jasmine",
+    //   "karma-junit-reporter",
+    //   "karma-coverage",
+    //   "karma-ng-html2js-preprocessor"
+    // ],
 
     // Continuous Integration mode
     // if true, it capture browsers, run tests and exit
