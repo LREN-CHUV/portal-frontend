@@ -1,4 +1,4 @@
-var cucumber = require("protractor-jasmine-cucumber");
+// var cucumber = require("protractor-jasmine-cucumber");
 var fs = require("fs"), path = require("path");
 var screenshotDir = path.resolve("./screenshots/");
 
@@ -13,18 +13,22 @@ function generateUUID() {
 
 exports.config = {
   directConnect: false,
-  seleniumAddress: "http://localhost:4444/wd/hub",
-  specs: ["./yadda/yadda-runner.js"],
+  specs: ['./specs/**/*-spec.js'],
+  // seleniumAddress: "http://localhost:4444/wd/hub",
+  // specs: ["./yadda/yadda-runner.js"],
   framework: "jasmine2",
+  // capabilities: {
+  //   browserName: "phantomjs",
+  //   "phantomjs.binary.path": require("phantomjs").path,
+  //   "phantomjs.cli.args": [
+  //     "--debug=true",
+  //     "--webdriver-logfile=webdriver.log",
+  //     "--webdriver-loglevel=INFO"
+  //   ],
+  //   "phantomjs.ghostdriver.cli.args": ["--loglevel=DEBUG"]
+  // },
   capabilities: {
-    browserName: "phantomjs",
-    "phantomjs.binary.path": require("phantomjs").path,
-    "phantomjs.cli.args": [
-      "--debug=true",
-      "--webdriver-logfile=webdriver.log",
-      "--webdriver-loglevel=INFO"
-    ],
-    "phantomjs.ghostdriver.cli.args": ["--loglevel=DEBUG"]
+    'browserName': 'chrome'
   },
   jasmineNodeOpts: {
     showColors: true,

@@ -40,6 +40,44 @@ Run: `./build.sh`
 
 Run: `./publish.sh`
 
+
+## Unit-tests 
+### using gulp
+This is a setup to run unit-tests in this project using gulp:
+1. To run unit-tests ones:
+  * `gulp unit-tests`
+2. Start running karma unit tests:
+  * `gulp unit-tests:auto`
+
+### using karma-cli
+This is a setup to run unit-tests in this project using karma-cli:
+1. Install karma-cli & phantomjs global
+  * `npm install karma-cli phantomjs -g` (might require `sudo`)
+2. Start karma unit tests:
+  * `karma start karma.conf.js` (might require `sudo`)
+  
+  
+## e2e-tests 
+e2e-testing works in chrome browser
+### using gulp
+This is a setup to run unit-tests in this project using gulp:
+1. To run e2e-tests:
+  * `gulp e2e-test` (it starts serve "dist" folder with dev config)
+  To run e2e test without rebuild dist folder use `gulp protractor-go` command in new terminal window
+
+
+### using protractor global
+This is a setup to run e2e-tests in this project using protractor:
+1. Install protractor global, webdriver-manager
+  * `npm install -g protractor` (might require `sudo`) This will install two command line tools, protractor and webdriver-manager
+  * `webdriver-manager update` (might require `sudo`)
+  * `webdriver-manager start` (might require `sudo`)
+2. Start karma unit tests:
+  * `protractor app/tests/e2e/e2e-conf.js` (might require `sudo`)
+(If you have a java error, try to install java: `sudo apt-get install default-jdk`).
+
+
+
 ## License
 
 Copyright © 2016-2017 LREN CHUV
