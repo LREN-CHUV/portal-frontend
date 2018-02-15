@@ -106,14 +106,7 @@ angular
               });
             }
 
-            var repeat_running = true;
-
-            function repeat_refresh_running_experiments() {
-              refresh_running_experiments();
-              if (repeat_running) {
-                $timeout(repeat_refresh_running_experiments, 20000); //TODO Remove this hardcoded value!
-              }
-            }
+            $interval(refresh_running_experiments, 2000);//TODO Remove this hardcoded value!
 
             User.get().then(repeat_refresh_running_experiments);
           }
