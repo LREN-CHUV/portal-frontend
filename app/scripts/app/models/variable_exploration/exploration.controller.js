@@ -119,7 +119,7 @@ angular.module("chuvApp.models").controller("ExploreController", [
       return (
         Object.keys($scope.configuration.variable).length > 0 &&
         Object.keys($scope.configuration.grouping).length +
-          Object.keys($scope.configuration.covariable).length >
+          Object.keys($scope.configuration.covariable).length >=
           0
       );
     };
