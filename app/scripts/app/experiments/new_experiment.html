@@ -70,7 +70,7 @@
                   <p ng-repeat="method in ml_methods | filter:{type:'features_extraction'}  | orderBy:'-label'">
                     <button class="btn btn-primary-alt col-xs-12" ng-disabled="!method.available" ng-click="shared.chosen_method = method" ng-bind="method.label">
                     </button>
-                    <br>
+                    <br>Configure The Method's
                     <br>
                   </p>
                 </div>
@@ -99,24 +99,29 @@
                   <div uib-accordion-group is-open="true">
                       <uib-accordion-heading>
                         <span class="ti ti-panel"></span>
-                        Datasets
+                        Validation
                       </uib-accordion-heading>
-                      <div ng-repeat="dataset in query.datasets" class="datasets-types">
+                      <span class="datasets-types">
+                        <label class="code"></label>
+                        <label class="training">Training</label>
+                        <label class="validation">Validation</label>
+                      </span>
+                      <div ng-repeat="dataset in datasets" class="datasets-types">
                         <label>
                             <span class="code">{{dataset.code}}</span>
                         </label>
-                        <input 
+                        <input
                           type="checkbox"
                           class="training"
-                          name="{{dataset.code}}" 
-                          ng-model="shared.experiment_datasets.training[dataset.code]" 
+                          name="{{dataset.code}}"
+                          ng-model="shared.experiment_datasets.training[dataset.code]"
                         />
-                        <input 
-                          type="checkbox" 
+                        <input
+                          type="checkbox"
                           class="validation"
                           name="{{dataset.code}}"
-                          ng-model="shared.experiment_datasets.validation[dataset.code]" 
-                        />  
+                          ng-model="shared.experiment_datasets.validation[dataset.code]"
+                        />
                       </div>
                   </div>
 

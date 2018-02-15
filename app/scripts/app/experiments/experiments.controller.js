@@ -32,6 +32,8 @@ angular
         local: { active: true, disabled: false },
         exareme: { disabled: false }
       };
+      $scope.datasets = [];
+
       $scope.shared = {
         chosen_method: null,
         method_parameters: [],
@@ -50,10 +52,6 @@ angular
       $scope.type_name = function(method_name) {
         return method_name.charAt(0).toUpperCase() + method_name.slice(1) + "s";
       };
-
-      Variable.datasets().then(data => {
-        $scope.datasets = data;
-      });
 
       // Get all the ml methods
       MLUtils.list_ml_methods().then(function(data) {
@@ -181,13 +179,26 @@ angular
         $scope.shared.chosen_method = method;
       };
 
+      const fetchDatasetsAndUpdate = () =>
+        Variable.datasets().then(data => {
+          $scope.datasets = data;
+          const values = $scope.query.trainingDatasets
+            .map(d => d.code)
+            .reduce((a, d) => {
+              a[d] = true;
+              return a;
+            }, {});
+          $scope.shared.experiment_datasets.training = values;
+          $scope.shared.experiment_datasets.validation = values;
+        });
+
       if ($stateParams.model_slug) {
         // we have a slug: load model
         Model.get({ slug: $stateParams.model_slug }, function(result) {
           $scope.model = result;
           $scope.dataset = result.dataset;
           $scope.query = result.query;
-          on_data_loaded();
+          fetchDatasetsAndUpdate.then(on_data_loaded);
         });
 
         $scope.model_slug = $stateParams.model_slug;
@@ -210,8 +221,10 @@ angular
           groupings: map_query("groupings"),
           coVariables: map_query("coVariables"),
           filters: map_query("filters"),
-          datasets: map_query("datasets")
+          trainingDatasets: map_query("datasets")
         };
+
+        fetchDatasetsAndUpdate();
 
         // step 2: load dataset
         var query = angular.copy($scope.query);
@@ -242,7 +255,10 @@ angular
                   };
 
                   config.title = { text: child_scope.name };
+                  query.trainingDatasets =
+                    $scope.shared.experiment_datasets.training;
 
+                  debugger;
                   $scope.model = {
                     title: child_scope.name,
                     config: config,

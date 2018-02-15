@@ -24,16 +24,7 @@ angular.module("chuvApp.components.criteria").factory("Variable", [
     );
 
     resource.datasets = () =>
-      Promise.resolve([
-        {
-          code: "chuv",
-          label: "CHUV"
-        },
-        {
-          code: "adni",
-          label: "ADNI"
-        }
-      ]);
+      $http.get(backendUrl + "/datasets").then(response => response.data);
 
     resource.hierarchy = function() {
       var hierarchy = cache.get("hierarchy");
