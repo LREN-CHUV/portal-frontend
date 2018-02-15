@@ -350,7 +350,7 @@ gulp.task("js-vendor:dev", function() {
   return gulp
     .src(appPath.src.js.vendorScripts)
     .pipe(plugins.sourcemaps.init())
-    .pipe(plugins.uglify())
+    // .pipe(plugins.uglify())
     .pipe(plugins.concat("vendor.js"))
     .pipe(plugins.sourcemaps.write("."))
     .pipe(gulp.dest(appPath.src.tmp));

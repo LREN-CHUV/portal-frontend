@@ -8,7 +8,8 @@ var vendorCss = [
   "./node_modules/ui-select/dist/select.css",
   "./node_modules/gridster/dist/jquery.gridster.css",
   "./node_modules/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css",
-  "./node_modules/jQuery-QueryBuilder/dist/css/query-builder.default.css"
+  "./node_modules/jQuery-QueryBuilder/dist/css/query-builder.default.css",
+  "./node_modules/textangular/dist/textAngular.css"
 ];
 
 module.exports = vendorCss;

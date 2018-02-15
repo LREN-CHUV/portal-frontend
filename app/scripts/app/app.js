@@ -33,7 +33,7 @@ angular
     "ngSanitize",
     "ngTouch",
     "pascalprecht.translate",
-    "ui.tinymce",
+    "textAngular",
     "tmh.dynamicLocale",
     "angularMoment",
     "ui.select",
