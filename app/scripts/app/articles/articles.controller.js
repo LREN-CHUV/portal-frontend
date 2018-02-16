@@ -52,32 +52,6 @@ angular
 
       $scope.query = null;
 
-      $scope.getLanguageCodeForTinyMCE = function() {
-        if ($translate.use() === "fr") {
-          return "fr_FR";
-        } else {
-          return "en_GB";
-        }
-      };
-
-      $scope.editorContentOption = {
-        inline: false,
-        toolbar: "undo redo | styleselect bold italic underline strikethrough | forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | eqneditor | link image",
-        plugins: "advlist anchor autolink autosave bbcode charmap code colorpicker contextmenu " +
-          "directionality emoticons fullpage fullscreen hr image insertdatetime layer legacyoutput link lists " +
-          "importcss media nonbreaking noneditable pagebreak paste preview print save searchreplace spellchecker " +
-          "tabfocus table template textcolor textpattern visualblocks visualchars wordcount eqneditor",
-        external_plugins: {
-          eqneditor: "../../libs/tinymce/plugins/eqneditor/plugin.min.js"
-        },
-        language: $scope.getLanguageCodeForTinyMCE(),
-        paste_data_images: true,
-        language_url: "libs/tinymce/langs/" +
-          $scope.getLanguageCodeForTinyMCE() +
-          ".js",
-        height: 500
-      };
-
       /**
        * Return true if is a creation action
        * @returns {boolean}

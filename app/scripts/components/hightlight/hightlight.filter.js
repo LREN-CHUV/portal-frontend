@@ -4,7 +4,7 @@
 "use strict";
 
 angular
-  .module("chuvApp.components.filters", [])
+  .module("chuvApp.components.filters")
   .filter("highlight", function($sce) {
     return function(text, phrase) {
       if (phrase) {
