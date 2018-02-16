@@ -255,10 +255,17 @@ angular
                   };
 
                   config.title = { text: child_scope.name };
-                  query.trainingDatasets =
-                    $scope.shared.experiment_datasets.training;
+                  const training = $scope.shared.experiment_datasets.training;
+                  query.trainingDatasets = Object.keys(training)
+                    .filter(k => training[k])
+                    .map(t => ({ code: t }));
 
-                  debugger;
+                  const validation =
+                    $scope.shared.experiment_datasets.validation;
+                  query.validationDatasets = Object.keys(validation)
+                    .filter(k => validation[k])
+                    .map(t => ({ code: t }));
+
                   $scope.model = {
                     title: child_scope.name,
                     config: config,
@@ -274,6 +281,7 @@ angular
                       $scope.model = result;
                       $scope.dataset = result.dataset;
                       $scope.query = result.query;
+
                       notifications.success(
                         "The model was successfully saved!"
                       );
@@ -282,10 +290,12 @@ angular
                         callback();
                       }
                     },
-                    function() {
-                      // TODO Add a notification service...
+                    function(error = {}) {
+                      $scope.model = null;
+
+                      const { data: { message } } = error;
                       notifications.error(
-                        "An error occurred when trying to save the model!"
+                        `An error occurred when trying to save the model! ${message}`
                       );
                       child_scope.$dismiss();
                     }
