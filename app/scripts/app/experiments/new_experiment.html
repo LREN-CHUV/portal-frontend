@@ -90,7 +90,7 @@
         <div class="col-sm-6">
 
           <!-- ng-show instead of ng-if because I don't want the inner directives to be destroyed  when unpicking the method -->
-          <form class="row" ng-show="shared.chosen_method">
+          <form class="row">
 
             <div class="col-xs-12">
 
@@ -98,9 +98,16 @@
 
                   <div uib-accordion-group is-open="true">
                       <uib-accordion-heading>
-                        <span class="ti ti-panel"></span>
-                        Validation
+                        <span class="ti ti-package"></span>
+                        Variables & Datasets
                       </uib-accordion-heading>
+                      <div>
+                        <p>
+                          <span ng-if="shared.query.variables"><strong>Variables:</strong> {{shared.query.variables}}</span>
+                          <span ng-if="shared.query.groupings"><strong>Grouping: </strong>{{shared.query.groupings}}</span>
+                          <span ng-if="shared.query.coVariables"><strong>Covariables: </strong>{{shared.query.coVariables}}</span>
+                        </p>
+                      </div>
                       <span class="datasets-types">
                         <label class="code"></label>
                         <label class="training">Training</label>
@@ -126,7 +133,7 @@
                   </div>
 
 
-                <div uib-accordion-group is-open="true">
+                <div uib-accordion-group is-open="true" ng-show="shared.chosen_method">
                   <uib-accordion-heading>
                     <span class="ti ti-panel"></span>
                     Configure The Method's Parameters
@@ -170,7 +177,7 @@
 
                 </div>
 
-                <div uib-accordion-group is-open="help_is_open">
+                <div uib-accordion-group is-open="help_is_open" ng-show="shared.chosen_method">
                   <uib-accordion-heading>
                     <span class="ti ti-help-alt"></span>
                     Help

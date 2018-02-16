@@ -42,8 +42,10 @@ angular
         experiment_datasets: {
           training: {},
           validation: {}
-        }
+        },
+        query: {}
       };
+
       $scope.help_is_open = true;
       Config.then(function(config) {
         $scope.federationmode = config.mode === "federation";
@@ -179,17 +181,33 @@ angular
         $scope.shared.chosen_method = method;
       };
 
+      const shareQuery = () => {
+        Object.keys($scope.query).forEach(k => {
+          if ($scope.query[k].length)
+            $scope.shared.query[k] = $scope.query[k]
+              .map(v => v.code)
+              .join(", ");
+        });
+      };
+
       const fetchDatasetsAndUpdate = () =>
         Variable.datasets().then(data => {
           $scope.datasets = data;
-          const values = $scope.query.trainingDatasets
+          $scope.shared.experiment_datasets.training = $scope.query.trainingDatasets
             .map(d => d.code)
             .reduce((a, d) => {
               a[d] = true;
               return a;
             }, {});
-          $scope.shared.experiment_datasets.training = values;
-          $scope.shared.experiment_datasets.validation = values;
+
+          $scope.shared.experiment_datasets.validation = $scope.query.trainingDatasets
+            .map(d => d.code)
+            .reduce((a, d) => {
+              a[d] = true;
+              return a;
+            }, {});
+
+          shareQuery();
         });
 
       if ($stateParams.model_slug) {
@@ -198,7 +216,8 @@ angular
           $scope.model = result;
           $scope.dataset = result.dataset;
           $scope.query = result.query;
-          fetchDatasetsAndUpdate.then(on_data_loaded);
+          fetchDatasetsAndUpdate();
+          on_data_loaded();
         });
 
         $scope.model_slug = $stateParams.model_slug;
@@ -308,10 +327,10 @@ angular
       }
 
       /**
-         * Checks whether this method has already been added to the experiment with this
-         * set of parameters.
-         * @returns {boolean}
-         */
+       * Checks whether this method has already been added to the experiment with this
+       * set of parameters.
+       * @returns {boolean}
+       */
       $scope.method_already_configured = function() {
         /*var method_idx, chosen_parameter_idx, other_parameter_idx, method;*/ // TODO: vars aren't used, commented to jshint warning detection
 
@@ -331,9 +350,9 @@ angular
       };
 
       /**
-         * Returns whether the current configuration is valid
-         * @returns {boolean}
-         */
+       * Returns whether the current configuration is valid
+       * @returns {boolean}
+       */
       $scope.configuration_not_valid = function() {
         var chosen_parameter_idx;
 
@@ -432,36 +451,37 @@ angular
 
       function compute_overview_graph(overview) {
         return {
-          options: {
-            chart: {
-              type: "column",
-              height: 400
-            },
-            plotOptions: {
-              column: {}
-            },
-            exporting: { enabled: false },
-            tooltip: {
-              headerFormat: "",
-              pointFormat: '<span style="color:{point.color}">\u25CF</span> {series.name}: <b>{point.y:.3f}</b><br/>'
-            },
-            legend: {
-              enabled: false
+          chart: {
+            type: "column",
+            height: 200
+          },
+          exporting: { enabled: false },
+          legend: {
+            enabled: false
+          },
+          plotOptions: {
+            column: {
+              pointPadding: 0.2,
+              borderWidth: 0
             }
           },
           series: overview.data,
           title: {
-            text: overview.label
+            text: overview.label,
+            verticalAlign: "top",
+            align: "center"
           },
           loading: false,
           xAxis: {
-            categories: overview.methods,
+            categories: overview.label,
             labels: {
               enabled: false
             },
             tickLength: 0
           },
           yAxis: {
+            min: 0,
+            max: 1,
             title: {
               text: null
             }
@@ -531,7 +551,6 @@ angular
                   return compute_overview_graph(o);
                 }
               );
-
               // Add legend
               if ($scope.overview_charts.length) {
                 link_charts_legend($scope.overview_charts[0]);

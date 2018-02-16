@@ -3,10 +3,10 @@
         <h2>Path</h2>
     </div>
     <div class="panel-body">
-        <span 
+        <span
             ng-repeat-start="node in $ctrl.breadcrumb"
             ng-click="$ctrl.zoom(node.code)"
-        >{{node.label}} ({{node.childsLength}})</span>
+        >{{node.label}}</span><span ng-if="node.childsLength"> ({{node.childsLength}})</span>
         <span ng-repeat-end ng-if="!$last">
             >
         </span>
