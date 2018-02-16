@@ -53,10 +53,10 @@ angular.module("chuvApp.models").controller("DatasetController", [
     $scope.query.groupings = map_query("grouping");
     $scope.query.coVariables = map_query("covariable");
     $scope.query.filters = map_query("filter");
-    $scope.query.datasets = map_query("datasets");
+    $scope.query.trainingDatasets = map_query("trainingDatasets");
 
     let selectedVariables = [];
-    let selectedDatasets = [...$scope.query.datasets.map(d => d.code)];
+    let selectedDatasets = [...$scope.query.trainingDatasets.map(d => d.code)];
 
     // TODO: refactor this
     const statistics = () => {
@@ -249,7 +249,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
       } else {
         selectedDatasets.push(code);
       }
-      $location.search("datasets", selectedDatasets.join(","));
+      $location.search("trainingDatasets", selectedDatasets.join(","));
 
       statistics();
     };
@@ -276,7 +276,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
         coVariables: unmap_category("coVariables"),
         groupings: unmap_category("groupings"),
         filters: unmap_category("filters"),
-        datasets: unmap_category("datasets"),
+        trainingDatasets: unmap_category("trainingDatasets"),
         graph_config: $scope.chartConfig,
         model_slug: ""
       };
@@ -297,6 +297,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
     };
 
     $scope.$on("event:loadModel", function(evt, model) {
+      selectedDatasets = [...$scope.query.trainingDatasets.map(d => d.code)];
       init(model);
     });
 

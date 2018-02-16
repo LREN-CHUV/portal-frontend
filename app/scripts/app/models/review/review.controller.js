@@ -360,9 +360,6 @@ angular.module("chuvApp.models").controller("ReviewController", [
         error += "A grouping is not complete yet.\n";
       }
 
-      if (query.coVariables.length + query.groupings.length < 1) {
-        error += "The query must have at least a covariable.\n";
-      }
       // check if coVariables is complete
       if ($scope.contains(query.coVariables, { code: undefined })) {
         error += "A covariable is not complete yet.\n";

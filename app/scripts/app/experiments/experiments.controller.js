@@ -240,7 +240,7 @@ angular
           groupings: map_query("groupings"),
           coVariables: map_query("coVariables"),
           filters: map_query("filters"),
-          trainingDatasets: map_query("datasets")
+          trainingDatasets: map_query("trainingDatasets")
         };
 
         fetchDatasetsAndUpdate();
@@ -490,32 +490,32 @@ angular
       }
 
       function link_charts_legend(chart) {
-        chart.options.chart.events = {
-          redraw: function() {
-            $(".single-legend").empty();
-            var chart = this;
-            $(chart.series).each(function(i, serie) {
-              $(
-                '<li style="color: ' +
-                  (serie.visible ? serie.color : "grey") +
-                  '">' +
-                  serie.name +
-                  "</li>"
-              )
-                .click(function() {
-                  $(".overview-charts > div > div").each(function() {
-                    var series = $(this).highcharts().series[serie.index];
-                    if (series.visible) {
-                      series.hide();
-                    } else {
-                      series.show();
-                    }
-                  });
-                })
-                .appendTo(".single-legend");
-            });
-          }
-        };
+        // chart.options.chart.events = {
+        //   redraw: function() {
+        //     $(".single-legend").empty();
+        //     var chart = this;
+        //     $(chart.series).each(function(i, serie) {
+        //       $(
+        //         '<li style="color: ' +
+        //           (serie.visible ? serie.color : "grey") +
+        //           '">' +
+        //           serie.name +
+        //           "</li>"
+        //       )
+        //         .click(function() {
+        //           $(".overview-charts > div > div").each(function() {
+        //             var series = $(this).highcharts().series[serie.index];
+        //             if (series.visible) {
+        //               series.hide();
+        //             } else {
+        //               series.show();
+        //             }
+        //           });
+        //         })
+        //         .appendTo(".single-legend");
+        //     });
+        //   }
+        // };
       }
 
       function get_experiment() {
@@ -541,6 +541,11 @@ angular
 
             // Parse the results
             try {
+              // catch error before parsing
+              if (!angular.isObject($scope.experiment.result)) {
+                throw $scope.experiment.result;
+              }
+
               $scope.experiment.display = MLUtils.parse_results(
                 $scope.experiment.result
               );
@@ -556,18 +561,9 @@ angular
                 link_charts_legend($scope.overview_charts[0]);
               }
             } catch (e) {
-              // TODO: seems like "throw e;" must be replaced in the end of "catch (e) {}"" block
-              /* jshint ignore:start */
-              throw e;
-              if (
-                !($scope.experiment.hasError ||
-                  $scope.experiment.hasServerError)
-              ) {
-                $scope.experiment.hasError = true;
-                $scope.experiment.result =
-                  "Invalid JSON: \n" + $scope.experiment.result;
-              }
-              /* jshint ignore:end */
+              $scope.experiment.hasError = true;
+              $scope.experiment.result =
+                "Invalid JSON: \n" + $scope.experiment.result;
             } finally {
               // Mark as read
               if (!$scope.experiment.resultsViewed) {
