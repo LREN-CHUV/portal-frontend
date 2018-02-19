@@ -36,9 +36,7 @@ angular
                 validations: validations,
                 algorithms: $scope.shared.experiment_configuration,
                 name: $scope.shared.experiment_name,
-                datasets: $scope.datasets.filter(
-                  (d, i) => $scope.shared.experiment_datasets[i]
-                )
+                datasets: $scope.query.trainingDatasets
               });
 
               promise.then(

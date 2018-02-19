@@ -9,8 +9,6 @@
         display: -webkit-flex;
         display: -ms-flexbox;
         display: flex;
-        height: 480px;
-        overflow: hidden;
 
         .tab-content {
             overflow-y: auto;
@@ -44,6 +42,8 @@
 }
 
 .dataset-list {
+    height: 480px;
+    overflow-y: auto;
     .active {
         line-height: 25px;
         display: inline-block;
@@ -73,9 +73,7 @@ li.list-group-item {
     }
 
     a:focus, a:active {
-        color:white;
-        text-decoration: none;
-        font-weight: 700;
+
     }
 }
 

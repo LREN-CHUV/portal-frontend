@@ -20,7 +20,6 @@ var gulp = require("gulp"),
   webdriver_standalone = require("gulp-protractor").webdriver_standalone,
   webdriver_update = require("gulp-protractor").webdriver_update_specific;
 
-
 // Application's main directories constants
 var appConfig = require("./app-config.json");
 // Application's application scripts directories
@@ -42,7 +41,7 @@ var appPath = {
     vendorCss: vendorCss,
     js: {
       appScripts: appScripts,
-      vendorScripts: vendorScripts,
+      vendorScripts: vendorScripts
     },
     images: appConfig.app + "/images/**/*",
     tmp: appConfig.app + "/tmp",
@@ -68,7 +67,7 @@ var appPath = {
     tests: {
       screenshots: "./screenshots",
       reports: "./reports"
-    },
+    }
     // tests: "./screenshots",
   },
   dist: {
@@ -104,7 +103,6 @@ var appPath = {
     mockJson: appConfig.dist + "/scripts/app/mock"
   }
 };
-
 
 gulp.task("clean:dev", function(cb) {
   return rimraf(appPath.src.tmp, cb);
@@ -287,24 +285,24 @@ gulp.task("index-html:test", function() {
 
 // Compile less to css (dev) minify css (prod)
 gulp.task("styles:dev", function() {
-  return gulp
-    .src(appPath.src.less)
-    .pipe(plugins.sourcemaps.init())
-    .pipe(plugins.less())
-    .on("error", function(err) {
-      console.error("Error!", err.message);
-    })
-    .pipe(
-      plugins.autoprefixer({
-        browsers: ["last 3 versions"],
-        cascade: false
+  return (gulp
+      .src(appPath.src.less)
+      .pipe(plugins.sourcemaps.init())
+      .pipe(plugins.less())
+      .on("error", function(err) {
+        console.error("Error!", err.message);
       })
-    )
-    // .pipe(plugins.cssmin())
-    .pipe(rename("main.css"))
-    .pipe(plugins.sourcemaps.write())
-    .pipe(gulp.dest(appPath.src.tmp))
-    .pipe(browserSync.stream());
+      .pipe(
+        plugins.autoprefixer({
+          browsers: ["last 3 versions"],
+          cascade: false
+        })
+      )
+      // .pipe(plugins.cssmin())
+      .pipe(rename("main.css"))
+      .pipe(plugins.sourcemaps.write())
+      .pipe(gulp.dest(appPath.src.tmp))
+      .pipe(browserSync.stream()) );
 });
 
 gulp.task("styles:prod", function() {
@@ -324,7 +322,6 @@ gulp.task("styles:prod", function() {
     .pipe(rename("main.css"))
     .pipe(gulp.dest(appPath.dist.cssProd));
 });
-
 
 gulp.task("styles-vendor:dev", function() {
   return gulp
@@ -347,13 +344,13 @@ gulp.task("styles-vendor:prod", function() {
 });
 
 gulp.task("js-vendor:dev", function() {
-  return gulp
-    .src(appPath.src.js.vendorScripts)
-    .pipe(plugins.sourcemaps.init())
-    .pipe(plugins.uglify())
-    .pipe(plugins.concat("vendor.js"))
-    .pipe(plugins.sourcemaps.write("."))
-    .pipe(gulp.dest(appPath.src.tmp));
+  return (gulp
+      .src(appPath.src.js.vendorScripts)
+      .pipe(plugins.sourcemaps.init())
+      // .pipe(plugins.uglify())
+      .pipe(plugins.concat("vendor.js"))
+      .pipe(plugins.sourcemaps.write("."))
+      .pipe(gulp.dest(appPath.src.tmp)) );
 });
 
 gulp.task("js-vendor:prod", function() {
@@ -367,10 +364,10 @@ gulp.task("js-vendor:prod", function() {
 gulp.task("js-app:dev", function() {
   return gulp
     .src(appPath.src.js.appScripts)
-    .pipe(plugins.babel({presets: ["es2015"]}))
-    .on('error', function(e) {
+    .pipe(plugins.babel({ presets: ["es2015"] }))
+    .on("error", function(e) {
       console.error(e);
-      this.emit('end');
+      this.emit("end");
     })
     .pipe(plugins.sourcemaps.init())
     .pipe(plugins.ngAnnotate())
@@ -383,10 +380,10 @@ gulp.task("js-app:dev", function() {
 gulp.task("js-app:prod", function() {
   return gulp
     .src(appPath.src.js.appScripts)
-    .pipe(plugins.babel({presets: ["es2015"]}))
-    .on('error', function(e) {
+    .pipe(plugins.babel({ presets: ["es2015"] }))
+    .on("error", function(e) {
       console.error(e);
-      this.emit('end');
+      this.emit("end");
     })
     .pipe(plugins.ngAnnotate())
     .pipe(plugins.concat("scripts.js"))
@@ -484,52 +481,63 @@ gulp.task("js-hint", function() {
     .pipe(jshint.reporter("jshint-stylish", { beep: true }));
 });
 
-
 // Run unit-test with Karma
-function runTests (singleRun, done) {
+function runTests(singleRun, done) {
   var testFiles = appPath.src.js.vendorScripts
     .concat(["./node_modules/angular-mocks/angular-mocks.js"])
     .concat(appPath.src.js.appScripts)
-    .concat([
-      "./app/tests/**/*.test.js",
-      "./app/scripts/**/*.html"
-    ]);
+    .concat(["./app/tests/**/*.test.js", "./app/scripts/**/*.html"]);
 
-  gulp.src(testFiles)
-    .pipe(plugins.karma({
-      configFile: "karma.conf.js",
-      action: (singleRun)? "run": "watch"
-    }))
-    .on("error", function (err) {
+  gulp
+    .src(testFiles)
+    .pipe(
+      plugins.karma({
+        configFile: "karma.conf.js",
+        action: singleRun ? "run" : "watch"
+      })
+    )
+    .on("error", function(err) {
       // Make sure failed tests cause gulp to exit non-zero
       throw err;
-    })
+    });
 }
 
 // Run unit tests
-gulp.task("unit-tests", function(done) { runTests(true /*singleRun*/, done) });
-gulp.task("unit-tests:auto", function(done) { runTests(false /*singleRun*/, done) });
-
+gulp.task("unit-tests", function(done) {
+  runTests(true /*singleRun*/, done);
+});
+gulp.task("unit-tests:auto", function(done) {
+  runTests(false /*singleRun*/, done);
+});
 
 // Downloads the selenium webdriver
-gulp.task("webdriver_update", webdriver_update({
-  browsers: ["ignore_ssl"]
-}));
+gulp.task(
+  "webdriver_update",
+  webdriver_update({
+    browsers: ["ignore_ssl"]
+  })
+);
 
 // Start the standalone selenium server
 gulp.task("webdriver_standalone", webdriver_standalone);
 
-gulp.task("protractor-go", ["clean:test-reports", "clean:test-screenshots", "webdriver_update"], function(cb) {
-  gulp.src([])
-    .pipe(protractor({
-      configFile: "./app/tests/e2e/e2e-conf.js"
-    }))
-    .on("error", function(e) {
-      console.log(e);
-    })
-    .on("end", cb);
-});
-
+gulp.task(
+  "protractor-go",
+  ["clean:test-reports", "clean:test-screenshots", "webdriver_update"],
+  function(cb) {
+    gulp
+      .src([])
+      .pipe(
+        protractor({
+          configFile: "./app/tests/e2e/e2e-conf.js"
+        })
+      )
+      .on("error", function(e) {
+        console.log(e);
+      })
+      .on("end", cb);
+  }
+);
 
 // Main build task, create dist folder
 // Type "gulp build" in command line

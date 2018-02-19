@@ -10,6 +10,8 @@ angular
     "$location",
     "$uibModal",
     "notifications",
+    "Config",
+    "Variable",
     function(
       $scope,
       MLUtils,
@@ -17,7 +19,9 @@ angular
       Model,
       $location,
       $uibModal,
-      notifications
+      notifications,
+      Config,
+      Variable
     ) {
       $scope.loaded = false;
       $scope.parseInt = parseInt;
@@ -28,21 +32,24 @@ angular
         local: { active: true, disabled: false },
         exareme: { disabled: false }
       };
+      $scope.datasets = [];
+
       $scope.shared = {
         chosen_method: null,
         method_parameters: [],
         cross_validation: false,
         experiment_configuration: [],
-        experiment_datasets: []
+        experiment_datasets: {
+          training: {},
+          validation: {}
+        },
+        query: {}
       };
+
       $scope.help_is_open = true;
-      $scope.datasets = [
-        { label: "chuv", code: "chuv_adni" },
-        { label: "brescia", code: "brescia" }
-        // { label: "plovdiv", code: "plovdiv" },
-        // { label: "adni", code: "epfl_adni" },
-        // { label: "ppmi", code: "ppmi" }
-      ];
+      Config.then(function(config) {
+        $scope.federationmode = config.mode === "federation";
+      });
 
       $scope.type_name = function(method_name) {
         return method_name.charAt(0).toUpperCase() + method_name.slice(1) + "s";
@@ -59,12 +66,6 @@ angular
       // Check if the method can be applied to the model
       function available_method(method) {
         if (method.disable) {
-          return false;
-        }
-
-        if (method.code === "statisticsSummary") {
-          console.warn("FIXME statisticsSummary disabled in frontend");
-          method.disable = true;
           return false;
         }
 
@@ -180,12 +181,42 @@ angular
         $scope.shared.chosen_method = method;
       };
 
+      const shareQuery = () => {
+        Object.keys($scope.query).forEach(k => {
+          if ($scope.query[k].length)
+            $scope.shared.query[k] = $scope.query[k]
+              .map(v => v.code)
+              .join(", ");
+        });
+      };
+
+      const fetchDatasetsAndUpdate = () =>
+        Variable.datasets().then(data => {
+          $scope.datasets = data;
+          $scope.shared.experiment_datasets.training = $scope.query.trainingDatasets
+            .map(d => d.code)
+            .reduce((a, d) => {
+              a[d] = true;
+              return a;
+            }, {});
+
+          $scope.shared.experiment_datasets.validation = $scope.query.trainingDatasets
+            .map(d => d.code)
+            .reduce((a, d) => {
+              a[d] = true;
+              return a;
+            }, {});
+
+          shareQuery();
+        });
+
       if ($stateParams.model_slug) {
         // we have a slug: load model
         Model.get({ slug: $stateParams.model_slug }, function(result) {
           $scope.model = result;
           $scope.dataset = result.dataset;
           $scope.query = result.query;
+          fetchDatasetsAndUpdate();
           on_data_loaded();
         });
 
@@ -209,14 +240,13 @@ angular
           groupings: map_query("groupings"),
           coVariables: map_query("coVariables"),
           filters: map_query("filters"),
-          textQuery: search.textQuery
+          trainingDatasets: map_query("trainingDatasets")
         };
+
+        fetchDatasetsAndUpdate();
 
         // step 2: load dataset
         var query = angular.copy($scope.query);
-
-        //TODO Remove this temporary solution
-        query.filters = query.textQuery;
 
         Model.executeQuery(query).then(function(response) {
           var queryResult = response.data;
@@ -244,6 +274,16 @@ angular
                   };
 
                   config.title = { text: child_scope.name };
+                  const training = $scope.shared.experiment_datasets.training;
+                  query.trainingDatasets = Object.keys(training)
+                    .filter(k => training[k])
+                    .map(t => ({ code: t }));
+
+                  const validation =
+                    $scope.shared.experiment_datasets.validation;
+                  query.validationDatasets = Object.keys(validation)
+                    .filter(k => validation[k])
+                    .map(t => ({ code: t }));
 
                   $scope.model = {
                     title: child_scope.name,
@@ -260,6 +300,7 @@ angular
                       $scope.model = result;
                       $scope.dataset = result.dataset;
                       $scope.query = result.query;
+
                       notifications.success(
                         "The model was successfully saved!"
                       );
@@ -268,10 +309,12 @@ angular
                         callback();
                       }
                     },
-                    function() {
-                      // TODO Add a notification service...
+                    function(error = {}) {
+                      $scope.model = null;
+
+                      const { data: { message } } = error;
                       notifications.error(
-                        "An error occurred when trying to save the model!"
+                        `An error occurred when trying to save the model! ${message}`
                       );
                       child_scope.$dismiss();
                     }
@@ -284,10 +327,10 @@ angular
       }
 
       /**
-         * Checks whether this method has already been added to the experiment with this
-         * set of parameters.
-         * @returns {boolean}
-         */
+       * Checks whether this method has already been added to the experiment with this
+       * set of parameters.
+       * @returns {boolean}
+       */
       $scope.method_already_configured = function() {
         /*var method_idx, chosen_parameter_idx, other_parameter_idx, method;*/ // TODO: vars aren't used, commented to jshint warning detection
 
@@ -307,9 +350,9 @@ angular
       };
 
       /**
-         * Returns whether the current configuration is valid
-         * @returns {boolean}
-         */
+       * Returns whether the current configuration is valid
+       * @returns {boolean}
+       */
       $scope.configuration_not_valid = function() {
         var chosen_parameter_idx;
 
@@ -408,36 +451,37 @@ angular
 
       function compute_overview_graph(overview) {
         return {
-          options: {
-            chart: {
-              type: "column",
-              height: 400
-            },
-            plotOptions: {
-              column: {}
-            },
-            exporting: { enabled: false },
-            tooltip: {
-              headerFormat: "",
-              pointFormat: '<span style="color:{point.color}">\u25CF</span> {series.name}: <b>{point.y:.3f}</b><br/>'
-            },
-            legend: {
-              enabled: false
+          chart: {
+            type: "column",
+            height: 200
+          },
+          exporting: { enabled: false },
+          legend: {
+            enabled: false
+          },
+          plotOptions: {
+            column: {
+              pointPadding: 0.2,
+              borderWidth: 0
             }
           },
           series: overview.data,
           title: {
-            text: overview.label
+            text: overview.label,
+            verticalAlign: "top",
+            align: "center"
           },
           loading: false,
           xAxis: {
-            categories: overview.methods,
+            categories: overview.label,
             labels: {
               enabled: false
             },
             tickLength: 0
           },
           yAxis: {
+            min: 0,
+            max: 1,
             title: {
               text: null
             }
@@ -446,32 +490,32 @@ angular
       }
 
       function link_charts_legend(chart) {
-        chart.options.chart.events = {
-          redraw: function() {
-            $(".single-legend").empty();
-            var chart = this;
-            $(chart.series).each(function(i, serie) {
-              $(
-                '<li style="color: ' +
-                  (serie.visible ? serie.color : "grey") +
-                  '">' +
-                  serie.name +
-                  "</li>"
-              )
-                .click(function() {
-                  $(".overview-charts > div > div").each(function() {
-                    var series = $(this).highcharts().series[serie.index];
-                    if (series.visible) {
-                      series.hide();
-                    } else {
-                      series.show();
-                    }
-                  });
-                })
-                .appendTo(".single-legend");
-            });
-          }
-        };
+        // chart.options.chart.events = {
+        //   redraw: function() {
+        //     $(".single-legend").empty();
+        //     var chart = this;
+        //     $(chart.series).each(function(i, serie) {
+        //       $(
+        //         '<li style="color: ' +
+        //           (serie.visible ? serie.color : "grey") +
+        //           '">' +
+        //           serie.name +
+        //           "</li>"
+        //       )
+        //         .click(function() {
+        //           $(".overview-charts > div > div").each(function() {
+        //             var series = $(this).highcharts().series[serie.index];
+        //             if (series.visible) {
+        //               series.hide();
+        //             } else {
+        //               series.show();
+        //             }
+        //           });
+        //         })
+        //         .appendTo(".single-legend");
+        //     });
+        //   }
+        // };
       }
 
       function get_experiment() {
@@ -497,6 +541,11 @@ angular
 
             // Parse the results
             try {
+              // catch error before parsing
+              if (!angular.isObject($scope.experiment.result)) {
+                throw $scope.experiment.result;
+              }
+
               $scope.experiment.display = MLUtils.parse_results(
                 $scope.experiment.result
               );
@@ -507,24 +556,14 @@ angular
                   return compute_overview_graph(o);
                 }
               );
-
               // Add legend
               if ($scope.overview_charts.length) {
                 link_charts_legend($scope.overview_charts[0]);
               }
             } catch (e) {
-              // TODO: seems like "throw e;" must be replaced in the end of "catch (e) {}"" block
-              /* jshint ignore:start */
-              throw e;
-              if (
-                !($scope.experiment.hasError ||
-                  $scope.experiment.hasServerError)
-              ) {
-                $scope.experiment.hasError = true;
-                $scope.experiment.result =
-                  "Invalid JSON: \n" + $scope.experiment.result;
-              }
-              /* jshint ignore:end */
+              $scope.experiment.hasError = true;
+              $scope.experiment.result =
+                "Invalid JSON: \n" + $scope.experiment.result;
             } finally {
               // Mark as read
               if (!$scope.experiment.resultsViewed) {

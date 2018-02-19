@@ -27,14 +27,17 @@ var appScripts = [
   "./" + appConfig.app + "/scripts/app/models/model.router.js",
   "./" + appConfig.app + "/scripts/app/models/model.controller.js",
   "./" + appConfig.app + "/scripts/app/models/model.service.js",
-  "./" + appConfig.app +
-  "/scripts/app/models/variable_exploration/exploration.controller.js",
-  "./" + appConfig.app +
-  "/scripts/app/models/variable_exploration/variable_selection.directives.js",
+  "./" +
+    appConfig.app +
+    "/scripts/app/models/variable_exploration/exploration.controller.js",
+  "./" +
+    appConfig.app +
+    "/scripts/app/models/variable_exploration/variable_selection.directives.js",
   "./" + appConfig.app + "/scripts/app/models/review/review.controller.js",
   "./" + appConfig.app + "/scripts/app/models/review/chart.controller.js",
-  "./" + appConfig.app +
-  "/scripts/app/models/review/configuration.controller.js",
+  "./" +
+    appConfig.app +
+    "/scripts/app/models/review/configuration.controller.js",
   "./" + appConfig.app + "/scripts/app/models/review/criteria.controller.js",
   "./" + appConfig.app + "/scripts/app/models/review/dataset.controller.js",
   "./" + appConfig.app + "/scripts/app/models/review/estimation.controller.js",
@@ -44,8 +47,11 @@ var appScripts = [
   "./" + appConfig.app + "/scripts/components/criteria/groups.service.js",
   "./" + appConfig.app + "/scripts/components/criteria/datasets.service.js",
   "./" + appConfig.app + "/scripts/components/criteria/variables.service.js",
-  "./" + appConfig.app +
-  "/scripts/components/criteria/chained-select.directive.js",
+  "./" + appConfig.app + "/scripts/components/config/config.module.js",
+  "./" + appConfig.app + "/scripts/components/config/config.service.js",
+  "./" +
+    appConfig.app +
+    "/scripts/components/criteria/chained-select.directive.js",
   "./" + appConfig.app + "/scripts/components/util/util-module.js",
   "./" + appConfig.app + "/scripts/components/util/chart-util.service.js",
   "./" + appConfig.app + "/scripts/components/util/modal-util.service.js",
@@ -55,8 +61,9 @@ var appScripts = [
   "./" + appConfig.app + "/scripts/app/experiments/experiments.controller.js",
   "./" + appConfig.app + "/scripts/app/experiments/experiments.services.js",
   "./" + appConfig.app + "/scripts/app/experiments/experiments.directives.js",
-  "./" + appConfig.app +
-  "/scripts/app/experiments/results/results.directives.js",
+  "./" +
+    appConfig.app +
+    "/scripts/app/experiments/results/results.directives.js",
   "./" + appConfig.app + "/scripts/components/button/button-module.js",
   "./" + appConfig.app + "/scripts/components/button/button-rounded.js",
   "./" + appConfig.app + "/scripts/components/button/carrousel-button.js",
@@ -65,8 +72,9 @@ var appScripts = [
   "./" + appConfig.app + "/scripts/components/date/from-now.filter.js",
   "./" + appConfig.app + "/scripts/components/carrousel/carrousel-module.js",
   "./" + appConfig.app + "/scripts/components/carrousel/carrousel.js",
-  "./" + appConfig.app +
-  "/scripts/components/notifications/notifications-module.js",
+  "./" +
+    appConfig.app +
+    "/scripts/components/notifications/notifications-module.js",
   "./" + appConfig.app + "/scripts/components/notifications/notifications.js",
   "./" + appConfig.app + "/scripts/app/mydata/mydata.module.js",
   "./" + appConfig.app + "/scripts/app/mydata/mydata.controller.js",
@@ -80,7 +88,7 @@ var appScripts = [
   "./" + appConfig.app + "/scripts/components/widget/widget.service.js",
   "./" + appConfig.app + "/scripts/components/toolbar/toolbar.module.js",
   "./" + appConfig.app + "/scripts/components/toolbar/toolbar.js",
-  "./" + appConfig.app + "/scripts/components/hightlight/hightlight.filter.js",
+  "./" + appConfig.app + "/scripts/components/hightlight/hightlight.filter.js"
 ];
 
 module.exports = appScripts;

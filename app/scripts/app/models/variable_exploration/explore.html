@@ -11,11 +11,11 @@
                 <div class="panel-heading" style="flex: 1">
                   <h2 style="margin-right: 20px">1. Select dataset</h2>
                   <span class="dataset-list">
-                      <span ng-repeat="dataset in datasets">
+                      <span ng-repeat="dataset in allDatasets">
                         <a
-                          ng-click="setDataset(dataset)"
-                          ng-class="{active: isDatasetSelected(dataset)}">
-                          {{dataset}}
+                          ng-click="setDataset(dataset.code)"
+                          ng-class="{active: isDatasetSelected(dataset.code)}">
+                          {{dataset.code}}
                         </a>
                         &nbsp;
                       </span>
@@ -52,8 +52,11 @@
       </div>
 
       <div class="col-md-6">
+        <breadcrumb
+          get-focused-variable="focused_variable"
+          zoom="zoom"
+        ></breadcrumb>
         <variable-statistics></variable-statistics>
-
         <variable-configuration
             set-focused-variable="set_focused_variable"
             set-variable-selected-as="use_variable_as"
