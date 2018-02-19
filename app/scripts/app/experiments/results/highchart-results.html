@@ -15,7 +15,7 @@
         <tabset active="0">
           <tab ng-repeat="chart in highchartdata.data" heading="{{ chart.label }}">
             <div class="panel">
-              <div class="panel-body">
+              <div class="panel-body highcharts-container">
                   <highchart config="chart"></highchart>
                   <div uib-accordion-group is-open="false">
                     <uib-accordion-heading>

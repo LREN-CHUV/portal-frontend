@@ -1,5 +1,5 @@
 <div class="panel">
-  
+
   <div class="panel-heading">
     <h2 ng-if="!focused_variable">Variable overview</h2>
     <h2 ng-if="focused_variable && focused_variable.isVariable">Variable Details</h2>
@@ -47,7 +47,7 @@
                    heading="{{ statistic.dataType == 'SummaryStatistics' ? 'Summary' : statistic.label }}">
                 <div ng-if="statistic.active">
                   <div ng-if="statistic.dataType !== 'SummaryStatistics'" ng-init="init_hc_config(statistic)">
-                    <highchart config="statistic.hc_config" ng-if="show" class="highchart-width"></highchart>
+                    <highchart config="statistic.hc_config" ng-if="show" class="highchart-width highcharts-container"></highchart>
                     <div style="height: 350px" ng-if="!show"></div>
                   </div>
                   <div ng-if="statistic.dataType === 'SummaryStatistics'">
