@@ -23,8 +23,7 @@ angular
                             });
                     }
                 }
-            }    
-        ],       
+            }
+        ],
         templateUrl: 'scripts/app/models/variable_exploration/breadcrumb.html'
     });
-    
