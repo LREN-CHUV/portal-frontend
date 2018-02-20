@@ -55,10 +55,6 @@ angular
         return method_name.charAt(0).toUpperCase() + method_name.slice(1) + "s";
       };
 
-      $scope.experiment_variable = {
-        'code': $stateParams.variables
-      };
-
       // Get all the ml methods
       MLUtils.list_ml_methods().then(function(data) {
         // FIXME Quick and dirty fix!
