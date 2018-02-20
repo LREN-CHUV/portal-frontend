@@ -440,7 +440,6 @@ angular.module("chuvApp.models").controller("ReviewController", [
           $scope.query.groupings.length ||
           $scope.query.filters.length ||
           $scope.query.coVariables.length);
-
       if (!should_configure) {
         return $location.url("/explore");
       }
@@ -457,7 +456,8 @@ angular.module("chuvApp.models").controller("ReviewController", [
         variable: unmap_category("variables"),
         covariable: unmap_category("coVariables"),
         grouping: unmap_category("groupings"),
-        filter: unmap_category("filters")
+        filter: unmap_category("filters"),
+        trainingDatasets: unmap_category("trainingDatasets")
       };
 
       $location.url(
