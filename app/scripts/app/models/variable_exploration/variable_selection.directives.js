@@ -7,7 +7,8 @@ angular
   .module("chuvApp.models")
   .directive("circlePacking", [
     "$location",
-    function($location) {
+    "Variable",
+    function($location, Variable) {
       return {
         templateUrl: "scripts/app/models/variable_exploration/circle_packing.html",
         replace: true,
@@ -17,6 +18,15 @@ angular
           $scope.selectedDatasets = $location.search()["trainingDatasets"]
             ? $location.search()["trainingDatasets"].split(",")
             : [];
+
+          // TODO: rewrite script in then or take a allDatasets prederective data
+          Variable.datasets().then(data => {
+            // $scope.allDatasets = data;
+            $scope.selectedDatasets =  data;
+          });
+
+          // $scope.allDatasets
+
           $scope.populatedGroups = {}; // FIXME: bad scope
           var api = {};
 
