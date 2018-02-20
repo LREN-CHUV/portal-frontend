@@ -161,7 +161,7 @@ angular.module("chuvApp.util").factory("MLUtils", [
             ) {
               if (
                 result.data.cells.validations[0].data.average.type ===
-                "RegressionScores"
+                "RegressionScore"
               ) {
                 return "regression";
               }
