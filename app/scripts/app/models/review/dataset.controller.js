@@ -14,6 +14,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
   "$timeout",
   "$location",
   "$state",
+  "$q",
   function(
     $scope,
     $stateParams,
@@ -27,7 +28,8 @@ angular.module("chuvApp.models").controller("DatasetController", [
     $log,
     $timeout,
     $location,
-    $state
+    $state,
+    $q
   ) {
     $scope.loading = true;
     $scope.error = undefined;
@@ -78,7 +80,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
       Config.then(config => config.mode === "local")
         // Forge queries for variable's statistics by dataset
         .then(isLocal =>
-          Promise.all(
+          $q.all(
             selectedDatasets.map(d =>
               Model.mining({
                 algorithm: {
@@ -119,7 +121,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
         .then(data => {
           // Surcharge with variable data
           rows = data;
-          return Promise.all(data.map(d => Variable.getVariableData(d.index)));
+          return $q.all(data.map(d => Variable.getVariableData(d.index)));
         })
         .then(data =>
           rows.map((r, i) =>
@@ -146,9 +148,13 @@ angular.module("chuvApp.models").controller("DatasetController", [
     // Format for angular
     const formatTable = data => {
       const tableRows = [];
-      data.forEach(d => {
+      data.forEach((d, i) => {
         let row;
-        if (d.parent) {
+
+        if (
+          i === 0 ||
+          (d.parent && i > 0 && d.parent.code !== data[i - 1].parent.code)
+        ) {
           row = {
             header: true,
             data: [d.parent.label, ...selectedDatasets.map(() => "")]
@@ -161,9 +167,9 @@ angular.module("chuvApp.models").controller("DatasetController", [
             data: [
               d.variable.label,
               ...d.continuous.map(e => {
-                const mean = e.mean && parseFloat(e.mean).toFixed(2);
-                const min = e.min && parseFloat(e.min).toFixed(2);
-                const max = e.max && parseFloat(e.max).toFixed(2);
+                const mean = (e.mean && parseFloat(e.mean).toFixed(2)) || 0;
+                const min = (e.min && parseFloat(e.min).toFixed(2)) || 0;
+                const max = (e.max && parseFloat(e.max).toFixed(2)) || 0;
 
                 return `${mean} (${min}-${max})`;
               })
@@ -223,7 +229,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
 
     // Charts ressources
     var getHistogram = function(variable) {
-      return Variable.get_histo(variable.code);
+      return variable ? Variable.get_histo(variable.code) : null;
     };
 
     $scope.isSelected = function(variable) {
