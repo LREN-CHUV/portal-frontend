@@ -11,22 +11,26 @@ function toNumber(promiseOrValue) {
   });
 }
 
-
+var width = 1200;
+var height = 800;
+browser.driver.manage().window().setSize(width, height);
 
 
 describe('the EE (explore) page ', function() {
+
+  function get_ApoE4_bubble(){
+    return element.all(by.css('.panel:nth-child(1) .panel-body:nth-child(1)>svg circle.node--leaf')).get(0);
+  }
+
+
   beforeEach(function(done){
     browser.get('http://localhost:8000/explore');
     loginButton = element.all(by.css('#login_btn'));
     loginButton.count().then(function(count){
-      console.log('login button count', count);
       if (count === 1){
         loginButton.get(0).click().then(function(){
-          console.log('login button clicked');
-         //var panel = element.all(by.css('.panel-footer'));
           element.all(by.css('.panel-footer #agree')).get(0).click();
           element.all(by.css('.panel-footer button.btn-primary')).get(0).click().then(function(){
-            console.log('tos button clicked');
             done();
           });    
         });   
@@ -34,12 +38,9 @@ describe('the EE (explore) page ', function() {
         //terms and service page
         var tos = element.all(by.css('.panel-footer #agree'));
         tos.count().then(function(count){
-          console.log('tos button count', count);
           if (count === 1){
             element.all(by.css('.panel-footer #agree')).get(0).click().then(function(){
-              console.log('agree checkbox clicked');
               element.all(by.css('.panel-footer button.btn-primary')).get(0).click().then(function(){
-                console.log('tos button clicked');
                 browser.get('http://localhost:8000/explore');
                 done();
               });
@@ -116,10 +117,15 @@ describe('the EE (explore) page ', function() {
       expect(dataset.isPresent()).toBe(true);
     });
 
-    it('should visually select a dataset when the corresponding dataset button is clicked', function() {      
+    it('should visually select a dataset when the corresponding dataset button is clicked', function(done) {      
       var dataset = panel.all(by.css('.dataset-list span:nth-child(1) a')).get(0);
-      dataset.click();
-      expect(helpers.hasClass(dataset, 'active')).toBe(true);
+      var scrolled = browser.executeScript("arguments[0].scrollIntoView(false);", dataset.getWebElement());
+      scrolled.then(function(){
+        dataset.click();
+        expect(helpers.hasClass(dataset, 'active')).toBe(true);
+        done();
+      });
+
     });
 
   });
@@ -161,7 +167,7 @@ describe('the EE (explore) page ', function() {
 
       bubble.click();
 
-      expect(toNumber(bubble.getAttribute('r'))).toBeGreaterThan(65);//69.80421083246561
+      expect(toNumber(bubble.getAttribute('r'))).toBeGreaterThan(60);//69.80421083246561
     });
 
     it('should display the variable detail in the variable-statistics panel when a bubble item is clicked', function(done) {      
@@ -248,10 +254,6 @@ describe('the EE (explore) page ', function() {
       });  
     });
 
-    function get_ApoE4_bubble(){
-      return element.all(by.css('.panel:nth-child(1) .panel-body:nth-child(1)>svg circle.node--leaf')).get(0);
-    }
-
     it('should add a variable to the `Variable` column when the variable bubble item is clicked and then the first button `as variable` is clicked', function() {         
       bubble = get_ApoE4_bubble();
       bubble.click();
@@ -268,8 +270,24 @@ describe('the EE (explore) page ', function() {
       expect(cols.get(1).all(by.css('h3+div')).count()).toEqual(1);
     });
 
-  
+  });
 
-  })
+  describe('the `review model` button ', function() {
+
+    it('should not be visible when no variable is selected (initial state)', function() {         
+      reviewModelButton = element.all(by.css('.page-content .explore button.btn-round'));
+      expect(reviewModelButton.count()).toEqual(0);
+    });
+
+    it('should  be visible when a variable is selected', function() {         
+      var bubble = get_ApoE4_bubble();
+      asVariableButton = element.all(by.css('.panel.explore-box .panel-body .explore-container button')).get(0);
+      bubble.click();
+      asVariableButton.click();
+      reviewModelButton = element.all(by.css('.page-content .explore button.btn-round'));
+      expect(reviewModelButton.count()).toEqual(1);
+    });
+
+  });
 
 });
