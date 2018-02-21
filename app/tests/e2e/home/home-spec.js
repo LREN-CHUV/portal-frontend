@@ -1,4 +1,4 @@
-var jasmineCucumber = require("protractor-jasmine-cucumber"),
+/*var jasmineCucumber = require("protractor-jasmine-cucumber"),
   featureSteps = jasmineCucumber.featureSteps;
 
 browser.ignoreSynchronization = true;
@@ -30,4 +30,4 @@ featureSteps("My articles page")
         expect(url).toContain(contents);
       })
       .then(this.async());
-  });
+  });*/
