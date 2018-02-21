@@ -19,14 +19,6 @@ angular
             ? $location.search()["trainingDatasets"].split(",")
             : [];
 
-          // TODO: rewrite script in then or take a allDatasets prederective data
-          // Variable.datasets().then(data => {
-          //   // $scope.allDatasets = data;
-          //   $scope.selectedDatasets =  data;
-          // });
-
-          // $scope.allDatasets
-
           $scope.populatedGroups = {}; // FIXME: bad scope
           var api = {};
 
