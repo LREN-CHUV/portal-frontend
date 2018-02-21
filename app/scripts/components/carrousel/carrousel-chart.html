@@ -5,7 +5,7 @@
   </h3>
   <span class="search-img">
     <div ng-if="config">
-      <highchart config="config" ng-if="!svg"></highchart>
+      <highchart config="config" ng-if="!svg" class="highcharts-container"></highchart>
       <img ng-src="{{ svg }}">
     </div>
   </span>
