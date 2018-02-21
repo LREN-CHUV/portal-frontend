@@ -19,11 +19,14 @@ describe('the EE (explore) page ', function() {
     browser.get('http://localhost:8000/explore');
     loginButton = element.all(by.css('#login_btn'));
     loginButton.count().then(function(count){
+      console.log('login button count', count);
       if (count === 1){
         loginButton.get(0).click().then(function(){
-          var panel = element.all(by.css('.panel-footer'));
-          panel(by.css('#agree')).click();
-          panel(by.css('button.btn-primary')).click().then(function(){
+          console.log('login button clicked');
+         //var panel = element.all(by.css('.panel-footer'));
+          element.all(by.css('.panel-footer #agree')).get(0).click();
+          element.all(by.css('.panel-footer button.btn-primary')).get(0).click().then(function(){
+            console.log('tos button clicked');
             done();
           });    
         });   
@@ -31,9 +34,12 @@ describe('the EE (explore) page ', function() {
         //terms and service page
         var tos = element.all(by.css('.panel-footer #agree'));
         tos.count().then(function(count){
+          console.log('tos button count', count);
           if (count === 1){
-            panel.all(by.css('#agree')).get(0).click().then(function(){
-              panel.all(by.css('button.btn-primary')).get(0).click().then(function(){
+            element.all(by.css('.panel-footer #agree')).get(0).click().then(function(){
+              console.log('agree checkbox clicked');
+              element.all(by.css('.panel-footer button.btn-primary')).get(0).click().then(function(){
+                console.log('tos button clicked');
                 browser.get('http://localhost:8000/explore');
                 done();
               });
@@ -77,14 +83,14 @@ describe('the EE (explore) page ', function() {
     });
 
     it('should have a panel with the title *Variable overview*', function(done) {
-      titles.get(2).getText().then(function(txt){
+      titles.get(3).getText().then(function(txt){
         expect(txt.toLowerCase()).toEqual('variable overview');
         done();
       });
     });
   
     it('should have a panel with the title *3. Add variables to Model*', function(done) {
-      titles.get(3).getText().then(function(txt){
+      titles.get(4).getText().then(function(txt){
         expect(txt.toLowerCase()).toEqual('3. add variables to model');
         done();
       });
@@ -155,11 +161,11 @@ describe('the EE (explore) page ', function() {
 
       bubble.click();
 
-      expect(toNumber(bubble.getAttribute('r'))).toBeGreaterThan(70);//69.80421083246561
+      expect(toNumber(bubble.getAttribute('r'))).toBeGreaterThan(65);//69.80421083246561
     });
 
     it('should display the variable detail in the variable-statistics panel when a bubble item is clicked', function(done) {      
-      var variableStatisticsPanel = element.all(by.css('.panel')).get(2);
+      var variableStatisticsPanel = element.all(by.css('.panel')).get(3);
 
       bubble.click();
 
@@ -185,7 +191,7 @@ describe('the EE (explore) page ', function() {
 
     var panel, buttons, cols;
     beforeEach(function(){
-      panel = element.all(by.css('.panel')).get(3);
+      panel = element.all(by.css('.panel')).get(4);
       buttons = panel.all(by.css('.panel-body .explore-container button'));
       cols = panel.all(by.css('.panel-body .explore-container>div.column'));
     });
