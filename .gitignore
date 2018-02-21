@@ -12,3 +12,4 @@ screenshots/
 package-lock.json
 .vscode
 yarn-error.log
+app/scripts/app/config.json

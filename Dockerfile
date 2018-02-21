@@ -6,10 +6,10 @@ WORKDIR /frontend
 RUN npm install -g gulp
 RUN npm install -g yarn
 
-COPY . /frontend
-
 COPY package.json /frontend
 RUN yarn install
+
+COPY . /frontend
 
 RUN gulp build
 
