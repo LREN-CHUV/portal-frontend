@@ -14,8 +14,8 @@ angular
         link: function($scope, element) {
           $scope.search_history = [];
           $scope.search = {};
-          $scope.selectedDatasets = $location.search()["datasets"]
-            ? $location.search()["datasets"].split(",")
+          $scope.selectedDatasets = $location.search()["trainingDatasets"]
+            ? $location.search()["trainingDatasets"].split(",")
             : [];
           $scope.populatedGroups = {}; // FIXME: bad scope
           var api = {};
@@ -376,7 +376,7 @@ angular
             $scope.selectedDatasets.forEach(
               datasetName => selectedDatasetsObj[datasetName] = {}
             );
-            $scope.configuration["datasets"] = selectedDatasetsObj;
+            $scope.configuration["trainingDatasets"] = selectedDatasetsObj;
 
             // TODO
             // svg

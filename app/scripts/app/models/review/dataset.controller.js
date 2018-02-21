@@ -14,6 +14,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
   "$timeout",
   "$location",
   "$state",
+  "$q",
   function(
     $scope,
     $stateParams,
@@ -27,7 +28,8 @@ angular.module("chuvApp.models").controller("DatasetController", [
     $log,
     $timeout,
     $location,
-    $state
+    $state,
+    $q
   ) {
     $scope.loading = true;
     $scope.error = undefined;
@@ -53,24 +55,32 @@ angular.module("chuvApp.models").controller("DatasetController", [
     $scope.query.groupings = map_query("grouping");
     $scope.query.coVariables = map_query("covariable");
     $scope.query.filters = map_query("filter");
-    $scope.query.datasets = map_query("datasets");
+    $scope.query.trainingDatasets = map_query("trainingDatasets");
 
     let selectedVariables = [];
-    let selectedDatasets = [...$scope.query.datasets.map(d => d.code)];
+    let selectedDatasets = [...$scope.query.trainingDatasets.map(d => d.code)];
 
-    // TODO: refactor this
     const statistics = () => {
       $scope.loading = true;
       $scope.tableHeader = ["Variables", ...selectedDatasets];
-
-      let dataRows = []; // [{ index, label, data: [], type: "" }, ]
+      let rows = [];
+      // format
+      // const rows = [
+      //   {
+      //     code,
+      //     variable: { label },
+      //     parent: { code, label }
+      //     datasets: [{ code, label }],
+      //     continuous: [{ min, max, mean }],
+      //     nominal: [[{ key, count }]]
+      //     }
+      // ];
 
       // Get local or federation mode
-      let datasets = [];
       Config.then(config => config.mode === "local")
         // Forge queries for variable's statistics by dataset
         .then(isLocal =>
-          Promise.all(
+          $q.all(
             selectedDatasets.map(d =>
               Model.mining({
                 algorithm: {
@@ -89,76 +99,43 @@ angular.module("chuvApp.models").controller("DatasetController", [
           )
         )
         .then(response => response.map(r => r.data))
-        .then(datasets => // flatten [[]]
-          [].concat.apply(
-            [],
-            datasets.map(dataset => dataset.data.data.map(d => d))
+        .then(data => // flatten [[]]
+          [].concat.apply([], data.map(d => d.data.data.map(e => e)))
+        )
+        .then(data => // all variables reduced by code field
+          data.reduce((total, amount) => {
+            const existing = total.find(a => a.index === amount.index);
+            const isNominal = Object.keys(amount.count).length > 1;
+
+            if (existing) {
+              existing[isNominal ? "nominal" : "continuous"].push(amount);
+            } else {
+              const value = { index: amount.index };
+              value[[isNominal ? "nominal" : "continuous"]] = [amount];
+              total.push(value);
+            }
+
+            return total;
+          }, [])
+        )
+        .then(data => {
+          // Surcharge with variable data
+          rows = data;
+          return $q.all(data.map(d => Variable.getVariableData(d.index)));
+        })
+        .then(data =>
+          rows.map((r, i) =>
+            Object.assign({}, r, {
+              parent: data[i].parent,
+              variable: data[i].data,
+              datasets: selectedDatasets
+            })
           )
         )
         .then(data => {
-          // reduce each variable in a dict {index, label, type: null, data: [col1, col2]}
-          data.forEach(dataRow => {
-            const index = dataRow.index;
-            const mean = dataRow.mean && parseFloat(dataRow.mean).toFixed(2);
-            const min = dataRow.min && parseFloat(dataRow.min).toFixed(2);
-            const max = dataRow.max && parseFloat(dataRow.max).toFixed(2);
-            const countKeys = Object.keys(dataRow.count);
+          rows = data;
 
-            if (countKeys.length === 1) {
-              // continuous values
-              const value = `${mean} (${min}-${max})`;
-              const row = dataRows.find(d => d.index === index);
-              if (row) {
-                row.data.push(value);
-              } else {
-                dataRows.push({ index, data: [value], type: null });
-              }
-            } else {
-              // nominal
-              const row = dataRows.find(d => d.index === index);
-              const value = countKeys
-                .map(k => `${k}: ${dataRow.count[k]}`)
-                .join("<br>");
-              if (row) {
-                row.data.push(value);
-              } else {
-                dataRows.push({ index, data: [value], type: null });
-              }
-            }
-          });
-
-          $scope.tableRows = dataRows;
-          $scope.loading = false;
-
-          return Promise.all(
-            dataRows.map(d => Variable.getVariableData(d.index))
-          );
-        })
-        .then(rows => {
-          // add parent row for Each Variable
-          let dataRowsWithParent = [];
-          rows.forEach((row, i) => {
-            const parent = dataRowsWithParent.find(
-              p => p.index === row.parent.code
-            );
-            const dataRow = dataRows[i];
-            dataRow.label = row.data.label;
-
-            if (parent) {
-              dataRowsWithParent.push(dataRow);
-            } else {
-              // push parent and 1st children
-              dataRowsWithParent.push({
-                index: row.parent.code,
-                label: row.parent.label,
-                data: $scope.tableHeader.map(_ => ""), // hack for colspan
-                type: "header"
-              });
-              dataRowsWithParent.push(dataRow);
-            }
-          });
-
-          $scope.tableRows = dataRowsWithParent;
+          $scope.tableRows = formatTable(data);
           $scope.loading = false;
         })
         .catch(e => {
@@ -166,6 +143,55 @@ angular.module("chuvApp.models").controller("DatasetController", [
           $scope.error = e;
           console.log(e);
         });
+    };
+
+    // Format for angular
+    const formatTable = data => {
+      const tableRows = [];
+      data.forEach((d, i) => {
+        let row;
+
+        if (
+          i === 0 ||
+          (d.parent && i > 0 && d.parent.code !== data[i - 1].parent.code)
+        ) {
+          row = {
+            header: true,
+            data: [d.parent.label, ...selectedDatasets.map(() => "")]
+          };
+          tableRows.push(row);
+        }
+
+        if (d.continuous) {
+          row = {
+            data: [
+              d.variable.label,
+              ...d.continuous.map(e => {
+                const mean = (e.mean && parseFloat(e.mean).toFixed(2)) || 0;
+                const min = (e.min && parseFloat(e.min).toFixed(2)) || 0;
+                const max = (e.max && parseFloat(e.max).toFixed(2)) || 0;
+
+                return `${mean} (${min}-${max})`;
+              })
+            ]
+          };
+          tableRows.push(row);
+        } else {
+          row = {
+            data: [d.variable.label, ...selectedDatasets.map(() => "")]
+          };
+          tableRows.push(row);
+
+          tableRows.push(
+            ...Object.keys(d.nominal[0].count).map(k => ({
+              sub: true,
+              data: [k, ...d.nominal.map(e => e.count[k])]
+            }))
+          );
+        }
+      });
+
+      return tableRows;
     };
 
     const tsne = () =>
@@ -203,7 +229,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
 
     // Charts ressources
     var getHistogram = function(variable) {
-      return Variable.get_histo(variable.code);
+      return variable ? Variable.get_histo(variable.code) : null;
     };
 
     $scope.isSelected = function(variable) {
@@ -249,7 +275,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
       } else {
         selectedDatasets.push(code);
       }
-      $location.search("datasets", selectedDatasets.join(","));
+      $location.search("trainingDatasets", selectedDatasets.join(","));
 
       statistics();
     };
@@ -276,7 +302,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
         coVariables: unmap_category("coVariables"),
         groupings: unmap_category("groupings"),
         filters: unmap_category("filters"),
-        datasets: unmap_category("datasets"),
+        trainingDatasets: unmap_category("trainingDatasets"),
         graph_config: $scope.chartConfig,
         model_slug: ""
       };
@@ -297,6 +323,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
     };
 
     $scope.$on("event:loadModel", function(evt, model) {
+      selectedDatasets = [...$scope.query.trainingDatasets.map(d => d.code)];
       init(model);
     });
 
