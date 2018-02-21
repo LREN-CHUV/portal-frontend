@@ -28,10 +28,7 @@ exports.config = {
   //   "phantomjs.ghostdriver.cli.args": ["--loglevel=DEBUG"]
   // },
   capabilities: {
-    'browserName': 'chrome',
-    chromeOptions: {
-      args: [ "--headless"]
-    }
+    'browserName': 'chrome'
   },
   jasmineNodeOpts: {
     showColors: true,
