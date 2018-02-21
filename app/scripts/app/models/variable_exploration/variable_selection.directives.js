@@ -20,10 +20,10 @@ angular
             : [];
 
           // TODO: rewrite script in then or take a allDatasets prederective data
-          Variable.datasets().then(data => {
-            // $scope.allDatasets = data;
-            $scope.selectedDatasets =  data;
-          });
+          // Variable.datasets().then(data => {
+          //   // $scope.allDatasets = data;
+          //   $scope.selectedDatasets =  data;
+          // });
 
           // $scope.allDatasets
 
