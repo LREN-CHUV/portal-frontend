@@ -1,0 +1,33 @@
+<div class="panel explore-box">
+  <div class="panel-heading">
+    <h2>Available Methods</h2>
+  </div>
+  <div class="panel-body">
+    <!--<pre>{{avmethods.ml_methods | json}}</pre>-->
+    <div class="available_methods" >
+      <span ng-if="method.available"
+            ng-repeat="method in avmethods.ml_methods | filter:{type:'predictive_model'}  | orderBy:'-label'">
+          <span class="label label-default" ng-if="method.nyi">Coming soon</span>
+          <button class="btn" ng-disabled="method.available" ng-bind="method.label">
+          </button>
+      </span>
+
+      <span ng-if="method.available"
+            ng-repeat="method in avmethods.ml_methods | filter:{type:'features_extraction'}  | orderBy:'-label'">
+          <span class="label label-default" ng-if="method.nyi">Coming soon</span>
+          <button class="btn" ng-disabled="method.available" ng-bind="method.label">
+          </button>
+      </span>
+
+      <span ng-if="method.available"
+            ng-repeat="method in avmethods.ml_methods | filter:{type:'statistics'}  | orderBy:'-label'">
+          <span class="label label-default" ng-if="method.nyi">Coming soon</span>
+          <button class="btn" ng-disabled="method.available" ng-bind="method.label">
+          </button>
+      </span>
+    </div>
+
+  </div>
+
+
+</div>

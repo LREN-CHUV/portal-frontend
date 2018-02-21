@@ -39,7 +39,7 @@ angular.module("chuvApp.components.criteria").factory("Variable", [
         .get(backendUrl + "/variables/hierarchy")
         .then(function(response) {
           var data = response.data;
-
+          cache.put("hierarchy", data);
           return data;
         });
     };

@@ -91,7 +91,9 @@ var appScripts = [
   "./" + appConfig.app + "/scripts/components/widget/widget.service.js",
   "./" + appConfig.app + "/scripts/components/toolbar/toolbar.module.js",
   "./" + appConfig.app + "/scripts/components/toolbar/toolbar.js",
-  "./" + appConfig.app + "/scripts/components/hightlight/hightlight.filter.js"
+  "./" + appConfig.app + "/scripts/components/hightlight/hightlight.filter.js",
+  "./" + appConfig.app + "/scripts/app/models/variable_exploration/breadcrumb.component.js",
+  "./" + appConfig.app + "/scripts/app/models/variable_exploration/available_methods.component.js"
 ];
 
 module.exports = appScripts;
