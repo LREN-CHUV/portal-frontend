@@ -230,14 +230,16 @@ describe("the EE (explore) page ", function() {
 
   describe("in the panel `path` ", function() {
     var breadcrumbPanel, selectVariablePanel, bubble, breadcrumbs;
-    beforeEach(function() {
-      browser.get("http://localhost:8000/explore");
-      selectVariablePanel = element.all(by.css(".panel")).get(1);
-      breadcrumbPanel = element.all(by.css(".panel")).get(2);
-      bubble = selectVariablePanel
-        .all(by.css(".panel-body:nth-child(1)>svg circle.node--leaf"))
-        .get(0);
-      breadcrumbs = breadcrumbPanel.all(by.css(".panel-body span"));
+    beforeEach(function(done) {
+      browser.get("http://localhost:8000/explore").then(function() {
+        selectVariablePanel = element.all(by.css(".panel")).get(1);
+        breadcrumbPanel = element.all(by.css(".panel")).get(2);
+        bubble = selectVariablePanel
+          .all(by.css(".panel-body:nth-child(1)>svg circle.node--leaf"))
+          .get(0);
+        breadcrumbs = breadcrumbPanel.all(by.css(".panel-body span"));
+        done();
+      });
     });
 
     it("should display the breadcrumb (path) to that variable when a bubble item is clicked", function(
@@ -292,13 +294,13 @@ describe("the EE (explore) page ", function() {
           if (i === 2) {
             expect(txt[0]).toEqual("polymorphism");
             expect(toNumber(polymorphismBubble.getAttribute("r"))).toBeLessThan(
-              50
+              300
             );
             bubble.click();
             breadcrumbs.get(3).click();
             expect(
               toNumber(polymorphismBubble.getAttribute("r"))
-            ).toBeGreaterThan(300);
+            ).toBeGreaterThan(1700);
             done();
           }
         });
