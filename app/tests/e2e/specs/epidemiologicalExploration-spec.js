@@ -334,7 +334,7 @@ describe("the EE (explore) page ", function() {
     });
   });
 
-  fdescribe("in the panel `variable-configuration` ", function() {
+  describe("in the panel `variable-configuration` ", function() {
     var panel, buttons, cols;
     beforeEach(function() {
       panel = element.all(by.css(".panel")).get(4);
