@@ -214,13 +214,91 @@ describe("the EE (explore) page ", function() {
       details.each(function(el, i) {
         el.getText().then(function(txt) {
           text.push(txt);
-          if (i == 3) {
+          if (i === 3) {
             expect(text[0]).toEqual("ApoE4");
             expect(text[1]).toEqual("adni-merge");
             expect(text[2]).toEqual("polynominal");
             expect(text[3]).toEqual(
               "Apolipoprotein E (APOE) e4 allele: is the strongest risk factor for Late Onset Alzheimer Disease (LOAD). At least one copy of APOE-e4"
             );
+            done();
+          }
+        });
+      });
+    });
+  });
+
+  describe("in the panel `path` ", function() {
+    var breadcrumbPanel, selectVariablePanel, bubble, breadcrumbs;
+    beforeEach(function() {
+      browser.get("http://localhost:8000/explore");
+      selectVariablePanel = element.all(by.css(".panel")).get(1);
+      breadcrumbPanel = element.all(by.css(".panel")).get(2);
+      bubble = selectVariablePanel
+        .all(by.css(".panel-body:nth-child(1)>svg circle.node--leaf"))
+        .get(0);
+      breadcrumbs = breadcrumbPanel.all(by.css(".panel-body span"));
+    });
+
+    it("should display the breadcrumb (path) to that variable when a bubble item is clicked", function(
+      done
+    ) {
+      bubble.click();
+      var text = [];
+      breadcrumbs.each(function(el, i) {
+        el.getText().then(function(txt) {
+          text.push(txt);
+          if (i === 5) {
+            expect(text[0]).toEqual("Genetic");
+            expect(text[1]).toEqual("(1)");
+            expect(text[2]).toEqual(">");
+            expect(text[3]).toEqual("polymorphism");
+            expect(text[4]).toEqual(">");
+            expect(text[5]).toEqual("ApoE4");
+            done();
+          }
+        });
+      });
+    });
+
+    it("should display the path to that item and not more when a breadcrumb item is clicked", function(
+      done
+    ) {
+      bubble.click();
+      breadcrumbs.get(3).click();
+      newBreadcrumbs = breadcrumbPanel.all(by.css(".panel-body span"));
+      var text = [];
+      newBreadcrumbs.each(function(el, i) {
+        el.getText().then(function(txt) {
+          text.push(txt);
+          if (i === 3) {
+            expect(text[0]).toEqual("Genetic");
+            expect(text[1]).toEqual("(1)");
+            expect(text[2]).toEqual(">");
+            expect(text[3]).toEqual("polymorphism");
+            done();
+          }
+        });
+      });
+    });
+
+    it("should zoom the corresponding bubble item when a breadcrumb item is clicked", function(
+      done
+    ) {
+      var polymorphismBubble = selectVariablePanel.all(by.css(".node")); //.get(170);
+      polymorphismBubble.each(function(el, i) {
+        el.all(by.css("title")).getAttribute("innerHTML").then(function(txt) {
+          //console.log('txt:', txt[0], i);
+          if (i === 2) {
+            expect(txt[0]).toEqual("polymorphism");
+            expect(toNumber(polymorphismBubble.getAttribute("r"))).toBeLessThan(
+              50
+            );
+            bubble.click();
+            breadcrumbs.get(3).click();
+            expect(
+              toNumber(polymorphismBubble.getAttribute("r"))
+            ).toBeGreaterThan(300);
             done();
           }
         });
