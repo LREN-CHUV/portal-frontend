@@ -457,7 +457,7 @@ angular.module("chuvApp.models").controller("ReviewController", [
         covariable: unmap_category("coVariables"),
         grouping: unmap_category("groupings"),
         filter: unmap_category("filters"),
-        trainingDatasets: unmap_category("trainingDatasets")
+        trainingDatasets: $location.search().trainingDatasets
       };
 
       $location.url(
