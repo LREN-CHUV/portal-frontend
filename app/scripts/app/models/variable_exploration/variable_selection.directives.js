@@ -396,6 +396,13 @@ angular
             //   })
             //   .style("opacity", 0.2);
           };
+
+          $scope.$on("event:URLtrainingDatasets", function(event, data) {
+            console.log("event:URLtrainingDatasets");
+            data.map(function(curVal) {
+              return $scope.selectedDatasets.push(curVal.code);
+            });
+          });
         }
       };
     }

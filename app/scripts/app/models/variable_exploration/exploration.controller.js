@@ -178,6 +178,12 @@ angular.module("chuvApp.models").controller("ExploreController", [
       })
       .then(data => {
         $scope.allDatasets = data;
+        if ( !$location.search()["trainingDatasets"] ) {
+          data.map(function(curVal) {
+            return $scope.configuration.trainingDatasets[curVal.code] = null;
+          });
+          $scope.$broadcast("event:URLtrainingDatasets", data);
+        }
       })
       .catch(e => {
         console.log(e);

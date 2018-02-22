@@ -23,7 +23,7 @@ angular.module("chuvApp.components.criteria").factory("Variable", [
       }
     );
 
-    resource.datasets = () => 
+    resource.datasets = () =>
       $http
         .get(backendUrl + "/datasets")
         .then(response => response.data.map(d => ({ code: d })));
@@ -39,6 +39,7 @@ angular.module("chuvApp.components.criteria").factory("Variable", [
         .get(backendUrl + "/variables/hierarchy")
         .then(function(response) {
           var data = response.data;
+          cache.put("hierarchy", data);
 
           return data;
         });
