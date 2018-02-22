@@ -153,6 +153,33 @@ describe("the EE (explore) page ", function() {
         done();
       });
     });
+
+    it("should add a dataset to url params (as in explore?trainingDatasets=foo,bar) when the corresponding dataset button is clicked", function(
+      done
+    ) {
+      var datasetAdni = panel
+        .all(by.css(".dataset-list span:nth-child(1) a"))
+        .get(0);
+      var datasetPpmi = panel
+        .all(by.css(".dataset-list span:nth-child(2) a"))
+        .get(0);
+      var scrolled = browser.executeScript(
+        "arguments[0].scrollIntoView(false);",
+        datasetAdni.getWebElement()
+      );
+      expect(browser.getCurrentUrl()).toContain("/explore");
+      scrolled.then(function() {
+        datasetAdni.click();
+        expect(browser.getCurrentUrl()).toContain(
+          "/explore?trainingDatasets=adni"
+        );
+        datasetPpmi.click();
+        expect(browser.getCurrentUrl()).toContain(
+          "/explore?trainingDatasets=adni,ppmi"
+        );
+        done();
+      });
+    });
   });
 
   describe("in the panel `select variable` ", function() {
@@ -287,10 +314,9 @@ describe("the EE (explore) page ", function() {
     it("should zoom the corresponding bubble item when a breadcrumb item is clicked", function(
       done
     ) {
-      var polymorphismBubble = selectVariablePanel.all(by.css(".node")); //.get(170);
+      var polymorphismBubble = selectVariablePanel.all(by.css(".node"));
       polymorphismBubble.each(function(el, i) {
         el.all(by.css("title")).getAttribute("innerHTML").then(function(txt) {
-          //console.log('txt:', txt[0], i);
           if (i === 2) {
             expect(txt[0]).toEqual("polymorphism");
             expect(toNumber(polymorphismBubble.getAttribute("r"))).toBeLessThan(
@@ -308,7 +334,7 @@ describe("the EE (explore) page ", function() {
     });
   });
 
-  describe("in the panel `variable-configuration` ", function() {
+  fdescribe("in the panel `variable-configuration` ", function() {
     var panel, buttons, cols;
     beforeEach(function() {
       panel = element.all(by.css(".panel")).get(4);
@@ -387,19 +413,35 @@ describe("the EE (explore) page ", function() {
     });
 
     it("should add a variable to the `Variable` column when the variable bubble item is clicked and then the first button `as variable` is clicked", function() {
-      bubble = get_ApoE4_bubble();
+      var bubble = get_ApoE4_bubble();
       bubble.click();
       buttons.get(0).click();
       expect(cols.get(0).all(by.css("h3+div")).count()).toEqual(1);
     });
 
     it("should add a variable to the `Covariable - grouping` column when the variable bubble item is clicked and then the first button `as variable` is clickedand and then the second button `as covariable`", function() {
-      bubble = get_ApoE4_bubble();
+      var bubble = get_ApoE4_bubble();
       bubble.click();
       buttons.get(0).click();
       buttons.get(1).click();
       expect(cols.get(0).all(by.css("h3+div")).count()).toEqual(0);
       expect(cols.get(1).all(by.css("h3+div")).count()).toEqual(1);
+    });
+
+    it("should add a variable name to url params (as in explore?trainingDatasets=foo) when the corresponding bubble item is clicked, and then the button `as variable`", function() {
+      var bubble = get_ApoE4_bubble();
+      expect(browser.getCurrentUrl()).toContain("/explore");
+      bubble.click();
+      buttons.get(0).click();
+      expect(browser.getCurrentUrl()).toContain("/explore?variable=apoe4");
+    });
+
+    it("should add a variable name to url params as covariable (as in explore?grouping=foo) when the corresponding bubble item is clicked, and then the button `as variable`", function() {
+      var bubble = get_ApoE4_bubble();
+      expect(browser.getCurrentUrl()).toContain("/explore");
+      bubble.click();
+      buttons.get(1).click();
+      expect(browser.getCurrentUrl()).toContain("/explore?grouping=apoe4");
     });
   });
 
