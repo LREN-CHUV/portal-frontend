@@ -258,7 +258,7 @@ angular-xeditable@^0.8.1:
   dependencies:
     angular "~1.x"
 
-"angular@>=1.2.26 <=1.6", angular@^1.6.8, angular@~1.x:
+"angular@>=1.2.26 <=1.6", angular@^1.4.7, angular@^1.6.8, angular@~1.x:
   version "1.6.9"
   resolved "https://registry.yarnpkg.com/angular/-/angular-1.6.9.tgz#bc812932e18909038412d594a5990f4bb66c0619"
 
@@ -6663,6 +6663,13 @@ property-is-enumerable-x@^1.1.0:
 propprop@^0.3.0:
   version "0.3.1"
   resolved "https://registry.yarnpkg.com/propprop/-/propprop-0.3.1.tgz#a049a3568b896440067d15d8ec9f33735e570178"
+
+protractor-helpers@^1.1.472:
+  version "1.1.472"
+  resolved "https://registry.yarnpkg.com/protractor-helpers/-/protractor-helpers-1.1.472.tgz#2fbc2b61131bf48663bda2bff0e4702f32347d2e"
+  dependencies:
+    angular "^1.4.7"
+    glob "^5.0.15"
 
 protractor-jasmine-cucumber@^0.2.2:
   version "0.2.2"
