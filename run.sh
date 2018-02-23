@@ -2,15 +2,30 @@
 
 set -e
 
+echo "INFO: Pass --federation argument to start in federation mode. Default is local"
+MODE=local
+
 for param in "$@"
 do
   if [ "--no-cache" == "$param" ]; then
-    no_cache=0
-    break;
+    NO_CACHE=0
+  fi
+
+  if [ "--federation" == "$param" ]; then
+    MODE=federation
   fi
 done
 
-if [ $no_cache ] ; then
+echo "INFO: starting in $MODE mode"
+if [ $MODE = "local" ]; then
+  echo "{\"version\": \"beta 0.0\", \"instanceName\": \"CHUV-DEV\", \"mode\": \"local\"}" > app/scripts/app/config.json
+else
+  echo "{\"version\": \"beta 0.0\", \"instanceName\": \"CHUV-DEV\", \"mode\": \"federation\"}" > app/scripts/app/config.json
+fi
+
+echo
+
+if [ $NO_CACHE ] ; then
     echo "INFO: --no-cache"
     docker build --no-cache -t hbpmip/portal-frontend-dev -f ./Dockerfile-dev .
 else

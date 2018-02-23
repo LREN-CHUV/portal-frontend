@@ -9,9 +9,9 @@ RUN webdriver-manager update --standalone --versions.chrome 2.28 --gecko false
 
 RUN npm install -g yarn # FIXME
 
-COPY . /frontend
-
 COPY package.json /frontend
 RUN yarn install
+
+COPY . /frontend
 
 CMD gulp
