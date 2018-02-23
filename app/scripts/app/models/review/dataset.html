@@ -1,109 +1,113 @@
 <div class="dataset-box">
   <div class="dataset-container">
-    <div class="panel style="flex: 0 0 0">
-      <div class="panel-heading">Datasets</div>
-      <div class="panel-body">
-        <ul class="list-group">
+    <div class="panel style=" flex: 0 0 0 ">
+      <div class="panel-heading ">Datasets</div>
+      <div class="panel-body ">
+        <ul class="list-group ">
           <li
-            ng-repeat="dataset in allDatasets"
-            class="list-group-item"
-            ng-class="{active: isDatasetSelected(dataset.code)}">
+            ng-repeat="dataset in allDatasets "
+            class="list-group-item "
+            ng-class="{active: isDatasetSelected(dataset.code)} ">
             <a
-              href=""
-              ng-click="selectDataset(dataset.code)"
+              href=" "
+              ng-click="selectDataset(dataset.code) "
             >{{dataset.code}}</a>
           </li>
         </ul>
       </div>
     </div>
-    <div class="panel" style="flex: 0 0 1">
-      <div class="panel-heading">Model</div>
-      <div class="panel-body dataset-list scrollable">
+    <div class="panel " style="flex: 0 0 1 ">
+      <div class="panel-heading ">Model</div>
+      <div class="panel-body dataset-list scrollable ">
         <h5>Variable </h5>
-        <p ng-repeat="variable in query.variables">
+        <p ng-repeat="variable in query.variables ">
           <a
-            ng-click="selectVariable(variable)"
-            class="active">
+            ng-click="selectVariable(variable) "
+            class="active ">
             {{variable.code}}
           </a>
         </p>
         <h5>CoVariables</h5>
-        <p ng-repeat="covariable in query.coVariables">
+        <p ng-repeat="covariable in query.coVariables ">
           <a
-            ng-click="selectVariable(covariable)"
-            ng-class="{active: isSelected(covariable)}">
+            ng-click="selectVariable(covariable) "
+            ng-class="{active: isSelected(covariable)} ">
             {{covariable.code}}
           </a>
         </p>
         <h5>Groupings</h5>
-        <p ng-repeat="covariable in query.groupings">
+        <p ng-repeat="covariable in query.groupings ">
           <a
-            ng-click="selectVariable(covariable)"
-            ng-class="{active: isSelected(covariable)}">
+            ng-click="selectVariable(covariable) "
+            ng-class="{active: isSelected(covariable)} ">
             {{covariable.code}}
           </a>
         </p>
         <h5>
-            <a ng-click="configureFilterQuery()">
-                <i class="ti ti-panel"></i>
+            <a ng-click="configureFilterQuery() ">
+                <i class="ti ti-panel "></i>
             </a>
             Filter variable
         </h5>
-        <p ng-repeat="filter in query.filters">
-            <a ng-click="configureFilterQuery()">
+        <p ng-repeat="filter in query.filters ">
+            <a ng-click="configureFilterQuery() ">
                 {{filter.code}}
             </a>
         </p>
-        <div class="query" ng-bind="query.textQuery"></div>
+        <div class="query " ng-bind="query.textQuery "></div>
       </div>
     </div>
-    <div class="panel" style="flex-grow: 2">
-      <uib-tabset active="active">
+    <div class="panel " style="flex-grow: 2 ">
+      <uib-tabset active="active ">
 
-        <uib-tab index="0" heading="Table">
-          <div class="panel-body scrollable">
-            <div ng-if="loading" class="loading">
-              <div class="fa fa-spin fa-spinner"></div>
+        <uib-tab index="0 " heading="Table ">
+          <div class="panel-body scrollable ">
+            <div ng-if="loading " class="loading ">
+              <div class="fa fa-spin fa-spinner "></div>
             </div>
-            <div ng-if="error">
+            <div ng-if="error ">
               There was an error perfoming the method
-              <pretty-json data="error"></pretty-json>
+              <pretty-json data="error "></pretty-json>
             </div>
-            <div ng-if="tableHeader"
-              style="background-color: #d5e5fd; padding: 0.5em">
-              <table class="table">
-                <tr style="background-color: transparent">
-                  <th ng-repeat="column in tableHeader track by $index">
-                    <h6 style="text-transform: uppercase">{{column}}</h6>
+            <div ng-if="tableHeader "
+              style="background-color: #d5e5fd; padding: 0.5em ">
+              <table class="table ">
+                <tr style="background-color: transparent ">
+                  <th ng-repeat="column in tableHeader track by $index ">
+                    <h6 style="text-transform: uppercase ">{{column}}</h6>
                   </th>
                 </tr>
                 <tr
                   ng-repeat="row in tableRows track by $index"
-                  ng-class="{ 'white-row': row.type !== 'header' }">
-                  <td class="header-row">{{row.label || row.index}}</td>
-                  <td ng-repeat="column in row.data track by $index" ng-bind-html="column"></td>
+                  ng-class="{ 'white-row': row.header } ">
+                  <td
+                    ng-repeat="column in row.data track by $index"
+                    ng-class="{ 'header-row': row.header, 'sub-row': row.sub }">
+                    {{column}}
+                  </td>
+
                 </tr>
               </table>
             </div>
           </div>
-        </uib-tab>
+          </uib-tab>
 
-        <uib-tab index="1" heading="Histogram">
+          <uib-tab index="1" heading="Histogram">
             <div class="panel-body scrollable">
-                <div ng-if="histogramLoading" class="loading">
-                  <div class="fa fa-spin fa-spinner"></div>
-                </div>
-                <div ng-if="histogramError">
-                  There was an error perfoming the method
-                  <pretty-json data="histogramError"></pretty-json>
-                </div>
-                <div ng-if="histogramData" ng-repeat="data in histogramData">
-                    <highchart config="data" class="highchart-width"></highchart>
-                </div>
+              <div ng-if="histogramLoading" class="loading">
+                <div class="fa fa-spin fa-spinner"></div>
               </div>
-        </uib-tab>
+              <div ng-if="histogramError">
+                There was an error perfoming the method
+                <pretty-json data="histogramError"></pretty-json>
+              </div>
+              <div ng-if="histogramData" ng-repeat="data in histogramData">
+                <highchart config="data" class="highchart-width highcharts-container"></highchart>
+              </div>
+            </div>
+          </uib-tab>
 
-        <!-- <uib-tab index="2" heading="t-SNE">
+  <!-- <uib-tab index="2" heading="t-SNE">
           <div class="panel-body scrollable">
             <div ng-if="tsneLoading" class="loading">
               <div class="fa fa-spin fa-spinner"></div>
@@ -116,17 +120,15 @@
           </div>
         </uib-tab> -->
 
-      </uib-tabset>
-    </div>
-  </div>
-  <div class="dataset-footer panel">
-  </div>
+  </uib-tabset>
+</div>
+</div>
+<div class="dataset-footer panel">
+</div>
 
-  <div class="execute">
-  <rounded-button
-    label="{{'common.button.execute' | translate}}"
-    icon-class="ti {{ loading_model ? 'ti-reload ti-spin reverse-direction' : 'ti-arrow-down' }}"
+<div class="execute">
+  <rounded-button label="{{'common.button.execute' | translate}}" icon-class="ti {{ loading_model ? 'ti-reload ti-spin reverse-direction' : 'ti-arrow-down' }}"
     on-click="open_experiment()">
   </rounded-button>
-  </div>
+</div>
 </div>
