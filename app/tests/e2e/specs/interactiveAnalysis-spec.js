@@ -92,106 +92,103 @@ describe("the IA (review) page ", function() {
     });
   });
 
-  fdescribe(
-    "when reached using the url /review?execute=true&variable=rightmcggmiddlecingulategyrus&covariable=righthippocampus,leftmtgmiddletemporalgyrus,leftstgsuperiortemporalgyrus,lefttmptemporalpole,rightfugfusiformgyrus,rightmtgmiddletemporalgyrus,rightppplanumpolare,rightventraldc&grouping=&filter=brainstem&trainingDatasets=",
-    function() {
-      beforeEach(function() {
-        browser.get(
-          "http://localhost:8000/review?execute=true&variable=rightmcggmiddlecingulategyrus&covariable=righthippocampus,leftmtgmiddletemporalgyrus,leftstgsuperiortemporalgyrus,lefttmptemporalpole,rightfugfusiformgyrus,rightmtgmiddletemporalgyrus,rightppplanumpolare,rightventraldc&grouping=&filter=brainstem&trainingDatasets="
-        );
-        panels = element.all(by.css(".page-content .dataset-container .panel"));
-      });
+  describe("when reached using the url /review?execute=true&variable=rightmcggmiddlecingulategyrus&covariable=righthippocampus,leftmtgmiddletemporalgyrus,leftstgsuperiortemporalgyrus,lefttmptemporalpole,rightfugfusiformgyrus,rightmtgmiddletemporalgyrus,rightppplanumpolare,rightventraldc&grouping=&filter=brainstem&trainingDatasets=", function() {
+    beforeEach(function() {
+      browser.get(
+        "http://localhost:8000/review?execute=true&variable=rightmcggmiddlecingulategyrus&covariable=righthippocampus,leftmtgmiddletemporalgyrus,leftstgsuperiortemporalgyrus,lefttmptemporalpole,rightfugfusiformgyrus,rightmtgmiddletemporalgyrus,rightppplanumpolare,rightventraldc&grouping=&filter=brainstem&trainingDatasets="
+      );
+      panels = element.all(by.css(".page-content .dataset-container .panel"));
+    });
 
-      it("should have in the second panel under `Variable` the variable : *rightmcggmiddlecingulategyrus* ", function(
-        done
-      ) {
-        panels
-          .get(1)
-          .all(by.css("h5:nth-child(1) + p>a"))
-          .get(0)
-          .getText()
-          .then(function(txt) {
-            expect(txt.toLowerCase()).toEqual("rightmcggmiddlecingulategyrus");
-            done();
+    it("should have in the second panel under `Variable` the variable : *rightmcggmiddlecingulategyrus* ", function(
+      done
+    ) {
+      panels
+        .get(1)
+        .all(by.css("h5:nth-child(1) + p>a"))
+        .get(0)
+        .getText()
+        .then(function(txt) {
+          expect(txt.toLowerCase()).toEqual("rightmcggmiddlecingulategyrus");
+          done();
+        });
+    });
+
+    it("should have in the second panel under `CoVariables` the whole list of variables ", function(
+      done
+    ) {
+      var text = [], els = [];
+      var h5count = 0, j = 0;
+      //h5:nth-of-type(2) ~ p:not(h5:nth-of-type(3) ~ p)      ----> not understood by protractor's css locators
+      panels.get(1).all(by.css("h5, p")).each(function(el, i) {
+        els.push(el);
+        protractor.promise
+          .all([el.getTagName(), el.getText()])
+          .then(function(all) {
+            var tagname = all[0];
+            var txt = all[1];
+            if (tagname === "h5") {
+              h5count++;
+            }
+            if (h5count === 2 && tagname === "p") {
+              text.push(txt);
+              j++;
+              if (j === 8) {
+                expect(text[0]).toEqual("righthippocampus");
+                expect(text[1]).toEqual("leftmtgmiddletemporalgyrus");
+                expect(text[2]).toEqual("leftstgsuperiortemporalgyrus");
+                expect(text[3]).toEqual("lefttmptemporalpole");
+                expect(text[4]).toEqual("rightfugfusiformgyrus");
+                expect(text[5]).toEqual("rightmtgmiddletemporalgyrus");
+                expect(text[6]).toEqual("rightppplanumpolare");
+                expect(text[7]).toEqual("rightventraldc");
+                done();
+              }
+            }
           });
       });
+    });
 
-      it("should have in the second panel under `CoVariables` the whole list of variables ", function(
-        done
-      ) {
-        var text = [], els = [];
-        var h5count = 0, j = 0;
-        //h5:nth-of-type(2) ~ p:not(h5:nth-of-type(3) ~ p)      ----> not understood by protractor's css locators
-        panels.get(1).all(by.css("h5, p")).each(function(el, i) {
-          els.push(el);
-          protractor.promise
-            .all([el.getTagName(), el.getText()])
-            .then(function(all) {
-              var tagname = all[0];
-              var txt = all[1];
-              if (tagname === "h5") {
-                h5count++;
+    it("should have in the second panel under `Filter variable` the variable *brainstem* ", function(
+      done
+    ) {
+      var text = [], els = [];
+      var h5count = 0, j = 0;
+      //h5:nth-of-type(2) ~ p:not(h5:nth-of-type(3) ~ p)      ----> not understood byprotractgor css locators
+      panels.get(1).all(by.css("h5, p")).each(function(el, i) {
+        els.push(el);
+        protractor.promise
+          .all([el.getTagName(), el.getText()])
+          .then(function(all) {
+            var tagname = all[0];
+            var txt = all[1];
+            if (tagname === "h5") {
+              h5count++;
+            }
+            if (h5count === 4 && tagname === "p") {
+              text.push(txt);
+              j++;
+              if (j === 1) {
+                expect(text[0]).toEqual("brainstem");
+                done();
               }
-              if (h5count === 2 && tagname === "p") {
-                text.push(txt);
-                j++;
-                if (j === 8) {
-                  expect(text[0]).toEqual("righthippocampus");
-                  expect(text[1]).toEqual("leftmtgmiddletemporalgyrus");
-                  expect(text[2]).toEqual("leftstgsuperiortemporalgyrus");
-                  expect(text[3]).toEqual("lefttmptemporalpole");
-                  expect(text[4]).toEqual("rightfugfusiformgyrus");
-                  expect(text[5]).toEqual("rightmtgmiddletemporalgyrus");
-                  expect(text[6]).toEqual("rightppplanumpolare");
-                  expect(text[7]).toEqual("rightventraldc");
-                  done();
-                }
-              }
-            });
-        });
+            }
+          });
       });
+    });
 
-      it("should have in the second panel under `Filter variable` the variable *brainstem* ", function(
-        done
-      ) {
-        var text = [], els = [];
-        var h5count = 0, j = 0;
-        //h5:nth-of-type(2) ~ p:not(h5:nth-of-type(3) ~ p)      ----> not understood byprotractgor css locators
-        panels.get(1).all(by.css("h5, p")).each(function(el, i) {
-          els.push(el);
-          protractor.promise
-            .all([el.getTagName(), el.getText()])
-            .then(function(all) {
-              var tagname = all[0];
-              var txt = all[1];
-              if (tagname === "h5") {
-                h5count++;
-              }
-              if (h5count === 4 && tagname === "p") {
-                text.push(txt);
-                j++;
-                if (j === 1) {
-                  expect(text[0]).toEqual("brainstem");
-                  done();
-                }
-              }
-            });
-        });
-      });
-
-      it("should open the experiment page with all url params passed (plus execute=true) when the button `execute` is clicked ", function() {
-        element
-          .all(by.css(".static-content .dataset-box .execute .btn-round"))
-          .get(0)
-          .click();
-        //notes :
-        //- variable becomes variables
-        //- covariable becomes coVariables
-        //- filter becomes filters
-        expect(browser.getCurrentUrl()).toContain(
-          "experiment/?variables=rightmcggmiddlecingulategyrus&coVariables=righthippocampus,leftmtgmiddletemporalgyrus,leftstgsuperiortemporalgyrus,lefttmptemporalpole,rightfugfusiformgyrus,rightmtgmiddletemporalgyrus,rightppplanumpolare,rightventraldc&filters=brainstem"
-        );
-      });
-    }
-  );
+    it("should open the experiment page with all url params passed (plus execute=true) when the button `execute` is clicked ", function() {
+      element
+        .all(by.css(".static-content .dataset-box .execute .btn-round"))
+        .get(0)
+        .click();
+      //notes :
+      //- variable becomes variables
+      //- covariable becomes coVariables
+      //- filter becomes filters
+      expect(browser.getCurrentUrl()).toContain(
+        "experiment/?variables=rightmcggmiddlecingulategyrus&coVariables=righthippocampus,leftmtgmiddletemporalgyrus,leftstgsuperiortemporalgyrus,lefttmptemporalpole,rightfugfusiformgyrus,rightmtgmiddletemporalgyrus,rightppplanumpolare,rightventraldc&filters=brainstem"
+      );
+    });
+  });
 });
