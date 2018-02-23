@@ -3,8 +3,7 @@
     <h2>Available Methods</h2>
   </div>
   <div class="panel-body">
-    <!--<pre>{{avmethods.ml_methods | json}}</pre>-->
-    <div class="available_methods" >
+    <div class="available_methods">
 
       <span ng-if="method.available"
             ng-repeat="method in avmethods.ml_methods | filter:{type:'predictive_model'}  | orderBy:'-label'">
