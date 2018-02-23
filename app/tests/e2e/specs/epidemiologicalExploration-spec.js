@@ -1,5 +1,3 @@
-var helpers = require("protractor-helpers");
-
 function toNumber(promiseOrValue) {
   // if it is not a promise, then convert a value
   if (!protractor.promise.isPromise(promiseOrValue)) {
@@ -27,6 +25,20 @@ describe("the EE (explore) page ", function() {
   }
 
   beforeEach(function(done) {
+    jasmine.addMatchers({
+      toHaveClass: function() {
+        return {
+          compare: function(actual, expected) {
+            return {
+              pass: actual.getAttribute("class").then(function(classes) {
+                return classes.split(" ").indexOf(expected) !== -1;
+              })
+            };
+          }
+        };
+      }
+    });
+
     browser.get("http://localhost:8000/explore");
     loginButton = element.all(by.css("#login_btn"));
     loginButton.count().then(function(count) {
@@ -149,7 +161,7 @@ describe("the EE (explore) page ", function() {
       );
       scrolled.then(function() {
         dataset.click();
-        expect(helpers.hasClass(dataset, "active")).toBe(true);
+        expect(dataset).toHaveClass("active");
         done();
       });
     });
