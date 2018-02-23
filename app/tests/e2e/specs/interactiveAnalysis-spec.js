@@ -111,7 +111,7 @@ fdescribe("the IA (review) page ", function() {
       ) {
         var text = [], els = [];
         var h5count = 0, j = 0;
-        //h5:nth-of-type(2) ~ p:not(h5:nth-of-type(3) ~ p)      ----> not understood byprotractgor css locators
+        //h5:nth-of-type(2) ~ p:not(h5:nth-of-type(3) ~ p)      ----> not understood by protractor's css locators
         panels.get(1).all(by.css("h5, p")).each(function(el, i) {
           els.push(el);
           protractor.promise
@@ -167,6 +167,20 @@ fdescribe("the IA (review) page ", function() {
               }
             });
         });
+      });
+
+      it("should open the experiment page with all url params passed (plus execute=true) when the button `execute` is clicked ", function() {
+        element
+          .all(by.css(".static-content .dataset-box .execute .btn-round"))
+          .get(0)
+          .click();
+        //notes :
+        //- variable becomes variables
+        //- covariable becomes coVariables
+        //- filter becomes filters
+        expect(browser.getCurrentUrl()).toContain(
+          "experiment/?variables=rightmcggmiddlecingulategyrus&coVariables=righthippocampus,leftmtgmiddletemporalgyrus,leftstgsuperiortemporalgyrus,lefttmptemporalpole,rightfugfusiformgyrus,rightmtgmiddletemporalgyrus,rightppplanumpolare,rightventraldc&filters=brainstem"
+        );
       });
     }
   );
