@@ -1,4 +1,4 @@
-fdescribe("the IA (review) page ", function() {
+describe("the IA (review) page ", function() {
   beforeEach(function(done) {
     browser.get("http://localhost:8000/review");
     loginButton = element.all(by.css("#login_btn"));
@@ -50,19 +50,29 @@ fdescribe("the IA (review) page ", function() {
     it("should have the first panel that contains the title *Datasets*", function(
       done
     ) {
-      panels.get(0).all(by.css(".panel-heading")).getText().then(function(txt) {
-        expect(txt.toLowerCase()).toEqual("dataset");
-        done();
-      });
+      panels
+        .get(0)
+        .all(by.css(".panel-heading"))
+        .get(0)
+        .getText()
+        .then(function(txt) {
+          expect(txt.toLowerCase()).toEqual("datasets");
+          done();
+        });
     });
 
     it("should have the second panel that contains the title *Model*", function(
       done
     ) {
-      panels.get(1).all(by.css(".panel-heading")).getText().then(function(txt) {
-        expect(txt.toLowerCase()).toEqual("model");
-        done();
-      });
+      panels
+        .get(1)
+        .all(by.css(".panel-heading"))
+        .get(0)
+        .getText()
+        .then(function(txt) {
+          expect(txt.toLowerCase()).toEqual("model");
+          done();
+        });
     });
 
     it("should have the third panel that contains two tabs `Table` `Histogram`", function(
