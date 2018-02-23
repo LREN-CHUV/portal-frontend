@@ -25,11 +25,9 @@ angular
             ml_all_methods = data.filter(function(m) {
               return m.code !== "glm_exareme";
             });
-          }).then(function() {
-            // console.log(ml_all_methods);
           });
 
-
+          // TODO: just filters by local methods
           vm.ml_methods = (true)
             ? ml_all_methods.filter(function(m) {
               return m.code.substr(0, 3) !== "WP_";
@@ -55,7 +53,6 @@ angular
         // Check if the method can be applied to the model
         function available_method(method) {
           if (method.disable) {
-            console.log("method.disable");
             return false;
           }
 
@@ -64,19 +61,16 @@ angular
             // Output constraints
             if (method.constraints.variable) {
               if (!method.constraints.variable.real) {
-                console.log("Check constraints");
                 return false;
               }
             }
 
             if (method.constraints.covariables) {
               if (method.constraints.covariables.min_count) {
-                console.log("method.constraints.covariables");
                 return false;
               }
 
               if (method.constraints.covariables.max_count) {
-                console.log("method.constraints.covariables.max_count");
                 return false;
               }
             }
@@ -84,17 +78,14 @@ angular
             // Grouping constraints
             if (method.constraints.grouping) {
               if (method.constraints.grouping.min_count) {
-                console.log("method.constraints.grouping.min_count");
                 return false;
               }
 
               if (method.constraints.grouping.max_count) {
-                console.log("method.constraints.grouping.max_count");
                 return false;
               }
             }
             if (!method.constraints.mixed) {
-              console.log("grp_nb > 0");
               return false;
             }
           }

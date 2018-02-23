@@ -182,7 +182,7 @@ angular.module("chuvApp.models").controller("ExploreController", [
           data.map(function(curVal) {
             return $scope.configuration.trainingDatasets[curVal.code] = null;
           });
-          $scope.$broadcast("event:URLtrainingDatasets", data);
+          $scope.$broadcast("event:setToURLtrainingDatasets", data);
         }
       })
       .catch(e => {
