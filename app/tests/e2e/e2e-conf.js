@@ -13,7 +13,7 @@ function generateUUID() {
 
 exports.config = {
   directConnect: false,
-  specs: ['./specs/**/*-spec.js'],
+  specs: ["./specs/**/*-spec.js"],
   // seleniumAddress: "http://localhost:4444/wd/hub",
   // specs: ["./yadda/yadda-runner.js"],
   framework: "jasmine2",
@@ -28,7 +28,10 @@ exports.config = {
   //   "phantomjs.ghostdriver.cli.args": ["--loglevel=DEBUG"]
   // },
   capabilities: {
-    'browserName': 'chrome'
+    browserName: "chrome",
+    chromeOptions: {
+      args: ["--headless"]
+    }
   },
   jasmineNodeOpts: {
     showColors: true,
@@ -44,6 +47,18 @@ exports.config = {
         filePrefix: "e2e-tests-results"
       })
     );
+
+    /*
+    for you need to uncomment this to get more detailed logs in the console
+
+    var terminalReporter = require('jasmine-terminal-reporter');
+    jasmine.getEnv().addReporter(
+      new terminalReporter({
+        isVerbose: true
+      })
+    );
+
+    */
 
     jasmine.getEnv().addReporter({
       specDone: function(result) {
