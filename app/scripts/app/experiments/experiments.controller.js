@@ -495,28 +495,28 @@ angular
               $scope.loading = false;
 
               // Parse the results
-              if ($scope.federationmode) {
-                //$scope.federationmode) {
+              // if ($scope.federationmode) {
+              //   //$scope.federationmode) {
 
-                if (data.result && !data.result.length) {
-                  throw data.result;
-                }
+              //   if (data.result && !data.result.length) {
+              //     throw data.result;
+              //   }
 
-                let foo;
-                const result = "foo=" + data.result[0].res;
-                let re = eval(result);
-                // re.type = "application/highcharts+json";
+              //   let foo;
+              //   const result = "foo=" + data.result[0].res;
+              //   let re = eval(result);
+              //   // re.type = "application/highcharts+json";
 
-                $scope.experiment = {
-                  type: "application/highcharts+json",
-                  result: [re],
-                  finished: true
-                };
+              //   $scope.experiment = {
+              //     type: "application/highcharts+json",
+              //     result: [re],
+              //     finished: true
+              //   };
 
-                $scope.loading = false;
-                MLUtils.mark_as_read($scope.experiment);
-                return;
-              }
+              //   $scope.loading = false;
+              //   MLUtils.mark_as_read($scope.experiment);
+              //   return;
+              // }
 
               // Refresh experiment until done
               if (!cancelled && !$scope.experiment.finished) {

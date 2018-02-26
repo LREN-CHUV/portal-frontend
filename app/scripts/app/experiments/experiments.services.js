@@ -70,12 +70,13 @@ angular.module("chuvApp.util").factory("MLUtils", [
       ml_validations = data.validations;
       ml_metrics = data.metrics;
 
-      return data.algorithms.filter(
-        a =>
-          (isFederation
-            ? a.environment === "Exareme"
-            : a.environment !== "Exareme")
-      );
+      return data.algorithms;
+      // .filter(
+      //   a =>
+      //     (isFederation
+      //       ? a.environment === "Exareme"
+      //       : a.environment !== "Exareme")
+      // );
     });
 
     var MLUtils = {
