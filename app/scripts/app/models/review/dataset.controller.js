@@ -76,6 +76,13 @@ angular.module("chuvApp.models").controller("DatasetController", [
       //     }
       // ];
 
+      if (!selectedDatasets.length) {
+        $scope.error = "Please, select at least a dataset.";
+        return;
+      } else {
+        $scope.error = null;
+      }
+
       // Get local or federation mode
       Config.then(config => config.mode === "local")
         // Forge queries for variable's statistics by dataset
@@ -137,6 +144,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
 
           $scope.tableRows = formatTable(data);
           $scope.loading = false;
+          $scope.error = null;
         })
         .catch(e => {
           $scope.loading = false;
@@ -217,15 +225,10 @@ angular.module("chuvApp.models").controller("DatasetController", [
           $scope.tsneLoading = false;
         });
 
-    var getDependantVariable = function() {
-      return (
-        ($scope.query &&
-          $scope.query.variables &&
-          $scope.query.variables.length &&
-          $scope.query.variables[0]) ||
-        null
-      );
-    };
+    const getDependantVariable = () =>
+      (_.isUndefined($scope.query.variables[0])
+        ? null
+        : $scope.query.variables[0]);
 
     // Charts ressources
     var getHistogram = function(variable) {
@@ -318,7 +321,15 @@ angular.module("chuvApp.models").controller("DatasetController", [
 
         statistics();
         // tsne();
-        getHistogram(getDependantVariable()).then(format, error);
+        const variable = getDependantVariable();
+
+        if (!variable) {
+          $scope.error =
+            "Please, select some variables in the previous screen.";
+          return;
+        }
+
+        getHistogram(variable).then(format, error);
       });
     };
 

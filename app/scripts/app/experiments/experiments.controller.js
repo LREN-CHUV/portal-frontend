@@ -495,7 +495,7 @@ angular
               $scope.loading = false;
 
               // Parse the results
-              if (true) {
+              if ($scope.federationmode) {
                 //$scope.federationmode) {
 
                 if (data.result && !data.result.length) {
@@ -505,7 +505,7 @@ angular
                 let foo;
                 const result = "foo=" + data.result[0].res;
                 let re = eval(result);
-                re.type = "application/highcharts+json";
+                // re.type = "application/highcharts+json";
 
                 $scope.experiment = {
                   type: "application/highcharts+json",
