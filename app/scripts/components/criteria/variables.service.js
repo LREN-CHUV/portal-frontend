@@ -114,14 +114,13 @@ angular.module("chuvApp.components.criteria").factory("Variable", [
           })
       );
 
-    resource.get_histo = function(code) {
+    resource.get_histo = function(code, datasets = []) {
       return $http
         .get(backendUrl + "/variables/" + code + "/histogram_query.json")
         .then(function(response) {
-          return $http.post(
-            backendUrl + "/mining",
-            JSON.stringify(response.data)
-          );
+          const data = response.data;
+          data.datasets = datasets;
+          return $http.post(backendUrl + "/mining", JSON.stringify(data));
         });
     };
 
@@ -142,7 +141,7 @@ angular.module("chuvApp.components.criteria").factory("Variable", [
         .then(function(response) {
           var data = response.data;
           data.grouping = [];
-          data.algorithm = {
+          data.datasets = data.algorithm = {
             code: "statisticsSummary",
             name: "Statistics Summary",
             parameters: [],
