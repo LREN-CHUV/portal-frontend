@@ -7,6 +7,11 @@
   </div>
 
   <div class="panel-body">
+      <breadcrumb
+      get-focused-variable="focused_variable"
+      zoom="zoom"
+    >
+    </breadcrumb>
     <div ng-if="!focused_variable">
       <div tooltip-placement="left" tooltip="The name of the group">
         <p>{{metrics}}</p>
