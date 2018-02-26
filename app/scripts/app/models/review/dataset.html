@@ -41,13 +41,14 @@
             ng-click="selectVariable(covariable)"
             ng-class="{active: isSelected(covariable)}">
             {{covariable.code}}
-          </a>
+          </span>
         </p>
         <h5>
             <a ng-click="configureFilterQuery()">
                 <i class="ti ti-panel"></i>
             </a>
             Filter variable
+          </a>
         </h5>
         <p ng-repeat="filter in query.filters">
             <a ng-click="configureFilterQuery()">
@@ -98,8 +99,8 @@
                   ng-repeat="row in tableRows track by $index"
                   ng-class="{ 'white-row': row.header }">
                   <td
-                    ng-repeat="column in row.data track by $index"
-                    ng-class="{ 'header-row': row.header, 'sub-row': row.sub }">
+                    ng-repeat="column in row.data track by $index "
+                    ng-class="{ 'header-row': row.header, 'sub-row': row.sub } ">
                     {{column}}
                   </td>
 
@@ -113,43 +114,44 @@
           </div>
           </uib-tab>
 
-          <uib-tab index="1" heading="Histogram">
-            <div class="panel-body scrollable">
-              <div ng-if="histogramLoading" class="loading">
-                <div class="fa fa-spin fa-spinner"></div>
+          <uib-tab index="1 " heading="Histogram ">
+            <div class="panel-body scrollable ">
+              <div ng-if="histogramLoading " class="loading ">
+                <div class="fa fa-spin fa-spinner "></div>
               </div>
-              <div ng-if="histogramData" ng-repeat="data in histogramData">
-                <highchart config="data" class="highchart-width highcharts-container"></highchart>
+              <div ng-if="histogramData " ng-repeat="data in histogramData ">
+                <highchart config="data " class="highchart-width highcharts-container "></highchart>
               </div>
-              <div ng-if="histogramError">
+              <div ng-if="histogramError ">
                 There was an error perfoming the method
-                <pretty-json data="histogramError"></pretty-json>
+                <pretty-json data="histogramError "></pretty-json>
               </div>
             </div>
           </uib-tab>
 
-  <!-- <uib-tab index="2" heading="t-SNE">
-          <div class="panel-body scrollable">
-            <div ng-if="tsneLoading" class="loading">
-              <div class="fa fa-spin fa-spinner"></div>
+  <!-- <uib-tab index="2 " heading="t-SNE ">
+          <div class="panel-body scrollable ">
+            <div ng-if="tsneLoading " class="loading ">
+              <div class="fa fa-spin fa-spinner "></div>
             </div>
-            <div ng-if="histogramError">
+            <div ng-if="histogramError ">
                 There was an error perfoming the method
-                <pretty-json data="histogramError"></pretty-json>
+                <pretty-json data="histogramError "></pretty-json>
             </div>
-            <highchart ng-if="tsneData" config="tsneData"></highchart>
+            <highchart ng-if="tsneData " config="tsneData "></highchart>
           </div>
         </uib-tab> -->
 
   </uib-tabset>
 </div>
 </div>
-<div class="dataset-footer panel">
+<div class="dataset-footer panel ">
 </div>
 
-<div class="execute">
-  <rounded-button label="{{'common.button.execute' | translate}}" icon-class="ti {{ loading_model ? 'ti-reload ti-spin reverse-direction' : 'ti-arrow-down' }}"
-    on-click="open_experiment()">
+<div class="execute ">
+  <rounded-button label="{{ 'common.button.execute' | translate}} " icon-class="ti {{ loading_model ?
+      'ti-reload ti-spin reverse-direction' : 'ti-arrow-down' }} "
+    on-click="open_experiment() ">
   </rounded-button>
 </div>
 </div>
