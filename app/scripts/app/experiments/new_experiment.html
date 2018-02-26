@@ -47,9 +47,9 @@
               </div>
 
               <uib-accordion ng-if="ml_methods.length" close-others="false">
-                <div uib-accordion-group heading="Predictive Model" ng-init="acc_pm.open = true" is-open="acc_pm.open" ng-click="!acc_pm.open">
-                  <p ng-repeat="method in ml_methods | filter:{type:'predictive_model'}  | orderBy:'-label'">
-                    <span class="label label-default" ng-if="method.nyi">Coming soon</span>
+
+                <div uib-accordion-group heading="Statistical Analysis" ng-init="acc_stats.open = true" is-open="acc_stats.open" ng-click="!acc_stats.open">
+                  <p ng-repeat="method in ml_methods | filter:{type:'statistics'}  | orderBy:'-label'">
                     <button class="btn btn-primary-alt col-xs-12" ng-disabled="!method.available" ng-click="shared.chosen_method = method" ng-bind="method.label">
                     </button>
                     <br>
@@ -65,14 +65,17 @@
                     <br>
                   </p>
                 </div>
-                <div uib-accordion-group heading="Statistical Analysis" ng-init="acc_stats.open = true" is-open="acc_stats.open" ng-click="!acc_stats.open">
-                  <p ng-repeat="method in ml_methods | filter:{type:'statistics'}  | orderBy:'-label'">
+
+                <div uib-accordion-group heading="Predictive Model" ng-init="acc_pm.open = true" is-open="acc_pm.open" ng-click="!acc_pm.open">
+                  <p ng-repeat="method in ml_methods | filter:{type:'predictive_model'}  | orderBy:'-label'">
+                    <span class="label label-default" ng-if="method.nyi">Coming soon</span>
                     <button class="btn btn-primary-alt col-xs-12" ng-disabled="!method.available" ng-click="shared.chosen_method = method" ng-bind="method.label">
                     </button>
                     <br>
                     <br>
                   </p>
                 </div>
+
               </uib-accordion>
             </div>
           </div>
