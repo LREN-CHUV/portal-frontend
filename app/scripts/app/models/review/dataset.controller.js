@@ -229,7 +229,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
       (_.isUndefined($scope.query.variables[0])
         ? null
         : $scope.query.variables[0]);
-
+    getDependantVariable;
     // Charts ressources
     var getHistogram = function(variable) {
       return variable ? Variable.get_histo(variable.code) : null;
