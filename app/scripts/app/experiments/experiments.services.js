@@ -5,7 +5,8 @@ angular.module("chuvApp.util").factory("MLUtils", [
   "ChartUtil",
   "backendUrl",
   "$resource",
-  function($http, ChartUtil, backendUrl, $resource) {
+  "Config",
+  function($http, ChartUtil, backendUrl, $resource, Config) {
     var datatypes_per_code = {},
       ml_methods,
       ml_validations,
@@ -59,22 +60,22 @@ angular.module("chuvApp.util").factory("MLUtils", [
       return uuid;
     }
 
-    // TODO: add exareme methods to backend
-    ml_methods = Promise.all([
-      $resource(backendUrl + "/methods").get().$promise,
-      $resource("/scripts/app/mock/exareme-methods.json").get().$promise
-    ]).then(function(responses) {
-      if (!responses.length) {
-        return [];
-      }
+    let isFederation;
+    ml_methods = Config.then(config => {
+      isFederation = config.mode === "federation";
+      return $resource(backendUrl + "/methods").get().$promise;
+    }).then(function(response) {
+      const data = angular.fromJson(response);
 
-      var backendData = angular.fromJson(responses[0]);
-      var staticData = angular.fromJson(responses[1]);
+      ml_validations = data.validations;
+      ml_metrics = data.metrics;
 
-      ml_validations = backendData.validations; //[].concat(backendData.validations, staticData.validations)
-      ml_metrics = backendData.metrics;
-
-      return [].concat(backendData.algorithms, staticData.algorithms);
+      return data.algorithms.filter(
+        a =>
+          (isFederation
+            ? a.environment === "Exareme"
+            : a.environment !== "Exareme")
+      );
     });
 
     var MLUtils = {

@@ -84,8 +84,8 @@ angular.module("chuvApp.models").controller("DatasetController", [
             selectedDatasets.map(d =>
               Model.mining({
                 algorithm: {
-                  code: isLocal ? "statisticsSummary" : "WP_VARIABLE_SUMMARY",
-                  name: isLocal ? "statisticsSummary" : "WP_VARIABLE_SUMMARY",
+                  code: isLocal ? "statisticsSummary" : "statisticsSummary", //"WP_VARIABLE_SUMMARY", FIXME once Exareme format is ready
+                  name: isLocal ? "statisticsSummary" : "statisticsSummary", // "WP_VARIABLE_SUMMARY",
                   parameters: [],
                   validation: false
                 },

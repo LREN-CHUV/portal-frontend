@@ -28,7 +28,6 @@ angular.module("chuvApp.components.criteria").factory("Variable", [
         .get(backendUrl + "/datasets")
         .then(response => response.data.map(d => ({ code: d })));
 
-
     resource.hierarchy = function() {
       var hierarchy = cache.get("hierarchy");
       if (!angular.isUndefined(hierarchy)) {
@@ -114,10 +113,6 @@ angular.module("chuvApp.components.criteria").factory("Variable", [
             iterate(data);
           })
       );
-
-    resource.mockup = function() {
-      return $resource("/scripts/app/mock/variables.json").query();
-    };
 
     resource.get_histo = function(code) {
       return $http
