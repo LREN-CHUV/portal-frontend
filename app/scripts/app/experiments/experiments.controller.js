@@ -26,12 +26,7 @@ angular
       $scope.loaded = false;
       $scope.parseInt = parseInt;
 
-      var ml_all_methods = [];
       $scope.ml_methods = [];
-      $scope.mode = {
-        local: { active: true, disabled: false },
-        exareme: { disabled: false }
-      };
       $scope.datasets = [];
 
       $scope.shared = {
@@ -57,10 +52,7 @@ angular
 
       // Get all the ml methods
       MLUtils.list_ml_methods().then(function(data) {
-        // FIXME Quick and dirty fix!
-        ml_all_methods = data.filter(function(m) {
-          return m.code !== "glm_exareme";
-        });
+        $scope.ml_methods = data;
       });
 
       // Check if the method can be applied to the model
@@ -106,7 +98,6 @@ angular
             ) {
               return false;
             }
-
             if (
               method.constraints.grouping.max_count &&
               grp_nb > method.constraints.grouping.max_count
@@ -125,14 +116,6 @@ angular
       // function to be called when query and dataset are ready
       function on_data_loaded() {
         $scope.loaded = true;
-        $scope.ml_methods = $scope.mode.local.active
-          ? ml_all_methods.filter(function(m) {
-              return m.code.substr(0, 3) !== "WP_";
-            })
-          : ml_all_methods.filter(function(m) {
-              return m.code.substr(0, 3) === "WP_";
-            });
-
         var variable_data = $scope.dataset.data[$scope.dataset.variable[0]];
 
         $scope.predicting_type = MLUtils.get_datatype(
@@ -143,6 +126,7 @@ angular
         $scope.ml_methods.forEach(function(method) {
           method.available = available_method(method);
           method.nyi = [
+            // TODO:
             "statisticsSummary",
             "svm",
             "randomforest",
@@ -159,21 +143,10 @@ angular
         };
       }
 
-      $scope.set_mode = function(mode) {
-        var local = mode === "local";
-        if (local === $scope.mode.local.active) {
-          return;
-        }
-
-        $scope.mode.local.active = local ? true : false;
-        on_data_loaded();
-      };
-
       // FIXME: exareme can run only 1 method at the moment
       $scope.exareme_method_disabled = function() {
         return (
-          !$scope.mode.local.active &&
-          $scope.shared.experiment_configuration.length
+          $scope.federationmode && $scope.shared.experiment_configuration.length
         );
       };
 
@@ -204,6 +177,7 @@ angular
             .map(d => d.code)
             .reduce((a, d) => {
               a[d] = true;
+
               return a;
             }, {});
 
@@ -403,13 +377,6 @@ angular
 
         $scope.shared.experiment_configuration.push(method_to_be_added);
         $scope.shared.cross_validation |= is_predictive_model;
-
-        // FIXME: hack to disallow cross source selection between local/exareme - nyi
-        if ($scope.mode.local.active) {
-          $scope.mode.exareme.disabled = true;
-        } else {
-          $scope.mode.local.disabled = true;
-        }
       };
 
       $scope.remove_from_experiment = function(index) {
@@ -424,12 +391,6 @@ angular
         }
 
         $scope.shared.experiment_configuration.splice(index, 1);
-
-        // FIXME: hack to disallow cross source selection between local/exareme - nyi
-        if (!$scope.shared.experiment_configuration.length) {
-          $scope.mode.exareme.disabled = false;
-          $scope.mode.local.disabled = false;
-        }
       };
     }
   ])
@@ -524,31 +485,49 @@ angular
             if (cancelled) {
               return;
             }
-
-            const data = response.data;
-            $scope.experiment = data;
-            $scope.experiment.name =
-              data.algorithms &&
-              data.algorithms.length &&
-              data.algorithms[0].name;
-            $scope.loading = false;
-
-            // Refresh experiment until done
-            if (!cancelled && !$scope.experiment.finished) {
-              cancel_timeout = $timeout(get_experiment, refresh_rate);
-              return;
-            }
-
-            // Parse the results
             try {
+              const data = response.data;
+              $scope.experiment = data;
+              $scope.experiment.name =
+                data.algorithms &&
+                data.algorithms.length &&
+                data.algorithms[0].name;
+              $scope.loading = false;
+
+              // Parse the results
+              // if ($scope.federationmode) {
+              //   //$scope.federationmode) {
+
+              //   if (data.result && !data.result.length) {
+              //     throw data.result;
+              //   }
+
+              //   let foo;
+              //   const result = "foo=" + data.result[0].res;
+              //   let re = eval(result);
+              //   // re.type = "application/highcharts+json";
+
+              //   $scope.experiment = {
+              //     type: "application/highcharts+json",
+              //     result: [re],
+              //     finished: true
+              //   };
+
+              //   $scope.loading = false;
+              //   MLUtils.mark_as_read($scope.experiment);
+              //   return;
+              // }
+
+              // Refresh experiment until done
+              if (!cancelled && !$scope.experiment.finished) {
+                cancel_timeout = $timeout(get_experiment, refresh_rate);
+                return;
+              }
+
               // catch error before parsing
               if (!angular.isObject($scope.experiment.result)) {
                 throw $scope.experiment.result;
               }
-
-              $scope.experiment.display = MLUtils.parse_results(
-                $scope.experiment.result
-              );
 
               // Prepare charts
               $scope.overview_charts = $scope.experiment.display.overview.map(
