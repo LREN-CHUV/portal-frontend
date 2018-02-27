@@ -191,6 +191,46 @@ angular.module("chuvApp.models").controller("ReviewController", [
       return _.find(list, findFunction) !== undefined;
     };
 
+    var getFilterVariables = () =>
+      $scope.query.filters
+        .concat($scope.query.variables)
+        .concat($scope.query.coVariables)
+        .concat($scope.query.groupings)
+        .map(function(variable) {
+          variable = $scope.allVariables[variable.code];
+
+          var var_config = {
+            id: variable.code,
+            label: variable.label,
+            type: "double",
+            operators: [
+              "equal",
+              "not_equal",
+              "less",
+              "greater",
+              "between",
+              "not_between"
+            ]
+          };
+
+          if (variable.type === "integer") {
+            var_config.type = "integer";
+          } else if (variable.type !== "real") {
+            var_config.type = "string";
+            var_config.input = "select";
+            var_config.operators = ["equal", "not_equal", "in", "not_in"];
+            var_config.values = {};
+            variable.enumerations.forEach(function(e /*, index*/) {
+              // TODO: var isn't used, commented to jshint warning detection
+              var_config.values[e.code] = e.label;
+            });
+          }
+
+          return var_config;
+        });
+
+    $scope.getFilterVariables = () => getFilterVariables();
+
     /**
      * Returns a promise that resolves when filterQuery is set.
      */
@@ -203,43 +243,7 @@ angular.module("chuvApp.models").controller("ReviewController", [
         size: "lg",
         controller: function($uibModalInstance) {
           childScope.contructQB = function() {
-            var filterVariables = $scope.query.filters
-              .concat($scope.query.variables)
-              .concat($scope.query.coVariables)
-              .concat($scope.query.groupings)
-              .map(function(variable) {
-                variable = $scope.allVariables[variable.code];
-
-                var var_config = {
-                  id: variable.code,
-                  label: variable.label,
-                  type: "double",
-                  operators: [
-                    "equal",
-                    "not_equal",
-                    "less",
-                    "greater",
-                    "between",
-                    "not_between"
-                  ]
-                };
-
-                if (variable.type === "integer") {
-                  var_config.type = "integer";
-                } else if (variable.type !== "real") {
-                  var_config.type = "string";
-                  var_config.input = "select";
-                  var_config.operators = ["equal", "not_equal", "in", "not_in"];
-                  var_config.values = {};
-                  variable.enumerations.forEach(function(e /*, index*/) {
-                    // TODO: var isn't used, commented to jshint warning detection
-                    var_config.values[e.code] = e.label;
-                  });
-                }
-
-                return var_config;
-              });
-
+            var filterVariables = getFilterVariables();
             if (!filterVariables.length) return;
 
             $(".query-builder").queryBuilder({

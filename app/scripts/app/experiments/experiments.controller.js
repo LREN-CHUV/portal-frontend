@@ -209,11 +209,18 @@ angular
             : [];
         };
 
+        const decodeFilters = () => {
+          return search.filterQuery
+            ? JSON.parse(decodeURI(search.filterQuery))
+            : "";
+        };
+
         $scope.query = {
           variables: map_query("variables"),
           groupings: map_query("groupings"),
           coVariables: map_query("coVariables"),
           filters: map_query("filters"),
+          filterQuery: decodeFilters(),
           trainingDatasets: map_query("trainingDatasets")
         };
 

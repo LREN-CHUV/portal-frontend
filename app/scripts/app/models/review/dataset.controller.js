@@ -51,10 +51,24 @@ angular.module("chuvApp.models").controller("DatasetController", [
         ? search[category].split(",").map(code => ({ code }))
         : []);
 
+    const decodeFilters = () => {
+      const query = search.filterQuery
+        ? JSON.parse(decodeURI(search.filterQuery))
+        : null;
+      return query;
+    };
+
+    const encodeFilters = () => {
+      return $scope.query.textQuery
+        ? encodeURI(JSON.stringify($scope.query.filterQuery))
+        : "";
+    };
+
     $scope.query.variables = map_query("variable");
     $scope.query.groupings = map_query("grouping");
     $scope.query.coVariables = map_query("covariable");
     $scope.query.filters = map_query("filter");
+    $scope.query.filterQuery = decodeFilters();
     $scope.query.trainingDatasets = map_query("trainingDatasets");
 
     let selectedVariables = [];
@@ -100,7 +114,9 @@ angular.module("chuvApp.models").controller("DatasetController", [
                 grouping: $scope.query.groupings,
                 covariables: $scope.query.coVariables,
                 datasets: [{ code: d }],
-                filters: ""
+                filters: $scope.query.textQuery
+                  ? JSON.stringify($scope.query.filterQuery)
+                  : ""
               })
             )
           )
@@ -229,7 +245,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
       (_.isUndefined($scope.query.variables[0])
         ? null
         : $scope.query.variables[0]);
-    getDependantVariable;
+
     // Charts ressources
     var getHistogram = function(variable) {
       return variable ? Variable.get_histo(variable.code) : null;
@@ -304,7 +320,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
         variables: unmap_category("variables"),
         coVariables: unmap_category("coVariables"),
         groupings: unmap_category("groupings"),
-        filters: unmap_category("filters"),
+        filterQuery: encodeFilters(),
         trainingDatasets: unmap_category("trainingDatasets"),
         graph_config: $scope.chartConfig,
         model_slug: ""
@@ -327,6 +343,20 @@ angular.module("chuvApp.models").controller("DatasetController", [
           $scope.error =
             "Please, select some variables in the previous screen.";
           return;
+        }
+
+        // configure filters as text, hack queryBuilder
+        if ($scope.query.filterQuery) {
+          const $element = $("<div>");
+          const qb = $element.queryBuilder({
+            rules: $scope.query.filterQuery,
+            filters: $scope.getFilterVariables(),
+            allow_empty: true,
+            inputs_separator: " - "
+          });
+
+          $scope.query.textQuery = qb.queryBuilder("getSQL", false, false).sql;
+          qb.queryBuilder("destroy");
         }
 
         getHistogram(variable).then(format, error);
