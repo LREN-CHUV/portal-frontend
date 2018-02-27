@@ -112,10 +112,19 @@ describe("the EE (explore) page ", function() {
       });
     });
 
-    it("should have a panel with the title *Variable overview*", function(
+    it("should have a panel with the title *available methods*", function(
       done
     ) {
       titles.get(3).getText().then(function(txt) {
+        expect(txt.toLowerCase()).toEqual("available methods");
+        done();
+      });
+    });
+
+    it("should have a panel with the title *Variable overview*", function(
+      done
+    ) {
+      titles.get(4).getText().then(function(txt) {
         expect(txt.toLowerCase()).toEqual("variable overview");
         done();
       });
@@ -124,7 +133,7 @@ describe("the EE (explore) page ", function() {
     it("should have a panel with the title *3. Add variables to Model*", function(
       done
     ) {
-      titles.get(4).getText().then(function(txt) {
+      titles.get(5).getText().then(function(txt) {
         expect(txt.toLowerCase()).toEqual("3. add variables to model");
         done();
       });
@@ -134,7 +143,7 @@ describe("the EE (explore) page ", function() {
   describe("in the panel `dataset`", function() {
     var panel;
     beforeEach(function() {
-      panel = element.all(by.css(".panel:nth-child(1)"));
+      panel = element.all(by.css(".panel")).get(0);
     });
 
     it("should display a list of datasets", function() {
@@ -149,7 +158,21 @@ describe("the EE (explore) page ", function() {
       expect(dataset.isPresent()).toBe(true);
     });
 
-    it("should visually select a dataset when the corresponding dataset button is clicked", function(
+    it("should have a list of datasets in which each dataset is active", function(
+      done
+    ) {
+      var datasets = panel.all(by.css(".dataset-list span a"));
+      var i = 0;
+      datasets.each(function(dataset) {
+        i++;
+        expect(dataset).toHaveClass("active");
+        if (i === 3) {
+          done();
+        }
+      });
+    });
+
+    it("should visually unselect a dataset when the corresponding dataset button is clicked", function(
       done
     ) {
       var dataset = panel
@@ -161,12 +184,12 @@ describe("the EE (explore) page ", function() {
       );
       scrolled.then(function() {
         dataset.click();
-        expect(dataset).toHaveClass("active");
+        expect(dataset).not.toHaveClass("active");
         done();
       });
     });
 
-    it("should add a dataset to url params (as in explore?trainingDatasets=foo,bar) when the corresponding dataset button is clicked", function(
+    it("should remove a dataset from url params (as in explore?trainingDatasets=foo,bar) when the corresponding dataset button is clicked", function(
       done
     ) {
       var datasetAdni = panel
@@ -183,12 +206,10 @@ describe("the EE (explore) page ", function() {
       scrolled.then(function() {
         datasetAdni.click();
         expect(browser.getCurrentUrl()).toContain(
-          "/explore?trainingDatasets=adni"
+          "/explore?trainingDatasets=ppmi"
         );
         datasetPpmi.click();
-        expect(browser.getCurrentUrl()).toContain(
-          "/explore?trainingDatasets=adni,ppmi"
-        );
+        expect(browser.getCurrentUrl()).toContain("/explore?trainingDatasets=");
         done();
       });
     });
@@ -242,7 +263,7 @@ describe("the EE (explore) page ", function() {
     it("should display the variable detail in the variable-statistics panel when a bubble item is clicked", function(
       done
     ) {
-      var variableStatisticsPanel = element.all(by.css(".panel")).get(3);
+      var variableStatisticsPanel = element.all(by.css(".panel")).get(4);
 
       bubble.click();
 
@@ -349,7 +370,7 @@ describe("the EE (explore) page ", function() {
   describe("in the panel `variable-configuration` ", function() {
     var panel, buttons, cols;
     beforeEach(function() {
-      panel = element.all(by.css(".panel")).get(4);
+      panel = element.all(by.css(".panel")).get(5);
       buttons = panel.all(by.css(".panel-body .explore-container button"));
       cols = panel.all(by.css(".panel-body .explore-container>div.column"));
     });
@@ -445,7 +466,9 @@ describe("the EE (explore) page ", function() {
       expect(browser.getCurrentUrl()).toContain("/explore");
       bubble.click();
       buttons.get(0).click();
-      expect(browser.getCurrentUrl()).toContain("/explore?variable=apoe4");
+      expect(browser.getCurrentUrl()).toContain(
+        "/explore?trainingDatasets=adni,ppmi,edsd&variable=apoe4"
+      );
     });
 
     it("should add a variable name to url params as covariable (as in explore?grouping=foo) when the corresponding bubble item is clicked, and then the button `as variable`", function() {
@@ -453,7 +476,9 @@ describe("the EE (explore) page ", function() {
       expect(browser.getCurrentUrl()).toContain("/explore");
       bubble.click();
       buttons.get(1).click();
-      expect(browser.getCurrentUrl()).toContain("/explore?grouping=apoe4");
+      expect(browser.getCurrentUrl()).toContain(
+        "/explore?trainingDatasets=adni,ppmi,edsd&grouping=apoe4"
+      );
     });
   });
 
