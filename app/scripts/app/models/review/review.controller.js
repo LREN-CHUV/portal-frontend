@@ -287,7 +287,10 @@ angular.module("chuvApp.models").controller("ReviewController", [
       });
 
       $scope.$on("$stateChangeStart", $uibModal.dismiss);
-      modal.result.then($scope.executeQuery);
+      modal.result.then(() => {
+        $scope.executeQuery;
+        $scope.$broadcast("event:configureFilterQueryFinished");
+      });
 
       // do not unwrap this: childScope.contructQB is set later.
       modal.opened.then(function() {
@@ -386,7 +389,8 @@ angular.module("chuvApp.models").controller("ReviewController", [
           "query.variables",
           "query.groupings",
           "query.coVariables",
-          "variables"
+          "variables",
+          "query.filterQuery"
         ],
         function(newValue) {
           if (!_.all(newValue)) {
@@ -400,6 +404,19 @@ angular.module("chuvApp.models").controller("ReviewController", [
         }
       );
     }
+
+    const decodeFilters = () => {
+      const query = $scope.query.textQuery
+        ? JSON.parse($scope.query.filterQuery)
+        : null;
+      return query;
+    };
+
+    const encodeFilters = () => {
+      return $scope.query.textQuery
+        ? JSON.stringify($scope.query.filterQuery)
+        : "";
+    };
 
     function update_location_search() {
       function unmap_category(category) {
@@ -418,6 +435,7 @@ angular.module("chuvApp.models").controller("ReviewController", [
         covariable: unmap_category("coVariables"),
         grouping: unmap_category("groupings"),
         filter: unmap_category("filters"),
+        filterQuery: decodeFilters(),
         execute: true
       };
 
@@ -440,10 +458,12 @@ angular.module("chuvApp.models").controller("ReviewController", [
         $scope.query.groupings &&
         $scope.query.coVariables &&
         $scope.query.filters &&
+        $scope.query.filterQuery &&
         ($scope.query.variables.length ||
           $scope.query.groupings.length ||
           $scope.query.filters.length ||
-          $scope.query.coVariables.length);
+          $scope.query.coVariables.length ||
+          $scope.query.textQuery);
 
       if (!should_configure) {
         return $location.url("/explore");
@@ -465,14 +485,16 @@ angular.module("chuvApp.models").controller("ReviewController", [
         trainingDatasets: $location.search().trainingDatasets
       };
 
-      $location.url(
+      const url =
         "/explore?configure=true&" +
-          Object.keys(query)
-            .map(function(category) {
-              return category + "=" + query[category];
-            })
-            .join("&")
-      );
+        Object.keys(query)
+          .map(function(category) {
+            return category + "=" + query[category];
+          })
+          .join("&") +
+        "&filterQuery=" +
+        encodeFilters();
+      $location.url(url);
     };
   }
 ]);
