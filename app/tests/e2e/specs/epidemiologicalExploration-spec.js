@@ -112,19 +112,10 @@ describe("the EE (explore) page ", function() {
       });
     });
 
-    it("should have a panel with the title *available methods*", function(
-      done
-    ) {
-      titles.get(3).getText().then(function(txt) {
-        expect(txt.toLowerCase()).toEqual("available methods");
-        done();
-      });
-    });
-
     it("should have a panel with the title *Variable overview*", function(
       done
     ) {
-      titles.get(4).getText().then(function(txt) {
+      titles.get(2).getText().then(function(txt) {
         expect(txt.toLowerCase()).toEqual("variable overview");
         done();
       });
@@ -133,7 +124,7 @@ describe("the EE (explore) page ", function() {
     it("should have a panel with the title *3. Add variables to Model*", function(
       done
     ) {
-      titles.get(5).getText().then(function(txt) {
+      titles.get(3).getText().then(function(txt) {
         expect(txt.toLowerCase()).toEqual("3. add variables to model");
         done();
       });
@@ -260,34 +251,39 @@ describe("the EE (explore) page ", function() {
       expect(toNumber(bubble.getAttribute("r"))).toBeGreaterThan(60); //69.80421083246561
     });
 
-    it("should display the variable detail in the variable-statistics panel when a bubble item is clicked", function(
-      done
-    ) {
-      var variableStatisticsPanel = element.all(by.css(".panel")).get(4);
+    it(
+      "should display the variable detail in the variable-statistics panel when a bubble item is clicked",
+      function(done) {
+        var variableStatisticsPanel = element.all(by.css(".panel")).get(2);
 
-      bubble.click();
+        bubble.click();
 
-      var text = [];
-      var details = variableStatisticsPanel.all(
-        by.css(".panel-body div>b+span, .panel-body div>b+variable-description")
-      );
-      details.each(function(el, i) {
-        el.getText().then(function(txt) {
-          text.push(txt);
-          if (i === 3) {
-            expect(text[0]).toEqual("ApoE4");
-            expect(text[1]).toEqual("adni-merge");
-            expect(text[2]).toEqual("polynominal");
-            expect(text[3]).toEqual(
-              "Apolipoprotein E (APOE) e4 allele: is the strongest risk factor for Late Onset Alzheimer Disease (LOAD). At least one copy of APOE-e4"
-            );
-            done();
-          }
+        var text = [];
+        var details = variableStatisticsPanel.all(
+          by.css(
+            ".panel-body div>b+span, .panel-body div>b+variable-description"
+          )
+        );
+
+        details.each(function(el, i) {
+          el.getText().then(function(txt) {
+            text.push(txt);
+            if (i === 3) {
+              expect(text[0]).toEqual("ApoE4");
+              expect(text[1]).toEqual("adni-merge");
+              expect(text[2]).toEqual("polynominal");
+              expect(text[3]).toEqual(
+                "Apolipoprotein E (APOE) e4 allele: is the strongest risk factor for Late Onset Alzheimer Disease (LOAD). At least one copy of APOE-e4"
+              );
+              done();
+            }
+          });
         });
-      });
-    });
+      },
+      60000
+    ); //this is slowing down the test and should be removed the day the variable-statitics panel become significantly faster
   });
-
+  /*
   describe("in the panel `path` ", function() {
     var breadcrumbPanel, selectVariablePanel, bubble, breadcrumbs;
     beforeEach(function(done) {
@@ -366,11 +362,11 @@ describe("the EE (explore) page ", function() {
       });
     });
   });
-
+*/
   describe("in the panel `variable-configuration` ", function() {
     var panel, buttons, cols;
     beforeEach(function() {
-      panel = element.all(by.css(".panel")).get(5);
+      panel = element.all(by.css(".panel")).get(3);
       buttons = panel.all(by.css(".panel-body .explore-container button"));
       cols = panel.all(by.css(".panel-body .explore-container>div.column"));
     });
