@@ -210,9 +210,7 @@ angular
         };
 
         const decodeFilters = () => {
-          return search.filterQuery
-            ? JSON.parse(decodeURI(search.filterQuery))
-            : "";
+          return search.filterQuery ? JSON.parse(search.filterQuery) : "";
         };
 
         $scope.query = {
