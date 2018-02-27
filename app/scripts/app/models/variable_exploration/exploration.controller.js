@@ -137,7 +137,9 @@ angular.module("chuvApp.models").controller("ExploreController", [
                 Object.keys($scope.configuration[category]).join(",")
               );
             })
-            .join("&")
+            .join("&") +
+          "&filterQuery" +
+          $location.search().filterQuery
       );
     };
 
@@ -178,9 +180,9 @@ angular.module("chuvApp.models").controller("ExploreController", [
       })
       .then(data => {
         $scope.allDatasets = data;
-        if ( !$location.search()["trainingDatasets"] ) {
+        if (!$location.search()["trainingDatasets"]) {
           data.map(function(curVal) {
-            return $scope.configuration.trainingDatasets[curVal.code] = null;
+            return ($scope.configuration.trainingDatasets[curVal.code] = null);
           });
           $scope.$broadcast("event:setToURLtrainingDatasets", data);
         }

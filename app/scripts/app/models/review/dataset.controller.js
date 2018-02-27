@@ -52,15 +52,14 @@ angular.module("chuvApp.models").controller("DatasetController", [
         : []);
 
     const decodeFilters = () => {
-      const query = search.filterQuery
-        ? JSON.parse(decodeURI(search.filterQuery))
-        : null;
+      const query = search.filterQuery ? JSON.parse(search.filterQuery) : null;
+
       return query;
     };
 
     const encodeFilters = () => {
       return $scope.query.textQuery
-        ? encodeURI(JSON.stringify($scope.query.filterQuery))
+        ? JSON.stringify($scope.query.filterQuery)
         : "";
     };
 
@@ -248,7 +247,15 @@ angular.module("chuvApp.models").controller("DatasetController", [
 
     // Charts ressources
     var getHistogram = function(variable) {
-      return variable ? Variable.get_histo(variable.code) : null;
+      return variable
+        ? Variable.get_histo(
+            variable.code,
+            selectedDatasets.map(code => ({ code })),
+            $scope.query.textQuery
+              ? JSON.stringify($scope.query.filterQuery)
+              : ""
+          )
+        : null;
     };
 
     $scope.isSelected = function(variable) {
@@ -362,6 +369,11 @@ angular.module("chuvApp.models").controller("DatasetController", [
         getHistogram(variable).then(format, error);
       });
     };
+
+    $scope.$on("event:configureFilterQueryFinished", () => {
+      $location.search("filterQuery", JSON.stringify($scope.query.filterQuery));
+      init();
+    });
 
     $scope.$on("event:loadModel", function(evt, model) {
       selectedDatasets = [...$scope.query.trainingDatasets.map(d => d.code)];
