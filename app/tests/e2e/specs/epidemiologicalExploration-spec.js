@@ -283,17 +283,19 @@ describe("the EE (explore) page ", function() {
       60000
     ); //this is slowing down the test and should be removed the day the variable-statitics panel become significantly faster
   });
-  /*
-  describe("in the panel `path` ", function() {
+
+  describe("the breadcrumb component` in the panel `variable detail` ", function() {
     var breadcrumbPanel, selectVariablePanel, bubble, breadcrumbs;
     beforeEach(function(done) {
       browser.get("http://localhost:8000/explore").then(function() {
         selectVariablePanel = element.all(by.css(".panel")).get(1);
-        breadcrumbPanel = element.all(by.css(".panel")).get(2);
+        variableDetailPanel = element.all(by.css(".panel")).get(2);
         bubble = selectVariablePanel
           .all(by.css(".panel-body:nth-child(1)>svg circle.node--leaf"))
           .get(0);
-        breadcrumbs = breadcrumbPanel.all(by.css(".panel-body span"));
+        breadcrumbs = variableDetailPanel.all(
+          by.css(".panel-body breadcrumb span")
+        );
         done();
       });
     });
@@ -324,7 +326,9 @@ describe("the EE (explore) page ", function() {
     ) {
       bubble.click();
       breadcrumbs.get(3).click();
-      newBreadcrumbs = breadcrumbPanel.all(by.css(".panel-body span"));
+      newBreadcrumbs = variableDetailPanel.all(
+        by.css(".panel-body breadcrumb span")
+      );
       var text = [];
       newBreadcrumbs.each(function(el, i) {
         el.getText().then(function(txt) {
@@ -362,7 +366,7 @@ describe("the EE (explore) page ", function() {
       });
     });
   });
-*/
+
   describe("in the panel `variable-configuration` ", function() {
     var panel, buttons, cols;
     beforeEach(function() {
