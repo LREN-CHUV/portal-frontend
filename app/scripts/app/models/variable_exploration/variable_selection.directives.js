@@ -482,7 +482,7 @@ angular
 
             Variable.get_histo(
               focused_variable.code,
-              $scope.selectedDatasets
+              $scope.selectedDatasets.map(d => ({ code: d }))
             ).then(
               function(response) {
                 if (current_request_id != request_id) {
