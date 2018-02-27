@@ -456,17 +456,17 @@ angular
                 node = $scope.populatedGroups;
               }
 
-              var length = 0;
+              var count = 0;
               var recNodeCalc = function(node) {
                 if (!node || !node.children) return;
                 node.children.map(function(c) {
-                  length = c.is_group ? length : length + 1;
+                  count = c.is_group ? count : count + 1;
                   recNodeCalc(c);
                 });
               };
               recNodeCalc(node);
 
-              $scope.count = length;
+              $scope.groupStats = { count };
               $scope.focused_variable_loaded = true;
 
               return;
@@ -480,7 +480,10 @@ angular
 
             $scope.variable_description = focused_variable.description;
 
-            Variable.get_histo(focused_variable.code).then(
+            Variable.get_histo(
+              focused_variable.code,
+              $scope.selectedDatasets
+            ).then(
               function(response) {
                 if (current_request_id != request_id) {
                   return;

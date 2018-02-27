@@ -30,15 +30,6 @@
         </div>
       </div>
 
-      <span ng-if="federationmode">
-        <button class="btn btn-primary" ng-class="{active: mode.local.active}" ng-disabled="mode.local.disabled" ng-click="set_mode('local')">
-          Local
-        </button>
-        <button class="btn btn-primary" ng-class="{active: !mode.local.active}" ng-disabled="mode.exareme.disabled" ng-click="set_mode('exareme')">
-          Exareme
-        </button>
-      </span>
-
       <div class="row">
 
         <div class="col-sm-3">
@@ -56,9 +47,9 @@
               </div>
 
               <uib-accordion ng-if="ml_methods.length" close-others="false">
-                <div uib-accordion-group heading="Predictive Model" ng-init="acc_pm.open = true" is-open="acc_pm.open" ng-click="!acc_pm.open">
-                  <p ng-repeat="method in ml_methods | filter:{type:'predictive_model'}  | orderBy:'-label'">
-                    <span class="label label-default" ng-if="method.nyi">Coming soon</span>
+
+                <div uib-accordion-group heading="Statistical Analysis" ng-init="acc_stats.open = true" is-open="acc_stats.open" ng-click="!acc_stats.open">
+                  <p ng-repeat="method in ml_methods | filter:{type:'statistics'}  | orderBy:'-label'">
                     <button class="btn btn-primary-alt col-xs-12" ng-disabled="!method.available" ng-click="shared.chosen_method = method" ng-bind="method.label">
                     </button>
                     <br>
@@ -74,14 +65,17 @@
                     <br>
                   </p>
                 </div>
-                <div uib-accordion-group heading="Statistical Analysis" ng-init="acc_stats.open = true" is-open="acc_stats.open" ng-click="!acc_stats.open">
-                  <p ng-repeat="method in ml_methods | filter:{type:'statistics'}  | orderBy:'-label'">
+
+                <div uib-accordion-group heading="Predictive Model" ng-init="acc_pm.open = true" is-open="acc_pm.open" ng-click="!acc_pm.open">
+                  <p ng-repeat="method in ml_methods | filter:{type:'predictive_model'}  | orderBy:'-label'">
+                    <span class="label label-default" ng-if="method.nyi">Coming soon</span>
                     <button class="btn btn-primary-alt col-xs-12" ng-disabled="!method.available" ng-click="shared.chosen_method = method" ng-bind="method.label">
                     </button>
                     <br>
                     <br>
                   </p>
                 </div>
+
               </uib-accordion>
             </div>
           </div>
