@@ -11,28 +11,22 @@
 
 This is a minimal setup to do frontend development in this project:
 
-1. Checkout the master branch of the [backend web-analytics-starter](https://github.com/LREN-CHUV/web-analytics-starter) project and run it. You will have the MIP backend running on your computer with no frontend.
-2. Install gulp & yarn global
+### Backend
+1. Checkout the master branch of the [backend web-analytics-starter](https://github.com/LREN-CHUV/web-analytics-starter) project. 
+2. Run the backend either on local or federated mode `./run.sh --no-frontend` or `./run-federation.sh --no-frontend` You will have the MIP backend running on your computer with no frontend.
 
-* `npm install -g gulp` (might require `sudo`)
-* `npm install -g yarn` (might require `sudo`)  (Debian/Ubuntu users should use `sudo apt-get install yarn`)
+### Frontend
+1. Checkout this repo "portal-frontend" on staging branch.
+2. There is two way to start the development frontend:
+3. Either by docker, `./run.sh` or `./run.sh --federation`
+4. Or manually install gulp & yarn global
+  * `npm install -g gulp` (might require `sudo`)
+  * `npm install -g yarn` (might require `sudo`)  (Debian/Ubuntu users should use `sudo apt-get install yarn`)
+  * `yarn install` (might require `sudo`)
+  * `gulp`
+  * `google-chrome --disable-web-security --user-data-dir http://localhost:8000` (opens the frontend in Chrome with flags to ignore CORS issues. CORS must be disabled for development because the backend runs on a different domain name than the frontend)
 
-3. Install npm`:
-
-* `yarn install` (might require `sudo`)
-
-4. Run the `portal-frontend`:
-
-* `gulp`
-* `google-chrome --disable-web-security --user-data-dir http://localhost:8000` (opens the frontend in Chrome with flags to ignore CORS issues. CORS must be disabled for development because the backend runs on a different domain name than the frontend)
-
-## Develop & debug
-
-1. Run: `./run.sh`
-2. Open Browsersync External Access URL `google-chrome --disable-web-security --user-data-dir http://localhost:8000`
-   (might be another access URL)
-
-## Build
+## Build (produce a local docker container)
 
 Run: `./build.sh`
 
@@ -80,7 +74,7 @@ This is a setup to run e2e-tests in this project using protractor:
 
 ## License
 
-Copyright © 2016-2017 LREN CHUV
+Copyright © 2016-2018LREN CHUV
 
 Licensed under the GNU Affero General Public License, Version 3.0 (the "License");
 you may not use this file except in compliance with the License.
