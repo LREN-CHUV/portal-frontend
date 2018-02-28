@@ -63,7 +63,6 @@ var appPath = {
         appConfig.app + "/*.txt"
       ]
     },
-    mockJson: appConfig.app + "/scripts/app/mock/**/*.json",
     tests: {
       screenshots: "./screenshots",
       reports: "./reports"
@@ -99,8 +98,7 @@ var appPath = {
       appConfig.dist + "/styles/main.css",
       appConfig.dist + "/styles/vendor.css",
       appConfig.dist + "/rev-manifest.json"
-    ],
-    mockJson: appConfig.dist + "/scripts/app/mock"
+    ]
   }
 };
 
@@ -391,10 +389,6 @@ gulp.task("js-app:prod", function() {
     .pipe(gulp.dest(appPath.dist.js.vendorsPath));
 });
 
-gulp.task("copy-mock-json", function() {
-  return gulp.src(appPath.src.mockJson).pipe(gulp.dest(appPath.dist.mockJson));
-});
-
 // Renaming main js and css files to exclude caching
 gulp.task("caching", function() {
   runSequence("revision", "replace", "replace-clean");
@@ -553,7 +547,6 @@ gulp.task("build", function() {
       "js-app:prod",
       "js-vendor:prod"
     ],
-    "copy-mock-json",
     "index-html:prod",
     "caching"
   );
@@ -594,7 +587,6 @@ gulp.task("e2e-test", function() {
       "js-app:prod",
       "js-vendor:prod"
     ],
-    "copy-mock-json",
     "index-html:test",
     "caching:test",
     "browser-sync:test",

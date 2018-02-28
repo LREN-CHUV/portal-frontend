@@ -88,7 +88,6 @@ angular.module("chuvApp.models").controller("ExploreController", [
           if (type == "variable") {
             config = $scope.configuration[type] = {};
           }
-
           // remove from all other configuration
           Object.keys($scope.configuration).forEach(function(var_config) {
             if (variable.code in $scope.configuration[var_config]) {
@@ -178,9 +177,9 @@ angular.module("chuvApp.models").controller("ExploreController", [
       })
       .then(data => {
         $scope.allDatasets = data;
-        if ( !$location.search()["trainingDatasets"] ) {
+        if (!$location.search()["trainingDatasets"]) {
           data.map(function(curVal) {
-            return $scope.configuration.trainingDatasets[curVal.code] = null;
+            return ($scope.configuration.trainingDatasets[curVal.code] = null);
           });
           $scope.$broadcast("event:setToURLtrainingDatasets", data);
         }
@@ -189,22 +188,16 @@ angular.module("chuvApp.models").controller("ExploreController", [
         console.log(e);
       });
 
-    config_keys.forEach(function(config_name) {
-      $scope.$watch(
-        function() {
-          return Object.keys($scope.configuration[config_name]).length;
-        },
-        function(picked_configuration_count) {
-          if (picked_configuration_count) {
-            $location.search(
-              config_name,
-              Object.keys($scope.configuration[config_name]).join(",")
-            );
-          } else {
-            $location.search(config_name, undefined);
+    $scope.$watch(
+      "configuration",
+      function(newVal, oldVal) {
+        _.each(newVal, (obj, key) => {
+          if (!angular.equals(newVal[key], oldVal[key])) {
+            $location.search(key, Object.keys(newVal[key]).join(","));
           }
-        }
-      );
-    });
+        });
+      },
+      true
+    );
   }
 ]);

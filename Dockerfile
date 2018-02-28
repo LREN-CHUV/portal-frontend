@@ -8,7 +8,7 @@ RUN npm install -g gulp
 RUN npm install -g webdriver-manager
 RUN webdriver-manager update --standalone --versions.chrome 2.28 --gecko false
 
-RUN npm install -g yarn
+RUN curl -o- -L https://yarnpkg.com/install.sh | bash
 
 COPY package.json /frontend
 RUN yarn install
