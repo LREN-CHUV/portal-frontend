@@ -26,7 +26,7 @@ ARG BUILD_DATE
 ARG VCS_REF
 ARG VERSION
 
-ENV DOCKERIZE_VERSION=v0.5.0
+ENV DOCKERIZE_VERSION=v0.6.0
 
 RUN apk add --no-cache --update ca-certificates wget openssl bash \
     && update-ca-certificates \
