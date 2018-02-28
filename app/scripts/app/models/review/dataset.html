@@ -1,81 +1,81 @@
 <div class="dataset-box">
   <div class="dataset-container">
-    <div class="panel style=" flex: 0 0 0 ">
-      <div class="panel-heading ">Datasets</div>
-      <div class="panel-body ">
-        <ul class="list-group ">
+    <div class="panel" style="flex: 0 0 0">
+      <div class="panel-heading">Datasets</div>
+      <div class="panel-body">
+        <ul class="list-group">
           <li
-            ng-repeat="dataset in allDatasets "
-            class="list-group-item "
-            ng-class="{active: isDatasetSelected(dataset.code)} ">
+            ng-repeat="dataset in allDatasets"
+            class="list-group-item"
+            ng-class="{active: isDatasetSelected(dataset.code)}">
             <a
               href=""
-              ng-click="selectDataset(dataset.code) "
+              ng-click="selectDataset(dataset.code)"
             >{{dataset.code}}</a>
           </li>
         </ul>
       </div>
     </div>
-    <div class="panel " style="flex: 0 0 1 ">
-      <div class="panel-heading ">Model</div>
-      <div class="panel-body dataset-list scrollable ">
+    <div class="panel" style="flex: 0 0 1">
+      <div class="panel-heading">Model</div>
+      <div class="panel-body dataset-list scrollable">
         <h5>Variable </h5>
-        <p ng-repeat="variable in query.variables ">
+        <p ng-repeat="variable in query.variables">
           <a
-            ng-click="selectVariable(variable) "
-            class="active ">
+            ng-click="selectVariable(variable)"
+            class="active">
             {{variable.code}}
           </a>
         </p>
         <h5>CoVariables</h5>
-        <p ng-repeat="covariable in query.coVariables ">
+        <p ng-repeat="covariable in query.coVariables">
           <a
-            ng-click="selectVariable(covariable) "
-            ng-class="{active: isSelected(covariable)} ">
+            ng-click="selectVariable(covariable)"
+            ng-class="{active: isSelected(covariable)}">
             {{covariable.code}}
           </a>
         </p>
         <h5>Groupings</h5>
-        <p ng-repeat="covariable in query.groupings ">
+        <p ng-repeat="covariable in query.groupings">
           <a
-            ng-click="selectVariable(covariable) "
-            ng-class="{active: isSelected(covariable)} ">
+            ng-click="selectVariable(covariable)"
+            ng-class="{active: isSelected(covariable)}">
             {{covariable.code}}
           </a>
         </p>
         <h5>
-            <a ng-click="configureFilterQuery() ">
-                <i class="ti ti-panel "></i>
+            <a ng-click="configureFilterQuery()">
+                <i class="ti ti-panel"></i>
             </a>
             Filter variable
         </h5>
-        <p ng-repeat="filter in query.filters ">
-            <a ng-click="configureFilterQuery() ">
+        <p ng-repeat="filter in query.filters">
+            <a ng-click="configureFilterQuery()">
                 {{filter.code}}
             </a>
         </p>
-        <div class="query " ng-bind="query.textQuery "></div>
+        <div class="query" ng-bind="query.textQuery"></div>
       </div>
     </div>
-    <div class="panel " style="flex-grow: 2 ">
-      <uib-tabset active="active ">
+    <div class="panel" style="flex-grow: 2">
+      <uib-tabset active="active">
 
-        <uib-tab index="0 " heading="Table ">
-          <div class="panel-body scrollable ">
-            <div ng-if="loading " class="loading ">
-              <div class="fa fa-spin fa-spinner "></div>
+        <uib-tab index="0" heading="Table">
+          <div class="panel-body scrollable">
+            <div ng-if="loading" class="loading">
+              <div class="fa fa-spin fa-spinner"></div>
             </div>
-            <div ng-if="tableHeader "
-              style="background-color: #d5e5fd; padding: 0.5em ">
-              <table class="table ">
-                <tr style="background-color: transparent ">
-                  <th ng-repeat="column in tableHeader track by $index ">
-                    <h6 style="text-transform: uppercase ">{{column}}</h6>
+            <div ng-if="tableHeader"
+              style="background-color: #d5e5fd; padding: 0.5em">
+              <table class="table">
+                <tr style="background-color: transparent">
+                  <th ng-repeat="column in tableHeader track by $index">
+                    <h6 style="text-transform: uppercase">{{column}}</h6>
                   </th>
                 </tr>
                 <tr
                   ng-repeat="row in tableRows track by $index"
-                  ng-class="{ 'white-row': row.header } ">
+                  ng-class="{ 'white-row': row.header }">
                   <td
                     ng-repeat="column in row.data track by $index"
                     ng-class="{ 'header-row': row.header, 'sub-row': row.sub }">
@@ -85,9 +85,9 @@
                 </tr>
               </table>
             </div>
-            <div ng-if="error ">
+            <div ng-if="error">
               There was an error perfoming the method
-              <pretty-json data="error "></pretty-json>
+              <pretty-json data="error"></pretty-json>
             </div>
           </div>
           </uib-tab>
