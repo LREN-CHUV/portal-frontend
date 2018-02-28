@@ -30,7 +30,11 @@ exports.config = {
   capabilities: {
     browserName: "chrome",
     chromeOptions: {
-      args: ["--headless"]
+      args: [
+        "--headless",
+        "--disable-web-security",
+        "--user-data-dir=~/.e2e-chrome-profile"
+      ]
     }
   },
   jasmineNodeOpts: {

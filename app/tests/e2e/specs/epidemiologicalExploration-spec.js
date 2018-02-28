@@ -14,15 +14,17 @@ var height = 800;
 browser.driver.manage().window().setSize(width, height);
 
 describe("the EE (explore) page ", function() {
-  function get_ApoE4_bubble() {
+  function get_bubble(rank) {
     return element
       .all(
         by.css(
           ".panel:nth-child(1) .panel-body:nth-child(1)>svg circle.node--leaf"
         )
       )
-      .get(0);
+      .get(rank);
   }
+  get_ApoE4_bubble = () => get_bubble(0);
+  get_AgeYears_bubble = () => get_bubble(153);
 
   beforeEach(function(done) {
     jasmine.addMatchers({
@@ -281,7 +283,77 @@ describe("the EE (explore) page ", function() {
         });
       },
       60000
-    ); //this is slowing down the test and should be removed the day the variable-statitics panel become significantly faster
+    ); //^^ this is slowing down the test and should be removed the day the variable-statitics panel become significantly faster
+  });
+
+  describe("the tabs in the variable detail panel", function() {
+    var variableStatisticsPanel, bubble;
+    beforeEach(function(done) {
+      variableStatisticsPanel = element.all(by.css(".panel")).get(2);
+      get_AgeYears_bubble().click().then(function() {
+        browser
+          .wait(
+            protractor.ExpectedConditions.presenceOf(
+              $('[ng-if="stats.length"]')
+            ),
+            30000
+          )
+          .then(function() {
+            done();
+          });
+      });
+    });
+    it(
+      "should have 5 tabs",
+      function() {
+        expect(
+          variableStatisticsPanel
+            .all(by.css("ul.nav.nav-tabs li.nav-item"))
+            .count()
+        ).toBe(5);
+      },
+      60000
+    );
+
+    it(
+      "should have the first tab open",
+      function() {
+        expect(
+          variableStatisticsPanel
+            .all(by.css("ul.nav.nav-tabs li.nav-item"))
+            .get(0)
+        ).toHaveClass("active");
+      },
+      60000
+    );
+
+    it(
+      "should have a chart with the title *subjectageyears histogram*",
+      function() {
+        expect(
+          variableStatisticsPanel
+            .element(by.css(".highcharts-title tspan"))
+            .getText()
+        ).toEqual("subjectageyears histogram");
+      },
+      60000
+    );
+
+    it(
+      "should have a first bar of value *19*",
+      function() {
+        var histogram = variableStatisticsPanel
+          .all(by.css("g.highcharts-series-group"))
+          .get(0);
+        expect(
+          histogram
+            .all(by.css("rect.highcharts-point"))
+            .get(0)
+            .getAttribute("height")
+        ).toEqual("12");
+      },
+      60000
+    );
   });
 
   describe("the breadcrumb component` in the panel `variable detail` ", function() {
