@@ -137,7 +137,7 @@ angular.module("chuvApp.models").controller("ExploreController", [
               );
             })
             .join("&") +
-          "&filterQuery" +
+          "&filterQuery=" +
           $location.search().filterQuery
       );
     };

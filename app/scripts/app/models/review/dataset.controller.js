@@ -51,23 +51,13 @@ angular.module("chuvApp.models").controller("DatasetController", [
         ? search[category].split(",").map(code => ({ code }))
         : []);
 
-    const decodeFilters = () => {
-      const query = search.filterQuery ? JSON.parse(search.filterQuery) : null;
-
-      return query;
-    };
-
-    const encodeFilters = () => {
-      return $scope.query.textQuery
-        ? JSON.stringify($scope.query.filterQuery)
-        : "";
-    };
-
     $scope.query.variables = map_query("variable");
     $scope.query.groupings = map_query("grouping");
     $scope.query.coVariables = map_query("covariable");
     $scope.query.filters = map_query("filter");
-    $scope.query.filterQuery = decodeFilters();
+    $scope.query.filterQuery = !_.isEmpty(search.filterQuery)
+      ? JSON.parse(search.filterQuery)
+      : "";
     $scope.query.trainingDatasets = map_query("trainingDatasets");
 
     let selectedVariables = [];
@@ -75,7 +65,6 @@ angular.module("chuvApp.models").controller("DatasetController", [
 
     const statistics = () => {
       $scope.loading = true;
-      $scope.tableHeader = ["Variables", ...selectedDatasets];
       let rows = [];
       // format
       // const rows = [
@@ -157,6 +146,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
         .then(data => {
           rows = data;
 
+          $scope.tableHeader = ["Variables", ...selectedDatasets];
           $scope.tableRows = formatTable(data);
           $scope.loading = false;
           $scope.error = null;
@@ -327,7 +317,8 @@ angular.module("chuvApp.models").controller("DatasetController", [
         variables: unmap_category("variables"),
         coVariables: unmap_category("coVariables"),
         groupings: unmap_category("groupings"),
-        filterQuery: encodeFilters(),
+        filters: unmap_category("filters"),
+        filterQuery: JSON.stringify($scope.query.filterQuery),
         trainingDatasets: unmap_category("trainingDatasets"),
         graph_config: $scope.chartConfig,
         model_slug: ""
@@ -352,7 +343,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
           return;
         }
 
-        // configure filters as text, hack queryBuilder
+        // retrieve filterQuery as sql text, hack queryBuilder
         if ($scope.query.filterQuery) {
           const $element = $("<div>");
           const qb = $element.queryBuilder({
