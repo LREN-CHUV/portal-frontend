@@ -208,7 +208,7 @@ describe("the EE (explore) page ", function() {
     });
   });
 
-  describe("in the panel `select variable` ", function() {
+  fdescribe("in the panel `select variable` ", function() {
     var panel, bubble;
     beforeEach(function() {
       panel = element.all(by.css(".panel:nth-child(1)"));
