@@ -51,6 +51,12 @@ angular.module("chuvApp.models").controller("DatasetController", [
         ? search[category].split(",").map(code => ({ code }))
         : []);
 
+    const encodeFilters = () => {
+      return $scope.query.textQuery
+        ? JSON.stringify($scope.query.filterQuery)
+        : "";
+    };
+
     $scope.query.variables = map_query("variable");
     $scope.query.groupings = map_query("grouping");
     $scope.query.coVariables = map_query("covariable");

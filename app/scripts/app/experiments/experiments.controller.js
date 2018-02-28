@@ -209,6 +209,10 @@ angular
             : [];
         };
 
+        const decodeFilters = () => {
+          return search.filterQuery ? JSON.parse(search.filterQuery) : "";
+        };
+
         $scope.query = {
           variables: map_query("variables"),
           groupings: map_query("groupings"),
