@@ -70,8 +70,21 @@
               <pretty-json data="error "></pretty-json>
             </div>
             <div ng-if="tableHeader "
-              style="background-color: #d5e5fd; padding: 0.5em ">
-              <table class="table ">
+              style="background-color: #d5e5fd; padding: 0.5em "
+              class="dt-wrapper">
+              <a class="btn btn-rounded export-btn"
+                 title="Export Table to SCV"
+                 ng-click="csv.generate()"
+                 ng-href="{{ csv.link() }}"
+                 download="myTable.csv">
+                <i class="fa fa-download"></i> &#160;Export as SCV
+              </a>
+              <a class="btn btn-rounded export-btn"
+                 title="Export Table to PNG"
+                 ng-click="png.generate()">
+                <i class="fa fa-download"></i> &#160;Export as PNG
+              </a>
+              <table class="table " export-csv="csv" export-to-png="png" separator=";">
                 <tr style="background-color: transparent ">
                   <th ng-repeat="column in tableHeader track by $index ">
                     <h6 style="text-transform: uppercase ">{{column}}</h6>

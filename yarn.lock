@@ -181,6 +181,10 @@ angular-dynamic-locale@^0.1.32:
   version "0.1.32"
   resolved "https://registry.yarnpkg.com/angular-dynamic-locale/-/angular-dynamic-locale-0.1.32.tgz#d07fea75281f25ba94a5be5b46df2a02c5e35836"
 
+"angular-export-table@https://github.com/Epotignano/angular-export-table.git":
+  version "0.0.0"
+  resolved "https://github.com/Epotignano/angular-export-table.git#09655f0bb6c4dc7e3d0f4cd44e5648dbe8312597"
+
 angular-gridster@^0.13.14:
   version "0.13.14"
   resolved "https://registry.yarnpkg.com/angular-gridster/-/angular-gridster-0.13.14.tgz#7abebf63d7c9fbec4538b9cca457e0da805d4204"
@@ -976,7 +980,7 @@ balanced-match@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/balanced-match/-/balanced-match-1.0.0.tgz#89b4d199ab2bee49de164ea02b89ce462d71b767"
 
-base64-arraybuffer@0.1.5:
+base64-arraybuffer@0.1.5, base64-arraybuffer@^0.1.5:
   version "0.1.5"
   resolved "https://registry.yarnpkg.com/base64-arraybuffer/-/base64-arraybuffer-0.1.5.tgz#73926771923b5a19747ad666aa5cd4bf9c6e9ce8"
 
@@ -1956,6 +1960,12 @@ crypto-browserify@^3.0.0:
     public-encrypt "^4.0.0"
     randombytes "^2.0.0"
     randomfill "^1.0.3"
+
+css-line-break@1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/css-line-break/-/css-line-break-1.0.1.tgz#19f2063a33e95fb2831b86446c0b80c188af450a"
+  dependencies:
+    base64-arraybuffer "^0.1.5"
 
 css-parse@1.7.0:
   version "1.7.0"
@@ -4020,6 +4030,12 @@ html-minifier@^3.0.3:
     relateurl "0.2.x"
     uglify-js "3.3.x"
 
+html2canvas@^1.0.0-alpha.10:
+  version "1.0.0-alpha.10"
+  resolved "https://registry.yarnpkg.com/html2canvas/-/html2canvas-1.0.0-alpha.10.tgz#08b3d0bf9f690e5e00e6cac3c5feb083a6a9488c"
+  dependencies:
+    css-line-break "1.0.1"
+
 htmlescape@^1.1.0:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/htmlescape/-/htmlescape-1.1.1.tgz#3a03edc2214bca3b66424a3e7959349509cb0351"
@@ -4764,6 +4780,13 @@ jasmine-reporters@^2.3.0:
   dependencies:
     mkdirp "^0.5.1"
     xmldom "^0.1.22"
+
+jasmine-terminal-reporter@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/jasmine-terminal-reporter/-/jasmine-terminal-reporter-1.0.3.tgz#896f1ec8fdf4bf6aecdd41c503eda7347f61526b"
+  dependencies:
+    indent-string "^2.1.0"
+    pluralize "^1.2.1"
 
 jasmine@2.8.0:
   version "2.8.0"
@@ -5908,6 +5931,10 @@ ng-csv@^0.3.6:
   version "0.3.6"
   resolved "https://registry.yarnpkg.com/ng-csv/-/ng-csv-0.3.6.tgz#a89cf02e4c3fa2a5b24d5c19984443dda7f275d8"
 
+ng-table-to-csv@^0.3.3:
+  version "0.3.3"
+  resolved "https://registry.yarnpkg.com/ng-table-to-csv/-/ng-table-to-csv-0.3.3.tgz#cf39a0e68045d81b5c2b52ba2ff46906e9d79d3d"
+
 no-case@^2.2.0:
   version "2.3.2"
   resolved "https://registry.yarnpkg.com/no-case/-/no-case-2.3.2.tgz#60b813396be39b3f1288a4c1ed5d1e7d28b464ac"
@@ -6575,6 +6602,10 @@ plur@^2.1.0, plur@^2.1.2:
   resolved "https://registry.yarnpkg.com/plur/-/plur-2.1.2.tgz#7482452c1a0f508e3e344eaec312c91c29dc655a"
   dependencies:
     irregular-plurals "^1.0.0"
+
+pluralize@^1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/pluralize/-/pluralize-1.2.1.tgz#d1a21483fd22bb41e58a12fa3421823140897c45"
 
 pngquant-bin@^3.0.0:
   version "3.1.1"
