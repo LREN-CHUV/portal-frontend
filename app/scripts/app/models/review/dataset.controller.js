@@ -57,7 +57,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
     $scope.query.filters = map_query("filter");
     $scope.query.filterQuery = !_.isEmpty(search.filterQuery)
       ? JSON.parse(search.filterQuery)
-      : "";
+      : null;
     $scope.query.trainingDatasets = map_query("trainingDatasets");
 
     let selectedVariables = [];

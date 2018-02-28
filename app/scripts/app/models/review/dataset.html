@@ -19,24 +19,26 @@
     <div class="panel " style="flex: 0 0 1 ">
       <div class="panel-heading ">Model</div>
       <div class="panel-body dataset-list scrollable ">
+
         <h5 ng-if="query.variables.length ">Variable </h5>
-        <p ng-repeat="variable in query.variables ">
-          <span>
+          <p ng-repeat="variable in query.variables ">
             {{variable.code}}
-          </a>
-        </span>
-        <h5 ng-if="query.coVariables.length ">CoVariables</h5>
-        <p ng-repeat="covariable in query.coVariables ">
-          <span>
-            {{covariable.code}}
-          </a>
-        </span>
-        <h5 ng-if="query.groupings.length ">Groupings</h5>
-        <p ng-repeat="covariable in query.groupings ">
-          <span>
-            {{covariable.code}}
-          </span>
-        </p>
+          </p>
+
+        <h5 ng-if="query.coVariables.length || query.groupings.length ">CoVariables</h5>
+          <h6 ng-if="query.groupings.length ">Nominal</h6>
+          <p ng-repeat="covariable in query.groupings ">
+            <span>
+              {{covariable.code}}
+            </span>
+          </p>
+          <h6 ng-if="query.coVariables.length ">Continuous</h6>
+          <p ng-repeat="covariable in query.coVariables ">
+            <span>
+              {{covariable.code}}
+            </span>
+          </p>
+
         <h5>
           <a ng-click="configureFilterQuery() ">
             <i class="ti ti-panel "></i>
