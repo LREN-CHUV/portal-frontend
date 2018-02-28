@@ -181,10 +181,6 @@ angular-dynamic-locale@^0.1.32:
   version "0.1.32"
   resolved "https://registry.yarnpkg.com/angular-dynamic-locale/-/angular-dynamic-locale-0.1.32.tgz#d07fea75281f25ba94a5be5b46df2a02c5e35836"
 
-"angular-export-table@https://github.com/Epotignano/angular-export-table.git":
-  version "0.0.0"
-  resolved "https://github.com/Epotignano/angular-export-table.git#09655f0bb6c4dc7e3d0f4cd44e5648dbe8312597"
-
 angular-gridster@^0.13.14:
   version "0.13.14"
   resolved "https://registry.yarnpkg.com/angular-gridster/-/angular-gridster-0.13.14.tgz#7abebf63d7c9fbec4538b9cca457e0da805d4204"

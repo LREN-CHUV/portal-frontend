@@ -58,17 +58,7 @@ var vendorScripts = [
   "./node_modules/jquery-ui/sortable.js",
   "./node_modules/ng-table-to-csv/dist/ng-table-to-csv.js",
   "./node_modules/html2canvas/dist/html2canvas.js",
-  "./" + appConfig.app + "/styles/plugins/wijets/wijets.js",
-
-  // "./node_modules/angular-export-table/export/table-export-directive.js",
-  // "./node_modules/angular-export-table/export/table-export-option-directive.js",
-  // "./node_modules/angular-export-table/export/smartTableDirectives.js",
-  // "./node_modules/angular-export-table/kayalshri-tableExport.jquery.plugin-a891806/table-export.js",
-  // "./node_modules/angular-export-table/kayalshri-tableExport.jquery.plugin-a891806/jquery.base64.js",
-  // "./node_modules/angular-export-table/kayalshri-tableExport.jquery.plugin-a891806/html2canvas.js",
-  // "./node_modules/angular-export-table/kayalshri-tableExport.jquery.plugin-a891806/jspdf/jspdf.js",
-  // "./node_modules/angular-export-table/kayalshri-tableExport.jquery.plugin-a891806/jspdf/libs/base64.js",
-  // "./node_modules/angular-export-table/kayalshri-tableExport.jquery.plugin-a891806/jspdf/libs/sprintf.js"
+  "./" + appConfig.app + "/styles/plugins/wijets/wijets.js"
 ]
 
 module.exports = vendorScripts;

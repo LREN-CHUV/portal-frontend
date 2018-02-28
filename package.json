@@ -8,7 +8,6 @@
     "angular-bootstrap-colorpicker": "^3.0.32",
     "angular-cookies": "^1.6.8",
     "angular-dynamic-locale": "^0.1.32",
-    "angular-export-table": "https://github.com/Epotignano/angular-export-table.git",
     "angular-gridster": "^0.13.14",
     "angular-i18n": "^1.6.8",
     "angular-markdown-directive": "^0.3.1",
