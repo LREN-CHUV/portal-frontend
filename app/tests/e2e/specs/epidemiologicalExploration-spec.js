@@ -14,15 +14,17 @@ var height = 800;
 browser.driver.manage().window().setSize(width, height);
 
 describe("the EE (explore) page ", function() {
-  function get_ApoE4_bubble() {
+  function get_bubble(rank) {
     return element
       .all(
         by.css(
           ".panel:nth-child(1) .panel-body:nth-child(1)>svg circle.node--leaf"
         )
       )
-      .get(0);
+      .get(rank);
   }
+  get_ApoE4_bubble = () => get_bubble(0);
+  get_AgeYears_bubble = () => get_bubble(153);
 
   beforeEach(function(done) {
     jasmine.addMatchers({
@@ -206,7 +208,7 @@ describe("the EE (explore) page ", function() {
     });
   });
 
-  describe("in the panel `select variable` ", function() {
+  fdescribe("in the panel `select variable` ", function() {
     var panel, bubble;
     beforeEach(function() {
       panel = element.all(by.css(".panel:nth-child(1)"));
@@ -281,7 +283,100 @@ describe("the EE (explore) page ", function() {
         });
       },
       60000
-    ); //this is slowing down the test and should be removed the day the variable-statitics panel become significantly faster
+    ); //^^ this is slowing down the test and should be removed the day the variable-statitics panel become significantly faster
+
+    fit(
+      "should display the variable detail in the variable-statistics panel when a bubble item *AgeYears* is clicked",
+      function(done) {
+        var variableStatisticsPanel = element.all(by.css(".panel")).get(2);
+
+        get_AgeYears_bubble().click();
+
+        var text = [];
+        var details = variableStatisticsPanel.all(
+          by.css(
+            ".panel-body div>b+span, .panel-body div>b+variable-description"
+          )
+        );
+
+        details.each(function(el, i) {
+          el.getText().then(function(txt) {
+            text.push(txt);
+            if (i === 3) {
+              expect(text[0]).toEqual("ApoE4");
+              expect(text[1]).toEqual("adni-merge");
+              expect(text[2]).toEqual("polynominal");
+              expect(text[3]).toEqual(
+                "Apolipoprotein E (APOE) e4 allele: is the strongest risk factor for Late Onset Alzheimer Disease (LOAD). At least one copy of APOE-e4"
+              );
+
+              browser.wait(function() {
+                variableStatisticsPanel
+                  .getAttribute("innerHTML")
+                  .then(function(txt) {
+                    console.log("innerHTML : ", txt);
+                  });
+                return element(by.css('[ng-if="stats.length"]')).isPresent();
+              }, 50000);
+
+              //done();
+            }
+          });
+        });
+      },
+      60000
+    ); //^^ this is slowing down the test and should be removed the day the variable-statitics panel become significantly faster
+  });
+
+  describe("the tabs in the variable detail panel", function() {
+    var variableStatisticsPanel, bubble;
+    beforeEach(function() {
+      variableStatisticsPanel = element.all(by.css(".panel")).get(2);
+    });
+    it(
+      "should have 5 tabs",
+      function(done) {
+        get_AgeYears_bubble().click().then(function() {
+          variableStatisticsPanel.getAttribute("innerHTML").then(function(txt) {
+            //browser.waitForAngular();
+            console.log("txt : ", txt);
+            //done();
+            var tabs = element(by.css('[ng-if="stats.length"]'));
+            var EC = protractor.ExpectedConditions;
+            browser
+              .wait(EC.presenceOf($('[ng-if="stats.length"]')), 1200000)
+              .then(function() {
+                console.log("tada");
+                webdriver.WebDriver.takeScreenshot();
+              });
+
+            //expect(variableStatisticsPanel.all(by.css('ul.nav.nav-tabs li.nav-item')).count()).toBe(5);//.nav.nav-tabs li.nav-item
+            //done();
+          });
+
+          //expect(variableStatisticsPanel.all(by.css('ul')).count()).toBe(5);//.nav.nav-tabs li.nav-item
+          //done();
+        });
+
+        /*
+      element
+        .all(
+          by.css(
+            ".panel:nth-child(1) .panel-body:nth-child(1)>svg circle.node--leaf title"
+          )
+        )
+
+        .get(153)
+        //.each(function(el, i){
+          //el
+          .getAttribute('innerHTML').then(function(txt){
+            console.log('txxxt',  typeof txt, txt);
+            done();
+          });
+        //})*/
+      },
+      180000
+    );
   });
 
   describe("the breadcrumb component` in the panel `variable detail` ", function() {
