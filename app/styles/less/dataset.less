@@ -101,3 +101,51 @@ li.list-group-item {
         padding: 5px 0 5px 5px !important;
     }
 }
+
+.export-pannel {
+  display: flex;
+  .export-btn-sandwich {
+    position: relative;
+    padding: 3px;
+    margin-left: auto;
+    background: #fff;
+    border-radius: 15%;
+    &:hover {
+      background: #e6e6e6;
+    }
+    span {
+      display: block;
+      height: 3px;
+      width: 15px;
+      border-radius: 33%;
+      background: #666666;
+      margin-bottom: 2px;
+    }
+    .export-menu {
+      position: absolute;
+      right: 0;
+      padding: 5px 0px;
+      background: #fff;
+      box-shadow: rgb(136, 136, 136) 3px 3px 10px;
+      border: 1px solid rgb(153, 153, 153);
+      a {
+        display: block;
+        min-width: 170px;
+        padding: 0.5em 1em;
+        background: #fff;
+        color: rgb(51, 51, 51);
+        font-size: 11px;
+        transition: background 250ms, color 250ms;
+        &:hover {
+          background: rgb(51, 92, 173);
+          color: rgb(255, 255, 255);
+        }
+      }
+    }
+  }
+}
+
+.table-image-wraper {
+  padding: 15px 0;
+  color: red;
+}

@@ -56,6 +56,8 @@ var vendorScripts = [
   "./node_modules/jquery-ui/widget.js",
   "./node_modules/jquery-ui/mouse.js",
   "./node_modules/jquery-ui/sortable.js",
+  "./node_modules/ng-table-to-csv/dist/ng-table-to-csv.js",
+  "./node_modules/html2canvas/dist/html2canvas.js",
   "./" + appConfig.app + "/styles/plugins/wijets/wijets.js"
 ]
 

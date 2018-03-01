@@ -42,6 +42,7 @@ angular
     "utf8-base64",
     "btford.markdown",
     "xeditable",
+    "ngTableToCsv",
     //components
     "chuvApp.components.filters",
     "chuvApp.components.criteria",
@@ -67,6 +68,7 @@ angular
     "chuvApp.experiments",
     "chuvApp.components.toolbar",
     "chuvApp.intro",
+    "chuvApp.components.exportToPng",
     // analytics
     "angulartics",
     "angulartics.google.analytics"
