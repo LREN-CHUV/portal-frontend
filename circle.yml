@@ -17,7 +17,7 @@ jobs:
             docker --version
   test:
     docker:
-      - image: hbpmip/docker-compose-for-ci:17.06-1.
+      - image: hbpmip/docker-compose-for-ci:17.06-1
       - image: zookeeper:3.4.11
     environment:
           - CIRCLECI: true
