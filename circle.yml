@@ -2,7 +2,10 @@ version: 2
 jobs:
   build:
     docker:
+      # Recursive self-reference...
       - image: hbpmip/docker-compose-for-ci:17.06-1
+    environment:
+      - CIRCLECI: true
     steps:
       - checkout
       - run:
@@ -12,6 +15,8 @@ jobs:
   test:
     docker:
       - image: hbpmip/docker-compose-for-ci:17.06-1
+    environment:
+          - CIRCLECI: true
     steps:
       - checkout
       - run:
