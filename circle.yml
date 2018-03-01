@@ -47,6 +47,10 @@ jobs:
           MESOS_SWITCH_USER: 0
           # see bug resolution for "Failed to determine the hierarchy where the subsystem freezer is attached" at https://github.com/eBayClassifiedsGroup/PanteraS/issues/142
           MESOS_LAUNCHER: "posix"
+      -image: mesosphere/chronos:v3.0.2
+        environment:
+          PORT0: 4400
+          PORT1: 4401
     environment:
           - CIRCLECI: true
     steps:
