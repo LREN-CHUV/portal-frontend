@@ -9,9 +9,7 @@ jobs:
     steps:
       - checkout
       - run:
-        name: "First run"
-        command: |
-         echo "A First hello"
+        name: echo "A First hello"
   test:
     docker:
       - image: hbpmip/docker-compose-for-ci:17.06-1
@@ -20,9 +18,7 @@ jobs:
     steps:
       - checkout
       - run:
-        name: "Second run"
-        command: |
-         echo "A second hello"
+        name: echo "A second hello"
 workflows:
   version: 2
   build_and_test:
