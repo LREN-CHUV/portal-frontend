@@ -505,7 +505,7 @@ angular
 
                 let foo;
                 const result = eval("foo=" + data.result[0].res);
-                $scope.experiment = {
+                $scope.experiment = Object.assign({}, $scope.experiment, {
                   result: {
                     data: {
                       data: result,
@@ -515,7 +515,7 @@ angular
                   algorithms: data.algorithms,
                   name: "K-MEANS",
                   finished: true
-                };
+                });
 
                 $scope.loading = false;
                 MLUtils.mark_as_read($scope.experiment);
