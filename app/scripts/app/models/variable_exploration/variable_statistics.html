@@ -12,11 +12,12 @@
       zoom="zoom"
     >
     </breadcrumb>
+
     <div ng-if="!focused_variable">
       <div tooltip-placement="left" tooltip="The name of the group">
         <p>{{metrics}}</p>
-      </div>    </div>
-
+      </div>
+    </div>
     <div ng-if="focused_variable">
       <div ng-if="!focused_variable.isVariable">
         <div tooltip-placement="left" tooltip="The name of the group">
@@ -55,6 +56,7 @@
                 <div ng-if="statistic.active">
                   <div ng-if="statistic.dataType !== 'SummaryStatistics'" ng-init="init_hc_config(statistic)">
                     <highchart config="statistic.hc_config" ng-if="show" class="highchart-width highcharts-container"></highchart>
+                    <pre>{{statistic.hc_config | json}}</pre>
                     <div style="height: 350px" ng-if="!show"></div>
                   </div>
                   <div ng-if="statistic.dataType === 'SummaryStatistics'">
@@ -87,6 +89,9 @@
         </div>
 
       </div>
+      <varcounter
+        get-focused-variable="focused_variable"
+      ></varcounter>
 
     </div>
 
