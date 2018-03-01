@@ -51,6 +51,12 @@ angular.module("chuvApp.models").controller("DatasetController", [
         ? search[category].split(",").map(code => ({ code }))
         : []);
 
+    const encodeFilters = () => {
+      return $scope.query.textQuery
+        ? JSON.stringify($scope.query.filterQuery)
+        : "";
+    };
+
     $scope.query.variables = map_query("variable");
     $scope.query.groupings = map_query("grouping");
     $scope.query.coVariables = map_query("covariable");
@@ -377,12 +383,14 @@ angular.module("chuvApp.models").controller("DatasetController", [
 
     // comfortable export button close
     $scope.exportPannel = false;
-    $scope.toogleExport = function () {
-      $scope.exportPannel = !$scope.exportPannel
+    $scope.toogleExport = function() {
+      $scope.exportPannel = !$scope.exportPannel;
     };
     let exportTimer;
     $scope.exportClose = function() {
-      exportTimer = $timeout(() => {$scope.exportPannel = false;}, 1000);
+      exportTimer = $timeout(() => {
+        $scope.exportPannel = false;
+      }, 1000);
     };
     $scope.exportCloseDeny = function() {
       $timeout.cancel(exportTimer);
