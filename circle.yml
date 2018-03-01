@@ -19,9 +19,9 @@ jobs:
     docker:
       - image: hbpmip/docker-compose-for-ci:17.06-1
       - image: zookeeper:3.4.11
-          environment:
-              ZOO_MY_ID: 1
-              ZOO_SERVERS: server.1=zookeeper:2888:3888
+        environment:
+          ZOO_MY_ID: 1
+          ZOO_SERVERS: server.1=zookeeper:2888:3888
     environment:
           - CIRCLECI: true
     steps:
