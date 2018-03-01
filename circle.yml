@@ -19,11 +19,6 @@ jobs:
           name: "Additional task"
           command: |
             echo "A first hello"
-
-    notify:
-      webhooks:
-      - url: 'https://webhook.atomist.com/atomist/circle'
-
   tests:
     docker:
       -image: hbpmip/docker-compose-for-ci:17.06-1
