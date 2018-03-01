@@ -15,10 +15,10 @@ jobs:
           name: "Build the project"
           command: |
             docker build -t hbpmip/portal-frontend .
-      -run:
-        name: "Additional task"
-        command: |
-          echo "A first hello"
+      - run:
+          name: "Additional task"
+          command: |
+            echo "A first hello"
 
     notify:
       webhooks:
