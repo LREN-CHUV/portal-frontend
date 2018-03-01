@@ -8,8 +8,7 @@ jobs:
       - CIRCLECI: true
     steps:
       - checkout
-      - run:
-        name: echo "A First hello"
+      - run: echo "A First hello"
       - run:
         name: "Install requirements"
         command: |
@@ -21,8 +20,7 @@ jobs:
           - CIRCLECI: true
     steps:
       - checkout
-      - run:
-        name: echo "A second hello"
+      - run: echo "A second hello"
       - run:
         name: "Install requirements"
         command: |
