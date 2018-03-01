@@ -36,6 +36,9 @@ var appScripts = [
   "./" +
     appConfig.app +
     "/scripts/app/models/variable_exploration/breadcrumb.component.js",
+  "./" +
+    appConfig.app +
+    "/scripts/app/models/variable_exploration/varcounter.component.js",
   "./" + appConfig.app + "/scripts/app/models/review/review.controller.js",
   "./" + appConfig.app + "/scripts/app/models/review/chart.controller.js",
   "./" +
@@ -92,7 +95,9 @@ var appScripts = [
   "./" + appConfig.app + "/scripts/components/toolbar/toolbar.module.js",
   "./" + appConfig.app + "/scripts/components/toolbar/toolbar.js",
   "./" + appConfig.app + "/scripts/components/hightlight/hightlight.filter.js",
-  "./" + appConfig.app + "/scripts/app/models/variable_exploration/available_methods.component.js",
+  "./" +
+    appConfig.app +
+    "/scripts/app/models/variable_exploration/available_methods.component.js"
 ];
 
 module.exports = appScripts;

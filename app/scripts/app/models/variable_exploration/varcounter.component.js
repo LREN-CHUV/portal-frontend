@@ -7,20 +7,10 @@ angular.module("chuvApp.models").component("varcounter", {
     "Variable",
     function(Variable) {
       const getVarChount = focusedVariable => {
-        console.log("this.getFocusedVariable", focusedVariable);
         if (_.has(focusedVariable, "code")) {
           Variable.getSubCategoryVariableCounter(
             focusedVariable.code
           ).then(subCategoryVariableCounter => {
-            console.log(
-              ">>>>",
-              subCategoryVariableCounter.map(group => group.code)
-            );
-            console.log(
-              ">>>>",
-              subCategoryVariableCounter.map(group => group.counter)
-            );
-
             var highchartData = {
               chart: {
                 type: "column"
@@ -43,7 +33,6 @@ angular.module("chuvApp.models").component("varcounter", {
                 }
               ]
             };
-            console.log("highchartData", highchartData);
             this.subCategoryVariableCounter = highchartData;
           });
         }
