@@ -106,9 +106,9 @@ angular
 
             function repeat_refresh_running_experiments() {
               refresh_running_experiments();
-              $interval(refresh_running_experiments, 2000);//TODO Remove this hardcoded value!
+              $interval(refresh_running_experiments, 60000); //TODO Remove this hardcoded value!
             }
-               
+
             User.get().then(repeat_refresh_running_experiments);
           }
         ]
