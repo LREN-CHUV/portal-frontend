@@ -66,8 +66,29 @@
               <div class="fa fa-spin fa-spinner "></div>
             </div>
             <div ng-if="tableHeader "
-              style="background-color: #d5e5fd; padding: 0.5em ">
-              <table class="table ">
+              style="background-color: #d5e5fd; padding: 0.5em "
+              class="dt-wrapper">
+              <div class="export-pannel">
+                <div ng-click="toogleExport()"
+                     class="export-btn-sandwich"
+                     ng-mouseleave="exportClose()"
+                     ng-mouseover="exportCloseDeny()">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                  <div ng-if="exportPannel" class="export-menu">
+                    <a title="Export Table to CSV"
+                       ng-click="csv.generate()"
+                       ng-href="{{ csv.link() }}"
+                       download="myTable.csv">Export as CSV
+                    </a>
+                    <a title="Export Table to PNG"
+                       ng-click="png.generate()">Export as PNG
+                    </a>
+                  </div>
+                </div>
+              </div>
+              <table class="table " export-csv="csv" export-to-png="png" separator=";">
                 <tr style="background-color: transparent ">
                   <th ng-repeat="column in tableHeader track by $index ">
                     <h6 style="text-transform: uppercase ">{{column}}</h6>
