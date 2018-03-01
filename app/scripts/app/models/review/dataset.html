@@ -72,18 +72,26 @@
             <div ng-if="tableHeader "
               style="background-color: #d5e5fd; padding: 0.5em "
               class="dt-wrapper">
-              <a class="btn btn-rounded export-btn"
-                 title="Export Table to SCV"
-                 ng-click="csv.generate()"
-                 ng-href="{{ csv.link() }}"
-                 download="myTable.csv">
-                <i class="fa fa-download"></i> &#160;Export as SCV
-              </a>
-              <a class="btn btn-rounded export-btn"
-                 title="Export Table to PNG"
-                 ng-click="png.generate()">
-                <i class="fa fa-download"></i> &#160;Export as PNG
-              </a>
+              <div class="export-pannel">
+                <div ng-click="toogleExport()"
+                     class="export-btn-sandwich"
+                     ng-mouseleave="exportClose()"
+                     ng-mouseover="exportCloseDeny()">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                  <div ng-if="exportPannel" class="export-menu">
+                    <a title="Export Table to SCV"
+                       ng-click="csv.generate()"
+                       ng-href="{{ csv.link() }}"
+                       download="myTable.csv">Export as SCV
+                    </a>
+                    <a title="Export Table to PNG"
+                       ng-click="png.generate()">Export as PNG
+                    </a>
+                  </div>
+                </div>
+              </div>
               <table class="table " export-csv="csv" export-to-png="png" separator=";">
                 <tr style="background-color: transparent ">
                   <th ng-repeat="column in tableHeader track by $index ">
