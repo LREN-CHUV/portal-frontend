@@ -214,9 +214,7 @@ angular
           groupings: map_query("groupings"),
           coVariables: map_query("coVariables"),
           filters: map_query("filters"),
-          filterQuery: !_.isEmpty(search.filterQuery)
-            ? JSON.parse(search.filterQuery)
-            : "",
+          filterQuery: !_.isEmpty(search.filterQuery) ? search.filterQuery : "",
           trainingDatasets: map_query("trainingDatasets")
         };
 
@@ -262,13 +260,8 @@ angular
                     .filter(k => validation[k])
                     .map(t => ({ code: t }));
 
-                  const filterQuery = !_.isEmpty(search.filterQuery)
-                    ? JSON.stringify($scope.query.filterQuery)
-                    : null;
-                  query.filterQuery = filterQuery;
-                  query.filters = $scope.query.filters
-                    .map(f => f.code)
-                    .join(",");
+                  query.filters = $scope.query.filterQuery;
+                  delete query.filterQuery;
 
                   $scope.model = {
                     title: child_scope.name,
