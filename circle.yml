@@ -7,12 +7,18 @@ jobs:
     environment:
       - CIRCLECI: true
     steps:
+      - setup_remote_docker:
+          version: 17.06.0-ce
       - checkout
       - run: echo "A First hello"
       - run:
           name: "Install requirements"
           command: |
             docker --version
+      - run:
+          name: "Build the project"
+          command: |
+            docker build -t hbpmip/portal-frontend .
   test:
     docker:
       - image: hbpmip/docker-compose-for-ci:17.06-1
