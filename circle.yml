@@ -159,9 +159,9 @@ jobs:
         command: |
           echo "A second hello"
 
-workflows:
-  version: 2
-  build_and_test:
-    jobs:
-      - build
-      - tests
+#workflows:
+#  version: 2
+#  build_and_test:
+#    jobs:
+#      - build
+#      - tests
