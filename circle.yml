@@ -10,6 +10,10 @@ jobs:
       - checkout
       - run:
         name: echo "A First hello"
+      - run:
+        name: "Install requirements"
+        command: |
+          docker --version
   test:
     docker:
       - image: hbpmip/docker-compose-for-ci:17.06-1
@@ -19,6 +23,10 @@ jobs:
       - checkout
       - run:
         name: echo "A second hello"
+      - run:
+        name: "Install requirements"
+        command: |
+          docker --version
 workflows:
   version: 2
   build_and_test:
