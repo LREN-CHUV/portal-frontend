@@ -20,13 +20,13 @@ jobs:
           command: |
             echo "A first hello"
 
-    notify:
-      webhooks:
-      - url: 'https://webhook.atomist.com/atomist/circle'
+#    notify:
+#      webhooks:
+#      - url: 'https://webhook.atomist.com/atomist/circle'
 
   tests:
     docker:
-      -image: hbpmip/docker-compose-for-ci:17.06-1
+#      -image: hbpmip/docker-compose-for-ci:17.06-1
 #      -image: zookeeper:3.4.11
 #        environment:
 #          ZOO_MY_ID: 1
@@ -159,9 +159,9 @@ jobs:
         command: |
           echo "A second hello"
 
-#workflows:
-#  version: 2
-#  build_and_test:
-#    jobs:
-#      - build
-#      - tests
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - build
+      - tests
