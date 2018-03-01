@@ -23,10 +23,10 @@ jobs:
     notify:
       webhooks:
       - url: 'https://webhook.atomist.com/atomist/circle'
-#
-#  tests:
-#    docker:
-#      -image: hbpmip/docker-compose-for-ci:17.06-1
+
+  tests:
+    docker:
+      -image: hbpmip/docker-compose-for-ci:17.06-1
 #      -image: zookeeper:3.4.11
 #        environment:
 #          ZOO_MY_ID: 1
@@ -146,18 +146,22 @@ jobs:
 #          VIRTUAL_HOST: backend
 #          VIRTUAL_PORT: 8080
 #          DATASETS: chuv,brescia,lille
-#    steps:
-#      - setup_remote_docker:
-#        version: 17.06.0-ce
-#      - checkout
-#      - run:
-#        name: "Install requirements"
-#        command: |
-#          docker --version
-#
-#workflows:
-#  version: 2
-#  build_and_test:
-#    jobs:
-#      - build
-#      - test
+    steps:
+      - setup_remote_docker:
+        version: 17.06.0-ce
+      - checkout
+      - run:
+        name: "Install requirements"
+        command: |
+          docker --version
+      - run:
+        name: "Some task in test job"
+        command: |
+          echo "A second hello"
+
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - build
+      - test
