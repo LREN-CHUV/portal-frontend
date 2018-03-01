@@ -492,35 +492,41 @@ angular
             try {
               const data = response.data;
               $scope.experiment = data;
+
+              // FIXME: Parse the results from Exareme JS Object
+              // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/eval
+              if (
+                !_.isUndefined(data.algorithms[0].code) &&
+                data.algorithms[0].code === "K_MEANS"
+              ) {
+                if (data.result && !data.result.length) {
+                  return;
+                }
+
+                let foo;
+                const result = eval("foo=" + data.result[0].res);
+                $scope.experiment = {
+                  result: {
+                    data: {
+                      data: result,
+                      type: "application/highcharts+json"
+                    }
+                  },
+                  algorithms: data.algorithms,
+                  name: "K-MEANS",
+                  finished: true
+                };
+
+                $scope.loading = false;
+                MLUtils.mark_as_read($scope.experiment);
+                return;
+              }
+
               $scope.experiment.name =
                 data.algorithms &&
                 data.algorithms.length &&
                 data.algorithms[0].name;
               $scope.loading = false;
-
-              // Parse the results
-              // if ($scope.federationmode) {
-              //   //$scope.federationmode) {
-
-              //   if (data.result && !data.result.length) {
-              //     throw data.result;
-              //   }
-
-              //   let foo;
-              //   const result = "foo=" + data.result[0].res;
-              //   let re = eval(result);
-              //   // re.type = "application/highcharts+json";
-
-              //   $scope.experiment = {
-              //     type: "application/highcharts+json",
-              //     result: [re],
-              //     finished: true
-              //   };
-
-              //   $scope.loading = false;
-              //   MLUtils.mark_as_read($scope.experiment);
-              //   return;
-              // }
 
               // Refresh experiment until done
               if (!cancelled && !$scope.experiment.finished) {
