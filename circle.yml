@@ -33,6 +33,10 @@ jobs:
           command: |
             docker --version
       - run:
+          name: "Install Java"
+          command: |
+            apt-get install default-jdk
+      - run:
           name: "Build the project"
           command: |
             docker build -t hbpmip/portal-frontend-dev -f ./Dockerfile-e2e-tests .
