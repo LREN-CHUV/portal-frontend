@@ -22,6 +22,7 @@ jobs:
   test:
     docker:
       - image: hbpmip/docker-compose-for-ci:17.06-1
+      - image: circleci/openjdk:8-jdk-browsers
     environment:
           - CIRCLECI: true
     steps:
@@ -32,10 +33,10 @@ jobs:
           name: "Install requirements"
           command: |
             docker --version
-      - run:
-          name: "Install Java"
-          command: |
-            apk update && apk add default-jdk
+#      - run:
+#          name: "Install Java"
+#          command: |
+#            apk update && apk add default-jdk
       - run:
           name: "Build the project"
           command: |
