@@ -50,22 +50,13 @@ jobs:
             rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
           environment:
             DOCKERIZE_VERSION: v0.3.0
-#      - run:
-#          name: install dockerize if not found in cache
-#          command: |
-#            if \[ -f /usr/local/bin/dockerize \]; then
-#              echo "dockerize found; skipping installation";
-#            else wget   http://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
-#              && tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
-#              && rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz;
-#            fi
       - run:
           name: "Wait for project Run"
-          command: dockerize -wait tcp://localhost:8000 -timeout 2m
+          command: dockerize -wait http://localhost:8000 -timeout 2m
       - run:
           name: "Test the project"
           command: |
-            docker exec -it hbpmip/portal-frontend-dev bash gulp protractor-go duration=$(( 180 - start ))
+            docker exec -it hbpmip/portal-frontend-dev bash gulp protractor-go
       - run:
           name: "Stop the project"
           command: |
