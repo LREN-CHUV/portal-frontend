@@ -51,6 +51,12 @@ jobs:
           environment:
             DOCKERIZE_VERSION: v0.3.0
       - run:
+          name: "Wonderful task"
+          command: |
+            pwd
+            ls -al
+
+      - run:
           name: "Wait for project Run"
           command: dockerize -wait http://localhost:8000 -timeout 1m
       - run:
