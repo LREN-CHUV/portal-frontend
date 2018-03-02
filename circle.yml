@@ -36,10 +36,10 @@ jobs:
           name: "Build the project"
           command: |
             docker build -t hbpmip/portal-frontend-dev -f ./Dockerfile-dev .
-#      - run:
-#          name: "Test the project"
-#          command: |
-#            docker run -it --rm -p8000:8000 hbpmip/portal-frontend-dev
+      - run:
+          name: "Test the project"
+          command: |
+            docker run -it --rm -p8000:8000 hbpmip/portal-frontend-dev
 workflows:
   version: 2
   build_and_test:
