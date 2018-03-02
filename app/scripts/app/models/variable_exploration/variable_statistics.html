@@ -12,11 +12,12 @@
       zoom="zoom"
     >
     </breadcrumb>
+
     <div ng-if="!focused_variable">
       <div tooltip-placement="left" tooltip="The name of the group">
         <p>{{metrics}}</p>
-      </div>    </div>
-
+      </div>
+    </div>
     <div ng-if="focused_variable">
       <div ng-if="!focused_variable.isVariable">
         <div tooltip-placement="left" tooltip="The name of the group">
@@ -87,6 +88,9 @@
         </div>
 
       </div>
+      <varcounter
+        get-focused-variable="focused_variable"
+      ></varcounter>
 
     </div>
 

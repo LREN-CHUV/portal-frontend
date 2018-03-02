@@ -44,6 +44,50 @@ angular.module("chuvApp.components.criteria").factory("Variable", [
         });
     };
 
+    resource.getSubCategoryVariableCounter = variableCode =>
+      resource.hierarchy().then(data => {
+        const getCounts = group => {
+          let out;
+          if (group.groups) {
+            out = _.map(group.groups, group => {
+              return { code: group.code, counter: count(group) };
+            });
+          } else {
+            out = [{ code: group.code, counter: group.variables.length }];
+          }
+          return out;
+        };
+
+        const count = (group, currentcount = 0) => {
+          if (group.variables) {
+            currentcount = currentcount + group.variables.length;
+          }
+          if (group.groups) {
+            for (let i = 0; i < group.groups.length; i++) {
+              currentcount = count(group.groups[i], currentcount);
+            }
+          }
+          return currentcount;
+        };
+        const getGroup = (child, code) => {
+          if (child.code === code) {
+            return child;
+          } else if (child.groups) {
+            let out;
+            for (let i = 0; i < child.groups.length; i++) {
+              let group = getGroup(child.groups[i], code);
+              if (group !== undefined) {
+                out = group;
+                break;
+              }
+            }
+            return out;
+          }
+        };
+        let currentGroup = variableCode ? getGroup(data, variableCode) : data;
+        return currentGroup ? getCounts(currentGroup) : [];
+      });
+
     resource.getBreadcrumb = variableCode =>
       resource.hierarchy().then(data => {
         let found = false;

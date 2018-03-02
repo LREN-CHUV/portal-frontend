@@ -356,6 +356,92 @@ describe("the EE (explore) page ", function() {
     );
   });
 
+  describe("the varcount component` in the panel `variable detail` ", function() {
+    var breadcrumbPanel, selectVariablePanel, groupBubble, varcounter;
+    beforeEach(function(done) {
+      browser.get("http://localhost:8000/explore").then(function() {
+        selectVariablePanel = element.all(by.css(".panel")).get(1);
+        variableDetailPanel = element.all(by.css(".panel")).get(2);
+        selectVariablePanel
+          .all(
+            by.css(".panel-body:nth-child(1)>svg circle.node:not(.node--leaf)")
+          )
+          .each((el, i) =>
+            el.getAttribute("innerHTML").then(txt => console.log("i", i, txt))
+          );
+        groupBubbleScore = selectVariablePanel
+          .all(
+            by.css(".panel-body:nth-child(1)>svg circle.node:not(.node--leaf)")
+          )
+          .get(24);
+        groupBubbleDiagnosis = selectVariablePanel
+          .all(
+            by.css(".panel-body:nth-child(1)>svg circle.node:not(.node--leaf)")
+          )
+          .get(28);
+        varcounter = variableDetailPanel.all(by.css(".panel-body varcounter"));
+        done();
+      });
+    });
+
+    it("should display the count [46, 46, 91, 274] of each subcategory of that category *Score* when the corresponding bubble item is clicked", function(
+      done
+    ) {
+      browser
+        .actions()
+        .mouseMove(groupBubbleScore)
+        .mouseMove({ x: 0, y: 40 }) //in order to avoid to click on subcircles
+        .click()
+        .perform();
+      var height = [];
+      varcounter
+        .all(
+          by.css(
+            "highchart g.highcharts-series-group g.highcharts-series rect.highcharts-point"
+          )
+        )
+        .each(function(el, i) {
+          el.getAttribute("height").then(function(h) {
+            height.push(h);
+            if (i === 3) {
+              expect(height[0]).toEqual("46");
+              expect(height[1]).toEqual("46");
+              expect(height[2]).toEqual("91");
+              expect(height[3]).toEqual("274");
+              done();
+            }
+          });
+        });
+    });
+
+    it("should display the count [274] of each subcategory of that category *Diagnosis* when the corresponding bubble item is clicked", function(
+      done
+    ) {
+      browser
+        .actions()
+        .mouseMove(groupBubbleDiagnosis)
+        .mouseMove({ x: 0, y: 18 }) //in order to avoid to click on subcircles
+        .click()
+        .perform();
+      var height = [];
+      varcounter
+        .all(
+          by.css(
+            "highchart g.highcharts-series-group g.highcharts-series rect.highcharts-point"
+          )
+        )
+        .each(function(el, i) {
+          el.getAttribute("height").then(function(h) {
+            height.push(h);
+            if (i === 0) {
+              expect(height[0]).toEqual("274");
+              done();
+            }
+          });
+        });
+    });
+  });
+
   describe("the breadcrumb component` in the panel `variable detail` ", function() {
     var breadcrumbPanel, selectVariablePanel, bubble, breadcrumbs;
     beforeEach(function(done) {
