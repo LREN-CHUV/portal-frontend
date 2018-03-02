@@ -56,6 +56,18 @@ angular
 
             // put groups in datastructure
             groups = map_groups($scope);
+
+            // FIXME: add variables to the root node
+            const root = {
+              label: "Dataset",
+              is_group: true,
+              code: "root",
+              original: { code: "root" },
+              children: []
+            };
+            group_dict.root = root;
+            groups.children.push(root);
+
             $scope.populatedGroups = groups;
             // and then all the variables in all the right groups
             $scope.allVariables.forEach(function(variable) {
@@ -67,14 +79,6 @@ angular
               if (!group) {
                 return;
               }
-              var group = group_dict[variable.group.code];
-              var description = variable.label;
-
-              if (variable.description) {
-                description += "\n" + variable.description;
-              }
-
-              if (!group) return;
 
               group.children.push(
                 (group_dict[variable.code] = {
