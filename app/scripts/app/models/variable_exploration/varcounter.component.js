@@ -11,10 +11,6 @@ angular.module("chuvApp.models").component("varcounter", {
           Variable.getSubCategoryVariableCounter(
             focusedVariable.code
           ).then(subCategoryVariableCounter => {
-            console.log(
-              "subCategoryVariableCounter.length > 0 : ",
-              subCategoryVariableCounter.length > 0
-            );
             this.showChart = subCategoryVariableCounter.length > 0;
             var highchartData = {
               chart: {
