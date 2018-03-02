@@ -33,7 +33,7 @@ jobs:
       - run:
           name: "Test the project"
           command: |
-            docker run -v $(pwd)/app:/frontend/app -it --rm -p8000:8000 hbpmip/portal-frontend-dev
+            docker run -it --rm -p8000:8000 hbpmip/portal-frontend-dev
 workflows:
   version: 2
   build_and_test:
