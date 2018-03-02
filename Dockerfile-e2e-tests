@@ -9,6 +9,8 @@ RUN webdriver-manager update --standalone --versions.chrome 2.28 --gecko false
 
 RUN curl -o- -L https://yarnpkg.com/install.sh | bash
 
+RUN apt-get install default-jdk
+
 COPY package.json /frontend
 RUN yarn install
 
