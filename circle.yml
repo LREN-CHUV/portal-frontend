@@ -15,16 +15,18 @@ jobs:
           name: "Install requirements"
           command: |
             docker --version
-      - run:
-          name: "Build the project"
-          command: |
-            docker build -t hbpmip/portal-frontend .
+#      - run:
+#          name: "Build the project"
+#          command: |
+#            docker build -t hbpmip/portal-frontend .
   test:
     docker:
       - image: hbpmip/docker-compose-for-ci:17.06-1
     environment:
           - CIRCLECI: true
     steps:
+      - setup_remote_docker:
+          version: 17.06.0-ce
       - checkout
       - run:
           name: "Install requirements"
@@ -33,7 +35,7 @@ jobs:
       - run:
           name: "Build the project"
           command: |
-            docker build -t hbpmip/portal-frontend .
+            docker build -t hbpmip/portal-frontend-dev -f ./Dockerfile-dev .
 #      - run:
 #          name: "Test the project"
 #          command: |
