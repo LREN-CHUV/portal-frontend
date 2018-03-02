@@ -52,7 +52,7 @@ jobs:
             DOCKERIZE_VERSION: v0.3.0
       - run:
           name: "Wait for project Run"
-          command: dockerize -wait http://localhost:8000 -timeout 2m
+          command: dockerize -wait http://172.17.0.2:8000 -timeout 2m
       - run:
           name: "Test the project"
           command: |
