@@ -53,7 +53,7 @@ jobs:
       - run:
           name: install dockerize if not found in cache
           command: |
-            wget --version
+            wget -V
       - run:
           name: install dockerize if not found in cache
           command: |
