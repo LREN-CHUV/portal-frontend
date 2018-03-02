@@ -44,7 +44,7 @@ jobs:
       - run:
           name: "Test the project"
           command: |
-            docker exec -it hbpmip/portal-frontend-dev bash gulp protractor-go
+            start=180 docker exec -it hbpmip/portal-frontend-dev bash gulp protractor-go
       - run:
           name: "Stop the project"
           command: |
