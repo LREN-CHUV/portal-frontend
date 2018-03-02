@@ -42,8 +42,6 @@
 }
 
 .dataset-list {
-    height: 480px;
-    overflow-y: auto;
     .active {
         line-height: 25px;
         display: inline-block;
@@ -57,6 +55,14 @@
         margin: 0 3px;
         transition: all 0.1s ease;
         vertical-align: middle;
+    }
+}
+
+.variables-list {
+    height: 480px;
+    overflow-y: auto;
+    h5+p {
+        margin-left: 10px;
     }
 }
 
