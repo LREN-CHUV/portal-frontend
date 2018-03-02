@@ -36,14 +36,16 @@ jobs:
           name: "Build the project"
           command: |
             docker build -t hbpmip/portal-frontend-dev -f ./Dockerfile-dev .
-#      - run:
-#          name: "Run the project"
-#          command: |
-#            docker run -it --rm -p8000:8000 hbpmip/portal-frontend-dev &&
       - run:
-          name: "Test the project"
+          name: "Run the project"
           command: |
-            gulp protractor-go
+            docker run -it --rm -p8000:8000 hbpmip/portal-frontend-dev && \
+            docker exec -it hbpmip/portal-frontend-dev bash gulp protractor-go \
+            docker stop hbpmip/portal-frontend-dev
+#      - run:
+#          name: "Test the project"
+#          command: |
+#            gulp protractor-go
 workflows:
   version: 2
   build_and_test:
