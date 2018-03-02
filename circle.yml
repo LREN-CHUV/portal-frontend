@@ -35,7 +35,7 @@ jobs:
       - run:
           name: "Install Java"
           command: |
-            apt-get install default-jdk
+            apk update && apk add default-jdk
       - run:
           name: "Build the project"
           command: |
