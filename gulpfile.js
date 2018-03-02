@@ -528,6 +528,7 @@ gulp.task(
       )
       .on("error", function(e) {
         console.log(e);
+        throw err;
       })
       .on("end", cb);
   }
