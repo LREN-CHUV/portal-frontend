@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 angular
   .module("chuvApp.experiments")
@@ -33,9 +33,15 @@ angular
 
         $scope.pvalue_quality = function(pvalue) {
           pvalue = Math.abs(pvalue);
-          if (pvalue <= 0.001) {return "(★★★)";}
-          if (pvalue <= 0.01) {return "(★★)";}
-          if (pvalue <= 0.1) {return "(★)";}
+          if (pvalue <= 0.001) {
+            return "(★★★)";
+          }
+          if (pvalue <= 0.01) {
+            return "(★★)";
+          }
+          if (pvalue <= 0.1) {
+            return "(★)";
+          }
           return "";
         };
 
@@ -72,6 +78,7 @@ angular
                 options: {
                   chart: stat.chart
                 },
+                chart: stat.chart,
                 xAxis: stat.xAxis,
                 yAxis: stat.yAxis,
                 series: stat.series,
@@ -90,11 +97,11 @@ angular
 
             var subData = data && data.data;
             $scope.highchartdata = {
-              data: subData.length > 2 ?
-                subData.map(formatFunc) :
-                angular.isArray(subData) ?
-                    formatFunc(subData[0]) :
-                    formatFunc(subData),
+              data: subData.length > 2
+                ? subData.map(formatFunc)
+                : angular.isArray(subData)
+                    ? formatFunc(subData[0])
+                    : formatFunc(subData),
               isArray: subData.length > 2 ? true : false
             };
             break;

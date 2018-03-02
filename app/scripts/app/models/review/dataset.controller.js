@@ -51,10 +51,19 @@ angular.module("chuvApp.models").controller("DatasetController", [
         ? search[category].split(",").map(code => ({ code }))
         : []);
 
+    const encodeFilters = () => {
+      return $scope.query.textQuery
+        ? JSON.stringify($scope.query.filterQuery)
+        : "";
+    };
+
     $scope.query.variables = map_query("variable");
     $scope.query.groupings = map_query("grouping");
     $scope.query.coVariables = map_query("covariable");
     $scope.query.filters = map_query("filter");
+    $scope.query.filterQuery = !_.isEmpty(search.filterQuery)
+      ? JSON.parse(search.filterQuery)
+      : null;
     $scope.query.trainingDatasets = map_query("trainingDatasets");
 
     let selectedVariables = [];
@@ -62,7 +71,6 @@ angular.module("chuvApp.models").controller("DatasetController", [
 
     const statistics = () => {
       $scope.loading = true;
-      $scope.tableHeader = ["Variables", ...selectedDatasets];
       let rows = [];
       // format
       // const rows = [
@@ -100,7 +108,9 @@ angular.module("chuvApp.models").controller("DatasetController", [
                 grouping: $scope.query.groupings,
                 covariables: $scope.query.coVariables,
                 datasets: [{ code: d }],
-                filters: ""
+                filters: $scope.query.textQuery
+                  ? JSON.stringify($scope.query.filterQuery)
+                  : ""
               })
             )
           )
@@ -142,6 +152,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
         .then(data => {
           rows = data;
 
+          $scope.tableHeader = ["Variables", ...selectedDatasets];
           $scope.tableRows = formatTable(data);
           $scope.loading = false;
           $scope.error = null;
@@ -232,7 +243,15 @@ angular.module("chuvApp.models").controller("DatasetController", [
 
     // Charts ressources
     var getHistogram = function(variable) {
-      return variable ? Variable.get_histo(variable.code) : null;
+      return variable
+        ? Variable.get_histo(
+            variable.code,
+            selectedDatasets.map(code => ({ code })),
+            $scope.query.textQuery
+              ? JSON.stringify($scope.query.filterQuery)
+              : ""
+          )
+        : null;
     };
 
     $scope.isSelected = function(variable) {
@@ -305,6 +324,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
         coVariables: unmap_category("coVariables"),
         groupings: unmap_category("groupings"),
         filters: unmap_category("filters"),
+        filterQuery: JSON.stringify($scope.query.filterQuery),
         trainingDatasets: unmap_category("trainingDatasets"),
         graph_config: $scope.chartConfig,
         model_slug: ""
@@ -329,9 +349,28 @@ angular.module("chuvApp.models").controller("DatasetController", [
           return;
         }
 
+        // retrieve filterQuery as sql text, hack queryBuilder
+        if ($scope.query.filterQuery) {
+          const $element = $("<div>");
+          const qb = $element.queryBuilder({
+            rules: $scope.query.filterQuery,
+            filters: $scope.getFilterVariables(),
+            allow_empty: true,
+            inputs_separator: " - "
+          });
+
+          $scope.query.textQuery = qb.queryBuilder("getSQL", false, false).sql;
+          qb.queryBuilder("destroy");
+        }
+
         getHistogram(variable).then(format, error);
       });
     };
+
+    $scope.$on("event:configureFilterQueryFinished", () => {
+      $location.search("filterQuery", JSON.stringify($scope.query.filterQuery));
+      init();
+    });
 
     $scope.$on("event:loadModel", function(evt, model) {
       selectedDatasets = [...$scope.query.trainingDatasets.map(d => d.code)];
@@ -344,12 +383,14 @@ angular.module("chuvApp.models").controller("DatasetController", [
 
     // comfortable export button close
     $scope.exportPannel = false;
-    $scope.toogleExport = function () {
-      $scope.exportPannel = !$scope.exportPannel
+    $scope.toogleExport = function() {
+      $scope.exportPannel = !$scope.exportPannel;
     };
     let exportTimer;
     $scope.exportClose = function() {
-      exportTimer = $timeout(() => {$scope.exportPannel = false;}, 1000);
+      exportTimer = $timeout(() => {
+        $scope.exportPannel = false;
+      }, 1000);
     };
     $scope.exportCloseDeny = function() {
       $timeout.cancel(exportTimer);

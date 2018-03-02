@@ -158,23 +158,13 @@ angular.module("chuvApp.components.criteria").factory("Variable", [
           })
       );
 
-    resource.get_histo = function(code, datasets = []) {
+    resource.get_histo = function(code, datasets = [], filters = "") {
       return $http
         .get(backendUrl + "/variables/" + code + "/histogram_query.json")
         .then(function(response) {
           const data = response.data;
           data.datasets = datasets;
-          return $http.post(backendUrl + "/mining", JSON.stringify(data));
-        });
-    };
-
-    resource.getCustomHistogram = function(code, grouping, filters) {
-      return $http
-        .get(backendUrl + "/variables/" + code + "/histogram_query.json")
-        .then(function(response) {
-          var data = response.data;
-          data.grouping = grouping ? grouping : data.grouping;
-          data.filters = filters ? filters : data.filters;
+          data.filters = filters;
           return $http.post(backendUrl + "/mining", JSON.stringify(data));
         });
     };

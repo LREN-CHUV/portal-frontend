@@ -191,6 +191,46 @@ angular.module("chuvApp.models").controller("ReviewController", [
       return _.find(list, findFunction) !== undefined;
     };
 
+    var getFilterVariables = () =>
+      $scope.query.filters
+        .concat($scope.query.variables)
+        .concat($scope.query.coVariables)
+        .concat($scope.query.groupings)
+        .map(function(variable) {
+          variable = $scope.allVariables[variable.code];
+
+          var var_config = {
+            id: variable.code,
+            label: variable.label,
+            type: "double",
+            operators: [
+              "equal",
+              "not_equal",
+              "less",
+              "greater",
+              "between",
+              "not_between"
+            ]
+          };
+
+          if (variable.type === "integer") {
+            var_config.type = "integer";
+          } else if (variable.type !== "real") {
+            var_config.type = "string";
+            var_config.input = "select";
+            var_config.operators = ["equal", "not_equal", "in", "not_in"];
+            var_config.values = {};
+            variable.enumerations.forEach(function(e /*, index*/) {
+              // TODO: var isn't used, commented to jshint warning detection
+              var_config.values[e.code] = e.label;
+            });
+          }
+
+          return var_config;
+        });
+
+    $scope.getFilterVariables = () => getFilterVariables();
+
     /**
      * Returns a promise that resolves when filterQuery is set.
      */
@@ -203,43 +243,7 @@ angular.module("chuvApp.models").controller("ReviewController", [
         size: "lg",
         controller: function($uibModalInstance) {
           childScope.contructQB = function() {
-            var filterVariables = $scope.query.filters
-              .concat($scope.query.variables)
-              .concat($scope.query.coVariables)
-              .concat($scope.query.groupings)
-              .map(function(variable) {
-                variable = $scope.allVariables[variable.code];
-
-                var var_config = {
-                  id: variable.code,
-                  label: variable.label,
-                  type: "double",
-                  operators: [
-                    "equal",
-                    "not_equal",
-                    "less",
-                    "greater",
-                    "between",
-                    "not_between"
-                  ]
-                };
-
-                if (variable.type === "integer") {
-                  var_config.type = "integer";
-                } else if (variable.type !== "real") {
-                  var_config.type = "string";
-                  var_config.input = "select";
-                  var_config.operators = ["equal", "not_equal", "in", "not_in"];
-                  var_config.values = {};
-                  variable.enumerations.forEach(function(e /*, index*/) {
-                    // TODO: var isn't used, commented to jshint warning detection
-                    var_config.values[e.code] = e.label;
-                  });
-                }
-
-                return var_config;
-              });
-
+            var filterVariables = getFilterVariables();
             if (!filterVariables.length) return;
 
             $(".query-builder").queryBuilder({
@@ -283,7 +287,10 @@ angular.module("chuvApp.models").controller("ReviewController", [
       });
 
       $scope.$on("$stateChangeStart", $uibModal.dismiss);
-      modal.result.then($scope.executeQuery);
+      modal.result.then(() => {
+        $scope.executeQuery;
+        $scope.$broadcast("event:configureFilterQueryFinished");
+      });
 
       // do not unwrap this: childScope.contructQB is set later.
       modal.opened.then(function() {
@@ -382,7 +389,8 @@ angular.module("chuvApp.models").controller("ReviewController", [
           "query.variables",
           "query.groupings",
           "query.coVariables",
-          "variables"
+          "variables",
+          "query.filterQuery"
         ],
         function(newValue) {
           if (!_.all(newValue)) {
@@ -396,6 +404,19 @@ angular.module("chuvApp.models").controller("ReviewController", [
         }
       );
     }
+
+    const decodeFilters = () => {
+      const query = $scope.query.textQuery
+        ? JSON.parse($scope.query.filterQuery)
+        : null;
+      return query;
+    };
+
+    const encodeFilters = () => {
+      return $scope.query.textQuery
+        ? JSON.stringify($scope.query.filterQuery)
+        : "";
+    };
 
     function update_location_search() {
       function unmap_category(category) {
@@ -414,6 +435,7 @@ angular.module("chuvApp.models").controller("ReviewController", [
         covariable: unmap_category("coVariables"),
         grouping: unmap_category("groupings"),
         filter: unmap_category("filters"),
+        filterQuery: decodeFilters(),
         execute: true
       };
 
@@ -436,10 +458,12 @@ angular.module("chuvApp.models").controller("ReviewController", [
         $scope.query.groupings &&
         $scope.query.coVariables &&
         $scope.query.filters &&
+        $scope.query.filterQuery &&
         ($scope.query.variables.length ||
           $scope.query.groupings.length ||
           $scope.query.filters.length ||
-          $scope.query.coVariables.length);
+          $scope.query.coVariables.length ||
+          $scope.query.textQuery);
 
       if (!should_configure) {
         return $location.url("/explore");
@@ -461,14 +485,16 @@ angular.module("chuvApp.models").controller("ReviewController", [
         trainingDatasets: $location.search().trainingDatasets
       };
 
-      $location.url(
+      const url =
         "/explore?configure=true&" +
-          Object.keys(query)
-            .map(function(category) {
-              return category + "=" + query[category];
-            })
-            .join("&")
-      );
+        Object.keys(query)
+          .map(function(category) {
+            return category + "=" + query[category];
+          })
+          .join("&") +
+        "&filterQuery=" +
+        encodeFilters();
+      $location.url(url);
     };
   }
 ]);

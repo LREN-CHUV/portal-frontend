@@ -125,6 +125,9 @@ angular.module("chuvApp.models").controller("ExploreController", [
     /**
      * programmatically redirects to the review model, with the current model.
      */
+    const filterQuery = $location.search().filterQuery
+      ? "&filterQuery=" + $location.search().filterQuery
+      : "";
     $scope.go_to_review = function() {
       $location.url(
         "/review?execute=true&" +
@@ -136,7 +139,8 @@ angular.module("chuvApp.models").controller("ExploreController", [
                 Object.keys($scope.configuration[category]).join(",")
               );
             })
-            .join("&")
+            .join("&") +
+          filterQuery
       );
     };
 
