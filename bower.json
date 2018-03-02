@@ -1,6 +1,6 @@
 {
   "name": "portal-frontend",
-  "version": "2.7.0",
+  "version": "2.7.1",
   "dependencies": {
     "jquery": "^3.2.1",
     "angular": "^1.6.8",
@@ -45,7 +45,8 @@
     "image-map-resizer": "^1.0.3",
     "ng-csv": "^0.3.6",
     "angulartics-google-analytics": "^0.4.0",
-    "jquery.ui": "~1.10.4"
+    "jquery.ui": "~1.10.4",
+    "angular-export-table": "*"
   },
   "devDependencies": {
     "angular-mocks": "^1.6.8"
@@ -98,7 +99,6 @@
         "modules/map.js"
       ]
     },
-
     "jQuery-QueryBuilder": {
       "main": [
         "dist/js/query-builder.standalone.js",

@@ -341,5 +341,18 @@ angular.module("chuvApp.models").controller("DatasetController", [
     if ($stateParams.slug === undefined) {
       init();
     }
+
+    // comfortable export button close
+    $scope.exportPannel = false;
+    $scope.toogleExport = function () {
+      $scope.exportPannel = !$scope.exportPannel
+    };
+    let exportTimer;
+    $scope.exportClose = function() {
+      exportTimer = $timeout(() => {$scope.exportPannel = false;}, 1000);
+    };
+    $scope.exportCloseDeny = function() {
+      $timeout.cancel(exportTimer);
+    };
   }
 ]);
