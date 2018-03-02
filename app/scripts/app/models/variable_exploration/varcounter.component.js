@@ -6,11 +6,12 @@ angular.module("chuvApp.models").component("varcounter", {
   controller: [
     "Variable",
     function(Variable) {
-      const getVarChount = focusedVariable => {
+      const getVarCount = focusedVariable => {
         if (_.has(focusedVariable, "code")) {
           Variable.getSubCategoryVariableCounter(
             focusedVariable.code
           ).then(subCategoryVariableCounter => {
+            this.showChart = subCategoryVariableCounter.length > 0;
             var highchartData = {
               chart: {
                 type: "column"
@@ -38,10 +39,12 @@ angular.module("chuvApp.models").component("varcounter", {
         }
       };
 
-      getVarChount(this.getFocusedVariable);
+      this.showChart = false;
+
+      getVarCount(this.getFocusedVariable);
 
       this.$onChanges = () => {
-        getVarChount(this.getFocusedVariable);
+        getVarCount(this.getFocusedVariable);
       };
     }
   ],
