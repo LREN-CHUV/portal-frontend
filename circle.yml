@@ -42,6 +42,14 @@ jobs:
             docker run -it --rm -p8000:8000 hbpmip/portal-frontend-dev
           background: true
       - run:
+          name: "Install dockerize"
+          command: wget https://github.com/jwilder/dockerize/releases/download/$DOC
+          enviroment:
+            DOCKERIZE_VERSION: v0.3.0
+      - run:
+          name: "Wait for project Run"
+          command: dockerize -wait tcp://localhost:8000 -timeout 2m
+      - run:
           name: "Test the project"
           command: |
             docker exec -it hbpmip/portal-frontend-dev bash gulp protractor-go duration=$(( 180 - start ))
