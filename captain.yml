@@ -9,15 +9,3 @@ portal-frontend:
     - echo "Finished frontend lightweight image"
   test:
     - ./tests/test.sh
-
-# Test image
-# Creates a portable environemnt to build this project.
-portal-frontend-dev:
-  build: Dockerfile-dev
-  image: hbpmip/portal-frontend-dev
-  pre:
-    - echo "Preparing frontend lightweight image"
-  post:
-    - echo "Finished frontend lightweight image"
-  test:
-    - ./tests/test.sh

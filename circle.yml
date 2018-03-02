@@ -33,7 +33,7 @@ jobs:
       - run:
           name: "Build the project"
           command: |
-            docker build -t hbpmip/portal-frontend-dev .
+            docker build -t hbpmip/portal-frontend .
 #      - run:
 #          name: "Test the project"
 #          command: |
