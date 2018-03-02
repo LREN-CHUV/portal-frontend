@@ -52,7 +52,11 @@ jobs:
 
       - run:
           name: install dockerize if not found in cache
-          command:
+          command: |
+            wget --version
+      - run:
+          name: install dockerize if not found in cache
+          command: |
             if \[ -f /usr/local/bin/dockerize \]; then
               echo "dockerize found; skipping installation";
             else wget   http://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
