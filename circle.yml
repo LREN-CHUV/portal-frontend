@@ -38,13 +38,19 @@ jobs:
 #          command: |
 #            apk update && apk add default-jdk
       - run:
-          name: "Build the project"
+          name: "Pull & install backend"
           command: |
-            docker build -t hbpmip/portal-frontend-dev -f ./Dockerfile-e2e-tests .
-      - run:
-          name: "Run the project"
-          command: |
-            docker run -it --rm -p8000:8000 hbpmip/portal-frontend-dev
+            git clone https://github.com/LREN-CHUV/web-analytics-starter.git && \
+            ls
+#      - run:
+#          name: "Build the project"
+#          command: |
+#            docker build -t hbpmip/portal-frontend-dev -f ./Dockerfile-e2e-tests .
+#      - run:
+#          name: "Run the project"
+#          command: |
+#            docker run -it --rm -p8000:8000 hbpmip/portal-frontend-dev
+
 #          background: true
 #      - run:
 #          name: "Install dockerize"
