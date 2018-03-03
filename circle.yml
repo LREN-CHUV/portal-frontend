@@ -87,8 +87,10 @@ jobs:
               docker-compose stop chronos
             done
 
+            echo "========== docker-compose up -d woken wokenvalidation ==========="
             docker-compose up -d woken wokenvalidation
 
+            echo "========== docker-compose run wait_woken ==========="
             docker-compose run wait_woken
 
             docker images -a
