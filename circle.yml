@@ -42,7 +42,9 @@ jobs:
           command: |
             git clone https://github.com/LREN-CHUV/web-analytics-starter.git
             cd web-analytics-starter
-            sudo ./run.sh
+            docker --version
+            docker-compose --version
+#            sudo ./run.sh
 #      - run:
 #          name: "Build the project"
 #          command: |
