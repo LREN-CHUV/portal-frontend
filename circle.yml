@@ -40,8 +40,8 @@ jobs:
       - run:
           name: "Pull & install backend"
           command: |
-            git clone https://github.com/LREN-CHUV/web-analytics-starter.git && \
-            cd web-analytics-starter && \
+            git clone https://github.com/LREN-CHUV/web-analytics-starter.git
+            cd web-analytics-starter
             ./run.sh
 #      - run:
 #          name: "Build the project"
