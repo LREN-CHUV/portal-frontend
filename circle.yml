@@ -42,7 +42,7 @@ jobs:
           command: |
             git clone https://github.com/LREN-CHUV/web-analytics-starter.git
             cd web-analytics-starter
-            ./run.sh
+            sudo ./run.sh
 #      - run:
 #          name: "Build the project"
 #          command: |
