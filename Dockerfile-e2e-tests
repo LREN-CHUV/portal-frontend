@@ -1,14 +1,17 @@
 FROM node:8.9.1
 
+# Install Chrome.
+RUN \
+  wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - && \
+  echo "deb http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google.list && \
+  apt-get update && \
+  apt-get install -y google-chrome-stable dbus-x11 packagekit-gtk3-module libcanberra-gtk-module && \
+  rm -rf /var/lib/apt/lists/*
+
 WORKDIR /frontend
 
 RUN npm install -g gulp
-
-RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-RUN dpkg -i google-chrome-stable_current_amd64.deb; apt-get -fy install
-
-RUN npm install -g webdriver-manager
-RUN webdriver-manager update --standalone --versions.chrome 2.28 --gecko false
+RUN npm install -g protractor
 
 RUN curl -o- -L https://yarnpkg.com/install.sh | bash
 

@@ -18,7 +18,7 @@ var gulp = require("gulp"),
   rename = require("gulp-rename"),
   protractor = require("gulp-protractor").protractor,
   webdriver_standalone = require("gulp-protractor").webdriver_standalone,
-  webdriver_update = require("gulp-protractor").webdriver_update;
+  webdriver_update = require("gulp-protractor").webdriver_update_specific;
 
 // Application's main directories constants
 var appConfig = require("./app-config.json");
@@ -505,10 +505,9 @@ gulp.task("unit-tests:auto", function(done) {
 });
 
 // Downloads the selenium webdriver
-gulp.task(
-  "webdriver_update",
-  webdriver_update
-);
+gulp.task('webdriver_update', webdriver_update({
+  webdriverManagerArgs: []
+}));
 
 // Start the standalone selenium server
 gulp.task("webdriver_standalone", webdriver_standalone);
@@ -526,6 +525,7 @@ gulp.task(
       )
       .on("error", function(e) {
         console.log(e);
+        throw e;
       })
       .on("end", cb);
   }
