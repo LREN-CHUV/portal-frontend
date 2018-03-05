@@ -305,6 +305,8 @@ angular
               zoom(groupNode);
             });
 
+            zoom(groups, true);
+
             return { zoom: d => zoom(d, true) };
           }
 
