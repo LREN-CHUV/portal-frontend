@@ -5,18 +5,18 @@
       <div class="panel-body">
         <ul class="list-group">
           <li ng-repeat="dataset in allDatasets" class="list-group-item" ng-class="{active: isDatasetSelected(dataset.code)}">
-            <a href="javascript:;" ng-click="selectDataset(dataset.code)"><span>{{dataset.code}}</span></a>
+            <a href="javascript:;" ng-click="selectDataset(dataset.code)">{{dataset.code}}</a>
           </li>
         </ul>
       </div>
     </div>
     <div class="panel" style="flex: 0 0 1">
       <div class="panel-heading">Model</div>
-      <div class="panel-body variables-list scrollable">
+      <div class="panel-body dataset-list scrollable">
 
         <h5 ng-if="query.variables.length">Variable</h5>
         <p ng-repeat="variable in query.variables">
-          {{variable.code}}
+          {{variable.code}} {{getLabel(variable.code)}}
         </p>
 
         <h5 ng-if="query.coVariables.length || query.groupings.length">CoVariables</h5>
@@ -33,7 +33,7 @@
           </span>
         </p>
 
-        <h5 ng-if="query.filters.length > 0">
+        <h5>
           <a ng-click="configureFilterQuery()">
             <i class="ti ti-panel"></i>
             Filter variable
@@ -50,29 +50,42 @@
     <div class="panel" style="flex-grow: 2">
       <uib-tabset active="active">
 
-        <uib-tab index="0" heading="Table">
-          <div class="panel-body scrollable">
-            <div ng-if="loading" class="loading">
-              <div class="fa fa-spin fa-spinner"></div>
+        <uib-tab index="0 " heading="Table ">
+          <div class="panel-body scrollable ">
+            <div ng-if="loading " class="loading ">
+              <div class="fa fa-spin fa-spinner "></div>
             </div>
-            <div ng-if="tableHeader" style="background-color: #d5e5fd; padding: 0.5em">
-              <table class="table">
-                <tr style="background-color: transparent">
-                  <th ng-repeat="column in tableHeader track by $index">
-                    <h6 style="text-transform: uppercase">{{column}}</h6>
+            <div ng-if="error ">
+              There was an error perfoming the method
+              <pretty-json data="error "></pretty-json>
+            </div>
+            <div ng-if="tableHeader " style="background-color: #d5e5fd; padding: 0.5em " class="dt-wrapper">
+              <div class="export-pannel">
+                <div ng-click="toogleExport()" class="export-btn-sandwich" ng-mouseleave="exportClose()" ng-mouseover="exportCloseDeny()">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                  <div ng-if="exportPannel" class="export-menu">
+                    <a title="Export Table to CSV" ng-click="csv.generate()" ng-href="{{ csv.link() }}" download="myTable.csv">Export as CSV
+                    </a>
+                    <a title="Export Table to PNG" ng-click="png.generate()">Export as PNG
+                    </a>
+                  </div>
+                </div>
+              </div>
+              <table class="table " export-csv="csv" export-to-png="png" separator=";">
+                <tr style="background-color: transparent ">
+                  <th ng-repeat="column in tableHeader track by $index ">
+                    <h6 style="text-transform: uppercase ">{{column}}</h6>
                   </th>
                 </tr>
-                <tr ng-repeat="row in tableRows track by $index" ng-class="{ 'white-row': row.header }">
+                <tr ng-repeat="row in tableRows track by $index" ng-class="{ 'white-row': row.header } ">
                   <td ng-repeat="column in row.data track by $index" ng-class="{ 'header-row': row.header, 'sub-row': row.sub }">
                     {{column}}
                   </td>
 
                 </tr>
               </table>
-            </div>
-            <div ng-if="error">
-              There was an error perfoming the method
-              <pretty-json data="error"></pretty-json>
             </div>
           </div>
         </uib-tab>
@@ -92,18 +105,23 @@
           </div>
         </uib-tab>
 
-        <!-- <uib-tab index="2" heading="t-SNE">
+        <uib-tab index="2" heading="Boxplot">
           <div class="panel-body scrollable">
-            <div ng-if="tsneLoading" class="loading">
+            <div ng-if="boxplotLoading" class="loading">
               <div class="fa fa-spin fa-spinner"></div>
             </div>
-            <div ng-if="histogramError">
+            <div ng-if="boxplotError">
                 There was an error perfoming the method
                 <pretty-json data="histogramError"></pretty-json>
             </div>
-            <highchart ng-if="tsneData" config="tsneData"></highchart>
+            <highchart
+              ng-if="boxplotData"
+              class="highchart-width highcharts-container"
+              ng-repeat="data in boxplotData"
+              config="data">
+            </highchart>
           </div>
-        </uib-tab> -->
+        </uib-tab>
 
       </uib-tabset>
     </div>
