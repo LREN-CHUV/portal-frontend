@@ -97,22 +97,22 @@ jobs:
             docker ps -a
 
             echo "========== docker-compose run wait_woken ==========="
-            docker-compose run wait_woken
+            #docker-compose run wait_woken
 
-            docker images -a
-            docker ps -a
+            #docker images -a
+            #docker ps -a
 #
-#            for i in 1 2 3 4 5 ; do
-#              docker-compose logs chronos | grep java.util.concurrent.TimeoutException || break
-#              echo "Chronos failed to start, restarting..."
-#              docker-compose stop chronos
-#              docker-compose up -d chronos
-#              docker-compose run wait_chronos
-#            done
-#
-#            docker-compose up -d backend
-#            docker-compose run wait_portal_backend
-#            docker-compose up -d frontend
+            for i in 1 2 3 4 5 ; do
+              docker-compose logs chronos | grep java.util.concurrent.TimeoutException || break
+              echo "Chronos failed to start, restarting..."
+              docker-compose stop chronos
+              docker-compose up -d chronos
+              docker-compose run wait_chronos
+            done
+
+            docker-compose up -d backend
+            docker-compose run wait_portal_backend
+            docker-compose up -d frontend
 
 
 
