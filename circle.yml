@@ -88,6 +88,12 @@ jobs:
             done
 
             echo "========== docker-compose up -d woken wokenvalidation ==========="
+            echo "========== docker-compose up -d woken wokenvalidation ==========="
+            docker images -a
+            docker ps -a
+
+
+            echo "========== docker-compose up -d woken wokenvalidation ==========="
             docker-compose up -d woken wokenvalidation
 
             echo "========== docker-compose run wait_woken ==========="
@@ -119,6 +125,10 @@ jobs:
 #          name: "Run the project"
 #          command: |
 #            docker run -it --rm -p8000:8000 hbpmip/portal-frontend-dev
+
+
+
+
 
 #          background: true
 #      - run:
