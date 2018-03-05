@@ -128,18 +128,17 @@ jobs:
       - run:
           name: "Build the project"
           command: |
-            docker build -t hbpmip/portal-frontend-dev -f ./Dockerfile-e2e-tests .
-      - run:
-          name: "Run the project"
-          command: |
-            docker run -it -d --rm -p8000:8000 hbpmip/portal-frontend-dev
-      - run:
-          name: "Tests"
-          command: |
-            npm install -g protractor
-            webdriver-manager update
-            webdriver-manager start
-            protractor app/tests/e2e/e2e-conf.js
+            docker images
+            docker ps
+#      - run:
+#          name: "Build the project"
+#          command: |
+#            docker build -t hbpmip/portal-frontend-dev -f ./Dockerfile-e2e-tests .
+#      - run:
+#          name: "Run the project"
+#          command: |
+#            docker run -it -d --rm -p8000:8000 hbpmip/portal-frontend-dev
+
 
 
 
