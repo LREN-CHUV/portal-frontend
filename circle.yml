@@ -113,6 +113,11 @@ jobs:
             docker images -a
             docker ps -a
 
+            cd ..
+
+            docker build -t hbpmip/portal-frontend-dev -f ./Dockerfile-e2e-tests .
+            docker run -it --rm -p8000:8000 hbpmip/portal-frontend-dev
+
 
 
 #            docker-compose run wait_woken
@@ -120,14 +125,14 @@ jobs:
 
 
 #            sudo ./run.sh
-      - run:
-          name: "Build the project"
-          command: |
-            docker build -t hbpmip/portal-frontend-dev -f ./Dockerfile-e2e-tests .
-      - run:
-          name: "Run the project"
-          command: |
-            docker run -it --rm -p8000:8000 hbpmip/portal-frontend-dev
+#      - run:
+#          name: "Build the project"
+#          command: |
+#            docker build -t hbpmip/portal-frontend-dev -f ./Dockerfile-e2e-tests .
+#      - run:
+#          name: "Run the project"
+#          command: |
+#            docker run -it --rm -p8000:8000 hbpmip/portal-frontend-dev
 
 
 
