@@ -16,7 +16,7 @@
 
         <h5 ng-if="query.variables.length">Variable</h5>
         <p ng-repeat="variable in query.variables">
-          {{variable.code}} {{getLabel(variable.code)}}
+          {{variable.code}}
         </p>
 
         <h5 ng-if="query.coVariables.length || query.groupings.length">CoVariables</h5>
