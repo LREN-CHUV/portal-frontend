@@ -125,19 +125,19 @@ jobs:
 
 
 #            sudo ./run.sh
-      - run:
-          name: "Build the project"
-          command: |
-            docker images
-            docker ps
 #      - run:
 #          name: "Build the project"
 #          command: |
-#            docker build -t hbpmip/portal-frontend-dev -f ./Dockerfile-e2e-tests .
-#      - run:
-#          name: "Run the project"
-#          command: |
-#            docker run -it -d --rm -p8000:8000 hbpmip/portal-frontend-dev
+#            docker images
+#            docker ps
+      - run:
+          name: "Build the project"
+          command: |
+            docker build -t hbpmip/portal-frontend-dev -f ./Dockerfile-e2e-tests .
+      - run:
+          name: "Run the project"
+          command: |
+            docker run -it --rm --net=host -p8000:8000 hbpmip/portal-frontend-dev
 
 
 

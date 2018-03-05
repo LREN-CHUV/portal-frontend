@@ -34,9 +34,17 @@ RUN \
     apt-get clean  && \
     rm -rf /var/lib/apt/lists/*
 
+#ADD xvfb.sh /etc/init.d/xvfb
+
+#ENV DISPLAY :99.0
+#ENV CHROME_BIN /usr/bin/google-chrome
+
+#RUN chmod +x /etc/init.d/xvfb
+
 COPY package.json /frontend
 RUN yarn install
 
 COPY . /frontend
 
-CMD gulp e2e-test
+CMD gulp e2e-test & \
+    gulp protractor-go

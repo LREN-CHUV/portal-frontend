@@ -18,6 +18,7 @@ var gulp = require("gulp"),
   rename = require("gulp-rename"),
   protractor = require("gulp-protractor").protractor,
   webdriver_standalone = require("gulp-protractor").webdriver_standalone,
+  wait = require("gulp-wait2"),
   webdriver_update = require("gulp-protractor").webdriver_update_specific;
 
 // Application's main directories constants
@@ -516,18 +517,20 @@ gulp.task(
   "protractor-go",
   ["clean:test-reports", "clean:test-screenshots", "webdriver_update"],
   function(cb) {
-    gulp
-      .src([])
-      .pipe(
-        protractor({
-          configFile: "./app/tests/e2e/e2e-conf.js"
+    setTimeout(function () {
+      gulp
+        .src([])
+        .pipe(
+          protractor({
+            configFile: "./app/tests/e2e/e2e-conf.js"
+          })
+        )
+        .on("error", function(e) {
+          console.log(e);
+          throw e;
         })
-      )
-      .on("error", function(e) {
-        console.log(e);
-        throw e;
-      })
-      .on("end", cb);
+        .on("end", cb);
+    }, 120000);
   }
 );
 

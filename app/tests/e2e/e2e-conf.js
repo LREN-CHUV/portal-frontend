@@ -21,8 +21,8 @@ exports.config = {
     browserName: "chrome",
     chromeOptions: {
       args: [
-        // "--headless",
-        // "no-sandbox",
+        "--headless",
+        "no-sandbox",
         "--disable-web-security"
       ]
     }
