@@ -88,13 +88,13 @@ jobs:
             done
 
             echo "========== docker-compose up -d woken wokenvalidation ==========="
-            echo "========== docker-compose up -d woken wokenvalidation ==========="
+            docker-compose up -d woken wokenvalidation
+
+
+            echo "========== ========= ==========="
+            echo "========== ========= ==========="
             docker images -a
             docker ps -a
-
-
-            echo "========== docker-compose up -d woken wokenvalidation ==========="
-            docker-compose up -d woken wokenvalidation
 
             echo "========== docker-compose run wait_woken ==========="
             docker-compose run wait_woken
