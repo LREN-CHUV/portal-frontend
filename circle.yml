@@ -87,15 +87,23 @@ jobs:
               docker-compose stop chronos
             done
 
+
+
+
             echo "========== docker-compose up -d woken wokenvalidation ==========="
             docker-compose up -d woken wokenvalidation
 
 
+            echo "========== ========= ==========="
+            echo "========== ========= ==========="
+            docker images -a
+            docker ps -a
 
-
-            echo "========== docker-compose run wait_woken ==========="
+#            echo "========== docker-compose run wait_woken ==========="
 #            docker-compose run wait_woken
 
+            docker images -a
+            docker ps -a
 
             for i in 1 2 3 4 5 ; do
               docker-compose logs chronos | grep java.util.concurrent.TimeoutException || break
@@ -108,11 +116,6 @@ jobs:
             docker-compose up -d backend
             docker-compose run wait_portal_backend
             docker-compose up -d frontend
-
-            echo "========== ========= ==========="
-            echo "========== ========= ==========="
-            docker images -a
-            docker ps -a
 
 
 
