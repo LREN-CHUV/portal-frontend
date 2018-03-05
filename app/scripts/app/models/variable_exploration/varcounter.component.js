@@ -7,7 +7,7 @@ angular.module("chuvApp.models").component("varcounter", {
     "Variable",
     function(Variable) {
       const getVarCount = focusedVariable => {
-        if (_.has(focusedVariable, "code")) {
+        if (typeof focusedVariable !== "undefined") {
           Variable.getSubCategoryVariableCounter(
             focusedVariable.code
           ).then(subCategoryVariableCounter => {
