@@ -587,8 +587,8 @@ gulp.task("e2e-test", function() {
     ],
     "index-html:test",
     "caching:test",
-    "browser-sync:test",
-    "protractor-go"
+    "browser-sync:test"/*,
+    "protractor-go"*/
   );
 });
 
