@@ -15,10 +15,10 @@ jobs:
           name: "Install requirements"
           command: |
             docker --version
-#      - run:
-#          name: "Build the project"
-#          command: |
-#            docker build -t hbpmip/portal-frontend .
+      - run:
+          name: "Build the project"
+          command: |
+            docker build -t hbpmip/portal-frontend .
   test:
     docker:
       - image: hbpmip/docker-compose-for-ci:17.06-1
@@ -33,12 +33,6 @@ jobs:
           name: "Install requirements"
           command: |
             docker --version
-#      - run:
-#          name: "Install Java"
-#          command: |
-#            apk update && apk add default-jdk
-
-
 #      - run:
 #          name: "Pull & install backend"
 #          command: |
@@ -138,38 +132,6 @@ jobs:
             docker run -it --rm --net=host -p8000:8000 hbpmip/portal-frontend-dev
 
 
-
-
-
-
-
-#          background: true
-#      - run:
-#          name: "Install dockerize"
-#          command: |
-#            apk update && apk add ca-certificates && update-ca-certificates && apk add openssl
-#            wget http://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
-#            tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
-#            rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
-#          environment:
-#            DOCKERIZE_VERSION: v0.3.0
-#      - run:
-#          name: "Wonderful task"
-#          command: |
-#            pwd
-#            ls -al
-
-#      - run:
-#          name: "Wait for project Run"
-#          command: dockerize -wait http://localhost:8000 -timeout 1m
-#      - run:
-#          name: "Test the project"
-#          command: |
-#            docker exec -it hbpmip/portal-frontend-dev bash gulp protractor-go
-#      - run:
-#          name: "Stop the project"
-#          command: |
-#            docker stop hbpmip/portal-frontend-dev
 workflows:
   version: 2
   build_and_test:
