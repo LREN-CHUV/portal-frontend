@@ -52,7 +52,6 @@ jobs:
                  done
                  cd -P "$( dirname "$SOURCE" )"
                  pwd
-                 ls -la .
             }
 
             cd "$(get_script_dir)"
