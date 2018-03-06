@@ -37,100 +37,97 @@ jobs:
 #          name: "Install Java"
 #          command: |
 #            apk update && apk add default-jdk
+
+
+#      - run:
+#          name: "Pull & install backend"
+#          command: |
+#            git clone https://github.com/LREN-CHUV/web-analytics-starter.git
+#            cd web-analytics-starter
+#            docker --version
+#
+#            get_script_dir () {
+#                 SOURCE="${BASH_SOURCE[0]}"
+#
+#                 while [ -h "$SOURCE" ]; do
+#                      DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+#                      SOURCE="$( readlink "$SOURCE" )"
+#                      [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
+#                 done
+#                 cd -P "$( dirname "$SOURCE" )"
+#                 pwd
+#            }
+#
+#            cd "$(get_script_dir)"
+#
+#            echo "Deploy a Postgres server and wait for it to be ready..."
+#            docker-compose up -d db zookeeper
+#            docker-compose run wait_zookeeper
+#            docker-compose up -d mesos_master
+#            docker-compose run wait_mesos_master
+#            docker-compose up -d mesos_slave
+#            docker-compose run wait_dbs
+#
+#            echo "Create databases..."
+#            docker-compose run create_dbs
+#
+#            echo "Migrate woken database..."
+#            docker-compose run woken_db_setup
+#
+#            echo "Migrate metadata database..."
+#            docker-compose run meta_db_setup
+#
+#            echo "Migrate features database..."
+#            docker-compose run sample_data_db_setup
+#
+#            echo "Run containers..."
+#            for i in 1 2 3 4 5 ; do
+#              docker-compose up -d chronos
+#              docker-compose run wait_chronos
+#              docker-compose logs chronos | grep java.util.concurrent.TimeoutException || break
+#              echo "Chronos failed to start, restarting..."
+#              docker-compose stop chronos
+#            done
+#
+#            echo "========== docker-compose up -d woken wokenvalidation ==========="
+#            docker-compose up -d woken wokenvalidation
+#
+#            echo "========== ========= ==========="
+#            echo "========== ========= ==========="
+#            docker images -a
+#            docker ps -a
+#
+#            echo "========== docker-compose run wait_woken ==========="
+#
+#
+#            for i in 1 2 3 4 5 ; do
+#              docker-compose logs chronos | grep java.util.concurrent.TimeoutException || break
+#              echo "Chronos failed to start, restarting..."
+#              docker-compose stop chronos
+#              docker-compose up -d chronos
+#              docker-compose run wait_chronos
+#            done
+#
+#            docker-compose up -d backend
+#            docker-compose run wait_portal_backend
+#            docker-compose up -d frontend
+#
+#            docker images -a
+#            docker ps -a
+#
+#            cd ..
+
+
+
       - run:
-          name: "Pull & install backend"
+          name: "Build the backend"
           command: |
             git clone https://github.com/LREN-CHUV/web-analytics-starter.git
             cd web-analytics-starter
-            docker --version
+            ./run.sh
+          environment:
+            NO_SUDO: "true"
 
-            get_script_dir () {
-                 SOURCE="${BASH_SOURCE[0]}"
-
-                 while [ -h "$SOURCE" ]; do
-                      DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
-                      SOURCE="$( readlink "$SOURCE" )"
-                      [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
-                 done
-                 cd -P "$( dirname "$SOURCE" )"
-                 pwd
-            }
-
-            cd "$(get_script_dir)"
-
-            echo "Deploy a Postgres server and wait for it to be ready..."
-            docker-compose up -d db zookeeper
-            docker-compose run wait_zookeeper
-            docker-compose up -d mesos_master
-            docker-compose run wait_mesos_master
-            docker-compose up -d mesos_slave
-            docker-compose run wait_dbs
-
-            echo "Create databases..."
-            docker-compose run create_dbs
-
-            echo "Migrate woken database..."
-            docker-compose run woken_db_setup
-
-            echo "Migrate metadata database..."
-            docker-compose run meta_db_setup
-
-            echo "Migrate features database..."
-            docker-compose run sample_data_db_setup
-
-            echo "Run containers..."
-            for i in 1 2 3 4 5 ; do
-              docker-compose up -d chronos
-              docker-compose run wait_chronos
-              docker-compose logs chronos | grep java.util.concurrent.TimeoutException || break
-              echo "Chronos failed to start, restarting..."
-              docker-compose stop chronos
-            done
-
-            echo "========== docker-compose up -d woken wokenvalidation ==========="
-            docker-compose up -d woken wokenvalidation
-
-            echo "========== ========= ==========="
-            echo "========== ========= ==========="
-            docker images -a
-            docker ps -a
-
-            echo "========== docker-compose run wait_woken ==========="
-            docker-compose run wait_woken
-
-
-            for i in 1 2 3 4 5 ; do
-              docker-compose logs chronos | grep java.util.concurrent.TimeoutException || break
-              echo "Chronos failed to start, restarting..."
-              docker-compose stop chronos
-              docker-compose up -d chronos
-              docker-compose run wait_chronos
-            done
-
-            docker-compose up -d backend
-            docker-compose run wait_portal_backend
-            docker-compose up -d frontend
-
-            docker images -a
-            docker ps -a
-
-            cd ..
-
-#            docker build -t hbpmip/portal-frontend-dev -f ./Dockerfile-e2e-tests .
-#            docker run -it --rm -p8000:8000 hbpmip/portal-frontend-dev
-
-
-
-#            docker-compose run wait_woken
-
-
-
-#            sudo ./run.sh
-#      - run:
-#          name: "Build the project"
-#          command: |
-#            docker images
-#            docker ps
       - run:
           name: "Build the project"
           command: |
