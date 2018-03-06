@@ -33,27 +33,29 @@ jobs:
           name: "Install requirements"
           command: |
             docker --version
-#      - run:
-#          name: "Pull & install backend"
-#          command: |
-#            git clone https://github.com/LREN-CHUV/web-analytics-starter.git
-#            cd web-analytics-starter
-#            docker --version
-#
-#            get_script_dir () {
-#                 SOURCE="${BASH_SOURCE[0]}"
-#
-#                 while [ -h "$SOURCE" ]; do
-#                      DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
-#                      SOURCE="$( readlink "$SOURCE" )"
-#                      [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
-#                 done
-#                 cd -P "$( dirname "$SOURCE" )"
-#                 pwd
-#            }
-#
-#            cd "$(get_script_dir)"
-#
+      - run:
+          name: "Pull & install backend"
+          command: |
+            git clone https://github.com/LREN-CHUV/web-analytics-starter.git
+            cd web-analytics-starter
+            docker --version
+
+            set -e
+
+            get_script_dir () {
+                 SOURCE="${BASH_SOURCE[0]}"
+
+                 while [ -h "$SOURCE" ]; do
+                      DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+                      SOURCE="$( readlink "$SOURCE" )"
+                      [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
+                 done
+                 cd -P "$( dirname "$SOURCE" )"
+                 pwd
+            }
+
+            cd "$(get_script_dir)"
+
 #            echo "Deploy a Postgres server and wait for it to be ready..."
 #            docker-compose up -d db zookeeper
 #            docker-compose run wait_zookeeper
@@ -113,23 +115,23 @@ jobs:
 
 
 
-      - run:
-          name: "Build the backend"
-          command: |
-            git clone https://github.com/LREN-CHUV/web-analytics-starter.git
-            cd web-analytics-starter
-            ./run.sh
-          environment:
-            NO_SUDO: "true"
+#      - run:
+#          name: "Build the backend"
+#          command: |
+#            git clone https://github.com/LREN-CHUV/web-analytics-starter.git
+#            cd web-analytics-starter
+#            ./run.sh
+#          environment:
+#            NO_SUDO: "true"
 
-      - run:
-          name: "Build the project"
-          command: |
-            docker build -t hbpmip/portal-frontend-dev -f ./Dockerfile-e2e-tests .
-      - run:
-          name: "Run the project"
-          command: |
-            docker run -it --rm --net=host -p8000:8000 hbpmip/portal-frontend-dev
+#      - run:
+#          name: "Build the project"
+#          command: |
+#            docker build -t hbpmip/portal-frontend-dev -f ./Dockerfile-e2e-tests .
+#      - run:
+#          name: "Run the project"
+#          command: |
+#            docker run -it --rm --net=host -p8000:8000 hbpmip/portal-frontend-dev
 
 
 workflows:
