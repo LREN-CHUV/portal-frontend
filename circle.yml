@@ -40,7 +40,8 @@ jobs:
             cd web-analytics-starter
             docker --version
 
-            
+            set -e
+
             get_script_dir () {
                  SOURCE="${BASH_SOURCE[0]}"
 
@@ -54,8 +55,35 @@ jobs:
             }
 
             cd "$(get_script_dir)"
-            echo "=============================="
-            ls -la .
+
+            if pgrep -lf sshuttle > /dev/null ; then
+              echo "sshuttle detected. Please close this program as it messes with networking and prevents Docker links to work"
+              exit 1
+            fi
+
+            if [ $NO_SUDO ]; then
+              DOCKER="docker"
+              DOCKER_COMPOSE="docker-compose"
+            elif groups "$USER" | grep &>/dev/null '\bdocker\b'; then
+              DOCKER="docker"
+              DOCKER_COMPOSE="docker-compose"
+            else
+              DOCKER="sudo docker"
+              DOCKER_COMPOSE="sudo docker-compose"
+            fi
+
+            for param in "$@"
+            do
+              if [ "--no-frontend" == "$param" ]; then
+                no_frontend=0
+                echo "INFO: --no-frontend option detected !"
+                break;
+              fi
+            done
+
+            echo "Remove old running containers (if any)..."
+            docker-compose kill
+            docker-compose rm -f
 
             echo "Deploy a Postgres server and wait for it to be ready..."
             docker-compose up -d db zookeeper
@@ -72,7 +100,7 @@ jobs:
             docker-compose run woken_db_setup
 
             echo "Migrate metadata database..."
-            docker-compose up meta_db_setup
+            docker-compose run sample_meta_db_setup
 
             echo "Migrate features database..."
             docker-compose run sample_data_db_setup
@@ -86,17 +114,9 @@ jobs:
               docker-compose stop chronos
             done
 
-            echo "========== docker-compose up -d woken wokenvalidation ==========="
             docker-compose up -d woken wokenvalidation
 
-            echo "========== ========= ==========="
-            echo "========== ========= ==========="
-            docker images -a
-            docker ps -a
-
-            echo "========== docker-compose run wait_woken ==========="
-            docker-compose up wait_woken
-
+            docker-compose run wait_woken
 
             for i in 1 2 3 4 5 ; do
               docker-compose logs chronos | grep java.util.concurrent.TimeoutException || break
@@ -106,12 +126,11 @@ jobs:
               docker-compose run wait_chronos
             done
 
-            docker-compose up -d backend
+            docker-compose up -d portalbackend
             docker-compose run wait_portal_backend
             docker-compose up -d frontend
 
-            docker images -a
-            docker ps -a
+            echo "DONE"
 
             cd ..
 
