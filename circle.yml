@@ -96,7 +96,7 @@ jobs:
             docker ps -a
 
             echo "========== docker-compose run wait_woken ==========="
-            $DOCKER_COMPOSE run wait_woken
+            docker-compose run wait_woken
 
 
             for i in 1 2 3 4 5 ; do
