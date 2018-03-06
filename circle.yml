@@ -55,7 +55,7 @@ jobs:
             }
 
             cd "$(get_script_dir)"
-            echo"=============================="
+            echo "=============================="
             ls -la .
 
 #            echo "Deploy a Postgres server and wait for it to be ready..."
