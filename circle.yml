@@ -56,31 +56,6 @@ jobs:
 
             cd "$(get_script_dir)"
 
-            if pgrep -lf sshuttle > /dev/null ; then
-              echo "sshuttle detected. Please close this program as it messes with networking and prevents Docker links to work"
-              exit 1
-            fi
-
-            if [ $NO_SUDO ]; then
-              DOCKER="docker"
-              DOCKER_COMPOSE="docker-compose"
-            elif groups "$USER" | grep &>/dev/null '\bdocker\b'; then
-              DOCKER="docker"
-              DOCKER_COMPOSE="docker-compose"
-            else
-              DOCKER="sudo docker"
-              DOCKER_COMPOSE="sudo docker-compose"
-            fi
-
-            for param in "$@"
-            do
-              if [ "--no-frontend" == "$param" ]; then
-                no_frontend=0
-                echo "INFO: --no-frontend option detected !"
-                break;
-              fi
-            done
-
             echo "Remove old running containers (if any)..."
             docker-compose kill
             docker-compose rm -f
