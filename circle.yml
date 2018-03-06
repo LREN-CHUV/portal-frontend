@@ -52,12 +52,12 @@ jobs:
                  done
                  cd -P "$( dirname "$SOURCE" )"
                  pwd
-                 ls la .
+                 ls -la .
             }
 
             cd "$(get_script_dir)"
             echo"=============================="
-            ls la .
+            ls -la .
 
 #            echo "Deploy a Postgres server and wait for it to be ready..."
 #            docker-compose up -d db zookeeper
