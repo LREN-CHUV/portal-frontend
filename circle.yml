@@ -15,10 +15,10 @@ jobs:
           name: "Install requirements"
           command: |
             docker --version
-      - run:
-          name: "Build the project"
-          command: |
-            docker build -t hbpmip/portal-frontend .
+#      - run:
+#          name: "Build the project"
+#          command: |
+#            docker build -t hbpmip/portal-frontend .
   test:
     docker:
       - image: hbpmip/docker-compose-for-ci:17.06-1
@@ -73,7 +73,7 @@ jobs:
             docker-compose run woken_db_setup
 
             echo "Migrate metadata database..."
-            docker-compose run meta_db_setup
+            docker-compose up meta_db_setup
 
             echo "Migrate features database..."
             docker-compose run sample_data_db_setup
@@ -96,7 +96,7 @@ jobs:
             docker ps -a
 
             echo "========== docker-compose run wait_woken ==========="
-            docker-compose run wait_woken
+            docker-compose up wait_woken
 
 
             for i in 1 2 3 4 5 ; do
