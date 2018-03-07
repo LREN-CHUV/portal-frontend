@@ -55,12 +55,6 @@ angular.module("chuvApp.models").controller("DatasetController", [
         ? search[category].split(",").map(code => ({ code }))
         : []);
 
-    const encodeFilters = () => {
-      return $scope.query.textQuery
-        ? JSON.stringify($scope.query.filterQuery)
-        : "";
-    };
-
     $scope.query.variables = map_query("variable");
     $scope.query.groupings = map_query("grouping");
     $scope.query.coVariables = map_query("covariable");
@@ -368,11 +362,14 @@ angular.module("chuvApp.models").controller("DatasetController", [
         coVariables: unmap_category("coVariables"),
         groupings: unmap_category("groupings"),
         filters: unmap_category("filters"),
-        filterQuery: JSON.stringify($scope.query.filterQuery),
         trainingDatasets: unmap_category("trainingDatasets"),
         graph_config: $scope.chartConfig,
         model_slug: ""
       };
+
+      if ($scope.query.filterQuery) {
+        query.filterQuery = JSON.stringify($scope.query.filterQuery);
+      }
 
       return $state.go("new_experiment", query);
     };
