@@ -95,6 +95,9 @@ jobs:
 
             docker-compose up -d woken wokenvalidation
 
+            echo "=========== netstat -tpln 2 =============="
+            netstat -tpln
+
             docker-compose run wait_woken
 
             for i in 1 2 3 4 5 ; do
