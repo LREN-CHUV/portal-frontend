@@ -45,8 +45,6 @@ jobs:
 
             get_script_dir () {
                  SOURCE="${BASH_SOURCE[0]}"
-                 echo "===============-------------------"
-                 ls -la .
 
                  while [ -h "$SOURCE" ]; do
                       DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
@@ -58,6 +56,9 @@ jobs:
             }
 
             cd "$(get_script_dir)"
+            echo "=========== netstat -tpln =============="
+            netstat -tpln
+
 
             echo "Remove old running containers (if any)..."
             docker-compose kill
