@@ -172,7 +172,8 @@ angular.module("chuvApp.models").controller("DatasetController", [
           })
           .catch(e => {
             $scope.loading = false;
-            $scope.error = e;
+            const { statusText } = e;
+            $scope.error = statusText;
             console.log(e);
           })
       );
@@ -262,7 +263,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
               ? JSON.stringify($scope.query.filterQuery)
               : ""
           ).then(
-            function(response) {
+            response => {
               var data = response.data && response.data.data;
               if (!angular.isArray(data)) {
                 data = [data];
@@ -291,15 +292,24 @@ angular.module("chuvApp.models").controller("DatasetController", [
               });
               $scope.histogramLoading = false;
             },
-            function(e) {
+            e => {
               $scope.histogramLoading = false;
-              $scope.histogramError = e;
+              const { statusText } = e;
+              $scope.histogramError = statusText;
+              console.log(e);
             }
           )
         : null;
     };
 
     const getBoxplot = data => {
+      if (!data) {
+        $scope.boxplotLoading = false;
+        $scope.boxplotError =
+          "There was an error while processing. Please try again later.";
+
+        return;
+      }
       $scope.boxplotData = data.filter(f => f.continuous).map(d => ({
         chart: {
           type: "boxplot"
