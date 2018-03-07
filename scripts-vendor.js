@@ -37,6 +37,7 @@ var vendorScripts = [
   "./node_modules/angular-bootstrap-colorpicker/js/bootstrap-colorpicker-module.js",
   "./node_modules/javascript-detect-element-resize/jquery.resize.js",
   "./node_modules/d3/d3.js",
+  "./node_modules/d3-textwrap/build/d3-textwrap.js",
   "./node_modules/gsap/src/uncompressed/TweenMax.js",
   "./node_modules/icheck/icheck.min.js",
   "./node_modules/ui-select/dist/select.js",
@@ -59,6 +60,6 @@ var vendorScripts = [
   "./node_modules/ng-table-to-csv/dist/ng-table-to-csv.js",
   "./node_modules/html2canvas/dist/html2canvas.js",
   "./" + appConfig.app + "/styles/plugins/wijets/wijets.js"
-]
+];
 
 module.exports = vendorScripts;
