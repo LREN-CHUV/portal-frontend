@@ -95,7 +95,7 @@ jobs:
 
             docker-compose up -d woken wokenvalidation
 
-            docker-compose run wait_woken -v
+            docker-compose run wait_woken
 
             for i in 1 2 3 4 5 ; do
               docker-compose logs chronos | grep java.util.concurrent.TimeoutException || break
