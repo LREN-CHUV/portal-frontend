@@ -38,14 +38,14 @@ jobs:
           command: |
             git clone https://github.com/LREN-CHUV/web-analytics-starter.git
             cd web-analytics-starter
-            docker --version
+#            docker --version
 
             set -e
 
             get_script_dir () {
                  SOURCE="${BASH_SOURCE[0]}"
 
-                 echo BASH_SOURCE[0]
+                 echo SOURCE
 
                  while [ -h "$SOURCE" ]; do
                       DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
