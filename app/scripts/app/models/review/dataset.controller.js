@@ -379,34 +379,42 @@ angular.module("chuvApp.models").controller("DatasetController", [
 
     // init
     const init = (model = {}) => {
-      $scope.loadResources(model);
-      Variable.datasets().then(data => {
-        $scope.allDatasets = data;
+      $scope
+        .loadResources(model)
+        .then(() =>
+          Variable.datasets().then(data => {
+            $scope.allDatasets = data;
 
-        const variable = getDependantVariable();
-        if (!variable) {
-          $scope.error =
-            "Please, select some variables in the previous screen.";
-          return;
-        }
+            const variable = getDependantVariable();
+            if (!variable) {
+              $scope.error =
+                "Please, select some variables in the previous screen.";
+              return;
+            }
 
-        getStatistics().then(getBoxplot);
-        getHistogram();
+            getStatistics().then(getBoxplot);
+            getHistogram();
 
-        // retrieve filterQuery as sql text, hack queryBuilder
-        if ($scope.query.filterQuery) {
-          const $element = $("<div>");
-          const qb = $element.queryBuilder({
-            rules: $scope.query.filterQuery,
-            filters: $scope.getFilterVariables(),
-            allow_empty: true,
-            inputs_separator: " - "
-          });
+            // retrieve filterQuery as sql text, hack queryBuilder
+            if ($scope.query.filterQuery) {
+              const $element = $("<div>");
+              const qb = $element.queryBuilder({
+                rules: $scope.query.filterQuery,
+                filters: $scope.getFilterVariables(),
+                allow_empty: true,
+                inputs_separator: " - "
+              });
 
-          $scope.query.textQuery = qb.queryBuilder("getSQL", false, false).sql;
-          qb.queryBuilder("destroy");
-        }
-      });
+              $scope.query.textQuery = qb.queryBuilder(
+                "getSQL",
+                false,
+                false
+              ).sql;
+              qb.queryBuilder("destroy");
+            }
+          })
+        )
+        .catch(console.log);
     };
 
     $scope.$on("event:configureFilterQueryFinished", () => {

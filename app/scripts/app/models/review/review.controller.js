@@ -326,7 +326,7 @@ angular.module("chuvApp.models").controller("ReviewController", [
      * @param model
      */
     $scope.loadResources = function(model) {
-      Variable.query()
+      return Variable.query()
         .$promise.then(function(allVariables) {
           allVariables = _.sortBy(allVariables, "label");
           $scope.variables = filterFilter(allVariables, { isVariable: true });
@@ -347,7 +347,20 @@ angular.module("chuvApp.models").controller("ReviewController", [
         })
         .then(function(group) {
           $scope.groups = group.groups;
+
+          // unbox filters
+          const filterQuery =
+            (model.query &&
+              model.query.filters &&
+              JSON.parse(model.query.filters)) ||
+            null;
+          if (filterQuery) {
+            model.query.filters = filterQuery.rules.map(o => ({ code: o.id }));
+            model.query.filterQuery = filterQuery;
+          }
           _.extend($scope.query, model.query);
+
+          return;
         });
     };
 

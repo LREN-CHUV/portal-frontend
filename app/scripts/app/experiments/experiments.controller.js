@@ -154,15 +154,6 @@ angular
         $scope.shared.chosen_method = method;
       };
 
-      const shareQuery = () => {
-        Object.keys($scope.query).forEach(k => {
-          if ($scope.query[k].length)
-            $scope.shared.query[k] = $scope.query[k]
-              .map(v => v.code)
-              .join(", ");
-        });
-      };
-
       const fetchDatasetsAndUpdate = () =>
         Variable.datasets().then(data => {
           $scope.datasets = data;
@@ -181,7 +172,7 @@ angular
               return a;
             }, {});
 
-          shareQuery();
+          $scope.shared.query = $scope.query;
         });
 
       if ($stateParams.model_slug) {
