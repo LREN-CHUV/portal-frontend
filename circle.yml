@@ -100,6 +100,9 @@ jobs:
 
             docker-compose run wait_woken
 
+            echo "=========== netstat -tpln 3 =============="
+            netstat -tpln
+
             for i in 1 2 3 4 5 ; do
               docker-compose logs chronos | grep java.util.concurrent.TimeoutException || break
               echo "Chronos failed to start, restarting..."
