@@ -27,6 +27,7 @@
     "angulartics-google-analytics": "^0.4.0",
     "bootstrap": "^3.3.7",
     "d3": "3.5.6",
+    "d3-textwrap": "^2.0.2",
     "font-awesome": "^4.7.0",
     "gridster": "^0.5.6",
     "gsap": "^1.20.3",

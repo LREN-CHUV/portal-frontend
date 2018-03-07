@@ -100,6 +100,41 @@ angular.module("chuvApp.models").directive("circlePacking", [
           });
         }
 
+        function wrap(text, width, height) {
+          text.each(function(idx, elem) {
+            var text = $(elem);
+            text.attr("dy", height);
+            var words = text.text().split(/\s+/).reverse(),
+              word,
+              line = [],
+              lineNumber = 0,
+              lineHeight = 1.1, // ems
+              y = text.attr("y"),
+              dy = parseFloat(text.attr("dy")),
+              tspan = text
+                .text(null)
+                .append("tspan")
+                .attr("x", 0)
+                .attr("y", y)
+                .attr("dy", dy + "em");
+            while ((word = words.pop())) {
+              line.push(word);
+              tspan.text(line.join(" "));
+              if (elem.getComputedTextLength() > width) {
+                line.pop();
+                tspan.text(line.join(" "));
+                line = [word];
+                tspan = text
+                  .append("tspan")
+                  .attr("x", 0)
+                  .attr("y", y)
+                  .attr("dy", ++lineNumber * lineHeight + dy + "em")
+                  .text(word);
+              }
+            }
+          });
+        }
+
         // clears the current circle packing and recreates it from crash.
         // quite compute intensive, do not overuse.
         // used when resizing
@@ -139,6 +174,8 @@ angular.module("chuvApp.models").directive("circlePacking", [
               "transform",
               "translate(" + diameter / 2 + "," + diameter / 2 + ")"
             );
+
+          var wrap = d3.textwrap().bounds({ height: 480, width: 960 });
           var focus = groups,
             nodes = pack.nodes(groups),
             view,
@@ -176,11 +213,15 @@ angular.module("chuvApp.models").directive("circlePacking", [
               .style("display", function(d) {
                 return d.parent === root ? "inline" : "none";
               })
+              .style("font-size", "25px")
+              .style("z-index", "999")
               .text(function(d) {
                 if (!d.parent) {
-                  return d.label;
+                  console.log(d);
+                  return d.label ? d.label.split(" ").join("<br>") : "";
                 }
-
+                return wrap(d.label.split(" "), 100, 25);
+                /*
                 // magic function to cut off text that's too long.
                 // I came up with this after a little trial and error
                 var max_length = 5 + d.r * 100 / d.parent.r;
@@ -188,13 +229,20 @@ angular.module("chuvApp.models").directive("circlePacking", [
                 if (d.label.length > max_length) {
                   return d.label.substr(0, max_length - 3) + "...";
                 }
-                return d.label;
-              }),
+                return d.label.split(' ').join('</tspan>');
+                */
+              })
+              .call(wrap),
             node = svg.selectAll("circle,text");
 
-          circle.append("title").text(function(d) {
-            return d.description;
-          });
+          circle
+            .append("title")
+            .text(function(d) {
+              return "trololo" + d.description + "bla bla<br><br>bla bla<br>";
+            })
+            .style("font-size", "30px")
+            .transition()
+            .style("font-weight", "bold");
 
           zoomTo([root.x, root.y, root.r * 2 + margin]);
           applyNodeColors();
