@@ -326,7 +326,7 @@ angular.module("chuvApp.models").controller("ReviewController", [
      * @param model
      */
     $scope.loadResources = function(model) {
-      Variable.query()
+      return Variable.query()
         .$promise.then(function(allVariables) {
           allVariables = _.sortBy(allVariables, "label");
           $scope.variables = filterFilter(allVariables, { isVariable: true });
@@ -347,7 +347,20 @@ angular.module("chuvApp.models").controller("ReviewController", [
         })
         .then(function(group) {
           $scope.groups = group.groups;
+
+          // unbox filters
+          const filterQuery =
+            (model.query &&
+              model.query.filters &&
+              JSON.parse(model.query.filters)) ||
+            null;
+          if (filterQuery) {
+            model.query.filters = filterQuery.rules.map(o => ({ code: o.id }));
+            model.query.filterQuery = filterQuery;
+          }
           _.extend($scope.query, model.query);
+
+          return;
         });
     };
 
@@ -405,19 +418,6 @@ angular.module("chuvApp.models").controller("ReviewController", [
       );
     }
 
-    const decodeFilters = () => {
-      const query = $scope.query.textQuery
-        ? JSON.parse($scope.query.filterQuery)
-        : null;
-      return query;
-    };
-
-    const encodeFilters = () => {
-      return $scope.query.textQuery
-        ? JSON.stringify($scope.query.filterQuery)
-        : "";
-    };
-
     function update_location_search() {
       function unmap_category(category) {
         return (
@@ -435,7 +435,9 @@ angular.module("chuvApp.models").controller("ReviewController", [
         covariable: unmap_category("coVariables"),
         grouping: unmap_category("groupings"),
         filter: unmap_category("filters"),
-        filterQuery: decodeFilters(),
+        filterQuery: $scope.query.textQuery
+          ? JSON.parse($scope.query.filterQuery)
+          : null,
         execute: true
       };
 
@@ -451,22 +453,6 @@ angular.module("chuvApp.models").controller("ReviewController", [
       // TODO: Temporary solution. $scope.query.filters came as a string, while we work with it as an array
       if (!$scope.query.filters) {
         $scope.query.filters = [];
-      }
-
-      var should_configure =
-        $scope.query.variables &&
-        $scope.query.groupings &&
-        $scope.query.coVariables &&
-        $scope.query.filters &&
-        $scope.query.filterQuery &&
-        ($scope.query.variables.length ||
-          $scope.query.groupings.length ||
-          $scope.query.filters.length ||
-          $scope.query.coVariables.length ||
-          $scope.query.textQuery);
-
-      if (!should_configure) {
-        return $location.url("/explore");
       }
 
       function unmap_category(category) {
@@ -485,15 +471,17 @@ angular.module("chuvApp.models").controller("ReviewController", [
         trainingDatasets: $location.search().trainingDatasets
       };
 
+      if ($scope.query.filterQuery) {
+        query.filterQuery = JSON.stringify($scope.query.filterQuery);
+      }
+
       const url =
         "/explore?configure=true&" +
         Object.keys(query)
           .map(function(category) {
             return category + "=" + query[category];
           })
-          .join("&") +
-        "&filterQuery=" +
-        encodeFilters();
+          .join("&");
       $location.url(url);
     };
   }

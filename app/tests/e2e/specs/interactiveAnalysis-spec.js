@@ -105,7 +105,7 @@ describe("the IA (review) page ", function() {
     ) {
       panels
         .get(1)
-        .all(by.css("h5:nth-child(1) + p>a"))
+        .all(by.css("h5:nth-child(1) + p"))
         .get(0)
         .getText()
         .then(function(txt) {

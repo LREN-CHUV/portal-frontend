@@ -32,7 +32,16 @@ var appScripts = [
     "/scripts/app/models/variable_exploration/exploration.controller.js",
   "./" +
     appConfig.app +
-    "/scripts/app/models/variable_exploration/variable_selection.directives.js",
+    "/scripts/app/models/variable_exploration/variable_description.directive.js",
+  "./" +
+    appConfig.app +
+    "/scripts/app/models/variable_exploration/variable_statistics.directive.js",
+  "./" +
+    appConfig.app +
+    "/scripts/app/models/variable_exploration/variable_configuration.directive.js",
+  "./" +
+    appConfig.app +
+    "/scripts/app/models/variable_exploration/circle_packing.directive.js",
   "./" +
     appConfig.app +
     "/scripts/app/models/variable_exploration/breadcrumb.component.js",
@@ -95,9 +104,15 @@ var appScripts = [
   "./" + appConfig.app + "/scripts/components/toolbar/toolbar.module.js",
   "./" + appConfig.app + "/scripts/components/toolbar/toolbar.js",
   "./" + appConfig.app + "/scripts/components/hightlight/hightlight.filter.js",
-  "./" + appConfig.app + "/scripts/app/models/variable_exploration/available_methods.component.js",
-  "./" + appConfig.app + "/scripts/components/export-to-png/export-to-png.module.js",
-  "./" + appConfig.app + "/scripts/components/export-to-png/export-to-png.directive.js",
+  "./" +
+    appConfig.app +
+    "/scripts/app/models/variable_exploration/available_methods.component.js",
+  "./" +
+    appConfig.app +
+    "/scripts/components/export-to-png/export-to-png.module.js",
+  "./" +
+    appConfig.app +
+    "/scripts/components/export-to-png/export-to-png.directive.js"
 ];
 
 module.exports = appScripts;

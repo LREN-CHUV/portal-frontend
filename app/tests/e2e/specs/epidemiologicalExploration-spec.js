@@ -114,11 +114,9 @@ describe("the EE (explore) page ", function() {
       });
     });
 
-    it("should have a panel with the title *Variable overview*", function(
-      done
-    ) {
+    it("should have a panel with the title *group details*", function(done) {
       titles.get(2).getText().then(function(txt) {
-        expect(txt.toLowerCase()).toEqual("variable overview");
+        expect(txt.toLowerCase()).toEqual("group details");
         done();
       });
     });
@@ -185,32 +183,37 @@ describe("the EE (explore) page ", function() {
     it("should remove a dataset from url params (as in explore?trainingDatasets=foo,bar) when the corresponding dataset button is clicked", function(
       done
     ) {
-      var datasetAdni = panel
+      var datasetChuv = panel
         .all(by.css(".dataset-list span:nth-child(1) a"))
         .get(0);
-      var datasetPpmi = panel
+      var datasetBrescia = panel
         .all(by.css(".dataset-list span:nth-child(2) a"))
         .get(0);
       var scrolled = browser.executeScript(
         "arguments[0].scrollIntoView(false);",
-        datasetAdni.getWebElement()
+        datasetChuv.getWebElement()
       );
-      expect(browser.getCurrentUrl()).toContain("/explore");
+      expect(browser.getCurrentUrl()).toContain(
+        "/explore?trainingDatasets=chuv,brescia,lille"
+      );
       scrolled.then(function() {
-        datasetAdni.click();
+        datasetChuv.click();
         expect(browser.getCurrentUrl()).toContain(
-          "/explore?trainingDatasets=ppmi"
+          "/explore?trainingDatasets=brescia,lille"
         );
-        datasetPpmi.click();
-        expect(browser.getCurrentUrl()).toContain("/explore?trainingDatasets=");
+        datasetBrescia.click();
+        expect(browser.getCurrentUrl()).toContain(
+          "/explore?trainingDatasets=lille"
+        );
         done();
       });
     });
   });
 
-  describe("in the panel `select variable` ", function() {
+  describe("in the panel `select variable` (in less than 180 secondes (WHICH IS ABSURDELY HUGE, NO REAL USER CAN ENDURE THAT) ) ", function() {
     var panel, bubble;
     beforeEach(function() {
+      browser.driver.manage().timeouts().setScriptTimeout(180000);
       panel = element.all(by.css(".panel:nth-child(1)"));
       bubble = panel
         .all(by.css(".panel-body:nth-child(1)>svg circle.node--leaf"))
@@ -245,13 +248,17 @@ describe("the EE (explore) page ", function() {
       });
     });
 
-    it("should zoom the same bubble item when a bubble item is clicked", function() {
-      expect(toNumber(bubble.getAttribute("r"))).toBeLessThan(7); //4.053769907494721
+    it(
+      "should zoom the same bubble item when a bubble item is clicked",
+      function() {
+        expect(toNumber(bubble.getAttribute("r"))).toBeLessThan(7); //4.053769907494721
 
-      bubble.click();
+        bubble.click();
 
-      expect(toNumber(bubble.getAttribute("r"))).toBeGreaterThan(60); //69.80421083246561
-    });
+        expect(toNumber(bubble.getAttribute("r"))).toBeGreaterThan(60); //69.80421083246561
+      },
+      600000
+    );
 
     it(
       "should display the variable detail in the variable-statistics panel when a bubble item is clicked",
@@ -282,13 +289,14 @@ describe("the EE (explore) page ", function() {
           });
         });
       },
-      60000
+      300000
     ); //^^ this is slowing down the test and should be removed the day the variable-statitics panel become significantly faster
   });
 
-  describe("the tabs in the variable detail panel", function() {
+  describe("the tabs in the variable detail panel (in less than 180 secondes (WHICH IS ABSURDELY HUGE, NO REAL USER CAN ENDURE THAT) )", function() {
     var variableStatisticsPanel, bubble;
     beforeEach(function(done) {
+      browser.driver.manage().timeouts().setScriptTimeout(300000);
       variableStatisticsPanel = element.all(by.css(".panel")).get(2);
       get_AgeYears_bubble().click().then(function() {
         browser
@@ -312,7 +320,7 @@ describe("the EE (explore) page ", function() {
             .count()
         ).toBe(5);
       },
-      60000
+      300000
     );
 
     it(
@@ -324,7 +332,7 @@ describe("the EE (explore) page ", function() {
             .get(0)
         ).toHaveClass("active");
       },
-      60000
+      180000
     );
 
     it(
@@ -336,7 +344,7 @@ describe("the EE (explore) page ", function() {
             .getText()
         ).toEqual("subjectageyears histogram");
       },
-      60000
+      180000
     );
 
     it(
@@ -352,7 +360,7 @@ describe("the EE (explore) page ", function() {
             .getAttribute("height")
         ).toEqual("12");
       },
-      60000
+      180000
     );
   });
 
@@ -362,13 +370,12 @@ describe("the EE (explore) page ", function() {
       browser.get("http://localhost:8000/explore").then(function() {
         selectVariablePanel = element.all(by.css(".panel")).get(1);
         variableDetailPanel = element.all(by.css(".panel")).get(2);
-        selectVariablePanel
-          .all(
-            by.css(".panel-body:nth-child(1)>svg circle.node:not(.node--leaf)")
-          )
-          .each((el, i) =>
-            el.getAttribute("innerHTML").then(txt => console.log("i", i, txt))
-          );
+        selectVariablePanel.all(
+          by.css(".panel-body:nth-child(1)>svg circle.node:not(.node--leaf)")
+        );
+        //.each((el, i) =>
+        //  el.getAttribute("innerHTML").then(txt => console.log("i", i, txt))
+        //);
         groupBubbleScore = selectVariablePanel
           .all(
             by.css(".panel-body:nth-child(1)>svg circle.node:not(.node--leaf)")
@@ -445,6 +452,7 @@ describe("the EE (explore) page ", function() {
   describe("the breadcrumb component` in the panel `variable detail` ", function() {
     var breadcrumbPanel, selectVariablePanel, bubble, breadcrumbs;
     beforeEach(function(done) {
+      browser.driver.manage().timeouts().setScriptTimeout(180000);
       browser.get("http://localhost:8000/explore").then(function() {
         selectVariablePanel = element.all(by.css(".panel")).get(1);
         variableDetailPanel = element.all(by.css(".panel")).get(2);
@@ -458,76 +466,83 @@ describe("the EE (explore) page ", function() {
       });
     });
 
-    it("should display the breadcrumb (path) to that variable when a bubble item is clicked", function(
-      done
-    ) {
-      bubble.click();
-      var text = [];
-      breadcrumbs.each(function(el, i) {
-        el.getText().then(function(txt) {
-          text.push(txt);
-          if (i === 5) {
-            expect(text[0]).toEqual("Genetic");
-            expect(text[1]).toEqual("(1)");
-            expect(text[2]).toEqual(">");
-            expect(text[3]).toEqual("polymorphism");
-            expect(text[4]).toEqual(">");
-            expect(text[5]).toEqual("ApoE4");
-            done();
-          }
+    it(
+      "should display the breadcrumb (path) to that variable when a bubble item is clicked",
+      function(done) {
+        bubble.click();
+        var text = [];
+        breadcrumbs.each(function(el, i) {
+          el.getText().then(function(txt) {
+            text.push(txt);
+            if (i === 5) {
+              expect(text[0]).toEqual("Genetic");
+              expect(text[1]).toEqual("(1)");
+              expect(text[2]).toEqual(">");
+              expect(text[3]).toEqual("polymorphism");
+              expect(text[4]).toEqual(">");
+              expect(text[5]).toEqual("ApoE4");
+              done();
+            }
+          });
         });
-      });
-    });
+      },
+      180000
+    );
 
-    it("should display the path to that item and not more when a breadcrumb item is clicked", function(
-      done
-    ) {
-      bubble.click();
-      breadcrumbs.get(3).click();
-      newBreadcrumbs = variableDetailPanel.all(
-        by.css(".panel-body breadcrumb span")
-      );
-      var text = [];
-      newBreadcrumbs.each(function(el, i) {
-        el.getText().then(function(txt) {
-          text.push(txt);
-          if (i === 3) {
-            expect(text[0]).toEqual("Genetic");
-            expect(text[1]).toEqual("(1)");
-            expect(text[2]).toEqual(">");
-            expect(text[3]).toEqual("polymorphism");
-            done();
-          }
+    it(
+      "should display the path to that item and not more when a breadcrumb item is clicked",
+      function(done) {
+        bubble.click();
+        breadcrumbs.get(3).click();
+        newBreadcrumbs = variableDetailPanel.all(
+          by.css(".panel-body breadcrumb span")
+        );
+        var text = [];
+        newBreadcrumbs.each(function(el, i) {
+          el.getText().then(function(txt) {
+            text.push(txt);
+            if (i === 3) {
+              expect(text[0]).toEqual("Genetic");
+              expect(text[1]).toEqual("(1)");
+              expect(text[2]).toEqual(">");
+              expect(text[3]).toEqual("polymorphism");
+              done();
+            }
+          });
         });
-      });
-    });
+      },
+      180000
+    );
 
-    it("should zoom the corresponding bubble item when a breadcrumb item is clicked", function(
-      done
-    ) {
-      var polymorphismBubble = selectVariablePanel.all(by.css(".node"));
-      polymorphismBubble.each(function(el, i) {
-        el.all(by.css("title")).getAttribute("innerHTML").then(function(txt) {
-          if (i === 2) {
-            expect(txt[0]).toEqual("polymorphism");
-            expect(toNumber(polymorphismBubble.getAttribute("r"))).toBeLessThan(
-              300
-            );
-            bubble.click();
-            breadcrumbs.get(3).click();
-            expect(
-              toNumber(polymorphismBubble.getAttribute("r"))
-            ).toBeGreaterThan(1700);
-            done();
-          }
+    it(
+      "should zoom the corresponding bubble item when a breadcrumb item is clicked",
+      function(done) {
+        var polymorphismBubble = selectVariablePanel.all(by.css(".node"));
+        polymorphismBubble.each(function(el, i) {
+          el.all(by.css("title")).getAttribute("innerHTML").then(function(txt) {
+            if (i === 2) {
+              expect(txt[0]).toEqual("polymorphism");
+              expect(
+                toNumber(polymorphismBubble.getAttribute("r"))
+              ).toBeLessThan(300);
+              bubble.click();
+              breadcrumbs.get(3).click();
+              expect(
+                toNumber(polymorphismBubble.getAttribute("r"))
+              ).toBeGreaterThan(1700);
+              done();
+            }
+          });
         });
-      });
-    });
+      },
+      180000
+    );
   });
 
   describe("in the panel `variable-configuration` ", function() {
     var panel, buttons, cols;
     beforeEach(function() {
+      browser.driver.manage().timeouts().setScriptTimeout(180000);
       panel = element.all(by.css(".panel")).get(3);
       buttons = panel.all(by.css(".panel-body .explore-container button"));
       cols = panel.all(by.css(".panel-body .explore-container>div.column"));
@@ -576,7 +591,7 @@ describe("the EE (explore) page ", function() {
         }
       );
     });
-
+    /*
     it("should do nothing when the second button `as covariable` is clicked at initial state", function() {
       buttons.get(1).click().then(
         function() {
@@ -602,45 +617,65 @@ describe("the EE (explore) page ", function() {
         }
       );
     });
+*/
+    it(
+      "should add a variable to the `Variable` column when the variable bubble item is clicked and then the first button `as variable` is clicked",
+      function() {
+        var bubble = get_ApoE4_bubble();
+        bubble.click();
+        buttons.get(0).click();
+        expect(cols.get(0).all(by.css("h3+div")).count()).toEqual(1);
+      },
+      180000
+    );
 
-    it("should add a variable to the `Variable` column when the variable bubble item is clicked and then the first button `as variable` is clicked", function() {
-      var bubble = get_ApoE4_bubble();
-      bubble.click();
-      buttons.get(0).click();
-      expect(cols.get(0).all(by.css("h3+div")).count()).toEqual(1);
-    });
+    it(
+      "should add a variable to the `Covariable - grouping` column when the variable bubble item is clicked and then the first button `as variable` is clickedand and then the second button `as covariable`",
+      function() {
+        var bubble = get_ApoE4_bubble();
+        bubble.click();
+        buttons.get(0).click();
+        buttons.get(1).click();
+        expect(cols.get(0).all(by.css("h3+div")).count()).toEqual(0);
+        expect(cols.get(1).all(by.css("h3+div")).count()).toEqual(1);
+      },
+      180000
+    );
 
-    it("should add a variable to the `Covariable - grouping` column when the variable bubble item is clicked and then the first button `as variable` is clickedand and then the second button `as covariable`", function() {
-      var bubble = get_ApoE4_bubble();
-      bubble.click();
-      buttons.get(0).click();
-      buttons.get(1).click();
-      expect(cols.get(0).all(by.css("h3+div")).count()).toEqual(0);
-      expect(cols.get(1).all(by.css("h3+div")).count()).toEqual(1);
-    });
+    it(
+      "should add a variable name to url params (as in explore?trainingDatasets=foo) when the corresponding bubble item is clicked, and then the button `as variable`",
+      function() {
+        var bubble = get_ApoE4_bubble();
+        expect(browser.getCurrentUrl()).toContain("/explore");
+        bubble.click();
+        buttons.get(0).click();
+        expect(browser.getCurrentUrl()).toContain(
+          "/explore?trainingDatasets=chuv,brescia,lille&variable=apoe4"
+        );
+      },
+      180000
+    );
 
-    it("should add a variable name to url params (as in explore?trainingDatasets=foo) when the corresponding bubble item is clicked, and then the button `as variable`", function() {
-      var bubble = get_ApoE4_bubble();
-      expect(browser.getCurrentUrl()).toContain("/explore");
-      bubble.click();
-      buttons.get(0).click();
-      expect(browser.getCurrentUrl()).toContain(
-        "/explore?trainingDatasets=adni,ppmi,edsd&variable=apoe4"
-      );
-    });
-
-    it("should add a variable name to url params as covariable (as in explore?grouping=foo) when the corresponding bubble item is clicked, and then the button `as variable`", function() {
-      var bubble = get_ApoE4_bubble();
-      expect(browser.getCurrentUrl()).toContain("/explore");
-      bubble.click();
-      buttons.get(1).click();
-      expect(browser.getCurrentUrl()).toContain(
-        "/explore?trainingDatasets=adni,ppmi,edsd&grouping=apoe4"
-      );
-    });
+    it(
+      "should add a variable name to url params as covariable (as in explore?grouping=foo) when the corresponding bubble item is clicked, and then the button `as variable`",
+      function() {
+        var bubble = get_ApoE4_bubble();
+        expect(browser.getCurrentUrl()).toContain("/explore");
+        bubble.click();
+        buttons.get(1).click();
+        expect(browser.getCurrentUrl()).toContain(
+          "/explore?trainingDatasets=chuv,brescia,lille&grouping=apoe4"
+        );
+      },
+      180000
+    );
   });
 
   describe("the `review model` button ", function() {
+    beforeEach(function() {
+      browser.driver.manage().timeouts().setScriptTimeout(180000);
+    });
+
     it("should not be visible when no variable is selected (initial state)", function() {
       reviewModelButton = element.all(
         by.css(".page-content .explore button.btn-round")
@@ -648,17 +683,23 @@ describe("the EE (explore) page ", function() {
       expect(reviewModelButton.count()).toEqual(0);
     });
 
-    it("should  be visible when a variable is selected", function() {
-      var bubble = get_ApoE4_bubble();
-      asVariableButton = element
-        .all(by.css(".panel.explore-box .panel-body .explore-container button"))
-        .get(0);
-      bubble.click();
-      asVariableButton.click();
-      reviewModelButton = element.all(
-        by.css(".page-content .explore button.btn-round")
-      );
-      expect(reviewModelButton.count()).toEqual(1);
-    });
+    it(
+      "should  be visible when a variable is selected",
+      function() {
+        var bubble = get_ApoE4_bubble();
+        asVariableButton = element
+          .all(
+            by.css(".panel.explore-box .panel-body .explore-container button")
+          )
+          .get(0);
+        bubble.click();
+        asVariableButton.click();
+        reviewModelButton = element.all(
+          by.css(".page-content .explore button.btn-round")
+        );
+        expect(reviewModelButton.count()).toEqual(1);
+      },
+      180000
+    );
   });
 });

@@ -39,7 +39,7 @@
             Filter variable
           </a>
         </h5>
-        <p ng-repeat="filter in query.filters">
+        <p ng-repeat="filter in query.filters track by $index">
           <a ng-click="configureFilterQuery()">
             {{filter.code}}
           </a>

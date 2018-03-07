@@ -55,12 +55,6 @@ angular.module("chuvApp.models").controller("DatasetController", [
         ? search[category].split(",").map(code => ({ code }))
         : []);
 
-    const encodeFilters = () => {
-      return $scope.query.textQuery
-        ? JSON.stringify($scope.query.filterQuery)
-        : "";
-    };
-
     $scope.query.variables = map_query("variable");
     $scope.query.groupings = map_query("grouping");
     $scope.query.coVariables = map_query("covariable");
@@ -172,7 +166,8 @@ angular.module("chuvApp.models").controller("DatasetController", [
           })
           .catch(e => {
             $scope.loading = false;
-            $scope.error = e;
+            const { statusText } = e;
+            $scope.error = statusText;
             console.log(e);
           })
       );
@@ -262,7 +257,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
               ? JSON.stringify($scope.query.filterQuery)
               : ""
           ).then(
-            function(response) {
+            response => {
               var data = response.data && response.data.data;
               if (!angular.isArray(data)) {
                 data = [data];
@@ -291,15 +286,24 @@ angular.module("chuvApp.models").controller("DatasetController", [
               });
               $scope.histogramLoading = false;
             },
-            function(e) {
+            e => {
               $scope.histogramLoading = false;
-              $scope.histogramError = e;
+              const { statusText } = e;
+              $scope.histogramError = statusText;
+              console.log(e);
             }
           )
         : null;
     };
 
     const getBoxplot = data => {
+      if (!data) {
+        $scope.boxplotLoading = false;
+        $scope.boxplotError =
+          "There was an error while processing. Please try again later.";
+
+        return;
+      }
       $scope.boxplotData = data.filter(f => f.continuous).map(d => ({
         chart: {
           type: "boxplot"
@@ -368,45 +372,56 @@ angular.module("chuvApp.models").controller("DatasetController", [
         coVariables: unmap_category("coVariables"),
         groupings: unmap_category("groupings"),
         filters: unmap_category("filters"),
-        filterQuery: JSON.stringify($scope.query.filterQuery),
         trainingDatasets: unmap_category("trainingDatasets"),
         graph_config: $scope.chartConfig,
         model_slug: ""
       };
+
+      if ($scope.query.filterQuery) {
+        query.filterQuery = JSON.stringify($scope.query.filterQuery);
+      }
 
       return $state.go("new_experiment", query);
     };
 
     // init
     const init = (model = {}) => {
-      $scope.loadResources(model);
-      Variable.datasets().then(data => {
-        $scope.allDatasets = data;
+      $scope
+        .loadResources(model)
+        .then(() =>
+          Variable.datasets().then(data => {
+            $scope.allDatasets = data;
 
-        const variable = getDependantVariable();
-        if (!variable) {
-          $scope.error =
-            "Please, select some variables in the previous screen.";
-          return;
-        }
+            const variable = getDependantVariable();
+            if (!variable) {
+              $scope.error =
+                "Please, select some variables in the previous screen.";
+              return;
+            }
 
-        getStatistics().then(getBoxplot);
-        getHistogram();
+            getStatistics().then(getBoxplot);
+            getHistogram();
 
-        // retrieve filterQuery as sql text, hack queryBuilder
-        if ($scope.query.filterQuery) {
-          const $element = $("<div>");
-          const qb = $element.queryBuilder({
-            rules: $scope.query.filterQuery,
-            filters: $scope.getFilterVariables(),
-            allow_empty: true,
-            inputs_separator: " - "
-          });
+            // retrieve filterQuery as sql text, hack queryBuilder
+            if ($scope.query.filterQuery) {
+              const $element = $("<div>");
+              const qb = $element.queryBuilder({
+                rules: $scope.query.filterQuery,
+                filters: $scope.getFilterVariables(),
+                allow_empty: true,
+                inputs_separator: " - "
+              });
 
-          $scope.query.textQuery = qb.queryBuilder("getSQL", false, false).sql;
-          qb.queryBuilder("destroy");
-        }
-      });
+              $scope.query.textQuery = qb.queryBuilder(
+                "getSQL",
+                false,
+                false
+              ).sql;
+              qb.queryBuilder("destroy");
+            }
+          })
+        )
+        .catch(console.log);
     };
 
     $scope.$on("event:configureFilterQueryFinished", () => {
