@@ -132,30 +132,31 @@ angular.module("chuvApp.components.criteria").factory("Variable", [
         return breadcrumb;
       });
 
-    resource.getVariableData = variableCode =>
-      resource.hierarchy().then(
-        data =>
-          new Promise(resolve => {
-            // find variable in the tree
-            const iterate = current => {
-              const children = current.groups || current.variables;
-              if (!children) {
-                return;
-              }
+    // find variable in the tree
+    resource.getVariableData = (data, variableCode) =>
+      resource.hierarchy().then(data =>
+        $q((resolve, reject) => {
+          const iterate = current => {
+            const groups = current.groups || [];
+            const variables = current.variables || [];
 
-              if (children.map(c => c.code).includes(variableCode)) {
-                const { code, label } = current;
-                const data = children.find(c => c.code === variableCode);
-                resolve({ data, parent: { code, label } });
-              }
+            if (variables.map(c => c.code).includes(variableCode)) {
+              const { code, label } = current;
+              const data = variables.find(c => c.code === variableCode);
+              resolve({ data, parent: { code, label } });
+            }
 
-              for (let i of children) {
-                iterate(i);
-              }
-            };
+            for (let i of groups) {
+              iterate(i);
+            }
 
-            iterate(data);
-          })
+            for (let i of variables) {
+              iterate(i);
+            }
+          };
+
+          iterate(data);
+        })
       );
 
     resource.get_histo = function(code, datasets = [], filters = "") {
