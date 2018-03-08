@@ -96,11 +96,9 @@
                         Variables & Datasets
                       </uib-accordion-heading>
                       <div>
-                        <p>
-                          <span ng-if="shared.query.variables"><strong>Variables:</strong> {{shared.query.variables}}</span>
-                          <span ng-if="shared.query.groupings"><strong>Grouping: </strong>{{shared.query.groupings}}</span>
-                          <span ng-if="shared.query.coVariables"><strong>Covariables: </strong>{{shared.query.coVariables}}</span>
-                        </p>
+                          <p ng-if="shared.query.variables"><strong>Variables:</strong> {{shared.query.variables}}</p>
+                          <p ng-if="shared.query.groupings"><strong>Grouping: </strong>{{shared.query.groupings}}</p>
+                          <p ng-if="shared.query.coVariables"><strong>Covariables: </strong>{{shared.query.coVariables}}</p>
                       </div>
                       <span class="datasets-types">
                         <label class="code"></label>
