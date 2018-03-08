@@ -100,41 +100,6 @@ angular.module("chuvApp.models").directive("circlePacking", [
           });
         }
 
-        function wrap(text, width, height) {
-          text.each(function(idx, elem) {
-            var text = $(elem);
-            text.attr("dy", height);
-            var words = text.text().split(/\s+/).reverse(),
-              word,
-              line = [],
-              lineNumber = 0,
-              lineHeight = 1.1, // ems
-              y = text.attr("y"),
-              dy = parseFloat(text.attr("dy")),
-              tspan = text
-                .text(null)
-                .append("tspan")
-                .attr("x", 0)
-                .attr("y", y)
-                .attr("dy", dy + "em");
-            while ((word = words.pop())) {
-              line.push(word);
-              tspan.text(line.join(" "));
-              if (elem.getComputedTextLength() > width) {
-                line.pop();
-                tspan.text(line.join(" "));
-                line = [word];
-                tspan = text
-                  .append("tspan")
-                  .attr("x", 0)
-                  .attr("y", y)
-                  .attr("dy", ++lineNumber * lineHeight + dy + "em")
-                  .text(word);
-              }
-            }
-          });
-        }
-
         // clears the current circle packing and recreates it from crash.
         // quite compute intensive, do not overuse.
         // used when resizing
@@ -175,7 +140,7 @@ angular.module("chuvApp.models").directive("circlePacking", [
               "translate(" + diameter / 2 + "," + diameter / 2 + ")"
             );
 
-          var wrap = d3.textwrap().bounds({ height: 480, width: 960 });
+          //var wrap = d3.textwrap().bounds({ height: 480, width: 960 });
           var focus = groups,
             nodes = pack.nodes(groups),
             view,
@@ -198,51 +163,45 @@ angular.module("chuvApp.models").directive("circlePacking", [
                   zoom(d);
                 }
                 d3.event.stopPropagation();
-              }),
-            text = svg
-              .selectAll("text")
-              .data(nodes)
-              .enter()
-              .append("text")
-              .filter(function(d) {
-                return !d.is_group || d.children;
-              }) // Do not display enpty groups
-              .attr("class", function(d) {
-                return d.children ? "circle-label group" : "circle-label";
-              })
-              .style("display", function(d) {
-                return d.parent === root ? "inline" : "none";
-              })
-              .style("font-size", "25px")
-              .style("z-index", "999")
-              .text(function(d) {
-                if (!d.parent) {
-                  console.log(d);
-                  return d.label ? d.label.split(" ").join("<br>") : "";
-                }
-                return wrap(d.label.split(" "), 100, 25);
-                /*
-                // magic function to cut off text that's too long.
-                // I came up with this after a little trial and error
-                var max_length = 5 + d.r * 100 / d.parent.r;
+              });
 
-                if (d.label.length > max_length) {
-                  return d.label.substr(0, max_length - 3) + "...";
-                }
-                return d.label.split(' ').join('</tspan>');
-                */
-              })
-              .call(wrap),
-            node = svg.selectAll("circle,text");
+          console.log(svg.selectAll("text"));
+          var text = svg
+            .selectAll("foreignObject")
+            .data(nodes)
+            .enter()
+            //.append('xhtml:div')
+            .append("foreignObject")
+            .attr("width", 200)
+            .attr("height", 100)
+            .attr("fill", "green")
+            .filter(function(d) {
+              return !d.is_group || d.children;
+            }) // Do not display enpty groups
+            .attr("class", function(d) {
+              return d.children ? "circle-label group" : "circle-label";
+            })
+            .style("display", function(d) {
+              return d.parent === root ? "inline" : "none";
+            })
+            .text(function(d) {
+              return d.label;
+            }) /*
+            .append('foreignObject')
+            .attr("width", 200)
+            .attr("height", 100)
+            .attr("fill", 'red')*/, //
+            //.attr("requiredFeatures", 'http://www.w3.org/TR/SVG11/feature#Extensibility')
+            //.append('xhtml:div')
+            //.text('foooo bar baz')
+            node = svg.selectAll("circle, foreignObject");
 
           circle
             .append("title")
             .text(function(d) {
-              return "trololo" + d.description + "bla bla<br><br>bla bla<br>";
+              return d.description;
             })
-            .style("font-size", "30px")
-            .transition()
-            .style("font-weight", "bold");
+            .transition();
 
           zoomTo([root.x, root.y, root.r * 2 + margin]);
           applyNodeColors();
@@ -272,7 +231,7 @@ angular.module("chuvApp.models").directive("circlePacking", [
             };
 
             transition
-              .selectAll("text")
+              .selectAll("foreignObject")
               .filter(function(d) {
                 return this.style.display === "inline" || condition(d);
               })
