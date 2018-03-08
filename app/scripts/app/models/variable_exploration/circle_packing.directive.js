@@ -165,36 +165,37 @@ angular.module("chuvApp.models").directive("circlePacking", [
                 d3.event.stopPropagation();
               });
 
-          console.log(svg.selectAll("text"));
+          var width = 260, height = 140;
+
           var text = svg
             .selectAll("foreignObject")
             .data(nodes)
             .enter()
-            //.append('xhtml:div')
             .append("foreignObject")
-            .attr("width", 200)
-            .attr("height", 100)
-            .attr("fill", "green")
+            .attr("width", width)
+            .attr("height", height)
+            .attr("x", -(width / 2))
+            .attr("y", -(height / 2))
             .filter(function(d) {
               return !d.is_group || d.children;
             }) // Do not display enpty groups
             .attr("class", function(d) {
-              return d.children ? "circle-label group" : "circle-label";
+              return d.children
+                ? "circle-label group"
+                : "circle-label variable";
             })
             .style("display", function(d) {
               return d.parent === root ? "inline" : "none";
             })
-            .text(function(d) {
-              return d.label;
-            }) /*
-            .append('foreignObject')
-            .attr("width", 200)
-            .attr("height", 100)
-            .attr("fill", 'red')*/, //
-            //.attr("requiredFeatures", 'http://www.w3.org/TR/SVG11/feature#Extensibility')
-            //.append('xhtml:div')
-            //.text('foooo bar baz')
-            node = svg.selectAll("circle, foreignObject");
+            .append("xhtml:div")
+            .attr("width", width)
+            .attr("height", height)
+            .append("xhtml:span")
+            .html(function(d) {
+              return d.label ? d.label.split(" ").join("<br>") : "";
+            });
+
+          var node = svg.selectAll("circle, foreignObject");
 
           circle
             .append("title")
