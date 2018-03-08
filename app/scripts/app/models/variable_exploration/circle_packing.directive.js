@@ -140,7 +140,6 @@ angular.module("chuvApp.models").directive("circlePacking", [
               "translate(" + diameter / 2 + "," + diameter / 2 + ")"
             );
 
-          //var wrap = d3.textwrap().bounds({ height: 480, width: 960 });
           var focus = groups,
             nodes = pack.nodes(groups),
             view,
@@ -197,12 +196,9 @@ angular.module("chuvApp.models").directive("circlePacking", [
 
           var node = svg.selectAll("circle, foreignObject");
 
-          circle
-            .append("title")
-            .text(function(d) {
-              return d.description;
-            })
-            .transition();
+          circle.append("title").text(function(d) {
+            return d.description;
+          });
 
           zoomTo([root.x, root.y, root.r * 2 + margin]);
           applyNodeColors();
