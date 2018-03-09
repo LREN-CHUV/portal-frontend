@@ -139,6 +139,7 @@ angular.module("chuvApp.models").directive("circlePacking", [
               "transform",
               "translate(" + diameter / 2 + "," + diameter / 2 + ")"
             );
+
           var focus = groups,
             nodes = pack.nodes(groups),
             view,
@@ -161,36 +162,39 @@ angular.module("chuvApp.models").directive("circlePacking", [
                   zoom(d);
                 }
                 d3.event.stopPropagation();
-              }),
-            text = svg
-              .selectAll("text")
-              .data(nodes)
-              .enter()
-              .append("text")
-              .filter(function(d) {
-                return !d.is_group || d.children;
-              }) // Do not display enpty groups
-              .attr("class", function(d) {
-                return d.children ? "circle-label group" : "circle-label";
-              })
-              .style("display", function(d) {
-                return d.parent === root ? "inline" : "none";
-              })
-              .text(function(d) {
-                if (!d.parent) {
-                  return d.label;
-                }
+              });
 
-                // magic function to cut off text that's too long.
-                // I came up with this after a little trial and error
-                var max_length = 5 + d.r * 100 / d.parent.r;
+          var width = 260, height = 140;
 
-                if (d.label.length > max_length) {
-                  return d.label.substr(0, max_length - 3) + "...";
-                }
-                return d.label;
-              }),
-            node = svg.selectAll("circle,text");
+          var text = svg
+            .selectAll("foreignObject")
+            .data(nodes)
+            .enter()
+            .append("foreignObject")
+            .attr("width", width)
+            .attr("height", height)
+            .attr("x", -(width / 2))
+            .attr("y", -(height / 2))
+            .filter(function(d) {
+              return !d.is_group || d.children;
+            }) // Do not display enpty groups
+            .attr("class", function(d) {
+              return d.children
+                ? "circle-label group"
+                : "circle-label variable";
+            })
+            .style("display", function(d) {
+              return d.parent === root ? "inline" : "none";
+            })
+            .append("xhtml:div")
+            .attr("width", width)
+            .attr("height", height)
+            .append("xhtml:span")
+            .html(function(d) {
+              return d.label ? d.label.split(" ").join("<br>") : "";
+            });
+
+          var node = svg.selectAll("circle, foreignObject");
 
           circle.append("title").text(function(d) {
             return d.description;
@@ -224,7 +228,7 @@ angular.module("chuvApp.models").directive("circlePacking", [
             };
 
             transition
-              .selectAll("text")
+              .selectAll("foreignObject")
               .filter(function(d) {
                 return this.style.display === "inline" || condition(d);
               })

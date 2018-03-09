@@ -5,7 +5,7 @@
       <div class="panel-body">
         <ul class="list-group">
           <li ng-repeat="dataset in allDatasets" class="list-group-item" ng-class="{active: isDatasetSelected(dataset.code)}">
-            <a href="javascript:;" ng-click="selectDataset(dataset.code)">{{dataset.code}}</a>
+            <a href="javascript:;" ng-click="selectDataset(dataset.code)"><span>{{dataset.code}}</span></a>
           </li>
         </ul>
       </div>
@@ -90,7 +90,7 @@
           </div>
         </uib-tab>
 
-        <uib-tab index="1" heading="Histogram">
+        <uib-tab index="1" heading="Histogram" ng-click="getHistogram()" disable="allDatasets === null" >
           <div class="panel-body scrollable">
             <div ng-if="histogramLoading" class="loading">
               <div class="fa fa-spin fa-spinner"></div>
