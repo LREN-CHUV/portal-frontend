@@ -172,7 +172,12 @@ angular
               return a;
             }, {});
 
-          $scope.shared.query = $scope.query;
+          Object.keys($scope.query).forEach(k => {
+            if ((_.has($scope.query, k), angular.isArray($scope.query[k])))
+              $scope.shared.query[k] = $scope.query[k]
+                .map(v => v.code)
+                .join(", ");
+          });
         });
 
       if ($stateParams.model_slug) {
