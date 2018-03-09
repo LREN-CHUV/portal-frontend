@@ -133,7 +133,7 @@ angular.module("chuvApp.components.criteria").factory("Variable", [
       });
 
     // find variable in the tree
-    resource.getVariableData = (data, variableCode) =>
+    resource.getVariableData = variableCode =>
       resource.hierarchy().then(data =>
         $q((resolve, reject) => {
           const iterate = current => {

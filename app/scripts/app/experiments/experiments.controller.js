@@ -172,7 +172,12 @@ angular
               return a;
             }, {});
 
-          $scope.shared.query = $scope.query;
+          Object.keys($scope.query).forEach(k => {
+            if ((_.has($scope.query, k), angular.isArray($scope.query[k])))
+              $scope.shared.query[k] = $scope.query[k]
+                .map(v => v.code)
+                .join(", ");
+          });
         });
 
       if ($stateParams.model_slug) {
@@ -531,6 +536,10 @@ angular
               }
 
               // Prepare charts
+              $scope.experiment.display = MLUtils.parse_results(
+                $scope.experiment.result
+              );
+
               $scope.overview_charts = $scope.experiment.display.overview.map(
                 function(o) {
                   return compute_overview_graph(o);

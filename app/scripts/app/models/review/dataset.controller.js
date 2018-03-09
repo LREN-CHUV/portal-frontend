@@ -246,8 +246,6 @@ angular.module("chuvApp.models").controller("DatasetController", [
         });
 
     $scope.getHistogram = function() {
-      if ($scope.histogramData) return;
-
       const variable = getDependantVariable();
       return variable
         ? Variable.get_histo(
@@ -347,7 +345,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
       }
       $location.search("trainingDatasets", selectedDatasets.join(","));
 
-      getStatistics();
+      init();
     };
 
     $scope.isDatasetSelected = code => {

@@ -179,9 +179,10 @@ angular.module("chuvApp.models").directive("circlePacking", [
               return !d.is_group || d.children;
             }) // Do not display enpty groups
             .attr("class", function(d) {
+              var lenClass = d.label ? "len" + d.label.split(" ").length : "";
               return d.children
-                ? "circle-label group"
-                : "circle-label variable";
+                ? "circle-label group " + lenClass
+                : "circle-label variable " + lenClass;
             })
             .style("display", function(d) {
               return d.parent === root ? "inline" : "none";
