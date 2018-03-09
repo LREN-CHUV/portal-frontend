@@ -12,7 +12,7 @@
 This is a minimal setup to do frontend development in this project:
 
 ### Backend
-1. Checkout the master branch of the [backend web-analytics-starter](https://github.com/LREN-CHUV/web-analytics-starter) project. 
+1. Checkout the master branch of the [backend web-analytics-starter](https://github.com/LREN-CHUV/web-analytics-starter) project.
 2. Run the backend either on local or federated mode `./run.sh --no-frontend` or `./run-federation.sh --no-frontend` You will have the MIP backend running on your computer with no frontend.
 
 ### Frontend
@@ -34,6 +34,13 @@ Run: `./build.sh`
 
 Run: `./publish.sh`
 
+## Execution
+
+See [Docker Readme](docker/README.md) for details about how to run the MIP frontend packaged as a Docker image.
+
+See [Web Analytics starter](https://github.com/HBPMedical/web-analytics-starter) to deploy MIP Web portal and its analytics stack for development.
+
+See [MIP Microservices Infrastructure](https://github.com/HBPMedical/mip-microservices-infrastructure) for the production deployment of the MIP platform
 
 ## Unit-tests
 ### using gulp
@@ -74,7 +81,7 @@ This is a setup to run e2e-tests in this project using protractor:
 
 ## License
 
-Copyright © 2016-2018LREN CHUV
+Copyright © 2016-2018 LREN CHUV
 
 Licensed under the GNU Affero General Public License, Version 3.0 (the "License");
 you may not use this file except in compliance with the License.
