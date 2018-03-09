@@ -211,7 +211,6 @@ gulp.task("copy-rootItems", function() {
 gulp.task("copy-scripts-html", function() {
   return gulp
     .src(appPath.src.scripts.html)
-    .pipe(rev())
     .pipe(gulp.dest(appPath.dist.scripts.html));
 });
 
