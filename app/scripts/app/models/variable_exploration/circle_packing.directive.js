@@ -299,7 +299,7 @@ angular.module("chuvApp.models").directive("circlePacking", [
             if (!groupNode) {
               return;
             }
-            zoom(groupNode);
+            zoom(groupNode, true);
           });
 
           zoom(groups, true);
