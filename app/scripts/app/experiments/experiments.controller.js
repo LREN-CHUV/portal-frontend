@@ -531,6 +531,10 @@ angular
               }
 
               // Prepare charts
+              $scope.experiment.display = MLUtils.parse_results(
+                $scope.experiment.result
+              );
+
               $scope.overview_charts = $scope.experiment.display.overview.map(
                 function(o) {
                   return compute_overview_graph(o);
