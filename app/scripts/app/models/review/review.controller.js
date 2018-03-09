@@ -468,7 +468,9 @@ angular.module("chuvApp.models").controller("ReviewController", [
         covariable: unmap_category("coVariables"),
         grouping: unmap_category("groupings"),
         filter: unmap_category("filters"),
-        trainingDatasets: $location.search().trainingDatasets
+        trainingDatasets: $scope.query.trainingDatasets
+          .map(t => t.code)
+          .join(",")
       };
 
       if ($scope.query.filterQuery) {
