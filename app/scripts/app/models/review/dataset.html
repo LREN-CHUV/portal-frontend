@@ -90,7 +90,7 @@
           </div>
         </uib-tab>
 
-        <uib-tab index="1" heading="Histogram" ng-click="getHistogram()" ng-disabled="allDatasets === null" >
+        <uib-tab index="1" heading="Histogram" ng-click="getHistogram()" disable="allDatasets === null" >
           <div class="panel-body scrollable">
             <div ng-if="histogramLoading" class="loading">
               <div class="fa fa-spin fa-spinner"></div>
