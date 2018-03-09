@@ -96,7 +96,7 @@ var appPath = {
       appConfig.dist + "/scripts/scripts.js",
       appConfig.dist + "/scripts/vendor.js",
       appConfig.dist + "/styles/main.css",
-      appConfig.dist + "/styles/vendor.css",
+      //  appConfig.dist + "/styles/vendor.css", FIXME: hack for publish script - no replace
       appConfig.dist + "/rev-manifest.json"
     ]
   }
