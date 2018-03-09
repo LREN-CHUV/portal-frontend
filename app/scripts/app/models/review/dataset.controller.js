@@ -400,7 +400,6 @@ angular.module("chuvApp.models").controller("DatasetController", [
             }
 
             getStatistics().then(getBoxplot);
-            getHistogram();
 
             // retrieve filterQuery as sql text, hack queryBuilder
             if ($scope.query.filterQuery) {
