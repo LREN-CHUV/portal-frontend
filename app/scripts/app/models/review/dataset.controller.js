@@ -245,7 +245,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
           $scope.tsneLoading = false;
         });
 
-    const getHistogram = function() {
+    $scope.getHistogram = function() {
       const variable = getDependantVariable();
       return variable
         ? Variable.get_histo(
