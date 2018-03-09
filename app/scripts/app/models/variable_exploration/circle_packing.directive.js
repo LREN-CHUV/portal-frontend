@@ -195,16 +195,11 @@ angular.module("chuvApp.models").directive("circlePacking", [
               if (!d.parent) {
                 return d.label;
               }
-              var txt = d.label ? d.label.split(" ").join("<br>") : "";
-              // magic function to cut off text that's too long.
-              var width = 260, height = 140;
-              // I came up with this after a little trial and error
               var max_length = 5 + d.r * 100 / d.parent.r;
-              if (txt.length > max_length) {
-                var node = svg.selectAll("circle, foreignObject");
-                txt = txt.substr(0, max_length - 3) + "...";
+              if (d.label.length > max_length) {
+                return d.label.substr(0, max_length - 3) + "...";
               }
-              return txt.split(" ").join("<br>");
+              return d.label;
             });
 
           var node = svg.selectAll("circle, foreignObject");
