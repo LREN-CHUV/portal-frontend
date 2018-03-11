@@ -75,6 +75,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
     // Charts ressources
     const getStatistics = () => {
       $scope.loading = true;
+
       let rows = [];
       // format
       // const rows = [
@@ -84,15 +85,67 @@ angular.module("chuvApp.models").controller("DatasetController", [
       //     parent: { code, label }
       //     datasets: [{ code, label }],
       //     continuous: [{ min, max, mean }],
-      //     nominal: [[{ key, count }]]
+      //     nominal: [[{ key, count }]],},
+      //     filter: {}
       //     }
       // ];
 
       if (!selectedDatasets.length) {
-        $scope.error = "Please, select at least a dataset.";
+        $scope.error = "Please, select at least one dataset.";
+        $scope.loading = false;
+        $scope.tableHeader = null;
+        $scope.tableRows = null;
         return;
       } else {
         $scope.error = null;
+      }
+
+      // retrieve cache if existing
+      const dataset = sessionStorage.getItem("dataset");
+      if (dataset) {
+        const json = JSON.parse(dataset);
+
+        // check if filters changed
+        const hasSameFilter = json.every(
+          d =>
+            JSON.stringify(d.filterQuery) ===
+            JSON.stringify($scope.query.filterQuery)
+        );
+
+        // check if variables changed
+        const all = [
+          ...$scope.query.variables,
+          ...$scope.query.groupings,
+          ...$scope.query.coVariables
+        ].map(a => a.code);
+        const hasSameVariables = all.every(d =>
+          json.map(j => j.index).includes(d)
+        );
+
+        if (hasSameVariables && hasSameFilter) {
+          // filter by variables
+          const byVariables = json.filter(j => all.includes(j.index));
+
+          // filter by datasets
+          const filtered = byVariables.map(j => {
+            const indexes = selectedDatasets.map(s => j.datasets.includes(s));
+
+            return Object.assign({}, j, {
+              datasets: j.datasets.filter((c, i) => indexes[i]),
+              continuous: j.continuous
+                ? j.continuous.filter((c, i) => indexes[i])
+                : null,
+              nominal: j.nominal ? j.nominal.filter((c, i) => indexes[i]) : null
+            });
+          });
+
+          $scope.tableHeader = ["Variables", ...selectedDatasets];
+          $scope.tableRows = formatTable(filtered);
+          $scope.loading = false;
+          $scope.error = null;
+
+          return Promise.resolve(filtered);
+        }
       }
 
       // Get local or federation mode
@@ -150,12 +203,15 @@ angular.module("chuvApp.models").controller("DatasetController", [
               Object.assign({}, r, {
                 parent: data[i].parent,
                 variable: data[i].data,
-                datasets: selectedDatasets
+                datasets: selectedDatasets,
+                filterQuery: $scope.query.filterQuery
               })
             )
           )
           .then(data => {
             rows = data;
+
+            sessionStorage.setItem("dataset", JSON.stringify(data));
 
             $scope.tableHeader = ["Variables", ...selectedDatasets];
             $scope.tableRows = formatTable(data);
