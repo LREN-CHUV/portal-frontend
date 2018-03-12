@@ -37,6 +37,7 @@ jobs:
           name: "Pull & install backend"
           command: |
             git clone https://github.com/LREN-CHUV/web-analytics-starter.git
+            ls -la .
             cd web-analytics-starter
             ls -la .
             docker --version
