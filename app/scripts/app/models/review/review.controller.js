@@ -10,6 +10,7 @@ angular.module("chuvApp.models").controller("ReviewController", [
   "$translate",
   "Model",
   "$stateParams",
+  "ChartUtil",
   "$state",
   "$log",
   "User",
@@ -26,6 +27,7 @@ angular.module("chuvApp.models").controller("ReviewController", [
     $translate,
     Model,
     $stateParams,
+    ChartUtil,
     $state,
     $log,
     User,
@@ -47,6 +49,13 @@ angular.module("chuvApp.models").controller("ReviewController", [
     $scope.dataset = null;
     $scope.datasets = null; // sources of the data
 
+    $scope.chartConfig = {
+      type: "designmatrix",
+      height: 480,
+      yAxisVariables: null,
+      xAxisVariable: null
+    };
+
     /**
      * load model by slug
      * @param slug
@@ -58,6 +67,9 @@ angular.module("chuvApp.models").controller("ReviewController", [
         if ($stateParams.isCopy === "true") {
           $scope.model.title = "Copy of " + $scope.model.title;
         }
+
+        $scope.chartConfig = result.config;
+        $scope.hcConfig = ChartUtil($scope.chartConfig, $scope.dataset);
 
         $scope.query = result.query;
         $scope.$broadcast("event:loadModel", result);
@@ -364,6 +376,18 @@ angular.module("chuvApp.models").controller("ReviewController", [
         });
     };
 
+    function reload_hc_config() {
+      $scope.chartConfig.yAxisVariables = ($scope.chartConfig
+        .yAxisVariables || [])
+        .filter(function(code) {
+          return (ChartUtil.isXAxisMain($scope.chartConfig.type)
+            ? ChartUtil.canUseAsYAxis
+            : ChartUtil.canUseAsXAxis)(code, $scope.chartConfig.type, $scope.dataset.data[code]);
+        })
+        .slice(0, 5);
+      $scope.hcConfig = ChartUtil($scope.chartConfig, $scope.dataset, true);
+    }
+
     /**
      * Execute a search query
      */
@@ -393,7 +417,24 @@ angular.module("chuvApp.models").controller("ReviewController", [
         notifications.error(error);
         return;
       }
+
+      $scope.loading_model = true;
+
+      Model.executeQuery(query).success(function(queryResult) {
+        $scope.executeBtnAnimate();
+        $scope.executed = true;
+        $scope.loading_model = false;
+        $scope.dataset = queryResult;
+        $scope.chartConfig.yAxisVariables = _.filter(
+          $scope.dataset.header,
+          $scope.canUseAxis
+        ).slice(0, 5);
+        update_location_search();
+        reload_hc_config();
+      });
     };
+
+    $scope.$on("chartConfigChanged", reload_hc_config);
 
     if ($location.search().execute) {
       // wait for data to be there before executing query.
