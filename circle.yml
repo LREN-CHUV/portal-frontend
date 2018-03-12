@@ -133,14 +133,14 @@ jobs:
 #          environment:
 #            NO_SUDO: "true"
 
-#      - run:
-#          name: "Build the project"
-#          command: |
-#            docker build -t hbpmip/portal-frontend-dev -f ./Dockerfile-e2e-tests .
-#      - run:
-#          name: "Run the project"
-#          command: |
-#            docker run -it --rm --net=host -p8000:8000 hbpmip/portal-frontend-dev
+      - run:
+          name: "Build the project"
+          command: |
+            docker build -t hbpmip/portal-frontend-dev -f ./Dockerfile-e2e-tests .
+      - run:
+          name: "Run the project"
+          command: |
+            docker run -it --rm --net=host -p8000:8000 hbpmip/portal-frontend-dev
 
 # docker build -t hbpmip/portal-frontend-test -f ./Dockerfile-run-backend .
 # docker run -it --rm --net=host hbpmip/portal-frontend-test
