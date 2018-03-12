@@ -517,6 +517,25 @@ gulp.task(
   "protractor-go",
   ["clean:test-reports", "clean:test-screenshots", "webdriver_update"],
   function(cb) {
+    gulp
+      .src([])
+      .pipe(
+        protractor({
+          configFile: "./app/tests/e2e/e2e-conf.js"
+        })
+      )
+      .on("error", function(e) {
+        console.log(e);
+        throw e;
+      })
+      .on("end", cb);
+  }
+);
+
+gulp.task(
+  "protractor-go:ci",
+  ["clean:test-reports", "clean:test-screenshots", "webdriver_update"],
+  function(cb) {
     setTimeout(function () {
       gulp
         .src([])
@@ -590,8 +609,26 @@ gulp.task("e2e-test", function() {
     ],
     "index-html:test",
     "caching:test",
-    "browser-sync:test"/*,
-    "protractor-go"*/
+    "browser-sync:test",
+    "protractor-go"
+  );
+});
+
+gulp.task("e2e-test:ci", function() {
+  runSequence(
+    "clean:prod",
+    "config:dev",
+    [
+      "copy-all",
+      "styles:prod",
+      "styles-vendor:prod",
+      "images",
+      "js-app:prod",
+      "js-vendor:prod"
+    ],
+    "index-html:test",
+    "caching:test",
+    "browser-sync:test"
   );
 });
 

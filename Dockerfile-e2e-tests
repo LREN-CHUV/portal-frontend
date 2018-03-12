@@ -39,5 +39,5 @@ RUN yarn install
 
 COPY . /frontend
 
-CMD gulp e2e-test & \
-    gulp protractor-go
+CMD gulp e2e-test:ci & \
+    gulp protractor-go:ci
