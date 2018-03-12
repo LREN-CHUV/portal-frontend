@@ -164,21 +164,35 @@ angular.module("chuvApp.models").directive("circlePacking", [
                 d3.event.stopPropagation();
               });
 
-          var width = 260, height = 140;
+          //var width = 140, height = 140;
 
+          const len = d => {
+            //console.log('d.r', d.r);
+            const out = d.r; //5*2*(d.r / Math.sqrt(2));
+            //console.log('out', out);
+            return out;
+          }; //6 * Math.sqrt(d.r * d.r + d.r * d.r - 2 * d.r * d.r * Math.cos(90));
+          const coord = d => -(len(d) / 2);
           var text = svg
             .selectAll("foreignObject")
             .data(nodes)
             .enter()
             .append("foreignObject")
-            .attr("width", width)
-            .attr("height", height)
-            .attr("x", -(width / 2))
-            .attr("y", -(height / 2))
+            //.attr("width", width)
+            //.attr("height", height)
+            .attr("width", d => len(d))
+            .attr("height", d => len(d))
+            //.attr("x", coord)
+            //.attr("y", coord)
+            //.attr(
+            //  "transform",
+            //  "translate(" + diameter / 2 + "," + diameter / 2 + ")"
+            //)
             .filter(function(d) {
               return !d.is_group || d.children;
             }) // Do not display enpty groups
             .attr("class", function(d) {
+              //console.log(d);
               var lenClass = d.label ? "len" + d.label.split(" ").length : "";
               return d.children
                 ? "circle-label group " + lenClass
@@ -186,19 +200,22 @@ angular.module("chuvApp.models").directive("circlePacking", [
             })
             .style("display", function(d) {
               return d.parent === root ? "inline" : "none";
-            })
+            });
+
+          /**/
+          var text2 = text
             .append("xhtml:div")
-            .attr("width", width)
-            .attr("height", height)
+            //.attr("width", width)
+            //.attr("height", height)
             .append("xhtml:span")
             .html(function(d) {
               if (!d.parent) {
                 return d.label;
               }
-              var max_length = 5 + d.r * 100 / d.parent.r;
+              /*var max_length = 5 + d.r * 100 / d.parent.r;
               if (d.label.length > max_length) {
                 return d.label.substr(0, max_length - 3) + "...";
-              }
+              }*/
               return d.label;
             });
 
@@ -241,16 +258,17 @@ angular.module("chuvApp.models").directive("circlePacking", [
                 return this.style.display === "inline" || condition(d);
               })
               .style("fill-opacity", function(d) {
-                return condition(d) ? 1 : 0;
+                return 1; //condition(d) ? 1 : 0;
               })
               .each("start", function(d) {
                 if (condition(d)) {
                   this.style.display = "inline";
                 }
+                this.style.display = "inline";
               })
               .each("end", function(d) {
                 if (!condition(d)) {
-                  this.style.display = "none";
+                  //this.style.display = "none";
                 }
               });
 
@@ -282,6 +300,10 @@ angular.module("chuvApp.models").directive("circlePacking", [
             circle.attr("r", function(d) {
               return d.r * k;
             });
+            text.attr("width", d => d.r * k * 1.45); //(d) => k * len(d));
+            text.attr("height", d => d.r * k) * 1.45; //(d) => k * len(d));
+            text.attr("x", d => -(len(d) / 2 * k) * 1); //(d) => coord(d.r) * k
+            text.attr("y", d => -(len(d) / 2 * k) * 1); //(d) => coord(d.r) * k);
           }
 
           d3.select(self.frameElement).style("height", diameter + "px");
