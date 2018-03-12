@@ -1,11 +1,12 @@
 # Use the latest image built as this is what is under test
 FROM hbpmip/woken:latest
 
-#COPY ./woken/config/application.conf /build/src/woken/config/application.conf
+COPY ./woken/config/application.conf /build/src/woken/config/application.conf
 COPY ./woken/config/application.conf /opt/woken/config/application.conf
-#COPY ./woken/config/application.conf /build/src/config/application.conf
-#COPY ./woken/config/application.conf /build/src/application.conf
-#COPY ./woken/config/application.conf /build/application.conf
+
+COPY ./woken/config/application.conf /build/src/config/application.conf
+COPY ./woken/config/application.conf /build/src/application.conf
+COPY ./woken/config/application.conf /build/application.conf
 COPY ./woken-fed/config/application.conf /build/src/woken-fed/config/application.conf
 COPY ./woken-worker1/config/application.conf /build/src/woken-worker1/config/application.conf
 COPY ./woken-worker2/config/application.conf /build/src/woken-worker2/config/application.conf
