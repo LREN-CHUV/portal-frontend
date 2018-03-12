@@ -187,7 +187,6 @@ services:
       - db
 
   woken:
-    image: hbpmip/woken:2.3.9
     build:
       context: .
       dockerfile: Dockerfile-woken
