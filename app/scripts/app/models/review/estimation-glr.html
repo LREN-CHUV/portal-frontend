@@ -1,0 +1,115 @@
+<div class="modal-body">
+
+  <accordion close-others="false">
+    <!--accordion-group ng-if="estimation.parameters.length" is-open="true">
+      <accordion-heading>
+        <span class="ti ti-panel"></span>
+        Parameters
+      </accordion-heading>
+
+      <table class="table">
+        <tr ng-repeat="parameter in estimation.parameters">
+          <th>
+            <label ng-bind="parameter.label" for="{{ parameter.id }}"></label>
+          </th>
+          <td ng-switch="parameter.type">
+            <select ng-switch-when="select"
+                    class="form-control"
+                    ng-model="parametrization[parameter.id]"
+                    id="{{ parameter.id }}"
+                    ng-options="o as o for o in parameter.options"></select>
+            <input ng-switch-when="number"
+                   class="form-control"
+                   ng-model="parametrization[parameter.id]"
+                   id="{{ parameter.id }}"
+                   type="number">
+          </td>
+        </tr>
+      </table>
+    </accordion-group-->
+
+    <accordion-group is-open="help_is_open">
+      <accordion-heading>
+        <span class="ti ti-help-alt"></span>
+        Help
+      </accordion-heading>
+
+      <div class="panel-body" btf-markdown="estimation.help"></div>
+    </accordion-group>
+
+    <accordion-group ng-if="result" is-open="true">
+      <accordion-heading>
+        <span class="ti ti-check-box"></span>
+        Results
+      </accordion-heading>
+
+      <div style="margin: -16px -16px 0 -16px" class="table-responsive">
+        <table class="table table-striped table-bordered">
+          <tr>
+            <th>Variable</th>
+            <th>Coefficients</th>
+            <th>Standard Error</th>
+            <th>T-statistic</th>
+            <th>P-value</th>
+          </tr>
+          <tr ng-repeat="(name, value) in result.cells.summary.init.coefficients">
+            <td ng-bind="variable_title(name)"></td>
+            <td ng-bind="value.estimate | number"></td>
+            <td ng-bind="value.std_error | number"></td>
+            <td ng-bind="value.t_value | number"></td>
+            <td>
+              <span ng-bind="value.p_value | number"></span>
+              <span ng-bind="pvalue_quality(value.p_value)"></span>
+            </td>
+          </tr>
+        </table>
+      </div>
+
+      <div>
+        <p>
+          <b>Degrees of freedom: </b>
+          <span ng-bind="result.cells.summary.init.degrees_freedom[1]"></span>
+        </p>
+      </div>
+
+      <div>
+        <p>
+          <b>Residuals </b>
+        </p>
+        <table class="table table-bordered">
+          <tr>
+            <th>Min</th>
+            <th>Q1</th>
+            <th>Median</th>
+            <th>Q3</th>
+            <th>Max</th>
+          </tr>
+          <tr>
+            <td ng-bind="result.cells.summary.init.residuals.min | number"></td>
+            <td ng-bind="result.cells.summary.init.residuals.q1 | number"></td>
+            <td ng-bind="result.cells.summary.init.residuals.median | number"></td>
+            <td ng-bind="result.cells.summary.init.residuals.q3 | number"></td>
+            <td ng-bind="result.cells.summary.init.residuals.max | number"></td>
+          </tr>
+        </table>
+      </div>
+
+      <div>
+        <p><b>Covariance matrix</b></p>
+        <table class="table table-condensed table-bordered">
+          <tr ng-repeat="row in result.cells.summary.init.cov_unscaled">
+            <td ng-repeat="cell in row" ng-bind="cell | number"></td>
+          </tr>
+        </table>
+      </div>
+    </accordion-group>
+  </accordion>
+
+  <div class="clearfix">
+    <button class="btn btn-default pull-right"
+            style="margin-left: 10px"
+            ng-click="$close()">
+      Close
+    </button>
+  </div>
+</div>
