@@ -139,7 +139,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
           $scope.loading = false;
           $scope.error = null;
 
-          return Promise.resolve(filtered);
+          return $q.resolve(filtered);
         }
       }
 
