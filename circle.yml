@@ -37,11 +37,8 @@ jobs:
           name: "Pull & install backend"
           command: |
             git clone https://github.com/LREN-CHUV/web-analytics-starter.git
-            ls -la .
             cp -a ./ci-e2e/. ./web-analytics-starter
             cd web-analytics-starter
-            ls -la .
-            docker --version
 
             set -e
 
@@ -58,9 +55,6 @@ jobs:
             }
 
             cd "$(get_script_dir)"
-            echo "=========== netstat -tpln =============="
-            netstat -tpln
-
 
             echo "Remove old running containers (if any)..."
             docker-compose kill
@@ -97,14 +91,8 @@ jobs:
 
             docker-compose up -d woken wokenvalidation
 
-            echo "=========== netstat -tpln 2 =============="
-            netstat -tpln
-
             docker-compose build wait_woken
             docker-compose run wait_woken
-
-            echo "=========== netstat -tpln 3 =============="
-            netstat -tpln
 
             for i in 1 2 3 4 5 ; do
               docker-compose logs chronos | grep java.util.concurrent.TimeoutException || break
@@ -118,20 +106,8 @@ jobs:
             docker-compose run wait_portal_backend
             docker-compose up -d frontend
 
-            echo "DONE"
-
             cd ..
-
-
-
-#      - run:
-#          name: "Build the backend"
-#          command: |
-#            git clone https://github.com/LREN-CHUV/web-analytics-starter.git
-#            cd web-analytics-starter
-#            ./run.sh
-#          environment:
-#            NO_SUDO: "true"
+            echo "DONE"
 
       - run:
           name: "Build the project"
@@ -141,10 +117,6 @@ jobs:
           name: "Run the project"
           command: |
             docker run -it --rm --net=host -p8000:8000 hbpmip/portal-frontend-dev
-
-# docker build -t hbpmip/portal-frontend-test -f ./Dockerfile-run-backend .
-# docker run -it --rm --net=host hbpmip/portal-frontend-test
-
 
 workflows:
   version: 2
