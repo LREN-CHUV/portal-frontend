@@ -38,7 +38,7 @@ jobs:
           command: |
             git clone https://github.com/LREN-CHUV/web-analytics-starter.git
             ls -la .
-            cp -a /ci-e2e/. /web-analytics-starter
+            cp -a ./ci-e2e/. ./web-analytics-starter
             cd web-analytics-starter
             ls -la .
             docker --version
