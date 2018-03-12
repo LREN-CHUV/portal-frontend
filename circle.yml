@@ -15,10 +15,10 @@ jobs:
           name: "Install requirements"
           command: |
             docker --version
-#      - run:
-#          name: "Build the project"
-#          command: |
-#            docker build -t hbpmip/portal-frontend .
+      - run:
+          name: "Build the project"
+          command: |
+            docker build -t hbpmip/portal-frontend .
   test:
     docker:
       - image: hbpmip/docker-compose-for-ci:17.06-1
