@@ -1,6 +1,6 @@
 "use strict";
 
-fdescribe("Service: Variable ", function() {
+describe("Service: Variable ", function() {
   beforeEach(module("app.config"));
   beforeEach(module("chuvApp.components.criteria"));
 
@@ -53,6 +53,23 @@ fdescribe("Service: Variable ", function() {
     Variable.hierarchy().then(function(data) {
       expect(data).toEqualData(getMockHierarchy());
       done();
+    });
+
+    $httpBackend.flush();
+  });
+
+  it("Should return  the whole hierarchical data from cache when hierarchy() is called is second time", function(
+    done
+  ) {
+    $httpBackend
+      .expectGET("http://localhost:8080/services/variables/hierarchy")
+      .respond(getMockHierarchy());
+
+    Variable.hierarchy().then(function(data) {
+      Variable.hierarchy().then(function(data2) {
+        expect(data2).toEqualData(getMockHierarchy());
+        done();
+      });
     });
 
     $httpBackend.flush();
