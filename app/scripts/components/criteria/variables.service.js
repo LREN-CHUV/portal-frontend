@@ -33,13 +33,10 @@ angular.module("chuvApp.components.criteria").factory("Variable", [
       if (!angular.isUndefined(hierarchy)) {
         return $q.resolve(hierarchy);
       }
-
       return $http
         .get(backendUrl + "/variables/hierarchy")
         .then(function(response) {
           var data = response.data;
-          cache.put("hierarchy", data);
-
           return data;
         });
     };
@@ -132,32 +129,32 @@ angular.module("chuvApp.components.criteria").factory("Variable", [
         return breadcrumb;
       });
 
-    resource.getVariableData = variableCode =>
-      resource.hierarchy().then(
-        data =>
-          new Promise(resolve => {
-            // find variable in the tree
-            const iterate = current => {
-              const children = current.groups || current.variables;
-              if (!children) {
-                return;
-              }
+    resource.getVariableData = variableCode => {
+      return resource.hierarchy().then(data => {
+        let variableData = {}, found = false;
+        const iterate = current => {
+          const children = current.groups || current.variables;
+          if (!children) {
+            return;
+          }
 
-              if (children.map(c => c.code).includes(variableCode)) {
-                const { code, label } = current;
-                const data = children.find(c => c.code === variableCode);
-                resolve({ data, parent: { code, label } });
-              }
+          if (_.contains(children.map(c => c.code), variableCode)) {
+            const { code, label } = current;
+            const data = _.find(children, c => c.code === variableCode);
+            found = true;
+            variableData = { data, parent: { code, label } };
+          }
 
-              for (let i of children) {
-                iterate(i);
-              }
-            };
+          for (let i = 0, len = children.length; i < len; i++) {
+            if (found) break;
+            iterate(children[i]);
+          }
+        };
 
-            iterate(data);
-          })
-      );
-
+        if (!found) iterate(data);
+        return variableData;
+      });
+    };
     resource.get_histo = function(code, datasets = [], filters = "") {
       return $http
         .get(backendUrl + "/variables/" + code + "/histogram_query.json")
