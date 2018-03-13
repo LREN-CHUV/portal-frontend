@@ -5,8 +5,7 @@ describe('the homepage ', function() {
 
     it('should display the title *CHUV-DEV*', function() {
       var title = element(by.css('#topnav h2'));
-      // expect(title.getText()).toBe("CHUV-DEV");
-      expect(title.getText()).toBe("");
+      expect(title.getText()).toBe("CHUV-DEV");
     });
 
     it('should display a page content area with 4 info boxes', function() {
