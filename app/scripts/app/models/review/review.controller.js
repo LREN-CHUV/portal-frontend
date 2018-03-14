@@ -73,7 +73,6 @@ angular.module("chuvApp.models").controller("ReviewController", [
         $scope.hcConfig = config;
         $scope.query = result.query;
         $scope.$broadcast("event:loadModel", result);
-        $scope.executeBtnAnimate();
         $scope.executed = true;
       });
     };
@@ -105,10 +104,11 @@ angular.module("chuvApp.models").controller("ReviewController", [
      * save or update model
      */
     $scope.saveModel = function() {
-      if (!$scope.model.title) {
+      if (!($scope.chartConfig.title && $scope.chartConfig.title.text)) {
         notifications.warning("You need a name for your model!");
         return;
       }
+      $scope.model.title = $scope.chartConfig.title.text;
 
       $scope.model.config = $scope.chartConfig;
       $scope.model.dataset = $scope.dataset;
@@ -153,40 +153,6 @@ angular.module("chuvApp.models").controller("ReviewController", [
           }
         );
       }
-    };
-
-    /**
-     * Execute animation
-     */
-    $scope.executeBtnAnimate = function() {
-      var searchHelpSelector = $(".search-help-container");
-      var searchResultSelector = $(".search-result");
-      new TimelineMax({
-        paused: true,
-        onComplete: function() {
-          TweenMax.set(searchHelpSelector, { position: "absolute" });
-          TweenMax.set(searchResultSelector, {
-            position: "relative",
-            left: 0,
-            x: 0,
-            y: 0
-          });
-        }
-      })
-        .fromTo(searchHelpSelector, 0.3, { scale: 1 }, { scale: 0.8 })
-        .fromTo(
-          searchHelpSelector,
-          0.3,
-          { autoAlpha: 1, x: "0%" },
-          { autoAlpha: 0, x: "40%" }
-        )
-        .fromTo(
-          searchResultSelector,
-          0.3,
-          { scale: 0.8, autoAlpha: 0 },
-          { scale: 1, autoAlpha: 1 }
-        )
-        .play();
     };
 
     /**
@@ -300,7 +266,7 @@ angular.module("chuvApp.models").controller("ReviewController", [
 
       $scope.$on("$stateChangeStart", $uibModal.dismiss);
       modal.result.then(() => {
-        $scope.executeQuery;
+        $scope.executeQuery();
         $scope.$broadcast("event:configureFilterQueryFinished");
       });
 
@@ -420,8 +386,8 @@ angular.module("chuvApp.models").controller("ReviewController", [
 
       $scope.loading_model = true;
 
-      Model.executeQuery(query).success(function(queryResult) {
-        $scope.executeBtnAnimate();
+      Model.executeQuery(query).then(function(response) {
+        const queryResult = response.data;
         $scope.executed = true;
         $scope.loading_model = false;
         $scope.dataset = queryResult;
@@ -429,7 +395,6 @@ angular.module("chuvApp.models").controller("ReviewController", [
           $scope.dataset.header,
           $scope.canUseAxis
         ).slice(0, 5);
-        update_location_search();
         reload_hc_config();
       });
     };

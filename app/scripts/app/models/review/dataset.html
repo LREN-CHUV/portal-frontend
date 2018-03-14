@@ -121,49 +121,42 @@
           </div>
         </uib-tab>
 
-        <uib-tab index="3" heading="Charts">
+        <uib-tab index="3" heading="Charts" ng-click="executeQuery()">
           <div class="panel-body scrollable">
             <div ng-if="boxplotLoading" class="loading">
               <div class="fa fa-spin fa-spinner"></div>
             </div>
-            <div class="row">
-              <div class="col-md-8">
-                <div class="panel  panel-charts">
-                  <div class="panel-heading">
-                    <h2>{{chartConfig.title.text}}</h2>
+            <div class="col-md-8">
+              <div class="panel panel-charts">
+                <div class="panel-body panel-charts-graph" >
+                  <div class="panel-body-graph" data-graph-type="column">
+                    <highchart ng-if="hcConfig" config="hcConfig"></highchart>
                   </div>
-                  <div class="panel-body panel-charts-graph" style="height: 520px;">
-                    <div class="panel-body-graph" data-graph-type="column" >
-                      <highchart ng-if="hcConfig" config="hcConfig"></highchart>
-                    </div>
-                  </div>
-                  <div class="panel-body panel-data-graph" style="height:520px;overflow-y:scroll;">
-                    <table class="table m-n">
-                      <thead>
+                </div>
+                <div class="panel-body panel-data-graph" style="height:480px; overflow-y:scroll;">
+                  <table class="table m-n">
+                    <thead>
                       <tr>
                         <th>#</th>
                         <th ng-repeat="header in dataset.header | limitTo: maxCol">{{header}}</th>
                       </tr>
-                      </thead>
-                      <tbody>
+                    </thead>
+                    <tbody>
                       <tr ng-repeat="(indexData,result) in dataset.data[dataset.header[0]] | limitTo: maxRow as limited_result track by indexData ">
                         <td>{{indexData+1}}</td>
                         <td ng-repeat="(indexHeader,header) in dataset.header | limitTo: maxCol">{{dataset.data[header][indexData]}}</td>
                       </tr>
-                      </tbody>
-                    </table>
-                  </div>
+                    </tbody>
+                  </table>
                 </div>
               </div>
-              <div ng-include="'scripts/app/models/review/configuration.html'"></div>
             </div>
+            <div ng-include="'scripts/app/models/review/configuration.html'"></div>
           </div>
         </uib-tab>
 
       </uib-tabset>
     </div>
   </div>
-
-  <a ng-click="open_experiment()" class="btn btn-primary">Run Machine Learning Experiment</a>
 
 </div>

@@ -406,36 +406,6 @@ angular.module("chuvApp.models").controller("DatasetController", [
       return selectedDatasets.includes(code);
     };
 
-    $scope.open_experiment = function() {
-      if ($scope.model && $scope.model.slug) {
-        return $state.go("new_experiment", { model_slug: $scope.model.slug });
-      }
-
-      function unmap_category(category) {
-        return $scope.query[category]
-          .map(function(variable) {
-            return variable.code;
-          })
-          .join(",");
-      }
-
-      var query = {
-        variables: unmap_category("variables"),
-        coVariables: unmap_category("coVariables"),
-        groupings: unmap_category("groupings"),
-        filters: unmap_category("filters"),
-        trainingDatasets: unmap_category("trainingDatasets"),
-        graph_config: $scope.chartConfig,
-        model_slug: ""
-      };
-
-      if ($scope.query.filterQuery) {
-        query.filterQuery = JSON.stringify($scope.query.filterQuery);
-      }
-
-      return $state.go("new_experiment", query);
-    };
-
     // init
     const init = (model = {}) => {
       $scope
