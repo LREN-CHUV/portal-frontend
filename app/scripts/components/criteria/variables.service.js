@@ -134,12 +134,8 @@ angular.module("chuvApp.components.criteria").factory("Variable", [
       return resource.hierarchy().then(data => {
         let variableData = {}, found = false;
         const iterate = current => {
-          //const children = current.groups || current.variables;
           const groups = current.groups || [];
           const variables = current.variables || [];
-          /*if (!children) {
-            return;
-          }*/
 
           if (_.contains(variables.map(c => c.code), variableCode)) {
             const { code, label } = current;
