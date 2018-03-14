@@ -14,6 +14,18 @@
       <div class="panel-heading">Model</div>
       <div class="panel-body variable-list scrollable">
 
+        <h5>
+          <a ng-click="configureFilterQuery()">
+            <i class="ti ti-panel"></i>
+            Filter variable
+          </a>
+        </h5>
+        <p ng-repeat="filter in query.filters track by $index">
+          <a ng-click="configureFilterQuery()">
+            {{filter.code}}
+          </a>
+        </p>
+        <div class="query" ng-bind="query.textQuery"></div>
         <h5 ng-if="query.variables.length">Variable</h5>
         <p ng-repeat="variable in query.variables">
           {{variable.code}}
@@ -33,18 +45,6 @@
           </span>
         </p>
 
-        <h5>
-          <a ng-click="configureFilterQuery()">
-            <i class="ti ti-panel"></i>
-            Filter variable
-          </a>
-        </h5>
-        <p ng-repeat="filter in query.filters track by $index">
-          <a ng-click="configureFilterQuery()">
-            {{filter.code}}
-          </a>
-        </p>
-        <div class="query" ng-bind="query.textQuery"></div>
       </div>
     </div>
     <div class="panel" style="flex-grow: 2">
@@ -126,11 +126,10 @@
       </uib-tabset>
     </div>
   </div>
-  <div class="dataset-footer panel">
-  </div>
+
 
   <div class="execute">
-    <rounded-button label="{{ 'common.button.execute' | translate}}" icon-class="ti {{ loading_model ?
+    <rounded-button label="{{ 'common.button.runAlgorithm' | translate}}" icon-class="ti {{ loading_model ?
       'ti-reload ti-spin reverse-direction' : 'ti-arrow-down' }}" on-click="open_experiment()">
     </rounded-button>
   </div>
