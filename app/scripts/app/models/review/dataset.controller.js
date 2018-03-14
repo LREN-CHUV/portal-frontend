@@ -55,12 +55,6 @@ angular.module("chuvApp.models").controller("DatasetController", [
         ? search[category].split(",").map(code => ({ code }))
         : []);
 
-    const encodeFilters = () => {
-      return $scope.query.textQuery
-        ? JSON.stringify($scope.query.filterQuery)
-        : "";
-    };
-
     $scope.query.variables = map_query("variable");
     $scope.query.groupings = map_query("grouping");
     $scope.query.coVariables = map_query("covariable");
@@ -81,6 +75,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
     // Charts ressources
     const getStatistics = () => {
       $scope.loading = true;
+
       let rows = [];
       // format
       // const rows = [
@@ -90,15 +85,62 @@ angular.module("chuvApp.models").controller("DatasetController", [
       //     parent: { code, label }
       //     datasets: [{ code, label }],
       //     continuous: [{ min, max, mean }],
-      //     nominal: [[{ key, count }]]
+      //     nominal: [[{ key, count }]],},
       //     }
       // ];
 
       if (!selectedDatasets.length) {
-        $scope.error = "Please, select at least a dataset.";
+        $scope.error = "Please, select at least one dataset.";
+        $scope.loading = false;
+        $scope.tableHeader = null;
+        $scope.tableRows = null;
         return;
       } else {
         $scope.error = null;
+      }
+
+      // retrieve cache if existing
+      const key = $scope.query.filterQuery
+        ? JSON.stringify($scope.query.filterQuery)
+        : "emptyFilterQuery";
+      const results = sessionStorage.getItem(key);
+      if (results) {
+        const json = JSON.parse(results);
+
+        // check if variables changed
+        const all = [
+          ...$scope.query.variables,
+          ...$scope.query.groupings,
+          ...$scope.query.coVariables
+        ].map(a => a.code);
+        const hasSameVariables = all.every(d =>
+          json.map(j => j.index).includes(d)
+        );
+
+        if (hasSameVariables) {
+          // filter by variables
+          const byVariables = json.filter(j => all.includes(j.index));
+
+          // filter by datasets
+          const filtered = byVariables.map(j => {
+            const indexes = selectedDatasets.map(s => j.datasets.includes(s));
+
+            return Object.assign({}, j, {
+              datasets: j.datasets.filter((c, i) => indexes[i]),
+              continuous: j.continuous
+                ? j.continuous.filter((c, i) => indexes[i])
+                : null,
+              nominal: j.nominal ? j.nominal.filter((c, i) => indexes[i]) : null
+            });
+          });
+
+          $scope.tableHeader = ["Variables", ...selectedDatasets];
+          $scope.tableRows = formatTable(filtered);
+          $scope.loading = false;
+          $scope.error = null;
+
+          return $q.resolve(filtered);
+        }
       }
 
       // Get local or federation mode
@@ -163,6 +205,12 @@ angular.module("chuvApp.models").controller("DatasetController", [
           .then(data => {
             rows = data;
 
+            // store data under the query key
+            const key = $scope.query.filterQuery
+              ? JSON.stringify($scope.query.filterQuery)
+              : "emptyFilterQuery";
+            sessionStorage.setItem(key, JSON.stringify(data));
+
             $scope.tableHeader = ["Variables", ...selectedDatasets];
             $scope.tableRows = formatTable(data);
             $scope.loading = false;
@@ -172,7 +220,8 @@ angular.module("chuvApp.models").controller("DatasetController", [
           })
           .catch(e => {
             $scope.loading = false;
-            $scope.error = e;
+            const { statusText } = e;
+            $scope.error = statusText;
             console.log(e);
           })
       );
@@ -250,9 +299,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
           $scope.tsneLoading = false;
         });
 
-    const getHistogram = function() {
-      if ($scope.histogramData) return;
-
+    $scope.getHistogram = function() {
       const variable = getDependantVariable();
       return variable
         ? Variable.get_histo(
@@ -262,7 +309,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
               ? JSON.stringify($scope.query.filterQuery)
               : ""
           ).then(
-            function(response) {
+            response => {
               var data = response.data && response.data.data;
               if (!angular.isArray(data)) {
                 data = [data];
@@ -291,15 +338,24 @@ angular.module("chuvApp.models").controller("DatasetController", [
               });
               $scope.histogramLoading = false;
             },
-            function(e) {
+            e => {
               $scope.histogramLoading = false;
-              $scope.histogramError = e;
+              const { statusText } = e;
+              $scope.histogramError = statusText;
+              console.log(e);
             }
           )
         : null;
     };
 
     const getBoxplot = data => {
+      if (!data) {
+        $scope.boxplotLoading = false;
+        $scope.boxplotError =
+          "There was an error while processing. Please try again later.";
+
+        return;
+      }
       $scope.boxplotData = data.filter(f => f.continuous).map(d => ({
         chart: {
           type: "boxplot"
@@ -343,7 +399,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
       }
       $location.search("trainingDatasets", selectedDatasets.join(","));
 
-      getStatistics();
+      init();
     };
 
     $scope.isDatasetSelected = code => {
@@ -368,11 +424,14 @@ angular.module("chuvApp.models").controller("DatasetController", [
         coVariables: unmap_category("coVariables"),
         groupings: unmap_category("groupings"),
         filters: unmap_category("filters"),
-        filterQuery: JSON.stringify($scope.query.filterQuery),
         trainingDatasets: unmap_category("trainingDatasets"),
         graph_config: $scope.chartConfig,
         model_slug: ""
       };
+
+      if ($scope.query.filterQuery) {
+        query.filterQuery = JSON.stringify($scope.query.filterQuery);
+      }
 
       return $state.go("new_experiment", query);
     };
@@ -393,7 +452,6 @@ angular.module("chuvApp.models").controller("DatasetController", [
             }
 
             getStatistics().then(getBoxplot);
-            getHistogram();
 
             // retrieve filterQuery as sql text, hack queryBuilder
             if ($scope.query.filterQuery) {

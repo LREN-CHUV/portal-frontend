@@ -21,14 +21,16 @@ angular.module("chuvApp.models").directive("variableStatistics", [
           if (statistic.hc_config) {
             return;
           }
+          var title = { text: statistic.label };
 
           statistic.hc_config = {
             chart: statistic.chart,
             xAxis: statistic.xAxis,
             yAxis: statistic.yAxis,
             series: statistic.series,
-            title: statistic.title
+            title: title //statistic.title
           };
+          console.log("statistic : ", statistic);
         };
 
         $scope.$watch("focused_variable", function(focused_variable) {
@@ -88,6 +90,7 @@ angular.module("chuvApp.models").directive("variableStatistics", [
               $scope.focused_variable_loaded = true;
 
               $scope.stats = response.data && response.data.data;
+              console.log("$scope.stats : ", $scope.stats);
 
               if (!angular.isArray($scope.stats)) {
                 $scope.stats = [$scope.stats];

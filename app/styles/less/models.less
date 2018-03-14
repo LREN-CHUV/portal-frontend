@@ -24,10 +24,23 @@
     text-anchor: middle;
     pointer-events: none;
     text-shadow: 0 2px 0 #fff, 2px 0 0 #fff, -2px 0 0 #fff, 0 -2px 0 #fff;
-
+    display: flex;
+    &>div{
+      display: flex;
+      height: 100%;
+      align-items: center;
+      justify-content: center;
+    }
     &.group {
-      font-size: 13px;
-      font-weight: 700;
+      &>div{
+        &>span{
+          font-size: 13px;
+        }
+      }
+    }
+    &.variable > div > span{
+      text-align: center;
+      font-size: 10px;
     }
   }
 

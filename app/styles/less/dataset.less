@@ -19,6 +19,7 @@
             flex: 1;
             text-align: center;
             align-items: center;
+            font-size: 32px;
         }
     }
 
@@ -42,13 +43,21 @@
 }
 
 .dataset-list {
+    a{
+        color: @blue-gray-500;
+        padding-left: 5px;
+        padding-right: 5px;
+        margin: 0 3px;
+    }
+
+
     .active {
         line-height: 25px;
         display: inline-block;
-        border: 1px solid @blue-gray-500;
+        border: 1px solid @light-blue-500;
         border-radius: 13px;
         font-size: 12px;
-        color: @blue-gray-500;
+        color: @light-blue-500;
         padding-left: 5px;
         padding-right: 5px;
         position: relative;
@@ -72,8 +81,9 @@ li.list-group-item {
 
     margin-bottom: 0.2em;
     padding: 0;
-    a, a:hover {
-        color: #a9c7d4;
+    background-color: gray;
+
+    a {
         text-decoration: none;
         font-weight: 700;
         span{
@@ -83,12 +93,8 @@ li.list-group-item {
             padding-right: 15px;
             display: inline-block;
         }
-
     }
-
-    a:focus, a:active {
-
-    }
+    a:link, a:visited { color: white; }
 }
 
 .table {

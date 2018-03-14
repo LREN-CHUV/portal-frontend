@@ -293,79 +293,76 @@ describe("the EE (explore) page ", function() {
     ); //^^ this is slowing down the test and should be removed the day the variable-statitics panel become significantly faster
   });
 
-  fdescribe(
-    "the tabs in the variable detail panel (in less than 180 secondes (WHICH IS ABSURDELY HUGE, NO REAL USER CAN ENDURE THAT) )",
-    function() {
-      var variableStatisticsPanel, bubble;
-      beforeEach(function(done) {
-        browser.driver.manage().timeouts().setScriptTimeout(300000);
-        variableStatisticsPanel = element.all(by.css(".panel")).get(2);
-        get_AgeYears_bubble().click().then(function() {
-          browser
-            .wait(
-              protractor.ExpectedConditions.presenceOf(
-                $('[ng-if="stats.length"]')
-              ),
-              30000
-            )
-            .then(function() {
-              done();
-            });
-        });
+  describe("the tabs in the variable detail panel (in less than 180 secondes (WHICH IS ABSURDELY HUGE, NO REAL USER CAN ENDURE THAT) )", function() {
+    var variableStatisticsPanel, bubble;
+    beforeEach(function(done) {
+      browser.driver.manage().timeouts().setScriptTimeout(300000);
+      variableStatisticsPanel = element.all(by.css(".panel")).get(2);
+      get_AgeYears_bubble().click().then(function() {
+        browser
+          .wait(
+            protractor.ExpectedConditions.presenceOf(
+              $('[ng-if="stats.length"]')
+            ),
+            30000
+          )
+          .then(function() {
+            done();
+          });
       });
-      fit(
-        "should have 5 tabs",
-        function() {
-          expect(
-            variableStatisticsPanel
-              .all(by.css("ul.nav.nav-tabs li.nav-item"))
-              .count()
-          ).toBe(5);
-        },
-        300000
-      );
+    });
+    it(
+      "should have 5 tabs",
+      function() {
+        expect(
+          variableStatisticsPanel
+            .all(by.css("ul.nav.nav-tabs li.nav-item"))
+            .count()
+        ).toBe(5);
+      },
+      300000
+    );
 
-      it(
-        "should have the first tab open",
-        function() {
-          expect(
-            variableStatisticsPanel
-              .all(by.css("ul.nav.nav-tabs li.nav-item"))
-              .get(0)
-          ).toHaveClass("active");
-        },
-        180000
-      );
+    it(
+      "should have the first tab open",
+      function() {
+        expect(
+          variableStatisticsPanel
+            .all(by.css("ul.nav.nav-tabs li.nav-item"))
+            .get(0)
+        ).toHaveClass("active");
+      },
+      180000
+    );
 
-      it(
-        "should have a chart with the title *subjectageyears histogram*",
-        function() {
-          expect(
-            variableStatisticsPanel
-              .element(by.css(".highcharts-title tspan"))
-              .getText()
-          ).toEqual("subjectageyears histogram");
-        },
-        180000
-      );
+    it(
+      "should have a chart with the title *subjectageyears histogram*",
+      function() {
+        expect(
+          variableStatisticsPanel
+            .element(by.css(".highcharts-title tspan"))
+            .getText()
+        ).toEqual("subjectageyears histogram");
+      },
+      180000
+    );
 
-      it(
-        "should have a first bar of value *19*",
-        function() {
-          var histogram = variableStatisticsPanel
-            .all(by.css("g.highcharts-series-group"))
-            .get(0);
-          expect(
-            histogram
-              .all(by.css("rect.highcharts-point"))
-              .get(0)
-              .getAttribute("height")
-          ).toEqual("12");
-        },
-        180000
-      );
-    }
-  );
+    it(
+      "should have a first bar of value *19*",
+      function() {
+        var histogram = variableStatisticsPanel
+          .all(by.css("g.highcharts-series-group"))
+          .get(0);
+        expect(
+          histogram
+            .all(by.css("rect.highcharts-point"))
+            .get(0)
+            .getAttribute("height")
+        ).toEqual("12");
+      },
+      180000
+    );
+  });
 
   describe("the varcount component` in the panel `variable detail` ", function() {
     var breadcrumbPanel, selectVariablePanel, groupBubble, varcounter;

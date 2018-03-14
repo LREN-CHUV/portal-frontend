@@ -5,15 +5,27 @@
       <div class="panel-body">
         <ul class="list-group">
           <li ng-repeat="dataset in allDatasets" class="list-group-item" ng-class="{active: isDatasetSelected(dataset.code)}">
-            <a href="javascript:;" ng-click="selectDataset(dataset.code)">{{dataset.code}}</a>
+            <a href="javascript:;" ng-click="selectDataset(dataset.code)"><span>{{dataset.code}}</span></a>
           </li>
         </ul>
       </div>
     </div>
-    <div class="panel" style="flex: 0 0 1">
+    <div class="panel" style="flex: 0 0 1; max-width: 180px; width: 180px">
       <div class="panel-heading">Model</div>
-      <div class="panel-body dataset-list scrollable">
+      <div class="panel-body variable-list scrollable">
 
+        <h5>
+          <a ng-click="configureFilterQuery()">
+            <i class="ti ti-panel"></i>
+            Filter variable
+          </a>
+        </h5>
+        <p ng-repeat="filter in query.filters track by $index">
+          <a ng-click="configureFilterQuery()">
+            {{filter.code}}
+          </a>
+        </p>
+        <div class="query" ng-bind="query.textQuery"></div>
         <h5 ng-if="query.variables.length">Variable</h5>
         <p ng-repeat="variable in query.variables">
           {{variable.code}}
@@ -33,18 +45,6 @@
           </span>
         </p>
 
-        <h5>
-          <a ng-click="configureFilterQuery()">
-            <i class="ti ti-panel"></i>
-            Filter variable
-          </a>
-        </h5>
-        <p ng-repeat="filter in query.filters track by $index">
-          <a ng-click="configureFilterQuery()">
-            {{filter.code}}
-          </a>
-        </p>
-        <div class="query" ng-bind="query.textQuery"></div>
       </div>
     </div>
     <div class="panel" style="flex-grow: 2">
@@ -53,7 +53,7 @@
         <uib-tab index="0 " heading="Table ">
           <div class="panel-body scrollable ">
             <div ng-if="loading " class="loading ">
-              <div class="fa fa-spin fa-spinner "></div>
+              <div class="fa fa-spin fa-spinner"></div>
             </div>
             <div ng-if="error ">
               There was an error perfoming the method
@@ -90,7 +90,7 @@
           </div>
         </uib-tab>
 
-        <uib-tab index="1" heading="Histogram">
+        <uib-tab index="1" heading="Histogram" ng-click="getHistogram()" disable="allDatasets === null" >
           <div class="panel-body scrollable">
             <div ng-if="histogramLoading" class="loading">
               <div class="fa fa-spin fa-spinner"></div>
@@ -110,27 +110,26 @@
             <div ng-if="boxplotLoading" class="loading">
               <div class="fa fa-spin fa-spinner"></div>
             </div>
-            <div ng-if="boxplotError">
-                There was an error perfoming the method
-                <pretty-json data="histogramError"></pretty-json>
-            </div>
             <highchart
               ng-if="boxplotData"
               class="highchart-width highcharts-container"
               ng-repeat="data in boxplotData"
               config="data">
             </highchart>
+            <div ng-if="boxplotError">
+              There was an error perfoming the method
+              <pretty-json data="boxplotError"></pretty-json>
+          </div>
           </div>
         </uib-tab>
 
       </uib-tabset>
     </div>
   </div>
-  <div class="dataset-footer panel">
-  </div>
+
 
   <div class="execute">
-    <rounded-button label="{{ 'common.button.execute' | translate}}" icon-class="ti {{ loading_model ?
+    <rounded-button label="{{ 'common.button.runAlgorithm' | translate}}" icon-class="ti {{ loading_model ?
       'ti-reload ti-spin reverse-direction' : 'ti-arrow-down' }}" on-click="open_experiment()">
     </rounded-button>
   </div>
