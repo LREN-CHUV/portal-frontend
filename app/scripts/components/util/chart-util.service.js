@@ -1,7 +1,7 @@
 /**
  * Created by Michael DESIGAUD on 12/08/2015.
  */
-'use strict';
+"use strict";
 
 angular.module("chuvApp.util").factory("ChartUtil", [
   "$filter",
@@ -46,7 +46,9 @@ angular.module("chuvApp.util").factory("ChartUtil", [
     }
 
     function groupBy(groupAxis, data) {
-      if (!groupAxis) {return data;}
+      if (!groupAxis) {
+        return data;
+      }
 
       var sortedData = orderBy(groupAxis, data),
         dataIdx,
@@ -186,20 +188,22 @@ angular.module("chuvApp.util").factory("ChartUtil", [
         variableIdxs = {},
         // all the data, with numbers represented as string that are mapped to actual numbers
         raw_data = headers.map(function(name, index) {
-          if (name === config.xAxisVariable) {xAxisVariableIdx = index;}
+          if (name === config.xAxisVariable) {
+            xAxisVariableIdx = index;
+          }
           variableIdxs[name] = index;
-          return isNumberArray(dataset.data[name]) ?
-            aToI(dataset.data[name]) :
-            dataset.data[name];
+          return isNumberArray(dataset.data[name])
+            ? aToI(dataset.data[name])
+            : dataset.data[name];
         }),
         // whether the x axis is string-indexed or number-indexed
         xSortingByNumber =
           angular.isNumber(xAxisVariableIdx) &&
           isNumberArray(raw_data[xAxisVariableIdx]),
         // the actual data for HC
-        sorted_data = xSortingByNumber ?
-          orderBy(raw_data[xAxisVariableIdx], raw_data)[0] :
-          raw_data;
+        sorted_data = xSortingByNumber
+          ? orderBy(raw_data[xAxisVariableIdx], raw_data)[0]
+          : raw_data;
 
       dm_mins.length = 0;
       dm_maxes.length = 0;
@@ -217,20 +221,20 @@ angular.module("chuvApp.util").factory("ChartUtil", [
           formatter: function() {
             return number(
               this.point.value *
-              (dm_maxes[this.point.x] - dm_mins[this.point.x]) +
-              dm_mins[this.point.x]
+                (dm_maxes[this.point.x] - dm_mins[this.point.x]) +
+                dm_mins[this.point.x]
             );
           }
         },
-        title: angular.isDefined(config.title) ?
-          config.title :
-          { text: "Design matrix" },
+        title: angular.isDefined(config.title)
+          ? config.title
+          : { text: "Design matrix" },
         xAxis: {
           categories: variables,
           title: null
         },
         yAxis: {
-          title: {text: null},
+          title: { text: null },
           labels: { enabled: false }
         },
         size: {
@@ -284,24 +288,26 @@ angular.module("chuvApp.util").factory("ChartUtil", [
           variableIdxs = {},
           // all the data, with numbers represented as string that are mapped to actual numbers
           raw_data = headers.map(function(name, index) {
-            if (name === config.xAxisVariable) {xAxisVariableIdx = index;}
+            if (name === config.xAxisVariable) {
+              xAxisVariableIdx = index;
+            }
             variableIdxs[name] = index;
-            return isNumberArray(dataset.data[name]) ?
-              aToI(dataset.data[name]) :
-              dataset.data[name];
+            return isNumberArray(dataset.data[name])
+              ? aToI(dataset.data[name])
+              : dataset.data[name];
           }),
           // whether the x axis is string-indexed or number-indexed
           xSortingByString =
             angular.isNumber(xAxisVariableIdx) &&
             !isNumberArray(raw_data[xAxisVariableIdx]),
           // the actual data for HC
-          data = angular.isNumber(xAxisVariableIdx) ?
-            groupBy(raw_data[xAxisVariableIdx], raw_data) :
-            raw_data,
+          data = angular.isNumber(xAxisVariableIdx)
+            ? groupBy(raw_data[xAxisVariableIdx], raw_data)
+            : raw_data,
           // the categories for HC (if applicable)
-          categories = xSortingByString ?
-            _.uniq(raw_data[xAxisVariableIdx]) :
-            undefined;
+          categories = xSortingByString
+            ? _.uniq(raw_data[xAxisVariableIdx])
+            : undefined;
 
         // if line or bar, do average when sorting
         if (
@@ -412,7 +418,8 @@ angular.module("chuvApp.util").factory("ChartUtil", [
       };
     }
 
-    var ChartUtil = function(config, dataset, notify) { // jshint ignore:line
+    var ChartUtil = function(config, dataset, notify) {
+      // jshint ignore:line
       if (!dataset) {
         return null;
       }
@@ -445,13 +452,15 @@ angular.module("chuvApp.util").factory("ChartUtil", [
         config.yAxisVariables = _.clone(dataset.header);
       }
 
-      return ({
+      const result = ({
         designmatrix: buildDesignMatrix,
         boxplot: buildBoxPlot,
         scatter: buildRegularChart("scatter"),
         column: buildRegularChart("column"),
         line: buildRegularChart("line")
       }[config.type] || angular.identity)(config, dataset);
+
+      return result;
     };
 
     // axis configuration information

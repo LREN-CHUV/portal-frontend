@@ -69,8 +69,8 @@ angular.module("chuvApp.models").controller("ReviewController", [
         }
 
         $scope.chartConfig = result.config;
-        $scope.hcConfig = ChartUtil($scope.chartConfig, $scope.dataset);
-
+        const config = ChartUtil($scope.chartConfig, $scope.dataset);
+        $scope.hcConfig = config;
         $scope.query = result.query;
         $scope.$broadcast("event:loadModel", result);
         $scope.executeBtnAnimate();
