@@ -241,7 +241,6 @@ angular.module("chuvApp.models").directive("circlePacking", [
                 if (condition(d)) {
                   this.style.display = "inline";
                 }
-                this.style.display = "inline";
               })
               .each("end", function(d) {
                 if (!condition(d)) {
