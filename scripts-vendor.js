@@ -44,7 +44,6 @@ var vendorScripts = [
   "./node_modules/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.js",
   "./node_modules/angular-ui-bootstrap/dist/ui-bootstrap-tpls.js",
   "./node_modules/angular-utf8-base64/angular-utf8-base64.js",
-  "./node_modules/showdown/src/options.js",
   "./node_modules/showdown/src/showdown.js",
   "./node_modules/angular-markdown-directive/markdown.js",
   "./node_modules/jQuery-QueryBuilder/dist/js/query-builder.standalone.js",

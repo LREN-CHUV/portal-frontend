@@ -50,7 +50,7 @@
 
                 <div uib-accordion-group heading="Statistical Analysis" ng-init="acc_stats.open = true" is-open="acc_stats.open" ng-click="!acc_stats.open">
                   <p ng-repeat="method in ml_methods | filter:{type:'statistics'}  | orderBy:'-label'">
-                    <button class="btn btn-primary-alt col-xs-12" ng-disabled="!method.available" ng-click="shared.chosen_method = method" ng-bind="method.label">
+                    <button class="btn btn-primary-alt col-xs-12" ng-disabled="!method.available" ng-click="show_training_validation(method)" ng-bind="method.label">
                     </button>
                     <br>
                     <br>
@@ -59,7 +59,7 @@
 
                 <div uib-accordion-group heading="Features Extraction" ng-init="acc_fe.open = true" is-open="acc_fe.open" ng-click="!acc_fe.open">
                   <p ng-repeat="method in ml_methods | filter:{type:'features_extraction'}  | orderBy:'-label'">
-                    <button class="btn btn-primary-alt col-xs-12" ng-disabled="!method.available" ng-click="shared.chosen_method = method" ng-bind="method.label">
+                    <button class="btn btn-primary-alt col-xs-12" ng-disabled="!method.available" ng-click="show_training_validation(method)" ng-bind="method.label">
                     </button>
                     <br>Configure The Method's
                     <br>
@@ -69,7 +69,7 @@
                 <div uib-accordion-group heading="Predictive Model" ng-init="acc_pm.open = true" is-open="acc_pm.open" ng-click="!acc_pm.open">
                   <p ng-repeat="method in ml_methods | filter:{type:'predictive_model'}  | orderBy:'-label'">
                     <span class="label label-default" ng-if="method.nyi">Coming soon</span>
-                    <button class="btn btn-primary-alt col-xs-12" ng-disabled="!method.available" ng-click="shared.chosen_method = method" ng-bind="method.label">
+                    <button class="btn btn-primary-alt col-xs-12" ng-disabled="!method.available" ng-click="show_training_validation(method)" ng-bind="method.label">
                     </button>
                     <br>
                     <br>
@@ -82,6 +82,54 @@
         </div>
 
         <div class="col-sm-6">
+          <uib-accordion close-others="false">
+
+            <div uib-accordion-group is-open="true">
+              <uib-accordion-heading>
+                Your Experiment
+              </uib-accordion-heading>
+
+              <algorithm-runner></algorithm-runner>
+
+              <div ng-if="shared.chosen_method.parameters.length" class="form-group">
+                <div ng-repeat="parameter in shared.chosen_method.parameters" class="form-inline">
+                  <label for="{{parameter.name}}">
+                    <b ng-bind="parameter.label + ': '"></b>
+                  </label>
+                  <div ng-switch on="parameter.type">
+                    <div ng-switch-when="int">
+                      <input type="number" step="1" id="{{parameter.name}}" class="form-control" ng-model="shared.method_parameters[$index].value"
+                             value="{{shared.method_parameters[$index].value}}" ng-init="shared.method_parameters[$index] = {code: parameter.code, label: parameter.label, value: parseInt(parameter.default_value)}">
+                    </div>
+                    <div ng-switch-when="real">
+                      <input type="number" step="0.1" id="{{parameter.name}}" class="form-control" ng-model="shared.method_parameters[$index].value"
+                             value="{{shared.method_parameters[$index].value}}" ng-init="shared.method_parameters[$index] = {code: parameter.code, label: parameter.label, value: parameter.default_value}">
+                    </div>
+                    <div ng-switch-when="enumeration">
+                      <select id="{{parameter.name}}" class="form-control" ng-model="shared.method_parameters[$index].value" ng-options="value for value in parameter.values"
+                              ng-init="shared.method_parameters[$index] = {code: parameter.code, label: parameter.label, value: parameter.default_value}"></select>
+                    </div>
+                    <div ng-switch-default>
+                      <p ng-bind="{{shared.chosen_method.parameters | json}}"></p>
+                      <input id="{{parameter.name}}" class="form-control" ng-model="shared.method_parameters[$index].value" value="{{shared.method_parameters[$index].value}}"
+                             ng-init="shared.method_parameters[$index] = {code: parameter.code, label: parameter.label, value: parameter.default_value}">
+                    </div>
+                  </div>
+                  <p ng-bind="parameter.description"></p>
+                </div>
+              </div>
+              <div ng-if="!shared.chosen_method.parameters.length">
+                There are no parameters for
+                <span ng-bind="shared.chosen_method.label"></span>.
+              </div>
+
+              <button class="btn btn-primary pull-right" ng-class="{'disabled': method_already_configured() || configuration_not_valid() || exareme_method_disabled()}"
+                      ng-click="add_to_experiment()">
+                Add to experiment
+              </button>
+
+            </div>
+          </uib-accordion>
 
           <!-- ng-show instead of ng-if because I don't want the inner directives to be destroyed  when unpicking the method -->
           <form class="row">
@@ -90,96 +138,53 @@
 
               <uib-accordion close-others="false">
 
-                  <div uib-accordion-group is-open="false">
-                      <uib-accordion-heading>
-                        <span class="ti ti-package"></span>
-                        Variables & Datasets
-                      </uib-accordion-heading>
-                      <div>
-                          <p ng-if="shared.query.variables"><strong>Variables:</strong> {{shared.query.variables}}</p>
-                          <p ng-if="shared.query.groupings"><strong>Grouping: </strong>{{shared.query.groupings}}</p>
-                          <p ng-if="shared.query.coVariables"><strong>Covariables: </strong>{{shared.query.coVariables}}</p>
-                      </div>
-                      <span class="datasets-types">
-                        <label class="code"></label>
-                        <label class="training">Training</label>
-                        <label class="validation">Validation</label>
-                      </span>
-                      <div ng-repeat="dataset in datasets" class="datasets-types">
-                        <label>
-                            <span class="code">{{dataset.code}}</span>
-                        </label>
-                        <input
-                          type="checkbox"
-                          class="training"
-                          name="{{dataset.code}}"
-                          ng-model="shared.experiment_datasets.training[dataset.code]"
-                        />
-                        <input
-                          type="checkbox"
-                          class="validation"
-                          name="{{dataset.code}}"
-                          ng-model="shared.experiment_datasets.validation[dataset.code]"
-                        />
-                      </div>
-                  </div>
-
-
-                <div uib-accordion-group is-open="true" ng-show="shared.chosen_method">
+                <div uib-accordion-group is-open="true" ng-if="training_validation">
                   <uib-accordion-heading>
-                    <span class="ti ti-panel"></span>
-                    Configure The Method's Parameters
+                    Training and validation
                   </uib-accordion-heading>
-                  <div ng-if="shared.chosen_method.parameters.length" class="form-group">
-                    <div ng-repeat="parameter in shared.chosen_method.parameters" class="form-inline">
-                      <label for="{{parameter.name}}">
-                        <b ng-bind="parameter.label + ': '"></b>
-                      </label>
-                      <div ng-switch on="parameter.type">
-                        <div ng-switch-when="int">
-                          <input type="number" step="1" id="{{parameter.name}}" class="form-control" ng-model="shared.method_parameters[$index].value"
-                            value="{{shared.method_parameters[$index].value}}" ng-init="shared.method_parameters[$index] = {code: parameter.code, label: parameter.label, value: parseInt(parameter.default_value)}">
-                        </div>
-                        <div ng-switch-when="real">
-                          <input type="number" step="0.1" id="{{parameter.name}}" class="form-control" ng-model="shared.method_parameters[$index].value"
-                            value="{{shared.method_parameters[$index].value}}" ng-init="shared.method_parameters[$index] = {code: parameter.code, label: parameter.label, value: parameter.default_value}">
-                        </div>
-                        <div ng-switch-when="enumeration">
-                          <select id="{{parameter.name}}" class="form-control" ng-model="shared.method_parameters[$index].value" ng-options="value for value in parameter.values"
-                            ng-init="shared.method_parameters[$index] = {code: parameter.code, label: parameter.label, value: parameter.default_value}"></select>
-                        </div>
-                        <div ng-switch-default>
-                          <p ng-bind="{{shared.chosen_method.parameters | json}}"></p>
-                          <input id="{{parameter.name}}" class="form-control" ng-model="shared.method_parameters[$index].value" value="{{shared.method_parameters[$index].value}}"
-                            ng-init="shared.method_parameters[$index] = {code: parameter.code, label: parameter.label, value: parameter.default_value}">
+
+                  <div class="training-and-validation">
+                    <div>
+                      <label class="training">Training</label>
+                      <div>
+                        <div ng-repeat="dataset in datasets" class="datasets-types">
+                          <span>
+                            <input
+                              type="checkbox"
+                              id="{{dataset.code}}T"
+                              class="training"
+                              name="{{dataset.code}}"
+                              ng-model="shared.experiment_datasets.training[dataset.code]"
+                            />
+                            <label for="{{dataset.code}}T">
+                              <span class="code">{{dataset.code}}</span>
+                            </label>
+                          </span>
                         </div>
                       </div>
-                      <p ng-bind="parameter.description"></p>
+                    </div>
+                    <div>
+                      <label class="validation">Validation</label>
+                      <div>
+                        <div ng-repeat="dataset in datasets" class="datasets-types">
+                          <span>
+                            <input
+                              type="checkbox"
+                              id="{{dataset.code}}V"
+                              class="validation"
+                              name="{{dataset.code}}"
+                              ng-model="shared.experiment_datasets.validation[dataset.code]"
+                            />
+                            <label for="{{dataset.code}}V">
+                              <span class="code">{{dataset.code}}</span>
+                            </label>
+                          </span>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                  <div ng-if="!shared.chosen_method.parameters.length">
-                    There are no parameters for
-                    <span ng-bind="shared.chosen_method.label"></span>.
-                  </div>
-
-                  <button class="btn btn-primary pull-right" ng-class="{'disabled': method_already_configured() || configuration_not_valid() || exareme_method_disabled()}"
-                    ng-click="add_to_experiment()">
-                    Add to experiment
-                  </button>
-
                 </div>
 
-                <div uib-accordion-group is-open="help_is_open" ng-show="shared.chosen_method">
-                  <uib-accordion-heading>
-                    <span class="ti ti-help-alt"></span>
-                    Help
-                  </uib-accordion-heading>
-
-                  <div ng-if="!shared.chosen_method.help">
-                    There is no help for this method
-                  </div>
-                  <div ng-if="shared.chosen_method.help" btf-markdown="shared.chosen_method.help"></div>
-                </div>
               </uib-accordion>
             </div>
           </form>
@@ -217,7 +222,63 @@
         </div>
 
         <div class="col-xs-3">
-          <algorithm-runner></algorithm-runner>
+          <uib-accordion close-others="false">
+
+            <div uib-accordion-group is-open="help_is_open" ng-show="shared.chosen_method">
+              <uib-accordion-heading>
+                {{shared.chosen_method.label}} method
+              </uib-accordion-heading>
+              <div ng-if="!shared.chosen_method.description">
+                There is no description for this method
+              </div>
+              <div ng-if="shared.chosen_method.description" btf-markdown="shared.chosen_method.description"></div>
+            </div>
+
+          </uib-accordion>
+
+          <uib-accordion close-others="false">
+
+            <div uib-accordion-group is-open="help_is_open">
+              <uib-accordion-heading>
+                Model
+              </uib-accordion-heading>
+
+              <div>
+                <div class="panel-body variable-list scrollable">
+
+                  <h5 ng-if="modelsList">My new experiment</h5>
+                  <select ng-model="selectedModel" ng-change="change(selectedModel)" ng-options="chowsenModel.title for chowsenModel in modelsList" class="form-control"></select>
+
+                  <h5 ng-if="query.variables.length">Variable</h5>
+                  <p ng-repeat="variable in query.variables">
+                    {{variable.code}}
+                  </p>
+
+                  <h5 ng-if="query.coVariables.length || query.groupings.length">CoVariables</h5>
+                  <h6 ng-if="query.groupings.length">Nominal</h6>
+                  <p ng-repeat="covariable in query.groupings">
+                    <span>
+                      {{covariable.code}}
+                    </span>
+                  </p>
+                  <h6 ng-if="query.coVariables.length">Continuous</h6>
+                  <p ng-repeat="covariable in query.coVariables">
+                    <span>
+                      {{covariable.code}}
+                    </span>
+                  </p>
+                  <h5 ng-if="query.filters.length">Filters</h5>
+                  <p ng-repeat="filter in query.filters">
+                    <span>
+                      {{filter.code}}
+                    </span>
+                  </p>
+
+                </div>
+              </div>
+            </div>
+
+          </uib-accordion>
         </div>
 
       </div>
