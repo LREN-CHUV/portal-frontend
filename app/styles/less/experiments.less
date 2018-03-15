@@ -354,3 +354,22 @@
     text-align: center;
   }
 }
+
+.training-and-validation {
+  display: flex;
+  flex-wrap: wrap;
+  &>div {
+    margin-right: 1em;
+    &:last-of-type {
+      margin-right: 0;
+    }
+    &>div {
+      border: 1px solid #9d9d9d;
+      .datasets-types {
+        input:checked + label {
+          color: #03a9f4;
+        }
+      }
+    }
+  }
+}

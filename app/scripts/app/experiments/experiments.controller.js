@@ -394,6 +394,27 @@ angular
 
         $scope.shared.experiment_configuration.splice(index, 1);
       };
+
+      // Display "Training and validation" only if predictive_model method selected
+      $scope.show_training_validation = function(method) {
+        $scope.shared.chosen_method = method;
+        ( method.type == "predictive_model" ) ?
+          $scope.training_validation = true :
+          $scope.training_validation = false;
+      }
+
+      $scope.modelsList = {};
+      Model.getList({ own: true }).then(function(result) {
+        $scope.modelsList = result.data;
+      });
+
+      $scope.change = function(selectedModel) {
+        $scope.config = selectedModel.config;
+        $scope.dataset = selectedModel.dataset;
+        $scope.query = selectedModel.query;
+        fetchDatasetsAndUpdate();
+        on_data_loaded();
+      }
     }
   ])
   .controller("ExperimentDetailsController", [
