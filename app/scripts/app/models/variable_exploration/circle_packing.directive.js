@@ -109,7 +109,6 @@ angular.module("chuvApp.models").directive("circlePacking", [
           disableLastWatch();
 
           var margin = 20,
-            labelWidthMultiplier = 7,
             diameter = element.width(),
             root = groups,
             pack = d3.layout
@@ -165,17 +164,17 @@ angular.module("chuvApp.models").directive("circlePacking", [
                 d3.event.stopPropagation();
               });
 
-          const len = d => {
-            return d.r;
-          };
-          const coord = d => -(len(d) / 2);
+          var width = 260, height = 140;
+
           var text = svg
             .selectAll("foreignObject")
             .data(nodes)
             .enter()
             .append("foreignObject")
-            .attr("width", d => labelWidthMultiplier * len(d))
-            .attr("height", d => len(d))
+            .attr("width", width)
+            .attr("height", height)
+            .attr("x", -(width / 2))
+            .attr("y", -(height / 2))
             .filter(function(d) {
               return !d.is_group || d.children;
             }) // Do not display enpty groups
@@ -187,12 +186,19 @@ angular.module("chuvApp.models").directive("circlePacking", [
             })
             .style("display", function(d) {
               return d.parent === root ? "inline" : "none";
-            });
-
-          var text2 = text
+            })
             .append("xhtml:div")
+            .attr("width", width)
+            .attr("height", height)
             .append("xhtml:span")
             .html(function(d) {
+              if (!d.parent) {
+                return d.label;
+              }
+              var max_length = 5 + d.r * 100 / d.parent.r;
+              if (d.label.length > max_length) {
+                return d.label.substr(0, max_length - 3) + "...";
+              }
               return d.label;
             });
 
@@ -241,7 +247,6 @@ angular.module("chuvApp.models").directive("circlePacking", [
                 if (condition(d)) {
                   this.style.display = "inline";
                 }
-                this.style.display = "inline";
               })
               .each("end", function(d) {
                 if (!condition(d)) {
@@ -277,13 +282,6 @@ angular.module("chuvApp.models").directive("circlePacking", [
             circle.attr("r", function(d) {
               return d.r * k;
             });
-            text.attr("width", d => d.r * k * 1.5 * labelWidthMultiplier);
-            text.attr("height", d => d.r * k * 1.5);
-            text.attr(
-              "x",
-              d => -(len(d) * 1.5 * labelWidthMultiplier / 2 * k) * 1
-            );
-            text.attr("y", d => -(len(d) * 1.5 / 2 * k) * 1);
           }
 
           d3.select(self.frameElement).style("height", diameter + "px");
