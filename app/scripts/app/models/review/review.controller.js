@@ -392,7 +392,7 @@ angular.module("chuvApp.models").controller("ReviewController", [
 
       $scope.loading_model = true;
 
-      return Model.executeQuery(query).then(function(response) {
+      Model.executeQuery(query).then(function(response) {
         const queryResult = response.data;
         $scope.executed = true;
         $scope.loading_model = false;

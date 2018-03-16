@@ -493,32 +493,32 @@ angular
 
               // FIXME: Parse the results from Exareme JS Object
               // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/eval
-              // if (
-              //   !_.isUndefined(data.algorithms[0].code) &&
-              //   data.algorithms[0].code === "K_MEANS"
-              // ) {
-              //   if (data.result && !data.result.length) {
-              //     return;
-              //   }
+              if (
+                !_.isUndefined(data.algorithms[0].code) &&
+                data.algorithms[0].code === "K_MEANS"
+              ) {
+                if (data.result && !data.result.length) {
+                  return;
+                }
 
-              //   let foo;
-              //   const result = eval("foo=" + data.result[0].res);
-              //   $scope.experiment = Object.assign({}, $scope.experiment, {
-              //     result: {
-              //       data: {
-              //         data: result,
-              //         type: "application/highcharts+json"
-              //       }
-              //     },
-              //     algorithms: data.algorithms,
-              //     name: "K-MEANS",
-              //     finished: true
-              //   });
+                let foo;
+                const result = eval("foo=" + data.result[0].res);
+                $scope.experiment = Object.assign({}, $scope.experiment, {
+                  result: {
+                    data: {
+                      data: result,
+                      type: "application/highcharts+json"
+                    }
+                  },
+                  algorithms: data.algorithms,
+                  name: "K-MEANS",
+                  finished: true
+                });
 
-              //   $scope.loading = false;
-              //   MLUtils.mark_as_read($scope.experiment);
-              //   return;
-              // }
+                $scope.loading = false;
+                MLUtils.mark_as_read($scope.experiment);
+                return;
+              }
 
               $scope.experiment.name =
                 data.algorithms &&
