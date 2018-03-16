@@ -5,6 +5,8 @@
 
 angular.module("chuvApp.components.filters", []).filter("fromNow", function() {
   return function(date) {
-    return moment(date).fromNow();
+    var dateFromServer = moment.utc(date).toISOString();
+    var newDateInUTC = moment().utc().toISOString();
+    return moment( dateFromServer ).from( moment(newDateInUTC) );
   };
 });
