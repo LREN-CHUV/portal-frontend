@@ -21,11 +21,6 @@ angular.module("chuvApp.models").directive("circlePacking", [
         var groups;
         var disableLastWatch = function() {};
         var group_dict;
-        var color = d3.scale
-          .linear()
-          .domain([-1, 5])
-          .range(["hsl(152,80%,80%)", "hsl(228,30%,40%)"])
-          .interpolate(d3.interpolateHcl);
         var svg;
 
         function createCirclePackingDataStructure() {
@@ -315,6 +310,47 @@ angular.module("chuvApp.models").directive("circlePacking", [
           return { zoom: d => zoom(d, true) };
         }
 
+        const belongsToBranch = (node, branchNodeCode) => {
+          if (node.code === branchNodeCode) {
+            return true;
+          }
+          if (node.parent === undefined) {
+            return false;
+          }
+          if (node.parent.code === branchNodeCode) {
+            return true;
+          } else if (node.parent.code === undefined) {
+            return false;
+          } else {
+            return belongsToBranch(node.parent, branchNodeCode);
+          }
+        };
+
+        const color = node => {
+          var Range = ["hsl(120,0%,90%)", "hsl(120,0%,50%)"];
+          if (belongsToBranch(node, "genetic")) {
+            Range = ["hsl(228,80%,80%)", "hsl(300,30%,40%)"];
+          }
+          if (belongsToBranch(node, "brain_metabolism")) {
+            Range = ["hsl(300,80%,80%)", "hsl(360,30%,40%)"];
+          }
+          if (belongsToBranch(node, "brain")) {
+            Range = ["hsl(152,80%,80%)", "hsl(228,30%,40%)"];
+          }
+          if (belongsToBranch(node, "demographics")) {
+            Range = ["hsl(80,80%,80%)", "hsl(120,30%,40%)"];
+          }
+          if (belongsToBranch(node, "clinical")) {
+            Range = ["hsl(120,80%,80%)", "hsl(150,30%,40%)"];
+          }
+
+          return d3.scale
+            .linear()
+            .domain([-1, 5])
+            .range(Range)
+            .interpolate(d3.interpolateHcl)(node.depth);
+        };
+
         function color_for_node(node) {
           var category = _.find(Object.keys($scope.configuration), function(
             category
@@ -324,7 +360,7 @@ angular.module("chuvApp.models").directive("circlePacking", [
           if (category) {
             return null;
           }
-          return node.children ? color(node.depth) : null;
+          return node.children ? color(node) : null;
         }
 
         $scope.$on("configurationChanged", applyNodeColors);
