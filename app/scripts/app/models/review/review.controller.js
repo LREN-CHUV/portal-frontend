@@ -113,7 +113,12 @@ angular.module("chuvApp.models").controller("ReviewController", [
       $scope.model.config = $scope.chartConfig;
       $scope.model.dataset = $scope.dataset;
       $scope.model.query = angular.copy($scope.query); // will be modified, therefore we do a deep copy
-      $scope.model.query.filters = $scope.filter;
+      if ($scope.query.filterQuery) {
+        $scope.model.query.filters = $scope.query.filterQuery;
+      } else {
+        delete $scope.model.query.filters;
+      }
+      delete $scope.model.query.filterQuery;
 
       if ($scope.isNew()) {
         // save new model
@@ -337,6 +342,7 @@ angular.module("chuvApp.models").controller("ReviewController", [
             model.query.filterQuery = filterQuery;
           }
           _.extend($scope.query, model.query);
+          $scope.executeQuery();
 
           return;
         });
@@ -386,7 +392,7 @@ angular.module("chuvApp.models").controller("ReviewController", [
 
       $scope.loading_model = true;
 
-      Model.executeQuery(query).then(function(response) {
+      return Model.executeQuery(query).then(function(response) {
         const queryResult = response.data;
         $scope.executed = true;
         $scope.loading_model = false;
