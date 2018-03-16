@@ -138,12 +138,12 @@
 
               <uib-accordion close-others="false">
 
-                <div uib-accordion-group is-open="true" ng-if="training_validation">
+                <div uib-accordion-group is-open="true" >
                   <uib-accordion-heading>
                     Training and validation
                   </uib-accordion-heading>
 
-                  <div class="training-and-validation">
+                  <div class="training-and-validation" ng-if="training_validation">
                     <div>
                       <label class="training">Training</label>
                       <div>
