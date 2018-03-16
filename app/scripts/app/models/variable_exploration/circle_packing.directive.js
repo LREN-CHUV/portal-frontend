@@ -326,7 +326,31 @@ angular.module("chuvApp.models").directive("circlePacking", [
           }
         };
 
+        const ranges = [
+          ["hsl(120,0%,90%)", "hsl(120,0%,50%)"],
+          ["hsl(228,80%,80%)", "hsl(300,30%,40%)"],
+          ["hsl(300,80%,80%)", "hsl(360,30%,40%)"],
+          ["hsl(152,80%,80%)", "hsl(228,30%,40%)"],
+          ["hsl(80,80%,80%)", "hsl(120,30%,40%)"],
+          ["hsl(120,80%,80%)", "hsl(150,30%,40%)"]
+        ];
+        let rangeIndex = 0;
         const color = node => {
+          console.log(node);
+          let range = ranges[rangeIndex];
+          if (node.depth === 1) {
+            console.log(node.depth);
+            if (rangeIndex < ranges.length - 1) {
+              rangeIndex++;
+            } else {
+              rangeIndex = 0;
+            }
+
+            range = ranges[rangeIndex];
+          }
+          console.log("rangeIndex", rangeIndex);
+
+          /*
           var Range = ["hsl(120,0%,90%)", "hsl(120,0%,50%)"];
           if (belongsToBranch(node, "genetic")) {
             Range = ["hsl(228,80%,80%)", "hsl(300,30%,40%)"];
@@ -342,12 +366,12 @@ angular.module("chuvApp.models").directive("circlePacking", [
           }
           if (belongsToBranch(node, "clinical")) {
             Range = ["hsl(120,80%,80%)", "hsl(150,30%,40%)"];
-          }
+          }*/
 
           return d3.scale
             .linear()
             .domain([-1, 5])
-            .range(Range)
+            .range(range)
             .interpolate(d3.interpolateHcl)(node.depth);
         };
 
