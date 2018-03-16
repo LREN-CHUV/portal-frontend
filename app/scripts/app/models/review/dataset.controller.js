@@ -104,44 +104,44 @@ angular.module("chuvApp.models").controller("DatasetController", [
         ? JSON.stringify($scope.query.filterQuery)
         : "emptyFilterQuery";
       const results = sessionStorage.getItem(key);
-      if (results) {
-        const json = JSON.parse(results);
+      // if (results) {
+      //   const json = JSON.parse(results);
 
-        // check if variables changed
-        const all = [
-          ...$scope.query.variables,
-          ...$scope.query.groupings,
-          ...$scope.query.coVariables
-        ].map(a => a.code);
-        const hasSameVariables = all.every(d =>
-          json.map(j => j.index).includes(d)
-        );
+      //   // check if variables changed
+      //   const all = [
+      //     ...$scope.query.variables,
+      //     ...$scope.query.groupings,
+      //     ...$scope.query.coVariables
+      //   ].map(a => a.code);
+      //   const hasSameVariables = all.every(d =>
+      //     json.map(j => j.index).includes(d)
+      //   );
 
-        if (hasSameVariables) {
-          // filter by variables
-          const byVariables = json.filter(j => all.includes(j.index));
+      //   if (hasSameVariables) {
+      //     // filter by variables
+      //     const byVariables = json.filter(j => all.includes(j.index));
 
-          // filter by datasets
-          const filtered = byVariables.map(j => {
-            const indexes = selectedDatasets.map(s => j.datasets.includes(s));
+      //     // filter by datasets
+      //     const filtered = byVariables.map(j => {
+      //       const indexes = selectedDatasets.map(s => j.datasets.includes(s));
 
-            return Object.assign({}, j, {
-              datasets: j.datasets.filter((c, i) => indexes[i]),
-              continuous: j.continuous
-                ? j.continuous.filter((c, i) => indexes[i])
-                : null,
-              nominal: j.nominal ? j.nominal.filter((c, i) => indexes[i]) : null
-            });
-          });
+      //       return Object.assign({}, j, {
+      //         datasets: j.datasets.filter((c, i) => indexes[i]),
+      //         continuous: j.continuous
+      //           ? j.continuous.filter((c, i) => indexes[i])
+      //           : null,
+      //         nominal: j.nominal ? j.nominal.filter((c, i) => indexes[i]) : null
+      //       });
+      //     });
 
-          $scope.tableHeader = ["Variables", ...selectedDatasets];
-          $scope.tableRows = formatTable(filtered);
-          $scope.loading = false;
-          $scope.error = null;
+      //     $scope.tableHeader = ["Variables", ...selectedDatasets];
+      //     $scope.tableRows = formatTable(filtered);
+      //     $scope.loading = false;
+      //     $scope.error = null;
 
-          return $q.resolve(filtered);
-        }
-      }
+      //     return $q.resolve(filtered);
+      //   }
+      // }
 
       // Get local or federation mode
       return (
