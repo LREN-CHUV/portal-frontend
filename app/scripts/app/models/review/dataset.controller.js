@@ -168,10 +168,13 @@ angular.module("chuvApp.models").controller("DatasetController", [
               )
             )
           )
-          .then(response => response.map(r => r.data))
-          .then(data => // flatten [[]]
-            [].concat.apply([], data.map(d => d.data.data.map(e => e)))
+          .then(response => response.map(r => r.data.data)) // [{ data: [], schema: {} }]
+          .then(data => // filter results in each datasets by group
+            data.map(byDataset =>
+              byDataset.data.filter(r => r.group[0] === "all")
+            )
           )
+          .then(data => [].concat.apply([], data))
           .then(data => // all variables reduced by code field
             data.reduce((total, amount) => {
               const existing = total.find(a => a.index === amount.index);
