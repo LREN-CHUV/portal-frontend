@@ -5,7 +5,9 @@
       <div class="panel-body">
         <ul class="list-group">
           <li ng-repeat="dataset in allDatasets" class="list-group-item" ng-class="{active: isDatasetSelected(dataset.code)}">
-            <a href="javascript:;" ng-click="selectDataset(dataset.code)"><span>{{dataset.code}}</span></a>
+            <a href="javascript:;" ng-click="selectDataset(dataset.code)">
+              <span>{{dataset.code}}</span>
+            </a>
           </li>
         </ul>
       </div>
@@ -14,6 +16,18 @@
       <div class="panel-heading">Model</div>
       <div class="panel-body variable-list scrollable">
 
+        <h5>
+          <a ng-click="configureFilterQuery()">
+            <i class="ti ti-panel"></i>
+            Filter variable
+          </a>
+        </h5>
+        <p ng-repeat="filter in query.filters track by $index">
+          <a ng-click="configureFilterQuery()">
+            {{filter.code}}
+          </a>
+        </p>
+        <div class="query" ng-bind="query.textQuery"></div>
         <h5 ng-if="query.variables.length">Variable</h5>
         <p ng-repeat="variable in query.variables">
           {{variable.code}}
@@ -33,18 +47,6 @@
           </span>
         </p>
 
-        <h5>
-          <a ng-click="configureFilterQuery()">
-            <i class="ti ti-panel"></i>
-            Filter variable
-          </a>
-        </h5>
-        <p ng-repeat="filter in query.filters track by $index">
-          <a ng-click="configureFilterQuery()">
-            {{filter.code}}
-          </a>
-        </p>
-        <div class="query" ng-bind="query.textQuery"></div>
       </div>
     </div>
     <div class="panel" style="flex-grow: 2">
@@ -90,7 +92,7 @@
           </div>
         </uib-tab>
 
-        <uib-tab index="1" heading="Histogram" ng-click="getHistogram()" disable="allDatasets === null" >
+        <uib-tab index="1" heading="Histogram" ng-click="getHistogram()" disable="allDatasets === null">
           <div class="panel-body scrollable">
             <div ng-if="histogramLoading" class="loading">
               <div class="fa fa-spin fa-spinner"></div>
@@ -110,28 +112,51 @@
             <div ng-if="boxplotLoading" class="loading">
               <div class="fa fa-spin fa-spinner"></div>
             </div>
-            <highchart
-              ng-if="boxplotData"
-              class="highchart-width highcharts-container"
-              ng-repeat="data in boxplotData"
-              config="data">
+            <highchart ng-if="boxplotData" class="highchart-width highcharts-container" ng-repeat="data in boxplotData" config="data">
             </highchart>
             <div ng-if="boxplotError">
               There was an error perfoming the method
               <pretty-json data="boxplotError"></pretty-json>
+            </div>
           </div>
+        </uib-tab>
+
+        <uib-tab index="3" heading="Charts" ng-click="executeQuery()">
+          <div class="panel-body scrollable">
+            <div ng-if="boxplotLoading" class="loading">
+              <div class="fa fa-spin fa-spinner"></div>
+            </div>
+            <div class="col-md-8">
+              <div class="panel panel-charts">
+                <div class="panel-body panel-charts-graph" >
+                  <div class="panel-body-graph" data-graph-type="column">
+                    <highchart ng-if="hcConfig" config="hcConfig"></highchart>
+                  </div>
+                </div>
+                <div class="panel-body panel-data-graph" style="height:480px; overflow-y:scroll;">
+                  <table class="table m-n">
+                    <thead>
+                      <tr>
+                        <th>#</th>
+                        <th ng-repeat="header in dataset.header | limitTo: maxCol">{{header}}</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr ng-repeat="(indexData,result) in dataset.data[dataset.header[0]] | limitTo: maxRow as limited_result track by indexData ">
+                        <td>{{indexData+1}}</td>
+                        <td ng-repeat="(indexHeader,header) in dataset.header | limitTo: maxCol">{{dataset.data[header][indexData]}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div ng-include="'scripts/app/models/review/configuration.html'"></div>
           </div>
         </uib-tab>
 
       </uib-tabset>
     </div>
   </div>
-  <div class="dataset-footer panel">
-  </div>
 
-  <div class="execute">
-    <rounded-button label="{{ 'common.button.execute' | translate}}" icon-class="ti {{ loading_model ?
-      'ti-reload ti-spin reverse-direction' : 'ti-arrow-down' }}" on-click="open_experiment()">
-    </rounded-button>
-  </div>
 </div>

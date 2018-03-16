@@ -18,6 +18,7 @@
   "common.value":"Valeur",
   "common.label":"Libellé",
   "common.button.execute":"Exécuter",
+  "common.button.runAlgorithm":"Run algorithm",
   "common.search":"Recherche",
   "common.see.more": "Voir plus",
   "common.type":"Type",

@@ -86,7 +86,6 @@ angular.module("chuvApp.models").controller("DatasetController", [
       //     datasets: [{ code, label }],
       //     continuous: [{ min, max, mean }],
       //     nominal: [[{ key, count }]],},
-      //     filter: {}
       //     }
       // ];
 
@@ -101,16 +100,12 @@ angular.module("chuvApp.models").controller("DatasetController", [
       }
 
       // retrieve cache if existing
-      const dataset = sessionStorage.getItem("dataset");
-      if (dataset) {
-        const json = JSON.parse(dataset);
-
-        // check if filters changed
-        const hasSameFilter = json.every(
-          d =>
-            JSON.stringify(d.filterQuery) ===
-            JSON.stringify($scope.query.filterQuery)
-        );
+      const key = $scope.query.filterQuery
+        ? JSON.stringify($scope.query.filterQuery)
+        : "emptyFilterQuery";
+      const results = sessionStorage.getItem(key);
+      if (results) {
+        const json = JSON.parse(results);
 
         // check if variables changed
         const all = [
@@ -122,7 +117,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
           json.map(j => j.index).includes(d)
         );
 
-        if (hasSameVariables && hasSameFilter) {
+        if (hasSameVariables) {
           // filter by variables
           const byVariables = json.filter(j => all.includes(j.index));
 
@@ -144,7 +139,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
           $scope.loading = false;
           $scope.error = null;
 
-          return Promise.resolve(filtered);
+          return $q.resolve(filtered);
         }
       }
 
@@ -203,15 +198,18 @@ angular.module("chuvApp.models").controller("DatasetController", [
               Object.assign({}, r, {
                 parent: data[i].parent,
                 variable: data[i].data,
-                datasets: selectedDatasets,
-                filterQuery: $scope.query.filterQuery
+                datasets: selectedDatasets
               })
             )
           )
           .then(data => {
             rows = data;
 
-            sessionStorage.setItem("dataset", JSON.stringify(data));
+            // store data under the query key
+            const key = $scope.query.filterQuery
+              ? JSON.stringify($scope.query.filterQuery)
+              : "emptyFilterQuery";
+            sessionStorage.setItem(key, JSON.stringify(data));
 
             $scope.tableHeader = ["Variables", ...selectedDatasets];
             $scope.tableRows = formatTable(data);
@@ -406,36 +404,6 @@ angular.module("chuvApp.models").controller("DatasetController", [
 
     $scope.isDatasetSelected = code => {
       return selectedDatasets.includes(code);
-    };
-
-    $scope.open_experiment = function() {
-      if ($scope.model && $scope.model.slug) {
-        return $state.go("new_experiment", { model_slug: $scope.model.slug });
-      }
-
-      function unmap_category(category) {
-        return $scope.query[category]
-          .map(function(variable) {
-            return variable.code;
-          })
-          .join(",");
-      }
-
-      var query = {
-        variables: unmap_category("variables"),
-        coVariables: unmap_category("coVariables"),
-        groupings: unmap_category("groupings"),
-        filters: unmap_category("filters"),
-        trainingDatasets: unmap_category("trainingDatasets"),
-        graph_config: $scope.chartConfig,
-        model_slug: ""
-      };
-
-      if ($scope.query.filterQuery) {
-        query.filterQuery = JSON.stringify($scope.query.filterQuery);
-      }
-
-      return $state.go("new_experiment", query);
     };
 
     // init

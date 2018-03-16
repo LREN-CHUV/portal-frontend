@@ -17,23 +17,13 @@ exports.config = {
   // seleniumAddress: "http://localhost:4444/wd/hub",
   // specs: ["./yadda/yadda-runner.js"],
   framework: "jasmine2",
-  // capabilities: {
-  //   browserName: "phantomjs",
-  //   "phantomjs.binary.path": require("phantomjs").path,
-  //   "phantomjs.cli.args": [
-  //     "--debug=true",
-  //     "--webdriver-logfile=webdriver.log",
-  //     "--webdriver-loglevel=INFO"
-  //   ],
-  //   "phantomjs.ghostdriver.cli.args": ["--loglevel=DEBUG"]
-  // },
   capabilities: {
     browserName: "chrome",
     chromeOptions: {
       args: [
         "--headless",
-        "--disable-web-security",
-        "--user-data-dir=~/.e2e-chrome-profile"
+        "no-sandbox",
+        "--disable-web-security"
       ]
     }
   },

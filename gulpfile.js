@@ -18,6 +18,7 @@ var gulp = require("gulp"),
   rename = require("gulp-rename"),
   protractor = require("gulp-protractor").protractor,
   webdriver_standalone = require("gulp-protractor").webdriver_standalone,
+  wait = require("gulp-wait2"),
   webdriver_update = require("gulp-protractor").webdriver_update_specific;
 
 // Application's main directories constants
@@ -505,12 +506,9 @@ gulp.task("unit-tests:auto", function(done) {
 });
 
 // Downloads the selenium webdriver
-gulp.task(
-  "webdriver_update",
-  webdriver_update({
-    browsers: ["ignore_ssl"]
-  })
-);
+gulp.task('webdriver_update', webdriver_update({
+  webdriverManagerArgs: []
+}));
 
 // Start the standalone selenium server
 gulp.task("webdriver_standalone", webdriver_standalone);
@@ -528,8 +526,30 @@ gulp.task(
       )
       .on("error", function(e) {
         console.log(e);
+        throw e;
       })
       .on("end", cb);
+  }
+);
+
+gulp.task(
+  "protractor-go:ci",
+  ["clean:test-reports", "clean:test-screenshots", "webdriver_update"],
+  function(cb) {
+    setTimeout(function () {
+      gulp
+        .src([])
+        .pipe(
+          protractor({
+            configFile: "./app/tests/e2e/e2e-conf.js"
+          })
+        )
+        .on("error", function(e) {
+          console.log(e);
+          throw e;
+        })
+        .on("end", cb);
+    }, 180000);
   }
 );
 
@@ -591,6 +611,24 @@ gulp.task("e2e-test", function() {
     "caching:test",
     "browser-sync:test",
     "protractor-go"
+  );
+});
+
+gulp.task("e2e-test:ci", function() {
+  runSequence(
+    "clean:prod",
+    "config:dev",
+    [
+      "copy-all",
+      "styles:prod",
+      "styles-vendor:prod",
+      "images",
+      "js-app:prod",
+      "js-vendor:prod"
+    ],
+    "index-html:test",
+    "caching:test",
+    "browser-sync:test"
   );
 });
 

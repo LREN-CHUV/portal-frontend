@@ -1,5 +1,4 @@
 .tmp/
-app/bower_components/
 app/scripts/app/app.config.js
 app/fonts
 dist/
@@ -13,3 +12,4 @@ package-lock.json
 .vscode
 yarn-error.log
 app/scripts/app/config.json
+~/

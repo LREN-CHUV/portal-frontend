@@ -33,13 +33,11 @@ angular.module("chuvApp.components.criteria").factory("Variable", [
       if (!angular.isUndefined(hierarchy)) {
         return $q.resolve(hierarchy);
       }
-
       return $http
         .get(backendUrl + "/variables/hierarchy")
         .then(function(response) {
           var data = response.data;
           cache.put("hierarchy", data);
-
           return data;
         });
     };
@@ -132,33 +130,35 @@ angular.module("chuvApp.components.criteria").factory("Variable", [
         return breadcrumb;
       });
 
-    // find variable in the tree
-    resource.getVariableData = variableCode =>
-      resource.hierarchy().then(data =>
-        $q((resolve, reject) => {
-          const iterate = current => {
-            const groups = current.groups || [];
-            const variables = current.variables || [];
+    resource.getVariableData = variableCode => {
+      return resource.hierarchy().then(data => {
+        let variableData = {}, found = false;
+        const iterate = current => {
+          const groups = current.groups || [];
+          const variables = current.variables || [];
 
-            if (variables.map(c => c.code).includes(variableCode)) {
-              const { code, label } = current;
-              const data = variables.find(c => c.code === variableCode);
-              resolve({ data, parent: { code, label } });
-            }
+          if (_.contains(variables.map(c => c.code), variableCode)) {
+            const { code, label } = current;
+            const data = _.find(variables, c => c.code === variableCode);
+            found = true;
+            variableData = { data, parent: { code, label } };
+          }
 
-            for (let i of groups) {
-              iterate(i);
-            }
+          for (let i = 0, len = groups.length; i < len; i++) {
+            if (found) break;
+            iterate(groups[i]);
+          }
 
-            for (let i of variables) {
-              iterate(i);
-            }
-          };
+          for (let i = 0, len = variables.length; i < len; i++) {
+            if (found) break;
+            iterate(variables[i]);
+          }
+        };
 
-          iterate(data);
-        })
-      );
-
+        if (!found) iterate(data);
+        return variableData;
+      });
+    };
     resource.get_histo = function(code, datasets = [], filters = "") {
       return $http
         .get(backendUrl + "/variables/" + code + "/histogram_query.json")

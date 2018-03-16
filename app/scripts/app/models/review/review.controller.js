@@ -10,6 +10,7 @@ angular.module("chuvApp.models").controller("ReviewController", [
   "$translate",
   "Model",
   "$stateParams",
+  "ChartUtil",
   "$state",
   "$log",
   "User",
@@ -26,6 +27,7 @@ angular.module("chuvApp.models").controller("ReviewController", [
     $translate,
     Model,
     $stateParams,
+    ChartUtil,
     $state,
     $log,
     User,
@@ -47,6 +49,13 @@ angular.module("chuvApp.models").controller("ReviewController", [
     $scope.dataset = null;
     $scope.datasets = null; // sources of the data
 
+    $scope.chartConfig = {
+      type: "designmatrix",
+      height: 480,
+      yAxisVariables: null,
+      xAxisVariable: null
+    };
+
     /**
      * load model by slug
      * @param slug
@@ -59,9 +68,11 @@ angular.module("chuvApp.models").controller("ReviewController", [
           $scope.model.title = "Copy of " + $scope.model.title;
         }
 
+        $scope.chartConfig = result.config;
+        const config = ChartUtil($scope.chartConfig, $scope.dataset);
+        $scope.hcConfig = config;
         $scope.query = result.query;
         $scope.$broadcast("event:loadModel", result);
-        $scope.executeBtnAnimate();
         $scope.executed = true;
       });
     };
@@ -93,15 +104,21 @@ angular.module("chuvApp.models").controller("ReviewController", [
      * save or update model
      */
     $scope.saveModel = function() {
-      if (!$scope.model.title) {
+      if (!($scope.chartConfig.title && $scope.chartConfig.title.text)) {
         notifications.warning("You need a name for your model!");
         return;
       }
+      $scope.model.title = $scope.chartConfig.title.text;
 
       $scope.model.config = $scope.chartConfig;
       $scope.model.dataset = $scope.dataset;
       $scope.model.query = angular.copy($scope.query); // will be modified, therefore we do a deep copy
-      $scope.model.query.filters = $scope.filter;
+      if ($scope.query.filterQuery) {
+        $scope.model.query.filters = $scope.query.filterQuery;
+      } else {
+        delete $scope.model.query.filters;
+      }
+      delete $scope.model.query.filterQuery;
 
       if ($scope.isNew()) {
         // save new model
@@ -141,40 +158,6 @@ angular.module("chuvApp.models").controller("ReviewController", [
           }
         );
       }
-    };
-
-    /**
-     * Execute animation
-     */
-    $scope.executeBtnAnimate = function() {
-      var searchHelpSelector = $(".search-help-container");
-      var searchResultSelector = $(".search-result");
-      new TimelineMax({
-        paused: true,
-        onComplete: function() {
-          TweenMax.set(searchHelpSelector, { position: "absolute" });
-          TweenMax.set(searchResultSelector, {
-            position: "relative",
-            left: 0,
-            x: 0,
-            y: 0
-          });
-        }
-      })
-        .fromTo(searchHelpSelector, 0.3, { scale: 1 }, { scale: 0.8 })
-        .fromTo(
-          searchHelpSelector,
-          0.3,
-          { autoAlpha: 1, x: "0%" },
-          { autoAlpha: 0, x: "40%" }
-        )
-        .fromTo(
-          searchResultSelector,
-          0.3,
-          { scale: 0.8, autoAlpha: 0 },
-          { scale: 1, autoAlpha: 1 }
-        )
-        .play();
     };
 
     /**
@@ -288,7 +271,7 @@ angular.module("chuvApp.models").controller("ReviewController", [
 
       $scope.$on("$stateChangeStart", $uibModal.dismiss);
       modal.result.then(() => {
-        $scope.executeQuery;
+        $scope.executeQuery();
         $scope.$broadcast("event:configureFilterQueryFinished");
       });
 
@@ -359,10 +342,23 @@ angular.module("chuvApp.models").controller("ReviewController", [
             model.query.filterQuery = filterQuery;
           }
           _.extend($scope.query, model.query);
+          $scope.executeQuery();
 
           return;
         });
     };
+
+    function reload_hc_config() {
+      $scope.chartConfig.yAxisVariables = ($scope.chartConfig
+        .yAxisVariables || [])
+        .filter(function(code) {
+          return (ChartUtil.isXAxisMain($scope.chartConfig.type)
+            ? ChartUtil.canUseAsYAxis
+            : ChartUtil.canUseAsXAxis)(code, $scope.chartConfig.type, $scope.dataset.data[code]);
+        })
+        .slice(0, 5);
+      $scope.hcConfig = ChartUtil($scope.chartConfig, $scope.dataset, true);
+    }
 
     /**
      * Execute a search query
@@ -393,7 +389,23 @@ angular.module("chuvApp.models").controller("ReviewController", [
         notifications.error(error);
         return;
       }
+
+      $scope.loading_model = true;
+
+      Model.executeQuery(query).then(function(response) {
+        const queryResult = response.data;
+        $scope.executed = true;
+        $scope.loading_model = false;
+        $scope.dataset = queryResult;
+        $scope.chartConfig.yAxisVariables = _.filter(
+          $scope.dataset.header,
+          $scope.canUseAxis
+        ).slice(0, 5);
+        reload_hc_config();
+      });
     };
+
+    $scope.$on("chartConfigChanged", reload_hc_config);
 
     if ($location.search().execute) {
       // wait for data to be there before executing query.
