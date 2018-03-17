@@ -84,11 +84,13 @@
                 <tr ng-repeat="row in tableRows track by $index" ng-class="{ 'white-row': row.header } ">
                   <td ng-if="row.header" ng-repeat="text in row.data track by $index" class="header-row">{{text}}</td>
                   <td ng-if="!row.header">{{row.variable.label}}</td>
-                  <td ng-if="!row.header && column.mean" ng-repeat="column in row.data track by $index" class="sub-row">
-                    {{column.mean | number: 2}} ({{column.max | number: 2}}-{{column.min | number: 2}})
-                  </td>
-                  <td ng-if="!row.header && !column.mean" ng-repeat="column in row.data track by $index" class="sub-row">
-                    {{column.count}}
+                  <td ng-if="!row.header" ng-repeat="column in row.data track by $index" class="sub-row">
+                    <span ng-if="column.mean">
+                      {{column.mean | number: 2}} ({{column.max | number: 2}}-{{column.min | number: 2}})
+                    </span>
+                    <span ng-if="!column.mean">
+                      {{column.count}}
+                    </span>
                   </td>
                 </tr>
               </table>
@@ -103,6 +105,7 @@
             </div>
             <div ng-if="histogramData" ng-repeat="data in histogramData">
               <highchart config="data" class="highchart-width highcharts-container"></highchart>
+              <hr>
             </div>
             <div ng-if="histogramError">
               There was an error perfoming the method
@@ -111,7 +114,7 @@
           </div>
         </uib-tab>
 
-        <uib-tab index="2" heading="Boxplot">
+        <!-- <uib-tab index="2" heading="Boxplot">
           <div class="panel-body scrollable">
             <div ng-if="boxplotLoading" class="loading">
               <div class="fa fa-spin fa-spinner"></div>
@@ -123,7 +126,7 @@
               <pretty-json data="boxplotError"></pretty-json>
             </div>
           </div>
-        </uib-tab>
+        </uib-tab> -->
 
         <uib-tab index="3" ng-if="isLocal" heading="Charts" ng-click="executeQuery()">
           <div class="panel-body scrollable">

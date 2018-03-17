@@ -116,7 +116,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
                 covariables: $scope.query.coVariables,
                 datasets: [{ code: d.code }],
                 filters: $scope.query.textQuery
-                  ? JSON.stringify($scope.query.filterQu$scope.ery)
+                  ? JSON.stringify($scope.query.filterQuery)
                   : ""
               })
             )
@@ -202,7 +202,6 @@ angular.module("chuvApp.models").controller("DatasetController", [
             tableRows.push(d);
           });
 
-        console.log(tableRows);
         return tableRows;
       };
 
@@ -222,8 +221,6 @@ angular.module("chuvApp.models").controller("DatasetController", [
           $scope.tableRows = formatTable(data);
           $scope.loading = false;
           $scope.error = null;
-
-          return data;
         })
         .catch(e => {
           $scope.loading = false;
@@ -305,42 +302,44 @@ angular.module("chuvApp.models").controller("DatasetController", [
         : null;
     };
 
-    const getBoxplot = data => {
-      if (!data) {
-        $scope.boxplotLoading = false;
-        $scope.boxplotError =
-          "There was an error while processing. Please try again later.";
+    const getBoxplot = () => {
+      miningRequest().then(data => {
+        if (!data) {
+          $scope.boxplotLoading = false;
+          $scope.boxplotError =
+            "There was an error while processing. Please try again later.";
 
-        return;
-      }
-      $scope.boxplotData = data.filter(f => f.continuous).map(d => ({
-        chart: {
-          type: "boxplot"
-        },
-        title: d.index,
-        xAxis: {
-          categories: d.datasets,
-          title: null
-        },
-        yAxis: {
-          title: null
-        },
-        series: [
-          {
-            name: d.variable.label,
-            data: d.continuous.map(s => [
-              s.min,
-              s["25%"],
-              s["50%"],
-              s["75%"],
-              s.max
-            ]),
-            index: 1,
-            id: 1
-          }
-        ]
-      }));
-      $scope.boxplotLoading = false;
+          return;
+        }
+        $scope.boxplotData = data.filter(f => f.continuous).map(d => ({
+          chart: {
+            type: "boxplot"
+          },
+          title: d.index,
+          xAxis: {
+            categories: d.datasets,
+            title: null
+          },
+          yAxis: {
+            title: null
+          },
+          series: [
+            {
+              name: d.variable.label,
+              data: d.continuous.map(s => [
+                s.min,
+                s["25%"],
+                s["50%"],
+                s["75%"],
+                s.max
+              ]),
+              index: 1,
+              id: 1
+            }
+          ]
+        }));
+        $scope.boxplotLoading = false;
+      });
     };
 
     $scope.isSelected = function(variable) {
@@ -378,7 +377,8 @@ angular.module("chuvApp.models").controller("DatasetController", [
               return;
             }
 
-            getStatistics().then(getBoxplot);
+            getStatistics();
+            // .then(getBoxplot);
 
             // retrieve filterQuery as sql text, hack queryBuilder
             if ($scope.query.filterQuery) {
