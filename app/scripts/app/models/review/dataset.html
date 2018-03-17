@@ -82,10 +82,14 @@
                   </th>
                 </tr>
                 <tr ng-repeat="row in tableRows track by $index" ng-class="{ 'white-row': row.header } ">
-                  <td ng-repeat="column in row.data track by $index" ng-class="{ 'header-row': row.header, 'sub-row': row.sub }">
-                    {{column}}
+                  <td ng-if="row.header" ng-repeat="text in row.data track by $index" class="header-row">{{text}}</td>
+                  <td ng-if="!row.header">{{row.variable.label}}</td>
+                  <td ng-if="!row.header && column.mean" ng-repeat="column in row.data track by $index" class="sub-row">
+                    {{column.mean | number: 2}} ({{column.max | number: 2}}-{{column.min | number: 2}})
                   </td>
-
+                  <td ng-if="!row.header && !column.mean" ng-repeat="column in row.data track by $index" class="sub-row">
+                    {{column.count}}
+                  </td>
                 </tr>
               </table>
             </div>
@@ -121,7 +125,7 @@
           </div>
         </uib-tab>
 
-        <uib-tab index="3" heading="Charts" ng-click="executeQuery()">
+        <uib-tab index="3" ng-if="isLocal" heading="Charts" ng-click="executeQuery()">
           <div class="panel-body scrollable">
             <div ng-if="boxplotLoading" class="loading">
               <div class="fa fa-spin fa-spinner"></div>
