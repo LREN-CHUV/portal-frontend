@@ -256,7 +256,9 @@ angular
                     .filter(k => validation[k])
                     .map(t => ({ code: t }));
 
-                  query.filters = $scope.query.filterQuery;
+                  if ($scope.query.filterQuery) {
+                    query.filters = $scope.query.filterQuery;
+                  }
                   delete query.filterQuery;
 
                   $scope.model = {

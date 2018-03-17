@@ -72,154 +72,162 @@ angular.module("chuvApp.models").controller("DatasetController", [
         ? null
         : $scope.query.variables[0]);
 
-    // Charts ressources
-    const getStatistics = () => {
-      $scope.loading = true;
-      let rows = [];
-      // format
-      // const rows = [
-      //   {
-      //     code,
-      //     variable: { label },
-      //     parent: { code, label }
-      //     datasets: [{ code, label }],
-      //     continuous: [{ min, max, mean }],
-      //     nominal: [[{ key, count }]]
-      //     }
-      // ];
+    const miningRequest = () =>
+      Config.then(config => config.mode === "local").then(isLocal => {
+        $scope.isLocal = isLocal;
 
-      if (!selectedDatasets.length) {
-        $scope.error = "Please, select at least a dataset.";
-        return;
-      } else {
-        $scope.error = null;
-      }
+        // Forge session cache key with filter & selected variables
+        const sessionStorageKey =
+          ($scope.query.filterQuery
+            ? JSON.stringify($scope.query.filterQuery)
+            : "all") +
+          "-" +
+          [
+            ...$scope.query.variables,
+            ...$scope.query.groupings,
+            ...$scope.query.coVariables
+          ].map(a => a.code);
 
-      // Get local or federation mode
-      return (
-        Config.then(config => config.mode === "local")
-          // Forge queries for variable's getStatistics by dataset
-          .then(isLocal =>
-            $q.all(
-              selectedDatasets.map(d =>
-                Model.mining({
-                  algorithm: {
-                    code: isLocal ? "statisticsSummary" : "statisticsSummary", //"WP_VARIABLE_SUMMARY", FIXME once Exareme format is ready
-                    name: isLocal ? "statisticsSummary" : "statisticsSummary", // "WP_VARIABLE_SUMMARY",
-                    parameters: [],
-                    validation: false
-                  },
-                  variables: $scope.query.variables,
-                  grouping: $scope.query.groupings,
-                  covariables: $scope.query.coVariables,
-                  datasets: [{ code: d }],
-                  filters: $scope.query.textQuery
-                    ? JSON.stringify($scope.query.filterQuery)
-                    : ""
-                })
-              )
+        // retrieve cache if existing
+        const results = sessionStorage.getItem(sessionStorageKey);
+        if (results) {
+          const json = JSON.parse(results);
+
+          // check if all datasets are included
+          const existing = json.map(r => r.name);
+          if (selectedDatasets.every(s => existing.includes(s))) {
+            return $q.resolve(json);
+          }
+        }
+
+        // Forge and start requests for variables by dataset
+        return $q
+          .all(
+            $scope.allDatasets.map(d =>
+              Model.mining({
+                algorithm: {
+                  code: isLocal ? "statisticsSummary" : "statisticsSummary", //"WP_VARIABLE_SUMMARY", FIXME once Exareme format is ready
+                  name: isLocal ? "statisticsSummary" : "statisticsSummary", // "WP_VARIABLE_SUMMARY",
+                  parameters: [],
+                  validation: false
+                },
+                variables: $scope.query.variables,
+                grouping: $scope.query.groupings,
+                covariables: $scope.query.coVariables,
+                datasets: [{ code: d.code }],
+                filters: $scope.query.textQuery
+                  ? JSON.stringify($scope.query.filterQuery)
+                  : ""
+              })
             )
           )
-          .then(response => response.map(r => r.data))
-          .then(data => // flatten [[]]
-            [].concat.apply([], data.map(d => d.data.data.map(e => e)))
-          )
-          .then(data => // all variables reduced by code field
-            data.reduce((total, amount) => {
-              const existing = total.find(a => a.index === amount.index);
-              const isNominal = Object.keys(amount.count).length > 1;
+          .then(response => {
+            const datasets = response.map(r => r.data.data).map((r, i) => ({
+              data: r.data,
+              name: $scope.allDatasets[i].code
+            }));
+            sessionStorage.setItem(sessionStorageKey, JSON.stringify(datasets));
 
-              if (existing) {
-                existing[isNominal ? "nominal" : "continuous"].push(amount);
-              } else {
-                const value = { index: amount.index };
-                value[[isNominal ? "nominal" : "continuous"]] = [amount];
-                total.push(value);
-              }
+            return datasets;
+          });
+      });
 
-              return total;
-            }, [])
+    // Charts ressources
+    const getStatistics = () => {
+      if (!selectedDatasets.length) {
+        $scope.error = "Please, select at least one dataset.";
+        $scope.loading = false;
+        $scope.tableHeader = null;
+        $scope.tableRows = null;
+
+        return;
+      }
+
+      $scope.error = null;
+      $scope.loading = true;
+
+      const filterBySelectedDataset = datasets =>
+        datasets.filter(d => selectedDatasets.includes(d.name));
+
+      const filterByGroupAll = datasets =>
+        datasets.map(dataset =>
+          dataset.data.filter(r => r.group && r.group[0] === "all")
+        );
+
+      const orderByVariable = datasets =>
+        [
+          ...$scope.query.variables,
+          ...$scope.query.groupings,
+          ...$scope.query.coVariables
+        ].map(variable => ({
+          variable,
+          data: datasets.map(dataset =>
+            dataset.find(r => r.index === variable.code)
           )
-          .then(data => {
-            // Surcharge with variable data
-            rows = data;
-            return $q.all(data.map(d => Variable.getVariableData(d.index)));
-          })
+        }));
+
+      const addDetailData = rows =>
+        $q
+          .all(rows.map(row => Variable.getVariableData(row.variable.code)))
           .then(data =>
             rows.map((r, i) =>
               Object.assign({}, r, {
                 parent: data[i].parent,
-                variable: data[i].data,
-                datasets: selectedDatasets
+                variable: data[i].data
               })
             )
-          )
-          .then(data => {
-            rows = data;
-
-            $scope.tableHeader = ["Variables", ...selectedDatasets];
-            $scope.tableRows = formatTable(data);
-            $scope.loading = false;
-            $scope.error = null;
-
-            return data;
-          })
-          .catch(e => {
-            $scope.loading = false;
-            const { statusText } = e;
-            $scope.error = statusText;
-            console.log(e);
-          })
-      );
-    };
-
-    // Format for angular
-    const formatTable = data => {
-      const tableRows = [];
-      data.forEach((d, i) => {
-        let row;
-
-        if (
-          i === 0 ||
-          (d.parent && i > 0 && d.parent.code !== data[i - 1].parent.code)
-        ) {
-          row = {
-            header: true,
-            data: [d.parent.label, ...selectedDatasets.map(() => "")]
-          };
-          tableRows.push(row);
-        }
-
-        if (d.continuous) {
-          row = {
-            data: [
-              d.variable.label,
-              ...d.continuous.map(e => {
-                const mean = (e.mean && parseFloat(e.mean).toFixed(2)) || 0;
-                const min = (e.min && parseFloat(e.min).toFixed(2)) || 0;
-                const max = (e.max && parseFloat(e.max).toFixed(2)) || 0;
-
-                return `${mean} (${min}-${max})`;
-              })
-            ]
-          };
-          tableRows.push(row);
-        } else {
-          row = {
-            data: [d.variable.label, ...selectedDatasets.map(() => "")]
-          };
-          tableRows.push(row);
-
-          tableRows.push(
-            ...Object.keys(d.nominal[0].count).map(k => ({
-              sub: true,
-              data: [k, ...d.nominal.map(e => e.count[k])]
-            }))
           );
-        }
-      });
 
-      return tableRows;
+      const formatTable = data => {
+        const tableRows = [];
+        data
+          .sort(
+            (a, b) =>
+              (a.parent.code < b.parent.code
+                ? -1
+                : a.parent.code === b.parent.code ? 0 : 1)
+          )
+          .forEach((d, i) => {
+            let row;
+            if (
+              i === 0 ||
+              (d.parent && i > 0 && d.parent.code !== data[i - 1].parent.code)
+            ) {
+              row = {
+                header: true,
+                data: [d.parent.label, ...selectedDatasets.map(() => "")] // hack for colspan
+              };
+              tableRows.push(row);
+            }
+            tableRows.push(d);
+          });
+
+        return tableRows;
+      };
+
+      let rows;
+      return miningRequest()
+        .then(filterBySelectedDataset)
+        .then(filterByGroupAll)
+        .then(orderByVariable)
+        .then(addDetailData)
+        .then(data => {
+          $scope.tableHeader = [
+            "Variables",
+            ...$scope.allDatasets
+              .filter(d => selectedDatasets.includes(d.code))
+              .map(s => s.code)
+          ];
+          $scope.tableRows = formatTable(data);
+          $scope.loading = false;
+          $scope.error = null;
+        })
+        .catch(e => {
+          $scope.loading = false;
+          const { statusText } = e;
+          $scope.error = statusText;
+          console.log(e);
+        });
     };
 
     const getTSNE = () =>
@@ -294,42 +302,44 @@ angular.module("chuvApp.models").controller("DatasetController", [
         : null;
     };
 
-    const getBoxplot = data => {
-      if (!data) {
-        $scope.boxplotLoading = false;
-        $scope.boxplotError =
-          "There was an error while processing. Please try again later.";
+    const getBoxplot = () => {
+      miningRequest().then(data => {
+        if (!data) {
+          $scope.boxplotLoading = false;
+          $scope.boxplotError =
+            "There was an error while processing. Please try again later.";
 
-        return;
-      }
-      $scope.boxplotData = data.filter(f => f.continuous).map(d => ({
-        chart: {
-          type: "boxplot"
-        },
-        title: d.index,
-        xAxis: {
-          categories: d.datasets,
-          title: null
-        },
-        yAxis: {
-          title: null
-        },
-        series: [
-          {
-            name: d.variable.label,
-            data: d.continuous.map(s => [
-              s.min,
-              s["25%"],
-              s["50%"],
-              s["75%"],
-              s.max
-            ]),
-            index: 1,
-            id: 1
-          }
-        ]
-      }));
-      $scope.boxplotLoading = false;
+          return;
+        }
+        $scope.boxplotData = data.filter(f => f.continuous).map(d => ({
+          chart: {
+            type: "boxplot"
+          },
+          title: d.index,
+          xAxis: {
+            categories: d.datasets,
+            title: null
+          },
+          yAxis: {
+            title: null
+          },
+          series: [
+            {
+              name: d.variable.label,
+              data: d.continuous.map(s => [
+                s.min,
+                s["25%"],
+                s["50%"],
+                s["75%"],
+                s.max
+              ]),
+              index: 1,
+              id: 1
+            }
+          ]
+        }));
+        $scope.boxplotLoading = false;
+      });
     };
 
     $scope.isSelected = function(variable) {
@@ -352,36 +362,6 @@ angular.module("chuvApp.models").controller("DatasetController", [
       return selectedDatasets.includes(code);
     };
 
-    $scope.open_experiment = function() {
-      if ($scope.model && $scope.model.slug) {
-        return $state.go("new_experiment", { model_slug: $scope.model.slug });
-      }
-
-      function unmap_category(category) {
-        return $scope.query[category]
-          .map(function(variable) {
-            return variable.code;
-          })
-          .join(",");
-      }
-
-      var query = {
-        variables: unmap_category("variables"),
-        coVariables: unmap_category("coVariables"),
-        groupings: unmap_category("groupings"),
-        filters: unmap_category("filters"),
-        trainingDatasets: unmap_category("trainingDatasets"),
-        graph_config: $scope.chartConfig,
-        model_slug: ""
-      };
-
-      if ($scope.query.filterQuery) {
-        query.filterQuery = JSON.stringify($scope.query.filterQuery);
-      }
-
-      return $state.go("new_experiment", query);
-    };
-
     // init
     const init = (model = {}) => {
       $scope
@@ -397,7 +377,8 @@ angular.module("chuvApp.models").controller("DatasetController", [
               return;
             }
 
-            getStatistics().then(getBoxplot);
+            getStatistics();
+            // .then(getBoxplot);
 
             // retrieve filterQuery as sql text, hack queryBuilder
             if ($scope.query.filterQuery) {

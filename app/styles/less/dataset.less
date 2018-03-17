@@ -12,7 +12,6 @@
 
         .tab-content {
             overflow-y: auto;
-            height: 480px;
         }
 
         .loading {
@@ -81,8 +80,9 @@ li.list-group-item {
 
     margin-bottom: 0.2em;
     padding: 0;
-    a, a:hover {
-        color: #a9c7d4;
+    background-color: gray;
+
+    a {
         text-decoration: none;
         font-weight: 700;
         span{
@@ -92,12 +92,8 @@ li.list-group-item {
             padding-right: 15px;
             display: inline-block;
         }
-
     }
-
-    a:focus, a:active {
-
-    }
+    a:link, a:visited { color: white; }
 }
 
 .table {
