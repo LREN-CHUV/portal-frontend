@@ -114,25 +114,26 @@
           </div>
         </uib-tab>
 
-        <!-- <uib-tab index="2" heading="Boxplot">
+        <uib-tab index="2" heading="Boxplot">
           <div class="panel-body scrollable">
             <div ng-if="boxplotLoading" class="loading">
               <div class="fa fa-spin fa-spinner"></div>
             </div>
-            <highchart ng-if="boxplotData" class="highchart-width highcharts-container" ng-repeat="data in boxplotData" config="data">
+            <highchart ng-if="boxplotData"
+              style="margin-top: 25px"
+              class="highchart-width highcharts-container"
+              ng-repeat="data in boxplotData"
+              config="data">
             </highchart>
             <div ng-if="boxplotError">
               There was an error perfoming the method
               <pretty-json data="boxplotError"></pretty-json>
             </div>
           </div>
-        </uib-tab> -->
+        </uib-tab>
 
         <uib-tab index="3" ng-if="isLocal" heading="Charts" ng-click="executeQuery()">
           <div class="panel-body scrollable">
-            <div ng-if="boxplotLoading" class="loading">
-              <div class="fa fa-spin fa-spinner"></div>
-            </div>
             <div class="col-md-8">
               <div class="panel panel-charts">
                 <div class="panel-body panel-charts-graph" >

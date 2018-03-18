@@ -93,14 +93,10 @@ angular.module("chuvApp.models").controller("DatasetController", [
         if (results) {
           const json = JSON.parse(results);
 
-          // check if all datasets are included
-          const existing = json.map(r => r.name);
-          if (selectedDatasets.every(s => existing.includes(s))) {
-            return $q.resolve(json);
-          }
+          return $q.resolve(json);
         }
 
-        // Forge and start requests for variables by dataset
+        // Forge and start requests for variables in all datasets
         return $q
           .all(
             $scope.allDatasets.map(d =>
@@ -133,6 +129,10 @@ angular.module("chuvApp.models").controller("DatasetController", [
       });
 
     // Charts ressources
+
+    const filterBySelectedDataset = datasets =>
+      datasets.filter(d => selectedDatasets.includes(d.name));
+
     const getStatistics = () => {
       if (!selectedDatasets.length) {
         $scope.error = "Please, select at least one dataset.";
@@ -145,9 +145,6 @@ angular.module("chuvApp.models").controller("DatasetController", [
 
       $scope.error = null;
       $scope.loading = true;
-
-      const filterBySelectedDataset = datasets =>
-        datasets.filter(d => selectedDatasets.includes(d.name));
 
       const filterByGroupAll = datasets =>
         datasets.map(dataset =>
@@ -303,43 +300,71 @@ angular.module("chuvApp.models").controller("DatasetController", [
     };
 
     const getBoxplot = () => {
-      miningRequest().then(data => {
-        if (!data) {
-          $scope.boxplotLoading = false;
-          $scope.boxplotError =
-            "There was an error while processing. Please try again later.";
-
-          return;
-        }
-        $scope.boxplotData = data.filter(f => f.continuous).map(d => ({
-          chart: {
-            type: "boxplot"
-          },
-          title: d.index,
-          xAxis: {
-            categories: d.datasets,
-            title: null
-          },
-          yAxis: {
-            title: null
-          },
-          series: [
-            {
-              name: d.variable.label,
-              data: d.continuous.map(s => [
-                s.min,
-                s["25%"],
-                s["50%"],
-                s["75%"],
-                s.max
-              ]),
-              index: 1,
-              id: 1
-            }
-          ]
-        }));
-        $scope.boxplotLoading = false;
+      const filterByVariable = datasets => ({
+        variables: [...$scope.query.variables, ...$scope.query.coVariables]
+          .map(variable => ({
+            variable,
+            data: datasets.map(dataset =>
+              dataset.data.filter(
+                r => r.mean && r.index === variable.code && r.group[0] !== "all"
+              )
+            )
+          }))
+          .filter(f => f.data[0].length),
+        datasetNames: datasets.map(d => d.name)
       });
+
+      const shapeData = ({ variables, datasetNames }) =>
+        variables.map(variable => ({
+          categories: _.flatten(
+            variable.data.map((datasets, i) =>
+              datasets.map(v => `${datasetNames[i]}-${v.group[0]}`)
+            )
+          ),
+          series: [].concat.apply(
+            [],
+            variable.data.map(datasets =>
+              datasets.map(v => [v.min, v["25%"], v["50%"], v["75%"], v.max])
+            )
+          ),
+          variable: variable.variable
+        }));
+
+      miningRequest()
+        .then(filterBySelectedDataset)
+        .then(filterByVariable)
+        .then(shapeData)
+        .then(data => {
+          if (!data) {
+            $scope.boxplotLoading = false;
+            $scope.boxplotError =
+              "There was an error while processing. Please try again later.";
+
+            return;
+          }
+
+          $scope.boxplotData = data.map(d => ({
+            chart: {
+              type: "boxplot"
+            },
+            title: "Boxplot",
+            xAxis: {
+              categories: d.categories,
+              title: null
+            },
+            yAxis: {
+              title: null
+            },
+            series: [
+              {
+                name: d.variable.code,
+                data: d.series
+              }
+            ]
+          }));
+
+          $scope.boxplotLoading = false;
+        });
     };
 
     $scope.isSelected = function(variable) {
@@ -377,8 +402,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
               return;
             }
 
-            getStatistics();
-            // .then(getBoxplot);
+            getStatistics().then(getBoxplot);
 
             // retrieve filterQuery as sql text, hack queryBuilder
             if ($scope.query.filterQuery) {
