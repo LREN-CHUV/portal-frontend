@@ -148,13 +148,13 @@
                       <label class="training">Training</label>
                       <div>
                         <div ng-repeat="dataset in datasets" class="datasets-types">
-                          <span>
+                          <span ng-init="shared.experiment_datasets.training[dataset.code] = false">
                             <input
                               type="checkbox"
                               id="{{dataset.code}}T"
                               class="training"
                               name="{{dataset.code}}"
-                              ng-model="shared.experiment_datasets.training[dataset.code]"
+                              ng-click="shared.experiment_datasets.validation[dataset.code] = !shared.experiment_datasets.training[dataset.code]"
                             />
                             <label for="{{dataset.code}}T">
                               <span class="code">{{dataset.code}}</span>
@@ -167,13 +167,13 @@
                       <label class="validation">Validation</label>
                       <div>
                         <div ng-repeat="dataset in datasets" class="datasets-types">
-                          <span>
+                          <span ng-init="shared.experiment_datasets.validation[dataset.code] = false">
                             <input
                               type="checkbox"
                               id="{{dataset.code}}V"
                               class="validation"
                               name="{{dataset.code}}"
-                              ng-model="shared.experiment_datasets.validation[dataset.code]"
+                              ng-click="shared.experiment_datasets.validation[dataset.code] = !shared.experiment_datasets.validation[dataset.code]"
                             />
                             <label for="{{dataset.code}}V">
                               <span class="code">{{dataset.code}}</span>
@@ -247,7 +247,7 @@
                 <div class="panel-body variable-list scrollable">
 
                   <h5 ng-if="modelsList">My new experiment</h5>
-                  <select ng-model="selectedModel" ng-change="change(selectedModel)" ng-options="chowsenModel.title for chowsenModel in modelsList" class="form-control"></select>
+                  <select ng-model="selectedModel" ng-change="change(selectedModel)" ng-options="chosenModel.title for chosenModel in modelsList" class="form-control chosen-model"></select>
 
                   <h5 ng-if="query.variables.length">Variable</h5>
                   <p ng-repeat="variable in query.variables">
