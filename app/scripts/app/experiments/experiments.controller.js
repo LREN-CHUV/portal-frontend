@@ -492,21 +492,14 @@ angular
               $scope.experiment = data;
 
               // FIXME: Parse the results from Exareme JS Object
-              // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/eval
-              if (
-                !_.isUndefined(data.algorithms[0].code) &&
-                data.algorithms[0].code === "K_MEANS"
-              ) {
-                if (data.result && !data.result.length) {
-                  return;
-                }
+              const ex = $scope.experiment.result;
+              if (ex && ex.length && ex[0].result) {
+                $scope.experiment.result = ex[0].result;
 
-                let foo;
-                const result = eval("foo=" + data.result[0].res);
                 $scope.experiment = Object.assign({}, $scope.experiment, {
                   result: {
                     data: {
-                      data: result,
+                      data: $scope.experiment.result,
                       type: "application/highcharts+json"
                     }
                   },
@@ -517,6 +510,7 @@ angular
 
                 $scope.loading = false;
                 MLUtils.mark_as_read($scope.experiment);
+
                 return;
               }
 
