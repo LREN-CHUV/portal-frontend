@@ -364,16 +364,30 @@
       margin-right: 0;
     }
     &>div {
-      border: 1px solid #9d9d9d;
+      border: 1px solid @gray-light;
       .datasets-types {
+        label {
+          margin-bottom: 5px;
+        }
         input:checked + label {
-          color: @gray-light;
+          color: @brand-primary;
+        }
+        &:last-of-type {
+          label {
+            margin-bottom: 2px;
+          }
         }
       }
     }
   }
 }
 
-.chowsen-method {
+.chosen-method {
   color: @brand-primary;
+}
+
+.chosen-model.ng-empty {
+  option:first-of-type {
+    display: none;
+  }
 }
