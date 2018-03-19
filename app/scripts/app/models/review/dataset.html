@@ -52,16 +52,16 @@
     <div class="panel" style="flex-grow: 2">
       <uib-tabset active="active">
 
-        <uib-tab index="0 " heading="Table ">
-          <div class="panel-body scrollable ">
-            <div ng-if="loading " class="loading ">
+        <uib-tab index="0" heading="Table">
+          <div class="panel-body scrollable">
+            <div ng-if="tableLoading " class="loading">
               <div class="fa fa-spin fa-spinner"></div>
             </div>
-            <div ng-if="error ">
+            <div ng-if="tableError">
               There was an error perfoming the method
-              <pretty-json data="error "></pretty-json>
+              <pretty-json data="error"></pretty-json>
             </div>
-            <div ng-if="tableHeader " style="background-color: #d5e5fd; padding: 0.5em " class="dt-wrapper">
+            <div ng-if="tableHeader" style="background-color: #d5e5fd; padding: 0.5em" class="dt-wrapper">
               <div class="export-pannel">
                 <div ng-click="toogleExport()" class="export-btn-sandwich" ng-mouseleave="exportClose()" ng-mouseover="exportCloseDeny()">
                   <span></span>
@@ -98,7 +98,7 @@
           </div>
         </uib-tab>
 
-        <uib-tab index="1" heading="Histogram" ng-click="getHistogram()" disable="allDatasets === null">
+        <!-- <uib-tab index="1" heading="Histogram" ng-click="getHistogram()" disable="allDatasets === null">
           <div class="panel-body scrollable">
             <div ng-if="histogramLoading" class="loading">
               <div class="fa fa-spin fa-spinner"></div>
@@ -112,23 +112,20 @@
               <pretty-json data="histogramError"></pretty-json>
             </div>
           </div>
-        </uib-tab>
+        </uib-tab> -->
 
-        <uib-tab index="2" heading="Boxplot">
+        <uib-tab index="2" heading="Boxplot" ng-show="!boxplotError">
           <div class="panel-body scrollable">
             <div ng-if="boxplotLoading" class="loading">
               <div class="fa fa-spin fa-spinner"></div>
             </div>
-            <highchart ng-if="boxplotData"
-              style="margin-top: 25px"
-              class="highchart-width highcharts-container"
-              ng-repeat="data in boxplotData"
-              config="data">
-            </highchart>
             <div ng-if="boxplotError">
               There was an error perfoming the method
               <pretty-json data="boxplotError"></pretty-json>
             </div>
+            <highchart ng-if="boxplotData" style="margin-top: 25px" class="highchart-width highcharts-container" ng-repeat="data in boxplotData"
+              config="data">
+            </highchart>
           </div>
         </uib-tab>
 
@@ -136,7 +133,7 @@
           <div class="panel-body scrollable">
             <div class="col-md-8">
               <div class="panel panel-charts">
-                <div class="panel-body panel-charts-graph" >
+                <div class="panel-body panel-charts-graph">
                   <div class="panel-body-graph" data-graph-type="column">
                     <highchart ng-if="hcConfig" config="hcConfig"></highchart>
                   </div>
