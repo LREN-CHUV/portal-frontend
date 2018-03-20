@@ -21,11 +21,6 @@ angular.module("chuvApp.models").directive("circlePacking", [
         var groups;
         var disableLastWatch = function() {};
         var group_dict;
-        var color = d3.scale
-          .linear()
-          .domain([-1, 5])
-          .range(["hsl(152,80%,80%)", "hsl(228,30%,40%)"])
-          .interpolate(d3.interpolateHcl);
         var svg;
 
         function createCirclePackingDataStructure() {
@@ -90,6 +85,7 @@ angular.module("chuvApp.models").directive("circlePacking", [
 
         function applyNodeColors() {
           var circle = svg.selectAll("circle");
+          rangeIndex = 0;
           circle.style("fill", color_for_node);
           Object.keys($scope.configuration).forEach(function(category) {
             circle.classed(category, function(node) {
@@ -109,23 +105,10 @@ angular.module("chuvApp.models").directive("circlePacking", [
           disableLastWatch();
 
           var margin = 20,
+            labelWidthMultiplier = 7,
             diameter = element.width(),
-            root = groups,
-            pack = d3.layout
-              .pack()
-              .padding(2)
-              // prevent sorting, otherwise packing will look way too regular.
-              //.sort(null)
-              // disabled: sort by descending value for better packing
-              .sort(function comparator(a, b) {
-                return b.value - a.value;
-              })
-              .size([diameter - margin, diameter - margin])
-              // circle weight is based on the length of text. It's not
-              // strictly necessary but makes things nicer looking.
-              .value(function(d) {
-                return 2 + d.label.length;
-              });
+            root = groups;
+
           svg = d3
             .select(element.find(".panel-body")[0])
             .append("svg")
@@ -140,9 +123,21 @@ angular.module("chuvApp.models").directive("circlePacking", [
               "translate(" + diameter / 2 + "," + diameter / 2 + ")"
             );
 
-          var focus = groups,
-            nodes = pack.nodes(groups),
-            view,
+          var focus = groups;
+          var nodes = d3.layout
+            .pack()
+            .padding(2)
+            .sort(function comparator(a, b) {
+              return b.value - a.value;
+            })
+            .size([diameter - margin, diameter - margin])
+            .value(function(d) {
+              return 2 + d.label.length;
+            })
+            .nodes(groups);
+
+          rangeIndex = 0;
+          var view,
             circle = svg
               .selectAll("circle")
               .data(nodes)
@@ -164,17 +159,17 @@ angular.module("chuvApp.models").directive("circlePacking", [
                 d3.event.stopPropagation();
               });
 
-          var width = 260, height = 140;
-
+          const len = d => {
+            return d.r;
+          };
+          const coord = d => -(len(d) / 2);
           var text = svg
             .selectAll("foreignObject")
             .data(nodes)
             .enter()
             .append("foreignObject")
-            .attr("width", width)
-            .attr("height", height)
-            .attr("x", -(width / 2))
-            .attr("y", -(height / 2))
+            .attr("width", d => labelWidthMultiplier * len(d))
+            .attr("height", d => len(d))
             .filter(function(d) {
               return !d.is_group || d.children;
             }) // Do not display enpty groups
@@ -186,19 +181,12 @@ angular.module("chuvApp.models").directive("circlePacking", [
             })
             .style("display", function(d) {
               return d.parent === root ? "inline" : "none";
-            })
+            });
+
+          var text2 = text
             .append("xhtml:div")
-            .attr("width", width)
-            .attr("height", height)
             .append("xhtml:span")
             .html(function(d) {
-              if (!d.parent) {
-                return d.label;
-              }
-              var max_length = 5 + d.r * 100 / d.parent.r;
-              if (d.label.length > max_length) {
-                return d.label.substr(0, max_length - 3) + "...";
-              }
               return d.label;
             });
 
@@ -282,6 +270,13 @@ angular.module("chuvApp.models").directive("circlePacking", [
             circle.attr("r", function(d) {
               return d.r * k;
             });
+            text.attr("width", d => d.r * k * 1.5 * labelWidthMultiplier);
+            text.attr("height", d => d.r * k * 1.5);
+            text.attr(
+              "x",
+              d => -(len(d) * 1.5 * labelWidthMultiplier / 2 * k) * 1
+            );
+            text.attr("y", d => -(len(d) * 1.5 / 2 * k) * 1);
           }
 
           d3.select(self.frameElement).style("height", diameter + "px");
@@ -314,6 +309,31 @@ angular.module("chuvApp.models").directive("circlePacking", [
           return { zoom: d => zoom(d, true) };
         }
 
+        const ranges = [
+          ["hsl(120,0%,90%)", "hsl(120,0%,50%)"], //grey
+          ["hsl(228,80%,80%)", "hsl(300,30%,40%)"], //light blue
+          ["hsl(300,80%,80%)", "hsl(360,30%,40%)"], //light pink to brick
+          ["hsl(152,80%,80%)", "hsl(228,30%,40%)"], //light green-blue
+          ["hsl(80,80%,80%)", "hsl(120,30%,40%)"], //light yellow-green
+          ["hsl(120,80%,80%)", "hsl(150,30%,40%)"], //light green
+          ["hsl(0,80%,80%)", "hsl(40,30%,40%)"], //light pink to brown
+          ["hsl(40,80%,80%)", "hsl(80,30%,40%)"] //sand
+        ];
+        let rangeIndex = 0;
+        const color = node => {
+          let range = ranges[rangeIndex];
+          if (node.depth === 1) {
+            rangeIndex = rangeIndex < ranges.length - 1 ? rangeIndex + 1 : 0;
+            range = ranges[rangeIndex];
+          }
+
+          return d3.scale
+            .linear()
+            .domain([-1, 5])
+            .range(range)
+            .interpolate(d3.interpolateHcl)(node.depth);
+        };
+
         function color_for_node(node) {
           var category = _.find(Object.keys($scope.configuration), function(
             category
@@ -323,7 +343,7 @@ angular.module("chuvApp.models").directive("circlePacking", [
           if (category) {
             return null;
           }
-          return node.children ? color(node.depth) : null;
+          return node.children ? color(node) : null;
         }
 
         $scope.$on("configurationChanged", applyNodeColors);
@@ -333,7 +353,7 @@ angular.module("chuvApp.models").directive("circlePacking", [
         $scope.$watch("groups", function(groups) {
           if (groups != null) {
             createCirclePackingDataStructure();
-            var api = updateCirclePacking();
+            api = updateCirclePacking();
             $scope.zoom = api.zoom;
           }
         });
@@ -345,7 +365,7 @@ angular.module("chuvApp.models").directive("circlePacking", [
         function resize_handler() {
           if ($scope.groups != null && element.width !== prev_dimension) {
             prev_dimension = element.width();
-
+            createCirclePackingDataStructure();
             api = updateCirclePacking();
             $scope.zoom = api.zoom;
           }
@@ -385,24 +405,6 @@ angular.module("chuvApp.models").directive("circlePacking", [
             datasetName => selectedDatasetsObj[datasetName] = {}
           );
           $scope.configuration["trainingDatasets"] = selectedDatasetsObj;
-
-          // TODO
-          // svg
-          //   .selectAll("circle")
-          //   .style("opacity", 1)
-          //   .filter(function(data) {
-          //     return (
-          //       !data.is_group &&
-          //       !$scope.selectedDatasets
-          //         .map(function(d) {
-          //           return data.datasets.includes(d);
-          //         })
-          //         .every(function(op) {
-          //           return op;
-          //         })
-          //     );
-          //   })
-          //   .style("opacity", 0.2);
         };
 
         $scope.$on("event:setToURLtrainingDatasets", function(event, data) {

@@ -52,7 +52,9 @@ angular
 
       // Get all the ml methods
       MLUtils.list_ml_methods().then(function(data) {
-        $scope.ml_methods = data;
+        $scope.ml_methods = data.filter(
+          f => ($scope.federationmode ? true : f.environment !== "Exareme")
+        );
       });
 
       // Check if the method can be applied to the model
@@ -256,7 +258,9 @@ angular
                     .filter(k => validation[k])
                     .map(t => ({ code: t }));
 
-                  query.filters = $scope.query.filterQuery;
+                  if ($scope.query.filterQuery) {
+                    query.filters = $scope.query.filterQuery;
+                  }
                   delete query.filterQuery;
 
                   $scope.model = {
@@ -490,22 +494,15 @@ angular
               $scope.experiment = data;
 
               // FIXME: Parse the results from Exareme JS Object
-              // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/eval
-              if (
-                !_.isUndefined(data.algorithms[0].code) &&
-                data.algorithms[0].code === "K_MEANS"
-              ) {
-                if (data.result && !data.result.length) {
-                  return;
-                }
+              const ex = $scope.experiment.result;
+              if (ex && ex.length && ex[0].result) {
+                $scope.experiment.result = ex[0].result;
 
-                let foo;
-                const result = eval("foo=" + data.result[0].res);
                 $scope.experiment = Object.assign({}, $scope.experiment, {
                   result: {
                     data: {
-                      data: result,
-                      type: "application/highcharts+json"
+                      data: $scope.experiment.result,
+                      type: "application/vnd.highcharts+jsonn"
                     }
                   },
                   algorithms: data.algorithms,
@@ -515,6 +512,7 @@ angular
 
                 $scope.loading = false;
                 MLUtils.mark_as_read($scope.experiment);
+
                 return;
               }
 
