@@ -31,8 +31,8 @@ angular.module("chuvApp.models").controller("DatasetController", [
     $state,
     $q
   ) {
-    $scope.loading = true;
-    $scope.error = undefined;
+    $scope.tableLoading = true;
+    $scope.tableError = undefined;
     $scope.tableHeader = undefined;
     $scope.tableRows = undefined;
 
@@ -135,16 +135,16 @@ angular.module("chuvApp.models").controller("DatasetController", [
 
     const getStatistics = () => {
       if (!selectedDatasets.length) {
-        $scope.error = "Please, select at least one dataset.";
-        $scope.loading = false;
+        $scope.tableError = "Please, select at least one dataset.";
+        $scope.tableLoading = false;
         $scope.tableHeader = null;
         $scope.tableRows = null;
 
         return;
       }
 
-      $scope.error = null;
-      $scope.loading = true;
+      $scope.tableError = null;
+      $scope.tableLoading = true;
 
       const filterByGroupAll = datasets =>
         datasets.map(dataset =>
@@ -203,7 +203,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
       };
 
       let rows;
-      return miningRequest()
+      miningRequest()
         .then(filterBySelectedDataset)
         .then(filterByGroupAll)
         .then(orderByVariable)
@@ -216,13 +216,15 @@ angular.module("chuvApp.models").controller("DatasetController", [
               .map(s => s.code)
           ];
           $scope.tableRows = formatTable(data);
-          $scope.loading = false;
-          $scope.error = null;
+          $scope.tableLoading = false;
+          $scope.tableError = null;
         })
         .catch(e => {
-          $scope.loading = false;
           const { statusText } = e;
-          $scope.error = statusText;
+          $scope.tableError = statusText;
+          $scope.tableHeader = null;
+          $scope.tableRows = null;
+          $scope.tableLoading = false;
           console.log(e);
         });
     };
@@ -233,7 +235,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
           code: "tSNE",
           name: "tSNE",
           parameters: [],
-          validation: false
+          validation: false$scope.boxplotError
         },
         variables: $scope.query.variables,
         grouping: $scope.query.groupings,
@@ -300,45 +302,59 @@ angular.module("chuvApp.models").controller("DatasetController", [
     };
 
     const getBoxplot = () => {
+      if (!selectedDatasets.length) {
+        $scope.boxplotError = "Please, select at least one dataset.";
+        $scope.boxplotLoading = false;
+        $scope.boxplotData = null;
+
+        return;
+      }
+
+      $scope.boxplotError = null;
+      $scope.boxplotLoading = true;
+
       const filterByVariable = datasets => ({
-        variables: [...$scope.query.variables, ...$scope.query.coVariables]
-          .map(variable => ({
-            variable,
-            data: datasets.map(dataset =>
-              dataset.data.filter(
-                r => r.mean && r.index === variable.code && r.group[0] !== "all"
-              )
+        variables: [
+          ...$scope.query.variables,
+          ...$scope.query.coVariables
+        ].map(variable => ({
+          variable,
+          data: datasets.map(dataset =>
+            dataset.data.filter(
+              r => r.mean && r.index === variable.code && r.group[0] !== "all"
             )
-          }))
-          .filter(f => f.data[0].length),
+          )
+        })),
         datasetNames: datasets.map(d => d.name)
       });
 
       const shapeData = ({ variables, datasetNames }) =>
-        variables.map(variable => ({
-          categories: _.flatten(
-            variable.data.map((datasets, i) =>
-              datasets.map(v => `${datasetNames[i]}-${v.group[0]}`)
-            )
-          ),
-          series: [].concat.apply(
-            [],
-            variable.data.map(datasets =>
-              datasets.map(v => [v.min, v["25%"], v["50%"], v["75%"], v.max])
-            )
-          ),
-          variable: variable.variable
-        }));
+        variables
+          .map(variable => ({
+            categories: _.flatten(
+              variable.data.map((datasets, i) =>
+                datasets.map(v => `${datasetNames[i]}-${v.group.join("-")}`)
+              )
+            ),
+            series: [].concat.apply(
+              [],
+              variable.data.map(datasets =>
+                datasets.map(v => [v.min, v["25%"], v["50%"], v["75%"], v.max])
+              )
+            ),
+            variable: variable.variable
+          }))
+          .filter(d => d.series.length);
 
       miningRequest()
         .then(filterBySelectedDataset)
         .then(filterByVariable)
         .then(shapeData)
         .then(data => {
-          if (!data) {
+          if (!data || !data.length) {
             $scope.boxplotLoading = false;
-            $scope.boxplotError =
-              "There was an error while processing. Please try again later.";
+            $scope.boxplotError = "Please select other variables to plot";
+            $scope.boxplotData = null;
 
             return;
           }
@@ -347,7 +363,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
             chart: {
               type: "boxplot"
             },
-            title: "Boxplot",
+            title: null,
             xAxis: {
               categories: d.categories,
               title: null
@@ -363,7 +379,16 @@ angular.module("chuvApp.models").controller("DatasetController", [
             ]
           }));
 
+          $scope.boxplotError = null;
           $scope.boxplotLoading = false;
+        })
+        .catch(e => {
+          $scope.boxplotLoading = false;
+          $scope.boxplotError =
+            "There was an error while processing. Please try again later.";
+          $scope.boxplotData = null;
+
+          return;
         });
     };
 
@@ -397,12 +422,14 @@ angular.module("chuvApp.models").controller("DatasetController", [
 
             const variable = getDependantVariable();
             if (!variable) {
-              $scope.error =
+              $scope.tableError =
                 "Please, select some variables in the previous screen.";
               return;
             }
 
-            getStatistics().then(getBoxplot);
+            getStatistics();
+            getBoxplot();
+            // $scope.getHistogram();
 
             // retrieve filterQuery as sql text, hack queryBuilder
             if ($scope.query.filterQuery) {
