@@ -84,9 +84,8 @@ angular.module("chuvApp.models").directive("circlePacking", [
         }
 
         function applyNodeColors() {
-          //console.info('applyNodeColors');
-          /*
           var circle = svg.selectAll("circle");
+          rangeIndex = 0;
           circle.style("fill", color_for_node);
           Object.keys($scope.configuration).forEach(function(category) {
             circle.classed(category, function(node) {
@@ -95,7 +94,6 @@ angular.module("chuvApp.models").directive("circlePacking", [
               );
             });
           });
-          */
         }
 
         // clears the current circle packing and recreates it from crash.
