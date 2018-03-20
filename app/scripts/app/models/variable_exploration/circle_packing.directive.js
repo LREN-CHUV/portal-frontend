@@ -84,6 +84,8 @@ angular.module("chuvApp.models").directive("circlePacking", [
         }
 
         function applyNodeColors() {
+          //console.info('applyNodeColors');
+          /*
           var circle = svg.selectAll("circle");
           circle.style("fill", color_for_node);
           Object.keys($scope.configuration).forEach(function(category) {
@@ -93,6 +95,7 @@ angular.module("chuvApp.models").directive("circlePacking", [
               );
             });
           });
+          */
         }
 
         // clears the current circle packing and recreates it from crash.
@@ -106,22 +109,8 @@ angular.module("chuvApp.models").directive("circlePacking", [
           var margin = 20,
             labelWidthMultiplier = 7,
             diameter = element.width(),
-            root = groups,
-            pack = d3.layout
-              .pack()
-              .padding(2)
-              // prevent sorting, otherwise packing will look way too regular.
-              //.sort(null)
-              // disabled: sort by descending value for better packing
-              .sort(function comparator(a, b) {
-                return b.value - a.value;
-              })
-              .size([diameter - margin, diameter - margin])
-              // circle weight is based on the length of text. It's not
-              // strictly necessary but makes things nicer looking.
-              .value(function(d) {
-                return 2 + d.label.length;
-              });
+            root = groups;
+
           svg = d3
             .select(element.find(".panel-body")[0])
             .append("svg")
@@ -136,9 +125,18 @@ angular.module("chuvApp.models").directive("circlePacking", [
               "translate(" + diameter / 2 + "," + diameter / 2 + ")"
             );
 
-          var focus = groups,
-            nodes = pack.nodes(groups),
-            view,
+          var focus = groups;
+          var nodes = d3.layout
+            .pack()
+            .padding(2)
+            .size([diameter - margin, diameter - margin])
+            .value(function(d) {
+              return 2 + d.label.length;
+            })
+            .nodes(groups);
+
+          rangeIndex = 0;
+          var view,
             circle = svg
               .selectAll("circle")
               .data(nodes)
@@ -310,63 +308,23 @@ angular.module("chuvApp.models").directive("circlePacking", [
           return { zoom: d => zoom(d, true) };
         }
 
-        const belongsToBranch = (node, branchNodeCode) => {
-          if (node.code === branchNodeCode) {
-            return true;
-          }
-          if (node.parent === undefined) {
-            return false;
-          }
-          if (node.parent.code === branchNodeCode) {
-            return true;
-          } else if (node.parent.code === undefined) {
-            return false;
-          } else {
-            return belongsToBranch(node.parent, branchNodeCode);
-          }
-        };
-
         const ranges = [
-          ["hsl(120,0%,90%)", "hsl(120,0%,50%)"],
-          ["hsl(228,80%,80%)", "hsl(300,30%,40%)"],
-          ["hsl(300,80%,80%)", "hsl(360,30%,40%)"],
-          ["hsl(152,80%,80%)", "hsl(228,30%,40%)"],
-          ["hsl(80,80%,80%)", "hsl(120,30%,40%)"],
-          ["hsl(120,80%,80%)", "hsl(150,30%,40%)"]
+          ["hsl(120,0%,90%)", "hsl(120,0%,50%)"], //grey
+          ["hsl(228,80%,80%)", "hsl(300,30%,40%)"], //light blue
+          ["hsl(300,80%,80%)", "hsl(360,30%,40%)"], //light pink to brick
+          ["hsl(152,80%,80%)", "hsl(228,30%,40%)"], //light green-blue
+          ["hsl(80,80%,80%)", "hsl(120,30%,40%)"], //light yellow-green
+          ["hsl(120,80%,80%)", "hsl(150,30%,40%)"], //light green
+          ["hsl(0,80%,80%)", "hsl(40,30%,40%)"], //light pink to brown
+          ["hsl(40,80%,80%)", "hsl(80,30%,40%)"] //sand
         ];
         let rangeIndex = 0;
         const color = node => {
-          console.log(node);
           let range = ranges[rangeIndex];
           if (node.depth === 1) {
-            console.log(node.depth);
-            if (rangeIndex < ranges.length - 1) {
-              rangeIndex++;
-            } else {
-              rangeIndex = 0;
-            }
-
+            rangeIndex = rangeIndex < ranges.length - 1 ? rangeIndex + 1 : 0;
             range = ranges[rangeIndex];
           }
-          console.log("rangeIndex", rangeIndex);
-
-          /*
-          var Range = ["hsl(120,0%,90%)", "hsl(120,0%,50%)"];
-          if (belongsToBranch(node, "genetic")) {
-            Range = ["hsl(228,80%,80%)", "hsl(300,30%,40%)"];
-          }
-          if (belongsToBranch(node, "brain_metabolism")) {
-            Range = ["hsl(300,80%,80%)", "hsl(360,30%,40%)"];
-          }
-          if (belongsToBranch(node, "brain")) {
-            Range = ["hsl(152,80%,80%)", "hsl(228,30%,40%)"];
-          }
-          if (belongsToBranch(node, "demographics")) {
-            Range = ["hsl(80,80%,80%)", "hsl(120,30%,40%)"];
-          }
-          if (belongsToBranch(node, "clinical")) {
-            Range = ["hsl(120,80%,80%)", "hsl(150,30%,40%)"];
-          }*/
 
           return d3.scale
             .linear()
@@ -394,7 +352,7 @@ angular.module("chuvApp.models").directive("circlePacking", [
         $scope.$watch("groups", function(groups) {
           if (groups != null) {
             createCirclePackingDataStructure();
-            var api = updateCirclePacking();
+            api = updateCirclePacking();
             $scope.zoom = api.zoom;
           }
         });
@@ -406,7 +364,7 @@ angular.module("chuvApp.models").directive("circlePacking", [
         function resize_handler() {
           if ($scope.groups != null && element.width !== prev_dimension) {
             prev_dimension = element.width();
-
+            createCirclePackingDataStructure();
             api = updateCirclePacking();
             $scope.zoom = api.zoom;
           }
@@ -446,24 +404,6 @@ angular.module("chuvApp.models").directive("circlePacking", [
             datasetName => selectedDatasetsObj[datasetName] = {}
           );
           $scope.configuration["trainingDatasets"] = selectedDatasetsObj;
-
-          // TODO
-          // svg
-          //   .selectAll("circle")
-          //   .style("opacity", 1)
-          //   .filter(function(data) {
-          //     return (
-          //       !data.is_group &&
-          //       !$scope.selectedDatasets
-          //         .map(function(d) {
-          //           return data.datasets.includes(d);
-          //         })
-          //         .every(function(op) {
-          //           return op;
-          //         })
-          //     );
-          //   })
-          //   .style("opacity", 0.2);
         };
 
         $scope.$on("event:setToURLtrainingDatasets", function(event, data) {
