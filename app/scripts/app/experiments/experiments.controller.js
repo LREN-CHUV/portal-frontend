@@ -52,9 +52,13 @@ angular
 
       // Get all the ml methods
       MLUtils.list_ml_methods().then(function(data) {
-        $scope.ml_methods = data.filter(
-          f => ($scope.federationmode ? true : f.environment !== "Exareme")
-        );
+        $scope.ml_methods = data
+          .filter(
+            f => ($scope.federationmode ? true : f.environment !== "Exareme")
+          )
+          .filter(
+            f => f.code !== "histograms" && f.code !== "statisticsSummary"
+          );
       });
 
       // Check if the method can be applied to the model
@@ -129,12 +133,12 @@ angular
           method.available = available_method(method);
           method.nyi = [
             // TODO:
-            "statisticsSummary",
             "svm",
             "randomforest",
             "gpr",
             "ffneuralnet"
           ].includes(method.code);
+          method.experimental = method.maturity === "experimental";
         });
 
         // Open methods menu accordion
