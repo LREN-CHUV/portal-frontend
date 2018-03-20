@@ -6,7 +6,7 @@
         <ul class="list-group">
           <li ng-repeat="dataset in allDatasets" class="list-group-item" ng-class="{active: isDatasetSelected(dataset.code)}">
             <a href="javascript:;" ng-click="selectDataset(dataset.code)">
-              <span>{{dataset.code}}</span>
+              <span>{{dataset.label}}</span>
             </a>
           </li>
         </ul>
