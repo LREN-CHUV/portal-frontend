@@ -83,7 +83,7 @@
                   Save PNG
                 </a>
               </div>
-              <table class="table " export-csv="csv" export-to-png="png" separator=";">
+              <table class="table" export-csv="csv" export-to-png="png" separator=";">
                 <tr style="background-color: transparent ">
                   <th ng-repeat="column in tableHeader track by $index ">
                     <h6 style="text-transform: uppercase ">{{column}}</h6>
@@ -137,7 +137,7 @@
           </div>
         </uib-tab>
 
-        <uib-tab index="3" ng-if="$ctrl.isLocal" heading="Charts" ng-click="executeQuery()">
+        <uib-tab index="3" ng-if="isLocal" heading="Charts" ng-click="executeQuery()">
           <div class="panel-body scrollable">
             <div class="col-md-8">
               <div class="panel panel-charts">
