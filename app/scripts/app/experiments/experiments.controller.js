@@ -502,7 +502,7 @@ angular
                   result: {
                     data: {
                       data: $scope.experiment.result,
-                      type: "application/highcharts+json"
+                      type: "application/vnd.highcharts+jsonn"
                     }
                   },
                   algorithms: data.algorithms,
