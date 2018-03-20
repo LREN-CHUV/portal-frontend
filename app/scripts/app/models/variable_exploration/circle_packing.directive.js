@@ -127,6 +127,9 @@ angular.module("chuvApp.models").directive("circlePacking", [
           var nodes = d3.layout
             .pack()
             .padding(2)
+            .sort(function comparator(a, b) {
+              return b.value - a.value;
+            })
             .size([diameter - margin, diameter - margin])
             .value(function(d) {
               return 2 + d.label.length;
