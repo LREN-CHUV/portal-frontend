@@ -5,6 +5,7 @@ dist/
 node_modules/
 app/index.html
 app/tmp/
+app/bower_components/
 reports/
 screenshots/
 *.log
