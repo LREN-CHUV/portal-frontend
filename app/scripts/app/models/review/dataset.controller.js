@@ -213,7 +213,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
             "Variables",
             ...$scope.allDatasets
               .filter(d => selectedDatasets.includes(d.code))
-              .map(s => s.code)
+              .map(s => s.label)
           ];
           $scope.tableRows = formatTable(data);
           $scope.tableLoading = false;

@@ -52,7 +52,9 @@ angular
 
       // Get all the ml methods
       MLUtils.list_ml_methods().then(function(data) {
-        $scope.ml_methods = data;
+        $scope.ml_methods = data.filter(
+          f => ($scope.federationmode ? true : f.environment !== "Exareme")
+        );
       });
 
       // Check if the method can be applied to the model

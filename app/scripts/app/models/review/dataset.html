@@ -6,7 +6,7 @@
         <ul class="list-group">
           <li ng-repeat="dataset in allDatasets" class="list-group-item" ng-class="{active: isDatasetSelected(dataset.code)}">
             <a href="javascript:;" ng-click="selectDataset(dataset.code)">
-              <span>{{dataset.code}}</span>
+              <span>{{dataset.label}}</span>
             </a>
           </li>
         </ul>
@@ -137,7 +137,7 @@
           </div>
         </uib-tab>
 
-        <uib-tab index="3" ng-if="isLocal" heading="Charts" ng-click="executeQuery()">
+        <uib-tab index="3" ng-if="$ctrl.isLocal" heading="Charts" ng-click="executeQuery()">
           <div class="panel-body scrollable">
             <div class="col-md-8">
               <div class="panel panel-charts">
