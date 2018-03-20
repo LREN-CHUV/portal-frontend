@@ -74,6 +74,14 @@
                     </a>
                   </div>
                 </div>
+                <a title="Save PNG"
+                   ng-if="png.ready()"
+                   ng-click="png.hideLink()"
+                   ng-href="{{ png.link() }}"
+                   download="{{ png.name() }}"
+                   class="btn btn-default save-btn">
+                  Save PNG
+                </a>
               </div>
               <table class="table " export-csv="csv" export-to-png="png" separator=";">
                 <tr style="background-color: transparent ">
