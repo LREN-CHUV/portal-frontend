@@ -21,12 +21,12 @@ angular.module("chuvApp.models").component("availableMethods", {
         // Get all the ml methods
         Config.then(config => config.mode === "local")
           .then(isLocal => {
-            $scope.isLocal = isLocal;
+            this.isLocal = isLocal;
           })
           .then(() => MLUtils.list_ml_methods())
           .then(function(data) {
             // FIXME Quick and dirty fix!
-            if (!$scope.isLocal) {
+            if (!this.isLocal) {
               ml_all_methods = data.filter(function(m) {
                 return m.environment !== "Exareme";
               });
