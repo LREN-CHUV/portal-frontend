@@ -409,11 +409,14 @@ angular
       });
 
       $scope.change = function(selectedModel) {
-        $scope.config = selectedModel.config;
-        $scope.dataset = selectedModel.dataset;
-        $scope.query = selectedModel.query;
-        fetchDatasetsAndUpdate();
-        on_data_loaded();
+        Model.get({ slug: selectedModel.slug }, function(result) {
+          $scope.model = result;
+          $scope.dataset = result.dataset;
+          $scope.query = result.query;
+          $scope.config = result.config;
+          fetchDatasetsAndUpdate();
+          on_data_loaded();
+        });
       }
     }
   ])
