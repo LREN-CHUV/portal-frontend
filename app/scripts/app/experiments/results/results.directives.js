@@ -72,6 +72,7 @@ angular
             break;
 
           case "application/vnd.highcharts+json":
+          case "application/highcharts+json":
             templateUrl = "highchart-results.html";
             var formatFunc = function(stat) {
               return {
