@@ -8,16 +8,18 @@
               <div class="">
                 <label class="txt">{{'model.yours.title' | translate}}</label>
                 <input type="text" ng-model="chartConfig.title.text" ng-disabled="!isMine()" />
-                <div class="checkbox red" ng-if="isMine()">
-                  <label>
-                    <input type="checkbox" ng-model="model.valid" />
-                    {{'model.validate' | translate}}
-                  </label>
-                </div>
               </div>
             </div>
             <div class="buttons">
               <ul class="nav navbar-nav pull-right toolbar disabled">
+                <li ng-if="isMine()">
+                  <div class="checkbox" ng-if="isMine()">
+                    <label>
+                      <input type="checkbox" ng-model="model.valid" />
+                      {{'model.validate' | translate}}
+                    </label>
+                  </div>
+                </li>
                 <li ng-if="isMine()">
                   <button type="submit" ng-click="saveModel()" class="btn-round">
                     <span>
