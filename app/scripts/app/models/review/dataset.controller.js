@@ -99,29 +99,36 @@ angular.module("chuvApp.models").controller("DatasetController", [
         // Forge and start requests for variables in all datasets
         return $q
           .all(
-            $scope.allDatasets.map(d =>
-              Model.mining({
-                algorithm: {
-                  code: isLocal ? "statisticsSummary" : "statisticsSummary", //"WP_VARIABLE_SUMMARY", FIXME once Exareme format is ready
-                  name: isLocal ? "statisticsSummary" : "statisticsSummary", // "WP_VARIABLE_SUMMARY",
-                  parameters: [],
-                  validation: false
-                },
-                variables: $scope.query.variables,
-                grouping: $scope.query.groupings,
-                covariables: $scope.query.coVariables,
-                datasets: [{ code: d.code }],
-                filters: $scope.query.textQuery
-                  ? JSON.stringify($scope.query.filterQuery)
-                  : ""
-              })
+            $scope.allDatasets.map(
+              d =>
+                Model.mining({
+                  algorithm: {
+                    code: isLocal ? "statisticsSummary" : "statisticsSummary", //"WP_VARIABLE_SUMMARY", FIXME once Exareme format is ready
+                    name: isLocal ? "statisticsSummary" : "statisticsSummary", // "WP_VARIABLE_SUMMARY",
+                    parameters: [],
+                    validation: false
+                  },
+                  variables: $scope.query.variables,
+                  grouping: $scope.query.groupings,
+                  covariables: $scope.query.coVariables,
+                  datasets: [{ code: d.code }],
+                  filters: $scope.query.textQuery
+                    ? JSON.stringify($scope.query.filterQuery)
+                    : ""
+                }).catch(e => {
+                  console.log(e);
+                  return e;
+                }) // bypass catch
             )
           )
           .then(response => {
-            const datasets = response.map(r => r.data.data).map((r, i) => ({
-              data: r.data,
-              name: $scope.allDatasets[i].code
-            }));
+            const datasets = response
+              .filter(r => r && r.data && r.data.data)
+              .map(r => r.data.data)
+              .map((r, i) => ({
+                data: r.data,
+                name: $scope.allDatasets[i].code
+              }));
             sessionStorage.setItem(sessionStorageKey, JSON.stringify(datasets));
 
             return datasets;
@@ -131,9 +138,9 @@ angular.module("chuvApp.models").controller("DatasetController", [
     // Charts ressources
 
     const filterBySelectedDataset = datasets =>
-      datasets.filter(d => selectedDatasets.includes(d.name));
+      $q.resolve(datasets.filter(d => selectedDatasets.includes(d.name)));
 
-    const getStatistics = () => {
+    const getStatistics = data => {
       if (!selectedDatasets.length) {
         $scope.tableError = "Please, select at least one dataset.";
         $scope.tableLoading = false;
@@ -203,8 +210,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
       };
 
       let rows;
-      miningRequest()
-        .then(filterBySelectedDataset)
+      filterBySelectedDataset(data)
         .then(filterByGroupAll)
         .then(orderByVariable)
         .then(addDetailData)
@@ -219,9 +225,10 @@ angular.module("chuvApp.models").controller("DatasetController", [
           $scope.tableLoading = false;
           $scope.tableError = null;
         })
-        .catch(e => {
-          const { statusText } = e;
-          $scope.tableError = statusText;
+        .catch(err => {
+          const statusText = err && err.statusText;
+          const message = err && err.data && err.data.error;
+          $scope.tableError = `${statusText} : ${message}`;
           $scope.tableHeader = null;
           $scope.tableRows = null;
           $scope.tableLoading = false;
@@ -301,7 +308,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
         : null;
     };
 
-    const getBoxplot = () => {
+    const getBoxplot = data => {
       if (!selectedDatasets.length) {
         $scope.boxplotError = "Please, select at least one dataset.";
         $scope.boxplotLoading = false;
@@ -346,8 +353,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
           }))
           .filter(d => d.series.length);
 
-      miningRequest()
-        .then(filterBySelectedDataset)
+      filterBySelectedDataset(data)
         .then(filterByVariable)
         .then(shapeData)
         .then(data => {
@@ -383,7 +389,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
           $scope.boxplotLoading = false;
         })
         .catch(e => {
-          $scope.boxplotLoading = false;
+          $scope.boxdataplotLoading = false;
           $scope.boxplotError =
             "There was an error while processing. Please try again later.";
           $scope.boxplotData = null;
@@ -427,8 +433,11 @@ angular.module("chuvApp.models").controller("DatasetController", [
               return;
             }
 
-            getStatistics();
-            getBoxplot();
+            miningRequest().then(data => {
+              getStatistics(data);
+              getBoxplot(data);
+            });
+
             // $scope.getHistogram();
 
             // retrieve filterQuery as sql text, hack queryBuilder
