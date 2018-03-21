@@ -366,15 +366,22 @@
     &>div {
       border: 1px solid @gray-light;
       .datasets-types {
-        label {
-          margin-bottom: 5px;
-        }
-        input:checked + label {
-          color: @brand-primary;
-        }
-        &:last-of-type {
+        .dataset-wrap {
+          display: flex;
+          align-items: center;
+          margin-bottom: 4px;
           label {
-            margin-bottom: 2px;
+            margin-bottom: 0;
+          }
+          .training,
+          .validation {
+            margin-top: 0;
+          }
+          input:checked + label {
+            color: @brand-primary;
+          }
+          &:first-of-type {
+            margin-top: 4px;
           }
         }
       }
@@ -389,5 +396,12 @@
 .chosen-model.ng-empty {
   option:first-of-type {
     display: none;
+  }
+}
+
+.variable-list {
+  p {
+    font-size: 14px;
+    color: @brand-primary;
   }
 }

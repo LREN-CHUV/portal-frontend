@@ -399,8 +399,8 @@ angular
       $scope.show_training_validation = function(method) {
         $scope.shared.chosen_method = method;
         ( method.type == "predictive_model" ) ?
-          $scope.training_validation = true :
-          $scope.training_validation = false;
+          $scope.isValidationShow = true :
+          $scope.isValidationShow = false;
       }
 
       $scope.modelsList = {};
