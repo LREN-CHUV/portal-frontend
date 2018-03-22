@@ -108,7 +108,6 @@ angular.module("chuvApp.models").controller("ReviewController", [
     $scope.saveModel = function() {
       var deferred = $q.defer();
 
-      $scope.isSavingModel = true;
       if (!($scope.chartConfig.title && $scope.chartConfig.title.text)) {
         notifications.warning("You need a name for your model!");
         return;
