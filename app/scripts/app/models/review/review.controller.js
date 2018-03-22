@@ -21,6 +21,7 @@ angular.module("chuvApp.models").controller("ReviewController", [
   "Variable",
   "Group",
   "notifications",
+  "$q",
   function(
     $scope,
     $translatePartialLoader,
@@ -37,7 +38,8 @@ angular.module("chuvApp.models").controller("ReviewController", [
     $filter,
     Variable,
     Group,
-    notifications
+    notifications,
+    $q
   ) {
     var filterFilter = $filter("filter");
 
@@ -104,6 +106,9 @@ angular.module("chuvApp.models").controller("ReviewController", [
      * save or update model
      */
     $scope.saveModel = function() {
+      var deferred = $q.defer();
+
+      $scope.isSavingModel = true;
       if (!($scope.chartConfig.title && $scope.chartConfig.title.text)) {
         notifications.warning("You need a name for your model!");
         return;
@@ -127,11 +132,13 @@ angular.module("chuvApp.models").controller("ReviewController", [
           function(model) {
             $state.go("models-edit", { slug: model.slug });
             notifications.success("The model was successfully saved!");
+            deferred.resolve(true);
           },
           function() {
             notifications.error(
               "An error occurred when trying to save the model!"
             );
+            deferred.resolve(true);
           }
         );
       } else {
@@ -150,14 +157,17 @@ angular.module("chuvApp.models").controller("ReviewController", [
           function(model) {
             $state.go("models-edit", { slug: model.slug });
             notifications.success("The model was successfully updated!");
+            deferred.resolve(true);
           },
           function() {
             notifications.error(
               "An error occurred when trying to update the model!"
             );
+            deferred.resolve(true);
           }
         );
       }
+      return deferred.promise;
     };
 
     /**
