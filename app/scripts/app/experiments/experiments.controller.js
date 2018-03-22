@@ -406,6 +406,7 @@ angular
       $scope.modelsList = {};
       Model.getList({ own: true }).then(function(result) {
         $scope.modelsList = result.data;
+        $scope.selectedModel = $scope.modelsList[$scope.modelsList.length - 1];
       });
 
       $scope.change = function(selectedModel) {
