@@ -15,7 +15,7 @@
                         <a
                           ng-click="setDataset(dataset.code)"
                           ng-class="{active: isDatasetSelected(dataset.code)}">
-                          {{dataset.code}}
+                          {{dataset.label}}
                         </a>
                         &nbsp;
                       </span>
@@ -36,8 +36,11 @@
                     <a href="" ng-click="search.group = group.code">{{group.label}}</a>&nbsp;&nbsp;
                   </span>
                   <br />
-                  <input placeholder="search" uib-typeahead="variable as (variable.label || '') for variable in allVariables | filter:$viewValue | limitTo:8"
-                    ng-model="search.value">
+                  <input
+                    placeholder="search"
+                    uib-typeahead="variable as (variable.label || '') for variable in allVariables | filter:{'label':$viewValue} | limitTo:8"
+                    ng-model="search.value"
+                  >
                   <span ng-if="search_history.length">History: </span>
                   <a ng-repeat="variable in search_history" ng-bind="variable.label" class="btn btn-sm btn-sm btn-default" style="margin-top: -3px"
                     ng-click="search.value = variable">

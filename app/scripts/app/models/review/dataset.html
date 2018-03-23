@@ -6,7 +6,7 @@
         <ul class="list-group">
           <li ng-repeat="dataset in allDatasets" class="list-group-item" ng-class="{active: isDatasetSelected(dataset.code)}">
             <a href="javascript:;" ng-click="selectDataset(dataset.code)">
-              <span>{{dataset.code}}</span>
+              <span>{{dataset.label}}</span>
             </a>
           </li>
         </ul>
@@ -59,7 +59,7 @@
             </div>
             <div ng-if="tableError">
               There was an error perfoming the method
-              <pretty-json data="error"></pretty-json>
+              <pretty-json data="tableError"></pretty-json>
             </div>
             <div ng-if="tableHeader" style="background-color: #d5e5fd; padding: 0.5em" class="dt-wrapper">
               <div class="export-pannel">
@@ -74,8 +74,16 @@
                     </a>
                   </div>
                 </div>
+                <a title="Save PNG"
+                   ng-if="png.ready()"
+                   ng-click="png.hideLink()"
+                   ng-href="{{ png.link() }}"
+                   download="{{ png.name() }}"
+                   class="btn btn-default save-btn">
+                  Save PNG
+                </a>
               </div>
-              <table class="table " export-csv="csv" export-to-png="png" separator=";">
+              <table class="table" export-csv="csv" export-to-png="png" separator=";">
                 <tr style="background-color: transparent ">
                   <th ng-repeat="column in tableHeader track by $index ">
                     <h6 style="text-transform: uppercase ">{{column}}</h6>
@@ -86,10 +94,10 @@
                   <td ng-if="!row.header">{{row.variable.label}}</td>
                   <td ng-if="!row.header" ng-repeat="column in row.data track by $index" class="sub-row">
                     <span ng-if="column.mean">
-                      {{column.mean | number: 2}} ({{column.max | number: 2}}-{{column.min | number: 2}})
+                      {{column.mean | number: 2}} ({{column.max | number: 2}}-{{column.min | number: 2}}), std: {{column.std | number: 2}}
                     </span>
                     <span ng-if="!column.mean">
-                      {{column.count}}
+                      {{column.count}}  {{column.null_count ? "(Null count: " + column.null_count + ")" : ""}}
                     </span>
                   </td>
                 </tr>

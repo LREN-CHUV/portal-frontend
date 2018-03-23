@@ -8,6 +8,7 @@
       <span ng-if="method.available"
             ng-repeat="method in avmethods.ml_methods | filter:{type:'predictive_model'}  | orderBy:'-label'">
           <span class="label label-default" ng-if="method.nyi">Coming soon</span>
+          <span class="label label-default" ng-if="method.experimental">Experimental</span>
           <button class="btn" ng-disabled="method.available" ng-bind="method.label">
           </button>
       </span>
@@ -15,6 +16,7 @@
       <span ng-if="method.available"
             ng-repeat="method in avmethods.ml_methods | filter:{type:'features_extraction'}  | orderBy:'-label'">
           <span class="label label-default" ng-if="method.nyi">Coming soon</span>
+          <span class="label label-default" ng-if="method.experimental">Experimental</span>
           <button class="btn" ng-disabled="method.available" ng-bind="method.label">
           </button>
       </span>
@@ -22,6 +24,7 @@
       <span ng-if="method.available"
             ng-repeat="method in avmethods.ml_methods | filter:{type:'statistics'}  | orderBy:'-label'">
           <span class="label label-default" ng-if="method.nyi">Coming soon</span>
+          <span class="label label-default" ng-if="method.experimental">Experimental</span>
           <button class="btn" ng-disabled="method.available" ng-bind="method.label">
           </button>
       </span>

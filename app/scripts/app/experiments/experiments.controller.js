@@ -52,7 +52,13 @@ angular
 
       // Get all the ml methods
       MLUtils.list_ml_methods().then(function(data) {
-        $scope.ml_methods = data;
+        $scope.ml_methods = data
+          .filter(
+            f => ($scope.federationmode ? true : f.environment !== "Exareme")
+          )
+          .filter(
+            f => f.code !== "histograms" && f.code !== "statisticsSummary"
+          );
       });
 
       // Check if the method can be applied to the model
@@ -127,12 +133,12 @@ angular
           method.available = available_method(method);
           method.nyi = [
             // TODO:
-            "statisticsSummary",
             "svm",
             "randomforest",
             "gpr",
             "ffneuralnet"
           ].includes(method.code);
+          method.experimental = method.maturity === "experimental";
         });
 
         // Open methods menu accordion
@@ -398,10 +404,10 @@ angular
       // Display "Training and validation" only if predictive_model method selected
       $scope.show_training_validation = function(method) {
         $scope.shared.chosen_method = method;
-        ( method.type == "predictive_model" ) ?
-          $scope.isValidationShow = true :
-          $scope.isValidationShow = false;
-      }
+        method.type == "predictive_model"
+          ? ($scope.isValidationShow = true)
+          : ($scope.isValidationShow = false);
+      };
 
       $scope.modelsList = {};
       Model.getList({ own: true }).then(function(result) {
@@ -418,7 +424,7 @@ angular
           fetchDatasetsAndUpdate();
           on_data_loaded();
         });
-      }
+      };
     }
   ])
   .controller("ExperimentDetailsController", [
@@ -525,7 +531,7 @@ angular
                   result: {
                     data: {
                       data: $scope.experiment.result,
-                      type: "application/highcharts+json"
+                      type: "application/vnd.highcharts+jsonn"
                     }
                   },
                   algorithms: data.algorithms,

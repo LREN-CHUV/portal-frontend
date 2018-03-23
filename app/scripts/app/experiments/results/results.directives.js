@@ -15,7 +15,7 @@ angular
     function($compile, $http) {
       var linker = function($scope, element) {
         var data = $scope.data;
-        var func = data && data.function;
+        var algorithm = data && data.algorithm;
         var type = data && data.type;
 
         // Linear regression & ANOVA utility functions
@@ -48,7 +48,7 @@ angular
         var templateUrl = "default-results.html";
         switch (type) {
           case "application/json":
-            switch (func) {
+            switch (algorithm) {
               case "python-linear-regression":
                 templateUrl = "linear-regression-results.html";
                 break;
@@ -71,6 +71,7 @@ angular
             }
             break;
 
+          case "application/vnd.highcharts+json":
           case "application/highcharts+json":
             templateUrl = "highchart-results.html";
             var formatFunc = function(stat) {

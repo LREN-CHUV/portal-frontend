@@ -61,7 +61,7 @@
                   <p ng-repeat="method in ml_methods | filter:{type:'features_extraction'}  | orderBy:'-label'">
                     <button class="btn btn-primary-alt col-xs-12" ng-disabled="!method.available" ng-click="show_training_validation(method)" ng-bind="method.label">
                     </button>
-                    <br>Configure The Method's
+                    <br>
                     <br>
                   </p>
                 </div>
@@ -187,7 +187,7 @@
 
               </uib-accordion>
             </div>
-          </form>
+
 
 
           <div class="row" ng-if="!shared.chosen_method">
