@@ -115,16 +115,12 @@ angular.module("chuvApp.models").controller("DatasetController", [
                   filters: $scope.query.textQuery
                     ? JSON.stringify($scope.query.filterQuery)
                     : ""
-                }).catch(e => {
-                  console.log(e);
-                  return e;
-                }) // bypass catch
+                }).catch(e => e) // bypass catch
             )
           )
           .then(response => {
             const datasets = response
-              .filter(r => r && r.data && r.data.data)
-              .map(r => r.data.data)
+              .map(r => (r && r.data && r.data.data) || { data: [] }) // return a "placeholder" for the non catched dataset error
               .map((r, i) => ({
                 data: r.data,
                 name: $scope.allDatasets[i].code
@@ -433,10 +429,12 @@ angular.module("chuvApp.models").controller("DatasetController", [
               return;
             }
 
-            miningRequest().then(data => {
-              getStatistics(data);
-              getBoxplot(data);
-            });
+            miningRequest()
+              .then(data => {
+                getStatistics(data);
+                getBoxplot(data);
+              })
+              .catch(console.log);
 
             // $scope.getHistogram();
 
