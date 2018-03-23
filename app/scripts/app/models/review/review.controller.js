@@ -183,8 +183,17 @@ angular.module("chuvApp.models").controller("ReviewController", [
       return _.find(list, findFunction) !== undefined;
     };
 
-    var getFilterVariables = () =>
-      $scope.query.filters
+    var getFilterVariables = () => {
+      if (typeof $scope.query.filters == "string") {
+        if ($scope.query.filters.length == 0) {
+          $scope.query.filters = [];
+        } else {
+          var filtersString = $scope.query.filters;
+          $scope.query.filters = [{"code": filtersString}];
+        }
+      }
+
+      return $scope.query.filters
         .concat($scope.query.variables)
         .concat($scope.query.coVariables)
         .concat($scope.query.groupings)
@@ -220,6 +229,7 @@ angular.module("chuvApp.models").controller("ReviewController", [
 
           return var_config;
         });
+    }
 
     $scope.getFilterVariables = () => getFilterVariables();
 

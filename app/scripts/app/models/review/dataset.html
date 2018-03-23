@@ -59,7 +59,7 @@
             </div>
             <div ng-if="tableError">
               There was an error perfoming the method
-              <pretty-json data="error"></pretty-json>
+              <pretty-json data="tableError"></pretty-json>
             </div>
             <div ng-if="tableHeader" style="background-color: #d5e5fd; padding: 0.5em" class="dt-wrapper">
               <div class="export-pannel">
@@ -94,10 +94,10 @@
                   <td ng-if="!row.header">{{row.variable.label}}</td>
                   <td ng-if="!row.header" ng-repeat="column in row.data track by $index" class="sub-row">
                     <span ng-if="column.mean">
-                      {{column.mean | number: 2}} ({{column.max | number: 2}}-{{column.min | number: 2}})
+                      {{column.mean | number: 2}} ({{column.max | number: 2}}-{{column.min | number: 2}}), std: {{column.std | number: 2}}
                     </span>
                     <span ng-if="!column.mean">
-                      {{column.count}}
+                      {{column.count}}  {{column.null_count ? "(Null count: " + column.null_count + ")" : ""}}
                     </span>
                   </td>
                 </tr>

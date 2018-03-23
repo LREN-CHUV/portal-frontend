@@ -134,7 +134,7 @@
                   </div>
                 </div>
               </uib-tab>
-              <uib-tab ng-repeat="method in experiment.result" heading="{{ experiment.name }}">
+              <uib-tab ng-repeat="method in experiment.result" heading="{{ method.code }}">
                 <div class="panel">
                   <div class="panel-body">
                     <method-result data="method"></method-result>

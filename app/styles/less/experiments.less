@@ -97,6 +97,7 @@
         border-width: 0 0 1px 0;
         border-radius: 4px 4px 0 0;
         background-color: @bg-color;
+        text-transform: capitalize;
         &:hover {
           border-color: @nav-tabs-link-hover-border-color @nav-tabs-link-hover-border-color @hbp-tab-border;
         }
@@ -343,14 +344,65 @@
 .datasets-types{
   .code{
     display: inline-block;
-    width: 100px;
+    width: 190px;
   }
   .training{
-    width: 50px;
+    width: 60px;
     text-align: center;
   }
   .validation{
-    width: 100px;
+    width: 60px;
     text-align: center;
+  }
+}
+
+.training-and-validation {
+  display: flex;
+  flex-wrap: wrap;
+  &>div {
+    margin-right: 1em;
+    &:last-of-type {
+      margin-right: 0;
+    }
+    &>div {
+      border: 1px solid @gray-light;
+      .datasets-types {
+        .dataset-wrap {
+          display: flex;
+          align-items: center;
+          margin-bottom: 4px;
+          label {
+            margin-bottom: 0;
+          }
+          .training,
+          .validation {
+            margin-top: 0;
+          }
+          input:checked + label {
+            color: @brand-primary;
+          }
+          &:first-of-type {
+            margin-top: 4px;
+          }
+        }
+      }
+    }
+  }
+}
+
+.chosen-method {
+  color: @brand-primary;
+}
+
+.chosen-model.ng-empty {
+  option:first-of-type {
+    display: none;
+  }
+}
+
+.variable-list {
+  p {
+    font-size: 14px;
+    font-weight: bold;
   }
 }
