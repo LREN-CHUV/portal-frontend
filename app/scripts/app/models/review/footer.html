@@ -21,7 +21,7 @@
                   </div>
                 </li>
                 <li ng-if="isMine()">
-                  <button type="submit" ng-click="saveModel()" class="btn-round">
+                  <button type="submit" ng-click="isSaving = saveModel()" ng-disabled="(isSaving.$$state.status === 0)" class="btn-round">
                     <span>
                       <span>{{'common.save' | translate }}</span>
                       <i class="ti ti-arrow-down"></i>
