@@ -143,18 +143,18 @@
                     Training and validation
                   </uib-accordion-heading>
 
-                  <div class="training-and-validation" ng-if="training_validation">
+                  <div class="training-and-validation" >
                     <div>
                       <label class="training">Training</label>
                       <div>
                         <div ng-repeat="dataset in datasets" class="datasets-types">
-                          <span ng-init="shared.experiment_datasets.training[dataset.code] = false">
+                          <span class="dataset-wrap">
                             <input
                               type="checkbox"
                               id="{{dataset.code}}T"
                               class="training"
                               name="{{dataset.code}}"
-                              ng-click="shared.experiment_datasets.validation[dataset.code] = !shared.experiment_datasets.training[dataset.code]"
+                              ng-model="shared.experiment_datasets.training[dataset.code]"
                             />
                             <label for="{{dataset.code}}T">
                               <span class="code">{{dataset.code}}</span>
@@ -163,11 +163,11 @@
                         </div>
                       </div>
                     </div>
-                    <div>
+                    <div ng-if="isValidationShow">
                       <label class="validation">Validation</label>
                       <div>
                         <div ng-repeat="dataset in datasets" class="datasets-types">
-                          <span ng-init="shared.experiment_datasets.validation[dataset.code] = false">
+                          <span ng-init="shared.experiment_datasets.validation[dataset.code] = false" class="dataset-wrap">
                             <input
                               type="checkbox"
                               id="{{dataset.code}}V"
@@ -224,30 +224,20 @@
         <div class="col-xs-3">
           <uib-accordion close-others="false">
 
-            <div uib-accordion-group is-open="help_is_open" ng-show="shared.chosen_method">
-              <uib-accordion-heading>
-                {{shared.chosen_method.label}} method
-              </uib-accordion-heading>
-              <div ng-if="!shared.chosen_method.description">
-                There is no description for this method
-              </div>
-              <div ng-if="shared.chosen_method.description" btf-markdown="shared.chosen_method.description"></div>
-            </div>
-
-          </uib-accordion>
-
-          <uib-accordion close-others="false">
-
             <div uib-accordion-group is-open="help_is_open">
               <uib-accordion-heading>
                 Model
               </uib-accordion-heading>
 
               <div>
-                <div class="panel-body variable-list scrollable">
+                <div class="variable-list scrollable">
 
-                  <h5 ng-if="modelsList">My new experiment</h5>
-                  <select ng-model="selectedModel" ng-change="change(selectedModel)" ng-options="chosenModel.title for chosenModel in modelsList" class="form-control chosen-model"></select>
+                  <h5 ng-if="modelsList">Select model</h5>
+                  <select ng-model="selectedModel"
+                          ng-change="change(selectedModel)"
+                          ng-options="chosenModel.title for chosenModel in modelsList"
+                          class="form-control chosen-model">
+                  </select>
 
                   <h5 ng-if="query.variables.length">Variable</h5>
                   <p ng-repeat="variable in query.variables">
@@ -276,6 +266,20 @@
 
                 </div>
               </div>
+            </div>
+
+          </uib-accordion>
+
+          <uib-accordion close-others="false">
+
+            <div uib-accordion-group is-open="help_is_open" ng-show="shared.chosen_method">
+              <uib-accordion-heading>
+                {{shared.chosen_method.label}} method
+              </uib-accordion-heading>
+              <div ng-if="!shared.chosen_method.description">
+                There is no description for this method
+              </div>
+              <div ng-if="shared.chosen_method.description" btf-markdown="shared.chosen_method.description"></div>
             </div>
 
           </uib-accordion>

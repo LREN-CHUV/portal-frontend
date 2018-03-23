@@ -399,21 +399,25 @@ angular
       $scope.show_training_validation = function(method) {
         $scope.shared.chosen_method = method;
         ( method.type == "predictive_model" ) ?
-          $scope.training_validation = true :
-          $scope.training_validation = false;
+          $scope.isValidationShow = true :
+          $scope.isValidationShow = false;
       }
 
       $scope.modelsList = {};
       Model.getList({ own: true }).then(function(result) {
         $scope.modelsList = result.data;
+        $scope.selectedModel = $scope.modelsList[$scope.modelsList.length - 1];
       });
 
       $scope.change = function(selectedModel) {
-        $scope.config = selectedModel.config;
-        $scope.dataset = selectedModel.dataset;
-        $scope.query = selectedModel.query;
-        fetchDatasetsAndUpdate();
-        on_data_loaded();
+        Model.get({ slug: selectedModel.slug }, function(result) {
+          $scope.model = result;
+          $scope.dataset = result.dataset;
+          $scope.query = result.query;
+          $scope.config = result.config;
+          fetchDatasetsAndUpdate();
+          on_data_loaded();
+        });
       }
     }
   ])
@@ -513,21 +517,14 @@ angular
               $scope.experiment = data;
 
               // FIXME: Parse the results from Exareme JS Object
-              // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/eval
-              if (
-                !_.isUndefined(data.algorithms[0].code) &&
-                data.algorithms[0].code === "K_MEANS"
-              ) {
-                if (data.result && !data.result.length) {
-                  return;
-                }
+              const ex = $scope.experiment.result;
+              if (ex && ex.length && ex[0].result) {
+                $scope.experiment.result = ex[0].result;
 
-                let foo;
-                const result = eval("foo=" + data.result[0].res);
                 $scope.experiment = Object.assign({}, $scope.experiment, {
                   result: {
                     data: {
-                      data: result,
+                      data: $scope.experiment.result,
                       type: "application/highcharts+json"
                     }
                   },
@@ -538,6 +535,7 @@ angular
 
                 $scope.loading = false;
                 MLUtils.mark_as_read($scope.experiment);
+
                 return;
               }
 

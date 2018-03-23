@@ -114,7 +114,7 @@ angular.module("chuvApp.models").controller("ReviewController", [
       $scope.model.dataset = $scope.dataset;
       $scope.model.query = angular.copy($scope.query); // will be modified, therefore we do a deep copy
       if ($scope.query.filterQuery) {
-        $scope.model.query.filters = $scope.query.filterQuery;
+        $scope.model.query.filters = JSON.stringify($scope.query.filterQuery);
       } else {
         delete $scope.model.query.filters;
       }

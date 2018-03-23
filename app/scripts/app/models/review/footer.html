@@ -1,10 +1,10 @@
 <div ng-controller="ModelFooterController">
-  <section class="toolbar-footer section-save-graph">
+  <section class="toolbar-footer section-save-graph" style="margin-top: 25px">
     <div class="toolbar-container">
       <form>
         <div class="container-fluid">
           <div class="row">
-            <div class="col-md-8">
+            <div class="col-md-7">
               <div class="form icheck-minimal validate-model-field">
                 <label class="txt">{{'model.yours.title' | translate}}</label>
                 <input type="text" ng-model="chartConfig.title.text" ng-disabled="!isMine()" />
@@ -16,11 +16,8 @@
                 </div>
               </div>
             </div>
-            <div class="col-md-4">
-
+            <div class="col-md-5">
               <ul class="nav navbar-nav pull-right toolbar disabled">
-                <a ng-click="open_experiment()" class="btn btn-primary">Run Machine Learning Experiment</a>
-
                 <li ng-if="isMine()">
                   <button type="submit" ng-click="saveModel()" class="btn-round">
                     <span>
@@ -32,6 +29,7 @@
                 <li class="toolbar-icon-bg hidden-xs">
                   <a href="" ng-click="copyModel()" ng-if="!isNew()"><span class="icon-bg"><i class="ti ti-files"></i></span></a>
                 </li>
+                <button ng-click="open_experiment()" class="btn btn-primary" style="height: 44px;">Run Machine Learning Experiment</button>
               </ul>
             </div>
           </div>
