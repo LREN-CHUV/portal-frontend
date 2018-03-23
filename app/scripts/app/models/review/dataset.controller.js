@@ -31,16 +31,15 @@ angular.module("chuvApp.models").controller("DatasetController", [
     $state,
     $q
   ) {
-    $scope.tableLoading = true;
+    $scope.loading = true;
     $scope.tableError = undefined;
     $scope.tableHeader = undefined;
     $scope.tableRows = undefined;
 
-    $scope.histogramLoading = true;
+    $scope.loading = true;
     $scope.histogramError = undefined;
     $scope.histogramData = undefined;
 
-    $scope.boxplotLoading = true;
     $scope.boxplotError = undefined;
     $scope.boxplotData = undefined;
 
@@ -75,7 +74,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
     const miningRequest = () =>
       Config.then(config => config.mode === "local").then(isLocal => {
         $scope.isLocal = isLocal;
-
+        $scope.loading = true;
         // Forge session cache key with filter & selected variables
         const sessionStorageKey =
           ($scope.query.filterQuery
@@ -115,16 +114,12 @@ angular.module("chuvApp.models").controller("DatasetController", [
                   filters: $scope.query.textQuery
                     ? JSON.stringify($scope.query.filterQuery)
                     : ""
-                }).catch(e => {
-                  console.log(e);
-                  return e;
-                }) // bypass catch
+                }).catch(e => e) // bypass catch
             )
           )
           .then(response => {
             const datasets = response
-              .filter(r => r && r.data && r.data.data)
-              .map(r => r.data.data)
+              .map(r => (r && r.data && r.data.data) || { data: [] }) // return a "placeholder" for the non catched dataset error
               .map((r, i) => ({
                 data: r.data,
                 name: $scope.allDatasets[i].code
@@ -143,7 +138,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
     const getStatistics = data => {
       if (!selectedDatasets.length) {
         $scope.tableError = "Please, select at least one dataset.";
-        $scope.tableLoading = false;
+        $scope.loading = false;
         $scope.tableHeader = null;
         $scope.tableRows = null;
 
@@ -151,7 +146,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
       }
 
       $scope.tableError = null;
-      $scope.tableLoading = true;
+      $scope.loading = true;
 
       const filterByGroupAll = datasets =>
         datasets.map(dataset =>
@@ -222,7 +217,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
               .map(s => s.label)
           ];
           $scope.tableRows = formatTable(data);
-          $scope.tableLoading = false;
+          $scope.loading = false;
           $scope.tableError = null;
         })
         .catch(err => {
@@ -231,7 +226,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
           $scope.tableError = `${statusText} : ${message}`;
           $scope.tableHeader = null;
           $scope.tableRows = null;
-          $scope.tableLoading = false;
+          $scope.loading = false;
           console.log(e);
         });
     };
@@ -296,10 +291,10 @@ angular.module("chuvApp.models").controller("DatasetController", [
                   title: stat.title
                 };
               });
-              $scope.histogramLoading = false;
+              $scope.loading = false;
             },
             e => {
-              $scope.histogramLoading = false;
+              $scope.loading = false;
               const { statusText } = e;
               $scope.histogramError = statusText;
               console.log(e);
@@ -311,14 +306,13 @@ angular.module("chuvApp.models").controller("DatasetController", [
     const getBoxplot = data => {
       if (!selectedDatasets.length) {
         $scope.boxplotError = "Please, select at least one dataset.";
-        $scope.boxplotLoading = false;
+        $scope.loading = false;
         $scope.boxplotData = null;
 
         return;
       }
 
       $scope.boxplotError = null;
-      $scope.boxplotLoading = true;
 
       const filterByVariable = datasets => ({
         variables: [
@@ -358,7 +352,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
         .then(shapeData)
         .then(data => {
           if (!data || !data.length) {
-            $scope.boxplotLoading = false;
+            $scope.loading = false;
             $scope.boxplotError = "Please select other variables to plot";
             $scope.boxplotData = null;
 
@@ -386,7 +380,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
           }));
 
           $scope.boxplotError = null;
-          $scope.boxplotLoading = false;
+          $scope.loading = false;
         })
         .catch(e => {
           $scope.boxdataplotLoading = false;
@@ -433,10 +427,12 @@ angular.module("chuvApp.models").controller("DatasetController", [
               return;
             }
 
-            miningRequest().then(data => {
-              getStatistics(data);
-              getBoxplot(data);
-            });
+            miningRequest()
+              .then(data => {
+                getStatistics(data);
+                getBoxplot(data);
+              })
+              .catch(e => e);
 
             // $scope.getHistogram();
 
