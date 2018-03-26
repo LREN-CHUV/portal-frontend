@@ -48,6 +48,9 @@ var appScripts = [
   "./" +
     appConfig.app +
     "/scripts/app/models/variable_exploration/varcounter.component.js",
+  "./" +
+    appConfig.app +
+    "/scripts/app/models/variable_exploration/variable.component.js",
   "./" + appConfig.app + "/scripts/app/models/review/review.controller.js",
   "./" + appConfig.app + "/scripts/app/models/review/chart.controller.js",
   "./" +
