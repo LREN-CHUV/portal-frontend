@@ -47,14 +47,25 @@ angular
 
         var templateUrl = "default-results.html";
         switch (type) {
-          case "application/json":
+          case "regression":
+            templateUrl = "default-regression-results.html";
+            break;
+          case "application/pfa+json":
             switch (algorithm) {
-              case "python-linear-regression":
-                templateUrl = "linear-regression-results.html";
+              case "java-rapidminer-knn":
+                templateUrl = "default-classification-results.html";
                 break;
 
               case "python-anova":
                 templateUrl = "anova-results.html";
+                break;
+            }
+            break;
+
+          case "application/json":
+            switch (algorithm) {
+              case "python-linear-regression":
+                templateUrl = "linear-regression-results.html";
                 break;
 
               case "binary_classification":
