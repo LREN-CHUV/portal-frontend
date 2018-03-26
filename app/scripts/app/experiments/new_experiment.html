@@ -157,7 +157,7 @@
                               ng-model="shared.experiment_datasets.training[dataset.code]"
                             />
                             <label for="{{dataset.code}}T">
-                              <span class="code">{{dataset.code}}</span>
+                              <span class="code">{{dataset.label}}</span>
                             </label>
                           </span>
                         </div>
@@ -176,7 +176,7 @@
                               ng-click="shared.experiment_datasets.validation[dataset.code] = !shared.experiment_datasets.validation[dataset.code]"
                             />
                             <label for="{{dataset.code}}V">
-                              <span class="code">{{dataset.code}}</span>
+                              <span class="code">{{dataset.label}}</span>
                             </label>
                           </span>
                         </div>
