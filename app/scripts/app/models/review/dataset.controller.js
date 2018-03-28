@@ -399,7 +399,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
 
     $scope.$watch(
       "uiSelectedDatasets",
-      e => {
+      () => {
         if (!_.isEmpty($scope.uiSelectedDatasets)) {
           selectedDatasets = Object.keys($scope.uiSelectedDatasets).filter(
             s => $scope.uiSelectedDatasets[s]
