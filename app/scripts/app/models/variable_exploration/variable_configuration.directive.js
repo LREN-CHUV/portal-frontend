@@ -37,11 +37,11 @@ angular.module("chuvApp.models").directive("variableConfiguration", function() {
             focusedVariable &&
             focusedVariable.code in $scope.configuration[type];
 
-          return (
-            [["+", "-"], ["+ all", "- all"]][+is_group][+is_used_as] +
-            " as " +
-            type
-          );
+          var out = is_used_as ? "-" : "+";
+          if (is_group) {
+            out = out + " all";
+          }
+          return out + " as " + type;
         };
       }
     ]
