@@ -16,7 +16,7 @@
             <th>T-value</th>
             <th>P-value</th>
           </tr>
-          <tr ng-repeat="(name, value) in data.data">
+          <tr ng-repeat="(name, value) in data.raw.data">
             <td ng-bind="variable_title(name)"></td>
             <td ng-bind="value.coef | number"></td>
             <td ng-bind="value.std_err | number"></td>

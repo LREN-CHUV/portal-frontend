@@ -74,7 +74,13 @@
     }
 }
 
-.panel { margin: 5px 0 }
+.panel { margin: 0;
+    border: 0 !important;
+
+    .panel-body {
+        padding: 10px;
+    }
+}
 
 li.list-group-item {
 
@@ -106,10 +112,6 @@ li.list-group-item {
 
     .white-row {
         background-color: white;
-    }
-
-    .header-row {
-        font-weight: 700;
     }
 
     .sub-row {

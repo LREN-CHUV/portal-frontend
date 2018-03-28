@@ -157,7 +157,7 @@
                               ng-model="shared.experiment_datasets.training[dataset.code]"
                             />
                             <label for="{{dataset.code}}T">
-                              <span class="code">{{dataset.code}}</span>
+                              <span class="code">{{dataset.label}}</span>
                             </label>
                           </span>
                         </div>
@@ -176,7 +176,7 @@
                               ng-click="shared.experiment_datasets.validation[dataset.code] = !shared.experiment_datasets.validation[dataset.code]"
                             />
                             <label for="{{dataset.code}}V">
-                              <span class="code">{{dataset.code}}</span>
+                              <span class="code">{{dataset.label}}</span>
                             </label>
                           </span>
                         </div>
@@ -245,13 +245,11 @@
                   </p>
 
                   <h5 ng-if="query.coVariables.length || query.groupings.length">CoVariables</h5>
-                  <h6 ng-if="query.groupings.length">Nominal</h6>
                   <p ng-repeat="covariable in query.groupings">
                     <span>
                       {{covariable.code}}
                     </span>
                   </p>
-                  <h6 ng-if="query.coVariables.length">Continuous</h6>
                   <p ng-repeat="covariable in query.coVariables">
                     <span>
                       {{covariable.code}}
