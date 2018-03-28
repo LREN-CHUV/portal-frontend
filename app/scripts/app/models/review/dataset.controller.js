@@ -65,6 +65,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
 
     let selectedVariables = [];
     let selectedDatasets = [...$scope.query.trainingDatasets.map(d => d.code)];
+    $scope.uiSelectedDatasets = {};
 
     const getDependantVariable = () =>
       (_.isUndefined($scope.query.variables[0])
@@ -237,7 +238,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
           code: "tSNE",
           name: "tSNE",
           parameters: [],
-          validation: false$scope.boxplotError
+          validation: $scope.boxplotError
         },
         variables: $scope.query.variables,
         grouping: $scope.query.groupings,
@@ -396,21 +397,20 @@ angular.module("chuvApp.models").controller("DatasetController", [
       return selectedVariables.includes(variable);
     };
 
-    $scope.selectDataset = code => {
-      if (selectedDatasets.includes(code)) {
-        const index = selectedDatasets.indexOf(code);
-        selectedDatasets.splice(index, 1);
-      } else {
-        selectedDatasets.push(code);
-      }
-      $location.search("trainingDatasets", selectedDatasets.join(","));
+    $scope.$watch(
+      "uiSelectedDatasets",
+      e => {
+        if (!_.isEmpty($scope.uiSelectedDatasets)) {
+          selectedDatasets = Object.keys($scope.uiSelectedDatasets).filter(
+            s => $scope.uiSelectedDatasets[s]
+          );
+          $location.search("trainingDatasets", selectedDatasets.join(","));
 
-      init();
-    };
-
-    $scope.isDatasetSelected = code => {
-      return selectedDatasets.includes(code);
-    };
+          init();
+        }
+      },
+      true
+    );
 
     // init
     const init = (model = {}) => {
@@ -419,6 +419,13 @@ angular.module("chuvApp.models").controller("DatasetController", [
         .then(() =>
           Variable.datasets().then(data => {
             $scope.allDatasets = data;
+
+            $scope.uiSelectedDatasets = Object.assign(
+              {},
+              ...$scope.allDatasets.map(d => ({
+                [d.code]: selectedDatasets.includes(d.code)
+              }))
+            );
 
             const variable = getDependantVariable();
             if (!variable) {

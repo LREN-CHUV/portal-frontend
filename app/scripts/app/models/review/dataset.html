@@ -39,17 +39,28 @@
             </p>
           </div>
         </div>
-          <ul class="list-group">
-            <li ng-repeat="dataset in allDatasets" class="list-group-item" ng-class="{active: isDatasetSelected(dataset.code)}">
-              <a href="javascript:;" ng-click="selectDataset(dataset.code)">
-                <span>{{dataset.label}}</span>
-              </a>
-            </li>
-          </ul>
-
       </uib-accordion>
 
+      <uib-accordion>
+        <div uib-accordion-group is-open="true">
+          <uib-accordion-heading>
+            <span class="ti ti-check-box"></span>
+            Datasets
+          </uib-accordion-heading>
+          <div class="panel-body variable-list scrollable">
+            <div ng-repeat="(dataset, enabled) in uiSelectedDatasets">
+                <label>
+                  <input
+                    ng-model="uiSelectedDatasets[dataset]"
+                    type="checkbox">
+                    {{dataset}}
+                </label>
+              </div>
+          </div>
+        </div>
+      </uib-accordion>
     </div>
+
     <div class="panel" style="flex-grow: 2">
       <uib-tabset active="active">
 
