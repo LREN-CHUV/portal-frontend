@@ -15,8 +15,8 @@ angular
     function($compile, $http) {
       var linker = function($scope, element) {
         var data = $scope.data;
-        var algorithm = data && data.algorithm;
-        var type = data && data.type;
+        var resultType = data.type;
+        var mimeType = data && data.raw && data.raw.type;
 
         // Linear regression & ANOVA utility functions
         $scope.variable_title = function(variable_code) {
@@ -46,25 +46,11 @@ angular
         };
 
         var templateUrl = "default-results.html";
-        switch (type) {
-          case "regression":
-            templateUrl = "default-regression-results.html";
-            break;
+        switch (mimeType) {
           case "application/pfa+json":
-            switch (algorithm) {
-              case "java-rapidminer-knn":
-                templateUrl = "default-classification-results.html";
-                break;
-
-              case "python-anova":
-                templateUrl = "anova-results.html";
-                break;
-            }
-            break;
-
           case "application/json":
-            switch (algorithm) {
-              case "python-linear-regression":
+            switch (resultType) {
+              case "linearRegression":
                 templateUrl = "linear-regression-results.html";
                 break;
 
@@ -78,6 +64,10 @@ angular
 
               case "regression":
                 templateUrl = "default-regression-results.html";
+                break;
+
+              case "anova":
+                templateUrl = "anova-results.html";
                 break;
             }
             break;
@@ -107,7 +97,7 @@ angular
               };
             };
 
-            var subData = data && data.data;
+            var subData = data && data.raw.data;
             $scope.highchartdata = {
               data: subData.length > 2
                 ? subData.map(formatFunc)

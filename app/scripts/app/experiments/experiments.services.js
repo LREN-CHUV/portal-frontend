@@ -191,7 +191,7 @@ angular.module("chuvApp.util").factory("MLUtils", [
       var methods = results.map(function(result) {
         var output = {
           type: MLUtils.get_display_type(result),
-          name: result.name
+          name: result.code
         };
 
         // Update validation type
@@ -225,9 +225,9 @@ angular.module("chuvApp.util").factory("MLUtils", [
 
             return angular.extend({ value: value }, metric);
           });
-        } else {
-          output.raw = result;
         }
+
+        output.raw = result;
 
         return output;
       });
