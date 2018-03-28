@@ -1,54 +1,66 @@
 <div class="dataset-box">
   <div class="dataset-container">
-    <div class="panel style=flex: 0 0 0">
-      <div class="panel-heading">Datasets</div>
-      <div class="panel-body">
-        <ul class="list-group">
-          <li ng-repeat="dataset in allDatasets" class="list-group-item" ng-class="{active: isDatasetSelected(dataset.code)}">
-            <a href="javascript:;" ng-click="selectDataset(dataset.code)">
-              <span>{{dataset.label}}</span>
-            </a>
-          </li>
-        </ul>
-      </div>
-    </div>
     <div class="panel" style="flex: 0 0 1; max-width: 180px; width: 180px">
-      <div class="panel-heading">Model</div>
-      <div class="panel-body variable-list scrollable">
+      <uib-accordion>
+        <div uib-accordion-group is-open="true">
+          <uib-accordion-heading>
+            <span class="ti ti-check-box"></span>
+            Model
+          </uib-accordion-heading>
+          <div class="panel-body variable-list scrollable">
 
-        <h5>
-          <a ng-click="configureFilterQuery()">
-            <i class="ti ti-panel"></i>
-            Filter variable
-          </a>
-        </h5>
-        <p ng-repeat="filter in query.filters track by $index">
-          <a ng-click="configureFilterQuery()">
-            {{filter.code}}
-          </a>
-        </p>
-        <div class="query" ng-bind="query.textQuery"></div>
-        <h5 ng-if="query.variables.length">Variable</h5>
-        <p ng-repeat="variable in query.variables">
-          {{variable.code}}
-        </p>
+            <h5>
+              <a ng-click="configureFilterQuery()">
+                <i class="ti ti-panel"></i>
+                Filter variable
+              </a>
+            </h5>
+            <p ng-repeat="filter in query.filters track by $index">
+              <a ng-click="configureFilterQuery()">
+                {{filter.code}}
+              </a>
+            </p>
+            <div class="query" ng-bind="query.textQuery"></div>
+            <h5 ng-if="query.variables.length">Variable</h5>
+            <p ng-repeat="variable in query.variables">
+              {{variable.code}}
+            </p>
 
-        <h5 ng-if="query.coVariables.length || query.groupings.length">CoVariables</h5>
-        <h6 ng-if="query.groupings.length">Nominal</h6>
-        <p ng-repeat="covariable in query.groupings">
-          <span>
-            {{covariable.code}}
-          </span>
-        </p>
-        <h6 ng-if="query.coVariables.length">Continuous</h6>
-        <p ng-repeat="covariable in query.coVariables">
-          <span>
-            {{covariable.code}}
-          </span>
-        </p>
+            <h5 ng-if="query.coVariables.length || query.groupings.length">CoVariables</h5>
+            <p ng-repeat="covariable in query.groupings">
+              <span style="margin-left: 10px">
+                {{covariable.code}}
+              </span>
+            </p>
+            <p ng-repeat="covariable in query.coVariables">
+              <span>
+                {{covariable.code}}
+              </span>
+            </p>
+          </div>
+        </div>
+      </uib-accordion>
 
-      </div>
+      <uib-accordion>
+        <div uib-accordion-group is-open="true">
+          <uib-accordion-heading>
+            <span class="ti ti-check-box"></span>
+            Datasets
+          </uib-accordion-heading>
+          <div class="panel-body variable-list scrollable">
+            <div ng-repeat="(dataset, enabled) in uiSelectedDatasets">
+                <label>
+                  <input
+                    ng-model="uiSelectedDatasets[dataset]"
+                    type="checkbox">
+                    {{dataset}}
+                </label>
+              </div>
+          </div>
+        </div>
+      </uib-accordion>
     </div>
+
     <div class="panel" style="flex-grow: 2">
       <uib-tabset active="active">
 
@@ -74,12 +86,8 @@
                     </a>
                   </div>
                 </div>
-                <a title="Save PNG"
-                   ng-if="png.ready()"
-                   ng-click="png.hideLink()"
-                   ng-href="{{ png.link() }}"
-                   download="{{ png.name() }}"
-                   class="btn btn-default save-btn">
+                <a title="Save PNG" ng-if="png.ready()" ng-click="png.hideLink()" ng-href="{{ png.link() }}" download="{{ png.name() }}"
+                  class="btn btn-default save-btn">
                   Save PNG
                 </a>
               </div>
@@ -91,13 +99,19 @@
                 </tr>
                 <tr ng-repeat="row in tableRows track by $index" ng-class="{ 'white-row': row.header } ">
                   <td ng-if="row.header" ng-repeat="text in row.data track by $index" class="header-row">{{text}}</td>
-                  <td ng-if="!row.header">{{row.variable.label}}</td>
+                  <td ng-if="!row.header">
+                    <strong>{{row.variable.label}}</strong>
+                  </td>
                   <td ng-if="!row.header" ng-repeat="column in row.data track by $index" class="sub-row">
                     <span ng-if="column.mean">
-                      {{column.mean | number: 2}} ({{column.max | number: 2}}-{{column.min | number: 2}}), std: {{column.std | number: 2}}
+                      <strong>{{column.mean | number: 2}}</strong> ({{column.max | number: 2}}-{{column.min | number: 2}}), std:
+                      {{column.std | number: 2}}
                     </span>
                     <span ng-if="!column.mean">
-                      {{column.count}}  {{column.null_count ? "(Null count: " + column.null_count + ")" : ""}}
+                      <strong>{{column.count}}</strong>
+                      <div ng-if="column.null_count">
+                        {{"(Null count: " + column.null_count + ")"}}
+                      </div>
                     </span>
                   </td>
                 </tr>
