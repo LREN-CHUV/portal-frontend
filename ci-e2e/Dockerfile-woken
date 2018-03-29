@@ -1,5 +1,5 @@
 # Use the latest image built as this is what is under test
-FROM hbpmip/woken:latest
+FROM hbpmip/woken:2.4.7
 
 COPY ./woken/config/application.conf /build/src/woken/config/application.conf
 COPY ./woken/config/application.conf /opt/woken/config/application.conf
@@ -10,14 +10,3 @@ COPY ./woken/config/application.conf /build/application.conf
 COPY ./woken-fed/config/application.conf /build/src/woken-fed/config/application.conf
 COPY ./woken-worker1/config/application.conf /build/src/woken-worker1/config/application.conf
 COPY ./woken-worker2/config/application.conf /build/src/woken-worker2/config/application.conf
-
-ENV CLUSTER_PORT: 8088 \
-    CLUSTER_IP: woken \
-    WOKEN_PORT_8088_TCP_ADDR: woken \
-    DOCKER_BRIDGE_NETWORK: "webanalyticsstarter_default" \
-    LOG_LEVEL: DEBUG \
-    KAMON_ENABLED: "yes" \
-    ZIPKIN_ENABLED: "yes" \
-    PROMETHEUS_ENABLED: "yes" \
-    SIGAR_SYSTEM_METRICS: "no" \
-    JVM_SYSTEM_METRICS: "yes"
