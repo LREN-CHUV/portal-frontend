@@ -8,9 +8,15 @@
 
   <form>
 
-    <button class="btn btn-primary pull-right" ng-if="!running" ng-click="run_experiment()" ng-class="{'disabled' : !shared.experiment_name || !shared.kfold}">
-      Run experiment
-    </button>
+    <div class="form-group">
+
+      <label for="name">Name: </label>
+      <div class="input-group">
+        <input id="name" ng-model="shared.experiment_name" class="form-control" type="text" />
+        <div class="input-group-addon fa fa-question-circle" popover-placement="left" popover-append-to-body="true" popover="The name of the experiment, for other humans"></div>
+      </div>
+    </div>
+
 
     <h4>Selected Methods</h4>
     <ul>
@@ -22,18 +28,15 @@
       </li>
     </ul>
 
+    <button class="btn btn-primary pull-right" ng-if="!running" ng-click="run_experiment()" ng-class="{'disabled' : !shared.experiment_name || !shared.kfold}">
+      Run experiment
+    </button>
+
     <hr/>
 
-    <h4><span class="chosen-method">{{ shared.chosen_method.label }}</span></h4>
-    <h5>Description</h5>
-    <div class="form-group">
-      <label for="name">Name: </label>
-      <div class="input-group">
-        <input id="name" ng-model="shared.experiment_name" class="form-control" type="text" />
-        <div class="input-group-addon fa fa-question-circle" popover-placement="left" popover-append-to-body="true" popover="The name of the experiment, for other humans"></div>
-      </div>
-    </div>
-
+    <h4>
+      <span class="chosen-method">{{ shared.chosen_method.label }}</span>
+    </h4>
     <div ng-if="shared.cross_validation">
       <h4>Validation</h4>
       <div class="form-group">
@@ -49,4 +52,3 @@
 
   </form>
 </div>
-
