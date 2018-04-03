@@ -16,7 +16,7 @@
 
   <div class="row">
     <div class="col-xs-12">
-      <div class="panel">
+      <div class="panel" style="margin-bottom: 20px">
         <div class="panel-heading">
           <h3 ng-if="model">
             Run an Experiment on
@@ -89,9 +89,11 @@
                 Your Experiment
               </uib-accordion-heading>
 
-              <algorithm-runner></algorithm-runner>
-
               <div ng-if="shared.chosen_method.parameters.length" class="form-group">
+
+                <h4>
+                    <span class="chosen-method">{{ shared.chosen_method.label }}</span>
+                </h4>
                 <div ng-repeat="parameter in shared.chosen_method.parameters" class="form-inline">
                   <label for="{{parameter.name}}">
                     <b ng-bind="parameter.label + ': '"></b>
@@ -118,16 +120,28 @@
                   <p ng-bind="parameter.description"></p>
                 </div>
               </div>
-              <div ng-if="!shared.chosen_method.parameters.length">
+              <div ng-if="shared.chosen_method && !shared.chosen_method.parameters.length">
                 There are no parameters for
                 <span ng-bind="shared.chosen_method.label"></span>.
               </div>
 
-              <button class="btn btn-primary pull-right" ng-class="{'disabled': method_already_configured() || configuration_not_valid() || exareme_method_disabled()}"
+              <div ng-if="!shared.chosen_method && shared.experiment_configuration.length == 0">
+                  <p>
+                    Pick a Method on the left and add it here to create an experiment
+                  </p>
+                </div>
+
+              <br>
+              <button class="btn btn-primary pull-right" ng-class="{'disabled': !shared.chosen_method || method_already_configured() || configuration_not_valid() || exareme_method_disabled()}"
                       ng-click="add_to_experiment()">
-                Add to experiment
+                Add method
               </button>
 
+              <br><br>
+
+              <div>
+                <algorithm-runner></algorithm-runner>
+              </div>
             </div>
           </uib-accordion>
 

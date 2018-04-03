@@ -404,9 +404,10 @@ angular
       // Display "Training and validation" only if predictive_model method selected
       $scope.show_training_validation = function(method) {
         $scope.shared.chosen_method = method;
-        method.type == "predictive_model"
-          ? ($scope.isValidationShow = true)
-          : ($scope.isValidationShow = false);
+        $scope.isValidationShow = false;
+        if (method.type == "predictive_model" && $scope.federationmode) {
+          $scope.isValidationShow = true;
+        }
       };
 
       $scope.modelsList = {};
