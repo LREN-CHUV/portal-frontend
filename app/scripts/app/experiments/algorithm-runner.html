@@ -1,42 +1,8 @@
-<div ng-if="shared.experiment_configuration.length == 0">
-  <p>
-    Pick a Method on the left and add it here to create an experiment
-  </p>
-</div>
+
 
 <div ng-if="shared.experiment_configuration.length > 0">
 
-  <form>
-
-    <div class="form-group">
-
-      <label for="name">Name: </label>
-      <div class="input-group">
-        <input id="name" ng-model="shared.experiment_name" class="form-control" type="text" />
-        <div class="input-group-addon fa fa-question-circle" popover-placement="left" popover-append-to-body="true" popover="The name of the experiment, for other humans"></div>
-      </div>
-    </div>
-
-
-    <h4>Selected Methods</h4>
-    <ul>
-      <li ng-repeat="experiment in shared.experiment_configuration track by $index">
-        <div style="max-width: calc(100% - 20px); display: inline-block; vertical-align: top">
-          <a href="#">{{ experiment.name || "Unknown" }}</a>
-        </div>
-        <a ng-click="remove_from_experiment($index)" style="margin-top: 2px" class="btn btn-xs btn-default fa fa-remove pull-right"></a>
-      </li>
-    </ul>
-
-    <button class="btn btn-primary pull-right" ng-if="!running" ng-click="run_experiment()" ng-class="{'disabled' : !shared.experiment_name || !shared.kfold}">
-      Run experiment
-    </button>
-
-    <hr/>
-
-    <h4>
-      <span class="chosen-method">{{ shared.chosen_method.label }}</span>
-    </h4>
+    <form>
     <div ng-if="shared.cross_validation">
       <h4>Validation</h4>
       <div class="form-group">
@@ -49,6 +15,30 @@
       </div>
     </div>
 
+    <hr>
+
+    <h4>Selected Methods</h4>
+    <ul>
+      <li ng-repeat="experiment in shared.experiment_configuration track by $index">
+        <div style="max-width: calc(100% - 20px); display: inline-block; vertical-align: top">
+          <p href="#">{{ experiment.name || "Unknown" }}</p>
+        </div>
+        <a ng-click="remove_from_experiment($index)" style="margin-top: 2px" class="btn btn-xs btn-default fa fa-remove pull-right"></a>
+      </li>
+    </ul>
+
+    <div class="form-group">
+
+        <label for="name">Your experiment name: </label>
+        <div class="input-group">
+          <input id="name" ng-model="shared.experiment_name" class="form-control" type="text" />
+          <div class="input-group-addon fa fa-question-circle" popover-placement="left" popover-append-to-body="true" popover="The name of the experiment, for other humans"></div>
+        </div>
+      </div>
+
+    <button class="btn btn-primary pull-right" ng-if="!running" ng-click="run_experiment()" ng-class="{'disabled' : !shared.experiment_name || !shared.kfold}">
+      Run experiment
+    </button>
 
   </form>
 </div>
