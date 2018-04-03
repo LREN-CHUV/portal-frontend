@@ -397,6 +397,9 @@ angular.module("chuvApp.models").controller("DatasetController", [
       return selectedVariables.includes(variable);
     };
 
+    $scope.uiSelectedDatasetName = code =>
+      $scope.allDatasets.find(a => a.code === code).label;
+
     $scope.$watch(
       "uiSelectedDatasets",
       () => {
