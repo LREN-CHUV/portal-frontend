@@ -66,6 +66,11 @@ http {
       listen [::]:{{ default .Env.PORTAL_PORT "80" }};
       server_name {{ default .Env.PORTAL_VIRTUAL_HOST "frontend" }};
 
+      # disable caching for html files
+      location ~* \.html$ {
+        expires -1;
+      }
+
       root /usr/share/nginx/html;
       location / {
         index index.html;
