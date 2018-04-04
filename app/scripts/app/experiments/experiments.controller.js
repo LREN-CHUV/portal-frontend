@@ -149,13 +149,6 @@ angular
         };
       }
 
-      // FIXME: exareme can run only 1 method at the moment
-      $scope.exareme_method_disabled = function() {
-        return (
-          $scope.federationmode && $scope.shared.experiment_configuration.length
-        );
-      };
-
       $scope.set_selected_method = function(method) {
         $scope.shared.chosen_method = method;
       };
