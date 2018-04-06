@@ -31,7 +31,7 @@
                 <li class="toolbar-icon-bg hidden-xs">
                   <a href="" ng-click="copyModel()" ng-if="!isNew()"><span class="icon-bg"><i class="ti ti-files"></i></span></a>
                 </li>
-                <button ng-click="open_experiment()" class="btn btn-primary" style="height: 44px;">Run Machine Learning Experiment</button>
+                <button ng-click="open_experiment()" ng-disabled="isNew()" class="btn btn-primary" style="height: 44px;">Run Machine Learning Experiment</button>
               </ul>
             </div>
           </div>

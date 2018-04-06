@@ -93,7 +93,12 @@ angular.module("chuvApp.models").controller("DatasetController", [
         if (results) {
           const json = JSON.parse(results);
 
-          return $q.resolve(json);
+          // Check if data is present. Else remove it, try again
+          if (json && json.length && json[0].data && json[0].data.length) {
+            return $q.resolve(json);
+          } else {
+            sessionStorage.removeItem(sessionStorageKey);
+          }
         }
 
         // Forge and start requests for variables in all datasets
@@ -189,6 +194,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
           )
           .forEach((d, i) => {
             let row;
+            // header
             if (
               i === 0 ||
               (d.parent && i > 0 && d.parent.code !== data[i - 1].parent.code)
@@ -199,7 +205,26 @@ angular.module("chuvApp.models").controller("DatasetController", [
               };
               tableRows.push(row);
             }
-            tableRows.push(d);
+
+            // make a row for each category of nominal values
+            if (d.data && d.data.length && d.data[0] && d.data[0].frequency) {
+              tableRows.push(d);
+              const frequencies = d.data[0].frequency;
+              Object.keys(frequencies).map(key => {
+                tableRows.push({
+                  subrow: true,
+                  variable: { label: key },
+                  data: [
+                    {
+                      count: frequencies[key]
+                    }
+                  ],
+                  parent: { code: key }
+                });
+              });
+            } else {
+              tableRows.push(d);
+            }
           });
 
         return tableRows;
@@ -228,7 +253,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
           $scope.tableHeader = null;
           $scope.tableRows = null;
           $scope.loading = false;
-          console.log(e);
+          console.log(err);
         });
     };
 
@@ -327,7 +352,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
             )
           )
         })),
-        datasetNames: datasets.map(d => d.name)
+        datasetNames: datasets.map(d => $scope.uiSelectedDatasetName(d.name))
       });
 
       const shapeData = ({ variables, datasetNames }) =>
