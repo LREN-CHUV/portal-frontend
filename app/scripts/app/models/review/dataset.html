@@ -28,9 +28,7 @@
 
             <h5 ng-if="query.coVariables.length || query.groupings.length">CoVariables</h5>
             <p ng-repeat="covariable in query.groupings">
-              <span style="margin-left: 10px">
                 {{covariable.code}}
-              </span>
             </p>
             <p ng-repeat="covariable in query.coVariables">
               <span>

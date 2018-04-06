@@ -67,6 +67,8 @@ angular.module("chuvApp.models").controller("DatasetController", [
     let selectedDatasets = [...$scope.query.trainingDatasets.map(d => d.code)];
     $scope.uiSelectedDatasets = {};
 
+    $scope.getVariableDataName = code => Variable.getVariableData(code);
+
     const getDependantVariable = () =>
       (_.isUndefined($scope.query.variables[0])
         ? null
@@ -93,7 +95,12 @@ angular.module("chuvApp.models").controller("DatasetController", [
         if (results) {
           const json = JSON.parse(results);
 
-          return $q.resolve(json);
+          // Check if data is present. Else remove it, try again
+          if (json && json.length && json[0].data && json[0].data.length) {
+            return $q.resolve(json);
+          } else {
+            sessionStorage.removeItem(sessionStorageKey);
+          }
         }
 
         // Forge and start requests for variables in all datasets
@@ -327,7 +334,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
             )
           )
         })),
-        datasetNames: datasets.map(d => d.name)
+        datasetNames: datasets.map(d => $scope.uiSelectedDatasetName(d.name))
       });
 
       const shapeData = ({ variables, datasetNames }) =>
