@@ -245,12 +245,11 @@ angular.module("chuvApp.models").controller("ReviewController", [
         size: "lg",
         controller: function($uibModalInstance) {
           childScope.contructQB = function() {
-            var filterVariables = [];
-            var preFilterVariables = getFilterVariables();
-            var checker = true;
+            let filterVariables = [];
+            let preFilterVariables = getFilterVariables();
+            let checker = true;
 
             preFilterVariables.forEach( (fv) => {
-
               filterVariables.forEach( (rfv) => {
                 if ( angular.equals(rfv, fv) ) {
                   return checker = false;
