@@ -245,7 +245,22 @@ angular.module("chuvApp.models").controller("ReviewController", [
         size: "lg",
         controller: function($uibModalInstance) {
           childScope.contructQB = function() {
-            var filterVariables = getFilterVariables();
+            let filterVariables = [];
+            let preFilterVariables = getFilterVariables();
+            let checker = true;
+
+            preFilterVariables.forEach( (fv) => {
+              filterVariables.forEach( (rfv) => {
+                if ( angular.equals(rfv, fv) ) {
+                  return checker = false;
+                }
+              });
+              if (checker == true) {
+                filterVariables.push(fv);
+              }
+              checker = true;
+            });
+
             if (!filterVariables.length) return;
 
             $(".query-builder").queryBuilder({
