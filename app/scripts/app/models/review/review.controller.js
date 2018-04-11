@@ -532,5 +532,10 @@ angular.module("chuvApp.models").controller("ReviewController", [
           .join("&");
       $location.url(url);
     };
+
+    Model.query({own: 1}).$promise
+    .then(function(data) {
+      $scope.mySavedModels = data.length && $location.path() == "/review" && !$location.search().variable;
+    });
   }
 ]);
