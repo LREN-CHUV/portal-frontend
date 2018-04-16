@@ -434,6 +434,8 @@ angular.module("chuvApp.models").controller("DatasetController", [
           );
           $location.search("trainingDatasets", selectedDatasets.join(","));
 
+          $rootScope.$broadcast("datasetsChanged", selectedDatasets);
+
           init();
         }
       },
