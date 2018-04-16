@@ -402,9 +402,6 @@ angular.module("chuvApp.models").controller("ReviewController", [
       //check query
       var error = "";
       //The query must have at less a Variable, a Grouping and a Covariable to be sent to the API.
-      if (query.variables.length < 1) {
-        error += "The query must have at least a Variable.\n";
-      }
       // check if grouping is complete
       if ($scope.contains(query.groupings, { code: undefined })) {
         error += "A grouping is not complete yet.\n";
