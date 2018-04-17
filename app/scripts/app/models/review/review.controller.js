@@ -102,6 +102,10 @@ angular.module("chuvApp.models").controller("ReviewController", [
       return $scope.model.slug == null;
     };
 
+    $scope.$on("datasetsChanged", (event, data) => {
+      $scope.chowsenDatasets = data;
+    });
+
     /**
      * save or update model
      */
@@ -117,6 +121,7 @@ angular.module("chuvApp.models").controller("ReviewController", [
       $scope.model.config = $scope.chartConfig;
       $scope.model.dataset = $scope.dataset;
       $scope.model.query = angular.copy($scope.query); // will be modified, therefore we do a deep copy
+      $scope.model.query.trainingDatasets = $scope.chowsenDatasets;
       if ($scope.query.filterQuery) {
         $scope.model.query.filters = JSON.stringify($scope.query.filterQuery);
       } else {
@@ -245,7 +250,22 @@ angular.module("chuvApp.models").controller("ReviewController", [
         size: "lg",
         controller: function($uibModalInstance) {
           childScope.contructQB = function() {
-            var filterVariables = getFilterVariables();
+            let filterVariables = [];
+            let preFilterVariables = getFilterVariables();
+            let checker = true;
+
+            preFilterVariables.forEach( (fv) => {
+              filterVariables.forEach( (rfv) => {
+                if ( angular.equals(rfv, fv) ) {
+                  return checker = false;
+                }
+              });
+              if (checker == true) {
+                filterVariables.push(fv);
+              }
+              checker = true;
+            });
+
             if (!filterVariables.length) return;
 
             $(".query-builder").queryBuilder({
@@ -387,9 +407,6 @@ angular.module("chuvApp.models").controller("ReviewController", [
       //check query
       var error = "";
       //The query must have at less a Variable, a Grouping and a Covariable to be sent to the API.
-      if (query.variables.length < 1) {
-        error += "The query must have at least a Variable.\n";
-      }
       // check if grouping is complete
       if ($scope.contains(query.groupings, { code: undefined })) {
         error += "A grouping is not complete yet.\n";
@@ -517,5 +534,10 @@ angular.module("chuvApp.models").controller("ReviewController", [
           .join("&");
       $location.url(url);
     };
+
+    Model.query({own: 1}).$promise
+    .then(function(data) {
+      $scope.mySavedModels = data.length && $location.path() == "/review" && !$location.search().variable;
+    });
   }
 ]);
