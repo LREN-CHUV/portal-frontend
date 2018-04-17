@@ -420,6 +420,18 @@ angular
           on_data_loaded();
         });
       };
+
+      $scope.$watch(
+        "shared.experiment_datasets.training",
+        () => {
+          if (!_.isEmpty($scope.shared.experiment_datasets.training)) {
+            $scope.model.query.trainingDatasets = Object.keys($scope.shared.experiment_datasets.training).filter(
+              s => $scope.shared.experiment_datasets.training[s]
+            );
+          }
+        },
+        true
+      );
     }
   ])
   .controller("ExperimentDetailsController", [
