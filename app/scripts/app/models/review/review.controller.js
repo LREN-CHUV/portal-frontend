@@ -102,6 +102,10 @@ angular.module("chuvApp.models").controller("ReviewController", [
       return $scope.model.slug == null;
     };
 
+    $scope.$on("datasetsChanged", (event, data) => {
+      $scope.chowsenDatasets = data;
+    });
+
     /**
      * save or update model
      */
@@ -117,6 +121,7 @@ angular.module("chuvApp.models").controller("ReviewController", [
       $scope.model.config = $scope.chartConfig;
       $scope.model.dataset = $scope.dataset;
       $scope.model.query = angular.copy($scope.query); // will be modified, therefore we do a deep copy
+      $scope.model.query.trainingDatasets = $scope.chowsenDatasets;
       if ($scope.query.filterQuery) {
         $scope.model.query.filters = JSON.stringify($scope.query.filterQuery);
       } else {
