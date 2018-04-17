@@ -71,6 +71,9 @@
               There was an error perfoming the method
               <pretty-json data="tableError"></pretty-json>
             </div>
+            <span ng-if="mySavedModels">
+              <a class="btn btn-primary" ui-sref="data({scope: 'mydata'})"><span>Go to saved models</span></a>
+            </span>
             <div ng-if="tableHeader" style="background-color: #d5e5fd; padding: 0.5em" class="dt-wrapper">
               <div class="export-pannel">
                 <div ng-click="toogleExport()" class="export-btn-sandwich" ng-mouseleave="exportClose()" ng-mouseover="exportCloseDeny()">

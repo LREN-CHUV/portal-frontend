@@ -1,7 +1,4 @@
 <div class="review">
-  <span ng-if="mySavedModels" class="go-to-saved-models-btn">
-    <a class="btn btn-primary" ui-sref="data({scope: 'mydata'})"><span>Go to saved models</span></a>
-  </span>
   <a class="btn-round" ng-click="go_to_explore()"><span><i class="ti ti-arrow-up"></i>Explore</span></a>
   <div ng-if="isMine()" ng-controller="DatasetController" ng-include="'scripts/app/models/review/dataset.html'">
   </div>
