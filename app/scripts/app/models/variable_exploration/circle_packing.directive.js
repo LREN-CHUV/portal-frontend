@@ -1,7 +1,8 @@
 "use strict";
 angular.module("chuvApp.models").directive("circlePacking", [
   "$location",
-  function($location) {
+  "$rootScope",
+  function($location, $rootScope) {
     return {
       templateUrl: "scripts/app/models/variable_exploration/circle_packing.html",
       replace: true,
@@ -404,6 +405,8 @@ angular.module("chuvApp.models").directive("circlePacking", [
             datasetName => selectedDatasetsObj[datasetName] = {}
           );
           $scope.configuration["trainingDatasets"] = selectedDatasetsObj;
+
+          $rootScope.$broadcast("event:selectedDatasetIsChanged", $scope.selectedDatasets);
         };
 
         $scope.$on("event:setToURLtrainingDatasets", function(event, data) {
