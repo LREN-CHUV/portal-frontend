@@ -57,7 +57,7 @@ angular.module("chuvApp.models").directive("variableStatistics", [
             var recNodeCalc = function(node) {
               if (!node || !node.children) return;
               node.children.map(function(c) {
-                count = c.is_group ? count : count + 1;
+                if (c.is_group) { ++count; }
                 recNodeCalc(c);
               });
             };
@@ -69,20 +69,29 @@ angular.module("chuvApp.models").directive("variableStatistics", [
             return;
           }
 
+          getVariableHistogram( focused_variable, $scope.selectedDatasets, $scope.current_request_id );
+        });
+
+        $scope.$on("event:selectedDatasetIsChanged", function(event, data) {
+          getVariableHistogram( $scope.focused_variable, data, $scope.current_request_id, true );
+        });
+
+        function getVariableHistogram( focused_variable, selected_dataset, current_request_id, changeDataset ){
           $scope.focused_variable_loaded = false;
           $scope.has_error = false;
 
           request_id++;
-          var current_request_id = request_id;
+          $scope.current_request_id = request_id;
 
-          $scope.variable_description = focused_variable.description;
+          $scope.variable_description = (changeDataset) ?
+            $scope.focused_variable.description : focused_variable.description;
 
           Variable.get_histo(
             focused_variable.code,
-            $scope.selectedDatasets.map(d => ({ code: d }))
+            selected_dataset.map(d => ({ code: d }))
           ).then(
             function(response) {
-              if (current_request_id != request_id) {
+              if ($scope.current_request_id != request_id) {
                 return;
               }
               $scope.focused_variable_loaded = true;
@@ -94,14 +103,14 @@ angular.module("chuvApp.models").directive("variableStatistics", [
               }
             },
             function() {
-              if (current_request_id != request_id) {
+              if ($scope.current_request_id != request_id) {
                 return;
               }
               $scope.has_error = true;
               $scope.focused_variable_loaded = true;
             }
           );
-        });
+        }
 
         // this is to overcome a ng-highcharts sizing bug.
         $scope.show_stats_after_timeout = function(statistics) {
