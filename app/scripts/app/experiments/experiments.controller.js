@@ -425,9 +425,9 @@ angular
         "shared.experiment_datasets.training",
         () => {
           if (!_.isEmpty($scope.shared.experiment_datasets.training)) {
-            $scope.model.query.trainingDatasets = Object.keys($scope.shared.experiment_datasets.training).filter(
-              s => $scope.shared.experiment_datasets.training[s]
-            );
+            $scope.model.query.trainingDatasets = Object.keys(
+              $scope.shared.experiment_datasets.training
+            ).filter(s => $scope.shared.experiment_datasets.training[s]);
           }
         },
         true
@@ -528,29 +528,6 @@ angular
             try {
               const data = response.data;
               $scope.experiment = data;
-
-              // FIXME: Parse the results from Exareme JS Object
-              const ex = $scope.experiment.result;
-              if (ex && ex.length && ex[0].result) {
-                $scope.experiment.result = ex[0].result;
-
-                $scope.experiment = Object.assign({}, $scope.experiment, {
-                  result: {
-                    data: {
-                      data: $scope.experiment.result,
-                      type: "application/vnd.highcharts+jsonn"
-                    }
-                  },
-                  algorithms: data.algorithms,
-                  name: "K-MEANS",
-                  finished: true
-                });
-
-                $scope.loading = false;
-                MLUtils.mark_as_read($scope.experiment);
-
-                return;
-              }
 
               $scope.experiment.name =
                 data.algorithms &&
