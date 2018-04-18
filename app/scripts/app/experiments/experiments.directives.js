@@ -271,4 +271,21 @@ angular
         }
       };
     }
+  ])
+  .directive("plotlyCharts", [
+    function() {
+      let layout = {
+        margin: {
+          l: 150
+        }
+      };
+
+      return {
+        link: function linkFunc(scope, element, attrs) {
+          scope.$watch('chartData', function (heatmap) {
+            Plotly.newPlot(element[0], heatmap, layout);
+          });
+        }
+      }
+    }
   ]);

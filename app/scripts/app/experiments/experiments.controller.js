@@ -660,5 +660,29 @@ angular
           }
         );
       };
+
+      $scope.chartData = [
+        {
+          "type": "heatmap",
+          "z": [
+            [
+              1,
+              -0.2077289198
+            ],
+            [
+              -0.2077289198,
+              1
+            ]
+          ],
+          "x": [
+            "lefthippocampus",
+            "subjectageyears"
+          ],
+          "y": [
+            "lefthippocampus",
+            "subjectageyears"
+          ]
+        }
+      ]
     }
   ]);
