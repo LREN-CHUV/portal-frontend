@@ -528,11 +528,8 @@ angular
             try {
               const data = response.data;
               $scope.experiment = data;
+              $scope.experiment.name = data.name;
 
-              $scope.experiment.name =
-                data.algorithms &&
-                data.algorithms.length &&
-                data.algorithms[0].name;
               $scope.loading = false;
 
               // Refresh experiment until done
