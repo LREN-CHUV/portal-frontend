@@ -192,34 +192,48 @@ angular.module("chuvApp.models").controller("DatasetController", [
                 ? -1
                 : a.parent.code === b.parent.code ? 0 : 1)
           )
-          .forEach((d, i) => {
-            let row;
+          .forEach((row, i) => {
             // header
             if (
               i === 0 ||
-              (d.parent && i > 0 && d.parent.code !== data[i - 1].parent.code)
+              (row.parent &&
+                i > 0 &&
+                row.parent.code !== data[i - 1].parent.code)
             ) {
-              row = {
+              let headerrow = {
                 header: true,
-                data: [d.parent.label, ...selectedDatasets.map(() => "")] // hack for colspan
+                data: [row.parent.label, ...selectedDatasets.map(() => "")] // hack for colspan
               };
-              tableRows.push(row);
+              tableRows.push(headerrow);
             }
 
             // make a row for each category of nominal values
-            if (d.data && d.data.length && d.data[0] && d.data[0].frequency) {
-              tableRows.push(d);
-              const frequencies = d.data[0].frequency;
+            if (
+              row.data &&
+              row.data.length &&
+              row.data[0] &&
+              row.data[0].frequency
+            ) {
+              tableRows.push(row);
+              const frequencies = row.data[0].frequency;
               Object.keys(frequencies).map(key => {
                 tableRows.push({
                   subrow: true,
                   variable: { label: key },
-                  data: d.data.map(e => ({ count: e.frequency[key] })),
+                  data: row.data.map(e => ({ count: e.frequency[key] })),
                   parent: { code: key }
                 });
               });
             } else {
-              tableRows.push(d);
+              const computedData = row.data.map(m => {
+                if (!m || m.count - m.null_count === 0) {
+                  return { count: "-" };
+                }
+
+                return m;
+              });
+              row.data = computedData;
+              tableRows.push(row);
             }
           });
 

@@ -191,7 +191,7 @@ angular.module("chuvApp.util").factory("MLUtils", [
       var methods = results.map(function(result) {
         var output = {
           type: MLUtils.get_display_type(result),
-          name: result.code
+          name: result.algorithm
         };
 
         // Update validation type
