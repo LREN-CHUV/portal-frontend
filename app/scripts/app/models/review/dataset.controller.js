@@ -214,11 +214,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
                 tableRows.push({
                   subrow: true,
                   variable: { label: key },
-                  data: [
-                    {
-                      count: frequencies[key]
-                    }
-                  ],
+                  data: d.data.map(e => ({ count: e.frequency[key] })),
                   parent: { code: key }
                 });
               });
