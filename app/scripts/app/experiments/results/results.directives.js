@@ -111,7 +111,6 @@ angular
           case "application/vnd.plotly.v1+json":
             templateUrl = "heatmap-results.html";
             $scope.chartData = data && data.raw.data;
-            // $scope.chartData[0].z[0].push(1.4);
             break;
 
           case "text/plain+error":
