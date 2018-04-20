@@ -58,7 +58,8 @@ angular
           )
           .filter(
             f => f.code !== "histograms" && f.code !== "statisticsSummary"
-          );
+          )
+          .filter(f => f.code !== "glm_exareme");
       });
 
       // Check if the method can be applied to the model
