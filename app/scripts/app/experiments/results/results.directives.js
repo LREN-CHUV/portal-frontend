@@ -108,6 +108,11 @@ angular
             };
             break;
 
+          case "application/vnd.plotly.v1+json":
+            templateUrl = "heatmap-results.html";
+            $scope.chartData = data && data.raw.data;
+            break;
+
           case "text/plain+error":
             templateUrl = "error.html";
             break;
