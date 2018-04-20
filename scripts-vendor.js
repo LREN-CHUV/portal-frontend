@@ -58,7 +58,8 @@ var vendorScripts = [
   "./node_modules/ng-table-to-csv/dist/ng-table-to-csv.js",
   "./node_modules/html2canvas/dist/html2canvas.js",
   "./" + appConfig.app + "/styles/plugins/wijets/wijets.js",
-  "./app/scripts/components/highcharts/world.js"
+  "./app/scripts/components/highcharts/world.js",
+  "./node_modules/plotly.js/dist/plotly.min.js"
 ];
 
 module.exports = vendorScripts;

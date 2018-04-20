@@ -4,14 +4,10 @@
     <div uib-accordion-group ng-if="data" is-open="true">
       <uib-accordion-heading>
         <span class="ti ti-check-box"></span>
-        Results
+        Results: Heatmap
       </uib-accordion-heading>
       <div>
-        The methods ran successfully but unfortunately we are not yet able to display the results in a nicely way.
-        <br>
-        Here's the raw output:
-        <br><br>
-        <pretty-json data="data"></pretty-json>
+        <plotly-charts chart-data="chartData"></plotly-charts>
       </div>
     </div>
 
@@ -23,6 +19,4 @@
 
       <div class="panel-body" btf-markdown="estimation.help"></div>
     </div>
-
-  </uib-accordion>
 </div>

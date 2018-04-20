@@ -148,10 +148,10 @@ angular.module("chuvApp.util").factory("MLUtils", [
         return $http.get(backendUrl + "/experiments");
       },
       get_display_type: function(result) {
-        switch (result.code) {
-          case "linearRegression":
+        switch (result.algorithm) {
+          case "python-linear-regression":
             return "linearRegression";
-          case "anova":
+          case "python-anova":
             return "anova";
           default:
             // Check if cross-validation and prediction type
