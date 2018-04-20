@@ -257,6 +257,26 @@ angular.module("chuvApp.models").controller("DatasetController", [
         });
     };
 
+    const getHeatmap = () => {
+      $scope.heatmapLoaded = false;
+      console.log($scope);
+
+      Model.mining({
+        algorithm: {
+          code: "correlationHeatmap",
+          name: "Correlation heatmap",
+          parameters: []
+        },
+        variables: $scope.query.variables,
+        grouping: $scope.query.groupings,
+        coVariables: $scope.query.coVariables,
+        datasets: selectedDatasets
+      }).then(result => {
+        $scope.heatmapLoaded = true;
+        $scope.chartData = result.data.data;
+      });
+    };
+
     const getTSNE = () =>
       Model.mining({
         algorithm: {
@@ -468,6 +488,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
               .then(data => {
                 getStatistics(data);
                 getBoxplot(data);
+                getHeatmap(data);
               })
               .catch(e => e);
 
