@@ -113,6 +113,14 @@ angular
             $scope.chartData = data && data.raw.data;
             break;
 
+          case "application/vnd.dataresource+json":
+            templateUrl = "dataresource-results.html";
+            const chartData = data && data.raw.data.resources
+              ? data.raw.data.resources[0]
+              : data.raw.data;
+            $scope.chartData = chartData;
+            break;
+
           case "text/plain+error":
             templateUrl = "error.html";
             break;
