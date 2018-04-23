@@ -16,6 +16,7 @@ angular.module("chuvApp.home").controller("HomeController", [
   "$q",
   "$http",
   "backendUrl",
+  "$state",
   // "notifications",
   function(
     $scope,
@@ -29,7 +30,8 @@ angular.module("chuvApp.home").controller("HomeController", [
     ChartUtil,
     $q,
     $http,
-    backendUrl /*,
+    backendUrl,
+    $state /*,
     notifications*/ // TODO: var isn't used, commented to jshint warning detection
   ) {
     $translatePartialLoader.addPart("home");
@@ -38,6 +40,11 @@ angular.module("chuvApp.home").controller("HomeController", [
     $translate.refresh();
 
     $scope.models = [];
+
+    // Check if User agreed TOS in every initiation home controller
+    if (!User.hasAgreedTos()) {
+      $state.go("tos_agreement");
+    }
 
     /**
      * Search articles with current selected filters
