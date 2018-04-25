@@ -116,10 +116,18 @@ angular.module("chuvApp.models").controller("DatasetController", [
                   variables: $scope.query.variables,
                   grouping: $scope.query.groupings,
                   covariables: $scope.query.coVariables,
+                  subjectageyears: "subjectageyears_allDatasets", // del
+                  gender: "gender_allDatasets", // del
                   datasets: [{ code: d.code }],
                   filters: $scope.query.textQuery
                     ? JSON.stringify($scope.query.filterQuery)
                     : ""
+                }, {
+                  subjectageyears: "subjectageyears_allDatasets", // del
+                  gender: "gender_allDatasets", // del
+                }).then(data => {
+                  console.log("after allDset model.mining", data); // del
+                  console.log("$scope.allDatasets", $scope.allDatasets); // del
                 }).catch(e => e) // bypass catch
             )
           )
@@ -269,7 +277,6 @@ angular.module("chuvApp.models").controller("DatasetController", [
 
     const getHeatmap = () => {
       $scope.heatmapLoaded = false;
-      console.log($scope);
 
       Model.mining({
         algorithm: {
@@ -280,6 +287,8 @@ angular.module("chuvApp.models").controller("DatasetController", [
         variables: $scope.query.variables,
         grouping: $scope.query.groupings,
         coVariables: $scope.query.coVariables,
+        subjectageyears: "subjectageyears_HEATMAP", // del
+        gender: "gender_HEATMAP", // del
         datasets: selectedDatasets
       }).then(result => {
         $scope.heatmapLoaded = true;
