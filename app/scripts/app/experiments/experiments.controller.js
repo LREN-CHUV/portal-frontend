@@ -468,9 +468,7 @@ angular
           },
           series: overview.data,
           title: {
-            text: overview.label,
-            verticalAlign: "top",
-            align: "center"
+            text: ""
           },
           loading: false,
           xAxis: {
@@ -484,7 +482,7 @@ angular
             min: 0,
             max: 1,
             title: {
-              text: null
+              text: overview.label
             }
           }
         };

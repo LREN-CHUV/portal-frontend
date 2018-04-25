@@ -105,8 +105,9 @@
                     <strong style="margin-left: 10px" ng-if="row.subrow">{{row.variable.label}}</strong>
                   </td>
                   <td ng-if="!row.header" ng-repeat="column in row.data track by $index" class="sub-row" style="text-align: center">
+                    <span ng-if="column.status">{{column.status}}</span>
                     <span ng-if="column.mean">
-                      <strong>{{column.mean | number: 2}}</strong> ({{column.max | number: 2}}-{{column.min | number: 2}}), std:
+                      <strong>{{column.mean | number: 2}}</strong> ({{column.min | number: 2}}-{{column.max | number: 2}}), std:
                       {{column.std | number: 2}}
                     </span>
                     <span ng-if="!column.mean">
@@ -138,7 +139,7 @@
           </div>
         </uib-tab> -->
 
-        <uib-tab index="2" heading="Boxplot" disable="boxplotError">
+        <uib-tab index="2" heading="Boxplot" disable="boxplotError" title="{{boxplotError}}">
           <div class="panel-body scrollable">
             <div ng-if="loading" class="loading">
               <div class="fa fa-spin fa-spinner"></div>
@@ -184,19 +185,24 @@
           </div>
         </uib-tab>
 
-        <!-- <uib-tab index="4" heading="Heatmap">
+        <uib-tab index="4" heading="Heatmap" ng-click="getHeatmap()" disable="heatmapError" title="{{heatmapError}}">
           <div class="panel-body scrollable">
 
-            <div ng-if="!heatmapLoaded" class="loading">
+            <div ng-if="heatmapLoading" class="loading">
               <div class="fa fa-spin fa-spinner"></div>
             </div>
 
-            <div ng-if="heatmapLoaded" class="dt-wrapper">
-              <plotly-charts chart-data="chartData"></plotly-charts>
+            <div ng-if="heatmapError">
+                There was an error perfoming the method
+                <pretty-json data="heatmapError"></pretty-json>
+              </div>
+
+            <div ng-if="heatmapData" class="dt-wrapper">
+              <plotly-charts chart-data="heatmapData"></plotly-charts>
             </div>
 
           </div>
-        </uib-tab> -->
+        </uib-tab>
 
       </uib-tabset>
     </div>

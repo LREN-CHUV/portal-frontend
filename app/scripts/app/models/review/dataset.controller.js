@@ -36,12 +36,15 @@ angular.module("chuvApp.models").controller("DatasetController", [
     $scope.tableHeader = undefined;
     $scope.tableRows = undefined;
 
-    $scope.loading = true;
     $scope.histogramError = undefined;
     $scope.histogramData = undefined;
 
     $scope.boxplotError = undefined;
     $scope.boxplotData = undefined;
+
+    $scope.heatmapLoading = true;
+    $scope.heatmapError = undefined;
+    $scope.heatmapData = undefined;
 
     $scope.tsneLoading = true;
     $scope.tsneError = undefined;
@@ -67,12 +70,18 @@ angular.module("chuvApp.models").controller("DatasetController", [
     let selectedDatasets = [...$scope.query.trainingDatasets.map(d => d.code)];
     $scope.uiSelectedDatasets = {};
 
+    $scope.miningResponses = [];
+
     const getDependantVariable = () =>
       (_.isUndefined($scope.query.variables[0])
         ? null
         : $scope.query.variables[0]);
 
-    const miningRequest = () =>
+    let isMining = false;
+    const miningRequest = () => {
+      if (isMining) return;
+      isMining = true;
+
       Config.then(config => config.mode === "local").then(isLocal => {
         $scope.isLocal = isLocal;
         $scope.loading = true;
@@ -94,47 +103,72 @@ angular.module("chuvApp.models").controller("DatasetController", [
           const json = JSON.parse(results);
 
           // Check if data is present. Else remove it, try again
-          if (json && json.length && json[0].data && json[0].data.length) {
-            return $q.resolve(json);
+          if (
+            json &&
+            json.length &&
+            json.map(j => j.data).every(d => d && d.length)
+          ) {
+            $scope.miningResponses = json;
+            $scope.loading = false;
+            return;
           } else {
             sessionStorage.removeItem(sessionStorageKey);
           }
         }
-
         // Forge and start requests for variables in all datasets
-        return $q
-          .all(
-            $scope.allDatasets.map(
-              d =>
-                Model.mining({
-                  algorithm: {
-                    code: isLocal ? "statisticsSummary" : "statisticsSummary", //"WP_VARIABLE_SUMMARY", FIXME once Exareme format is ready
-                    name: isLocal ? "statisticsSummary" : "statisticsSummary", // "WP_VARIABLE_SUMMARY",
-                    parameters: [],
-                    validation: false
-                  },
-                  variables: $scope.query.variables,
-                  grouping: $scope.query.groupings,
-                  covariables: $scope.query.coVariables,
-                  datasets: [{ code: d.code }],
-                  filters: $scope.query.textQuery
-                    ? JSON.stringify($scope.query.filterQuery)
-                    : ""
-                }).catch(e => e) // bypass catch
-            )
-          )
-          .then(response => {
-            const datasets = response
-              .map(r => (r && r.data && r.data.data) || { data: [] }) // return a "placeholder" for the non catched dataset error
-              .map((r, i) => ({
-                data: r.data,
-                name: $scope.allDatasets[i].code
-              }));
-            sessionStorage.setItem(sessionStorageKey, JSON.stringify(datasets));
+        $scope.allDatasets.forEach(d =>
+          Model.mining({
+            algorithm: {
+              code: isLocal ? "statisticsSummary" : "statisticsSummary", //"WP_VARIABLE_SUMMARY", FIXME once Exareme format is ready
+              name: isLocal ? "statisticsSummary" : "statisticsSummary", // "WP_VARIABLE_SUMMARY",
+              parameters: [],
+              validation: false
+            },
+            variables: $scope.query.variables,
+            grouping: $scope.query.groupings,
+            covariables: $scope.query.coVariables,
+            datasets: [{ code: d.code }],
+            filters: $scope.query.textQuery
+              ? JSON.stringify($scope.query.filterQuery)
+              : ""
+          })
+            .then(r => {
+              const data = (r && r.data && r.data.data && r.data.data.data) || [
+              ]; // return a "placeholder" for the non catched dataset error
+              const dataset = {
+                data,
+                name: d.code,
+                status: data.length ? "" : "Error"
+              };
 
-            return datasets;
-          });
+              const results = $scope.miningResponses;
+              const datasets = results.length ? results : [];
+              const index = datasets.findIndex(rs => rs.name === d.code);
+              datasets.splice(index, 1, dataset);
+
+              isMining = false;
+              $scope.miningResponses = datasets;
+              if (datasets.length === $scope.allDatasets.length) {
+                sessionStorage.setItem(
+                  sessionStorageKey,
+                  JSON.stringify(datasets)
+                );
+              }
+            })
+            .catch(e => {
+              const dataset = { name: d.code, status: "Error" };
+              console.log(e);
+              const results = $scope.miningResponses;
+              const datasets = results.length ? results : [];
+              const index = datasets.findIndex(rs => rs.name === d.code);
+              datasets.splice(index, 1, dataset);
+
+              isMining = false;
+              $scope.miningResponses = datasets;
+            })
+        );
       });
+    };
 
     // Charts ressources
 
@@ -142,6 +176,11 @@ angular.module("chuvApp.models").controller("DatasetController", [
       $q.resolve(datasets.filter(d => selectedDatasets.includes(d.name)));
 
     const getStatistics = data => {
+      if (!data.length) {
+        $scope.loading = true;
+        return;
+      }
+
       if (!selectedDatasets.length) {
         $scope.tableError = "Please, select at least one dataset.";
         $scope.loading = false;
@@ -155,8 +194,12 @@ angular.module("chuvApp.models").controller("DatasetController", [
       $scope.loading = true;
 
       const filterByGroupAll = datasets =>
-        datasets.map(dataset =>
-          dataset.data.filter(r => r.group && r.group[0] === "all")
+        datasets.map(
+          dataset =>
+            (dataset.data &&
+              dataset.data.length &&
+              dataset.data.filter(r => r.group && r.group[0] === "all")) ||
+            dataset
         );
 
       const orderByVariable = datasets =>
@@ -166,8 +209,12 @@ angular.module("chuvApp.models").controller("DatasetController", [
           ...$scope.query.coVariables
         ].map(variable => ({
           variable,
-          data: datasets.map(dataset =>
-            dataset.find(r => r.index === variable.code)
+          data: datasets.map(
+            dataset =>
+              (dataset &&
+                dataset.length &&
+                dataset.find(r => r.index === variable.code)) ||
+              dataset
           )
         }));
 
@@ -220,7 +267,9 @@ angular.module("chuvApp.models").controller("DatasetController", [
                 tableRows.push({
                   subrow: true,
                   variable: { label: key },
-                  data: row.data.map(e => ({ count: e.frequency[key] })),
+                  data: row.data.map(e => ({
+                    count: (e && e.frequency && e.frequency[key]) || "-"
+                  })),
                   parent: { code: key }
                 });
               });
@@ -267,9 +316,8 @@ angular.module("chuvApp.models").controller("DatasetController", [
         });
     };
 
-    const getHeatmap = () => {
-      $scope.heatmapLoaded = false;
-      console.log($scope);
+    $scope.getHeatmap = () => {
+      $scope.heatmapLoading = true;
 
       Model.mining({
         algorithm: {
@@ -278,13 +326,18 @@ angular.module("chuvApp.models").controller("DatasetController", [
           parameters: []
         },
         variables: $scope.query.variables,
-        grouping: $scope.query.groupings,
+        // grouping: $scope.query.groupings,
         coVariables: $scope.query.coVariables,
         datasets: selectedDatasets
-      }).then(result => {
-        $scope.heatmapLoaded = true;
-        $scope.chartData = result.data.data;
-      });
+      })
+        .then(result => {
+          $scope.heatmapLoading = false;
+          $scope.heatmapData = result && result.data && result.data.data;
+        })
+        .catch(e => {
+          $scope.heatmapLoading = false;
+          $scope.heatmapError = e.xhrStatus;
+        });
     };
 
     const getTSNE = () =>
@@ -409,7 +462,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
         .then(data => {
           if (!data || !data.length) {
             $scope.loading = false;
-            $scope.boxplotError = "Please select other variables to plot";
+            $scope.boxplotError = "Not available for this model.";
             $scope.boxplotData = null;
 
             return;
@@ -466,8 +519,22 @@ angular.module("chuvApp.models").controller("DatasetController", [
 
           $rootScope.$broadcast("datasetsChanged", selectedDatasets);
 
+          const data = $scope.miningResponses;
+          getStatistics(data);
+          getBoxplot(data);
+
           init();
         }
+      },
+      true
+    );
+
+    $scope.$watch(
+      "miningResponses",
+      () => {
+        const data = $scope.miningResponses;
+        getStatistics(data);
+        getBoxplot(data);
       },
       true
     );
@@ -494,15 +561,28 @@ angular.module("chuvApp.models").controller("DatasetController", [
               return;
             }
 
-            miningRequest()
-              .then(data => {
-                getStatistics(data);
-                getBoxplot(data);
-                getHeatmap(data);
-              })
-              .catch(e => e);
+            $scope.miningResponses = $scope.miningResponses.length
+              ? $scope.miningResponses
+              : data.map(d => ({ name: d.code, status: "loading..." }));
+            miningRequest();
 
-            // $scope.getHistogram();
+            // $scope.heatmapError = () => {
+
+            const variables = $scope.query.variables.concat(
+              $scope.query.coVariables
+            );
+            $q
+              .all(
+                variables.map(variable =>
+                  Variable.getVariableData(variable.code)
+                )
+              )
+              .then(data => data.every(d => d.data && d.data.type === "real"))
+              .then(isContinuous => {
+                $scope.heatmapError = isContinuous
+                  ? null
+                  : "Please select continuous variables";
+              });
 
             // retrieve filterQuery as sql text, hack queryBuilder
             if ($scope.query.filterQuery) {
