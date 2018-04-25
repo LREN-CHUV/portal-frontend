@@ -327,7 +327,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
         },
         variables: $scope.query.variables,
         // grouping: $scope.query.groupings,
-        coVariables: $scope.query.coVariables,
+        covariables: $scope.query.coVariables,
         datasets: selectedDatasets
       })
         .then(result => {
@@ -577,7 +577,13 @@ angular.module("chuvApp.models").controller("DatasetController", [
                   Variable.getVariableData(variable.code)
                 )
               )
-              .then(data => data.every(d => d.data && d.data.type === "real"))
+              .then(data =>
+                data.every(
+                  d =>
+                    (d.data && d.data.type === "real") ||
+                    d.data.type === "integer"
+                )
+              )
               .then(isContinuous => {
                 $scope.heatmapError = isContinuous
                   ? null
