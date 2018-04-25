@@ -36,12 +36,15 @@ angular.module("chuvApp.models").controller("DatasetController", [
     $scope.tableHeader = undefined;
     $scope.tableRows = undefined;
 
-    $scope.loading = true;
     $scope.histogramError = undefined;
     $scope.histogramData = undefined;
 
     $scope.boxplotError = undefined;
     $scope.boxplotData = undefined;
+
+    $scope.heatmapLoaded = true;
+    $scope.heatmapError = undefined;
+    $scope.heatmapData = undefined;
 
     $scope.tsneLoading = true;
     $scope.tsneError = undefined;
@@ -267,9 +270,8 @@ angular.module("chuvApp.models").controller("DatasetController", [
         });
     };
 
-    const getHeatmap = () => {
+    $scope.getHeatmap = () => {
       $scope.heatmapLoaded = false;
-      console.log($scope);
 
       Model.mining({
         algorithm: {
@@ -281,10 +283,15 @@ angular.module("chuvApp.models").controller("DatasetController", [
         grouping: $scope.query.groupings,
         coVariables: $scope.query.coVariables,
         datasets: selectedDatasets
-      }).then(result => {
-        $scope.heatmapLoaded = true;
-        $scope.chartData = result.data.data;
-      });
+      })
+        .then(result => {
+          $scope.heatmapLoaded = true;
+          $scope.heatmapData = result && result.data && result.data.data;
+        })
+        .catch(e => {
+          $scope.heatmapLoaded = true;
+          $scope.heatmapError = e;
+        });
     };
 
     const getTSNE = () =>

@@ -184,19 +184,24 @@
           </div>
         </uib-tab>
 
-        <!-- <uib-tab index="4" heading="Heatmap">
+        <uib-tab index="4" heading="Heatmap" ng-click="getHeatmap()">
           <div class="panel-body scrollable">
 
             <div ng-if="!heatmapLoaded" class="loading">
               <div class="fa fa-spin fa-spinner"></div>
             </div>
 
-            <div ng-if="heatmapLoaded" class="dt-wrapper">
-              <plotly-charts chart-data="chartData"></plotly-charts>
+            <div ng-if="heatmapError">
+                There was an error perfoming the method
+                <pretty-json data="heatmapError"></pretty-json>
+              </div>
+
+            <div ng-if="chartData" class="dt-wrapper">
+              <plotly-charts chart-data="heatmapData"></plotly-charts>
             </div>
 
           </div>
-        </uib-tab> -->
+        </uib-tab>
 
       </uib-tabset>
     </div>
