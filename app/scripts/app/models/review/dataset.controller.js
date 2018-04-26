@@ -134,7 +134,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
             },
             variables: $scope.query.variables,
             grouping: $scope.query.groupings,
-            covariables: $scope.ageGendercoVarArray,
+            covariables: $scope.ageGendercoVarArray ? $scope.ageGendercoVarArray : $scope.query.coVariables,
             datasets: [{ code: d.code }],
             filters: $scope.query.textQuery
               ? JSON.stringify($scope.query.filterQuery)
@@ -210,11 +210,12 @@ angular.module("chuvApp.models").controller("DatasetController", [
             dataset
         );
 
-      const orderByVariable = datasets =>
-        [
+      const orderByVariable = datasets => {
+        let caVarArray = $scope.ageGendercoVarArray ? $scope.ageGendercoVarArray : $scope.query.coVariables;
+        return [
           ...$scope.query.variables,
           ...$scope.query.groupings,
-          ...$scope.ageGendercoVarArray
+          ...caVarArray
         ].map(variable => ({
           variable,
           data: datasets.map(
@@ -225,6 +226,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
               dataset
           )
         }));
+      }
 
       const addDetailData = rows =>
         $q
