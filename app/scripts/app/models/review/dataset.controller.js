@@ -101,6 +101,13 @@ angular.module("chuvApp.models").controller("DatasetController", [
           }
         }
 
+        $scope.ageGendercoVarArray = angular.copy($scope.query.coVariables);
+        if($scope.ageGendercoVarArray.filter(covarElem => covarElem.code === "gender").length == 0 ) {
+          $scope.ageGendercoVarArray.push(
+            {"code":"gender"},
+            {"code":"subjectageyears"});
+        }
+
         // Forge and start requests for variables in all datasets
         return $q
           .all(
@@ -115,19 +122,11 @@ angular.module("chuvApp.models").controller("DatasetController", [
                   },
                   variables: $scope.query.variables,
                   grouping: $scope.query.groupings,
-                  covariables: $scope.query.coVariables,
-                  subjectageyears: "subjectageyears_allDatasets", // del
-                  gender: "gender_allDatasets", // del
+                  covariables: $scope.ageGendercoVarArray,
                   datasets: [{ code: d.code }],
                   filters: $scope.query.textQuery
                     ? JSON.stringify($scope.query.filterQuery)
                     : ""
-                }, {
-                  subjectageyears: "subjectageyears_allDatasets", // del
-                  gender: "gender_allDatasets", // del
-                }).then(data => {
-                  console.log("after allDset model.mining", data); // del
-                  console.log("$scope.allDatasets", $scope.allDatasets); // del
                 }).catch(e => e) // bypass catch
             )
           )
@@ -171,7 +170,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
         [
           ...$scope.query.variables,
           ...$scope.query.groupings,
-          ...$scope.query.coVariables
+          ...$scope.ageGendercoVarArray
         ].map(variable => ({
           variable,
           data: datasets.map(dataset =>
@@ -287,8 +286,6 @@ angular.module("chuvApp.models").controller("DatasetController", [
         variables: $scope.query.variables,
         grouping: $scope.query.groupings,
         coVariables: $scope.query.coVariables,
-        subjectageyears: "subjectageyears_HEATMAP", // del
-        gender: "gender_HEATMAP", // del
         datasets: selectedDatasets
       }).then(result => {
         $scope.heatmapLoaded = true;
