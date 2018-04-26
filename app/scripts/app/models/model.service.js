@@ -38,7 +38,7 @@ angular.module("chuvApp.models").factory("Model", [
       return $http.post(backendUrl + "/mining", data);
     };
 
-    resource.mining = (data, headers) => $http.post(backendUrl + "/mining", data, { headers: headers }); //del { headers: headers }
+    resource.mining = (data, headers) => $http.post(backendUrl + "/mining", data);
 
     resource.getList = function(params) {
       return $http.get(backendUrl + "/models", { params: params });
