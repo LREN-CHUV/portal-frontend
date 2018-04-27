@@ -479,8 +479,6 @@ angular
             tickLength: 0
           },
           yAxis: {
-            min: 0,
-            max: 1,
             title: {
               text: overview.label
             }

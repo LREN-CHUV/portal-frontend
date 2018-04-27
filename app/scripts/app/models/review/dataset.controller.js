@@ -77,6 +77,16 @@ angular.module("chuvApp.models").controller("DatasetController", [
         ? null
         : $scope.query.variables[0]);
 
+    const addGenderToGroupings = variables =>
+      (variables.find(g => g.code === "gender")
+        ? variables
+        : variables.concat({ code: "gender" }));
+
+    const addAgeToCovariables = variables =>
+      (variables.find(g => g.code === "subjectageyears")
+        ? variables
+        : variables.concat({ code: "subjectageyears" }));
+
     let isMining = false;
     const miningRequest = () => {
       if (isMining) return;
@@ -115,6 +125,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
             sessionStorage.removeItem(sessionStorageKey);
           }
         }
+
         // Forge and start requests for variables in all datasets
         $scope.allDatasets.forEach(d =>
           Model.mining({
@@ -125,8 +136,8 @@ angular.module("chuvApp.models").controller("DatasetController", [
               validation: false
             },
             variables: $scope.query.variables,
-            grouping: $scope.query.groupings,
-            covariables: $scope.query.coVariables,
+            grouping: addGenderToGroupings($scope.query.groupings),
+            covariables: addAgeToCovariables($scope.query.coVariables),
             datasets: [{ code: d.code }],
             filters: $scope.query.textQuery
               ? JSON.stringify($scope.query.filterQuery)
@@ -202,11 +213,11 @@ angular.module("chuvApp.models").controller("DatasetController", [
             dataset
         );
 
-      const orderByVariable = datasets =>
-        [
+      const orderByVariable = datasets => {
+        return [
           ...$scope.query.variables,
-          ...$scope.query.groupings,
-          ...$scope.query.coVariables
+          ...addGenderToGroupings($scope.query.groupings),
+          ...addAgeToCovariables($scope.query.coVariables)
         ].map(variable => ({
           variable,
           data: datasets.map(
@@ -217,6 +228,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
               dataset
           )
         }));
+      };
 
       const addDetailData = rows =>
         $q
