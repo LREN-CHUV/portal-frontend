@@ -77,18 +77,15 @@ angular.module("chuvApp.models").controller("DatasetController", [
         ? null
         : $scope.query.variables[0]);
 
-    $scope.ageGendercoVarArray = null;
+    const addGenderToGroupings = variables =>
+      (variables.find(g => g.code === "gender")
+        ? variables
+        : variables.concat({ code: "gender" }));
 
-    const addAgeAndGenderCovariableArray = () => {
-      if ($scope.ageGendercoVarArray === null) {
-        $scope.ageGendercoVarArray = angular.copy($scope.query.coVariables);
-      }
-      if($scope.ageGendercoVarArray.filter(covarElem => covarElem.code === "gender").length == 0 ) {
-        $scope.ageGendercoVarArray.push(
-          {"code":"gender"},
-          {"code":"subjectageyears"});
-      }
-    }
+    const addAgeToCovariables = variables =>
+      (variables.find(g => g.code === "subjectageyears")
+        ? variables
+        : variables.concat({ code: "subjectageyears" }));
 
     let isMining = false;
     const miningRequest = () => {
@@ -129,8 +126,6 @@ angular.module("chuvApp.models").controller("DatasetController", [
           }
         }
 
-        addAgeAndGenderCovariableArray();
-
         // Forge and start requests for variables in all datasets
         $scope.allDatasets.forEach(d =>
           Model.mining({
@@ -141,8 +136,8 @@ angular.module("chuvApp.models").controller("DatasetController", [
               validation: false
             },
             variables: $scope.query.variables,
-            grouping: $scope.query.groupings,
-            covariables: $scope.ageGendercoVarArray ? $scope.ageGendercoVarArray : $scope.query.coVariables,
+            grouping: addGenderToGroupings($scope.query.groupings),
+            covariables: addAgeToCovariables($scope.query.coVariables),
             datasets: [{ code: d.code }],
             filters: $scope.query.textQuery
               ? JSON.stringify($scope.query.filterQuery)
@@ -219,11 +214,10 @@ angular.module("chuvApp.models").controller("DatasetController", [
         );
 
       const orderByVariable = datasets => {
-        addAgeAndGenderCovariableArray();
         return [
           ...$scope.query.variables,
-          ...$scope.query.groupings,
-          ...$scope.ageGendercoVarArray
+          ...addGenderToGroupings($scope.query.groupings),
+          ...addAgeToCovariables($scope.query.coVariables)
         ].map(variable => ({
           variable,
           data: datasets.map(
@@ -234,7 +228,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
               dataset
           )
         }));
-      }
+      };
 
       const addDetailData = rows =>
         $q
