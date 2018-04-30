@@ -599,7 +599,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
               .then(isContinuous => {
                 $scope.heatmapError = isContinuous
                   ? null
-                  : "Please select continuous variables";
+                  : "Enabled only if variables are continuous";
               });
 
             // retrieve filterQuery as sql text, hack queryBuilder

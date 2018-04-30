@@ -132,6 +132,7 @@ angular
         $scope.ml_methods.forEach(function(method) {
           method.available = available_method(method);
           method.experimental = method.maturity === "experimental";
+          method.nyi = method.maturity === "coming_soon";
         });
 
         // Open methods menu accordion
@@ -338,22 +339,16 @@ angular
 
       $scope.add_to_experiment = function() {
         var name = $scope.shared.chosen_method.label;
-        if (
+        const parameters =
           $scope.shared.method_parameters &&
-          $scope.shared.method_parameters.length
-        ) {
+          $scope.shared.method_parameters.length;
+
+        if (parameters) {
           name +=
-            " with " +
-            $scope.shared.method_parameters.map(function(parameter, index) {
-              return (
-                parameter.label +
-                "=" +
-                parameter.value +
-                (index !== $scope.shared.method_parameters.length - 1
-                  ? ", "
-                  : "")
-              );
-            });
+            " with" +
+            $scope.shared.method_parameters.map(
+              (parameter, index) => ` ${parameter.label}=${parameter.value}`
+            );
         }
 
         var is_predictive_model =
@@ -364,7 +359,9 @@ angular
           name: name,
           validation: is_predictive_model,
           parameters: $scope.shared.method_parameters.map(function(param) {
-            return { code: param.code, value: param.value };
+            const parsed = parseFloat(param);
+            const value = isNaN(parsed) ? param : parsed;
+            return { code: param.code, value: value };
           })
         };
 
