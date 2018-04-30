@@ -11,7 +11,8 @@ var vendorCss = [
   "./node_modules/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css",
   "./node_modules/jQuery-QueryBuilder/dist/css/query-builder.default.css",
   "./node_modules/textangular/dist/textAngular.css",
-  "./app/styles/plugins/googleapi/fonts.css"
+  "./app/styles/plugins/googleapi/fonts.css",
+  "./node_modules/vis/dist/vis.css"
 ];
 
 module.exports = vendorCss;

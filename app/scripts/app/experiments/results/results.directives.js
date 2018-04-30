@@ -121,6 +121,19 @@ angular
             $scope.chartData = chartData;
             break;
 
+          case "application/vnd.visjs+javascript":
+            templateUrl = "visjs-results.html";
+            const visFunction =
+              data &&
+              data.raw &&
+              data.raw.data &&
+              data.raw.data.result &&
+              data.raw.data.result.length &&
+              data.raw.data.result.slice(1, -1);
+            $scope.visData = eval(visFunction);
+
+            break;
+
           case "text/plain+error":
             templateUrl = "error.html";
             break;

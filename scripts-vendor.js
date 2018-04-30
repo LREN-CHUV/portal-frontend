@@ -59,7 +59,8 @@ var vendorScripts = [
   "./node_modules/html2canvas/dist/html2canvas.js",
   "./" + appConfig.app + "/styles/plugins/wijets/wijets.js",
   "./app/scripts/components/highcharts/world.js",
-  "./node_modules/plotly.js/dist/plotly.min.js"
+  "./node_modules/plotly.js/dist/plotly.min.js",
+  "./node_modules/vis/dist/vis.min.js"
 ];
 
 module.exports = vendorScripts;

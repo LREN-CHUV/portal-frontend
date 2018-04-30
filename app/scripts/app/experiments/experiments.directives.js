@@ -131,20 +131,23 @@ angular
           "$scope",
           function($scope) {
             $scope.open_popover = function() {
-              MLUtils.list_experiments($scope.modelSlug)
-                .then(function(response) {
-                  if (!!$scope.onlyPositive) {
-                    $scope.model_experiments = _.filter(response.data, function(experiment) {
-                      return (
-                        !!experiment.finished &&
-                        !experiment.hasError &&
-                        !experiment.hasServerError
-                      );
-                    });
-                  } else {
-                    $scope.model_experiments = response.data;
-                  }
-                });
+              MLUtils.list_experiments($scope.modelSlug).then(function(
+                response
+              ) {
+                if (!!$scope.onlyPositive) {
+                  $scope.model_experiments = _.filter(response.data, function(
+                    experiment
+                  ) {
+                    return (
+                      !!experiment.finished &&
+                      !experiment.hasError &&
+                      !experiment.hasServerError
+                    );
+                  });
+                } else {
+                  $scope.model_experiments = response.data;
+                }
+              });
             };
 
             $scope.get_drag_data = function(experiment) {
@@ -282,10 +285,10 @@ angular
 
       return {
         link: function linkFunc(scope, element, attrs) {
-          scope.$watch('chartData', function (heatmap) {
+          scope.$watch("chartData", function(heatmap) {
             Plotly.newPlot(element[0], heatmap, layout);
           });
         }
-      }
+      };
     }
   ]);
