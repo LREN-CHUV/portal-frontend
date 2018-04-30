@@ -44,13 +44,6 @@ angular.module("chuvApp.models").component("availableMethods", {
 
         vm.ml_methods.forEach(function(method) {
           method.available = available_method(method);
-          method.nyi = [
-            "statisticsSummary",
-            "svm",
-            "randomforest",
-            "gpr",
-            "ffneuralnet"
-          ].includes(method.code);
         });
       };
 

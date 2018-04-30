@@ -58,8 +58,7 @@ angular
           )
           .filter(
             f => f.code !== "histograms" && f.code !== "statisticsSummary"
-          )
-          .filter(f => f.code !== "glm_exareme");
+          );
       });
 
       // Check if the method can be applied to the model
@@ -132,13 +131,6 @@ angular
 
         $scope.ml_methods.forEach(function(method) {
           method.available = available_method(method);
-          method.nyi = [
-            // TODO:
-            "svm",
-            "randomforest",
-            "gpr",
-            "ffneuralnet"
-          ].includes(method.code);
           method.experimental = method.maturity === "experimental";
         });
 
@@ -225,7 +217,6 @@ angular
           $scope.dataset = queryResult;
           on_data_loaded();
         });
-
         $scope.save_model = function(callback) {
           // pass
 
