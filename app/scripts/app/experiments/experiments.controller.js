@@ -321,21 +321,19 @@ angular
        * Returns whether the current configuration is valid
        * @returns {boolean}
        */
-      $scope.configuration_not_valid = function() {
-        var chosen_parameter_idx;
-
-        for (
-          chosen_parameter_idx = 0;
-          chosen_parameter_idx < $scope.shared.method_parameters.length;
-          chosen_parameter_idx++
-        ) {
-          if (!$scope.shared.method_parameters[chosen_parameter_idx].value) {
-            return true;
-          }
-        }
-
-        return false;
-      };
+      $scope.configuration_valid = () =>
+        // check for number (=== 0) or string value
+        $scope.shared.method_parameters.every((v, index) => {
+          if (
+            $scope.shared.chosen_method.parameters[index].default_value
+              .length === 0
+          )
+            return true; // no default_value means it's not mandatory
+          return (
+            (v.value || v.value === 0) &&
+            (!isNaN(parseFloat(v.value)) || v.value.length)
+          );
+        });
 
       $scope.add_to_experiment = function() {
         var name = $scope.shared.chosen_method.label;
@@ -359,8 +357,8 @@ angular
           name: name,
           validation: is_predictive_model,
           parameters: $scope.shared.method_parameters.map(function(param) {
-            const parsed = parseFloat(param);
-            const value = isNaN(parsed) ? param : parsed;
+            const parsed = parseFloat(param.value);
+            const value = isNaN(parsed) ? param.value : parsed;
             return { code: param.code, value: value };
           })
         };
@@ -386,6 +384,7 @@ angular
       // Display "Training and validation" only if predictive_model method selected
       $scope.show_training_validation = function(method) {
         $scope.shared.chosen_method = method;
+        $scope.shared.method_parameters = [];
         $scope.isValidationShow = false;
         if (method.type == "predictive_model" && $scope.federationmode) {
           $scope.isValidationShow = true;

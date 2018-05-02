@@ -48,19 +48,22 @@
 
               <uib-accordion ng-if="ml_methods.length" close-others="false">
 
-                  <div ng-if="federationmode" uib-accordion-group heading="Exareme" ng-init="acc_dist.open = true" is-open="acc_dist.open" ng-click="!acc_dist.open">
-                      <p ng-repeat="method in ml_methods | filter:{environment:'Exareme'}  | orderBy:'-label'">
-                          <button class="btn btn-primary-alt col-xs-12" ng-disabled="!method.available" ng-click="show_training_validation(method)" ng-bind="method.label">
-                        </button>
-                        <br>
-                        <br>
-                      </p>
-                    </div>
+                <div ng-if="federationmode" uib-accordion-group heading="Exareme" ng-init="acc_dist.open = true" is-open="acc_dist.open"
+                  ng-click="!acc_dist.open">
+                  <p ng-repeat="method in ml_methods | filter:{environment:'Exareme'}  | orderBy:'-label'">
+                    <button class="btn btn-primary-alt col-xs-12" ng-disabled="!method.available" ng-click="show_training_validation(method)"
+                      ng-bind="method.label">
+                    </button>
+                    <br>
+                    <br>
+                  </p>
+                </div>
 
                 <div uib-accordion-group heading="Statistical Analysis" ng-init="acc_stats.open = true" is-open="acc_stats.open" ng-click="!acc_stats.open">
                   <p ng-repeat="method in ml_methods | filter:{type:'statistics', environment:'!Exareme'}  | orderBy:'-label'">
                     <span class="label label-default" ng-if="method.nyi">Coming soon</span>
-                    <button class="btn btn-primary-alt col-xs-12" ng-disabled="!method.available" ng-click="show_training_validation(method)" ng-bind="method.label">
+                    <button class="btn btn-primary-alt col-xs-12" ng-disabled="!method.available" ng-click="show_training_validation(method)"
+                      ng-bind="method.label">
                     </button>
                     <br>
                     <br>
@@ -70,7 +73,8 @@
                 <div uib-accordion-group heading="Features Extraction" ng-init="acc_fe.open = true" is-open="acc_fe.open" ng-click="!acc_fe.open">
                   <p ng-repeat="method in ml_methods | filter:{type:'features_extraction', environment:'!Exareme'}  | orderBy:'-label'">
                     <span class="label label-default" ng-if="method.nyi">Coming soon</span>
-                    <button class="btn btn-primary-alt col-xs-12" ng-disabled="!method.available" ng-click="show_training_validation(method)" ng-bind="method.label">
+                    <button class="btn btn-primary-alt col-xs-12" ng-disabled="!method.available" ng-click="show_training_validation(method)"
+                      ng-bind="method.label">
                     </button>
                     <br>
                     <br>
@@ -80,7 +84,8 @@
                 <div uib-accordion-group heading="Predictive Model" ng-init="acc_pm.open = true" is-open="acc_pm.open" ng-click="!acc_pm.open">
                   <p ng-repeat="method in ml_methods | filter:{type:'predictive_model', environment:'!Exareme'}  | orderBy:'-label'">
                     <span class="label label-default" ng-if="method.nyi">Coming soon</span>
-                    <button class="btn btn-primary-alt col-xs-12" ng-disabled="!method.available" ng-click="show_training_validation(method)" ng-bind="method.label">
+                    <button class="btn btn-primary-alt col-xs-12" ng-disabled="!method.available" ng-click="show_training_validation(method)"
+                      ng-bind="method.label">
                     </button>
                     <br>
                     <br>
@@ -103,7 +108,7 @@
               <div ng-if="shared.chosen_method.parameters.length" class="form-group">
 
                 <h4>
-                    <span class="chosen-method">{{ shared.chosen_method.label }}</span>
+                  <span class="chosen-method">{{ shared.chosen_method.label }}</span>
                 </h4>
                 <div ng-repeat="parameter in shared.chosen_method.parameters" class="form-inline">
                   <label for="{{parameter.name}}">
@@ -112,28 +117,32 @@
                   <div ng-switch on="parameter.type">
                     <div ng-switch-when="int">
                       <input type="number" step="1" id="{{parameter.name}}" class="form-control" ng-model="shared.method_parameters[$index].value"
-                             value="{{shared.method_parameters[$index].value}}" ng-init="shared.method_parameters[$index] = {code: parameter.code, label: parameter.label, value: parseInt(parameter.default_value)}">
+                        value="{{shared.method_parameters[$index].value}}" ng-init="shared.method_parameters[$index] = {code: parameter.code, label: parameter.label, value: parseInt(parameter.default_value)}">
                     </div>
                     <div ng-switch-when="real">
                       <input type="text" step="0.1" id="{{parameter.name}}" class="form-control" ng-model="shared.method_parameters[$index].value"
-                             value="{{shared.method_parameters[$index].value}}" ng-init="shared.method_parameters[$index] = {code: parameter.code, label: parameter.label, value: parameter.default_value}">
+                        value="{{shared.method_parameters[$index].value}}" ng-init="shared.method_parameters[$index] = {code: parameter.code, label: parameter.label, value: parameter.default_value}">
                     </div>
                     <div ng-switch-when="number">
-                        <input type="text" id="{{parameter.name}}" class="form-control" ng-model="shared.method_parameters[$index].value"
-                               value="{{shared.method_parameters[$index].value}}" ng-init="shared.method_parameters[$index] = {code: parameter.code, label: parameter.label, value: parameter.default_value}">
-                      </div>
+                      <input type="text" id="{{parameter.name}}" class="form-control" ng-model="shared.method_parameters[$index].value" value="{{shared.method_parameters[$index].value}}"
+                        ng-init="shared.method_parameters[$index] = {code: parameter.code, label: parameter.label, value: parameter.default_value}">
+                    </div>
+                    <div ng-switch-when="numeric">
+                      <input type="text" id="{{parameter.name}}" class="form-control" ng-model="shared.method_parameters[$index].value" value="{{shared.method_parameters[$index].value}}"
+                        ng-init="shared.method_parameters[$index] = {code: parameter.code, label: parameter.label, value: parameter.default_value}">
+                    </div>
                     <div ng-switch-when="enumeration">
                       <select id="{{parameter.name}}" class="form-control" ng-model="shared.method_parameters[$index].value" ng-options="value for value in parameter.values"
-                              ng-init="shared.method_parameters[$index] = {code: parameter.code, label: parameter.label, value: parameter.default_value}"></select>
+                        ng-init="shared.method_parameters[$index] = {code: parameter.code, label: parameter.label, value: parameter.default_value}"></select>
                     </div>
                     <div ng-switch-when="string">
-                        <input type="text" id="{{parameter.name}}" class="form-control" ng-model="shared.method_parameters[$index].value"
-                               value="{{shared.method_parameters[$index].value}}" ng-init="shared.method_parameters[$index] = {code: parameter.code, label: parameter.label, value: parameter.default_value}">
-                      </div>
+                      <input type="text" id="{{parameter.name}}" class="form-control" ng-model="shared.method_parameters[$index].value" value="{{shared.method_parameters[$index].value}}"
+                        ng-init="shared.method_parameters[$index] = {code: parameter.code, label: parameter.label, value: parameter.default_value}">
+                    </div>
                     <div ng-switch-default>
                       <p ng-bind="{{shared.chosen_method.parameters | json}}"></p>
                       <input id="{{parameter.name}}" class="form-control" ng-model="shared.method_parameters[$index].value" value="{{shared.method_parameters[$index].value}}"
-                             ng-init="shared.method_parameters[$index] = {code: parameter.code, label: parameter.label, value: parameter.default_value}">
+                        ng-init="shared.method_parameters[$index] = {code: parameter.code, label: parameter.label, value: parameter.default_value}">
                     </div>
                   </div>
                   <p ng-bind="parameter.description"></p>
@@ -145,18 +154,19 @@
               </div>
 
               <div ng-if="!shared.chosen_method && shared.experiment_configuration.length == 0">
-                  <p>
-                    Pick a Method on the left and add it here to create an experiment
-                  </p>
-                </div>
+                <p>
+                  Pick a Method on the left and add it here to create an experiment
+                </p>
+              </div>
 
               <br>
-              <button class="btn btn-primary pull-right" ng-class="{'disabled': !shared.chosen_method || method_already_configured() || configuration_not_valid()}"
-                      ng-click="add_to_experiment()">
+              <button class="btn btn-primary pull-right" ng-class="{'disabled': !shared.chosen_method || method_already_configured() || !configuration_valid()}"
+                ng-click="add_to_experiment()">
                 Add method
               </button>
 
-              <br><br>
+              <br>
+              <br>
 
               <div>
                 <algorithm-runner></algorithm-runner>
@@ -171,23 +181,18 @@
 
               <uib-accordion close-others="false">
 
-                <div uib-accordion-group is-open="true" >
+                <div uib-accordion-group is-open="true">
                   <uib-accordion-heading>
                     Training and validation
                   </uib-accordion-heading>
 
-                  <div class="training-and-validation" >
+                  <div class="training-and-validation">
                     <div>
                       <label class="training">Training</label>
                       <div>
                         <div ng-repeat="dataset in datasets" class="datasets-types">
                           <span class="dataset-wrap">
-                            <input
-                              type="checkbox"
-                              id="{{dataset.code}}T"
-                              class="training"
-                              name="{{dataset.code}}"
-                              ng-model="shared.experiment_datasets.training[dataset.code]"
+                            <input type="checkbox" id="{{dataset.code}}T" class="training" name="{{dataset.code}}" ng-model="shared.experiment_datasets.training[dataset.code]"
                             />
                             <label for="{{dataset.code}}T">
                               <span class="code">{{dataset.label}}</span>
@@ -201,12 +206,7 @@
                       <div>
                         <div ng-repeat="dataset in datasets" class="datasets-types">
                           <span ng-init="shared.experiment_datasets.validation[dataset.code] = false" class="dataset-wrap">
-                            <input
-                              type="checkbox"
-                              id="{{dataset.code}}V"
-                              class="validation"
-                              name="{{dataset.code}}"
-                              ng-click="shared.experiment_datasets.validation[dataset.code] = !shared.experiment_datasets.validation[dataset.code]"
+                            <input type="checkbox" id="{{dataset.code}}V" class="validation" name="{{dataset.code}}" ng-click="shared.experiment_datasets.validation[dataset.code] = !shared.experiment_datasets.validation[dataset.code]"
                             />
                             <label for="{{dataset.code}}V">
                               <span class="code">{{dataset.label}}</span>
@@ -223,34 +223,34 @@
 
 
 
-          <div ng-if="!shared.chosen_method">
+            <div ng-if="!shared.chosen_method">
 
-            <div class="col-xs-12">
-              <div class="panel">
-                <div class="panel-heading">
-                  About Running Experiments
-                </div>
-                <div class="panel-body">
-                  An experiment is a set of algorithm(s) and their configuration applied to the variables already selected. You may choose
-                  same algorithms more than once providing that you change the configuration parameters.
-                  <br />
-                  <br /> You can design your own MIP Experiment by doing the following:
-                  <br />
-                  <ol>
-                    <li>Select a Machine Learning method on the left</li>
-                    <li>If required, configure parameters (e.g. "k")</li>
-                    <li>Add to Experiment</li>
-                    <li>Optionally operate the same steps with other algorithms and/or parameters</li>
-                    <li>Give a name to the Experiment</li>
-                    <li>Select your k-fold Validation (to be applied to predictive model algorithms)</li>
-                    <li>Run Experiment</li>
-                  </ol>
-                  Wait for results.
+              <div class="col-xs-12">
+                <div class="panel">
+                  <div class="panel-heading">
+                    About Running Experiments
+                  </div>
+                  <div class="panel-body">
+                    An experiment is a set of algorithm(s) and their configuration applied to the variables already selected. You may choose
+                    same algorithms more than once providing that you change the configuration parameters.
+                    <br />
+                    <br /> You can design your own MIP Experiment by doing the following:
+                    <br />
+                    <ol>
+                      <li>Select a Machine Learning method on the left</li>
+                      <li>If required, configure parameters (e.g. "k")</li>
+                      <li>Add to Experiment</li>
+                      <li>Optionally operate the same steps with other algorithms and/or parameters</li>
+                      <li>Give a name to the Experiment</li>
+                      <li>Select your k-fold Validation (to be applied to predictive model algorithms)</li>
+                      <li>Run Experiment</li>
+                    </ol>
+                    Wait for results.
+                  </div>
                 </div>
               </div>
-            </div>
 
-          </div>
+            </div>
 
         </div>
 
@@ -266,10 +266,8 @@
                 <div class="variable-list scrollable">
 
                   <h5 ng-if="modelsList">Select model</h5>
-                  <select ng-model="selectedModel"
-                          ng-change="change(selectedModel)"
-                          ng-options="chosenModel.title for chosenModel in modelsList"
-                          class="form-control chosen-model">
+                  <select ng-model="selectedModel" ng-change="change(selectedModel)" ng-options="chosenModel.title for chosenModel in modelsList"
+                    class="form-control chosen-model">
                   </select>
 
                   <h5 ng-if="query.variables.length">Variable</h5>
