@@ -46,7 +46,7 @@
                 </p>
               </div>
 
-              <uib-accordion ng-if="ml_methods.length" close-others="false">
+              <uib-accordion ng-if="ml_methods.length" close-others="false" class="limited-height">
 
                 <div ng-if="federationmode" uib-accordion-group heading="Exareme" ng-init="acc_dist.open = true" is-open="acc_dist.open"
                   ng-click="!acc_dist.open">
@@ -95,6 +95,20 @@
               </uib-accordion>
             </div>
           </div>
+
+          <uib-accordion close-others="false">
+
+            <div uib-accordion-group is-open="help_is_open" ng-show="shared.chosen_method">
+              <uib-accordion-heading>
+                {{shared.chosen_method.label}} method
+              </uib-accordion-heading>
+              <div ng-if="!shared.chosen_method.description">
+                There is no description for this method
+              </div>
+              <div ng-if="shared.chosen_method.description" btf-markdown="shared.chosen_method.description"></div>
+            </div>
+
+          </uib-accordion>
         </div>
 
         <div class="col-sm-6">
@@ -295,20 +309,6 @@
 
                 </div>
               </div>
-            </div>
-
-          </uib-accordion>
-
-          <uib-accordion close-others="false">
-
-            <div uib-accordion-group is-open="help_is_open" ng-show="shared.chosen_method">
-              <uib-accordion-heading>
-                {{shared.chosen_method.label}} method
-              </uib-accordion-heading>
-              <div ng-if="!shared.chosen_method.description">
-                There is no description for this method
-              </div>
-              <div ng-if="shared.chosen_method.description" btf-markdown="shared.chosen_method.description"></div>
             </div>
 
           </uib-accordion>
