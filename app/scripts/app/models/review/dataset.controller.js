@@ -578,8 +578,6 @@ angular.module("chuvApp.models").controller("DatasetController", [
               : data.map(d => ({ name: d.code, status: "loading..." }));
             miningRequest();
 
-            // $scope.heatmapError = () => {
-
             const variables = $scope.query.variables.concat(
               $scope.query.coVariables
             );
