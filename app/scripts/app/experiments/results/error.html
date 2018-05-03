@@ -3,24 +3,16 @@
 
         <div uib-accordion-group ng-if="data" is-open="true">
           <uib-accordion-heading>
-            <span class="ti ti-check-box"></span>
-            Error
+            <h3>
+              <span class="fa fa-warning" style="color: darkorange"></span>
+              An error has occurred.
+            </h3>
           </uib-accordion-heading>
-          <div>
-            There was an error perfoming the method
-            <br>
-            Here's the raw output:
+          <div class="panel-body">
+            An error has occurred while running your experiment. Here's the message:
             <br><br>
-            <pretty-json data="data"></pretty-json>
+            <p ng-bind="data.raw.error"></p>
           </div>
         </div>
 
-        <div uib-accordion-group is-open="help_is_open">
-          <uib-accordion-heading>
-            <span class="ti ti-help-alt"></span>
-            Help
-          </uib-accordion-heading>
-
-          <div class="panel-body" btf-markdown="estimation.help"></div>
-        </div>
       </div>

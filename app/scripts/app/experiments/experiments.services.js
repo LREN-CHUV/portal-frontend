@@ -209,8 +209,14 @@ angular.module("chuvApp.util").factory("MLUtils", [
         if (output.type === validation_type) {
           var i = 0;
           output.metrics = ml_metrics[output.type].map(function(metric) {
-            var value =
-              result.data.cells.validations[0].data.average[metric.code];
+            // TODO: Change mapping in backend
+            var code = metric.code === "Weighted Precision"
+              ? "Weighted precision"
+              : metric.code;
+            var code = metric.code === "Weighted Recall"
+              ? "Weighted recall"
+              : code;
+            var value = result.data.cells.validations[0].data.average[code];
 
             if (metric.type === "numeric") {
               if (overview.length <= i) {

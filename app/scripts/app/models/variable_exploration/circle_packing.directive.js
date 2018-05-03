@@ -105,9 +105,7 @@ angular.module("chuvApp.models").directive("circlePacking", [
           element.find(".panel-body").empty();
           disableLastWatch();
 
-          var margin = 20,
-            diameter = element.width(),
-            root = groups;
+          var margin = 20, diameter = element.width(), root = groups;
 
           svg = d3
             .select(element.find(".panel-body")[0])
@@ -269,12 +267,21 @@ angular.module("chuvApp.models").directive("circlePacking", [
           function zoomTo(v) {
             var k = diameter / v[2];
             view = v;
+            var singleParent = d => d.parent && d.parent.children.length === 1;
+            var singleParentChild = d =>
+              d.parent &&
+              d.parent.parent &&
+              d.parent.parent.children.length === 1;
+
             node.attr("transform", function(d) {
               return (
                 "translate(" + (d.x - v[0]) * k + "," + (d.y - v[1]) * k + ")"
               );
             });
+
             circle.attr("r", function(d) {
+              if (singleParent(d)) return d.r * k / 1.1;
+              if (singleParentChild(d)) return d.r * k / 1.5;
               return d.r * k;
             });
           }
@@ -406,7 +413,10 @@ angular.module("chuvApp.models").directive("circlePacking", [
           );
           $scope.configuration["trainingDatasets"] = selectedDatasetsObj;
 
-          $rootScope.$broadcast("event:selectedDatasetIsChanged", $scope.selectedDatasets);
+          $rootScope.$broadcast(
+            "event:selectedDatasetIsChanged",
+            $scope.selectedDatasets
+          );
         };
 
         $scope.$on("event:setToURLtrainingDatasets", function(event, data) {
