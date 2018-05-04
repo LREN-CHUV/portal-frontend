@@ -12,7 +12,8 @@ angular
   .directive("methodResult", [
     "$compile",
     "$http",
-    function($compile, $http) {
+    "$sce",
+    function($compile, $http, $sce) {
       var linker = function($scope, element) {
         var data = $scope.data;
         var resultType = data.type;
@@ -108,6 +109,11 @@ angular
             };
             break;
 
+          case "image/svg+xml":
+            templateUrl = "image-svg.html";
+            $scope.svg = $sce.trustAsHtml(data.raw.data);
+            break;
+
           case "application/vnd.plotly.v1+json":
             templateUrl = "heatmap-results.html";
             $scope.chartData = data && data.raw.data;
@@ -134,8 +140,19 @@ angular
 
             break;
 
+          case "text/plain":
+            templateUrl = "textplain-results.html";
+            $scope.textData = data && data.raw && data.raw.data;
+
+            break;
+
           case "text/plain+error":
             templateUrl = "error.html";
+            $scope.errorData = data && data.raw && data.raw.error;
+            $scope.errorData = $scope.errorData
+              ? $scope.errorData
+              : data && data.Error;
+
             break;
         }
 
