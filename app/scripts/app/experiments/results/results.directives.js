@@ -12,7 +12,8 @@ angular
   .directive("methodResult", [
     "$compile",
     "$http",
-    function($compile, $http) {
+    "$sce",
+    function($compile, $http, $sce) {
       var linker = function($scope, element) {
         var data = $scope.data;
         var resultType = data.type;
@@ -106,6 +107,11 @@ angular
                     : formatFunc(subData),
               isArray: subData.length > 2 ? true : false
             };
+            break;
+
+          case "image/svg+xml":
+            templateUrl = "image-svg.html";
+            $scope.svg = $sce.trustAsHtml(data.raw.data);
             break;
 
           case "application/vnd.plotly.v1+json":
