@@ -134,8 +134,15 @@ angular
 
             break;
 
+          case "text/plain":
+            templateUrl = "textplain-results.html";
+            $scope.textData = data && data.raw && data.raw.data;
+
+            break;
+
           case "text/plain+error":
             templateUrl = "error.html";
+
             break;
         }
 
