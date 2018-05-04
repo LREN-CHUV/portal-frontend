@@ -148,6 +148,10 @@ angular
 
           case "text/plain+error":
             templateUrl = "error.html";
+            $scope.errorData = data && data.raw && data.raw.error;
+            $scope.errorData = $scope.errorData
+              ? $scope.errorData
+              : data && data.Error;
 
             break;
         }
