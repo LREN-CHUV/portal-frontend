@@ -48,7 +48,7 @@
           <div tooltip-placement="left" ng-if="focused_variable.description.length > 0" tooltip="The description of the variable">
             <b>Description</b>: <variable-description text="variable_description"></variable-description>
           </div>
-          <div ng-if="stats.length">
+          <div id="hch-tabs" ng-if="stats.length">
             <uib-tabset>
               <uib-tab ng-repeat="statistic in stats"
                    select="show_stats_after_timeout(statistic)"

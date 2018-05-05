@@ -2,7 +2,8 @@
 angular.module("chuvApp.models").directive("circlePacking", [
   "$location",
   "$rootScope",
-  function($location, $rootScope) {
+  "Debounce",
+  function($location, $rootScope, Debounce) {
     return {
       templateUrl: "scripts/app/models/variable_exploration/circle_packing.html",
       replace: true,
@@ -257,7 +258,8 @@ angular.module("chuvApp.models").directive("circlePacking", [
                 ? Object.assign({ is_group: true }, d.original)
                 : d.original;
 
-              $scope.set_focused_variable(variable);
+              // debounce set_focused_variable function to 2 seconds
+              ( Debounce($scope.set_focused_variable, 2000, false) )(variable);
               $scope.search.value = null;
               $scope.search.group = null;
               if (!calledFromAngular) $scope.$apply(); //$apply trigger a digest cycle, necessary for a click on a svg el
