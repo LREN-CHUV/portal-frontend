@@ -5,6 +5,25 @@
         <div uib-accordion-group is-open="true">
           <uib-accordion-heading>
             <span class="ti ti-check-box"></span>
+            Datasets
+          </uib-accordion-heading>
+          <div class="panel-body variable-list scrollable">
+            <div ng-repeat="(dataset, enabled) in uiSelectedDatasets">
+              <label>
+                <input
+                  ng-model="uiSelectedDatasets[dataset]"
+                  type="checkbox">
+                {{uiSelectedDatasetName(dataset)}}
+              </label>
+            </div>
+          </div>
+        </div>
+      </uib-accordion>
+
+      <uib-accordion>
+        <div uib-accordion-group is-open="true">
+          <uib-accordion-heading>
+            <span class="ti ti-check-box"></span>
             Model
           </uib-accordion-heading>
           <div class="panel-body variable-list scrollable">
@@ -39,24 +58,6 @@
         </div>
       </uib-accordion>
 
-      <uib-accordion>
-        <div uib-accordion-group is-open="true">
-          <uib-accordion-heading>
-            <span class="ti ti-check-box"></span>
-            Datasets
-          </uib-accordion-heading>
-          <div class="panel-body variable-list scrollable">
-            <div ng-repeat="(dataset, enabled) in uiSelectedDatasets">
-                <label>
-                  <input
-                    ng-model="uiSelectedDatasets[dataset]"
-                    type="checkbox">
-                    {{uiSelectedDatasetName(dataset)}}
-                </label>
-              </div>
-          </div>
-        </div>
-      </uib-accordion>
     </div>
 
     <div class="panel" style="flex-grow: 2">
