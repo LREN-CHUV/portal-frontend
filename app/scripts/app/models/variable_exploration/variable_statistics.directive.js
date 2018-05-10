@@ -54,16 +54,17 @@ angular.module("chuvApp.models").directive("variableStatistics", [
             }
 
             var count = 0;
+            var varCount = 0;
             var recNodeCalc = function(node) {
               if (!node || !node.children) return;
               node.children.map(function(c) {
-                if (c.is_group) { ++count; }
-                recNodeCalc(c);
+                if ( c.is_group ) { ++count; }
+                if ( !c.is_group ) { ++varCount; }
               });
             };
             recNodeCalc(node);
 
-            $scope.groupStats = { count };
+            $scope.groupStats = { count, varCount };
             $scope.focused_variable_loaded = true;
 
             return;

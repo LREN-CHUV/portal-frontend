@@ -22,9 +22,14 @@
       <div ng-if="!focused_variable.isVariable">
         <div tooltip-placement="left" tooltip="The name of the group">
           <b>Name</b>: <span ng-bind="focused_variable.label || 'Root'"></span>
-          <p ng-if="groupStats">
-            Variables count: {{groupStats.count}}
-          </p>
+          <div ng-if="groupStats">
+            <div>
+              Subgroups count: {{groupStats.count}}
+            </div>
+            <div>
+              Variables count: {{groupStats.varCount}}
+            </div>
+          </div>
         </div>
       </div>
       <div ng-if="focused_variable.isVariable && (has_error && !variable_description)">
