@@ -24,10 +24,13 @@
           <b>Name</b>: <span ng-bind="focused_variable.label || 'Root'"></span>
           <div ng-if="groupStats">
             <div>
-              Subgroups count: {{groupStats.count}}
+              Group Variables count: {{groupStats.varCount}}
             </div>
             <div>
-              Variables count: {{groupStats.varCount}}
+              Subgroups count: {{groupStats.count}}
+            </div>
+            <div ng-if="groupStats.count">
+              Subgroups Variables count: {{groupStats.subVarCount}}
             </div>
           </div>
         </div>
