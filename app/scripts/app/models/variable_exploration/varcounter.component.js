@@ -28,9 +28,15 @@ angular.module("chuvApp.models").component("varcounter", {
               xAxis: {
                 categories: subCategoryVariableCounter.map(group => group.code)
               },
+              yAxis: {
+                allowDecimals: false
+              },
               series: [
                 {
-                  data: subCategoryVariableCounter.map(group => group.counter)
+                  data: subCategoryVariableCounter.map(group => group.counter),
+                  dataLabels: {
+                    enabled: true,
+                  }
                 }
               ]
             };
