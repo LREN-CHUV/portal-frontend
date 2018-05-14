@@ -7,8 +7,7 @@ angular.module("chuvApp.models").directive("variableStatistics", [
   "$timeout",
   "$filter",
   "Variable",
-  // "$stateParams",
-  function($timeout, $filter, Variable /*, $stateParams*/) {
+  function($timeout, $filter, Variable) {
     // TODO: var isn't used, commented to jshint warning detection
     return {
       templateUrl: "scripts/app/models/variable_exploration/variable_statistics.html",
@@ -72,9 +71,6 @@ angular.module("chuvApp.models").directive("variableStatistics", [
           getVariableHistogram( focused_variable, $scope.selectedDatasets, $scope.current_request_id );
         });
 
-        $scope.$on("event:selectedDatasetIsChanged", function(event, data) {
-          getVariableHistogram( $scope.focused_variable, data, $scope.current_request_id, true );
-        });
 
         function getVariableHistogram( focused_variable, selected_dataset, current_request_id, changeDataset ){
           $scope.focused_variable_loaded = false;
@@ -101,6 +97,13 @@ angular.module("chuvApp.models").directive("variableStatistics", [
               if (!angular.isArray($scope.stats)) {
                 $scope.stats = [$scope.stats];
               }
+
+              // to avoid uib-tab failing
+              if ( angular.element("#hch-tabs").length > 0 ) {
+                $timeout(function() {
+                  angular.element("#hch-tabs ul li:first a").triggerHandler('click');
+                }, 100);
+              }
             },
             function() {
               if ($scope.current_request_id != request_id) {
@@ -111,6 +114,10 @@ angular.module("chuvApp.models").directive("variableStatistics", [
             }
           );
         }
+
+        $scope.$on("event:selectedDatasetIsChanged", function(event, data) {
+          getVariableHistogram( $scope.focused_variable, data, $scope.current_request_id, true );
+        });
 
         // this is to overcome a ng-highcharts sizing bug.
         $scope.show_stats_after_timeout = function(statistics) {
