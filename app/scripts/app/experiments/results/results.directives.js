@@ -151,7 +151,7 @@ angular
             $scope.errorData = data && data.raw && data.raw.error;
             $scope.errorData = $scope.errorData
               ? $scope.errorData
-              : data && data.Error;
+              : data.raw && data.raw.data && data.raw.data.Error;
 
             break;
         }
