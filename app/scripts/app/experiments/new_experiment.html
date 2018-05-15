@@ -48,7 +48,7 @@
 
               <uib-accordion ng-if="ml_methods.length" close-others="false" class="limited-height">
 
-                <div ng-if="federationmode" uib-accordion-group heading="Exareme" ng-init="acc_dist.open = true" is-open="acc_dist.open"
+                <div ng-if="federationmode" uib-accordion-group heading="Federation" ng-init="acc_dist.open = true" is-open="acc_dist.open"
                   ng-click="!acc_dist.open">
                   <p ng-repeat="method in ml_methods | filter:{environment:'Exareme'}  | orderBy:'-label'">
                     <button class="btn btn-primary-alt col-xs-12" ng-disabled="!method.available" ng-click="show_training_validation(method)"
@@ -59,8 +59,8 @@
                   </p>
                 </div>
 
-                <div uib-accordion-group heading="Statistical Analysis" ng-init="acc_stats.open = true" is-open="acc_stats.open" ng-click="!acc_stats.open">
-                  <p ng-repeat="method in ml_methods | filter:{type:'statistics', environment:'!Exareme'}  | orderBy:'-label'">
+                <div ng-if="federationmode" uib-accordion-group heading="Pseudo-Federation" ng-init="acc_stats.open = true" is-open="acc_stats.open" ng-click="!acc_stats.open">
+                  <p ng-repeat="method in ml_methods | filter:{environment:'!Exareme'}  | orderBy:'-label'">
                     <span class="label label-default" ng-if="method.nyi">Coming soon</span>
                     <button class="btn btn-primary-alt col-xs-12" ng-disabled="!method.available" ng-click="show_training_validation(method)"
                       ng-bind="method.label">
@@ -70,28 +70,40 @@
                   </p>
                 </div>
 
-                <div uib-accordion-group heading="Features Extraction" ng-init="acc_fe.open = true" is-open="acc_fe.open" ng-click="!acc_fe.open">
-                  <p ng-repeat="method in ml_methods | filter:{type:'features_extraction', environment:'!Exareme'}  | orderBy:'-label'">
-                    <span class="label label-default" ng-if="method.nyi">Coming soon</span>
-                    <button class="btn btn-primary-alt col-xs-12" ng-disabled="!method.available" ng-click="show_training_validation(method)"
-                      ng-bind="method.label">
-                    </button>
-                    <br>
-                    <br>
-                  </p>
-                </div>
+                <span ng-if="!federationmode">
+                  <div uib-accordion-group heading="Statistical Analysis" ng-init="acc_stats.open = true" is-open="acc_stats.open" ng-click="!acc_stats.open">
+                    <p ng-repeat="method in ml_methods | filter:{type:'statistics', environment:'!Exareme'}  | orderBy:'-label'">
+                      <span class="label label-default" ng-if="method.nyi">Coming soon</span>
+                      <button class="btn btn-primary-alt col-xs-12" ng-disabled="!method.available" ng-click="show_training_validation(method)"
+                        ng-bind="method.label">
+                      </button>
+                      <br>
+                      <br>
+                    </p>
+                  </div>
 
-                <div uib-accordion-group heading="Predictive Model" ng-init="acc_pm.open = true" is-open="acc_pm.open" ng-click="!acc_pm.open">
-                  <p ng-repeat="method in ml_methods | filter:{type:'predictive_model', environment:'!Exareme'}  | orderBy:'-label'">
-                    <span class="label label-default" ng-if="method.nyi">Coming soon</span>
-                    <button class="btn btn-primary-alt col-xs-12" ng-disabled="!method.available" ng-click="show_training_validation(method)"
-                      ng-bind="method.label">
-                    </button>
-                    <br>
-                    <br>
-                  </p>
-                </div>
+                  <div uib-accordion-group heading="Features Extraction" ng-init="acc_fe.open = true" is-open="acc_fe.open" ng-click="!acc_fe.open">
+                    <p ng-repeat="method in ml_methods | filter:{type:'features_extraction', environment:'!Exareme'}  | orderBy:'-label'">
+                      <span class="label label-default" ng-if="method.nyi">Coming soon</span>
+                      <button class="btn btn-primary-alt col-xs-12" ng-disabled="!method.available" ng-click="show_training_validation(method)"
+                        ng-bind="method.label">
+                      </button>
+                      <br>
+                      <br>
+                    </p>
+                  </div>
 
+                  <div uib-accordion-group heading="Predictive Model" ng-init="acc_pm.open = true" is-open="acc_pm.open" ng-click="!acc_pm.open">
+                    <p ng-repeat="method in ml_methods | filter:{type:'predictive_model', environment:'!Exareme'}  | orderBy:'-label'">
+                      <span class="label label-default" ng-if="method.nyi">Coming soon</span>
+                      <button class="btn btn-primary-alt col-xs-12" ng-disabled="!method.available" ng-click="show_training_validation(method)"
+                        ng-bind="method.label">
+                      </button>
+                      <br>
+                      <br>
+                    </p>
+                  </div>
+                </span>
               </uib-accordion>
             </div>
           </div>
