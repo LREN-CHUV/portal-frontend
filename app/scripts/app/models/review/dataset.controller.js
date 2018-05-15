@@ -120,6 +120,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
           ) {
             $scope.miningResponses = json;
             $scope.loading = false;
+            isMining = false;
             return;
           } else {
             sessionStorage.removeItem(sessionStorageKey);
@@ -158,6 +159,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
               datasets.splice(index, 1, dataset);
 
               isMining = false;
+              $scope.loading = false;
               $scope.miningResponses = datasets;
               if (datasets.length === $scope.allDatasets.length) {
                 sessionStorage.setItem(
@@ -173,7 +175,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
               const datasets = results.length ? results : [];
               const index = datasets.findIndex(rs => rs.name === d.code);
               datasets.splice(index, 1, dataset);
-
+              $scope.loading = false;
               isMining = false;
               $scope.miningResponses = datasets;
             })
