@@ -258,8 +258,8 @@ angular.module("chuvApp.models").directive("circlePacking", [
                 ? Object.assign({ is_group: true }, d.original)
                 : d.original;
 
-              // debounce set_focused_variable function to 2 seconds
-              ( Debounce($scope.set_focused_variable, 2000, false) )(variable);
+              // debounce set_focused_variable function to 0.5 seconds
+              ( Debounce($scope.set_focused_variable, 500, false) )(variable);
               $scope.search.value = null;
               $scope.search.group = null;
               if (!calledFromAngular) $scope.$apply(); //$apply trigger a digest cycle, necessary for a click on a svg el
