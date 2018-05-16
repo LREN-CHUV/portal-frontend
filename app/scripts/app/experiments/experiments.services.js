@@ -163,8 +163,8 @@ angular.module("chuvApp.util").factory("MLUtils", [
               result.data.cells.validations.init.length > 0
             ) {
               if (
-                result.data.cells.validations.init[0].data.type ===
-                "KFoldCrossValidationScore"
+                result.data.cells.validations.init[0].data.average.type ===
+                "RegressionScore"
               ) {
                 return "regression";
               }
