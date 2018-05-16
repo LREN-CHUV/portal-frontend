@@ -159,10 +159,11 @@ angular.module("chuvApp.util").factory("MLUtils", [
               result.data &&
               result.data.cells &&
               result.data.cells.validations &&
-              result.data.cells.validations.length
+              result.data.cells.validations.init &&
+              result.data.cells.validations.init.length > 0
             ) {
               if (
-                result.data.cells.validations[0].data.average.type ===
+                result.data.cells.validations.init[0].data.average.type ===
                 "RegressionScore"
               ) {
                 return "regression";
@@ -200,7 +201,8 @@ angular.module("chuvApp.util").factory("MLUtils", [
           result.data &&
           result.data.cells &&
           result.data.cells.validations &&
-          result.data.cells.validations.length &&
+          result.data.cells.validations.init &&
+          result.data.cells.validations.init.length &&
           (output.type === "regression" || output.type === "classification")
         ) {
           validation_type = output.type;
@@ -216,7 +218,8 @@ angular.module("chuvApp.util").factory("MLUtils", [
             var code = metric.code === "Weighted Recall"
               ? "Weighted recall"
               : code;
-            var value = result.data.cells.validations[0].data.average[code];
+            var value =
+              result.data.cells.validations.init[0].data.average[code];
 
             if (metric.type === "numeric") {
               if (overview.length <= i) {
