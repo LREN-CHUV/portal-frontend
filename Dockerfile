@@ -4,6 +4,7 @@ FROM node:8.9.1 as builder
 WORKDIR /frontend
 
 RUN npm install -g gulp
+RUN npm link gulp
 
 RUN npm install -g webdriver-manager
 RUN webdriver-manager update --standalone --versions.chrome 2.28 --gecko false
