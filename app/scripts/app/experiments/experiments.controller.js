@@ -512,7 +512,6 @@ angular
               const data = response.data;
               $scope.experiment = data;
               $scope.experiment.name = data.name;
-
               $scope.loading = false;
 
               // Refresh experiment until done
@@ -524,6 +523,32 @@ angular
               // catch error before parsing
               if (!angular.isObject($scope.experiment.result)) {
                 throw $scope.experiment.result;
+              }
+
+              // federation nodes parallels results
+              if (angular.isArray(data.result)) {
+                $scope.isFederationResult = true;
+                $scope.experiments = [];
+
+                data.result.forEach((r, i) => {
+                  const experiment = MLUtils.parse_results(r.data);
+                  // Prepare charts
+                  experiment.overview_charts = experiment.overview.map(
+                    compute_overview_graph
+                  );
+                  $scope.experiments.push(experiment);
+                });
+
+                if (!$scope.experiment.resultsViewed) {
+                  MLUtils.mark_as_read($scope.experiment);
+                }
+
+                $scope.experiment = {
+                  finished: true,
+                  hasError: false
+                };
+
+                return;
               }
 
               $scope.experiment.display = MLUtils.parse_results(
@@ -544,6 +569,7 @@ angular
               $scope.experiment.hasError = true;
               $scope.experiment.result =
                 "Invalid JSON: \n" + $scope.experiment.result;
+              console.log(e);
             } finally {
               // Mark as read
               if (!$scope.experiment.resultsViewed) {
