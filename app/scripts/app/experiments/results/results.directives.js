@@ -22,7 +22,7 @@ angular
         // Linear regression & ANOVA utility functions
         $scope.variable_title = function(variable_code) {
           // capitalize
-          return variable_code
+          const code = variable_code
             .split(/[ _\-]/)
             .map(function(code_part) {
               return code_part.replace(/^[a-z]/, function(str) {
@@ -30,6 +30,8 @@ angular
               });
             })
             .join(" ");
+
+          return code.length > 50 ? code.split(":").join("<br>:") : code;
         };
 
         $scope.pvalue_quality = function(pvalue) {
@@ -115,7 +117,7 @@ angular
             break;
 
           case "application/vnd.plotly.v1+json":
-            templateUrl = "heatmap-results.html";
+            templateUrl = "plotly-results.html";
             $scope.chartData = data && data.raw.data;
             break;
 
@@ -136,7 +138,8 @@ angular
               data.raw.data.result &&
               data.raw.data.result.length &&
               data.raw.data.result.slice(1, -1);
-            $scope.visData = eval(visFunction);
+            const newFunction = `var network; ${visFunction}`;
+            $scope.visData = () => eval(newFunction); // FIXME: evil hack
 
             break;
 
