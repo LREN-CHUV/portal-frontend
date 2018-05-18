@@ -22,7 +22,7 @@ angular
         // Linear regression & ANOVA utility functions
         $scope.variable_title = function(variable_code) {
           // capitalize
-          return variable_code
+          const code = variable_code
             .split(/[ _\-]/)
             .map(function(code_part) {
               return code_part.replace(/^[a-z]/, function(str) {
@@ -30,6 +30,8 @@ angular
               });
             })
             .join(" ");
+
+          return code.length > 50 ? code.split(":").join("<br>:") : code;
         };
 
         $scope.pvalue_quality = function(pvalue) {

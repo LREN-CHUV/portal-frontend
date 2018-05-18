@@ -525,7 +525,7 @@ angular
               }
 
               // federated nodes distributed results
-              if (data.result.map(r => r.data && r.data.length).every(r => r)) {
+              if (data.result.map(r => angular.isArray(r.data)).every(r => r)) {
                 $scope.isFederationResult = true;
 
                 const experiments = [];
@@ -563,13 +563,16 @@ angular
               $scope.experiment.name = data.name;
 
               // Prepare charts
-              $scope.overview_charts = $scope.experiment.display.overview.map(
-                compute_overview_graph
-              );
+              const methods = $scope.experiment.display.methods;
+              $scope.overview_charts =
+                methods &&
+                methods.length &&
+                methods[0].overview &&
+                methods[0].overview.map(compute_overview_graph);
             } catch (e) {
+              $scope.experiment = $scope.experiment ? $scope.experiment : {};
               $scope.experiment.hasError = true;
-              $scope.experiment.result =
-                "Invalid JSON: \n" + $scope.experiment.result;
+              $scope.experiment.result = "Invalid JSON: \n" + data.result;
               console.log(e);
             } finally {
               // Mark as read
