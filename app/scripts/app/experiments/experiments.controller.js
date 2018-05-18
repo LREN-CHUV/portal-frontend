@@ -508,8 +508,9 @@ angular
             if (cancelled) {
               return;
             }
+
+            const data = response.data;
             try {
-              const data = response.data;
               $scope.loading = false;
 
               // Refresh experiment until done
@@ -526,16 +527,23 @@ angular
               // federated nodes distributed results
               if (data.result.map(r => r.data && r.data.length).every(r => r)) {
                 $scope.isFederationResult = true;
-                $scope.experiments = [];
 
-                data.result.forEach((r, i) => {
-                  const experiment = MLUtils.parse_results(r.data);
-                  // Prepare charts
-                  experiment.overview_charts = experiment.overview.map(
-                    compute_overview_graph
-                  );
-                  $scope.experiments.push(experiment);
+                const experiments = [];
+                data.result.forEach((methods, i) => {
+                  const experiment = MLUtils.parse_results(methods.data);
+                  experiment.methods.map(m => {
+                    if (!m.overview) {
+                      m.panel2title = "Overview";
+                      return;
+                    }
+                    m.overview_charts = m.overview.map(compute_overview_graph);
+                    m.panel2title = "Validation details";
+                  });
+                  experiment.nodeName = methods.data[0].node;
+                  experiments.push(experiment);
                 });
+
+                $scope.experiments = experiments;
 
                 $scope.experiment = angular.extend(data, {
                   finished: true,
@@ -549,18 +557,15 @@ angular
                 return;
               }
 
+              $scope.isFederationResult = false;
               $scope.experiment = data;
               $scope.experiment.display = MLUtils.parse_results(data.result);
               $scope.experiment.name = data.name;
 
               // Prepare charts
-              $scope.overview_charts = data.display.overview.map(function(o) {
-                return compute_overview_graph(o);
-              });
-              // Add legend
-              if ($scope.overview_charts.length) {
-                link_charts_legend($scope.overview_charts[0]);
-              }
+              $scope.overview_charts = $scope.experiment.display.overview.map(
+                compute_overview_graph
+              );
             } catch (e) {
               $scope.experiment.hasError = true;
               $scope.experiment.result =
@@ -568,8 +573,8 @@ angular
               console.log(e);
             } finally {
               // Mark as read
-              if (!$scope.experiment.resultsViewed) {
-                MLUtils.mark_as_read($scope.experiment);
+              if (!data.resultsViewed) {
+                MLUtils.mark_as_read(data);
               }
             }
           },

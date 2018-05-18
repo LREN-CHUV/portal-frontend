@@ -186,7 +186,7 @@ angular.module("chuvApp.util").factory("MLUtils", [
      * @returns {{validations, algorithms, validation_type: *, methods: *, overview: Array, raw}}
      */
     function parse_results(results) {
-      var overview = [], validation_type = null;
+      var validation_type = null;
 
       // Prepare every algorithms output for display
       var methods = results.map(function(result) {
@@ -210,6 +210,7 @@ angular.module("chuvApp.util").factory("MLUtils", [
 
         if (output.type === validation_type) {
           var i = 0;
+          var overview = [];
           output.metrics = ml_metrics[output.type].map(function(metric) {
             // TODO: Change mapping in backend
             var code = metric.code === "Weighted Precision"
@@ -234,6 +235,7 @@ angular.module("chuvApp.util").factory("MLUtils", [
 
             return angular.extend({ value: value }, metric);
           });
+          output.overview = overview;
         }
 
         output.raw = result;
@@ -244,7 +246,6 @@ angular.module("chuvApp.util").factory("MLUtils", [
       return {
         validation_type: validation_type,
         methods: methods,
-        overview: overview,
         raw: results
       };
     }

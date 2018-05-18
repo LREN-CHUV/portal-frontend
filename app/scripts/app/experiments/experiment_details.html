@@ -25,13 +25,10 @@
           <h3>
             Results of Experiment
             <b ng-bind="experiment.name"></b>
-            on <a ui-sref="models-edit({slug: experiment.model.slug, isCopy: false})" ng-bind="experiment.model.title"></a>
+            on
+            <a ui-sref="models-edit({slug: experiment.model.slug, isCopy: false})" ng-bind="experiment.model.title"></a>
             <other-experiments model-slug="model_slug"></other-experiments>
-            <button class="btn btn-primary pull-right"
-                    ng-cloak
-                    style="margin: 1px 5px"
-                    ng-class="{'disabled': sharing_working }"
-                    ng-click="experiment.shared ? mark_experiment_as_unshared() : mark_experiment_as_shared()">
+            <button class="btn btn-primary pull-right" ng-cloak style="margin: 1px 5px" ng-class="{'disabled': sharing_working }" ng-click="experiment.shared ? mark_experiment_as_unshared() : mark_experiment_as_shared()">
               <span ng-class="{'fa fa-spin fa-spinner': sharing_working}"></span>
               <span ng-bind="experiment.shared ? 'Unshare experiment' : 'Share experiment'"></span>
             </button>
@@ -75,8 +72,7 @@
             </div>
             <div class="panel-body">
               <p>
-                Please check back in a few minutes. This page will automatically
-                refresh once your experiment has finished executing.
+                Please check back in a few minutes. This page will automatically refresh once your experiment has finished executing.
               </p>
             </div>
           </div>
@@ -90,7 +86,8 @@
             <div class="panel-body">
               An error has occurred while running your experiment
               <b ng-bind="experiment.name"></b>. Here's the message:
-              <br><br>
+              <br>
+              <br>
               <pre ng-bind="experiment.result"></pre>
             </div>
           </div>
@@ -98,103 +95,106 @@
           <div class="experiment-details" ng-if="experiment.finished && !experiment.hasError" ng-cloak>
 
             <uib-tabset active="0" ng-if="isFederationResult">
-              <uib-tab heading="node1" ng-repeat="experiment in experiments">
-                <uib-tabset active="0">
-                  <uib-tab heading="Overview" ng-if="experiment.overview_charts.length">
-                    <div class="panel">
-                      <div class="panel-body">
+                <uib-tab heading="{{ experiment.nodeName }}" ng-repeat="experiment in experiments">
+                    <div class="panel bordered">
+                        <div class="panel-body">
+                            <uib-tabset active="0">
+                                <uib-tab ng-repeat="method in experiment.methods" heading="{{ method.name }}">
+                                    <div class="panel bordered">
+                                        <div class="panel-body">
+                                            <uib-tabset>
+                                                <uib-tab heading="Cross-validation" ng-if="method.overview_charts.length">
+                                                    <div class="panel bordered">
+                                                        <div class="panel-body">
+                                                            <uib-accordion close-others="false">
+                                                                <div uib-accordion-group ng-if="method.overview_charts" is-open="true">
+                                                                    <div class="row">
+                                                                        <div class="single-legend col-sm-12"></div>
+                                                                    </div>
 
-                        <uib-accordion close-others="false">
+                                                                    <div class="row overview-charts">
+                                                                        <div class="col-sm-3 highcharts-container" ng-repeat="chart_config in method.overview_charts" style="width: 200px; height: 200px; margin: 1em 0">
+                                                                            <highchart class="highcharts-container" config="chart_config"></highchart>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
 
-                          <div uib-accordion-group ng-if="experiment.overview_charts" is-open="true">
-                            <uib-accordion-heading>
-                              <span class="ti ti-check-box"></span>
-                              Results: Cross-validation
-                            </uib-accordion-heading>
+                                                                <div uib-accordion-group is-open="false">
+                                                                    <uib-accordion-heading>
+                                                                        <span class="ti ti-list"></span>
+                                                                        Raw JSON
+                                                                    </uib-accordion-heading>
+                                                                    <pretty-json collapse="hideJson" data="experiment.raw"></pretty-json>
+                                                                </div>
 
-                            <div class="row">
-                              <div class="single-legend col-sm-12"></div>
-                            </div>
+                                                            </uib-accordion>
+                                                        </div>
+                                                    </div>
+                                                </uib-tab>
 
-                            <div class="row overview-charts">
-                              <div class="col-sm-3 highcharts-container"
-                                ng-repeat="chart_config in experiment.overview_charts"
-                                style="width: 200px; height: 200px; margin: 1em 0">
-                                  <highchart class="highcharts-container" config="chart_config"></highchart>
-                              </div>
-                            </div>
-                          </div>
-
-                          <div uib-accordion-group is-open="false">
-                            <uib-accordion-heading>
-                              <span class="ti ti-list"></span>
-                              Raw JSON
-                            </uib-accordion-heading>
-                            <pretty-json collapse="hideJson" data="experiment.raw"></pretty-json>
-                          </div>
-
-                        </uib-accordion>
-                      </div>
+                                                <uib-tab heading="{{method.panel2title}}">
+                                                    <div class="panel bordered">
+                                                        <div class="panel-body">
+                                                            <method-result data="method"></method-result>
+                                                        </div>
+                                                    </div>
+                                                </uib-tab>
+                                            </uib-tabset>
+                                        </div>
+                                    </div>
+                                </uib-tab>
+                            </uib-tabset>
+                        </div>
                     </div>
-                  </uib-tab>
-                  <uib-tab ng-repeat="method in experiment.methods" heading="{{ method.name }}">
-                    <div class="panel">
-                      <div class="panel-body">
-                        <method-result data="method"></method-result>
-                      </div>
-                    </div>
-                  </uib-tab>
-                </uib-tabset>
-              </uib-tab>
+                </uib-tab>
             </uib-tabset>
 
             <uib-tabset active="0" ng-if="!isFederationResult">
-                <uib-tab heading="Overview" ng-if="overview_charts.length">
-                  <div class="panel">
-                    <div class="panel-body">
 
-                      <uib-accordion close-others="false">
+              <uib-tab heading="Overview" ng-if="overview_charts.length">
+                <div class="panel bordered">
+                  <div class="panel-body">
 
-                        <div uib-accordion-group ng-if="overview_charts" is-open="true">
-                          <uib-accordion-heading>
-                            <span class="ti ti-check-box"></span>
-                            Results: Cross-validation
-                          </uib-accordion-heading>
+                    <uib-accordion close-others="false">
+                      <div uib-accordion-group ng-if="overview_charts" is-open="true">
+                        <uib-accordion-heading>
+                          <span class="ti ti-check-box"></span>
+                          Results: Cross-validation
+                        </uib-accordion-heading>
 
-                          <div class="row">
-                            <div class="single-legend col-sm-12"></div>
-                          </div>
-
-                          <div class="row overview-charts">
-                            <div class="col-sm-3 highcharts-container"
-                              ng-repeat="chart_config in overview_charts"
-                              style="width: 200px; height: 200px; margin: 1em 0">
-                                <highchart class="highcharts-container" config="chart_config"></highchart>
-                            </div>
-                          </div>
+                        <div class="row">
+                          <div class="single-legend col-sm-12"></div>
                         </div>
 
-                        <div uib-accordion-group is-open="false">
-                          <uib-accordion-heading>
-                            <span class="ti ti-list"></span>
-                            Raw JSON
-                          </uib-accordion-heading>
-                          <pretty-json collapse="hideJson" data="experiment.display.raw"></pretty-json>
+                        <div class="row overview-charts">
+                          <div class="col-sm-3 highcharts-container" ng-repeat="chart_config in overview_charts" style="width: 200px; height: 200px; margin: 1em 0">
+                            <highchart class="highcharts-container" config="chart_config"></highchart>
+                          </div>
                         </div>
+                      </div>
 
-                      </uib-accordion>
-                    </div>
-                  </div>
-                </uib-tab>
-                <uib-tab ng-repeat="method in experiment.display.methods" heading="{{ method.name }}">
-                  <div class="panel">
-                    <div class="panel-body">
-                      <method-result data="method"></method-result>
-                    </div>
-                  </div>
-                </uib-tab>
-              </uib-tabset>
+                      <div uib-accordion-group is-open="false">
+                        <uib-accordion-heading>
+                          <span class="ti ti-list"></span>
+                          Raw JSON
+                        </uib-accordion-heading>
+                        <pretty-json collapse="hideJson" data="experiment.display.raw"></pretty-json>
+                      </div>
+                    </uib-accordion>
 
+                  </div>
+                </div>
+              </uib-tab>
+
+              <uib-tab ng-repeat="method in experiment.display.methods" heading="{{ method.name }}">
+                <div class="panel bordered">
+                  <div class="panel-body">
+                    <method-result data="method"></method-result>
+                  </div>
+                </div>
+              </uib-tab>
+
+            </uib-tabset>
           </div>
         </div>
       </div>

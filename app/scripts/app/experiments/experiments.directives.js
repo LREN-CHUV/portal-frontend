@@ -279,7 +279,7 @@ angular
     function() {
       let layout = {
         margin: {
-          l: 150
+          l: 400
         }
       };
 
