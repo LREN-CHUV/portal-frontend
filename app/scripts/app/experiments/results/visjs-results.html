@@ -4,12 +4,9 @@
       <div uib-accordion-group ng-if="data" is-open="true">
         <uib-accordion-heading>
           <span class="ti ti-check-box"></span>
-          Results: Vis
+          Results
         </uib-accordion-heading>
-        <div>
-          <div id="visualization"></div>
-          <p ng-model="visData">{{visData)}}</p>
-        </div>
+        <div id="visualization"></div>
       </div>
 
       <div uib-accordion-group is-open="help_is_open">
@@ -20,4 +17,6 @@
 
         <div class="panel-body" btf-markdown="estimation.help"></div>
       </div>
+
+      <span ng-if="visData" class="display: none">{{visData()}}</span>
   </div>

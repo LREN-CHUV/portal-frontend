@@ -115,7 +115,7 @@ angular
             break;
 
           case "application/vnd.plotly.v1+json":
-            templateUrl = "heatmap-results.html";
+            templateUrl = "plotly-results.html";
             $scope.chartData = data && data.raw.data;
             break;
 
@@ -136,7 +136,8 @@ angular
               data.raw.data.result &&
               data.raw.data.result.length &&
               data.raw.data.result.slice(1, -1);
-            $scope.visData = eval(visFunction);
+            const newFunction = `var network; ${visFunction}`;
+            $scope.visData = () => eval(newFunction); // FIXME: evil hack
 
             break;
 

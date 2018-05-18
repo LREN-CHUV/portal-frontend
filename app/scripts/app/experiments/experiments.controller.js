@@ -510,23 +510,21 @@ angular
             }
             try {
               const data = response.data;
-              $scope.experiment = data;
-              $scope.experiment.name = data.name;
               $scope.loading = false;
 
               // Refresh experiment until done
-              if (!cancelled && !$scope.experiment.finished) {
+              if (!cancelled && !data.finished) {
                 cancel_timeout = $timeout(get_experiment, refresh_rate);
                 return;
               }
 
               // catch error before parsing
-              if (!angular.isObject($scope.experiment.result)) {
-                throw $scope.experiment.result;
+              if (!angular.isObject(data.result)) {
+                throw data.result;
               }
 
-              // federation nodes parallels results
-              if (angular.isArray(data.result)) {
+              // federated nodes distributed results
+              if (data.result.map(r => r.data && r.data.length).every(r => r)) {
                 $scope.isFederationResult = true;
                 $scope.experiments = [];
 
@@ -539,28 +537,26 @@ angular
                   $scope.experiments.push(experiment);
                 });
 
-                if (!$scope.experiment.resultsViewed) {
-                  MLUtils.mark_as_read($scope.experiment);
-                }
-
-                $scope.experiment = {
+                $scope.experiment = angular.extend(data, {
                   finished: true,
                   hasError: false
-                };
+                });
+
+                if (!data.resultsViewed) {
+                  MLUtils.mark_as_read($scope.experiment);
+                }
 
                 return;
               }
 
-              $scope.experiment.display = MLUtils.parse_results(
-                $scope.experiment.result
-              );
+              $scope.experiment = data;
+              $scope.experiment.display = MLUtils.parse_results(data.result);
+              $scope.experiment.name = data.name;
 
               // Prepare charts
-              $scope.overview_charts = $scope.experiment.display.overview.map(
-                function(o) {
-                  return compute_overview_graph(o);
-                }
-              );
+              $scope.overview_charts = data.display.overview.map(function(o) {
+                return compute_overview_graph(o);
+              });
               // Add legend
               if ($scope.overview_charts.length) {
                 link_charts_legend($scope.overview_charts[0]);
