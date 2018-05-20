@@ -77,15 +77,15 @@ angular.module("chuvApp.models").controller("DatasetController", [
         ? null
         : $scope.query.variables[0]);
 
-    const addGenderToGroupings = variables =>
-      (variables.find(g => g.code === "gender")
-        ? variables
-        : variables.concat({ code: "gender" }));
+    const addGenderToGroupings = (groupings = $scope.query.groupings, variables = $scope.query.variables) =>
+      (groupings.find(g => g.code === "gender") || variables.find(g => g.code === "gender")
+        ? groupings
+        : groupings.concat({ code: "gender" }));
 
-    const addAgeToCovariables = variables =>
-      (variables.find(g => g.code === "subjectageyears")
-        ? variables
-        : variables.concat({ code: "subjectageyears" }));
+    const addAgeToCovariables = (covariables = $scope.query.coVariables, variables = $scope.query.variables) =>
+      (covariables.find(g => g.code === "subjectageyears")  || variables.find(g => g.code === "subjectageyears")
+        ? covariables
+        : covariables.concat({ code: "subjectageyears" }));
 
     let isMining = false;
     const miningRequest = () => {
@@ -137,8 +137,8 @@ angular.module("chuvApp.models").controller("DatasetController", [
               validation: false
             },
             variables: $scope.query.variables,
-            grouping: addGenderToGroupings($scope.query.groupings),
-            covariables: addAgeToCovariables($scope.query.coVariables),
+            grouping: addGenderToGroupings(),
+            covariables: addAgeToCovariables(),
             datasets: [{ code: d.code }],
             filters: $scope.query.textQuery
               ? JSON.stringify($scope.query.filterQuery)
@@ -218,8 +218,8 @@ angular.module("chuvApp.models").controller("DatasetController", [
       const orderByVariable = datasets => {
         return [
           ...$scope.query.variables,
-          ...addGenderToGroupings($scope.query.groupings),
-          ...addAgeToCovariables($scope.query.coVariables)
+          ...addGenderToGroupings(),
+          ...addAgeToCovariables()
         ].map(variable => ({
           variable,
           data: datasets.map(
