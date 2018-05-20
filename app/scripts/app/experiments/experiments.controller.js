@@ -157,7 +157,7 @@ angular
               return a;
             }, {});
 
-          $scope.shared.experiment_datasets.validation = $scope.query.trainingDatasets
+          $scope.shared.experiment_datasets.validation = $scope.query.validationDatasets
             .map(d => d.code)
             .reduce((a, d) => {
               a[d] = true;
@@ -280,7 +280,9 @@ angular
                     function(error = {}) {
                       $scope.model = null;
 
-                      const { data: { message } } = error;
+                      const {
+                        data: { message }
+                      } = error;
                       notifications.error(
                         `An error occurred when trying to save the model! ${message}`
                       );
@@ -415,6 +417,18 @@ angular
             $scope.model.query.trainingDatasets = Object.keys(
               $scope.shared.experiment_datasets.training
             ).filter(s => $scope.shared.experiment_datasets.training[s]);
+          }
+        },
+        true
+      );
+
+      $scope.$watch(
+        "shared.experiment_datasets.validation",
+        () => {
+          if (!_.isEmpty($scope.shared.experiment_datasets.validation)) {
+            $scope.model.query.validationDatasets = Object.keys(
+              $scope.shared.experiment_datasets.validation
+            ).filter(s => $scope.shared.experiment_datasets.validation[s]);
           }
         },
         true
@@ -590,10 +604,10 @@ angular
               hasError: true,
               result: response.data
                 ? response.status +
-                    " " +
-                    response.data.error +
-                    "\n" +
-                    response.data.message
+                  " " +
+                  response.data.error +
+                  "\n" +
+                  response.data.message
                 : "This experiment doesn't exist",
               finished: true
             };
