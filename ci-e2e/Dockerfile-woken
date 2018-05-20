@@ -1,5 +1,5 @@
 # Use the latest image built as this is what is under test
-FROM hbpmip/woken:2.7.1
+FROM hbpmip/woken:2.7.4
 
 COPY ./woken/config/application.conf /build/src/woken/config/application.conf
 COPY ./woken/config/application.conf /opt/woken/config/application.conf
