@@ -188,8 +188,6 @@ angular.module("chuvApp.util").factory("MLUtils", [
     function parse_results(results) {
       var validation_type = null;
 
-      if (!angular.isArray(results)) return;
-
       // Prepare every algorithms output for display
       var methods = results.map(function(result) {
         var output = {
