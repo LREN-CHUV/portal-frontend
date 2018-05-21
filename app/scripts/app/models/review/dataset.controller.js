@@ -77,15 +77,23 @@ angular.module("chuvApp.models").controller("DatasetController", [
         ? null
         : $scope.query.variables[0]);
 
-    const addGenderToGroupings = variables =>
-      (variables.find(g => g.code === "gender")
-        ? variables
-        : variables.concat({ code: "gender" }));
+    const addGenderToGroupings = (
+      groupings = $scope.query.groupings,
+      variables = $scope.query.variables
+    ) =>
+      (groupings.find(g => g.code === "gender") ||
+        variables.find(g => g.code === "gender")
+        ? groupings
+        : groupings.concat({ code: "gender" }));
 
-    const addAgeToCovariables = variables =>
-      (variables.find(g => g.code === "subjectageyears")
-        ? variables
-        : variables.concat({ code: "subjectageyears" }));
+    const addAgeToCovariables = (
+      covariables = $scope.query.coVariables,
+      variables = $scope.query.variables
+    ) =>
+      (covariables.find(g => g.code === "subjectageyears") ||
+        variables.find(g => g.code === "subjectageyears")
+        ? covariables
+        : covariables.concat({ code: "subjectageyears" }));
 
     let isMining = false;
     const miningRequest = () => {
@@ -137,8 +145,8 @@ angular.module("chuvApp.models").controller("DatasetController", [
               validation: false
             },
             variables: $scope.query.variables,
-            grouping: addGenderToGroupings($scope.query.groupings),
-            covariables: addAgeToCovariables($scope.query.coVariables),
+            grouping: addGenderToGroupings(),
+            covariables: addAgeToCovariables(),
             datasets: [{ code: d.code }],
             filters: $scope.query.textQuery
               ? JSON.stringify($scope.query.filterQuery)
@@ -218,8 +226,8 @@ angular.module("chuvApp.models").controller("DatasetController", [
       const orderByVariable = datasets => {
         return [
           ...$scope.query.variables,
-          ...addGenderToGroupings($scope.query.groupings),
-          ...addAgeToCovariables($scope.query.coVariables)
+          ...addGenderToGroupings(),
+          ...addAgeToCovariables()
         ].map(variable => ({
           variable,
           data: datasets.map(
@@ -443,10 +451,13 @@ angular.module("chuvApp.models").controller("DatasetController", [
           ...$scope.query.coVariables
         ].map(variable => ({
           variable,
-          data: datasets.map(dataset =>
-            dataset.data.filter(
-              r => r.mean && r.index === variable.code && r.group[0] !== "all"
-            )
+          data: datasets.map(
+            dataset =>
+              dataset &&
+              dataset.data &&
+              dataset.data.filter(
+                r => r.mean && r.index === variable.code && r.group[0] !== "all"
+              )
           )
         })),
         datasetNames: datasets.map(d => $scope.uiSelectedDatasetName(d.name))
@@ -456,14 +467,24 @@ angular.module("chuvApp.models").controller("DatasetController", [
         variables
           .map(variable => ({
             categories: _.flatten(
-              variable.data.map((datasets, i) =>
-                datasets.map(v => `${datasetNames[i]}-${v.group.join("-")}`)
+              variable.data.map(
+                (datasets, i) =>
+                  datasets &&
+                  datasets.map(v => `${datasetNames[i]}-${v.group.join("-")}`)
               )
             ),
             series: [].concat.apply(
               [],
-              variable.data.map(datasets =>
-                datasets.map(v => [v.min, v["25%"], v["50%"], v["75%"], v.max])
+              variable.data.map(
+                datasets =>
+                  datasets &&
+                  datasets.map(v => [
+                    v.min,
+                    v["25%"],
+                    v["50%"],
+                    v["75%"],
+                    v.max
+                  ])
               )
             ),
             variable: variable.variable
@@ -510,6 +531,7 @@ angular.module("chuvApp.models").controller("DatasetController", [
           $scope.boxplotError =
             "There was an error while processing. Please try again later.";
           $scope.boxplotData = null;
+          console.log(e);
 
           return;
         });
