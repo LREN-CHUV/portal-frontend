@@ -59,15 +59,40 @@
                   </p>
                 </div>
 
-                <div ng-if="federationmode" uib-accordion-group heading="Pseudo-Federation" ng-init="acc_stats.open = true" is-open="acc_stats.open" ng-click="!acc_stats.open">
-                  <p ng-repeat="method in ml_methods | filter:{environment:'!Exareme'}  | orderBy:'-label'">
-                    <span class="label label-default" ng-if="method.nyi">Coming soon</span>
-                    <button class="btn btn-primary-alt col-xs-12" ng-disabled="!method.available" ng-click="show_training_validation(method)"
-                      ng-bind="method.label">
-                    </button>
-                    <br>
-                    <br>
-                  </p>
+                <div ng-if="federationmode" uib-accordion-group heading="Distributed" ng-init="acc_stats.open = true" is-open="acc_stats.open"
+                  ng-click="!acc_stats.open">
+                  <div uib-accordion-group heading="Statistical Analysis" ng-init="acc_stats.open = true" is-open="acc_stats.open" ng-click="!acc_stats.open">
+                    <p ng-repeat="method in ml_methods | filter:{type:'statistics', environment:'!Exareme'}  | orderBy:'-label'">
+                      <span class="label label-default" ng-if="method.nyi">Coming soon</span>
+                      <button class="btn btn-primary-alt col-xs-12" ng-disabled="!method.available" ng-click="show_training_validation(method)"
+                        ng-bind="method.label">
+                      </button>
+                      <br>
+                      <br>
+                    </p>
+                  </div>
+
+                  <div uib-accordion-group heading="Features Extraction" ng-init="acc_fe.open = true" is-open="acc_fe.open" ng-click="!acc_fe.open">
+                    <p ng-repeat="method in ml_methods | filter:{type:'features_extraction', environment:'!Exareme'}  | orderBy:'-label'">
+                      <span class="label label-default" ng-if="method.nyi">Coming soon</span>
+                      <button class="btn btn-primary-alt col-xs-12" ng-disabled="!method.available" ng-click="show_training_validation(method)"
+                        ng-bind="method.label">
+                      </button>
+                      <br>
+                      <br>
+                    </p>
+                  </div>
+
+                  <div uib-accordion-group heading="Predictive Model" ng-init="acc_pm.open = true" is-open="acc_pm.open" ng-click="!acc_pm.open">
+                    <p ng-repeat="method in ml_methods | filter:{type:'predictive_model', environment:'!Exareme'}  | orderBy:'-label'">
+                      <span class="label label-default" ng-if="method.nyi">Coming soon</span>
+                      <button class="btn btn-primary-alt col-xs-12" ng-disabled="!method.available" ng-click="show_training_validation(method)"
+                        ng-bind="method.label">
+                      </button>
+                      <br>
+                      <br>
+                    </p>
+                  </div>
                 </div>
 
                 <span ng-if="!federationmode">
@@ -149,32 +174,32 @@
                       <div ng-switch on="parameter.type">
                         <div ng-switch-when="int">
                           <input type="number" step="1" id="{{parameter.name}}" class="form-control" ng-model="shared.method_parameters[$index].value"
-                                 value="{{shared.method_parameters[$index].value}}" ng-init="shared.method_parameters[$index] = {code: parameter.code, label: parameter.label, value: parseInt(parameter.default_value)}">
+                            value="{{shared.method_parameters[$index].value}}" ng-init="shared.method_parameters[$index] = {code: parameter.code, label: parameter.label, value: parseInt(parameter.default_value)}">
                         </div>
                         <div ng-switch-when="real">
                           <input type="text" step="0.1" id="{{parameter.name}}" class="form-control" ng-model="shared.method_parameters[$index].value"
-                                 value="{{shared.method_parameters[$index].value}}" ng-init="shared.method_parameters[$index] = {code: parameter.code, label: parameter.label, value: parameter.default_value}">
+                            value="{{shared.method_parameters[$index].value}}" ng-init="shared.method_parameters[$index] = {code: parameter.code, label: parameter.label, value: parameter.default_value}">
                         </div>
                         <div ng-switch-when="number">
                           <input type="text" id="{{parameter.name}}" class="form-control" ng-model="shared.method_parameters[$index].value" value="{{shared.method_parameters[$index].value}}"
-                                 ng-init="shared.method_parameters[$index] = {code: parameter.code, label: parameter.label, value: parameter.default_value}">
+                            ng-init="shared.method_parameters[$index] = {code: parameter.code, label: parameter.label, value: parameter.default_value}">
                         </div>
                         <div ng-switch-when="numeric">
                           <input type="text" id="{{parameter.name}}" class="form-control" ng-model="shared.method_parameters[$index].value" value="{{shared.method_parameters[$index].value}}"
-                                 ng-init="shared.method_parameters[$index] = {code: parameter.code, label: parameter.label, value: parameter.default_value}">
+                            ng-init="shared.method_parameters[$index] = {code: parameter.code, label: parameter.label, value: parameter.default_value}">
                         </div>
                         <div ng-switch-when="enumeration">
                           <select id="{{parameter.name}}" class="form-control" ng-model="shared.method_parameters[$index].value" ng-options="value for value in parameter.values"
-                                  ng-init="shared.method_parameters[$index] = {code: parameter.code, label: parameter.label, value: parameter.default_value}"></select>
+                            ng-init="shared.method_parameters[$index] = {code: parameter.code, label: parameter.label, value: parameter.default_value}"></select>
                         </div>
                         <div ng-switch-when="string">
                           <input type="text" id="{{parameter.name}}" class="form-control" ng-model="shared.method_parameters[$index].value" value="{{shared.method_parameters[$index].value}}"
-                                 ng-init="shared.method_parameters[$index] = {code: parameter.code, label: parameter.label, value: parameter.default_value}">
+                            ng-init="shared.method_parameters[$index] = {code: parameter.code, label: parameter.label, value: parameter.default_value}">
                         </div>
                         <div ng-switch-default>
                           <p ng-bind="{{shared.chosen_method.parameters | json}}"></p>
                           <input id="{{parameter.name}}" class="form-control" ng-model="shared.method_parameters[$index].value" value="{{shared.method_parameters[$index].value}}"
-                                 ng-init="shared.method_parameters[$index] = {code: parameter.code, label: parameter.label, value: parameter.default_value}">
+                            ng-init="shared.method_parameters[$index] = {code: parameter.code, label: parameter.label, value: parameter.default_value}">
                         </div>
                       </div>
                       <p ng-bind="parameter.description"></p>
