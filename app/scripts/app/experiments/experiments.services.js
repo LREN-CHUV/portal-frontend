@@ -147,34 +147,8 @@ angular.module("chuvApp.util").factory("MLUtils", [
       list_available_experiments: function() {
         return $http.get(backendUrl + "/experiments");
       },
-      get_display_type: function(result) {
-        switch (result.algorithm) {
-          case "python-linear-regression":
-            return "linearRegression";
-          case "python-anova":
-            return "anova";
-          default:
-            // Check if cross-validation and prediction type
-            if (
-              result.data &&
-              result.data.cells &&
-              result.data.cells.validations &&
-              result.data.cells.validations.init &&
-              result.data.cells.validations.init.length > 0
-            ) {
-              if (
-                result.data.cells.validations.init[0].data.average.type ===
-                "RegressionScore"
-              ) {
-                return "regression";
-              }
-              return "classification";
-            } else {
-              return "unknown";
-            }
-        }
-      },
-      parse_results: parse_results
+      parse_results,
+      parse_distributed_results
     };
 
     // TODO Move in get_experiment
@@ -191,8 +165,34 @@ angular.module("chuvApp.util").factory("MLUtils", [
       // Prepare every algorithms output for display
       var methods = results.map(function(result) {
         var output = {
-          type: MLUtils.get_display_type(result),
-          name: result.algorithm
+          name: result.algorithm,
+          type: (function(result) {
+            switch (result.algorithm) {
+              case "python-linear-regression":
+                return "linearRegression";
+              case "python-anova":
+                return "anova";
+              default:
+                // Check if cross-validation and prediction type
+                if (
+                  result.data &&
+                  result.data.cells &&
+                  result.data.cells.validations &&
+                  result.data.cells.validations.init &&
+                  result.data.cells.validations.init.length > 0
+                ) {
+                  if (
+                    result.data.cells.validations.init[0].data.average.type ===
+                    "RegressionScore"
+                  ) {
+                    return "regression";
+                  }
+                  return "classification";
+                } else {
+                  return "unknown";
+                }
+            }
+          })(result)
         };
 
         // Update validation type
@@ -233,7 +233,7 @@ angular.module("chuvApp.util").factory("MLUtils", [
               i++;
             }
 
-            return angular.extend({ value: value }, metric);
+            return angular.extend({ value }, metric);
           });
           output.overview = overview;
         }
@@ -244,8 +244,171 @@ angular.module("chuvApp.util").factory("MLUtils", [
       });
 
       return {
-        validation_type: validation_type,
-        methods: methods,
+        validation_type,
+        methods,
+        raw: results
+      };
+    }
+
+    function parse_distributed_results(results) {
+      var validation_type = null;
+
+      // Prepare every algorithms output for display
+      var methods = results.map(function(result) {
+        var output = {
+          name: result.algorithm,
+          type: (function(result) {
+            switch (result.algorithm) {
+              case "python-linear-regression":
+                return "linearRegression";
+              case "python-anova":
+                return "anova";
+              default:
+                // Check if cross-validation and prediction type
+                if (
+                  result.data &&
+                  result.data.cells &&
+                  result.data.cells.validations &&
+                  result.data.cells.validations.init &&
+                  result.data.cells.validations.init.length > 0
+                ) {
+                  if (
+                    result.data.cells.validations.init[0].data.average.type ===
+                    "RegressionScore"
+                  ) {
+                    return "regression";
+                  }
+                  return "classification";
+                } else {
+                  return "unknown";
+                }
+            }
+          })(result)
+        };
+
+        // Update validation type
+        if (
+          !validation_type &&
+          result.data &&
+          result.data.cells &&
+          result.data.cells.validations &&
+          result.data.cells.validations.init &&
+          result.data.cells.validations.init.length &&
+          (output.type === "regression" || output.type === "classification")
+        ) {
+          validation_type = output.type;
+        }
+
+        if (output.type === validation_type) {
+          var i = 0;
+          var overview = [];
+          output.metrics = ml_metrics[output.type].map(function(metric) {
+            // TODO: Change mapping in backend
+            var code = metric.code === "Weighted Precision"
+              ? "Weighted precision"
+              : metric.code;
+            var code = metric.code === "Weighted Recall"
+              ? "Weighted recall"
+              : code;
+            var value =
+              result.data.cells.validations.init[0].data.average[code];
+
+            if (metric.type === "numeric") {
+              if (overview.length <= i) {
+                overview.push({
+                  data: [],
+                  label: metric.label
+                });
+              }
+              overview[i].data.push({ data: [value], name: result.name });
+              i++;
+            }
+
+            return angular.extend({ value }, metric);
+          });
+          output.overview = overview;
+        }
+
+        var validations = result.data.cells.validations.init.map(validation => {
+          if (validation.error) {
+            return {
+              title: validation.code,
+              raw: {
+                type: "text/plain+error",
+                error: validation.error
+              }
+            };
+          }
+          var output2 = {
+            name: result.algorithm,
+            title: validation.code,
+            type: (function(result) {
+              switch (result.algorithm) {
+                case "python-linear-regression":
+                  return "linearRegression";
+                case "python-anova":
+                  return "anova";
+                default:
+                  if (
+                    validation.data &&
+                    validation.data.average.type === "RegressionScore"
+                  ) {
+                    return "regression";
+                  }
+                  return "classification";
+              }
+            })(result)
+          };
+
+          // Update validation type
+          if (
+            output2.type === "regression" || output2.type === "classification"
+          ) {
+            validation_type = output2.type;
+          }
+
+          if (output2.type === validation_type) {
+            var i = 0;
+            var overview = [];
+            output2.metrics = ml_metrics[output2.type].map(function(metric) {
+              // TODO: Change mapping in backend
+              var code = metric.code === "Weighted Precision"
+                ? "Weighted precision"
+                : metric.code;
+              var code = metric.code === "Weighted Recall"
+                ? "Weighted recall"
+                : code;
+              var value = validation.data && validation.data.average[code];
+
+              if (metric.type === "numeric") {
+                if (overview.length <= i) {
+                  overview.push({
+                    data: [],
+                    label: metric.label
+                  });
+                }
+                overview[i].data.push({ data: [value], name: result.name });
+                i++;
+              }
+
+              return angular.extend({ value }, metric);
+            });
+            output2.overview = overview;
+            output2.raw = result;
+
+            return output2;
+          }
+        });
+
+        output.validations = validations;
+        output.raw = result;
+
+        return output;
+      });
+
+      return {
+        validation_type,
+        methods,
         raw: results
       };
     }

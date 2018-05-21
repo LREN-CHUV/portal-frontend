@@ -547,23 +547,27 @@ angular
 
                   const experiments = [];
                   data.result.forEach((result, i) => {
-                    // TODO: structured responses from api
+                    // TODO: same structure responses from api
                     const resultData = angular.isArray(result.data)
                       ? result.data
                       : [result];
 
-                    const experiment = MLUtils.parse_results(resultData);
-                    experiment.methods.map(m => {
-                      if (!m.overview) {
-                        m.panel2title = "Overview";
+                    const experiment = MLUtils.parse_distributed_results(
+                      resultData
+                    );
+                    experiment.methods.map(method => {
+                      if (!method.overview) {
+                        method.title = "Overview";
                         return;
                       }
-                      m.overview_charts = m.overview.map(
+                      method.overview_charts = method.overview.map(
                         compute_overview_graph
                       );
-                      m.panel2title = "Validation details";
+                      method.title = method.title || "Validation details";
                     });
+
                     experiment.nodeName = resultData[0].node || "node";
+
                     experiments.push(experiment);
                   });
 
