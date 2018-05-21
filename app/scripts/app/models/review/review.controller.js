@@ -189,20 +189,19 @@ angular.module("chuvApp.models").controller("ReviewController", [
     };
 
     var getFilterVariables = () => {
-      var filtersString = $scope.query.filters;
-      if (typeof filtersString == "string") {
-        if (filtersString.length === 0) {
+      if (typeof $scope.query.filters == "string") {
+        if ($scope.query.filters.length == 0) {
           $scope.query.filters = [];
         } else {
-          $scope.query.filters = [{ code: filtersString }];
+          var filtersString = $scope.query.filters;
+          $scope.query.filters = [{"code": filtersString}];
         }
       }
 
-      const allVars = $scope.query.filters
+      return $scope.query.filters
         .concat($scope.query.variables)
         .concat($scope.query.coVariables)
         .concat($scope.query.groupings)
-        .filter((el, i, ar) => ar.findIndex(e => e.code === el.code) === i) // filter on unique { code } value
         .map(function(variable) {
           variable = $scope.allVariables[variable.code];
 
@@ -235,7 +234,7 @@ angular.module("chuvApp.models").controller("ReviewController", [
 
           return var_config;
         });
-    };
+    }
 
     $scope.getFilterVariables = () => getFilterVariables();
 
@@ -255,10 +254,10 @@ angular.module("chuvApp.models").controller("ReviewController", [
             let preFilterVariables = getFilterVariables();
             let checker = true;
 
-            preFilterVariables.forEach(fv => {
-              filterVariables.forEach(rfv => {
-                if (angular.equals(rfv, fv)) {
-                  return (checker = false);
+            preFilterVariables.forEach( (fv) => {
+              filterVariables.forEach( (rfv) => {
+                if ( angular.equals(rfv, fv) ) {
+                  return checker = false;
                 }
               });
               if (checker == true) {
@@ -389,9 +388,8 @@ angular.module("chuvApp.models").controller("ReviewController", [
     };
 
     function reload_hc_config() {
-      $scope.chartConfig.yAxisVariables = (
-        $scope.chartConfig.yAxisVariables || []
-      )
+      $scope.chartConfig.yAxisVariables = ($scope.chartConfig
+        .yAxisVariables || [])
         .filter(function(code) {
           return (ChartUtil.isXAxisMain($scope.chartConfig.type)
             ? ChartUtil.canUseAsYAxis
@@ -537,11 +535,9 @@ angular.module("chuvApp.models").controller("ReviewController", [
       $location.url(url);
     };
 
-    Model.query({ own: 1 }).$promise.then(function(data) {
-      $scope.mySavedModels =
-        data.length &&
-        $location.path() == "/review" &&
-        !$location.search().variable;
+    Model.query({own: 1}).$promise
+    .then(function(data) {
+      $scope.mySavedModels = data.length && $location.path() == "/review" && !$location.search().variable;
     });
   }
 ]);
