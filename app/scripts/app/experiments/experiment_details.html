@@ -132,13 +132,14 @@
                                                     </div>
                                                 </uib-tab>
 
-                                                <uib-tab heading="{{method.panel2title}}">
+                                                <uib-tab ng-repeat="validation in method.validations" heading="{{ validation.title }}">
                                                     <div class="panel bordered">
                                                         <div class="panel-body">
-                                                            <method-result data="method"></method-result>
+                                                            <method-result data="validation"></method-result>
                                                         </div>
                                                     </div>
                                                 </uib-tab>
+
                                             </uib-tabset>
                                         </div>
                                     </div>
