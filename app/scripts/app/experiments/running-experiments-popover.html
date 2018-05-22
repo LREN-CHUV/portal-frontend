@@ -6,7 +6,7 @@
       and configuring an experiment on it.
     </p>
   </div>
-  <div ng-repeat="experiment in experiments | orderBy:'-finished' track by $index">
+  <div ng-repeat="experiment in experiments | orderBy:'-finished' track by $index" class="temp-sol">
     <span ng-if="!experiment.finished" class="fa fa-spin fa-spinner"></span>
     <span ng-if="experiment.finished && !experiment.resultsViewed && experiment.hasError"
           class="fa fa-warning" style="color: darkorange"></span>
@@ -17,5 +17,6 @@
     <a ui-sref="experiment_details({model_slug: experiment.model.slug, experiment_uuid: experiment.uuid})"
        ng-bind="experiment.name"></a>
     (<span style="font-size: 10px" ng-bind="experiment.created | fromNow"></span>)
+    <a ui-sref="experiment_details({model_slug: experiment.model.slug, experiment_uuid: experiment.uuid})" class="link-layout"></a>
   </div>
 </div>
