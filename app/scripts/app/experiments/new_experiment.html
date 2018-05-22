@@ -59,7 +59,7 @@
                   </p>
                 </div>
 
-                <div ng-if="federationmode" uib-accordion-group heading="Distributed" ng-init="acc_stats.open = true" is-open="acc_stats.open"
+                <div ng-if="federationmode" uib-accordion-group heading="Distributed" ng-init="acc_fed.open = true" is-open="acc_fed.open"
                   ng-click="!acc_stats.open">
                   <div uib-accordion-group heading="Statistical Analysis" ng-init="acc_stats.open = true" is-open="acc_stats.open" ng-click="!acc_stats.open">
                     <p ng-repeat="method in ml_methods | filter:{type:'statistics', environment:'!Exareme'}  | orderBy:'-label'">
