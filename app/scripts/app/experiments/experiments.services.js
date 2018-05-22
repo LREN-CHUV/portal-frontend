@@ -164,6 +164,10 @@ angular.module("chuvApp.util").factory("MLUtils", [
 
       // Prepare every algorithms output for display
       var methods = results.map(function(result) {
+        if (angular.isArray(result.data)) {
+          result = result.data[0];
+        }
+
         var output = {
           name: result.algorithm,
           type: (function(result) {
