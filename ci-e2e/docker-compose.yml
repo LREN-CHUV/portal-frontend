@@ -243,7 +243,7 @@ services:
       - wokenvalidation
 
   portalbackend:
-    image: hbpmip/portal-backend:2.8.2
+    image: hbpmip/portal-backend:2.8.5
     restart: "no"
     ports:
       - "8080:8080"
