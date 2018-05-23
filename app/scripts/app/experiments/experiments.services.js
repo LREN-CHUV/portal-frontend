@@ -346,22 +346,24 @@ angular.module("chuvApp.util").factory("MLUtils", [
           var output2 = {
             name: result.algorithm,
             title: validation.code,
-            type: (function(result) {
-              switch (result.algorithm) {
+            type: (function(validation) {
+              switch (validation && validation.algorithm) {
                 case "python-linear-regression":
                   return "linearRegression";
                 case "python-anova":
                   return "anova";
                 default:
                   if (
+                    validation &&
                     validation.data &&
+                    validation.data.average &&
                     validation.data.average.type === "RegressionScore"
                   ) {
                     return "regression";
                   }
                   return "classification";
               }
-            })(result)
+            })(validation)
           };
 
           // Update validation type
@@ -382,7 +384,13 @@ angular.module("chuvApp.util").factory("MLUtils", [
               var code = metric.code === "Weighted Recall"
                 ? "Weighted recall"
                 : code;
-              var value = validation.data && validation.data.average[code];
+              var value =
+                validation.data &&
+                validation.data.average &&
+                validation.data.average[code];
+              if (!value) {
+                value = validation.data && validation.data[code];
+              }
 
               if (metric.type === "numeric") {
                 if (overview.length <= i) {
@@ -391,7 +399,7 @@ angular.module("chuvApp.util").factory("MLUtils", [
                     label: metric.label
                   });
                 }
-                overview[i].data.push({ data: [value], name: result.name });
+                overview[i].data.push({ value, name: result.name });
                 i++;
               }
 
