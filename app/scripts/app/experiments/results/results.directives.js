@@ -3,12 +3,12 @@
 angular
   .module("chuvApp.experiments")
   /**
- *
- * TODO In the future separate method-result from validation-result:
- * TODO For a given method we might want to display a specific view followed by the generic validation infos...
- *
- * In function of type of method get the right result template...
- */
+   *
+   * TODO In the future separate method-result from validation-result:
+   * TODO For a given method we might want to display a specific view followed by the generic validation infos...
+   *
+   * In function of type of method get the right result template...
+   */
   .directive("methodResult", [
     "$compile",
     "$http",
@@ -146,6 +146,16 @@ angular
           case "text/plain":
             templateUrl = "textplain-results.html";
             $scope.textData = data && data.raw && data.raw.data;
+
+            break;
+
+          case "text/html":
+            templateUrl = "html-results.html";
+            const html = data.raw.data.replace(
+              "\u0026lt;!DOCTYPE html\u0026gt;",
+              "<!DOCTYPE html>"
+            );
+            $scope.html = $sce.trustAsHtml(html);
 
             break;
 

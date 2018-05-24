@@ -441,7 +441,19 @@ angular
     "$timeout",
     "User",
     "Config",
-    function($stateParams, $state, MLUtils, $scope, $timeout, User, Config) {
+    "Model",
+    "Variable",
+    function(
+      $stateParams,
+      $state,
+      MLUtils,
+      $scope,
+      $timeout,
+      User,
+      Config,
+      Model,
+      Variable
+    ) {
       var refresh_rate = 10000; // ms
       var cancel_timeout;
       var cancelled = false;
@@ -486,6 +498,24 @@ angular
         };
       }
 
+      if ($stateParams.model_slug) {
+        // we have a slug: load model
+        Model.get({ slug: $stateParams.model_slug }, function(result) {
+          $scope.model = result;
+          $scope.query = result.query;
+
+          $scope.query.display = {};
+          Variable.datasets().then(data => {
+            $scope.query.display.trainingDatasets = $scope.query.trainingDatasets.map(
+              t => data.find(d => d.code === t.code)
+            );
+            $scope.query.display.validationDatasets = $scope.query.validationDatasets.map(
+              t => data.find(d => d.code === t.code)
+            );
+          });
+        });
+      }
+
       function link_charts_legend(chart) {
         // chart.options.chart.events = {
         //   redraw: function() {
@@ -518,117 +548,133 @@ angular
       function get_experiment() {
         Config.then(config => {
           $scope.federationmode = config.mode === "federation";
-        }).then(() => {
-          MLUtils.get_experiment($stateParams.experiment_uuid).then(
-            function on_get_experiment_success(response) {
-              if (cancelled) {
-                return;
-              }
-
-              const data = response.data;
-              try {
-                $scope.loading = false;
-
-                // Refresh experiment until done
-                if (!cancelled && !data.finished) {
-                  cancel_timeout = $timeout(get_experiment, refresh_rate);
+        })
+          .then(() => {
+            MLUtils.get_experiment($stateParams.experiment_uuid).then(
+              function on_get_experiment_success(response) {
+                if (cancelled) {
                   return;
                 }
+                $scope.loading = false;
+                const data = response.data;
+                $scope.experiment = data;
 
-                // catch error before parsing
-                if (!angular.isObject(data.result)) {
-                  throw data.result;
-                }
-
-                // federated nodes distributed results
-                if ($scope.federationmode && data.validations.length) {
-                  //data.result.map(r => angular.isArray(r.data)).every(r => r)) {
-                  $scope.isFederationResult = true;
-
-                  const experiments = [];
-                  data.result.forEach((result, i) => {
-                    // TODO: same structure responses from api
-                    const resultData = angular.isArray(result.data)
-                      ? result.data
-                      : [result];
-
-                    const experiment = MLUtils.parse_distributed_results(
-                      resultData
-                    );
-                    experiment.methods.map(method => {
-                      if (!method.overview) {
-                        method.title = "Overview";
-                        return;
-                      }
-                      method.overview_charts = method.overview.map(
-                        compute_overview_graph
-                      );
-                      method.title = method.title || "Validation details";
-                    });
-
-                    experiment.nodeName = resultData[0].node || "node";
-
-                    experiments.push(experiment);
-                  });
-
-                  $scope.experiments = experiments;
-
-                  $scope.experiment = angular.extend(data, {
-                    finished: true,
-                    hasError: false
-                  });
-
-                  if (!data.resultsViewed) {
-                    MLUtils.mark_as_read($scope.experiment);
+                try {
+                  // Refresh experiment until done
+                  if (!cancelled && !data.finished) {
+                    cancel_timeout = $timeout(get_experiment, refresh_rate);
+                    return;
                   }
 
+                  // data.result ? data.result : data;
+
+                  // catch error before parsing
+                  if (!angular.isObject(data.result)) {
+                    throw data.result;
+                  }
+
+                  // federated nodes distributed results
+                  if ($scope.federationmode && data.validations.length) {
+                    //data.result.map(r => angular.isArray(r.data)).every(r => r)) {
+                    $scope.isFederationResult = true;
+
+                    const experiments = [];
+                    data.result.forEach((result, i) => {
+                      // TODO: same structure responses from api
+                      const resultData = angular.isArray(result.data)
+                        ? result.data
+                        : [result];
+
+                      const experiment = MLUtils.parse_distributed_results(
+                        resultData
+                      );
+                      experiment.methods.map(method => {
+                        if (!method.overview) {
+                          method.title = "Overview";
+                          return;
+                        }
+                        method.overview_charts = method.overview.map(
+                          compute_overview_graph
+                        );
+                        method.title = method.title || "Validation details";
+                      });
+
+                      experiment.nodeName = resultData[0].node || "node";
+
+                      experiments.push(experiment);
+                    });
+
+                    $scope.experiments = experiments;
+
+                    $scope.experiment = angular.extend(data, {
+                      finished: true,
+                      hasError: false,
+                      name: data.name
+                    });
+
+                    if (!data.resultsViewed) {
+                      MLUtils.mark_as_read($scope.experiment);
+                    }
+
+                    return;
+                  }
+
+                  $scope.isFederationResult = false;
+                  $scope.experiment = angular.extend(data, {
+                    finished: true,
+                    hasError: false,
+                    name: data.name
+                  });
+                  $scope.experiment.display = MLUtils.parse_results(
+                    data.result
+                  );
+
+                  // Prepare charts
+                  const methods = $scope.experiment.display.methods;
+                  $scope.overview_charts =
+                    methods &&
+                    methods.length &&
+                    methods[0].overview &&
+                    methods[0].overview.map(compute_overview_graph);
+                } catch (e) {
+                  $scope.experiment = $scope.experiment
+                    ? $scope.experiment
+                    : {};
+                  $scope.experiment.hasError = true;
+                  $scope.experiment.finished = true;
+                  $scope.experiment.result = data.result;
+                  console.log(e);
+                } finally {
+                  // Mark as read
+                  if (!data.resultsViewed) {
+                    MLUtils.mark_as_read(data);
+                  }
+                }
+              },
+              function on_get_experiment_fail(response) {
+                if (cancelled) {
                   return;
                 }
-
-                $scope.isFederationResult = false;
-                $scope.experiment = data;
-                $scope.experiment.display = MLUtils.parse_results(data.result);
-                $scope.experiment.name = data.name;
-
-                // Prepare charts
-                const methods = $scope.experiment.display.methods;
-                $scope.overview_charts =
-                  methods &&
-                  methods.length &&
-                  methods[0].overview &&
-                  methods[0].overview.map(compute_overview_graph);
-              } catch (e) {
-                $scope.experiment = $scope.experiment ? $scope.experiment : {};
-                $scope.experiment.hasError = true;
-                $scope.experiment.result = "Invalid JSON: \n" + data.result;
-                console.log(e);
-              } finally {
-                // Mark as read
-                if (!data.resultsViewed) {
-                  MLUtils.mark_as_read(data);
-                }
+                $scope.loading = false;
+                $scope.experiment = {
+                  hasError: true,
+                  result: response.data
+                    ? response.status +
+                        " " +
+                        response.data.error +
+                        "\n" +
+                        response.data.message
+                    : "This experiment doesn't exist",
+                  finished: true
+                };
+                MLUtils.mark_as_read($scope.experiment);
               }
-            },
-            function on_get_experiment_fail(response) {
-              if (cancelled) {
-                return;
-              }
-              $scope.loading = false;
-              $scope.experiment = {
-                hasError: true,
-                result: response.data
-                  ? response.status +
-                      " " +
-                      response.data.error +
-                      "\n" +
-                      response.data.message
-                  : "This experiment doesn't exist",
-                finished: true
-              };
-              MLUtils.mark_as_read($scope.experiment);
-            }
-          );
-        });
+            );
+          })
+          .catch(e => {
+            $scope.loading = false;
+            $scope.finished = true;
+          });
       }
 
       get_experiment();
