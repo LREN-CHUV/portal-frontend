@@ -59,7 +59,57 @@
               </ul>
             </div>
           </div>
+
+          <div class="panel">
+            <div class="panel-body">
+              <h3>Model:</h3>
+              <div>
+                <div class="variable-list scrollable">
+
+                  <h5 ng-if="query.variables.length">Variable</h5>
+                  <p ng-repeat="variable in query.variables">
+                    {{variable.code}}
+                  </p>
+
+                  <h5 ng-if="query.coVariables.length || query.groupings.length">CoVariables</h5>
+                  <p ng-repeat="covariable in query.groupings">
+                    <span>
+                      {{covariable.code}}
+                    </span>
+                  </p>
+                  <p ng-repeat="covariable in query.coVariables">
+                    <span>
+                      {{covariable.code}}
+                    </span>
+                  </p>
+                  <!-- <h5 ng-if="query.filters.length">Filters</h5>
+                  <p ng-repeat="filter in query.filters track by $index">
+                    <span>
+                      {{filter.code}}
+                    </span>
+                  </p> -->
+                  <h5 ng-if="query.display.trainingDatasets.length">Training datasets</h5>
+                  <p ng-repeat="filter in query.display.trainingDatasets track by $index">
+                    <span>
+                      {{filter.label}}
+                    </span>
+                  </p>
+                  <h5 ng-if="query.display.validationDatasets.length">Validation dataset</h5>
+                  <p ng-repeat="filter in query.display.validationDatasets track by $index">
+                    <span>
+                      {{filter.label}}
+                    </span>
+                  </p>
+
+
+
+                </div>
+              </div>
+            </div>
+          </div>
+
         </div>
+
 
         <div class="col-sm-9">
 
@@ -95,59 +145,59 @@
           <div class="experiment-details" ng-if="experiment.finished && !experiment.hasError" ng-cloak>
 
             <uib-tabset active="0" ng-if="isFederationResult">
-                <uib-tab heading="{{ experiment.nodeName }}" ng-repeat="experiment in experiments">
-                    <div class="panel bordered">
-                        <div class="panel-body">
-                            <uib-tabset active="0">
-                                <uib-tab ng-repeat="method in experiment.methods" heading="{{ method.name }}">
-                                    <div class="panel bordered">
-                                        <div class="panel-body">
-                                            <uib-tabset>
-                                                <uib-tab heading="Cross-validation" ng-if="method.overview_charts.length">
-                                                    <div class="panel bordered">
-                                                        <div class="panel-body">
-                                                            <uib-accordion close-others="false">
-                                                                <div uib-accordion-group ng-if="method.overview_charts" is-open="true">
-                                                                    <div class="row">
-                                                                        <div class="single-legend col-sm-12"></div>
-                                                                    </div>
-
-                                                                    <div class="row overview-charts">
-                                                                        <div class="col-sm-3 highcharts-container" ng-repeat="chart_config in method.overview_charts" style="width: 200px; height: 200px; margin: 1em 0">
-                                                                            <highchart class="highcharts-container" config="chart_config"></highchart>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div uib-accordion-group is-open="false">
-                                                                    <uib-accordion-heading>
-                                                                        <span class="ti ti-list"></span>
-                                                                        Raw JSON
-                                                                    </uib-accordion-heading>
-                                                                    <pretty-json collapse="hideJson" data="experiment.raw"></pretty-json>
-                                                                </div>
-
-                                                            </uib-accordion>
-                                                        </div>
-                                                    </div>
-                                                </uib-tab>
-
-                                                <uib-tab ng-repeat="validation in method.validations" heading="{{ validation.title }}">
-                                                    <div class="panel bordered">
-                                                        <div class="panel-body">
-                                                            <method-result data="validation"></method-result>
-                                                        </div>
-                                                    </div>
-                                                </uib-tab>
-
-                                            </uib-tabset>
+              <uib-tab heading="{{ experiment.nodeName }}" ng-repeat="experiment in experiments">
+                <div class="panel bordered">
+                  <div class="panel-body">
+                    <uib-tabset active="0">
+                      <uib-tab ng-repeat="method in experiment.methods" heading="{{ method.name }}">
+                        <div class="panel bordered">
+                          <div class="panel-body">
+                            <uib-tabset>
+                              <uib-tab heading="Cross-validation" ng-if="method.overview_charts.length">
+                                <div class="panel bordered">
+                                  <div class="panel-body">
+                                    <uib-accordion close-others="false">
+                                      <div uib-accordion-group ng-if="method.overview_charts" is-open="true">
+                                        <div class="row">
+                                          <div class="single-legend col-sm-12"></div>
                                         </div>
-                                    </div>
-                                </uib-tab>
+
+                                        <div class="row overview-charts">
+                                          <div class="col-sm-3 highcharts-container" ng-repeat="chart_config in method.overview_charts" style="width: 200px; height: 200px; margin: 1em 0">
+                                            <highchart class="highcharts-container" config="chart_config"></highchart>
+                                          </div>
+                                        </div>
+                                      </div>
+
+                                      <div uib-accordion-group is-open="false">
+                                        <uib-accordion-heading>
+                                          <span class="ti ti-list"></span>
+                                          Raw JSON
+                                        </uib-accordion-heading>
+                                        <pretty-json collapse="hideJson" data="experiment.raw"></pretty-json>
+                                      </div>
+
+                                    </uib-accordion>
+                                  </div>
+                                </div>
+                              </uib-tab>
+
+                              <uib-tab ng-repeat="validation in method.validations" heading="{{ validation.title }}">
+                                <div class="panel bordered">
+                                  <div class="panel-body">
+                                    <method-result data="validation"></method-result>
+                                  </div>
+                                </div>
+                              </uib-tab>
+
                             </uib-tabset>
+                          </div>
                         </div>
-                    </div>
-                </uib-tab>
+                      </uib-tab>
+                    </uib-tabset>
+                  </div>
+                </div>
+              </uib-tab>
             </uib-tabset>
 
             <uib-tabset active="0" ng-if="!isFederationResult">
