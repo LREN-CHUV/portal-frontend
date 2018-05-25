@@ -7,6 +7,7 @@
           Results
         </uib-accordion-heading>
         <div style="height: 480px" id="visualization"></div>
+        <div ng-bind-html="visData"></div>
       </div>
 
       <div uib-accordion-group is-open="help_is_open">
@@ -17,6 +18,4 @@
 
         <div class="panel-body" btf-markdown="estimation.help"></div>
       </div>
-
-      <span ng-if="visData" class="display: none">{{visData()}}</span>
   </div>

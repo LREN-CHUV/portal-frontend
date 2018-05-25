@@ -120,7 +120,6 @@ angular
             templateUrl = "plotly-results.html";
             $scope.chartData = data && data.raw.data;
             break;
-
           case "application/vnd.dataresource+json":
             templateUrl = "dataresource-results.html";
             const chartData = data && data.raw.data.resources
@@ -138,8 +137,9 @@ angular
               data.raw.data.result &&
               data.raw.data.result.length &&
               data.raw.data.result.slice(1, -1);
-            const newFunction = `var network; ${visFunction}`;
-            $scope.visData = () => eval(newFunction); // FIXME: evil hack
+            const js = `<script>var network; ${visFunction}</script>`;
+            // // $scope.visData = () => eval(newFunction); // FIXME: evil hack
+            $scope.visData = $sce.trustAsHtml(js);
 
             break;
 
