@@ -116,10 +116,12 @@ angular
             $scope.svg = $sce.trustAsHtml(data.raw.data);
             break;
 
+          case "heatmap":
           case "application/vnd.plotly.v1+json":
             templateUrl = "plotly-results.html";
-            $scope.chartData = data && data.raw.data;
+            $scope.chartData = (data && data.raw.data) || { data: data.raw };
             break;
+
           case "application/vnd.dataresource+json":
             templateUrl = "dataresource-results.html";
             const chartData = data && data.raw.data.resources

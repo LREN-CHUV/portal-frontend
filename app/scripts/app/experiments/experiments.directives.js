@@ -16,37 +16,42 @@ angular
             $scope.shared.kfold = 2;
 
             $scope.run_experiment = function() {
-              Model.update( { slug: $scope.model.slug }, $scope.model, () => {
-                var validations = [];
-                if ($scope.shared.cross_validation) {
-                  validations.push({
-                    code: "kfold",
-                    parameters: [{ code: "k", value: $scope.shared.kfold }]
-                  });
-                }
-  
-                //$scope.running = true;
-                var promise = MLUtils.run_experiment({
-                  model: $scope.model.slug,
-                  validations: validations,
-                  algorithms: $scope.shared.experiment_configuration,
-                  name: $scope.shared.experiment_name,
-                  datasets: $scope.model.query.trainingDatasets
-                });
-  
-                return promise.then(
-                  function(result) {
-                    //$state.go(result.data.uuid);
-                    $state.go("experiment_details", {
-                      model_slug: $scope.model.slug,
-                      experiment_uuid: result.data.uuid
+              Model.update(
+                { slug: $scope.model.slug },
+                $scope.model,
+                () => {
+                  var validations = [];
+                  if ($scope.shared.cross_validation) {
+                    validations.push({
+                      code: "kfold",
+                      parameters: [{ code: "k", value: $scope.shared.kfold }]
                     });
-                  },
-                  function() {
-                    $scope.error = true;
                   }
-                );
-              }, () => {})
+
+                  //$scope.running = true;
+                  var promise = MLUtils.run_experiment({
+                    model: $scope.model.slug,
+                    validations: validations,
+                    algorithms: $scope.shared.experiment_configuration,
+                    name: $scope.shared.experiment_name,
+                    datasets: $scope.model.query.trainingDatasets
+                  });
+
+                  return promise.then(
+                    function(result) {
+                      //$state.go(result.data.uuid);
+                      $state.go("experiment_details", {
+                        model_slug: $scope.model.slug,
+                        experiment_uuid: result.data.uuid
+                      });
+                    },
+                    function() {
+                      $scope.error = true;
+                    }
+                  );
+                },
+                () => {}
+              );
             };
           }
         ]
@@ -282,7 +287,7 @@ angular
       return {
         link: function linkFunc(scope, element, attrs) {
           scope.$watch("chartData", function(heatmap) {
-            Plotly.newPlot(element[0], heatmap, layout);
+            Plotly.newPlot(element[0], heatmap.data, heatmap.layout || layout);
           });
         }
       };
