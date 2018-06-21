@@ -22,6 +22,7 @@ var vendorScripts = [
   "./node_modules/angular-xeditable/dist/js/xeditable.js",
   "./node_modules/highcharts/highstock.js",
   "./node_modules/highcharts/highcharts-more.js",
+  "./node_modules/highcharts/highcharts-3d.js",
   "./node_modules/highcharts/modules/heatmap.js",
   "./node_modules/highcharts/modules/exporting.js",
   "./node_modules/highcharts/modules/data.js",
