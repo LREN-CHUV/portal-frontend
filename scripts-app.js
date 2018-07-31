@@ -78,6 +78,9 @@ var appScripts = [
   "./" + appConfig.app + "/scripts/components/header/header-scroll.js",
   "./" + appConfig.app + "/scripts/app/experiments/experiments.module.js",
   "./" + appConfig.app + "/scripts/app/experiments/experiments.controller.js",
+  "./" +
+    appConfig.app +
+    "/scripts/app/experiments/experiments-details.controller.js",
   "./" + appConfig.app + "/scripts/app/experiments/experiments.services.js",
   "./" + appConfig.app + "/scripts/app/experiments/experiments.directives.js",
   "./" +
