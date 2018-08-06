@@ -2,25 +2,19 @@
 import * as dotenv from 'dotenv';
 import fetch from "node-fetch";
 import { Container } from "unstated";
+import { IExperimentContainer } from "../../types"
 
 dotenv.config()
 
-export interface IExperimentResult {
-  error?: string;
-  experiment: any;
-  loading: boolean;
-}
-
-class ExperimentContainer extends Container<IExperimentResult> {
+class ExperimentContainer extends Container<IExperimentContainer> {
   public state = {
     error: undefined,
-    experiment: { name: "" },
+    experiment: undefined,
     loading: true
   };
 
   public load = async (uuid: string) => {
     this.setState({ loading: true });
-    console.log(process.env.REACT_APP_BACKEND_URL)
     try {
       const data = await fetch(`${process.env.REACT_APP_BACKEND_URL}/experiments/${uuid}`);
       const json = await data.json();
