@@ -14,3 +14,4 @@ package-lock.json
 yarn-error.log
 app/scripts/app/config.json
 ~/
+app/v3/.env
