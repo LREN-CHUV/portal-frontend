@@ -1,26 +1,14 @@
-// tslint:disable: jsx-no-lambda
 // tslint:disable:no-console
-// tslint:disable:max-classes-per-file
-
 import * as React from "react";
-import { /*Button,*/ Panel } from "react-bootstrap";
+import { Panel } from "react-bootstrap";
 import { match } from "react-router-dom";
 import { Subscribe } from "unstated";
 import { ExperimentContainer } from "../containers";
+import { IExperimentResult } from "../types";
+import { LoadExperiment } from "./";
+
 import "./Experiment.css";
 
-class LoadExperiment extends React.Component<any> {
-  public componentDidMount() {
-    const { load, uuid } = this.props;
-    if (load) {
-      load(uuid);
-    }
-  }
-
-  public render() {
-    return <p>test</p>;
-  }
-}
 interface IExperimentParams {
   slug: string;
   uuid: string;
@@ -30,42 +18,42 @@ interface IExperimentProps {
   match?: match<IExperimentParams>;
 }
 
+const display = (experiment: IExperimentResult | undefined) => {
+  if (experiment === undefined) {
+    return <p>Empty</p>;
+  }
+
+  return (
+    <React.Fragment>
+      <p>{experiment.name}</p>
+      <p>{experiment.result.map(r => r.algorithm)}</p>
+    </React.Fragment>
+  );
+};
+
 class Experiment extends React.Component<IExperimentProps> {
   public render() {
-    const matched = this.props.match;
+    const { match: matched } = this.props;
     if (!matched) {
-      return <p>Loading</p>;
+      return <p>Error, check you url</p>;
     }
-
     const { uuid } = matched.params;
+
     return (
       <Subscribe to={[ExperimentContainer]}>
         {(experimentContainer: ExperimentContainer) => (
           <React.Fragment>
+            <LoadExperiment load={experimentContainer.load} uuid={uuid} />
             {experimentContainer.state.loading ? <h1>Loading...</h1> : null}
-            {experimentContainer.state.error ? <h1>{experimentContainer.state.error}</h1> : null}
+            {experimentContainer.state.error ? (
+              <h1>{experimentContainer.state.error}</h1>
+            ) : null}
+
             <Panel>
-              <Panel.Heading>
-                <LoadExperiment load={experimentContainer.load} uuid={uuid} />
-                <h3>
-                  Results of Experiment: 
-                  <a>
-                    {experimentContainer.state.experiment.name}
-                  </a>
-                </h3>
-                {console.log(experimentContainer.state.experiment)}
-                {/* <Button onClick={experiments.load}>Load experiments</Button>
-              {experiments.state.items
-                ? experiments.state.items.map(e => (
-                    <Button
-                      key={e.uuid}
-                      onClick={() => experiment.load(e.uuid)}
-                    >
-                      {e.name}
-                    </Button>
-                  ))
-                : null} */}
-              </Panel.Heading>
+              <Panel.Title>Experiment</Panel.Title>
+              <Panel.Body>
+                {display(experimentContainer.state.experiment)}
+              </Panel.Body>
             </Panel>
           </React.Fragment>
         )}
