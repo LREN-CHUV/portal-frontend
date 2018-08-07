@@ -1,8 +1,9 @@
 // tslint:disable:no-console
+import * as dotenv from 'dotenv';
 import fetch from "node-fetch";
 import { Container } from "unstated";
 
-const BACKEND_URL = "http://155.105.202.23:8080/services";
+dotenv.config()
 
 export interface IResult {
     uuid: string;
@@ -16,7 +17,7 @@ export interface IExperimentsResult {
 class ExperimentsContainer extends Container<IExperimentsResult> {
   public state = { items: [{ uuid: "", name: ""}] };
   public load = async () => {
-    const items = await fetch(`${BACKEND_URL}/experiments?mine=true`).then(res =>
+    const items = await fetch(`${process.env.REACT_APP_BACKEND_URL}/experiments?mine=true`).then(res =>
       res.json()
     );
 
