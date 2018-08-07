@@ -1,10 +1,10 @@
 // tslint:disable:no-console
-import * as dotenv from 'dotenv';
+import * as dotenv from "dotenv";
 import fetch from "node-fetch";
 import { Container } from "unstated";
-import { IExperimentContainer } from "../../types"
+import { IExperimentContainer } from "../../types";
 
-dotenv.config()
+dotenv.config();
 
 class ExperimentContainer extends Container<IExperimentContainer> {
   public state = {
@@ -14,16 +14,22 @@ class ExperimentContainer extends Container<IExperimentContainer> {
   };
 
   public load = async (uuid: string) => {
-    this.setState({ loading: true });
+    await this.setState({ loading: true });
     try {
-      const data = await fetch(`${process.env.REACT_APP_BACKEND_URL}/experiments/${uuid}`);
+      const data = await fetch(
+        `${process.env.REACT_APP_BACKEND_URL}/experiments/${uuid}`
+      );
       const json = await data.json();
-      this.setState(state => ({ experiment: json, loading: false }));
+      return await this.setState(state => ({ experiment: json, loading: false }));
     } catch (error) {
-      this.setState(state => ({ loading: false, error: error.message }));
+      return await this.setState(state => ({ loading: false, error: error.message }));
       console.log(error);
     }
   };
+
+  // public create = async (params: any) => {
+  //   this.setState(state => ({ experiment: { name: "tsne" }, loading: false }));
+  // };
 }
 
 export default ExperimentContainer;
