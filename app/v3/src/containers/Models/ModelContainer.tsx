@@ -2,28 +2,25 @@
 import * as dotenv from "dotenv";
 import fetch from "node-fetch";
 import { Container } from "unstated";
-import { IExperimentContainer } from "../../types";
+import { IModelContainer } from "../../types";
 
 dotenv.config();
 
-class ExperimentContainer extends Container<IExperimentContainer> {
-  public state: IExperimentContainer = {
+class ModelContainer extends Container<IModelContainer> {
+  public state = {
     error: undefined,
-    experiment: undefined,
-    loading: true
+    loading: true,
+    model: undefined
   };
 
-  private baseUrl = `${process.env.REACT_APP_BACKEND_URL}/experiments`;
+  private baseUrl = `${process.env.REACT_APP_BACKEND_URL}/models`;
 
-  public load = async (uuid: string) => {
+  public load = async (slug: string) => {
     await this.setState({ loading: true });
     try {
-      const data = await fetch(`${this.baseUrl}/${uuid}`);
+      const data = await fetch(`${this.baseUrl}/${slug}`);
       const json = await data.json();
-      return await this.setState(state => ({
-        experiment: json,
-        loading: false
-      }));
+      return await this.setState(state => ({ loading: false, model: json }));
     } catch (error) {
       return await this.setState(state => ({
         error: error.message,
@@ -42,10 +39,7 @@ class ExperimentContainer extends Container<IExperimentContainer> {
         method: "POST"
       });
       const json = await data.json();
-      return await this.setState(state => ({
-        experiment: json,
-        loading: false
-      }));
+      return await this.setState(state => ({ loading: false, model: json }));
     } catch (error) {
       return await this.setState(state => ({
         error: error.message,
@@ -56,4 +50,4 @@ class ExperimentContainer extends Container<IExperimentContainer> {
   };
 }
 
-export default ExperimentContainer;
+export default ModelContainer;
