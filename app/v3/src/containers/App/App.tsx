@@ -12,7 +12,7 @@ class App extends React.Component {
         <Router>
           <div className="App">
             <Navigation />
-            <Route path="/experiment/:slug/:uuid" component={ Experiment } />
+            <Route path="/v3/experiment/:slug/:uuid" component={ Experiment } />
           </div>
         </Router>
       </Provider>

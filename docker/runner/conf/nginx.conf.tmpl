@@ -78,9 +78,7 @@ http {
       }
 
       location ^~ /v3/ {
-        root /usr/share/nginx/html;
-        index  index.html;
-        # try_files $uri $uri/index.html;
+        try_files $uri /v3/index.html;
       }
 
       location /protected/ {
