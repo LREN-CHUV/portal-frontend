@@ -1,0 +1,30 @@
+.wrapper {
+  display: grid;
+  grid-gap: 8px;
+  grid-template-columns: 200px auto 200px;
+  grid-template-areas:
+    "header  header  header"
+    "sidebar content content"
+    "sidebar2  content  content";
+}
+
+.sidebar {
+  grid-area: sidebar;
+  background-color: orangered;
+}
+
+.sidebar2 {
+    grid-area: sidebar2;
+    background-color:greenyellow;
+  }
+
+.content {
+  grid-area: content;
+  position: relative;
+  background-color: royalblue;
+}
+
+.header {
+  grid-area: header;
+  background-color: yellowgreen;
+}
