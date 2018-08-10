@@ -22,11 +22,11 @@ class ModelContainer extends Container<IModelContainer> {
       const json = await data.json();
       return await this.setState(state => ({ loading: false, model: json }));
     } catch (error) {
+      // console.log(error);
       return await this.setState(state => ({
         error: error.message,
         loading: false
       }));
-      console.log(error);
     }
   };
 

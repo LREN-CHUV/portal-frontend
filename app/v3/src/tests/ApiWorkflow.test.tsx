@@ -7,21 +7,6 @@ const datasets = ["desd-synthdata"];
 let modelTitle: string;
 let experimentUUID: string;
 
-const method = (model: string, code: string, parameters: any[] = []) => ({
-  algorithms: [
-    {
-      code,
-      name: code,
-      parameters,
-      validation: true
-    }
-  ],
-  datasets,
-  model,
-  name: code,
-  validations: []
-});
-
 /// TESTS ///
 
 beforeAll(() => {
@@ -33,7 +18,7 @@ test("initial state is: loading", () => {
   expect(experimentContainer.state.loading).toBe(true);
 });
 
-test("Create new model", async () => {
+test.skip("Create new model", async () => {
   const modelContainer = new ModelContainer();
   await modelContainer.create({
     config: {
@@ -60,7 +45,7 @@ test("Create new model", async () => {
   expect(result!.slug).toBe(modelTitle);
 });
 
-test("Load model", async () => {
+test.skip("Load model", async () => {
   const modelContainer = new ModelContainer();
   await modelContainer.load(modelTitle);
 
@@ -70,9 +55,23 @@ test("Load model", async () => {
   expect(result!.slug).toBe(modelTitle);
 });
 
-test("Set experiment", async () => {
+test.skip("Set experiment", async () => {
   const experimentContainer = new ExperimentContainer();
-  const algorithm = method(modelTitle, "tSNE");
+  const code = "tSNE";
+  const algorithm = {
+    algorithms: [
+      {
+        code,
+        name: code,
+        parameters: [],
+        validation: true
+      }
+    ],
+    datasets,
+    model: modelTitle,
+    name: code,
+    validations: []
+  };
   await experimentContainer.create(algorithm);
   const result: IExperimentResult | undefined =
     experimentContainer.state.experiment;
@@ -83,10 +82,10 @@ test("Set experiment", async () => {
   experimentUUID = result!.uuid;
 });
 
-test("Fetch experiment", async done => {
+test.skip("Fetch experiment", async done => {
   const experimentContainer = new ExperimentContainer();
 
-  jest.setTimeout(60 * 2 * 1000);
+  jest.setTimeout(4 * 60 * 1000);
   await setTimeout(async () => {
     await experimentContainer.load(experimentUUID);
     const eresult: IExperimentResult | undefined =
@@ -99,9 +98,8 @@ test("Fetch experiment", async done => {
     expect(results).toBeDefined();
     results!.forEach(result => {
       expect(result.data).toBeDefined();
-    })
-    
+    });
+
     done();
   }, 60 * 1000);
-  
 });
