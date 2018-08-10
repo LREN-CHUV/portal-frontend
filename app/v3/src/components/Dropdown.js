@@ -1,17 +1,17 @@
 import React from "react";
-import { SplitButton, MenuItem } from "react-bootstrap";
+import { DropdownButton, MenuItem } from "react-bootstrap";
 
-export default ({ models = [], title = "Current Model", handleSelect }) => (
-  <SplitButton
+export default ({ items = [], title = "Current Model", handleSelect }) => (
+  <DropdownButton
     bsStyle="default"
-    bsSize="xsmall"
-    id={"split-button"}
+    bsSize="small"
+    id={"dropdown-basic"}
     title={title}
   >
-    {models.map((m, i) => (
-      <MenuItem eventKey={i} key={m.slug} onSelect={handleSelect}>
-        {m.title}
+    {items.map((m, i) => (
+      <MenuItem eventKey={i} key={m.uuid} onSelect={() => handleSelect(m)}>
+        {m.name}
       </MenuItem>
     ))}
-  </SplitButton>
+  </DropdownButton>
 );
