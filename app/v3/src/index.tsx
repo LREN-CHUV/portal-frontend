@@ -1,8 +1,8 @@
+import { App } from "@app/containers";
+import { unregister } from "@app/registerServiceWorker";
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import { App } from "./containers";
 import "./index.css";
-import { unregister } from "./registerServiceWorker";
 
 import "bootstrap/dist/css/bootstrap-theme.css";
 import "bootstrap/dist/css/bootstrap.css";

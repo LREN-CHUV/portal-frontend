@@ -1,8 +1,8 @@
 // tslint:disable:no-console
+import { IExperimentListContainer } from "@app/types";
 import * as dotenv from "dotenv";
 import fetch from "node-fetch";
 import { Container } from "unstated";
-import { IExperimentsContainer } from "../../types";
 
 dotenv.config();
 
@@ -11,7 +11,7 @@ export interface IResult {
   name: string;
 }
 
-class ExperimentsContainer extends Container<IExperimentsContainer> {
+class ExperimentListContainer extends Container<IExperimentListContainer> {
   public state = {
     error: undefined,
     experiments: undefined,
@@ -39,4 +39,4 @@ class ExperimentsContainer extends Container<IExperimentsContainer> {
   };
 }
 
-export default ExperimentsContainer;
+export default ExperimentListContainer;
