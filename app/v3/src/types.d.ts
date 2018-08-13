@@ -48,7 +48,7 @@ export interface IModelResult {
   createdBy: any;
 }
 
-export interface IExperimentsContainer {
+export interface IExperimentListContainer {
   error?: string;
   experiments?: IExperimentResult[];
   loading: boolean;

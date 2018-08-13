@@ -1,16 +1,15 @@
 // tslint:disable:no-console
-import * as React from "react";
-import { Button, Panel } from "react-bootstrap";
-import {  RouteComponentProps, withRouter } from "react-router-dom";
-import { Subscribe } from "unstated";
+import { Dropdown, LoadData } from "@app/components";
 import {
   ExperimentContainer,
-  ExperimentsContainer,
+  ExperimentListContainer,
   ModelContainer
-} from "../containers";
-import { IExperimentResult, IModelResult } from "../types";
-import { Dropdown, LoadData } from "./";
-
+} from "@app/containers";
+import { IExperimentResult, IModelResult } from "@app/types";
+import * as React from "react";
+import { Button, Panel } from "react-bootstrap";
+import { RouteComponentProps, withRouter } from "react-router-dom";
+import { Subscribe } from "unstated";
 
 import "./Experiment.css";
 interface IExperimentParams {
@@ -18,19 +17,14 @@ interface IExperimentParams {
   uuid: string;
 }
 
-// interface IExperimentProps {
-//   match?: match<IExperimentParams>;
-//   history: any
-// }
-
 const headerDisplay = (experiment: IExperimentResult | undefined) => {
   if (experiment === undefined) {
     return <p>Empty</p>;
   }
 
-  const result = experiment.result
+  const result = experiment.result;
   if (result === undefined) {
-    return "No result"
+    return "No result";
   }
 
   return (
@@ -45,16 +39,14 @@ const headerDisplay = (experiment: IExperimentResult | undefined) => {
   );
 };
 
-
-
 const methodDisplay = (experiment: IExperimentResult | undefined) => {
   if (experiment === undefined) {
     return <p>Empty</p>;
   }
 
-  const result = experiment.result
+  const result = experiment.result;
   if (result === undefined) {
-    return "No result"
+    return "No result";
   }
 
   return (
@@ -113,8 +105,9 @@ const contentDisplay = (experiment: IExperimentResult | undefined) => {
   ));
 };
 
-class Experiment extends React.Component<RouteComponentProps<IExperimentParams>> {
-
+class Experiment extends React.Component<
+  RouteComponentProps<IExperimentParams>
+> {
   public render() {
     // Get url parameters
     const { match: matched } = this.props;
@@ -125,17 +118,17 @@ class Experiment extends React.Component<RouteComponentProps<IExperimentParams>>
 
     return (
       <Subscribe
-        to={[ExperimentsContainer, ExperimentContainer, ModelContainer]}
+        to={[ExperimentListContainer, ExperimentContainer, ModelContainer]}
       >
         {(
-          experimentsContainer: ExperimentsContainer,
+          experimentListContainer: ExperimentListContainer,
           experimentContainer: ExperimentContainer,
           modelContainer: ModelContainer
         ) => (
           <div className="wrapper">
             <LoadData load={experimentContainer.load} id={uuid} />
             <LoadData load={modelContainer.load} id={slug} />
-            <LoadData load={experimentsContainer.load} />
+            <LoadData load={experimentListContainer.load} />
 
             {experimentContainer.state.loading ? <h1>Loading...</h1> : null}
             {experimentContainer.state.error ? (
@@ -145,7 +138,9 @@ class Experiment extends React.Component<RouteComponentProps<IExperimentParams>>
             <React.Fragment>
               <Panel className="header">
                 {headerDisplay(experimentContainer.state.experiment)}
-                {this.experimentsDisplay(experimentsContainer.state.experiments)}
+                {this.experimentsDisplay(
+                  experimentListContainer.state.experiments
+                )}
               </Panel>
               <Panel className="sidebar">
                 <Panel.Title>Method</Panel.Title>
@@ -173,15 +168,20 @@ class Experiment extends React.Component<RouteComponentProps<IExperimentParams>>
   }
 
   private handleSelect = (experiment: IExperimentResult) => {
-    const { model: { slug }, uuid} = experiment;
-    this.props.history.push(`/v3/experiment/${slug}/${uuid}`)
-  }
-  
-  private experimentsDisplay = (experiments: IExperimentResult[] | undefined) => {
+    const {
+      model: { slug },
+      uuid
+    } = experiment;
+    this.props.history.push(`/v3/experiment/${slug}/${uuid}`);
+  };
+
+  private experimentsDisplay = (
+    experiments: IExperimentResult[] | undefined
+  ) => {
     if (experiments === undefined) {
       return <p>Empty</p>;
     }
-  
+
     return (
       <Dropdown
         items={experiments}

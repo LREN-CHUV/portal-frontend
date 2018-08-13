@@ -1,9 +1,9 @@
 // tslint:disable:no-console
 
-import ExperimentContainer from "../containers/Experiments/ExperimentContainer";
-import ModelContainer from "../containers/Models/ModelContainer";
-import { IExperimentResult, IModelResult } from "../types";
-import { methods, models } from "./mocks";
+import ExperimentContainer from "@app/containers/Experiments/ExperimentContainer";
+import ModelContainer from "@app/containers/Models/ModelContainer";
+import { methods, models } from "@app/tests/mocks";
+import { IExperimentResult, IModelResult } from "@app/types";
 
 const datasets = ["desd-synthdata"];
 const experimentsUUID: string[] = [];
