@@ -1,5 +1,4 @@
 export { default as Navigation } from './Navigation'
 export { default as Experiment } from './Experiment'
 export { default as Dropdown } from './Dropdown'
-export { default as LoadExperiment } from './ExperimentLoader'
-export { default as LoadModel } from './ModelLoader'
+export { default as LoadData } from './DataLoader'

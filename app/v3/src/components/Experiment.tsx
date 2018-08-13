@@ -9,7 +9,7 @@ import {
   ModelContainer
 } from "../containers";
 import { IExperimentResult, IModelResult } from "../types";
-import { Dropdown, LoadExperiment, LoadModel } from "./";
+import { Dropdown, LoadData } from "./";
 
 
 import "./Experiment.css";
@@ -78,20 +78,20 @@ const modelDisplay = (model: IModelResult | undefined) => {
 
   return (
     <React.Fragment>
-      <h5>Variable</h5>
+      <h4>Variable</h4>
       {query.variables &&
         query.variables.map((v: any) => <p key={v.code}>{v.code}</p>)}
-      <h5>CoVariables</h5>
+      <h4>CoVariables</h4>
       {query.coVariables &&
         query.coVariables.map((v: any) => <p key={v.code}>{v.code}</p>)}
       {query.groupings &&
         query.groupings.map((v: any) => <p key={v.code}>{v.code}</p>)}
-      <h5>Filters</h5>
+      <h4>Filters</h4>
 
-      <h5>Training datasets</h5>
+      <h4>Training datasets</h4>
       {query.trainingDatasets &&
         query.trainingDatasets.map((v: any) => <p key={v.code}>{v.code}</p>)}
-      <h5>Validation dataset</h5>
+      <h4>Validation dataset</h4>
       {query.validationDatasets &&
         query.validationDatasets.map((v: any) => <p key={v.code}>{v.code}</p>)}
     </React.Fragment>
@@ -133,9 +133,9 @@ class Experiment extends React.Component<RouteComponentProps<IExperimentParams>>
           modelContainer: ModelContainer
         ) => (
           <div className="wrapper">
-            <LoadExperiment load={experimentContainer.load} uuid={uuid} />
-            <LoadModel load={modelContainer.load} slug={slug} />
-            <LoadModel load={experimentsContainer.load} slug={slug} />
+            <LoadData load={experimentContainer.load} id={uuid} />
+            <LoadData load={modelContainer.load} id={slug} />
+            <LoadData load={experimentsContainer.load} />
 
             {experimentContainer.state.loading ? <h1>Loading...</h1> : null}
             {experimentContainer.state.error ? (
