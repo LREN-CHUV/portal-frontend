@@ -1,6 +1,6 @@
-import App from "@app/containers/App/App";
 import * as React from "react";
 import * as ReactDOM from "react-dom";
+import App from "../containers/App/App";
 
 it("renders without crashing", () => {
   const div = document.createElement("div");

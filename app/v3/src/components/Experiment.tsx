@@ -1,15 +1,15 @@
 // tslint:disable:no-console
-import { Dropdown, LoadData } from "@app/components";
+import { IExperimentResult, IModelResult } from "@app/types";
+import * as React from "react";
+import { Panel } from "react-bootstrap";
+import { RouteComponentProps, withRouter } from "react-router-dom";
+import { Subscribe } from "unstated";
+import { Dropdown, LoadData } from "../components";
 import {
   ExperimentContainer,
   ExperimentListContainer,
   ModelContainer
-} from "@app/containers";
-import { IExperimentResult, IModelResult } from "@app/types";
-import * as React from "react";
-import { Button, Panel } from "react-bootstrap";
-import { RouteComponentProps, withRouter } from "react-router-dom";
-import { Subscribe } from "unstated";
+} from "../containers";
 
 import "./Experiment.css";
 interface IExperimentParams {
@@ -30,11 +30,11 @@ const headerDisplay = (experiment: IExperimentResult | undefined) => {
   return (
     <React.Fragment>
       <Panel.Title>Results of Experiment {experiment.name} </Panel.Title>
-      <Panel.Body>
+      {/* <Panel.Body>
         Created 2 hours ago by anonymous
         <p>{result.map(r => r.algorithm)}</p>
         <Button bsStyle="primary">Share Experiment</Button>
-      </Panel.Body>
+      </Panel.Body> */}
     </React.Fragment>
   );
 };

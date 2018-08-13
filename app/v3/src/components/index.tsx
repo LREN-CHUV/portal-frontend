@@ -1,4 +1,4 @@
-export { default as Experiment } from '@app/components/Experiment'
-export { default as Dropdown } from '@app/components/Dropdown'
-export { default as LoadData } from '@app/components/DataLoader'
-export { default as Navigation } from '@app/components/Navigation'
+export { default as Experiment } from '../components/Experiment'
+export { default as Dropdown } from '../components/Dropdown'
+export { default as LoadData } from '../components/DataLoader'
+export { default as Navigation } from '../components/Navigation'
