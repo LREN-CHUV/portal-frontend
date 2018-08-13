@@ -1,6 +1,6 @@
-import ExperimentContainer from "@app/containers/Experiments/ExperimentContainer";
-import ModelContainer from "@app/containers/Models/ModelContainer";
-import { IExperimentResult, IModelResult } from "@app/types";
+import ExperimentContainer from "../containers/Experiments/ExperimentContainer";
+import ModelContainer from "../containers/Models/ModelContainer";
+import { IExperimentResult, IModelResult } from "../types";
 
 const datasets = ["desd-synthdata"];
 

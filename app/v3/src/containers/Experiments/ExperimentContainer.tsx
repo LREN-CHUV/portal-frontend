@@ -1,8 +1,8 @@
 // tslint:disable:no-console
-import { IExperimentContainer } from "@app/types";
 import * as dotenv from "dotenv";
 import fetch from "node-fetch";
 import { Container } from "unstated";
+import { IExperimentContainer } from "../../types";
 
 dotenv.config();
 
