@@ -5,7 +5,7 @@ export const models = {
     groupings: [],
     testingDatasets: [],
     trainingDatasets: ["desd-synthdata"],
-    validationDatasets: [],
+    validationDatasets: ["qqni-synthdata"],
     variables: [{ code: "alzheimerbroadcategory" }]
   },
   classification2: {
@@ -14,13 +14,14 @@ export const models = {
     groupings: [],
     testingDatasets: [],
     trainingDatasets: ["desd-synthdata"],
-    validationDatasets: [],
+    validationDatasets: ["qqni-synthdata"],
     variables: [{ code: "alzheimerbroadcategory" }]
   },
   regression: {
     coVariables: [{ code: "subjectageyears" }],
     filters: "",
     trainingDatasets: ["desd-synthdata"],
+    validationDatasets: ["qqni-synthdata"],
     variables: [{ code: "lefthippocampus" }]
   },
   regression2: {
@@ -29,7 +30,7 @@ export const models = {
     groupings: [],
     testingDatasets: [],
     trainingDatasets: ["desd-synthdata"],
-    validationDatasets: [],
+    validationDatasets: ["qqni-synthdata"],
     variables: [{ code: "lefthippocampus" }]
   }
 };

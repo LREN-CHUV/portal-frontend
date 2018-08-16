@@ -40,7 +40,7 @@ test("Fetch experiments", async () => {
 
     expect(experiment.created).toBeDefined();
     expect(experiment.hasError).toBeFalsy();
-    
+
     if (experiment.hasServerError) {
       expect(experiment.result).toBeDefined();
       return;
@@ -65,7 +65,7 @@ test("Fetch experiments", async () => {
       console.log("\tname: ", names[i], ", mime:", mime);
       expect(mime).toBeDefined();
 
-      const data = r.data.length ? r.data : [r.data];
+      const data = r.data && (r.data.length ? r.data : [r.data]) || null;
 
       switch (mime) {
         case "application/vnd.highcharts+json":
@@ -92,15 +92,13 @@ test("Fetch experiments", async () => {
             expect(d).toBeDefined();
           });
           break;
+        case "text/plain+error":
+          expect(r.error).toBeDefined();
+          break;
         default:
           console.log("SHOULD TEST", mime);
       }
     });
   });
-  console.log(
-    "Parsed",
-    succeeded,
-    "results on a total of",
-    experiments.length
-  );
+  console.log("Parsed", succeeded, "results on a total of", experiments.length);
 });

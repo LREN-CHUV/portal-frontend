@@ -20,7 +20,6 @@ class ModelContainer extends Container<IModelContainer> {
     try {
       const data = await fetch(`${this.baseUrl}/${slug}`);
       const json = await data.json();
-      console.log(json)
       if (json.error) {
         return await this.setState(state => ({
           error: json.error,
