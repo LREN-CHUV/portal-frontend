@@ -13,7 +13,7 @@ beforeAll(() => {
   modelTitle = `${Date.now()}`;
 });
 
-test("initial state is: loading", () => {
+test.skip("initial state is: loading", () => {
   const experimentContainer = new ExperimentContainer();
   expect(experimentContainer.state.loading).toBe(true);
 });
@@ -36,7 +36,7 @@ test.skip("Create new model", async () => {
       testingDatasets: [],
       trainingDatasets: ["desd-synthdata"],
       validationDatasets: [],
-      variables: [{ code: "leftpoparietaloperculum" }]
+      variables: [{ code: "leftskiploperculum" }]
     }
   });
   const result: IModelResult | undefined = modelContainer.state.model;

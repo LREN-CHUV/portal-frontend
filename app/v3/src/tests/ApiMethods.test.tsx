@@ -2,14 +2,14 @@
 
 import ExperimentContainer from "../containers/Experiments/ExperimentContainer";
 import ModelContainer from "../containers/Models/ModelContainer";
-import { methods, models } from "../tests/mocks";
+import { experiments, models } from "../tests/mocks";
 import { IExperimentResult, IModelResult } from "../types";
 
 const datasets = ["desd-synthdata"];
 const experimentsUUID: string[] = [];
 
 /// TESTS ///
-test("Create new models", async () => {
+test.skip("Create new models", async () => {
   console.log("> Create new models");
   const modelContainer = new ModelContainer();
   await Promise.all(
@@ -50,37 +50,38 @@ test("Create new models", async () => {
   console.log("> Create new models done!");
 });
 
-test(`Set experiments`, async () => {
+test.skip(`Set experiments`, async () => {
   console.log("> Set experiments");
+  
   await Promise.all(
-    methods.filter(m => m.modelStatus === "ok").map(async method => {
+    experiments.map(async experiment => {
       const experimentContainer = new ExperimentContainer();
       const model = Object.keys(models).find(
-        key => models[key] === method.model
+        key => models[key] === experiment.model
       );
-      const algorithm = {
-        algorithms: [
-          {
-            code: method.code,
-            name: method.code,
-            parameters: method.parameters,
-            validation: method.validations.length ? true : false
-          }
-        ],
+      const exp = {
+        algorithms: experiment.methods.map(m => 
+          ({
+            code: m.code,
+            name: m.code,
+            parameters: m.parameters,
+            validation: experiment.validations.length ? true : false
+          })
+        ),
         datasets,
         model,
-        name: method.code,
-        validations: method.validations
+        name: experiment.name,
+        validations: experiment.validations
       };
-      // console.log(algorithm)
-      await experimentContainer.create(algorithm);
-      console.log("created", algorithm.name);
+      await experimentContainer.create(exp);
+      
       const result: IExperimentResult | undefined =
         experimentContainer.state.experiment;
 
       expect(result).toBeDefined();
-      expect(result!.name).toBe(method.code);
+      expect(result!.name).toBe(experiment.name);
       // expect(result!.model).toBeDefined();
+      console.log("created", exp.name);
 
       experimentsUUID.push(result!.uuid);
     })
@@ -89,7 +90,7 @@ test(`Set experiments`, async () => {
   console.log("> Set experiments done");
 });
 
-test("Fetch experiments", async done => {
+test.skip("Fetch experiments", async done => {
   console.log("> Fetch experiments");
   const experimentContainer = new ExperimentContainer();
   const timeout = 3 * 60 * 1000;
@@ -108,6 +109,10 @@ test("Fetch experiments", async done => {
         results!.forEach(r => {
           expect(r.data).toBeDefined();
         });
+
+        
+
+
       })
     );
     done();
