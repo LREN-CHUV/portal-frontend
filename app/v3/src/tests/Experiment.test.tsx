@@ -1,7 +1,7 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
+import { BrowserRouter as Router } from "react-router-dom";
 import { Provider } from "unstated";
-import { BrowserRouter as Router, Route } from "react-router-dom";
 
 import { Experiment } from "../components";
 
@@ -10,7 +10,7 @@ it("renders without crashing", () => {
   ReactDOM.render(
     <Provider>
       <Router>
-      <Experiment />
+        <Experiment />
       </Router>
     </Provider>,
     div
