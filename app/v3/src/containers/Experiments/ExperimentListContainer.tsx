@@ -25,6 +25,13 @@ class ExperimentListContainer extends Container<IExperimentListContainer> {
     try {
       const data = await fetch(`${this.baseUrl}?mine=true`);
       const json = await data.json();
+      if (json.error) {
+        return await this.setState(state => ({
+          error: json.error,
+          loading: false
+        }));
+      }
+
       return await this.setState(state => ({
         experiments: json,
         loading: false
