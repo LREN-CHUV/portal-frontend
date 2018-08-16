@@ -18,8 +18,18 @@ class ExperimentContainer extends Container<IExperimentContainer> {
   public load = async (uuid: string) => {
     await this.setState({ loading: true });
     try {
-      const data = await fetch(`${this.baseUrl}/${uuid}`);
+      const options: any = {
+        credentials: "same-origin"
+      };
+      const data = await fetch(`${this.baseUrl}/${uuid}`, options);
       const json = await data.json();
+      if (json.error) {
+        return await this.setState(state => ({
+          error: json.error,
+          loading: false
+        }));
+      }
+
       return await this.setState(state => ({
         experiment: json,
         loading: false
@@ -29,7 +39,7 @@ class ExperimentContainer extends Container<IExperimentContainer> {
         error: error.message,
         loading: false
       }));
-      console.log(error);
+      console.log({ error });
     }
   };
 
