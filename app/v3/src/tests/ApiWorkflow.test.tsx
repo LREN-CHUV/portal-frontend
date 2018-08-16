@@ -2,8 +2,6 @@ import ExperimentContainer from "../containers/Experiments/ExperimentContainer";
 import ModelContainer from "../containers/Models/ModelContainer";
 import { IExperimentResult, IModelResult } from "../types";
 
-const datasets = ["desd-synthdata"];
-
 let modelTitle: string;
 let experimentUUID: string;
 
@@ -67,7 +65,6 @@ test.skip("Set experiment", async () => {
         validation: true
       }
     ],
-    datasets,
     model: modelTitle,
     name: code,
     validations: []

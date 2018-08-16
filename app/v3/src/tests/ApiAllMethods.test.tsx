@@ -5,11 +5,11 @@ import ModelContainer from "../containers/Models/ModelContainer";
 import { experiments, models } from "../tests/mocks";
 import { IExperimentResult, IModelResult } from "../types";
 
-const datasets = ["desd-synthdata"];
+const datasets = ["desd-synthdata", "qqni-synthdata"];
 const experimentsUUID: string[] = [];
 
 /// TESTS ///
-test.skip("Create new models", async () => {
+test("Create new models", async () => {
   console.log("> Create new models");
   const modelContainer = new ModelContainer();
   await Promise.all(
