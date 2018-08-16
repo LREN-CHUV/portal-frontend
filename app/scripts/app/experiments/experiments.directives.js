@@ -40,10 +40,11 @@ angular
                   return promise.then(
                     function(result) {
                       //$state.go(result.data.uuid);
-                      $state.go("experiment_details", {
-                        model_slug: $scope.model.slug,
-                        experiment_uuid: result.data.uuid
-                      });
+                      window.location.href = `/v3/experiment/${$scope.model.slug}/${result.data.uuid}`;
+                      // $state.go("experiment_details", {
+                      //   model_slug: $scope.model.slug,
+                      //   experiment_uuid: result.data.uuid
+                      // });
                     },
                     function() {
                       $scope.error = true;
@@ -197,7 +198,7 @@ angular
                   })
                   .join("") +
                 "</table>" +
-                '<p><a href="/experiment/' +
+                '<p><a href="/v3/experiment/' +
                 experiment.model.slug +
                 "/" +
                 experiment.uuid +
