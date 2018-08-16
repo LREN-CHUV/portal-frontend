@@ -45,208 +45,296 @@ const kfold = {
   ]
 };
 
-export const methods = [
+export const experiments = [
   {
-    code: "histograms",
     model: models.regression,
-    modelStatus: "ok",
-    parameters: [],
+    status: "ok",
+    name: "histograms",
+    methods: [
+      {
+        code: "histograms",
+        parameters: []
+      }
+    ],
     validations: []
   },
   {
-    code: "linearRegression",
     model: models.regression,
-    modelStatus: "ok",
-    parameters: [],
+    status: "ok",
+    name: "linearRegression",
+    methods: [
+      {
+        code: "linearRegression",
+        parameters: []
+      }
+    ],
     validations: []
   },
   {
-    code: "sgdLinearModel",
     model: models.regression,
-    modelStatus: "ok",
-    parameters: [
+    status: "ok",
+    name: "sgdLinearModel",
+    methods: [
       {
-        code: "alpha",
-        value: "0.0001"
-      },
-      {
-        code: "penalty",
-        value: "l2"
-      },
-      {
-        code: "l1_ratio",
-        value: "0.15"
+        code: "sgdLinearModel",
+
+        parameters: [
+          {
+            code: "alpha",
+            value: "0.0001"
+          },
+          {
+            code: "penalty",
+            value: "l2"
+          },
+          {
+            code: "l1_ratio",
+            value: "0.15"
+          }
+        ]
       }
     ],
     validations: [kfold]
   },
   {
-    code: "naiveBayes",
     model: models.classification,
-    modelStatus: "ok",
-    parameters: [
+    status: "ok",
+    name: "naiveBayes",
+    methods: [
       {
-        code: "alpha",
-        value: "1"
-      },
-      {
-        code: "class_prior",
-        value: ""
+        code: "naiveBayes",
+
+        parameters: [
+          {
+            code: "alpha",
+            value: "1"
+          },
+          {
+            code: "class_prior",
+            value: ""
+          }
+        ]
       }
     ],
     validations: [kfold]
   },
   {
-    code: "sgdNeuralNetwork",
     model: models.classification,
-    modelStatus: "ok",
-    parameters: [
+    status: "ok",
+    name: "sgdNeuralNetwork",
+    methods: [
       {
-        code: "hidden_layer_sizes",
-        value: "100"
-      },
-      {
-        code: "activation",
-        value: "relu"
-      },
-      {
-        code: "alpha",
-        value: "0.0001"
-      },
-      {
-        code: "learning_rate_init",
-        value: "0.001"
+        code: "sgdNeuralNetwork",
+
+        parameters: [
+          {
+            code: "hidden_layer_sizes",
+            value: "100"
+          },
+          {
+            code: "activation",
+            value: "relu"
+          },
+          {
+            code: "alpha",
+            value: "0.0001"
+          },
+          {
+            code: "learning_rate_init",
+            value: "0.001"
+          }
+        ]
       }
     ],
     validations: [kfold]
   },
   {
-    code: "gradientBoosting",
     model: models.classification,
-    modelStatus: "ok",
-    parameters: [
+    status: "ok",
+    name: "gradientBoosting",
+    methods: [
       {
-        code: "learning_rate",
-        value: "0.1"
-      },
-      {
-        code: "n_estimators",
-        value: "100"
-      },
-      {
-        code: "max_depth",
-        value: "3"
-      },
-      {
-        code: "min_samples_split",
-        value: "2"
-      },
-      {
-        code: "min_samples_leaf",
-        value: "1"
-      },
-      {
-        code: "min_weight_fraction_leaf",
-        value: "0"
-      },
-      {
-        code: "min_impurity_decrease",
-        value: "0"
+        code: "gradientBoosting",
+
+        parameters: [
+          {
+            code: "learning_rate",
+            value: "0.1"
+          },
+          {
+            code: "n_estimators",
+            value: "100"
+          },
+          {
+            code: "max_depth",
+            value: "3"
+          },
+          {
+            code: "min_samples_split",
+            value: "2"
+          },
+          {
+            code: "min_samples_leaf",
+            value: "1"
+          },
+          {
+            code: "min_weight_fraction_leaf",
+            value: "0"
+          },
+          {
+            code: "min_impurity_decrease",
+            value: "0"
+          }
+        ]
       }
     ],
     validations: [kfold]
   },
   {
-    code: "anova",
     model: models.regression2,
-    modelStatus: "ok",
-    parameters: [],
+    status: "ok",
+    name: "anova",
+    methods: [
+      {
+        code: "anova",
+        parameters: []
+      }
+    ],
     validations: []
   },
   {
-    code: "knn",
     model: models.classification,
-    modelStatus: "ok",
-    parameters: [
+    status: "ok",
+    name: "knn",
+    methods: [
       {
-        code: "k",
-        value: "5"
+        code: "knn",
+        parameters: [
+          {
+            code: "k",
+            value: "5"
+          }
+        ]
       }
     ],
     validations: [kfold]
   },
   {
-    code: "correlationHeatmap", // no displayable result, what variables should be used?
     model: models.regression,
-    modelStatus: "ko",
-    parameters: [],
+    status: "ko",
+    name: "correlationHeatmap",
+    methods: [
+      {
+        code: "correlationHeatmap", // no displayable result, what variables should be used?
+        parameters: []
+      }
+    ],
     validations: []
   },
   {
-    code: "pca",
     model: models.regression,
-    modelStatus: "ok",
-    parameters: [],
+    status: "ok",
+    name: "pca",
+    methods: [
+      {
+        code: "pca",
+        parameters: []
+      }
+    ],
     validations: []
   },
   {
-    code: "hedwig", // Job dcb21fac-6766-43af-87c2-b8921c5734ef using hbpmip/python-jsi-hedwig:1.0.7 has completed in Chronos, but encountered timeout while waiting for job results. Does the algorithm store its results or errors in the output database?
     model: models.classification2,
-    modelStatus: "ko",
-    parameters: [
+    status: "ko",
+    name: "hedwig",
+    methods: [
       {
-        code: "beam",
-        value: "10"
-      },
-      {
-        code: "support",
-        value: "0.1"
+        code: "hedwig", // Job dcb21fac-6766-43af-87c2-b8921c5734ef using hbpmip/python-jsi-hedwig:1.0.7 has completed in Chronos, but encountered timeout while waiting for job results. Does the algorithm store its results or errors in the output database?
+        parameters: [
+          {
+            code: "beam",
+            value: "10"
+          },
+          {
+            code: "support",
+            value: "0.1"
+          }
+        ]
       }
     ],
     validations: []
   },
   {
-    code: "hinmine",
     model: models.classification,
-    modelStatus: "ko",
-    parameters: [
+    status: "ko",
+    name: "hinmine",
+    methods: [
       {
-        code: "normalize",
-        value: "true"
-      },
-      {
-        code: "0.85",
-        value: "0.85"
+        code: "hinmine",
+        parameters: [
+          {
+            code: "normalize",
+            value: "true"
+          },
+          {
+            code: "0.85",
+            value: "0.85"
+          }
+        ]
       }
     ],
     validations: []
   },
   {
-    code: "tSNE",
     model: models.regression,
-    modelStatus: "ok",
-    parameters: [],
+    status: "ok",
+    name: "tSNE-linearRegression",
+    methods: [
+      {
+        code: "tSNE",
+        parameters: []
+      },
+      {
+        code: "linearRegression",
+        parameters: []
+      }
+    ],
     validations: []
   },
   {
-    code: "ggparci",
     model: models.classification,
-    modelStatus: "ko", // Error in if (min(data_to_plot$value) >= 0 & max(data_to_plot$value) <= : missing value where TRUE/FALSE needed
-    parameters: [],
+    status: "ko", // Error in if (min(data_to_plot$value) >= 0 & max(data_to_plot$value) <= : missing value where TRUE/FALSE needed
+    name: "ggparci",
+    methods: [
+      {
+        code: "ggparci",
+        parameters: []
+      }
+    ],
     validations: []
   },
   {
-    code: "kmeans",
     model: models.regression,
-    modelStatus: "ok",
-    parameters: [],
+    status: "ok",
+    name: "kmeans",
+    methods: [
+      {
+        code: "kmeans",
+        parameters: []
+      }
+    ],
     validations: []
   },
   {
-    code: "heatmaply",
     model: models.regression,
-    modelStatus: "ko", // Error in hclustfun_col(dist_x): must have n >= 2 objects to cluster
-    parameters: [],
+    status: "ko", // Error in hclustfun_col(dist_x): must have n >= 2 objects to cluster
+    name: "heatmaply",
+    methods: [
+      {
+        code: "heatmaply",
+        parameters: []
+      }
+    ],
     validations: []
   }
   // { code: "WP_VARIABLES_HISTOGRAM" },
