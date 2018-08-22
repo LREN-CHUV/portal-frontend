@@ -1,95 +1,97 @@
 import ExperimentContainer from "../containers/Experiments/ExperimentContainer";
 import ModelContainer from "../containers/Models/ModelContainer";
+import { models } from "../tests/mocks";
 import { IExperimentResult, IModelResult } from "../types";
 
-let modelTitle: string;
+let modelId: string;
 let experimentUUID: string;
 
-/// TESTS ///
+// TESTS /; //
 
 beforeAll(() => {
-  modelTitle = `${Date.now()}`;
+  modelId = `${Date.now()}`;
 });
 
-test.skip("initial state is: loading", () => {
+test("initial state is: loading", () => {
   const experimentContainer = new ExperimentContainer();
   expect(experimentContainer.state.loading).toBe(true);
 });
 
-test.skip("Create new model", async () => {
+test("Create new model", async () => {
+  const key = "regression0";
   const modelContainer = new ModelContainer();
   await modelContainer.create({
     config: {
+      hasXAxis: true,
+      height: 480,
       title: {
-        text: modelTitle
-      }
+        text: modelId
+      },
+      type: "designmatrix",
+      xAxisVariable: null,
+      yAxisVariables: ["apoe4"]
     },
     dataset: {
-      code: "DS1528208604241"
+      code: "DS1528208604241",
+      date: 1533814206000,
+      grouping: [],
+      header: models[key].coVariables.map((v: any) => v.code),
+      variable: models[key].variables.map((v: any) => v.code)
     },
-    query: {
-      coVariables: [{ code: "lefthippocampus" }],
-      filters: "",
-      groupings: [],
-      testingDatasets: [],
-      trainingDatasets: ["desd-synthdata"],
-      validationDatasets: [],
-      variables: [{ code: "leftskiploperculum" }]
-    }
+    query: models[key]
   });
   const result: IModelResult | undefined = modelContainer.state.model;
 
   expect(result).toBeDefined();
-  expect(result!.slug).toBe(modelTitle);
+  expect(result!.title).toBe(modelId);
 });
 
-test.skip("Load model", async () => {
+test("Load model", async () => {
   const modelContainer = new ModelContainer();
-  await modelContainer.load(modelTitle);
+  await modelContainer.load(modelId);
 
   const result: IModelResult | undefined = modelContainer.state.model;
 
   expect(result).toBeDefined();
-  expect(result!.slug).toBe(modelTitle);
+  expect(result!.slug).toBe(modelId);
 });
 
-test.skip("Set experiment", async () => {
+test("Set experiment", async () => {
   const experimentContainer = new ExperimentContainer();
   const code = "tSNE";
   const algorithm = {
     algorithms: [
       {
         code,
-        name: code,
+        name: `testing-${modelId}`,
         parameters: [],
         validation: true
       }
     ],
-    model: modelTitle,
-    name: code,
+    model: modelId,
+    name: `tSNE-${modelId}`,
     validations: []
   };
   await experimentContainer.create(algorithm);
   const result: IExperimentResult | undefined =
     experimentContainer.state.experiment;
 
-  expect(result).toBeDefined();
-  expect(result!.name).toBe("tSNE");
-
   experimentUUID = result!.uuid;
+  expect(result).toBeDefined();
+  expect(result!.name).toBe(`tSNE-${modelId}`);
 });
 
-test.skip("Fetch experiment", async done => {
+test("Fetch experiment", async done => {
   const experimentContainer = new ExperimentContainer();
 
-  jest.setTimeout(4 * 60 * 1000);
+  jest.setTimeout(3 * 60 * 1000);
   await setTimeout(async () => {
     await experimentContainer.load(experimentUUID);
     const eresult: IExperimentResult | undefined =
       experimentContainer.state.experiment;
 
     expect(eresult).toBeDefined();
-    expect(eresult!.name).toBe("tSNE");
+    expect(eresult!.name).toBe(`tSNE-${modelId}`);
 
     const results = eresult!.result;
     expect(results).toBeDefined();
@@ -98,5 +100,5 @@ test.skip("Fetch experiment", async done => {
     });
 
     done();
-  }, 60 * 1000);
+  }, 2 * 60 * 1000);
 });

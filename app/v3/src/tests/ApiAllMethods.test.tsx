@@ -5,7 +5,6 @@ import ModelContainer from "../containers/Models/ModelContainer";
 import { experiments, models } from "../tests/mocks";
 import { IExperimentResult, IModelResult } from "../types";
 
-const datasets = ["desd-synthdata", "qqni-synthdata"];
 const experimentsUUID: string[] = [];
 
 /// TESTS ///
@@ -50,31 +49,28 @@ test("Create new models", async () => {
   console.log("> Create new models done!");
 });
 
-test.skip(`Set experiments`, async () => {
+test(`Set experiments`, async () => {
   console.log("> Set experiments");
-  
+
   await Promise.all(
-    experiments.map(async experiment => {
+    experiments.slice(0, 1).map(async experiment => {
       const experimentContainer = new ExperimentContainer();
       const model = Object.keys(models).find(
         key => models[key] === experiment.model
       );
       const exp = {
-        algorithms: experiment.methods.map(m => 
-          ({
-            code: m.code,
-            name: m.code,
-            parameters: m.parameters,
-            validation: experiment.validations.length ? true : false
-          })
-        ),
-        datasets,
+        algorithms: experiment.methods.map(m => ({
+          code: m.code,
+          name: m.code,
+          parameters: m.parameters,
+          validation: experiment.validations.length ? true : false
+        })),
         model,
         name: experiment.name,
         validations: experiment.validations
       };
       await experimentContainer.create(exp);
-      
+
       const result: IExperimentResult | undefined =
         experimentContainer.state.experiment;
 
@@ -90,32 +86,3 @@ test.skip(`Set experiments`, async () => {
   console.log("> Set experiments done");
 });
 
-test.skip("Fetch experiments", async done => {
-  console.log("> Fetch experiments");
-  const experimentContainer = new ExperimentContainer();
-  const timeout = 3 * 60 * 1000;
-  jest.setTimeout(4 * 60 * 1000);
-  await setTimeout(async () => {
-    await Promise.all(
-      experimentsUUID.map(async uuid => {
-        await experimentContainer.load(uuid);
-        const result: IExperimentResult | undefined =
-          experimentContainer.state.experiment;
-        console.log("name: ", result!.name);
-        expect(result).toBeDefined();
-
-        const results = result!.result;
-        expect(results).toBeDefined();
-        results!.forEach(r => {
-          expect(r.data).toBeDefined();
-        });
-
-        
-
-
-      })
-    );
-    done();
-    console.log("> Fetch experiments done");
-  }, timeout);
-});
