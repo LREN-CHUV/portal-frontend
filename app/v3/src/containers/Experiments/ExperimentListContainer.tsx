@@ -1,7 +1,8 @@
 // tslint:disable:no-console
 import * as dotenv from "dotenv";
-import fetch from "node-fetch";
+import request from "request-promise-native";
 import { Container } from "unstated";
+import { config } from "../../tests/mocks";
 import { IExperimentListContainer } from "../../types";
 
 dotenv.config();
@@ -23,8 +24,8 @@ class ExperimentListContainer extends Container<IExperimentListContainer> {
   public load = async () => {
     await this.setState({ loading: true });
     try {
-      const data = await fetch(`${this.baseUrl}?mine=true`);
-      const json = await data.json();
+      const data = await request.get(`${this.baseUrl}?mine=true`, config)
+      const json = await JSON.parse(data);
       if (json.error) {
         return await this.setState(state => ({
           error: json.error,
@@ -37,11 +38,11 @@ class ExperimentListContainer extends Container<IExperimentListContainer> {
         loading: false
       }));
     } catch (error) {
+      console.log(error);
       return await this.setState(state => ({
         error: error.message,
         loading: false
       }));
-      console.log(error);
     }
   };
 }

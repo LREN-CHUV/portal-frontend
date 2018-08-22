@@ -1,7 +1,8 @@
 // tslint:disable:no-console
 import * as dotenv from "dotenv";
-import fetch from "node-fetch";
+import request from "request-promise-native";
 import { Container } from "unstated";
+import { config } from "../../tests/mocks";
 import { IExperimentContainer } from "../../types";
 
 dotenv.config();
@@ -18,11 +19,8 @@ class ExperimentContainer extends Container<IExperimentContainer> {
   public load = async (uuid: string) => {
     await this.setState({ loading: true });
     try {
-      const options: any = {
-        credentials: "same-origin"
-      };
-      const data = await fetch(`${this.baseUrl}/${uuid}`, options);
-      const json = await data.json();
+      const data = await request.get(`${this.baseUrl}/${uuid}`, config);
+      const json = await JSON.parse(data);
       if (json.error) {
         return await this.setState(state => ({
           error: json.error,
@@ -35,33 +33,38 @@ class ExperimentContainer extends Container<IExperimentContainer> {
         loading: false
       }));
     } catch (error) {
+      console.log({ error });
       return await this.setState(state => ({
         error: error.message,
         loading: false
       }));
-      console.log({ error });
     }
   };
 
   public create = async (params: any) => {
     await this.setState({ loading: true });
+
     try {
-      const data = await fetch(this.baseUrl, {
+      const data = await request({
         body: JSON.stringify(params),
-        headers: { "Content-Type": "application/json" },
-        method: "POST"
+        headers: {
+          ...config.headers,
+          "Content-Type": "application/json"
+        },
+        method: "POST",
+        uri: `${this.baseUrl}`,
       });
-      const json = await data.json();
+      const json = await JSON.parse(data);
       return await this.setState(state => ({
         experiment: json,
         loading: false
       }));
     } catch (error) {
+      console.log(error);
       return await this.setState(state => ({
         error: error.message,
         loading: false
       }));
-      console.log(error);
     }
   };
 }

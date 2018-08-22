@@ -1,7 +1,8 @@
 // tslint:disable:no-console
 import * as dotenv from "dotenv";
-import fetch from "node-fetch";
+import request from "request-promise-native";
 import { Container } from "unstated";
+import { config } from "../../tests/mocks";
 import { IModelContainer } from "../../types";
 
 dotenv.config();
@@ -18,8 +19,8 @@ class ModelContainer extends Container<IModelContainer> {
   public load = async (slug: string) => {
     await this.setState({ loading: true });
     try {
-      const data = await fetch(`${this.baseUrl}/${slug}`);
-      const json = await data.json();
+      const data = await request.get(`${this.baseUrl}/${slug}`, config);
+      const json = await JSON.parse(data);
       if (json.error) {
         return await this.setState(state => ({
           error: json.error,
@@ -40,19 +41,23 @@ class ModelContainer extends Container<IModelContainer> {
   public create = async (params: any) => {
     await this.setState({ loading: true });
     try {
-      const data = await fetch(this.baseUrl, {
+      const data = await request({
         body: JSON.stringify(params),
-        headers: { "Content-Type": "application/json" },
-        method: "POST"
+        headers: {
+          ...config.headers,
+          "Content-Type": "application/json"
+        },
+        method: "POST",
+        uri: `${this.baseUrl}`,
       });
-      const json = await data.json();
+      const json = await JSON.parse(data);
       return await this.setState(state => ({ loading: false, model: json }));
     } catch (error) {
+      console.log(error);
       return await this.setState(state => ({
         error: error.message,
         loading: false
       }));
-      console.log(error);
     }
   };
 }

@@ -1,11 +1,35 @@
+import * as dotenv from "dotenv";
+
+dotenv.config();
+
+const trainingDatasets: string[] = process.env.REACT_APP_TRAININGDATASETS!.split(
+  ","
+);
+const validationDatasets: string[] = process.env.REACT_APP_VALIDATIONDATASETS!.split(
+  ","
+);
+
+export const config : RequestInit =
+  process.env.NODE_ENV === "production"
+    ? {
+        credentials: "same-origin",
+      }
+    : {
+        headers: {
+          Authorization: process.env.REACT_APP_AUTHORIZATION!,
+          Cookie: process.env.REACT_APP_COOKIE!,
+          "X-XSRF-TOKEN": process.env.REACT_APP_COOKIE!.match(/XSRF-TOKEN=(.*)/)![1] || ""
+        }
+      };
+
 export const models = {
   classification: {
     coVariables: [{ code: "lefthippocampus" }],
     filters: "",
     groupings: [],
     testingDatasets: [],
-    trainingDatasets: ["desd-synthdata"],
-    validationDatasets: ["qqni-synthdata"],
+    trainingDatasets,
+    validationDatasets,
     variables: [{ code: "alzheimerbroadcategory" }]
   },
   classification2: {
@@ -13,15 +37,16 @@ export const models = {
     filters: "",
     groupings: [],
     testingDatasets: [],
-    trainingDatasets: ["desd-synthdata"],
-    validationDatasets: ["qqni-synthdata"],
+    trainingDatasets,
+    validationDatasets,
     variables: [{ code: "alzheimerbroadcategory" }]
   },
-  regression: {
+  regression0: {
     coVariables: [{ code: "subjectageyears" }],
     filters: "",
-    trainingDatasets: ["desd-synthdata"],
-    validationDatasets: ["qqni-synthdata"],
+    groupings: [],
+    trainingDatasets,
+    validationDatasets,
     variables: [{ code: "lefthippocampus" }]
   },
   regression2: {
@@ -29,8 +54,8 @@ export const models = {
     filters: "",
     groupings: [],
     testingDatasets: [],
-    trainingDatasets: ["desd-synthdata"],
-    validationDatasets: ["qqni-synthdata"],
+    trainingDatasets,
+    validationDatasets,
     variables: [{ code: "lefthippocampus" }]
   }
 };
@@ -48,9 +73,10 @@ const kfold = {
 
 export const experiments = [
   {
-    model: models.regression,
-    status: "ok",
+    model: models.regression0,
     name: "histograms",
+    status: "ok",
+
     methods: [
       {
         code: "histograms",
@@ -60,21 +86,18 @@ export const experiments = [
     validations: []
   },
   {
-    model: models.regression,
-    status: "ok",
-    name: "linearRegression",
     methods: [
       {
         code: "linearRegression",
         parameters: []
       }
     ],
+    model: models.regression0,
+    name: "linearRegression",
+    status: "ok",
     validations: []
   },
   {
-    model: models.regression,
-    status: "ok",
-    name: "sgdLinearModel",
     methods: [
       {
         code: "sgdLinearModel",
@@ -95,12 +118,12 @@ export const experiments = [
         ]
       }
     ],
+    model: models.regression0,
+    name: "sgdLinearModel",
+    status: "ok",
     validations: [kfold]
   },
   {
-    model: models.classification,
-    status: "ok",
-    name: "naiveBayes",
     methods: [
       {
         code: "naiveBayes",
@@ -117,12 +140,12 @@ export const experiments = [
         ]
       }
     ],
+    model: models.classification,
+    name: "naiveBayes",
+    status: "ok",
     validations: [kfold]
   },
   {
-    model: models.classification,
-    status: "ok",
-    name: "sgdNeuralNetwork",
     methods: [
       {
         code: "sgdNeuralNetwork",
@@ -147,12 +170,12 @@ export const experiments = [
         ]
       }
     ],
+    model: models.classification,
+    name: "sgdNeuralNetwork",
+    status: "ok",
     validations: [kfold]
   },
   {
-    model: models.classification,
-    status: "ok",
-    name: "gradientBoosting",
     methods: [
       {
         code: "gradientBoosting",
@@ -189,24 +212,24 @@ export const experiments = [
         ]
       }
     ],
+    model: models.classification,
+    name: "gradientBoosting",
+    status: "ok",
     validations: [kfold]
   },
   {
-    model: models.regression2,
-    status: "ok",
-    name: "anova",
     methods: [
       {
         code: "anova",
         parameters: []
       }
     ],
+    model: models.regression2,
+    name: "anova",
+    status: "ok",
     validations: []
   },
   {
-    model: models.classification,
-    status: "ok",
-    name: "knn",
     methods: [
       {
         code: "knn",
@@ -218,36 +241,37 @@ export const experiments = [
         ]
       }
     ],
+    model: models.classification,
+    name: "knn",
+    status: "ok",
     validations: [kfold]
   },
   {
-    model: models.regression,
-    status: "ko",
-    name: "correlationHeatmap",
     methods: [
       {
         code: "correlationHeatmap", // no displayable result, what variables should be used?
         parameters: []
       }
     ],
+    model: models.regression0,
+    name: "correlationHeatmap",
+    status: "ko",
     validations: []
   },
   {
-    model: models.regression,
-    status: "ok",
-    name: "pca",
     methods: [
       {
         code: "pca",
         parameters: []
       }
     ],
+    model: models.regression0,
+    name: "pca",
+    status: "ok",
+
     validations: []
   },
   {
-    model: models.classification2,
-    status: "ko",
-    name: "hedwig",
     methods: [
       {
         code: "hedwig", // Job dcb21fac-6766-43af-87c2-b8921c5734ef using hbpmip/python-jsi-hedwig:1.0.7 has completed in Chronos, but encountered timeout while waiting for job results. Does the algorithm store its results or errors in the output database?
@@ -263,12 +287,12 @@ export const experiments = [
         ]
       }
     ],
+    model: models.classification2,
+    name: "hedwig",
+    status: "ko",
     validations: []
   },
   {
-    model: models.classification,
-    status: "ko",
-    name: "hinmine",
     methods: [
       {
         code: "hinmine",
@@ -284,12 +308,12 @@ export const experiments = [
         ]
       }
     ],
+    model: models.classification,
+    name: "hinmine",
+    status: "ko",
     validations: []
   },
   {
-    model: models.regression,
-    status: "ok",
-    name: "tSNE-linearRegression",
     methods: [
       {
         code: "tSNE",
@@ -300,42 +324,45 @@ export const experiments = [
         parameters: []
       }
     ],
+    model: models.regression0,
+    name: "tSNE-linearRegression",
+    status: "ok",
     validations: []
   },
   {
-    model: models.classification,
-    status: "ko", // Error in if (min(data_to_plot$value) >= 0 & max(data_to_plot$value) <= : missing value where TRUE/FALSE needed
-    name: "ggparci",
     methods: [
       {
         code: "ggparci",
         parameters: []
       }
     ],
+    model: models.classification,
+    name: "ggparci",
+    status: "ko", // Error in if (min(data_to_plot$value) >= 0 & max(data_to_plot$value) <= : missing value where TRUE/FALSE needed
     validations: []
   },
   {
-    model: models.regression,
-    status: "ok",
-    name: "kmeans",
     methods: [
       {
         code: "kmeans",
         parameters: []
       }
     ],
+    model: models.regression0,
+    name: "kmeans",
+    status: "ok",
     validations: []
   },
   {
-    model: models.regression,
-    status: "ko", // Error in hclustfun_col(dist_x): must have n >= 2 objects to cluster
-    name: "heatmaply",
     methods: [
       {
         code: "heatmaply",
         parameters: []
       }
     ],
+    model: models.regression0,
+    name: "heatmaply",
+    status: "ko", // Error in hclustfun_col(dist_x): must have n >= 2 objects to cluster
     validations: []
   }
   // { code: "WP_VARIABLES_HISTOGRAM" },
