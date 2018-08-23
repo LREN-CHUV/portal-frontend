@@ -2,23 +2,26 @@ import * as dotenv from "dotenv";
 
 dotenv.config();
 
-const trainingDatasets: string[] = process.env.REACT_APP_TRAININGDATASETS!.split(
-  ","
-);
-const validationDatasets: string[] = process.env.REACT_APP_VALIDATIONDATASETS!.split(
-  ","
-);
+const trainingDatasetsValue = process.env.REACT_APP_TRAININGDATASETS;
+const trainingDatasets: string[] = trainingDatasetsValue
+  ? trainingDatasetsValue.split(",")
+  : [];
+const validationDatasetsValue = process.env.REACT_APP_VALIDATIONDATASETS;
+const validationDatasets: string[] = validationDatasetsValue
+  ? validationDatasetsValue.split(",")
+  : [];
 
-export const config : RequestInit =
+export const config: RequestInit =
   process.env.NODE_ENV === "production"
     ? {
-        credentials: "same-origin",
+        credentials: "same-origin"
       }
     : {
         headers: {
           Authorization: process.env.REACT_APP_AUTHORIZATION!,
           Cookie: process.env.REACT_APP_COOKIE!,
-          "X-XSRF-TOKEN": process.env.REACT_APP_COOKIE!.match(/XSRF-TOKEN=(.*)/)![1] || ""
+          "X-XSRF-TOKEN":
+            process.env.REACT_APP_COOKIE!.match(/XSRF-TOKEN=(.*)/)![1] || ""
         }
       };
 
