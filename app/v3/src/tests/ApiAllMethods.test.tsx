@@ -8,7 +8,7 @@ import { IExperimentResult, IModelResult } from "../types";
 const experimentsUUID: string[] = [];
 
 /// TESTS ///
-test("Create new models", async () => {
+test.skip("Create new models", async () => {
   console.log("> Create new models");
   const modelContainer = new ModelContainer();
   await Promise.all(
@@ -49,11 +49,11 @@ test("Create new models", async () => {
   console.log("> Create new models done!");
 });
 
-test(`Set experiments`, async () => {
+test.skip(`Set experiments`, async () => {
   console.log("> Set experiments");
 
   await Promise.all(
-    experiments.slice(0, 1).map(async experiment => {
+    experiments.slice(0,5).map(async experiment => {
       const experimentContainer = new ExperimentContainer();
       const model = Object.keys(models).find(
         key => models[key] === experiment.model
