@@ -12,7 +12,7 @@ beforeAll(() => {
   modelId = `${Date.now()}`;
 });
 
-test("initial state is: loading", () => {
+test.only("initial state is: loading", () => {
   const experimentContainer = new ExperimentContainer();
   expect(experimentContainer.state.loading).toBe(true);
 });
@@ -46,7 +46,7 @@ test("Create new model", async () => {
   expect(result!.title).toBe(modelId);
 });
 
-test("Load model", async () => {
+test.skip("Load model", async () => {
   const modelContainer = new ModelContainer();
   await modelContainer.load(modelId);
 
@@ -56,7 +56,7 @@ test("Load model", async () => {
   expect(result!.slug).toBe(modelId);
 });
 
-test("Set experiment", async () => {
+test.skip("Set experiment", async () => {
   const experimentContainer = new ExperimentContainer();
   const code = "tSNE";
   const algorithm = {
@@ -81,7 +81,7 @@ test("Set experiment", async () => {
   expect(result!.name).toBe(`tSNE-${modelId}`);
 });
 
-test("Fetch experiment", async done => {
+test.skip("Fetch experiment", async done => {
   const experimentContainer = new ExperimentContainer();
 
   jest.setTimeout(3 * 60 * 1000);

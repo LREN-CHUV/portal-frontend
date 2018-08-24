@@ -18,6 +18,8 @@ const highcharts = data => {
   data.forEach(d => {
     expect(d.xAxis).toBeDefined();
   });
+
+  return data;
 };
 
 const plotly = data => {
@@ -28,17 +30,21 @@ const plotly = data => {
       expect(d.data).toBeDefined();
     }
   });
+
+  return data
 };
 
 const pfa = (data, hasValidation) => {
-  console.log("has validation", hasValidation);
+  // console.log("has validation", hasValidation);
+  const output = { data: [] };
   data.forEach(d => {
     if (!d.cells) {
       expect(d).toBeDefined();
+      output.data.push(d);
     } else {
       expect(d.cells).toBeDefined();
 
-      if (hasValidation) {
+      if (d.cells.validations) {
         expect(d.cells.validations.init).toBeDefined();
 
         // Convert to array to have consistent results
@@ -52,30 +58,39 @@ const pfa = (data, hasValidation) => {
 
           if (i.error) {
             expect(i.error).toBeDefined();
-            console.log("\thas error");
+            output.error += i.error;
+            // console.log("\thas error");
             return;
           } else {
             expect(i.data).toBeDefined();
+            output.data.push({ code: i.code, data: i.data, node: i.node });
           }
         });
       }
     }
   });
+  return output;
 };
 
 const jsonTest = data => {
   data.forEach(d => {
     expect(d).toBeDefined();
   });
+  return data;
 };
 
 const errorTest = (data, error) => {
+  let errorOutput;
   if (data) {
     expect(data.error).toBeDefined();
+    errorOutput = data.error;
   } else {
     expect(error).toBeDefined();
+    errorOutput = error;
   }
-  console.log("\thas error");
+
+  return errorOutput.slice(-144);
+  // console.log("\thas error");
 };
 
 const parse = value => {
@@ -95,21 +110,75 @@ test("Fetch experiments", async () => {
     experimentListContainer.state.experiments;
   expect(experiments).toBeDefined();
 
-  experiments.forEach((experiment, index) => {
-    console.log(index, "Experiment:", experiment.name, experiment.uuid);
+  let experimentResults = [];
+  experiments.slice(0, 100).forEach((experiment, index) => {
+    // console.log(JSON.stringify(experiment, null, 2));
 
     expect(experiment.created).toBeDefined();
     expect(experiment.hasError).toBeFalsy();
+    expect(experiment.name).toBeDefined();
+    expect(experiment.uuid).toBeDefined();
+    expect(experiment.resultsViewed).toBeDefined();
+
+    let experimentResult = {
+      created: new Date(experiment.created),
+      error: undefined,
+      loading: true,
+      name: experiment.name,
+      resultsViewed: experiment.resultsViewed,
+      uuid: experiment.uuid
+    };
+
+    if (!experiment.model) {
+      experimentResult.error = "No model defined";
+      experimentResult.loading = false;
+      experimentResults.push(experimentResult);
+
+      return;
+    }
+
+    expect(experiment.model.slug).toBeDefined();
+    console.log(
+      index,
+      "Experiment:",
+      experiment.name,
+      `${experiment.model.slug}/${experiment.uuid}`
+    );
+
+    experimentResult = {
+      ...experimentResult,
+      model: experiment.model.slug
+    };
 
     if (experiment.hasServerError) {
-      console.log("hasServerError");
+      // console.log("hasServerError");
       expect(experiment.result).toBeDefined();
+
+      experimentResult = {
+        ...experimentResult,
+        error: experiment.result,
+        loading: false
+      };
+      experimentResults.push(experimentResult);
+
       return;
     }
 
     if (!experiment.result) {
+      // console.log("No result");
       expect(experiment.finished).toBeNull();
-      console.log("no result");
+
+      const created = new Date(experiment.created);
+      const elapsed = (new Date() - new Date(experiment.created)) / 1000;
+
+      if (elapsed > 60 * 5) {
+        experimentResult = {
+          ...experimentResult,
+          error: "No result",
+          loading: false
+        };
+      }
+      experimentResults.push(experimentResult);
       return;
     }
 
@@ -124,7 +193,15 @@ test("Fetch experiments", async () => {
       codes.includes("PIPELINE_ISOUP_MODEL_TREE_SERIALIZER") ||
       codes.includes("WP_LINEAR_REGRESSION")
     ) {
-      console.log("\tExareme format, not parsing yet");
+      // console.log("\tExareme format, not parsing yet");
+
+      experimentResult = {
+        ...experimentResult,
+        error: "Exareme",
+        loading: false
+      };
+      experimentResults.push(experimentResult);
+
       return;
     }
 
@@ -133,10 +210,15 @@ test("Fetch experiments", async () => {
       Array.isArray(experiment.validations) &&
       experiment.validations.length > 0;
 
+    const nodes = [];
     result.forEach((r, i) => {
+      let node = {};
       const mime = r.type;
       console.log("\tname: ", names[i], ", mime:", mime);
       expect(mime).toBeDefined();
+
+      expect(r.node).toBeDefined();
+      node = { name: r.node, algorithm: r.algorithm, mime };
 
       // Convert to array to have consistent results
       const normalizedResult = input =>
@@ -145,15 +227,17 @@ test("Fetch experiments", async () => {
       const results = normalizedResult(r);
       switch (mime) {
         case "application/vnd.highcharts+json":
-          highcharts(results);
+          node.data = highcharts(results);
           break;
 
         case "application/vnd.plotly.v1+json":
-          plotly(results);
+          node.data = plotly(results);
           break;
 
         case "application/pfa+json":
-          pfa(results, hasValidation);
+          const output = pfa(results, hasValidation);
+          node.data = output.data;
+          node.error = output.error;
           break;
 
         case "application/vnd.hbp.mip.experiment.pfa+json":
@@ -161,17 +245,27 @@ test("Fetch experiments", async () => {
             let subResult = aResult;
 
             // Lift the data one level up if needed
-            if (aResult.data) {
+            if (!subResult.type && aResult.data) {
               subResult = normalizedResult(aResult);
             }
+            expect(subResult.type).toBeDefined();
+            expect(subResult.algorithm).toBeDefined();
+            console.log(subResult.type);
+            node.mime = subResult.type;
+            node.algorithm = subResult.algorithm;
 
             switch (subResult.type) {
+              case "application/vnd.highcharts+json":
+                expect(subResult.data).toBeDefined();
+                node.data = highcharts(normalizedResult(subResult));
+                break;
+
               case "application/json":
-                jsonTest(subResult);
+                node.data = jsonTest(normalizedResult(subResult));
                 break;
 
               case "text/plain+error":
-                errorTest(subResult);
+                node.error = errorTest(subResult);
                 break;
 
               case "application/vnd.plotly.v1+json":
@@ -179,8 +273,13 @@ test("Fetch experiments", async () => {
                 break;
 
               case "application/pfa+json":
-                pfa(subResult, hasValidation);
+                const output2 = pfa(normalizedResult(subResult), hasValidation);
+                node.data = output2.data;
+                node.error = output2.error;
                 break;
+
+              default:
+                console.log("!!!!!!!! SHOULD TEST", subResult.type);
             }
           });
 
@@ -195,13 +294,21 @@ test("Fetch experiments", async () => {
         // break;
 
         case "text/plain+error":
-          console.log(results);
-          errorTest(results, r);
+          node.error = errorTest(results, r.error);
           break;
 
         default:
           console.log("!!!!!!!! SHOULD TEST", mime);
       }
+
+      // node.data = node.data ? "result" : undefined; // FIXME:
+      nodes.push(node);
     });
+    experimentResult.nodes = nodes;
+    experimentResult.loading = false;
+    experimentResults.push(experimentResult);
   });
+
+  // console.log(experimentResults);
+  console.log(JSON.stringify(experimentResults, null, 2));
 });
