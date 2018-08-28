@@ -102,13 +102,13 @@ export interface IModelResult {
 
 export interface IExperimentListContainer {
   error?: string;
-  experiments?: IExperimentResult[];
+  experiments?: IExperimentResultParsed[];
   loading: boolean;
 }
 
 export interface IExperimentContainer {
   error?: string;
-  experiment?: IExperimentResult;
+  experiment?: IExperimentResultParsed;
   loading: boolean;
 }
 

@@ -3,7 +3,7 @@
 import ExperimentContainer from "../containers/Experiments/ExperimentContainer";
 import ModelContainer from "../containers/Models/ModelContainer";
 import { experiments, models } from "../tests/mocks";
-import { IExperimentResult, IModelResult } from "../types";
+import { IExperimentResultParsed, IModelResult } from "../types";
 
 const experimentsUUID: string[] = [];
 
@@ -71,7 +71,7 @@ test.skip(`Set experiments`, async () => {
       };
       await experimentContainer.create(exp);
 
-      const result: IExperimentResult | undefined =
+      const result: IExperimentResultParsed | undefined =
         experimentContainer.state.experiment;
 
       expect(result).toBeDefined();

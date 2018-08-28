@@ -1,25 +1,20 @@
 // tslint:disable:no-console
-import { IExperimentResult, IExperimentResultParsed } from "@app/types";
+import { IExperimentResultParsed } from "@app/types";
 import * as React from "react";
 import { Label, Panel } from "react-bootstrap";
 import { Subscribe } from "unstated";
 import { LoadData } from "../components";
 import { ExperimentListContainer, ModelContainer } from "../containers";
 import "./Experiments.css";
-import ParseExperiment from "./ParseExperiment";
 
-const renderExperiments = (experiments: IExperimentResult[] | undefined) => {
+const renderExperiments = (experiments: IExperimentResultParsed[] | undefined) => {
   if (experiments === undefined) {
     return <p>error</p>;
   }
 
-  const experimentsParsed: IExperimentResultParsed[] = experiments.map(
-    (e: IExperimentResult) => new ParseExperiment(e).parse()
-  );
-
   return (
     <div>
-      {experimentsParsed.map((experiment: IExperimentResultParsed) => {
+      {experiments.map((experiment: IExperimentResultParsed) => {
         const status: [string, string] = experiment.loading
           ? ["loading", "info"]
           : experiment.error

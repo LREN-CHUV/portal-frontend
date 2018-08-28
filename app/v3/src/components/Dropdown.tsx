@@ -1,9 +1,9 @@
 import * as React from "react";
 import { DropdownButton, MenuItem } from "react-bootstrap";
-import { IExperimentResult } from "../types";
+import { IExperimentResultParsed } from "../types";
 
 interface IDropdown {
-  items: IExperimentResult[] | undefined;
+  items: IExperimentResultParsed[] | undefined;
   title: string;
   handleSelect: any;
 }

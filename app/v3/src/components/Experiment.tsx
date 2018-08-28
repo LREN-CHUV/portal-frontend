@@ -1,5 +1,5 @@
 // tslint:disable:no-console
-import { IExperimentResult, IModelResult } from "@app/types";
+import { IExperimentResultParsed, IModelResult } from "@app/types";
 import * as React from "react";
 import { Panel } from "react-bootstrap";
 import { RouteComponentProps, withRouter } from "react-router-dom";
@@ -17,14 +17,14 @@ interface IExperimentParams {
   uuid: string;
 }
 
-const headerDisplay = (experiment: IExperimentResult | undefined) => {
+const headerDisplay = (experiment: IExperimentResultParsed | undefined) => {
   if (experiment === undefined) {
     return <p>Empty</p>;
   }
 
-  const result = experiment.result;
+  const result = experiment.error;
   if (result === undefined) {
-    return "No result";
+    return experiment.error;
   }
 
   return (
@@ -39,26 +39,20 @@ const headerDisplay = (experiment: IExperimentResult | undefined) => {
   );
 };
 
-const methodDisplay = (experiment: IExperimentResult | undefined) => {
+const methodDisplay = (experiment: IExperimentResultParsed | undefined) => {
   if (experiment === undefined) {
     return <p>Empty</p>;
   }
 
-  const result = experiment.result;
-  if (result === undefined ) {
-    return "No result";
-  }
-
-  if (!Array.isArray(result) ) {
-    return "";
+  const result = experiment.error;
+  if (result === undefined) {
+    return experiment.error;
   }
 
   return (
     <React.Fragment>
       <Panel.Title>Results of Experiment {experiment.name} </Panel.Title>
-      <Panel.Body>
-        <p>{result.map(r => r.algorithm)}</p>
-      </Panel.Body>
+      <Panel.Body>{/* <p>{result.map(r => r.algorithm)}</p> */}</Panel.Body>
     </React.Fragment>
   );
 };
@@ -94,23 +88,17 @@ const modelDisplay = (model: IModelResult | undefined) => {
   );
 };
 
-const contentDisplay = (experiment: IExperimentResult | undefined) => {
+const contentDisplay = (experiment: IExperimentResultParsed | undefined) => {
   if (experiment === undefined) {
     return <p>Empty</p>;
   }
 
-  const results = experiment.result;
-  if (results === undefined) {
-    return "";
+  const result = experiment.error;
+  if (result === undefined) {
+    return experiment.error;
   }
 
-  if (!Array.isArray(results) ) {
-    return results;
-  }
-
-  return results.map(r => (
-    <pre key="{r.jobId}">{JSON.stringify(r.data, null, 4)}</pre>
-  ));
+  return <pre>{JSON.stringify(experiment, null, 2)}</pre>
 };
 
 class Experiment extends React.Component<
@@ -175,16 +163,13 @@ class Experiment extends React.Component<
     );
   }
 
-  private handleSelect = (experiment: IExperimentResult) => {
-    const {
-      model: { slug },
-      uuid
-    } = experiment;
-    this.props.history.push(`/v3/experiment/${slug}/${uuid}`);
+  private handleSelect = (experiment: IExperimentResultParsed) => {
+    const { modelDefinitionId, uuid } = experiment;
+    this.props.history.push(`/v3/experiment/${modelDefinitionId}/${uuid}`);
   };
 
   private experimentsDisplay = (
-    experiments: IExperimentResult[] | undefined
+    experiments: IExperimentResultParsed[] | undefined
   ) => {
     if (experiments === undefined) {
       return <p>Empty</p>;
