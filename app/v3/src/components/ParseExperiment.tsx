@@ -6,25 +6,16 @@ import {
   IPolynomialClassificationScore,
   IValidationScore
 } from "@app/types";
-import * as React from "react";
 
-interface IProps {
-  experiment: IExperimentResult;
-}
 
-class ParseExperiment extends React.Component<IProps> {
-  public render() {
-    const { experiment } = this.props;
-    const results = this.parse(experiment);
-    return (
-      <React.Fragment>
-        <h6>{experiment.name}</h6>
-        <pre>{JSON.stringify(results, null, 2)}</pre>
-      </React.Fragment>
-    );
+class ParseExperiment {
+  public experiment: IExperimentResult;
+  constructor(experiment: IExperimentResult) {
+    this.experiment = experiment;
   }
 
-  private parse = (experiment: IExperimentResult) => {
+  public parse = () : IExperimentResultParsed => {
+    const experiment = this.experiment
     let experimentResult: IExperimentResultParsed = {
       created: new Date(experiment.created),
       loading: true,
@@ -151,7 +142,7 @@ class ParseExperiment extends React.Component<IProps> {
                   ...method,
                   ...pfa(normalizedResult(subResult))
                 };
-      
+
                 break;
 
               default:
@@ -237,7 +228,7 @@ const pfa = (data: any): IPfa => {
           node: `${node}`,
           precision: parseFloat(dta[precisionKey]),
           recall: parseFloat(dta[recallKey])
-        })
+        });
 
         init.forEach((i: any) => {
           if (i.error) {
