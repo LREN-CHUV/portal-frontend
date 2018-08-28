@@ -1,6 +1,5 @@
 import {
   IExperimentResult,
-  IExperimentResultParsed,
   IMethod,
   INode,
   IPolynomialClassificationScore,
@@ -9,14 +8,9 @@ import {
 
 
 class ParseExperiment {
-  public experiment: IExperimentResult;
-  constructor(experiment: IExperimentResult) {
-    this.experiment = experiment;
-  }
 
-  public parse = () : IExperimentResultParsed => {
-    const experiment = this.experiment
-    let experimentResult: IExperimentResultParsed = {
+  public static parse = (experiment: any) : IExperimentResult => {
+    let experimentResult: IExperimentResult = {
       created: new Date(experiment.created),
       loading: true,
       name: experiment.name,

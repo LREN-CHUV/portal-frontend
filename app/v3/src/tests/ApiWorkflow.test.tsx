@@ -1,7 +1,7 @@
 import ExperimentContainer from "../containers/Experiments/ExperimentContainer";
 import ModelContainer from "../containers/Models/ModelContainer";
 import { models } from "../tests/mocks";
-import { IExperimentResultParsed, IModelResult } from "../types";
+import { IExperimentResult, IModelResult } from "../types";
 
 let modelId: string;
 let experimentUUID: string;
@@ -73,7 +73,7 @@ test.skip("Set experiment", async () => {
     validations: []
   };
   return await experimentContainer.create(algorithm);
-  const result: IExperimentResultParsed | undefined =
+  const result: IExperimentResult | undefined =
     experimentContainer.state.experiment;
 
   experimentUUID = result!.uuid;
@@ -87,7 +87,7 @@ test.skip("Fetch experiment", async done => {
   jest.setTimeout(3 * 60 * 1000);
   return await setTimeout(async () => {
     await experimentContainer.load(experimentUUID);
-    const eresult: IExperimentResultParsed | undefined =
+    const eresult: IExperimentResult | undefined =
       experimentContainer.state.experiment;
 
     expect(eresult).toBeDefined();

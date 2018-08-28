@@ -1,5 +1,5 @@
 // tslint:disable:no-console
-import { IExperimentResultParsed } from "@app/types";
+import { IExperimentResult } from "@app/types";
 import * as React from "react";
 import { Label, Panel } from "react-bootstrap";
 import { Subscribe } from "unstated";
@@ -7,14 +7,14 @@ import { LoadData } from "../components";
 import { ExperimentListContainer, ModelContainer } from "../containers";
 import "./Experiments.css";
 
-const renderExperiments = (experiments: IExperimentResultParsed[] | undefined) => {
+const renderExperiments = (experiments: IExperimentResult[] | undefined) => {
   if (experiments === undefined) {
     return <p>error</p>;
   }
 
   return (
     <div>
-      {experiments.map((experiment: IExperimentResultParsed) => {
+      {experiments.map((experiment: IExperimentResult) => {
         const status: [string, string] = experiment.loading
           ? ["loading", "info"]
           : experiment.error
