@@ -45,8 +45,12 @@ const methodDisplay = (experiment: IExperimentResult | undefined) => {
   }
 
   const result = experiment.result;
-  if (result === undefined) {
+  if (result === undefined ) {
     return "No result";
+  }
+
+  if (!Array.isArray(result) ) {
+    return "";
   }
 
   return (
@@ -98,6 +102,10 @@ const contentDisplay = (experiment: IExperimentResult | undefined) => {
   const results = experiment.result;
   if (results === undefined) {
     return "";
+  }
+
+  if (!Array.isArray(results) ) {
+    return results;
   }
 
   return results.map(r => (

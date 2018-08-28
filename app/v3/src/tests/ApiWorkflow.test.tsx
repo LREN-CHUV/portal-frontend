@@ -20,7 +20,7 @@ test.only("initial state is: loading", () => {
 test("Create new model", async () => {
   const key = "regression0";
   const modelContainer = new ModelContainer();
-  await modelContainer.create({
+  return await modelContainer.create({
     config: {
       hasXAxis: true,
       height: 480,
@@ -48,7 +48,7 @@ test("Create new model", async () => {
 
 test.skip("Load model", async () => {
   const modelContainer = new ModelContainer();
-  await modelContainer.load(modelId);
+  return await modelContainer.load(modelId);
 
   const result: IModelResult | undefined = modelContainer.state.model;
 
@@ -72,7 +72,7 @@ test.skip("Set experiment", async () => {
     name: `tSNE-${modelId}`,
     validations: []
   };
-  await experimentContainer.create(algorithm);
+  return await experimentContainer.create(algorithm);
   const result: IExperimentResult | undefined =
     experimentContainer.state.experiment;
 
@@ -85,7 +85,7 @@ test.skip("Fetch experiment", async done => {
   const experimentContainer = new ExperimentContainer();
 
   jest.setTimeout(3 * 60 * 1000);
-  await setTimeout(async () => {
+  return await setTimeout(async () => {
     await experimentContainer.load(experimentUUID);
     const eresult: IExperimentResult | undefined =
       experimentContainer.state.experiment;

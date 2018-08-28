@@ -1,3 +1,55 @@
+
+
+export interface IConfusionMatrix {
+  labels : string[],
+  values: number[][]
+}
+
+export interface IValidationScore {
+  recall: number,
+  precision: number,
+  f1score: number,
+  falsePositiveRate: number,
+  accuracy: number,
+  weighted?: boolean,
+  confusionMatrix?: IConfusionMatrix,
+  node: string
+}
+
+export interface IPolynomialClassificationScore extends IValidationScore {
+
+}
+
+export interface IMethod {
+  algorithm: string,
+  predictive?: boolean,
+  mime: string,
+  data?: any[],
+  error?: string,
+  // Details for the validation of a method on a single node, includes for example the folds when k-fold cross-validation is used
+  crossValidation?: IValidationScore | IPolynomialClassificationScore
+  remoteValidations?: INode | IValidationScore
+}
+export interface INode {
+  name: string,
+  methods: IMethod[],
+  // Validation of all predictive methods, ranked by descending order of performance
+  rankedCrossValidations?: IValidationScore[]
+}
+
+export interface IExperimentResultParsed {
+  created: Date,
+  error?: string,
+  loading: boolean,
+  name: string,
+  resultsViewed: boolean,
+  uuid: string,
+  modelDefinitionId?: string,
+  nodes?: INode[],
+  global?: INode,
+  user?: string
+}
+
 export interface IExperimentResult {
   uuid: string;
   name: string;
