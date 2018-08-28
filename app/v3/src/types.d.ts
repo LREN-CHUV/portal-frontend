@@ -37,7 +37,7 @@ export interface INode {
   rankedCrossValidations?: IValidationScore[]
 }
 
-export interface IExperimentResultParsed {
+export interface IExperimentResult {
   created: Date,
   error?: string,
   loading: boolean,
@@ -48,32 +48,6 @@ export interface IExperimentResultParsed {
   nodes?: INode[],
   global?: INode,
   user?: string
-}
-
-export interface IExperimentResult {
-  uuid: string;
-  name: string;
-  createdBy: any;
-  model: any;
-  created: string;
-  finished: string;
-  hasError: boolean;
-  hasServerError: boolean;
-  shared: boolean;
-  resultsViewed: boolean;
-  algorithms: any;
-  validations: any;
-  result: IResultEntity[];
-}
-
-export interface IResultEntity {
-  timestamp: number;
-  data: any;
-  algorithmSpec: any;
-  algorithm: string;
-  jobId: string;
-  node: string;
-  type: string;
 }
 
 export interface CodeEntity {
@@ -102,13 +76,13 @@ export interface IModelResult {
 
 export interface IExperimentListContainer {
   error?: string;
-  experiments?: IExperimentResultParsed[];
+  experiments?: IExperimentResult[];
   loading: boolean;
 }
 
 export interface IExperimentContainer {
   error?: string;
-  experiment?: IExperimentResultParsed;
+  experiment?: IExperimentResult;
   loading: boolean;
 }
 

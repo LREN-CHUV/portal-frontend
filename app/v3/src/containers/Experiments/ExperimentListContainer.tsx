@@ -36,7 +36,7 @@ class ExperimentListContainer extends Container<IExperimentListContainer> {
 
       return await this.setState({
         experiments: json.map((j: IExperimentResult) =>
-          new ParseExperiment(j).parse()
+          ParseExperiment.parse(j)
         ),
         loading: false
       });

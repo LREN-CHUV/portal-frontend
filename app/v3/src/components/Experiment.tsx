@@ -1,5 +1,5 @@
 // tslint:disable:no-console
-import { IExperimentResultParsed, IModelResult } from "@app/types";
+import { IExperimentResult, IModelResult } from "@app/types";
 import * as React from "react";
 import { Panel } from "react-bootstrap";
 import { RouteComponentProps, withRouter } from "react-router-dom";
@@ -17,7 +17,7 @@ interface IExperimentParams {
   uuid: string;
 }
 
-const headerDisplay = (experiment: IExperimentResultParsed | undefined) => {
+const headerDisplay = (experiment: IExperimentResult | undefined) => {
   if (experiment === undefined) {
     return <p>Empty</p>;
   }
@@ -39,7 +39,7 @@ const headerDisplay = (experiment: IExperimentResultParsed | undefined) => {
   );
 };
 
-const methodDisplay = (experiment: IExperimentResultParsed | undefined) => {
+const methodDisplay = (experiment: IExperimentResult | undefined) => {
   if (experiment === undefined) {
     return <p>Empty</p>;
   }
@@ -88,7 +88,7 @@ const modelDisplay = (model: IModelResult | undefined) => {
   );
 };
 
-const contentDisplay = (experiment: IExperimentResultParsed | undefined) => {
+const contentDisplay = (experiment: IExperimentResult | undefined) => {
   if (experiment === undefined) {
     return <p>Empty</p>;
   }
@@ -163,13 +163,13 @@ class Experiment extends React.Component<
     );
   }
 
-  private handleSelect = (experiment: IExperimentResultParsed) => {
+  private handleSelect = (experiment: IExperimentResult) => {
     const { modelDefinitionId, uuid } = experiment;
     this.props.history.push(`/v3/experiment/${modelDefinitionId}/${uuid}`);
   };
 
   private experimentsDisplay = (
-    experiments: IExperimentResultParsed[] | undefined
+    experiments: IExperimentResult[] | undefined
   ) => {
     if (experiments === undefined) {
       return <p>Empty</p>;
