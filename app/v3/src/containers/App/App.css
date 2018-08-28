@@ -1,3 +1,9 @@
 .App {
-  padding: 1em;
+  background: url(../../images/body-bg.jpg) top center no-repeat fixed #f5f5f5;
+  background-size: 100% auto;
+  overflow-x: hidden;
+}
+
+.badge, body, h1, h2, h3, h4, h5, h6 {
+    font-family: 'Open Sans',sans-serif;
 }
