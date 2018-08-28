@@ -1,37 +1,55 @@
 // tslint:disable:no-console
-import { IExperimentResult } from "@app/types";
+import { IExperimentResult, IExperimentResultParsed } from "@app/types";
 import * as React from "react";
-import { Label } from "react-bootstrap";
+import { Label, Panel } from "react-bootstrap";
 import { Subscribe } from "unstated";
 import { LoadData } from "../components";
 import { ExperimentListContainer, ModelContainer } from "../containers";
+import "./Experiments.css";
 import ParseExperiment from "./ParseExperiment";
-
-const summary = (experiments: IExperimentResult[] | undefined) => {
-  return (
-    experiments &&
-    experiments.map(e => (
-      <Label bsStyle={e.finished ? "success" : "danger"}>
-        {e.name}
-      </Label>
-    ))
-  );
-};
-const renderExperiment = (experiment: IExperimentResult) => {
-  return (
-    <li key={experiment.uuid}>
-      <ParseExperiment experiment={experiment} />
-    </li>
-  );
-};
 
 const renderExperiments = (experiments: IExperimentResult[] | undefined) => {
   if (experiments === undefined) {
     return <p>error</p>;
   }
 
+  const experimentsParsed: IExperimentResultParsed[] = experiments.map(
+    (e: IExperimentResult) => new ParseExperiment(e).parse()
+  );
+
   return (
-    <ul>{experiments!.map(experiment => renderExperiment(experiment))}</ul>
+    <div>
+      {experimentsParsed.map((experiment: IExperimentResultParsed) => {
+        const status: [string, string] = experiment.loading
+          ? ["loading", "info"]
+          : experiment.error
+            ? [experiment.error, "danger"]
+            : ["OK", "success"];
+        return (
+          <Panel
+            key={experiment.uuid}
+            id="collapsible-panel-{experiment.uuid}"
+            defaultExpanded={false}
+          >
+            <Panel.Heading>
+              <Panel.Title toggle={true}>
+                <div className="Experiments-wrapper">
+                  <div className="box">{experiment.name} </div>
+                  <div className="box">
+                    <Label bsStyle={status[1]}>{status[0]}</Label>
+                  </div>
+                </div>
+              </Panel.Title>
+            </Panel.Heading>
+            <Panel.Collapse>
+              <Panel.Body>
+                <pre>{JSON.stringify(experiment, null, 2)}</pre>
+              </Panel.Body>
+            </Panel.Collapse>
+          </Panel>
+        );
+      })}
+    </div>
   );
 };
 
@@ -51,7 +69,6 @@ class Experiment extends React.Component {
               <p>{experimentListContainer.state.error}</p>
             ) : null}
 
-            {summary(experimentListContainer.state.experiments)}
             {renderExperiments(experimentListContainer.state.experiments)}
           </div>
         )}
