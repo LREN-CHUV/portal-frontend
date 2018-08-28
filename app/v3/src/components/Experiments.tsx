@@ -1,15 +1,14 @@
 // tslint:disable:no-console
-import { IExperimentResult } from "@app/types";
+import { IExperimentListContainer, IExperimentResult } from "@app/types";
 import * as React from "react";
 import { Label, Panel } from "react-bootstrap";
-import { Subscribe } from "unstated";
-import { LoadData } from "../components";
-import { ExperimentListContainer, ModelContainer } from "../containers";
+import { Provider, Subscribe } from "unstated";
+import { ExperimentListContainer } from "../containers";
 import "./Experiments.css";
 
 const renderExperiments = (experiments: IExperimentResult[] | undefined) => {
   if (experiments === undefined) {
-    return <p>error</p>;
+    return <React.Fragment />;
   }
 
   return (
@@ -49,25 +48,26 @@ const renderExperiments = (experiments: IExperimentResult[] | undefined) => {
 };
 
 class Experiment extends React.Component {
+  private experimentListContainer: any;
+
+  constructor(props: any) {
+    super(props);
+    this.experimentListContainer = new ExperimentListContainer();
+  }
+
+  public async componentDidMount() {
+    await this.experimentListContainer.load();
+  }
+
   public render() {
     return (
-      <Subscribe to={[ExperimentListContainer, ModelContainer]}>
-        {(
-          experimentListContainer: ExperimentListContainer,
-          modelContainer: ModelContainer
-        ) => (
-          <div>
-            <LoadData load={experimentListContainer.load} />
-
-            {experimentListContainer.state.loading ? <h1>Loading...</h1> : null}
-            {experimentListContainer.state.error ? (
-              <p>{experimentListContainer.state.error}</p>
-            ) : null}
-
-            {renderExperiments(experimentListContainer.state.experiments)}
-          </div>
-        )}
-      </Subscribe>
+      <Provider inject={[this.experimentListContainer]}>
+        <Subscribe to={[ExperimentListContainer]}>
+          {({ state }: { state: IExperimentListContainer }) =>
+            renderExperiments(state.experiments)
+          }
+        </Subscribe>
+      </Provider>
     );
   }
 }
