@@ -1,10 +1,14 @@
 // tslint:disable:no-console
-import { IExperimentResult, IModelResult } from "@app/types";
+import {
+  IExperimentResult,
+  // IExperimentListContainer,
+  IModelResult
+} from "@app/types";
 import * as React from "react";
 import { Panel } from "react-bootstrap";
 import { RouteComponentProps, withRouter } from "react-router-dom";
-import { Subscribe } from "unstated";
-import { Dropdown, LoadData } from "../components";
+import { Provider, Subscribe } from "unstated";
+import { Dropdown } from "../components";
 import {
   ExperimentContainer,
   ExperimentListContainer,
@@ -98,74 +102,97 @@ const contentDisplay = (experiment: IExperimentResult | undefined) => {
     return experiment.error;
   }
 
-  return <pre>{JSON.stringify(experiment, null, 2)}</pre>
+  return <pre>{JSON.stringify(experiment, null, 2)}</pre>;
 };
 
 class Experiment extends React.Component<
   RouteComponentProps<IExperimentParams>
 > {
-  public render() {
+  private experimentListContainer: ExperimentListContainer;
+  private experimentContainer: ExperimentContainer;
+  private modelContainer: ModelContainer;
+
+  constructor(props: any) {
+    super(props);
+    this.experimentListContainer = new ExperimentListContainer();
+    this.experimentContainer = new ExperimentContainer();
+    this.modelContainer = new ModelContainer();
+  }
+
+  public async componentDidMount() {
+    await this.experimentListContainer.load();
     // Get url parameters
     const { match: matched } = this.props;
     if (!matched) {
-      return <p>Error, check you url</p>;
+      return;
     }
     const { uuid, slug } = matched.params;
 
+    await this.experimentContainer.load(uuid);
+    return await this.modelContainer.load(slug);
+  }
+
+  public render() {
     return (
-      <Subscribe
-        to={[ExperimentListContainer, ExperimentContainer, ModelContainer]}
+      <Provider
+        inject={[
+          this.experimentListContainer,
+          this.experimentContainer,
+          this.modelContainer
+        ]}
       >
-        {(
-          experimentListContainer: ExperimentListContainer,
-          experimentContainer: ExperimentContainer,
-          modelContainer: ModelContainer
-        ) => (
-          <div className="wrapper">
-            <LoadData load={experimentContainer.load} id={uuid} />
-            <LoadData load={modelContainer.load} id={slug} />
-            <LoadData load={experimentListContainer.load} />
+        <Subscribe
+          to={[ExperimentListContainer, ExperimentContainer, ModelContainer]}
+        >
+          {(
+            experimentListContainer: any,
+            experimentContainer: any,
+            modelContainer: any
+          ) => (
+            <div className="wrapper">
+      
+              {experimentContainer.state.loading ? <h1>Loading...</h1> : null}
+              {experimentContainer.state.error ? (
+                <h1>{experimentContainer.state.error}</h1>
+              ) : null}
 
-            {experimentContainer.state.loading ? <h1>Loading...</h1> : null}
-            {experimentContainer.state.error ? (
-              <h1>{experimentContainer.state.error}</h1>
-            ) : null}
-
-            <React.Fragment>
-              <Panel className="header">
-                {headerDisplay(experimentContainer.state.experiment)}
-                {this.experimentsDisplay(
-                  experimentListContainer.state.experiments
-                )}
-              </Panel>
-              <Panel className="sidebar">
-                <Panel.Title>Method</Panel.Title>
-                <Panel.Body>
-                  {methodDisplay(experimentContainer.state.experiment)}
-                </Panel.Body>
-              </Panel>
-              <Panel className="sidebar2">
-                <Panel.Title>Model</Panel.Title>
-                <Panel.Body>
-                  {modelDisplay(modelContainer.state.model)}
-                </Panel.Body>
-              </Panel>
-              <Panel className="content">
-                <Panel.Title>Results</Panel.Title>
-                <Panel.Body>
-                  {contentDisplay(experimentContainer.state.experiment)}
-                </Panel.Body>
-              </Panel>
-            </React.Fragment>
-          </div>
-        )}
-      </Subscribe>
+              <React.Fragment>
+                <Panel className="header">
+                  {headerDisplay(experimentContainer.state.experiment)}
+                  {this.experimentsDisplay(
+                    experimentListContainer.state.experiments
+                  )}
+                </Panel>
+                <Panel className="sidebar">
+                  <Panel.Title>Method</Panel.Title>
+                  <Panel.Body>
+                    {methodDisplay(experimentContainer.state.experiment)}
+                  </Panel.Body>
+                </Panel>
+                <Panel className="sidebar2">
+                  <Panel.Title>Model</Panel.Title>
+                  <Panel.Body>
+                    {modelDisplay(modelContainer.state.model)}
+                  </Panel.Body>
+                </Panel>
+                <Panel className="content">
+                  <Panel.Title>Results</Panel.Title>
+                  <Panel.Body>
+                    {contentDisplay(experimentContainer.state.experiment)}
+                  </Panel.Body>
+                </Panel>
+              </React.Fragment>
+            </div>
+          )}
+        </Subscribe>
+      </Provider>
     );
   }
 
   private handleSelect = (experiment: IExperimentResult) => {
     const { modelDefinitionId, uuid } = experiment;
-    this.props.history.push(`/v3/experiment/${modelDefinitionId}/${uuid}`);
+    this.experimentContainer.load(uuid);
+    this.modelContainer.load(modelDefinitionId!);
   };
 
   private experimentsDisplay = (

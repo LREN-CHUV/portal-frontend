@@ -14,14 +14,17 @@ export interface IResult {
 }
 
 class ExperimentListContainer extends Container<IExperimentListContainer> {
-  public state = {
-    error: undefined,
-    experiments: undefined,
-    loading: true
-  };
-
   private baseUrl = `${process.env.REACT_APP_BACKEND_URL}/experiments`;
 
+  constructor() {
+    super();
+    this.state = {
+      error: undefined,
+      experiments: undefined,
+      loading: true
+    };
+  }
+  
   public load = async () => {
     await this.setState({ loading: true });
     try {
