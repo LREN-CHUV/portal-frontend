@@ -5,7 +5,7 @@ import {
   IModelResult
 } from "@app/types";
 import * as React from "react";
-import { Panel } from "react-bootstrap";
+import { Button, Panel } from "react-bootstrap";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { Provider, Subscribe } from "unstated";
 import { Dropdown } from "../components";
@@ -22,23 +22,19 @@ interface IExperimentParams {
 }
 
 const headerDisplay = (experiment: IExperimentResult | undefined) => {
-  if (experiment === undefined) {
-    return <p>Empty</p>;
-  }
-
-  const result = experiment.error;
-  if (result === undefined) {
-    return experiment.error;
-  }
-
+  const title = experiment && experiment.name || "undefined";
+  const error = experiment && experiment.error;
+  const modelDefinitionId = experiment && experiment.modelDefinitionId || "undefined model"
+  
   return (
     <React.Fragment>
-      <Panel.Title>Results of Experiment {experiment.name} </Panel.Title>
-      {/* <Panel.Body>
-        Created 2 hours ago by anonymous
-        <p>{result.map(r => r.algorithm)}</p>
+      <Panel.Title>Results of Experiment {title} </Panel.Title>
+      <Panel.Body>
+        <p>Created 2 hours ago by anonymous
+        {modelDefinitionId}</p>
+        {error}
         <Button bsStyle="primary">Share Experiment</Button>
-      </Panel.Body> */}
+      </Panel.Body>
     </React.Fragment>
   );
 };
