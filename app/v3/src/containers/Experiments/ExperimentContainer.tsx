@@ -4,6 +4,7 @@ import request from "request-promise-native";
 import { Container } from "unstated";
 import { config } from "../../tests/mocks";
 import { IExperimentContainer } from "../../types";
+import ParseExperiment from "./ParseExperiment";
 
 dotenv.config();
 
@@ -22,22 +23,22 @@ class ExperimentContainer extends Container<IExperimentContainer> {
       const data = await request.get(`${this.baseUrl}/${uuid}`, config);
       const json = await JSON.parse(data);
       if (json.error) {
-        return await this.setState(state => ({
+        return await this.setState({
           error: json.error,
           loading: false
-        }));
+        });
       }
 
-      return await this.setState(state => ({
-        experiment: json,
+      return await this.setState({
+        experiment: new ParseExperiment(json).parse(),
         loading: false
-      }));
+      });
     } catch (error) {
       console.log({ error });
-      return await this.setState(state => ({
+      return await this.setState({
         error: error.message,
         loading: false
-      }));
+      });
     }
   };
 
@@ -52,19 +53,19 @@ class ExperimentContainer extends Container<IExperimentContainer> {
           "Content-Type": "application/json"
         },
         method: "POST",
-        uri: `${this.baseUrl}`,
+        uri: `${this.baseUrl}`
       });
       const json = await JSON.parse(data);
-      return await this.setState(state => ({
-        experiment: json,
+      return await this.setState({
+        experiment: new ParseExperiment(json).parse(),
         loading: false
-      }));
+      });
     } catch (error) {
       console.log(error);
-      return await this.setState(state => ({
+      return await this.setState({
         error: error.message,
         loading: false
-      }));
+      });
     }
   };
 }

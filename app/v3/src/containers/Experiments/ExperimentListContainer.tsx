@@ -1,10 +1,11 @@
 // tslint:disable:no-console
+import { IExperimentResult } from "@app/types";
 import * as dotenv from "dotenv";
 import request from "request-promise-native";
 import { Container } from "unstated";
 import { config } from "../../tests/mocks";
 import { IExperimentListContainer } from "../../types";
-
+import ParseExperiment from "./ParseExperiment";
 dotenv.config();
 
 export interface IResult {
@@ -24,25 +25,27 @@ class ExperimentListContainer extends Container<IExperimentListContainer> {
   public load = async () => {
     await this.setState({ loading: true });
     try {
-      const data = await request.get(`${this.baseUrl}?mine=true`, config)
+      const data = await request.get(`${this.baseUrl}?mine=true`, config);
       const json = await JSON.parse(data);
       if (json.error) {
-        return await this.setState(state => ({
+        return await this.setState({
           error: json.error,
           loading: false
-        }));
+        });
       }
 
-      return await this.setState(state => ({
-        experiments: json,
+      return await this.setState({
+        experiments: json.map((j: IExperimentResult) =>
+          new ParseExperiment(j).parse()
+        ),
         loading: false
-      }));
+      });
     } catch (error) {
       console.log(error);
-      return await this.setState(state => ({
+      return await this.setState({
         error: error.message,
         loading: false
-      }));
+      });
     }
   };
 }
