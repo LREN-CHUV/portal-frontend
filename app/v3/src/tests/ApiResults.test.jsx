@@ -4,6 +4,54 @@ import ExperimentListContainer from "../containers/Experiments/ExperimentListCon
 import ModelContainer from "../containers/Models/ModelContainer";
 import { methods, models } from "../tests/mocks";
 
+export interface IConfusionMatrix {
+  labels: string[];
+  values: number[][];
+}
+
+export interface IValidationScore {
+  recall: number;
+  precision: number;
+  f1score: number;
+  falsePositiveRate: number;
+  accuracy: number;
+  weighted?: boolean;
+  confusionMatrix?: IConfusionMatrix;
+  node: string;
+}
+
+export interface IPolynomialClassificationScore extends IValidationScore {}
+
+export interface IMethod {
+  algorithm: string;
+  predictive?: boolean;
+  mime: string;
+  data?: any[];
+  error?: string;
+  // Details for the validation of a method on a single node, includes for example the folds when k-fold cross-validation is used
+  crossValidation?: IValidationScore | IPolynomialClassificationScore;
+  remoteValidations?: INode | IValidationScore;
+}
+export interface INode {
+  name: string;
+  methods: IMethod[];
+  // Validation of all predictive methods, ranked by descending order of performance
+  rankedCrossValidations?: IValidationScore[];
+}
+
+export interface IExperimentResultParsed {
+  created: Date;
+  error?: string;
+  loading: boolean;
+  name: string;
+  resultsViewed: boolean;
+  uuid: string;
+  modelDefinitionId?: string;
+  nodes?: INode[];
+  global?: INode;
+  user?: string;
+}
+
 /// TESTS ///
 
 /*
@@ -31,16 +79,30 @@ const plotly = data => {
     }
   });
 
-  return data
+  return data;
 };
+interface IPfa {
+  crossValidation?: IValidationScore | IPolynomialClassificationScore;
+  data?: any;
+  remoteValidations?: INode | IValidationScore | IPolynomialClassificationScore;
+  error?: any;
+}
 
-const pfa = (data, hasValidation) => {
-  // console.log("has validation", hasValidation);
-  const output = { data: [] };
+const pfa = (data: any): IPfa => {
+  const output: IPfa = {};
+
+  const accuracyKey = "Accuracy";
+  const f1scoreKey = "Weighted F1-score";
+  const falsePositiveRateKey = "Weighted false positive rate";
+  const precisionKey = "Weighted precision";
+  const recallKey = "Weighted recall";
+  const confusionMatrixKey = "Confusion matrix";
+
   data.forEach(d => {
     if (!d.cells) {
       expect(d).toBeDefined();
-      output.data.push(d);
+      output.error = "WARNING, not handled";
+      // output.data.push(d);
     } else {
       expect(d.cells).toBeDefined();
 
@@ -52,7 +114,27 @@ const pfa = (data, hasValidation) => {
           ? d.cells.validations.init
           : [d.cells.validations.init];
 
-        init.forEach(i => {
+        const buildValidation = (dta: any, node: any) => {
+          expect(dta[accuracyKey]).toBeDefined();
+          expect(dta[confusionMatrixKey]).toBeDefined();
+          expect(dta[f1scoreKey]).toBeDefined();
+          expect(dta[falsePositiveRateKey]).toBeDefined();
+          expect(dta[precisionKey]).toBeDefined();
+          expect(dta[recallKey]).toBeDefined();
+          expect(dta[falsePositiveRateKey]).toBeDefined();
+
+          return {
+            accuracy: parseFloat(dta[accuracyKey]),
+            confusionMatrix: dta[confusionMatrixKey],
+            f1score: parseFloat(dta[f1scoreKey]),
+            falsePositiveRate: parseFloat(dta[falsePositiveRateKey]),
+            node: `${node}`,
+            precision: parseFloat(dta[precisionKey]),
+            recall: parseFloat(dta[recallKey])
+          };
+        };
+
+        init.forEach((i: any) => {
           expect(i.code).toBeDefined();
           expect(i.node).toBeDefined();
 
@@ -63,7 +145,19 @@ const pfa = (data, hasValidation) => {
             return;
           } else {
             expect(i.data).toBeDefined();
-            output.data.push({ code: i.code, data: i.data, node: i.node });
+
+            const node = i.node;
+            if (i.code === "kfold") {
+              const dta: any = i.data.average;
+              expect(dta).toBeDefined();
+              output.crossValidation = buildValidation(dta, node);
+            }
+
+            if (i.code === "remote-validation") {
+              const dta: any = i.data;
+              expect(dta).toBeDefined();
+              output.remoteValidations = buildValidation(dta, node);
+            }
           }
         });
       }
@@ -110,7 +204,7 @@ test("Fetch experiments", async () => {
     experimentListContainer.state.experiments;
   expect(experiments).toBeDefined();
 
-  let experimentResults = [];
+  let experimentResults: IExperimentResultParsed[] = [];
   experiments.slice(0, 100).forEach((experiment, index) => {
     // console.log(JSON.stringify(experiment, null, 2));
 
@@ -206,19 +300,18 @@ test("Fetch experiments", async () => {
     }
 
     const result = parse(experiment.result);
-    const hasValidation =
-      Array.isArray(experiment.validations) &&
-      experiment.validations.length > 0;
-
-    const nodes = [];
+    const nodes: INode[] = [];
     result.forEach((r, i) => {
-      let node = {};
       const mime = r.type;
+
+      let method: IMethod = {
+        algorithm: r.algorithm,
+        mime
+      };
       console.log("\tname: ", names[i], ", mime:", mime);
       expect(mime).toBeDefined();
 
       expect(r.node).toBeDefined();
-      node = { name: r.node, algorithm: r.algorithm, mime };
 
       // Convert to array to have consistent results
       const normalizedResult = input =>
@@ -227,17 +320,18 @@ test("Fetch experiments", async () => {
       const results = normalizedResult(r);
       switch (mime) {
         case "application/vnd.highcharts+json":
-          node.data = highcharts(results);
+          method.data = highcharts(results);
           break;
 
         case "application/vnd.plotly.v1+json":
-          node.data = plotly(results);
+          method.data = plotly(results);
           break;
 
         case "application/pfa+json":
-          const output = pfa(results, hasValidation);
-          node.data = output.data;
-          node.error = output.error;
+          method = {
+            ...method,
+            ...pfa(results)
+          };
           break;
 
         case "application/vnd.hbp.mip.experiment.pfa+json":
@@ -251,21 +345,21 @@ test("Fetch experiments", async () => {
             expect(subResult.type).toBeDefined();
             expect(subResult.algorithm).toBeDefined();
             console.log(subResult.type);
-            node.mime = subResult.type;
-            node.algorithm = subResult.algorithm;
+            method.mime = subResult.type;
+            method.algorithm = subResult.algorithm;
 
             switch (subResult.type) {
               case "application/vnd.highcharts+json":
                 expect(subResult.data).toBeDefined();
-                node.data = highcharts(normalizedResult(subResult));
+                method.data = highcharts(normalizedResult(subResult));
                 break;
 
               case "application/json":
-                node.data = jsonTest(normalizedResult(subResult));
+                method.data = jsonTest(normalizedResult(subResult));
                 break;
 
               case "text/plain+error":
-                node.error = errorTest(subResult);
+                method.error = errorTest(subResult);
                 break;
 
               case "application/vnd.plotly.v1+json":
@@ -273,9 +367,10 @@ test("Fetch experiments", async () => {
                 break;
 
               case "application/pfa+json":
-                const output2 = pfa(normalizedResult(subResult), hasValidation);
-                node.data = output2.data;
-                node.error = output2.error;
+                method = {
+                  ...method,
+                  ...pfa(normalizedResult(subResult))
+                };
                 break;
 
               default:
@@ -284,7 +379,7 @@ test("Fetch experiments", async () => {
           });
 
         case "application/json":
-          jsonTest(results);
+          method.data = jsonTest(results);
           break;
 
         // case "application/vnd.dataresource+json":
@@ -294,7 +389,7 @@ test("Fetch experiments", async () => {
         // break;
 
         case "text/plain+error":
-          node.error = errorTest(results, r.error);
+          method.error = errorTest(results, r.error);
           break;
 
         default:
@@ -302,6 +397,10 @@ test("Fetch experiments", async () => {
       }
 
       // node.data = node.data ? "result" : undefined; // FIXME:
+      const node: INode = {
+        methods: [method],
+        name: r.node
+      };
       nodes.push(node);
     });
     experimentResult.nodes = nodes;
