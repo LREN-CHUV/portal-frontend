@@ -3,7 +3,7 @@ import './Navigation.css'
 
 class Navigation extends React.Component {
   public render() {
-    return <header className="Navigation">HBP - MIP </header>;
+    return <nav>HBP, MIP</nav>;
   }
 }
 

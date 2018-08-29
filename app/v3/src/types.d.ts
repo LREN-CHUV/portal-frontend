@@ -37,6 +37,11 @@ export interface INode {
   rankedCrossValidations?: IValidationScore[]
 }
 
+export interface User {
+  fullname?: string;
+  username: string;
+}
+
 export interface IExperimentResult {
   created: Date,
   error?: string,
@@ -46,8 +51,8 @@ export interface IExperimentResult {
   uuid: string,
   modelDefinitionId?: string,
   nodes?: INode[],
-  global?: INode,
-  user?: string
+  user: User;
+  algorithms: string[]
 }
 
 export interface CodeEntity {

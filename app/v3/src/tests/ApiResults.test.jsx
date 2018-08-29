@@ -159,28 +159,17 @@ test("Fetch experiments", async () => {
 
   let experimentResults: IExperimentResultParsed[] = [];
   experiments.slice(0, 100).forEach((experiment, index) => {
-    // console.log(JSON.stringify(experiment, null, 2));
+    console.log(JSON.stringify(experiment, null, 2));
 
     expect(experiment.created).toBeDefined();
     expect(experiment.hasError).toBeFalsy();
     expect(experiment.name).toBeDefined();
     expect(experiment.uuid).toBeDefined();
     expect(experiment.resultsViewed).toBeDefined();
-
-    let experimentResult = {
-      created: new Date(experiment.created),
-      error: undefined,
-      loading: true,
-      name: experiment.name,
-      resultsViewed: experiment.resultsViewed,
-      uuid: experiment.uuid
-    };
+    expect(experiment.user).toBeDefined();
+    expect(experiment.algorithms).toBeDefined();
 
     if (!experiment.model) {
-      experimentResult.error = "No model defined";
-      experimentResult.loading = false;
-      experimentResults.push(experimentResult);
-
       return;
     }
 
@@ -192,40 +181,15 @@ test("Fetch experiments", async () => {
       `${experiment.model.slug}/${experiment.uuid}`
     );
 
-    experimentResult = {
-      ...experimentResult,
-      model: experiment.model.slug
-    };
-
     if (experiment.hasServerError) {
       // console.log("hasServerError");
       expect(experiment.result).toBeDefined();
-
-      experimentResult = {
-        ...experimentResult,
-        error: experiment.result,
-        loading: false
-      };
-      experimentResults.push(experimentResult);
-
       return;
     }
 
     if (!experiment.result) {
       // console.log("No result");
       expect(experiment.finished).toBeNull();
-
-      const created = new Date(experiment.created);
-      const elapsed = (new Date() - new Date(experiment.created)) / 1000;
-
-      if (elapsed > 60 * 5) {
-        experimentResult = {
-          ...experimentResult,
-          error: "No result",
-          loading: false
-        };
-      }
-      experimentResults.push(experimentResult);
       return;
     }
 
@@ -241,14 +205,6 @@ test("Fetch experiments", async () => {
       codes.includes("WP_LINEAR_REGRESSION")
     ) {
       // console.log("\tExareme format, not parsing yet");
-
-      experimentResult = {
-        ...experimentResult,
-        error: "Exareme",
-        loading: false
-      };
-      experimentResults.push(experimentResult);
-
       return;
     }
 
@@ -348,17 +304,7 @@ test("Fetch experiments", async () => {
         default:
           console.log("!!!!!!!! SHOULD TEST", mime);
       }
-
-      // node.data = node.data ? "result" : undefined; // FIXME:
-      const node: INode = {
-        methods: [method],
-        name: r.node
-      };
-      nodes.push(node);
     });
-    experimentResult.nodes = nodes;
-    experimentResult.loading = false;
-    experimentResults.push(experimentResult);
   });
 
   // console.log(experimentResults);

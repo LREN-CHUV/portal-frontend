@@ -1,3 +1,4 @@
+// tslint:disable:no-console
 import {
   IExperimentResult,
   IMethod,
@@ -6,15 +7,19 @@ import {
   IValidationScore
 } from "@app/types";
 
-
 class ParseExperiment {
-
-  public static parse = (experiment: any) : IExperimentResult => {
+  public static parse = (experiment: any): IExperimentResult => {
+    const algorithms = parse(experiment.algorithms);
     let experimentResult: IExperimentResult = {
+      algorithms: algorithms.map((e: any) => e.name),
       created: new Date(experiment.created),
       loading: true,
       name: experiment.name,
       resultsViewed: experiment.resultsViewed,
+      user: {
+        fullname: experiment.createdBy.fullname,
+        username: experiment.createdBy.username
+      },
       uuid: experiment.uuid
     };
 
@@ -55,8 +60,7 @@ class ParseExperiment {
       return experimentResult;
     }
 
-    const algo = parse(experiment.algorithms);
-    const codes = algo.map((a: any) => a.code);
+    const codes = algorithms.map((a: any) => a.code);
 
     if (
       codes.includes("PIPELINE_ISOUP_MODEL_TREE_SERIALIZER") ||
@@ -73,6 +77,10 @@ class ParseExperiment {
 
     const result = parse(experiment.result);
     const nodes: INode[] = [];
+    // const distinctNodeCount = result
+    //   .map((r: any) => r.node)
+    //   .filter((el: any, i: any, a: any) => i === a.indexOf(el)).length;
+
     result.forEach((r: any, i: number) => {
       const mime = r.type;
 
@@ -162,12 +170,20 @@ class ParseExperiment {
         // console.log("!!!!!!!! SHOULD TEST", mime);
       }
 
-      // node.data = node.data ? "result" : undefined; // FIXME:
-      const node: INode = {
-        methods: [method],
-        name: r.node
-      };
-      nodes.push(node);
+      // In case we have 2 methods on 2 same nodes
+      // merge nodes
+      if (nodes.length) {
+        const node: INode | undefined = nodes.find((n: any) => n.name === r.node);
+        if (node) {
+          node.methods.push(method);
+        }
+      } else {
+        const node: INode = {
+          methods: [method],
+          name: r.node
+        };
+        nodes.push(node);
+      }
     });
     experimentResult.nodes = nodes;
     experimentResult.loading = false;
@@ -268,6 +284,6 @@ const parse = (value: any) => {
     const json = JSON.parse(value);
     return json;
   } catch (e) {
-    throw new Error(e);
+    return value;
   }
 };
