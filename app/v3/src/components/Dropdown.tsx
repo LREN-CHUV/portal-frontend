@@ -1,3 +1,4 @@
+import * as moment from "moment";
 import * as React from "react";
 import { DropdownButton, MenuItem } from "react-bootstrap";
 import { IExperimentResult } from "../types";
@@ -23,7 +24,9 @@ export default ({
       items.map((m, i: number) => (
         // tslint:disable-next-line jsx-no-lambda
         <MenuItem eventKey={i} key={m.uuid} onSelect={() => handleSelect(m)}>
-          {m.name}
+          {m.error? <span>x </span>: null}
+          {m.loading? <span>... </span>: null}
+          <strong>{m.name}</strong>{" - "}{moment(m.created, "YYYYMMDD").fromNow()}
         </MenuItem>
       ))}
   </DropdownButton>

@@ -1,11 +1,14 @@
 // tslint:disable:no-console
 import {
-  IExperimentResult,
+  IExperimentContainer,
   // IExperimentListContainer,
+  IExperimentResult,
   IModelResult
 } from "@app/types";
+import * as moment from "moment";
+
 import * as React from "react";
-import { Button, Panel } from "react-bootstrap";
+import { Button, Panel, Tab, Tabs } from "react-bootstrap";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { Provider, Subscribe } from "unstated";
 import { Dropdown } from "../components";
@@ -21,84 +24,131 @@ interface IExperimentParams {
   uuid: string;
 }
 
-const headerDisplay = (experiment: IExperimentResult | undefined) => {
-  const title = experiment && experiment.name || "undefined";
-  const error = experiment && experiment.error;
-  const modelDefinitionId = experiment && experiment.modelDefinitionId || "undefined model"
-  
+const headerDisplay = (
+  experiment: IExperimentResult | undefined,
+  experiments: IExperimentResult[] | undefined,
+  handleSelect: any
+) => {
+  const title = (experiment && experiment.name) || "undefined";
+  const modelDefinitionId =
+    (experiment && experiment.modelDefinitionId) || "undefined model";
+
   return (
-    <React.Fragment>
-      <Panel.Title>Results of Experiment {title} </Panel.Title>
+    <Panel>
+      <Panel.Title className="experiment-header">
+        <h3 className="item">
+          Results of Experiment <strong>{title}</strong> on{" "}
+          <a href={`/models/${modelDefinitionId}`}>{modelDefinitionId}</a>
+        </h3>
+        <div className="item">
+          <Button bsStyle="info">SHARE EXPERIMENT</Button>
+        </div>
+        <div className="item">
+          <Dropdown
+            items={experiments}
+            title="RELATED EXPERIMENTS"
+            handleSelect={handleSelect}
+          />
+        </div>
+      </Panel.Title>
+
       <Panel.Body>
-        <p>Created 2 hours ago by anonymous
-        {modelDefinitionId}</p>
-        {error}
-        <Button bsStyle="primary">Share Experiment</Button>
+        <h5>
+          Created{" "}
+          {experiment && moment(experiment.created, "YYYYMMDD").fromNow()} by{" "}
+          {experiment && experiment.user.username}
+        </h5>
       </Panel.Body>
-    </React.Fragment>
+    </Panel>
   );
 };
 
-const methodDisplay = (experiment: IExperimentResult | undefined) => {
-  if (experiment === undefined) {
-    return <p>Empty</p>;
-  }
-
-  const result = experiment.error;
-  if (result === undefined) {
-    return experiment.error;
-  }
-
-  return (
-    <React.Fragment>
-      <Panel.Title>Results of Experiment {experiment.name} </Panel.Title>
-      <Panel.Body>{/* <p>{result.map(r => r.algorithm)}</p> */}</Panel.Body>
-    </React.Fragment>
-  );
-};
+const methodDisplay = (experiment: IExperimentResult | undefined) => (
+  <Panel>
+    <Panel.Title>
+      <h3>Methods</h3>
+    </Panel.Title>
+    <Panel.Body>
+      <ul>
+        {experiment &&
+          experiment.algorithms.map((m: any) => <li key={m}>{m}</li>)}
+      </ul>
+    </Panel.Body>
+  </Panel>
+);
 
 const modelDisplay = (model: IModelResult | undefined) => {
-  if (model === undefined) {
-    return "Empty";
-  }
-  const query = model.query;
-  if (query === undefined) {
-    return "Empty";
-  }
-
   return (
-    <React.Fragment>
-      <h4>Variable</h4>
-      {query.variables &&
-        query.variables.map((v: any) => <p key={v.code}>{v.code}</p>)}
-      <h4>CoVariables</h4>
-      {query.coVariables &&
-        query.coVariables.map((v: any) => <p key={v.code}>{v.code}</p>)}
-      {query.groupings &&
-        query.groupings.map((v: any) => <p key={v.code}>{v.code}</p>)}
-      <h4>Filters</h4>
+    <Panel>
+      <Panel.Title>
+        <h3>Model {model && model.title}</h3>
+      </Panel.Title>
+      {model &&
+        model.query && (
+          <Panel.Body>
+            {model.query.variables && <h5>Variables</h5>}
+            {model.query.variables &&
+              model.query.variables.map((v: any) => (
+                <var key={v.code}>{v.code}</var>
+              ))}
+            {model.query.coVariables && <h5>CoVariables</h5>}
+            {model.query.coVariables &&
+              model.query.coVariables.map((v: any) => (
+                <var key={v.code}>{v.code}</var>
+              ))}
+            {model.query.groupings &&
+              model.query.groupings.map((v: any) => (
+                <var key={v.code}>{v.code}</var>
+              ))}
+            {model.query.filters && <h5>Filters</h5>}
+            {model.query.filters}
 
-      <h4>Training datasets</h4>
-      {query.trainingDatasets &&
-        query.trainingDatasets.map((v: any) => <p key={v.code}>{v.code}</p>)}
-      <h4>Validation dataset</h4>
-      {query.validationDatasets &&
-        query.validationDatasets.map((v: any) => <p key={v.code}>{v.code}</p>)}
-    </React.Fragment>
+            {model.query.trainingDatasets && <h5>Training datasets</h5>}
+            {model.query.trainingDatasets &&
+              model.query.trainingDatasets.map((v: any) => (
+                <var key={v.code}>{v.code}</var>
+              ))}
+            {model.query.validationDatasets && <h5>Validation dataset</h5>}
+            {model.query.validationDatasets &&
+              model.query.validationDatasets.map((v: any) => (
+                <var key={v.code}>{v.code}</var>
+              ))}
+          </Panel.Body>
+        )}
+    </Panel>
   );
 };
 
-const contentDisplay = (experiment: IExperimentResult | undefined) => {
-  if (experiment === undefined) {
-    return <p>Empty</p>;
-  }
+const contentDisplay = (state: IExperimentContainer | undefined) => {
+  const experiment = state && state.experiment;
+  const nodes = experiment && experiment.nodes;
 
-  const result = experiment.error;
-  if (result === undefined) {
-    return experiment.error;
-  }
-
-  return <pre>{JSON.stringify(experiment, null, 2)}</pre>;
+  return (
+    <Panel>
+      <Panel.Title>
+        <h3>Results</h3>
+      </Panel.Title>
+      <Panel.Body>
+        {state && state.loading ? <p>Loading...</p> : null}
+        {state && state.error ? <p>{state.error}</p> : null}
+        <Tabs defaultActiveKey={0} id="tabs-node">
+          {nodes &&
+            nodes.map((n: any, i: number) => (
+              <Tab eventKey={i} title={n.name}>
+                <Tabs defaultActiveKey={0} id="tabs-methods">
+                  {n.methods &&
+                    n.methods.map((m: any, j: number) => (
+                      <Tab eventKey={j} title={m.algorithm}>
+                        <pre>{JSON.stringify(m, null, 4)}</pre>
+                      </Tab>
+                    ))}
+                </Tabs>
+              </Tab>
+            ))}
+        </Tabs>
+      </Panel.Body>
+    </Panel>
+  );
 };
 
 class Experiment extends React.Component<
@@ -113,6 +163,8 @@ class Experiment extends React.Component<
     this.experimentListContainer = new ExperimentListContainer();
     this.experimentContainer = new ExperimentContainer();
     this.modelContainer = new ModelContainer();
+
+    this.handleSelectExperiment = this.handleSelectExperiment.bind(this);
   }
 
   public async componentDidMount() {
@@ -130,81 +182,53 @@ class Experiment extends React.Component<
 
   public render() {
     return (
-      <Provider
-        inject={[
-          this.experimentListContainer,
-          this.experimentContainer,
-          this.modelContainer
-        ]}
-      >
-        <Subscribe
-          to={[ExperimentListContainer, ExperimentContainer, ModelContainer]}
+      <div className="Experiment">
+        <Provider
+          inject={[
+            this.experimentListContainer,
+            this.experimentContainer,
+            this.modelContainer
+          ]}
         >
-          {(
-            experimentListContainer: any,
-            experimentContainer: any,
-            modelContainer: any
-          ) => (
-            <div className="wrapper">
-      
-              {experimentContainer.state.loading ? <h1>Loading...</h1> : null}
-              {experimentContainer.state.error ? (
-                <h1>{experimentContainer.state.error}</h1>
-              ) : null}
-
-              <React.Fragment>
-                <Panel className="header">
-                  {headerDisplay(experimentContainer.state.experiment)}
-                  {this.experimentsDisplay(
-                    experimentListContainer.state.experiments
-                  )}
-                </Panel>
-                <Panel className="sidebar">
-                  <Panel.Title>Method</Panel.Title>
-                  <Panel.Body>
-                    {methodDisplay(experimentContainer.state.experiment)}
-                  </Panel.Body>
-                </Panel>
-                <Panel className="sidebar2">
-                  <Panel.Title>Model</Panel.Title>
-                  <Panel.Body>
-                    {modelDisplay(modelContainer.state.model)}
-                  </Panel.Body>
-                </Panel>
-                <Panel className="content">
-                  <Panel.Title>Results</Panel.Title>
-                  <Panel.Body>
-                    {contentDisplay(experimentContainer.state.experiment)}
-                  </Panel.Body>
-                </Panel>
-              </React.Fragment>
-            </div>
-          )}
-        </Subscribe>
-      </Provider>
+          <Subscribe
+            to={[ExperimentListContainer, ExperimentContainer, ModelContainer]}
+          >
+            {(
+              experimentListContainer: any,
+              experimentContainer: any,
+              modelContainer: any
+            ) => (
+              <div className="wrapper">
+                <React.Fragment>
+                  <div className="header">
+                    {headerDisplay(
+                      experimentContainer.state.experiment,
+                      experimentListContainer.state.experiments,
+                      this.handleSelectExperiment
+                    )}
+                  </div>
+                  <div className="sidebar">
+                    <div>
+                      {methodDisplay(experimentContainer.state.experiment)}
+                      {modelDisplay(modelContainer.state.model)}
+                    </div>
+                  </div>
+                  <div className="content">
+                    {contentDisplay(experimentContainer.state)}
+                  </div>
+                </React.Fragment>
+              </div>
+            )}
+          </Subscribe>
+        </Provider>
+      </div>
     );
   }
 
-  private handleSelect = (experiment: IExperimentResult) => {
+  private handleSelectExperiment = (experiment: IExperimentResult) => {
     const { modelDefinitionId, uuid } = experiment;
     this.experimentContainer.load(uuid);
     this.modelContainer.load(modelDefinitionId!);
-  };
-
-  private experimentsDisplay = (
-    experiments: IExperimentResult[] | undefined
-  ) => {
-    if (experiments === undefined) {
-      return <p>Empty</p>;
-    }
-
-    return (
-      <Dropdown
-        items={experiments}
-        title="Other Experiments"
-        handleSelect={this.handleSelect}
-      />
-    );
   };
 }
 

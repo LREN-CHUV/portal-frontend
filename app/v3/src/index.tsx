@@ -4,8 +4,5 @@ import { App } from "./containers";
 import "./index.css";
 import { unregister } from "./registerServiceWorker";
 
-import "bootstrap/dist/css/bootstrap-theme.css";
-import "bootstrap/dist/css/bootstrap.css";
-
 ReactDOM.render(<App />, document.getElementById("root") as HTMLElement);
 unregister();
