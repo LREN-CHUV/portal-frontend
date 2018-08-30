@@ -12,41 +12,33 @@ class ExperimentContainer extends Container<IExperimentContainer> {
   public state: IExperimentContainer = {
     error: undefined,
     experiment: undefined,
-    loading: true
   };
 
   private baseUrl = `${process.env.REACT_APP_BACKEND_URL}/experiments`;
 
   public load = async (uuid: string) => {
-    await this.setState({ loading: true });
     try {
       const data = await request.get(`${this.baseUrl}/${uuid}`, config);
       const json = await JSON.parse(data);
       if (json.error) {
         return await this.setState({
           error: json.error,
-          loading: false
         });
       }
       const experiment = ParseExperiment.parse(json);
-      const { loading } = experiment;
       return await this.setState({
         error: undefined,
         experiment,
-        loading
       });
     } catch (error) {
       console.log({ error });
       return await this.setState({
         error: error.message,
-        loading: false
       });
     }
   };
 
   public create = async (params: any) => {
-    await this.setState({ loading: true });
-
     try {
       const data = await request({
         body: JSON.stringify(params),
@@ -59,17 +51,14 @@ class ExperimentContainer extends Container<IExperimentContainer> {
       });
       const json = await JSON.parse(data);
       const experiment = ParseExperiment.parse(json);
-      const { error, loading } = experiment;
       return await this.setState({
-        error,
+        error: undefined,
         experiment,
-        loading
       });
     } catch (error) {
       console.log(error);
       return await this.setState({
         error: error.message,
-        loading: false
       });
     }
   };

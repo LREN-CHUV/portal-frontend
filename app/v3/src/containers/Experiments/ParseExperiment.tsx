@@ -13,7 +13,8 @@ class ParseExperiment {
     let experimentResult: IExperimentResult = {
       algorithms: algorithms.map((e: any) => e.name),
       created: new Date(experiment.created),
-      loading: true,
+      finished: experiment.finished,
+      modelDefinitionId: experiment.model.slug,
       name: experiment.name,
       resultsViewed: experiment.resultsViewed,
       user: {
@@ -23,23 +24,10 @@ class ParseExperiment {
       uuid: experiment.uuid
     };
 
-    if (!experiment.model) {
-      experimentResult.error = "No model defined";
-      experimentResult.loading = false;
-
-      return experimentResult;
-    }
-
-    experimentResult = {
-      ...experimentResult,
-      modelDefinitionId: experiment.model.slug
-    };
-
     if (experiment.hasServerError) {
       experimentResult = {
         ...experimentResult,
         error: `${experiment.result}`,
-        loading: false
       };
 
       return experimentResult;
@@ -49,12 +37,10 @@ class ParseExperiment {
       const elapsed: number =
         (new Date().getTime() - new Date(experiment.created).getTime()) / 1000;
 
-        console.log(elapsed)
       if (elapsed > 60 * 5) {
         experimentResult = {
           ...experimentResult,
           error: "Timeout after 5 mn",
-          loading: false
         };
       }
 
@@ -70,7 +56,6 @@ class ParseExperiment {
       experimentResult = {
         ...experimentResult,
         error: "Exareme",
-        loading: false
       };
 
       return experimentResult;
@@ -187,7 +172,6 @@ class ParseExperiment {
       }
     });
     experimentResult.nodes = nodes;
-    experimentResult.loading = false;
 
     return experimentResult;
   };

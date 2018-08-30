@@ -7,9 +7,9 @@ import {
   INode
 } from "@app/types";
 import * as moment from "moment";
-
 import * as React from "react";
 import { Button, Panel, Tab, Tabs } from "react-bootstrap";
+import Plot from "react-plotly.js";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { Provider, Subscribe } from "unstated";
 import { Dropdown } from "../components";
@@ -123,9 +123,9 @@ const modelDisplay = (model: IModelResult | undefined) => {
 const contentDisplay = (state: IExperimentContainer | undefined) => {
   const experiment = state && state.experiment;
   const nodes = experiment && experiment.nodes;
+  const error = (state && state.error || experiment && experiment.error);
 
-  const loading = state && state.loading;
-  const error = (state && state.error) || (experiment && experiment.error);
+  const loading =  !nodes && !error;
 
   const methodsDisplay = (thenode: INode) => (
     <Tabs defaultActiveKey={0} id="tabs-methods">
@@ -142,6 +142,11 @@ const contentDisplay = (state: IExperimentContainer | undefined) => {
             {m.mime === "application/json" &&
               m.data.map((d: any, k: number) => (
                 <pre key={k}>{JSON.stringify(d, null, 2)}</pre>
+              ))}
+
+            {m.mime === "application/vnd.plotly.v1+json" &&
+              m.data.map((d: any, k: number) => (
+                <Plot key={k} data={d.data} layout={d.layout} />
               ))}
           </Tab>
         ))}
