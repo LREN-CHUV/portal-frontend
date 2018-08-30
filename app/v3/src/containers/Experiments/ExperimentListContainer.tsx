@@ -38,6 +38,7 @@ class ExperimentListContainer extends Container<IExperimentListContainer> {
       }
 
       return await this.setState({
+        error: undefined,
         experiments: json.map((j: IExperimentResult) =>
           ParseExperiment.parse(j)
         ),

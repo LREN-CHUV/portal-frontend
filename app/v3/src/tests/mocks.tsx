@@ -10,20 +10,21 @@ const validationDatasetsValue = process.env.REACT_APP_VALIDATIONDATASETS;
 const validationDatasets: string[] = validationDatasetsValue
   ? validationDatasetsValue.split(",")
   : [];
+  const Cookie = process.env.REACT_APP_COOKIE
 
 export const config: RequestInit =
   process.env.NODE_ENV === "production"
     ? {
         credentials: "same-origin"
       }
-    : {
-        // headers: {
-        //   Authorization: process.env.REACT_APP_AUTHORIZATION!,
-        //   Cookie: process.env.REACT_APP_COOKIE!,
-        //   "X-XSRF-TOKEN":
-        //     process.env.REACT_APP_COOKIE!.match(/XSRF-TOKEN=(.*)/)![1] || ""
-        // }
-      };
+    : Cookie ? {
+        headers: {
+          Authorization: process.env.REACT_APP_AUTHORIZATION!,
+          Cookie,
+          "X-XSRF-TOKEN":
+          Cookie.match(/XSRF-TOKEN=(.*)/)![1] || ""
+        }
+      } : {};
 
 export const models = {
   classification: {

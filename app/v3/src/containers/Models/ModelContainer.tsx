@@ -28,7 +28,11 @@ class ModelContainer extends Container<IModelContainer> {
         }));
       }
 
-      return await this.setState(state => ({ loading: false, model: json }));
+      return await this.setState(state => ({
+        error: undefined,
+        loading: false,
+        model: json
+      }));
     } catch (error) {
       console.log(error);
       return await this.setState(state => ({
@@ -48,10 +52,14 @@ class ModelContainer extends Container<IModelContainer> {
           "Content-Type": "application/json"
         },
         method: "POST",
-        uri: `${this.baseUrl}`,
+        uri: `${this.baseUrl}`
       });
       const json = await JSON.parse(data);
-      return await this.setState(state => ({ loading: false, model: json }));
+      return await this.setState(state => ({
+        error: undefined,
+        loading: false,
+        model: json
+      }));
     } catch (error) {
       console.log(error);
       return await this.setState(state => ({

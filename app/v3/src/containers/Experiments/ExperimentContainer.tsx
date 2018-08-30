@@ -28,8 +28,8 @@ class ExperimentContainer extends Container<IExperimentContainer> {
           loading: false
         });
       }
-
       return await this.setState({
+        error: undefined,
         experiment:ParseExperiment.parse(json),
         loading: false
       });
@@ -57,6 +57,7 @@ class ExperimentContainer extends Container<IExperimentContainer> {
       });
       const json = await JSON.parse(data);
       return await this.setState({
+        error: undefined,
         experiment: ParseExperiment.parse(json),
         loading: false
       });
