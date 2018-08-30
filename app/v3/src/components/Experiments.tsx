@@ -14,7 +14,12 @@ const renderExperiments = (experiments: IExperimentResult[] | undefined) => {
   return (
     <div>
       {experiments.map((experiment: IExperimentResult) => {
-        const status: [string, string] = experiment.loading
+          const nodes = experiment && experiment.nodes;
+          const error = (experiment && experiment.error);
+        
+          const loading =  !nodes && !error;
+
+        const status: [string, string] = loading
           ? ["loading", "info"]
           : experiment.error
             ? [experiment.error, "danger"]

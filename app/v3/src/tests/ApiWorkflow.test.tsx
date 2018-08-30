@@ -14,7 +14,9 @@ beforeAll(() => {
 
 test.only("initial state is: loading", () => {
   const experimentContainer = new ExperimentContainer();
-  expect(experimentContainer.state.loading).toBe(true);
+  expect(experimentContainer.state.error).toBeUndefined();
+  expect(experimentContainer.state.experiment).toBeUndefined();
+
 });
 
 test("Create new model", async () => {

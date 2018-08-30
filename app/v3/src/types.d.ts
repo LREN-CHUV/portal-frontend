@@ -45,11 +45,11 @@ export interface User {
 export interface IExperimentResult {
   created: Date,
   error?: string,
-  loading: boolean,
+  finished?: Date
   name: string,
   resultsViewed: boolean,
   uuid: string,
-  modelDefinitionId?: string,
+  modelDefinitionId: string,
   nodes?: INode[],
   user: User;
   algorithms: string[]
@@ -88,7 +88,6 @@ export interface IExperimentListContainer {
 export interface IExperimentContainer {
   error?: string;
   experiment?: IExperimentResult;
-  loading: boolean;
 }
 
 export interface IModelContainer {
