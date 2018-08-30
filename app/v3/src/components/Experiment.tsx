@@ -120,7 +120,11 @@ const modelDisplay = (model: IModelResult | undefined) => {
 };
 
 const contentDisplay = (state: IExperimentContainer | undefined) => {
+  
+  const loading = state && state.loading;
+  const error = state && state.error;
   const experiment = state && state.experiment;
+  const experimentError = experiment && experiment.error;
   const nodes = experiment && experiment.nodes;
 
   return (
@@ -129,8 +133,10 @@ const contentDisplay = (state: IExperimentContainer | undefined) => {
         <h3>Results</h3>
       </Panel.Title>
       <Panel.Body>
-        {state && state.loading ? <p>Loading...</p> : null}
-        {state && state.error ? <p>{state.error}</p> : null}
+        {loading ? <p>Loading...</p> : null}
+        {error ? <p>{error}</p> : null}
+        {experimentError ? <p>{experimentError}</p> : null}
+
         <Tabs defaultActiveKey={0} id="tabs-node">
           {nodes &&
             nodes.map((n: any, i: number) => (
@@ -199,24 +205,22 @@ class Experiment extends React.Component<
               modelContainer: any
             ) => (
               <div className="wrapper">
-                <React.Fragment>
-                  <div className="header">
-                    {headerDisplay(
-                      experimentContainer.state.experiment,
-                      experimentListContainer.state.experiments,
-                      this.handleSelectExperiment
-                    )}
+                <div className="header">
+                  {headerDisplay(
+                    experimentContainer.state.experiment,
+                    experimentListContainer.state.experiments,
+                    this.handleSelectExperiment
+                  )}
+                </div>
+                <div className="sidebar">
+                  <div>
+                    {methodDisplay(experimentContainer.state.experiment)}
+                    {modelDisplay(modelContainer.state.model)}
                   </div>
-                  <div className="sidebar">
-                    <div>
-                      {methodDisplay(experimentContainer.state.experiment)}
-                      {modelDisplay(modelContainer.state.model)}
-                    </div>
-                  </div>
-                  <div className="content">
-                    {contentDisplay(experimentContainer.state)}
-                  </div>
-                </React.Fragment>
+                </div>
+                <div className="content">
+                  {contentDisplay(experimentContainer.state)}
+                </div>
               </div>
             )}
           </Subscribe>
@@ -229,6 +233,7 @@ class Experiment extends React.Component<
     const { modelDefinitionId, uuid } = experiment;
     this.experimentContainer.load(uuid);
     this.modelContainer.load(modelDefinitionId!);
+    this.props.history.push(`/v3/experiment/${modelDefinitionId}/${uuid}`)
   };
 }
 

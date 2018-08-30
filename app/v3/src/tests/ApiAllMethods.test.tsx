@@ -53,7 +53,7 @@ test.skip(`Set experiments`, async () => {
   console.log("> Set experiments");
 
   await Promise.all(
-    experiments.map(async experiment => {
+    experiments.slice(5,10).map(async experiment => {
       const experimentContainer = new ExperimentContainer();
       const model = Object.keys(models).find(
         key => models[key] === experiment.model
