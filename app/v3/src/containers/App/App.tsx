@@ -1,10 +1,12 @@
-import * as React from "react";
-import { BrowserRouter as Router, Route } from "react-router-dom";
-import { Experiment, Experiments, Navigation } from "../../components";
-
 // import "./Bootstrap-custom.css"
 import "bootstrap/dist/css/bootstrap.css";
+import * as React from "react";
+import { BrowserRouter as Router, Route } from "react-router-dom";
+import UNSTATED from "unstated-debug";
+import { Experiment, Experiments, Navigation } from "../../components";
 import "./App.css";
+
+UNSTATED.logStateChanges = process.env.NODE_ENV === "development";
 
 class App extends React.Component {
   public render() {

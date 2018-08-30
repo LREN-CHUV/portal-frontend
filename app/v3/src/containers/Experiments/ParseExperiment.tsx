@@ -49,6 +49,7 @@ class ParseExperiment {
       const elapsed: number =
         (new Date().getTime() - new Date(experiment.created).getTime()) / 1000;
 
+        console.log(elapsed)
       if (elapsed > 60 * 5) {
         experimentResult = {
           ...experimentResult,
@@ -271,7 +272,13 @@ const jsonTest = (data: any) => {
 const errorTest = (data: any, error: any) => {
   let errorOutput;
   if (data) {
-    errorOutput = data.error;
+    try {
+      const subError = JSON.parse(data)
+      errorOutput = subError.error
+    } catch(e) {
+      errorOutput = data.error;
+    }
+    
   } else {
     errorOutput = error;
   }

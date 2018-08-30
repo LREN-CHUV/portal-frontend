@@ -33,7 +33,7 @@
 
 .experiment-header {
   display: grid;
-  grid-template-columns: auto 180px 180px;
+  grid-template-columns: auto 190px 200px;
 }
 
 .Experiment .item {

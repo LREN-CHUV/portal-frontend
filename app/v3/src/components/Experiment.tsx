@@ -3,7 +3,8 @@ import {
   IExperimentContainer,
   // IExperimentListContainer,
   IExperimentResult,
-  IModelResult
+  IModelResult,
+  INode
 } from "@app/types";
 import * as moment from "moment";
 
@@ -120,12 +121,43 @@ const modelDisplay = (model: IModelResult | undefined) => {
 };
 
 const contentDisplay = (state: IExperimentContainer | undefined) => {
-  
-  const loading = state && state.loading;
-  const error = state && state.error;
   const experiment = state && state.experiment;
-  const experimentError = experiment && experiment.error;
   const nodes = experiment && experiment.nodes;
+
+  const loading = state && state.loading;
+  const error = (state && state.error) || (experiment && experiment.error);
+
+  const methodsDisplay = (thenode: INode) => (
+    <Tabs defaultActiveKey={0} id="tabs-methods">
+      {thenode.methods &&
+        thenode.methods.map((m: any, j: number) => (
+          <Tab eventKey={j} title={m.algorithm} key={j}>
+            {m.mime === "text/plain+error" && (
+              <div>
+                <h3>An error has occured</h3>
+                <p>{m.error}</p>
+              </div>
+            )}
+
+            {m.mime === "application/json" &&
+              m.data.map((d: any, k: number) => (
+                <pre key={k}>{JSON.stringify(d, null, 2)}</pre>
+              ))}
+          </Tab>
+        ))}
+    </Tabs>
+  );
+
+  const nodesDisplay = (thenodes: INode[]) => (
+    <Tabs defaultActiveKey={0} id="tabs-node">
+      {thenodes &&
+        thenodes.map((node: any, i: number) => (
+          <Tab eventKey={i} title={node.name} key={i}>
+            {methodsDisplay(node)}
+          </Tab>
+        ))}
+    </Tabs>
+  );
 
   return (
     <Panel>
@@ -133,25 +165,23 @@ const contentDisplay = (state: IExperimentContainer | undefined) => {
         <h3>Results</h3>
       </Panel.Title>
       <Panel.Body>
-        {loading ? <p>Loading...</p> : null}
-        {error ? <p>{error}</p> : null}
-        {experimentError ? <p>{experimentError}</p> : null}
-
-        <Tabs defaultActiveKey={0} id="tabs-node">
-          {nodes &&
-            nodes.map((n: any, i: number) => (
-              <Tab eventKey={i} title={n.name}>
-                <Tabs defaultActiveKey={0} id="tabs-methods">
-                  {n.methods &&
-                    n.methods.map((m: any, j: number) => (
-                      <Tab eventKey={j} title={m.algorithm}>
-                        <pre>{JSON.stringify(m, null, 4)}</pre>
-                      </Tab>
-                    ))}
-                </Tabs>
-              </Tab>
-            ))}
-        </Tabs>
+        {loading ? (
+          <div>
+            <h3>Your experiment is currently running...</h3>
+            <p>
+              Please check back in a few minutes. This page will automatically
+              refresh once your experiment has finished executing.
+            </p>
+          </div>
+        ) : null}
+        {error ? (
+          <div>
+            <h3>An error has occured</h3>
+            <p>{error}</p>
+          </div>
+        ) : null}
+        {nodes && nodes.length > 1 && nodesDisplay(nodes)}
+        {nodes && nodes.length === 1 && methodsDisplay(nodes[0])}
       </Panel.Body>
     </Panel>
   );
@@ -181,6 +211,18 @@ class Experiment extends React.Component<
       return;
     }
     const { uuid, slug } = matched.params;
+    // setInterval(() => {
+    //   this.experimentListContainer.load();
+    //   this.experimentContainer.load(uuid);
+    // }, 10000);
+
+    // if (
+    //   this.experimentContainer.state.error ||
+    //   (this.experimentContainer.state.experiment &&
+    //     this.experimentContainer.state.experiment.error)
+    // ) {
+    //   clearInterval(interval);
+    // }
 
     await this.experimentContainer.load(uuid);
     return await this.modelContainer.load(slug);
@@ -233,7 +275,7 @@ class Experiment extends React.Component<
     const { modelDefinitionId, uuid } = experiment;
     this.experimentContainer.load(uuid);
     this.modelContainer.load(modelDefinitionId!);
-    this.props.history.push(`/v3/experiment/${modelDefinitionId}/${uuid}`)
+    this.props.history.push(`/v3/experiment/${modelDefinitionId}/${uuid}`);
   };
 }
 

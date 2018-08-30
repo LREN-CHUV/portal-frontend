@@ -28,10 +28,12 @@ class ExperimentContainer extends Container<IExperimentContainer> {
           loading: false
         });
       }
+      const experiment = ParseExperiment.parse(json);
+      const { loading } = experiment;
       return await this.setState({
         error: undefined,
-        experiment:ParseExperiment.parse(json),
-        loading: false
+        experiment,
+        loading
       });
     } catch (error) {
       console.log({ error });
@@ -56,10 +58,12 @@ class ExperimentContainer extends Container<IExperimentContainer> {
         uri: `${this.baseUrl}`
       });
       const json = await JSON.parse(data);
+      const experiment = ParseExperiment.parse(json);
+      const { error, loading } = experiment;
       return await this.setState({
-        error: undefined,
-        experiment: ParseExperiment.parse(json),
-        loading: false
+        error,
+        experiment,
+        loading
       });
     } catch (error) {
       console.log(error);
