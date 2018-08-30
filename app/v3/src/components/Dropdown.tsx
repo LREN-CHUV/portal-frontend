@@ -15,18 +15,17 @@ export default ({
 }: IDropdown) => (
   <DropdownButton
     bsStyle="default"
-    bsSize="small"
-    id={"dropdown-basic"}
+    id={"experiment-dropdown"}
     title={title}
   >
     {items &&
       handleSelect &&
-      items.map((m, i: number) => (
+      items.map((experiment, i: number) => (
         // tslint:disable-next-line jsx-no-lambda
-        <MenuItem eventKey={i} key={m.uuid} onSelect={() => handleSelect(m)}>
-          {m.error? <span>x </span>: null}
-          {m.loading? <span>... </span>: null}
-          <strong>{m.name}</strong>{" - "}{moment(m.created, "YYYYMMDD").fromNow()}
+        <MenuItem eventKey={i} key={experiment.uuid} onSelect={() => handleSelect(experiment)}>
+          {experiment.error? <span>x </span>: null}
+          {experiment.loading? <span>... </span>: null}
+          <strong>{experiment.name}</strong>{" - "}{moment(experiment.created, "YYYYMMDD").fromNow()}
         </MenuItem>
       ))}
   </DropdownButton>
