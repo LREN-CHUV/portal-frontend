@@ -38,7 +38,7 @@ export default ({
               <span className={"glyphicon-eye-open glyph viewed"}  />
             ) : (
               <span className={"glyphicon-eye-open glyph success"}  />
-            )}{" "}
+            )}{"  "}
             <strong>{experiment.name}</strong>
             {" - "}
             {moment(experiment.created, "YYYYMMDD").fromNow()}
