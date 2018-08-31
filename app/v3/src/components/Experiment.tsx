@@ -1,4 +1,6 @@
 // tslint:disable:no-console
+import { Highchart, Plotly } from "./Experiment/";
+
 import {
   IExperimentContainer,
   // IExperimentListContainer,
@@ -6,10 +8,10 @@ import {
   IModelResult,
   INode
 } from "@app/types";
-import * as moment from "moment";
+import moment from "moment";
 import * as React from "react";
 import { Button, Panel, Tab, Tabs } from "react-bootstrap";
-import Plot from "react-plotly.js";
+
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { Provider, Subscribe } from "unstated";
 import { Dropdown } from "../components";
@@ -30,9 +32,9 @@ const headerDisplay = (
   experiments: IExperimentResult[] | undefined,
   handleSelect: any
 ) => {
-  const title = (experiment && experiment.name) || "undefined";
+  const title = (experiment && experiment.name);
   const modelDefinitionId =
-    (experiment && experiment.modelDefinitionId) || "undefined model";
+    (experiment && experiment.modelDefinitionId);
 
   return (
     <Panel>
@@ -46,7 +48,7 @@ const headerDisplay = (
         </div>
         <div className="item">
           <Dropdown
-            items={experiments}
+            items={experiment && experiments && experiments.filter(e => e.modelDefinitionId === experiment.modelDefinitionId)}
             title="RELATED EXPERIMENTS"
             handleSelect={handleSelect}
           />
@@ -56,7 +58,7 @@ const headerDisplay = (
       <Panel.Body>
         <h5>
           Created{" "}
-          {experiment && moment(experiment.created, "YYYYMMDD").fromNow()} by{" "}
+          {experiment && moment(new Date(experiment.created), "YYYYMMDD").fromNow()} by{" "}
           {experiment && experiment.user.username}
         </h5>
       </Panel.Body>
@@ -70,10 +72,8 @@ const methodDisplay = (experiment: IExperimentResult | undefined) => (
       <h3>Methods</h3>
     </Panel.Title>
     <Panel.Body>
-      <ul>
         {experiment &&
-          experiment.algorithms.map((m: any) => <li key={m}>{m}</li>)}
-      </ul>
+          experiment.algorithms.map((m: any) => <p key={m}>{m}</p>)}
     </Panel.Body>
   </Panel>
 );
@@ -123,9 +123,9 @@ const modelDisplay = (model: IModelResult | undefined) => {
 const contentDisplay = (state: IExperimentContainer | undefined) => {
   const experiment = state && state.experiment;
   const nodes = experiment && experiment.nodes;
-  const error = (state && state.error || experiment && experiment.error);
+  const error = (state && state.error) || (experiment && experiment.error);
 
-  const loading =  !nodes && !error;
+  const loading = !nodes && !error;
 
   const methodsDisplay = (thenode: INode) => (
     <Tabs defaultActiveKey={0} id="tabs-methods">
@@ -138,16 +138,24 @@ const contentDisplay = (state: IExperimentContainer | undefined) => {
                 <p>{m.error}</p>
               </div>
             )}
-
             {m.mime === "application/json" &&
               m.data.map((d: any, k: number) => (
                 <pre key={k}>{JSON.stringify(d, null, 2)}</pre>
               ))}
-
             {m.mime === "application/vnd.plotly.v1+json" &&
-              m.data.map((d: any, k: number) => (
-                <Plot key={k} data={d.data} layout={d.layout} />
+              m.data.map((d: { data: any; layout: any }, k: number) => (
+                <Plotly data={d.data} layout={d.layout} key={k} />
               ))}
+            {m.mime === "application/vnd.highcharts+json" &&
+              m.data.map((d: { data: any; }, k: number) => (
+                <Highchart options={d}  key={k} />
+              ))}
+
+            {m.mime === "application/pfa+json" &&
+              m.data.map((d: any, k: number) => (
+                <pre key={k}>{JSON.stringify(d, null, 2)}</pre>
+              ))}
+            
           </Tab>
         ))}
     </Tabs>

@@ -1,0 +1,23 @@
+.glyph {
+  position: relative;
+  top: 3px;
+  display: inline-block;
+  font-family: "Glyphicons Halflings";
+  font-style: normal;
+  font-weight: normal;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.viewed {
+    color: gray;
+}
+
+.success {
+    color: #4cae4c
+}
+
+.info {
+    color: #5bc0de;
+}

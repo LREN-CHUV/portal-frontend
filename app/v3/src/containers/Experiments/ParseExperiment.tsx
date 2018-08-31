@@ -9,10 +9,19 @@ import {
 
 class ParseExperiment {
   public static parse = (experiment: any): IExperimentResult => {
+    // Formats are differents in the API for 1 experiment and array of experiments, apply specific parsing to some terms
     const algorithms = parse(experiment.algorithms);
+    const created = (() => {
+      const d = Date.parse(experiment.created + " GMT");
+      if (isNaN(d)) {
+        return new Date(experiment.created);
+      }
+
+      return new Date(d);
+    })();
     let experimentResult: IExperimentResult = {
       algorithms: algorithms.map((e: any) => e.name),
-      created: new Date(experiment.created),
+      created,
       finished: experiment.finished,
       modelDefinitionId: experiment.model.slug,
       name: experiment.name,
@@ -27,7 +36,7 @@ class ParseExperiment {
     if (experiment.hasServerError) {
       experimentResult = {
         ...experimentResult,
-        error: `${experiment.result}`,
+        error: `${experiment.result}`
       };
 
       return experimentResult;
@@ -35,28 +44,14 @@ class ParseExperiment {
 
     if (!experiment.result) {
       const elapsed: number =
-        (new Date().getTime() - new Date(experiment.created).getTime()) / 1000;
+        (new Date().getTime() - experimentResult.created.getTime()) / 1000;
 
       if (elapsed > 60 * 5) {
         experimentResult = {
           ...experimentResult,
-          error: "Timeout after 5 mn",
+          error: "Timeout after 5 mn"
         };
       }
-
-      return experimentResult;
-    }
-
-    const codes = algorithms.map((a: any) => a.code);
-
-    if (
-      codes.includes("PIPELINE_ISOUP_MODEL_TREE_SERIALIZER") ||
-      codes.includes("WP_LINEAR_REGRESSION")
-    ) {
-      experimentResult = {
-        ...experimentResult,
-        error: "Exareme",
-      };
 
       return experimentResult;
     }
@@ -80,6 +75,7 @@ class ParseExperiment {
         (input.data && (input.data.length ? input.data : [input.data])) || null;
 
       const results = normalizedResult(r);
+
       switch (mime) {
         case "application/vnd.highcharts+json":
           method.data = highcharts(results);
@@ -90,11 +86,7 @@ class ParseExperiment {
           break;
 
         case "application/pfa+json":
-          method = {
-            ...method,
-            ...pfa(results)
-          };
-
+          method.data = [pfa(results)];
           break;
 
         case "application/vnd.hbp.mip.experiment.pfa+json":
@@ -122,19 +114,15 @@ class ParseExperiment {
                 break;
 
               case "application/vnd.plotly.v1+json":
-                // console.log("application/vnd.plotly.v1+json");
+                console.log("application/vnd.plotly.v1+json");
                 break;
 
               case "application/pfa+json":
-                method = {
-                  ...method,
-                  ...pfa(normalizedResult(subResult))
-                };
-
+                method.data = [pfa(normalizedResult(subResult))];
                 break;
 
               default:
-              // console.log("!!!!!!!! SHOULD TEST", subResult.type);
+                console.log("!!!!!!!! SHOULD TEST", subResult.type);
             }
           });
 
@@ -153,20 +141,27 @@ class ParseExperiment {
           break;
 
         default:
-        // console.log("!!!!!!!! SHOULD TEST", mime);
+          method = {
+            ...method,
+            algorithm: "no data",
+            error: "no data",
+            mime: "no data"
+          };
       }
 
       // In case we have 2 methods on 2 same nodes
       // merge nodes
       if (nodes.length) {
-        const node: INode | undefined = nodes.find((n: any) => n.name === r.node);
+        const node: INode | undefined = nodes.find(
+          (n: any) => n.name === r.node
+        );
         if (node) {
           node.methods.push(method);
         }
       } else {
         const node: INode = {
           methods: [method],
-          name: r.node
+          name: r.node || "Default"
         };
         nodes.push(node);
       }
@@ -257,17 +252,16 @@ const errorTest = (data: any, error: any) => {
   let errorOutput;
   if (data) {
     try {
-      const subError = JSON.parse(data)
-      errorOutput = subError.error
-    } catch(e) {
+      const subError = JSON.parse(data);
+      errorOutput = subError.error;
+    } catch (e) {
       errorOutput = data.error;
     }
-    
   } else {
     errorOutput = error;
   }
 
-  return errorOutput.slice(-144);
+  return errorOutput.slice(-256);
 };
 
 const parse = (value: any) => {
