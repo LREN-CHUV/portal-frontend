@@ -1,5 +1,5 @@
 // tslint:disable:no-console
-import { IExperimentListContainer, IExperimentResult } from "@app/types";
+import { IExperimentListContainer, IExperimentResult, IExperimentContainer } from "@app/types";
 import * as React from "react";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { Subscribe } from "unstated";
@@ -8,7 +8,11 @@ import { Dropdown } from "./";
 
 import "./Navigation.css";
 
-class Navigation extends React.Component<RouteComponentProps<any>> {
+interface INavigation {
+  experimentContainer: IExperimentContainer;
+}
+
+class Navigation extends React.Component<RouteComponentProps<INavigation>> {
   public render() {
     return (
       <nav>
@@ -28,6 +32,7 @@ class Navigation extends React.Component<RouteComponentProps<any>> {
   private handleSelectExperiment = (experiment: IExperimentResult) => {
     const { modelDefinitionId, uuid } = experiment;
     this.props.history.push(`/v3/experiment/${modelDefinitionId}/${uuid}`);
+    this.props.experimentContainer.load(uuid)
   };
 }
 
