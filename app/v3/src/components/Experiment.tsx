@@ -3,7 +3,6 @@ import { Highchart, Plotly } from "./Experiment/";
 
 import {
   IExperimentContainer,
-  // IExperimentListContainer,
   IExperimentResult,
   IModelResult,
   INode
@@ -203,13 +202,11 @@ const contentDisplay = (state: IExperimentContainer | undefined) => {
 class Experiment extends React.Component<
   RouteComponentProps<IExperimentParams>
 > {
-  private experimentListContainer: ExperimentListContainer;
   private experimentContainer: ExperimentContainer;
   private modelContainer: ModelContainer;
 
   constructor(props: any) {
     super(props);
-    this.experimentListContainer = new ExperimentListContainer();
     this.experimentContainer = new ExperimentContainer();
     this.modelContainer = new ModelContainer();
 
@@ -217,7 +214,6 @@ class Experiment extends React.Component<
   }
 
   public async componentDidMount() {
-    await this.experimentListContainer.load();
     // Get url parameters
     const { match: matched } = this.props;
     if (!matched) {
@@ -246,7 +242,6 @@ class Experiment extends React.Component<
       <div className="Experiment">
         <Provider
           inject={[
-            this.experimentListContainer,
             this.experimentContainer,
             this.modelContainer
           ]}

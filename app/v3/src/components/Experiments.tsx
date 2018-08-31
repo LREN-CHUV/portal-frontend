@@ -2,7 +2,7 @@
 import { IExperimentListContainer, IExperimentResult } from "@app/types";
 import * as React from "react";
 import { Label, Panel } from "react-bootstrap";
-import { Provider, Subscribe } from "unstated";
+import { Subscribe } from "unstated";
 import { ExperimentListContainer } from "../containers";
 import "./Experiments.css";
 
@@ -14,10 +14,10 @@ const renderExperiments = (experiments: IExperimentResult[] | undefined) => {
   return (
     <div>
       {experiments.map((experiment: IExperimentResult) => {
-          const nodes = experiment && experiment.nodes;
-          const error = (experiment && experiment.error);
-        
-          const loading =  !nodes && !error;
+        const nodes = experiment && experiment.nodes;
+        const error = experiment && experiment.error;
+
+        const loading = !nodes && !error;
 
         const status: [string, string] = loading
           ? ["loading", "info"]
@@ -53,26 +53,13 @@ const renderExperiments = (experiments: IExperimentResult[] | undefined) => {
 };
 
 class Experiment extends React.Component {
-  private experimentListContainer: any;
-
-  constructor(props: any) {
-    super(props);
-    this.experimentListContainer = new ExperimentListContainer();
-  }
-
-  public async componentDidMount() {
-    await this.experimentListContainer.load();
-  }
-
   public render() {
     return (
-      <Provider inject={[this.experimentListContainer]}>
-        <Subscribe to={[ExperimentListContainer]}>
-          {({ state }: { state: IExperimentListContainer }) =>
-            renderExperiments(state.experiments)
-          }
-        </Subscribe>
-      </Provider>
+      <Subscribe to={[ExperimentListContainer]}>
+        {({ state }: { state: IExperimentListContainer }) =>
+          renderExperiments(state.experiments)
+        }
+      </Subscribe>
     );
   }
 }
