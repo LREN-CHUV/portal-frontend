@@ -12,19 +12,16 @@ test("Fetch experiments", async () => {
 
   expect(experiments).toBeDefined();
 
-  experiments.forEach((experiment, index) => {
+  experiments.forEach((experiment: IExperimentResult, index) => {
+    
+    
     expect(experiment.created).toBeDefined();
-    expect(experiment.loading).toBeDefined();
     expect(experiment.name).toBeDefined();
     expect(experiment.resultsViewed).toBeDefined();
     expect(experiment.uuid).toBeDefined();
     expect(experiment.modelDefinitionId).toBeDefined();
     expect(experiment.user).toBeDefined();
     expect(experiment.algorithms).toBeDefined();
-
-    if (experiment.error) {
-      expect(experiment.loading).toBeFalsy();
-    }
 
     if (experiment.nodes) {
       expect(experiment.finished).toBeDefined();
@@ -34,6 +31,8 @@ test("Fetch experiments", async () => {
         expect(node.methods).toBeDefined();
 
         node.methods.forEach(method => {
+          // console.log(experiment.name, experiment.uuid);
+          // console.log(JSON.stringify(method, null, 4))
           expect(method.mime).toBeDefined();
           expect(method.algorithm).toBeDefined();
           expect(method.data || method.error).toBeDefined();
