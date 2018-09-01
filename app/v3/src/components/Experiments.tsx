@@ -1,9 +1,7 @@
 // tslint:disable:no-console
-import { IExperimentListContainer, IExperimentResult } from "@app/types";
+import { IExperimentResult } from "@app/types";
 import * as React from "react";
 import { Label, Panel } from "react-bootstrap";
-import { Subscribe } from "unstated";
-import { ExperimentListContainer } from "../containers";
 import "./Experiments.css";
 
 const renderExperiments = (experiments: IExperimentResult[] | undefined) => {
@@ -52,15 +50,10 @@ const renderExperiments = (experiments: IExperimentResult[] | undefined) => {
   );
 };
 
-class Experiment extends React.Component {
+class Experiment extends React.Component<any> {
   public render() {
-    return (
-      <Subscribe to={[ExperimentListContainer]}>
-        {({ state }: { state: IExperimentListContainer }) =>
-          renderExperiments(state.experiments)
-        }
-      </Subscribe>
-    );
+    const { experimentListContainer } = this.props;
+    return renderExperiments(experimentListContainer.state.experiments);
   }
 }
 

@@ -1,8 +1,10 @@
 // import "./Bootstrap-custom.css"
+// tslint:disable:no-console
+
 import "bootstrap/dist/css/bootstrap.css";
 import * as React from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
-import { Provider } from "unstated";
+import { Provider, Subscribe } from "unstated";
 import {
   ExperimentContainer,
   ExperimentListContainer,
@@ -17,21 +19,9 @@ import "./App.css";
 UNSTATED.logStateChanges = process.env.NODE_ENV === "development";
 
 class App extends React.Component {
-  private experimentListContainer: ExperimentListContainer;
-  private experimentContainer: ExperimentContainer;
-  private modelContainer: ModelContainer;
-
-  constructor(props: any) {
-    super(props);
-    this.experimentListContainer = new ExperimentListContainer();
-    this.experimentContainer = new ExperimentContainer();
-    this.modelContainer = new ModelContainer();
-  }
-
-  public async componentDidMount() {
-    return await this.experimentListContainer.load();
-  }
-
+  private experimentControler = new ExperimentContainer();
+  private experimentListContainer = new ExperimentListContainer();
+  private modelContainer = new ModelContainer();
   // public async componentWillReceiveProps() {
   //   const { match: matched } = this.props;
   //   if (!matched) {
@@ -47,20 +37,54 @@ class App extends React.Component {
       <Router>
         <Provider
           inject={[
+            this.experimentControler,
             this.experimentListContainer,
-            this.experimentContainer,
             this.modelContainer
           ]}
         >
-          <div className="App">
-            <header className="Navigation">
-              <Navigation experimentContainer={this.experimentContainer} />
-            </header>
-            <section>
-              <Route path="/v3/experiments" component={Experiments} />
-              <Route path="/v3/experiment/:slug/:uuid" component={Experiment} />
-            </section>
-          </div>
+          <Subscribe
+            to={[ExperimentContainer, ExperimentListContainer, ModelContainer]}
+          >
+            {(
+              experimentContainer: any,
+              experimentListContainer: any,
+              modelContainer: any
+            ) => (
+              <div className="App">
+                <header className="Navigation">
+                  <Navigation
+                    experimentContainer={experimentContainer}
+                    experimentListContainer={experimentListContainer}
+                    modelContainer={modelContainer}
+                  />
+                </header>
+                <section>
+                  <Route
+                    path="/v3/experiments"
+                    // tslint:disable-next-line jsx-no-lambda
+                    render={() => (
+                      <Experiments
+                        experimentContainer={experimentContainer}
+                        experimentListContainer={experimentListContainer}
+                      />
+                    )}
+                  />
+
+                  <Route
+                    path="/v3/experiment/:slug/:uuid"
+                    // tslint:disable-next-line jsx-no-lambda
+                    render={() => (
+                      <Experiment
+                        experimentContainer={experimentContainer}
+                        experimentListContainer={experimentListContainer}
+                        modelContainer={modelContainer}
+                      />
+                    )}
+                  />
+                </section>
+              </div>
+            )}
+          </Subscribe>
         </Provider>
       </Router>
     );

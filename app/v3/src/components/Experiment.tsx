@@ -11,45 +11,56 @@ import moment from "moment";
 import * as React from "react";
 import { Button, Panel, Tab, Tabs } from "react-bootstrap";
 
-import { RouteComponentProps, withRouter } from "react-router-dom";
-import { Provider, Subscribe } from "unstated";
+import { withRouter } from "react-router-dom";
 import { Dropdown } from "../components";
-import {
-  ExperimentContainer,
-  ExperimentListContainer,
-  ModelContainer
-} from "../containers";
 
 import "./Experiment.css";
-interface IExperimentParams {
-  slug: string;
-  uuid: string;
-}
+// interface IExperimentParams {
+//   slug: string;
+//   uuid: string;
+// }
 
 const headerDisplay = (
-  experiment: IExperimentResult | undefined,
+  experimentContainer: any | undefined,
   experiments: IExperimentResult[] | undefined,
-  handleSelect: any
+  history: any
 ) => {
-  const title = (experiment && experiment.name);
-  const modelDefinitionId =
-    (experiment && experiment.modelDefinitionId);
+  const state = experimentContainer && experimentContainer.state;
+  const experiment = state && state.experiment;
+  const title = experiment && experiment.name;
+  const modelId = experiment && experiment.modelDefinitionId;
+
+  const handleSelectExperiment = async (
+    selectedExperiment: IExperimentResult
+  ) => {
+    const { modelDefinitionId, uuid } = selectedExperiment;
+    history.push(`/v3/experiment/${modelDefinitionId}/${uuid}`);
+
+    const load = experimentContainer && experimentContainer.load;
+    return await load(uuid);
+  };
 
   return (
     <Panel>
       <Panel.Title className="experiment-header">
         <h3 className="item">
           Results of Experiment <strong>{title}</strong> on{" "}
-          <a href={`/models/${modelDefinitionId}`}>{modelDefinitionId}</a>
+          <a href={`/models/${modelId}`}>{modelId}</a>
         </h3>
         <div className="item">
           <Button bsStyle="info">SHARE EXPERIMENT</Button>
         </div>
         <div className="item">
           <Dropdown
-            items={experiment && experiments && experiments.filter(e => e.modelDefinitionId === experiment.modelDefinitionId)}
+            items={
+              experiment &&
+              experiments &&
+              experiments.filter(
+                e => e.modelDefinitionId === experiment.modelDefinitionId
+              )
+            }
             title="RELATED EXPERIMENTS"
-            handleSelect={handleSelect}
+            handleSelect={handleSelectExperiment}
           />
         </div>
       </Panel.Title>
@@ -57,8 +68,9 @@ const headerDisplay = (
       <Panel.Body>
         <h5>
           Created{" "}
-          {experiment && moment(new Date(experiment.created), "YYYYMMDD").fromNow()} by{" "}
-          {experiment && experiment.user.username}
+          {experiment &&
+            moment(new Date(experiment.created), "YYYYMMDD").fromNow()}{" "}
+          by {experiment && experiment.user.username}
         </h5>
       </Panel.Body>
     </Panel>
@@ -71,8 +83,7 @@ const methodDisplay = (experiment: IExperimentResult | undefined) => (
       <h3>Methods</h3>
     </Panel.Title>
     <Panel.Body>
-        {experiment &&
-          experiment.algorithms.map((m: any) => <p key={m}>{m}</p>)}
+      {experiment && experiment.algorithms.map((m: any) => <p key={m}>{m}</p>)}
     </Panel.Body>
   </Panel>
 );
@@ -146,15 +157,14 @@ const contentDisplay = (state: IExperimentContainer | undefined) => {
                 <Plotly data={d.data} layout={d.layout} key={k} />
               ))}
             {m.mime === "application/vnd.highcharts+json" &&
-              m.data.map((d: { data: any; }, k: number) => (
-                <Highchart options={d}  key={k} />
+              m.data.map((d: { data: any }, k: number) => (
+                <Highchart options={d} key={k} />
               ))}
 
             {m.mime === "application/pfa+json" &&
               m.data.map((d: any, k: number) => (
                 <pre key={k}>{JSON.stringify(d, null, 2)}</pre>
               ))}
-            
           </Tab>
         ))}
     </Tabs>
@@ -199,20 +209,7 @@ const contentDisplay = (state: IExperimentContainer | undefined) => {
   );
 };
 
-class Experiment extends React.Component<
-  RouteComponentProps<IExperimentParams>
-> {
-  private experimentContainer: ExperimentContainer;
-  private modelContainer: ModelContainer;
-
-  constructor(props: any) {
-    super(props);
-    this.experimentContainer = new ExperimentContainer();
-    this.modelContainer = new ModelContainer();
-
-    this.handleSelectExperiment = this.handleSelectExperiment.bind(this);
-  }
-
+class Experiment extends React.Component<any> {
   public async componentDidMount() {
     // Get url parameters
     const { match: matched } = this.props;
@@ -220,71 +217,42 @@ class Experiment extends React.Component<
       return;
     }
     const { uuid, slug } = matched.params;
-    // setInterval(() => {
-    //   this.experimentListContainer.load();
-    //   this.experimentContainer.load(uuid);
-    // }, 10000);
+    const { experimentContainer, modelContainer } = this.props;
 
-    // if (
-    //   this.experimentContainer.state.error ||
-    //   (this.experimentContainer.state.experiment &&
-    //     this.experimentContainer.state.experiment.error)
-    // ) {
-    //   clearInterval(interval);
-    // }
-
-    await this.experimentContainer.load(uuid);
-    return await this.modelContainer.load(slug);
+    await modelContainer.load(slug);
+    return await experimentContainer.load(uuid);
   }
 
   public render() {
+    const {
+      experimentContainer,
+      experimentListContainer,
+      modelContainer
+    } = this.props;
     return (
       <div className="Experiment">
-        <Provider
-          inject={[
-            this.experimentContainer,
-            this.modelContainer
-          ]}
-        >
-          <Subscribe
-            to={[ExperimentListContainer, ExperimentContainer, ModelContainer]}
-          >
-            {(
-              experimentListContainer: any,
-              experimentContainer: any,
-              modelContainer: any
-            ) => (
-              <div className="wrapper">
-                <div className="header">
-                  {headerDisplay(
-                    experimentContainer.state.experiment,
-                    experimentListContainer.state.experiments,
-                    this.handleSelectExperiment
-                  )}
-                </div>
-                <div className="sidebar">
-                  <div>
-                    {methodDisplay(experimentContainer.state.experiment)}
-                    {modelDisplay(modelContainer.state.model)}
-                  </div>
-                </div>
-                <div className="content">
-                  {contentDisplay(experimentContainer.state)}
-                </div>
-              </div>
+        <div className="wrapper">
+          <div className="header">
+            {headerDisplay(
+              experimentContainer,
+              experimentListContainer.state.experiments,
+              this.props.history
             )}
-          </Subscribe>
-        </Provider>
+          </div>
+          <div className="sidebar">
+            <div>
+              {methodDisplay(experimentContainer.state.experiment)}
+              {modelDisplay(modelContainer.state.model)}
+            </div>
+          </div>
+          <div className="content">
+            {contentDisplay(experimentContainer.state)}
+          </div>
+        </div>
+        )}
       </div>
     );
   }
-
-  private handleSelectExperiment = (experiment: IExperimentResult) => {
-    const { modelDefinitionId, uuid } = experiment;
-    this.experimentContainer.load(uuid);
-    this.modelContainer.load(modelDefinitionId!);
-    this.props.history.push(`/v3/experiment/${modelDefinitionId}/${uuid}`);
-  };
 }
 
 export default withRouter(Experiment);

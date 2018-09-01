@@ -1,39 +1,43 @@
 // tslint:disable:no-console
-import { IExperimentListContainer, IExperimentResult, IExperimentContainer } from "@app/types";
+import { IExperimentResult } from "@app/types";
 import * as React from "react";
-import { RouteComponentProps, withRouter } from "react-router-dom";
-import { Subscribe } from "unstated";
-import { ExperimentListContainer } from "../containers";
+import { withRouter } from "react-router-dom";
 import { Dropdown } from "./";
 
 import "./Navigation.css";
 
-interface INavigation {
-  experimentContainer: IExperimentContainer;
-}
+// interface IProps {
+//   experimentContainer: any;
+//   experimentListContainer: any
+// }
 
-class Navigation extends React.Component<RouteComponentProps<INavigation>> {
+class Navigation extends React.Component<any, any> {
+  public async componentDidMount() {
+    const { experimentListContainer } = this.props;
+    return await experimentListContainer.load()
+  }
+
   public render() {
+    const { experimentListContainer, experimentContainer, modelContainer } = this.props;
+
     return (
       <nav>
-        <Subscribe to={[ExperimentListContainer]}>
-          {({ state }: { state: IExperimentListContainer }) => (
-            <Dropdown
-              items={state.experiments}
-              title="BSD"
-              handleSelect={this.handleSelectExperiment}
-            />
-          )}
-        </Subscribe>
+        <Dropdown
+          items={experimentListContainer.state.experiments}
+          title="BSD"
+          // tslint:disable-next-line jsx-no-lambda
+          handleSelect={(experiment: IExperimentResult) => {
+            const { modelDefinitionId, uuid } = experiment;
+            this.props.history.push(
+              `/v3/experiment/${modelDefinitionId}/${uuid}`
+            );
+            experimentContainer.load(uuid);
+            modelContainer.load(modelDefinitionId)
+          }}
+        />
       </nav>
     );
   }
-
-  private handleSelectExperiment = (experiment: IExperimentResult) => {
-    const { modelDefinitionId, uuid } = experiment;
-    this.props.history.push(`/v3/experiment/${modelDefinitionId}/${uuid}`);
-    this.props.experimentContainer.load(uuid)
-  };
 }
 
 export default withRouter(Navigation);
