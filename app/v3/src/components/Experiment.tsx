@@ -1,21 +1,18 @@
 // tslint:disable:no-console
 import {
-  IExperimentContainer,
   IExperimentResult,
   IModelResult,
-  INode
 } from "@app/types";
 import moment from "moment"; // FIXME: change lib, too heavy
 import * as React from "react";
-import { Button, Panel, Tab, Tabs } from "react-bootstrap";
+import { Button, Panel } from "react-bootstrap";
 import { RouteComponentProps, withRouter } from "react-router-dom";
-import { Dropdown } from "../components";
+import { Dropdown, ExperimentResult } from "../components";
 import {
   ExperimentContainer,
   ExperimentListContainer,
   ModelContainer
 } from "../containers";
-import { Highchart, Plotly } from "./Experiment/";
 
 import "./Experiment.css";
 
@@ -135,85 +132,6 @@ const modelDisplay = (model: IModelResult | undefined) => {
   );
 };
 
-const contentDisplay = (state: IExperimentContainer | undefined) => {
-  const experiment = state && state.experiment;
-  const nodes = experiment && experiment.nodes;
-  const error = (state && state.error) || (experiment && experiment.error);
-
-  const loading = !nodes && !error;
-
-  const methodsDisplay = (thenode: INode) => (
-    <Tabs defaultActiveKey={0} id="tabs-methods">
-      {thenode.methods &&
-        thenode.methods.map((m: any, j: number) => (
-          <Tab eventKey={j} title={m.algorithm} key={j}>
-            {m.mime === "text/plain+error" && (
-              <div>
-                <h3>An error has occured</h3>
-                <p>{m.error}</p>
-              </div>
-            )}
-            {m.mime === "application/json" &&
-              m.data.map((d: any, k: number) => (
-                <pre key={k}>{JSON.stringify(d, null, 2)}</pre>
-              ))}
-            {m.mime === "application/vnd.plotly.v1+json" &&
-              m.data.map((d: { data: any; layout: any }, k: number) => (
-                <Plotly data={d.data} layout={d.layout} key={k} />
-              ))}
-            {m.mime === "application/vnd.highcharts+json" &&
-              m.data.map((d: { data: any }, k: number) => (
-                <Highchart options={d} key={k} />
-              ))}
-
-            {m.mime === "application/pfa+json" &&
-              m.data.map((d: any, k: number) => (
-                <pre key={k}>{JSON.stringify(d, null, 2)}</pre>
-              ))}
-          </Tab>
-        ))}
-    </Tabs>
-  );
-
-  const nodesDisplay = (thenodes: INode[]) => (
-    <Tabs defaultActiveKey={0} id="tabs-node">
-      {thenodes &&
-        thenodes.map((node: any, i: number) => (
-          <Tab eventKey={i} title={node.name} key={i}>
-            {methodsDisplay(node)}
-          </Tab>
-        ))}
-    </Tabs>
-  );
-
-  return (
-    <Panel>
-      <Panel.Title>
-        <h3>Results</h3>
-      </Panel.Title>
-      <Panel.Body>
-        {loading ? (
-          <div>
-            <h3>Your experiment is currently running...</h3>
-            <p>
-              Please check back in a few minutes. This page will automatically
-              refresh once your experiment has finished executing.
-            </p>
-          </div>
-        ) : null}
-        {error ? (
-          <div>
-            <h3>An error has occured</h3>
-            <p>{error}</p>
-          </div>
-        ) : null}
-        {nodes && nodes.length > 1 && nodesDisplay(nodes)}
-        {nodes && nodes.length === 1 && methodsDisplay(nodes[0])}
-      </Panel.Body>
-    </Panel>
-  );
-};
-
 class Experiment extends React.Component<IProps> {
   public async componentDidMount() {
     // Get url parameters
@@ -243,6 +161,7 @@ class Experiment extends React.Component<IProps> {
             this.props.history
           )}
         </div>
+
         <div className="sidebar">
           <div>
             {methodDisplay(experimentContainer.state.experiment)}
@@ -250,7 +169,7 @@ class Experiment extends React.Component<IProps> {
           </div>
         </div>
         <div className="content">
-          {contentDisplay(experimentContainer.state)}
+          <ExperimentResult experimentState={experimentContainer.state} />
         </div>
       </div>
     );
