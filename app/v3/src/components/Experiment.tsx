@@ -236,23 +236,21 @@ class Experiment extends React.Component<IProps> {
     } = this.props;
     return (
       <div className="Experiment">
-        <div className="wrapper">
-          <div className="header">
-            {headerDisplay(
-              experimentContainer,
-              experimentListContainer.state.experiments,
-              this.props.history
-            )}
+        <div className="header">
+          {headerDisplay(
+            experimentContainer,
+            experimentListContainer.state.experiments,
+            this.props.history
+          )}
+        </div>
+        <div className="sidebar">
+          <div>
+            {methodDisplay(experimentContainer.state.experiment)}
+            {modelDisplay(modelContainer.state.model)}
           </div>
-          <div className="sidebar">
-            <div>
-              {methodDisplay(experimentContainer.state.experiment)}
-              {modelDisplay(modelContainer.state.model)}
-            </div>
-          </div>
-          <div className="content">
-            {contentDisplay(experimentContainer.state)}
-          </div>
+        </div>
+        <div className="content">
+          {contentDisplay(experimentContainer.state)}
         </div>
       </div>
     );

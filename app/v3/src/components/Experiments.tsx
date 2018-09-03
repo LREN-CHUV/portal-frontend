@@ -29,27 +29,29 @@ const renderExperiments = (experiments: IExperimentResult[] | undefined) => {
             ? [experiment.error, "danger"]
             : ["OK", "success"];
         return (
-          <Panel
-            key={experiment.uuid}
-            id="collapsible-panel-{experiment.uuid}"
-            defaultExpanded={false}
-          >
-            <Panel.Heading>
-              <Panel.Title toggle={true}>
-                <div className="Experiments-wrapper">
-                  <div className="box">{experiment.name} </div>
-                  <div className="box">
-                    <Label bsStyle={status[1]}>{status[0]}</Label>
+          <div className="Experiments" key={experiment.uuid}>
+            <Panel
+              
+              id="collapsible-panel-{experiment.uuid}"
+              defaultExpanded={false}
+            >
+              <Panel.Heading>
+                <Panel.Title toggle={true}>
+                  <div className="experiment-box">
+                    <div className="box">{experiment.name} </div>
+                    <div className="box">
+                      <Label bsStyle={status[1]}>{status[0]}</Label>
+                    </div>
                   </div>
-                </div>
-              </Panel.Title>
-            </Panel.Heading>
-            <Panel.Collapse>
-              <Panel.Body>
-                <pre>{JSON.stringify(experiment, null, 2)}</pre>
-              </Panel.Body>
-            </Panel.Collapse>
-          </Panel>
+                </Panel.Title>
+              </Panel.Heading>
+              <Panel.Collapse>
+                <Panel.Body>
+                  <pre>{JSON.stringify(experiment, null, 2)}</pre>
+                </Panel.Body>
+              </Panel.Collapse>
+            </Panel>
+          </div>
         );
       })}
     </div>

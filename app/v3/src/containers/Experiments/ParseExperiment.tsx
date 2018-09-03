@@ -22,7 +22,6 @@ class ParseExperiment {
     let experimentResult: IExperimentResult = {
       algorithms: algorithms.map((e: any) => e.name),
       created,
-      finished: experiment.finished,
       modelDefinitionId: experiment.model.slug,
       name: experiment.name,
       resultsViewed: experiment.resultsViewed,

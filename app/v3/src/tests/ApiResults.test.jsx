@@ -24,7 +24,6 @@ test("Fetch experiments", async () => {
     expect(experiment.algorithms).toBeDefined();
 
     if (experiment.nodes) {
-      expect(experiment.finished).toBeDefined();
       const nodes: INode[] = experiment.nodes;
       nodes.forEach((node, i) => {
         expect(node.name).toBeDefined();
