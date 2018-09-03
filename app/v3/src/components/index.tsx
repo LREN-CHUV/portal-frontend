@@ -1,5 +1,7 @@
 export { default as Experiment } from "../components/Experiment";
 export { default as ExperimentResult } from "../components/ExperimentResult";
+export { default as ExperimentHeader } from "../components/ExperimentHeader";
+export { default as Model } from "../components/Model";
 export { default as Experiments } from "../components/Experiments";
 export { default as Dropdown } from "../components/Dropdown";
 export { default as Navigation } from "../components/Navigation";
