@@ -6,6 +6,7 @@ import {
   IPolynomialClassificationScore,
   IValidationScore
 } from "@app/types";
+import { MIME_TYPES } from "../../constants"
 
 class ParseExperiment {
   public static parse = (experiment: any): IExperimentResult => {
@@ -76,19 +77,19 @@ class ParseExperiment {
       const results = normalizedResult(r);
 
       switch (mime) {
-        case "application/vnd.highcharts+json":
+        case MIME_TYPES.HIGHCHARTS:
           method.data = highcharts(results);
           break;
 
-        case "application/vnd.plotly.v1+json":
+        case MIME_TYPES.PLOTLY:
           method.data = plotly(results);
           break;
 
-        case "application/pfa+json":
+        case MIME_TYPES.PFA:
           method.data = [pfa(results)];
           break;
 
-        case "application/vnd.hbp.mip.experiment.pfa+json":
+        case MIME_TYPES.MIP_PFA:
           results.forEach((aResult: any) => {
             let subResult = aResult;
 
@@ -100,23 +101,23 @@ class ParseExperiment {
             method.algorithm = subResult.algorithm;
 
             switch (subResult.type) {
-              case "application/vnd.highcharts+json":
+              case MIME_TYPES.HIGHCHARTS:
                 method.data = highcharts(normalizedResult(subResult));
                 break;
 
-              case "application/json":
+              case MIME_TYPES.JSON:
                 method.data = jsonTest(normalizedResult(subResult));
                 break;
 
-              case "text/plain+error":
+              case MIME_TYPES.ERROR:
                 method.error = errorTest(subResult, null);
                 break;
 
-              case "application/vnd.plotly.v1+json":
+              case MIME_TYPES.PLOTLY:
                 console.log("application/vnd.plotly.v1+json");
                 break;
 
-              case "application/pfa+json":
+              case MIME_TYPES.PFA:
                 method.data = [pfa(normalizedResult(subResult))];
                 break;
 
@@ -125,7 +126,7 @@ class ParseExperiment {
             }
           });
 
-        case "application/json":
+        case MIME_TYPES.JSON:
           method.data = jsonTest(results);
           break;
 
@@ -135,7 +136,7 @@ class ParseExperiment {
         // case "application/vnd.visjs+javascript":
         // break;
 
-        case "text/plain+error":
+        case MIME_TYPES.ERROR:
           method.error = errorTest(results, r.error);
           break;
 
