@@ -19,7 +19,7 @@ import "./App.css";
 UNSTATED.logStateChanges = process.env.NODE_ENV === "development";
 
 class App extends React.Component {
-  private experimentControler = new ExperimentContainer();
+  private experimentContainer = new ExperimentContainer();
   private experimentListContainer = new ExperimentListContainer();
   private modelContainer = new ModelContainer();
 
@@ -28,7 +28,7 @@ class App extends React.Component {
       <Router>
         <Provider
           inject={[
-            this.experimentControler,
+            this.experimentContainer,
             this.experimentListContainer,
             this.modelContainer
           ]}

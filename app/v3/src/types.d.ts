@@ -45,7 +45,6 @@ export interface User {
 export interface IExperimentResult {
   created: Date,
   error?: string,
-  finished?: Date
   name: string,
   resultsViewed: boolean,
   uuid: string,

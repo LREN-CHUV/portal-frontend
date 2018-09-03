@@ -1,5 +1,6 @@
-.wrapper {
+.Experiment {
   display: grid;
+  padding: 0 50px;
   grid-gap: 8px;
   grid-template-columns: 200px auto 200px;
   grid-template-areas:
@@ -19,16 +20,9 @@
   grid-area: header;
 }
 
-.Experiment {
-  padding: 0 50px;
-}
-
 .Experiment h5 {
   font-weight: 700 !important;
   line-height: 1.2 !important;
-}
-
-.Experiment .panel-title {
 }
 
 .experiment-header {
