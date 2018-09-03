@@ -1,24 +1,34 @@
 // tslint:disable:no-console
 import { IExperimentResult } from "@app/types";
 import * as React from "react";
-import { withRouter } from "react-router-dom";
+import { RouteComponentProps, withRouter } from "react-router-dom";
+import {
+  ExperimentContainer,
+  ExperimentListContainer,
+  ModelContainer
+} from "../containers";
 import { Dropdown } from "./";
 
 import "./Navigation.css";
 
-// interface IProps {
-//   experimentContainer: any;
-//   experimentListContainer: any
-// }
+interface IProps extends RouteComponentProps<any> {
+  experimentContainer: ExperimentContainer;
+  experimentListContainer: ExperimentListContainer;
+  modelContainer: ModelContainer;
+}
 
-class Navigation extends React.Component<any, any> {
+class Navigation extends React.Component<IProps> {
   public async componentDidMount() {
     const { experimentListContainer } = this.props;
-    return await experimentListContainer.load()
+    return await experimentListContainer.load();
   }
 
   public render() {
-    const { experimentListContainer, experimentContainer, modelContainer } = this.props;
+    const {
+      experimentListContainer,
+      experimentContainer,
+      modelContainer
+    } = this.props;
 
     return (
       <nav>
@@ -32,7 +42,7 @@ class Navigation extends React.Component<any, any> {
               `/v3/experiment/${modelDefinitionId}/${uuid}`
             );
             experimentContainer.load(uuid);
-            modelContainer.load(modelDefinitionId)
+            modelContainer.load(modelDefinitionId);
           }}
         />
       </nav>
