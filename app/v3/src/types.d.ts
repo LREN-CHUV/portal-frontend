@@ -16,6 +16,15 @@ export interface IValidationScore {
   node: string
 }
 
+export interface IKfoldValidationScore {
+  explainedVariance: number,
+  mae: number,
+  mse: number,
+  rsquared: number,
+  rmse: number,
+  type: string
+}
+
 export interface IPolynomialClassificationScore extends IValidationScore {
 
 }
@@ -27,7 +36,7 @@ export interface IMethod {
   data?: any[],
   error?: string,
   // Details for the validation of a method on a single node, includes for example the folds when k-fold cross-validation is used
-  crossValidation?: IValidationScore | IPolynomialClassificationScore
+  crossValidation?: IKfoldValidationScore | IValidationScore | IPolynomialClassificationScore
   remoteValidations?: INode | IValidationScore
 }
 export interface INode {

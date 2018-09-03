@@ -1,12 +1,13 @@
 // tslint:disable:no-console
 import {
   IExperimentResult,
+  IKfoldValidationScore,
   IMethod,
   INode,
   IPolynomialClassificationScore,
   IValidationScore
 } from "@app/types";
-import { MIME_TYPES } from "../../constants"
+import { MEASURES, MIME_TYPES } from "../../constants";
 
 class ParseExperiment {
   public static parse = (experiment: any): IExperimentResult => {
@@ -183,21 +184,21 @@ const plotly = (data: any) => {
 };
 
 interface IPfa {
-  crossValidation?: IValidationScore | IPolynomialClassificationScore;
+  crossValidation?:
+    | IKfoldValidationScore
+    | IValidationScore
+    | IPolynomialClassificationScore;
   data?: any;
-  remoteValidations?: INode | IValidationScore | IPolynomialClassificationScore;
+  remoteValidations?:
+    | INode
+    | IKfoldValidationScore
+    | IValidationScore
+    | IPolynomialClassificationScore;
   error?: any;
 }
 
 const pfa = (data: any): IPfa => {
   const output: IPfa = {};
-
-  const accuracyKey = "Accuracy";
-  const f1scoreKey = "Weighted F1-score";
-  const falsePositiveRateKey = "Weighted false positive rate";
-  const precisionKey = "Weighted precision";
-  const recallKey = "Weighted recall";
-  const confusionMatrixKey = "Confusion matrix";
 
   data.forEach((d: any) => {
     if (!d.cells) {
@@ -210,14 +211,23 @@ const pfa = (data: any): IPfa => {
           ? d.cells.validations.init
           : [d.cells.validations.init];
 
+        const buildKFoldValidation = (dta: any, node: any) => ({
+          explainedVariance: parseFloat(dta[MEASURES.explainedVariance.code]),
+          mae: parseFloat(dta[MEASURES.mae.code]),
+          mse: parseFloat(dta[MEASURES.mse.code]),
+          rmse: parseFloat(dta[MEASURES.rmse.code]),
+          rsquared: parseFloat(dta[MEASURES.rsquared.code]),
+          type: `${dta[MEASURES.type.code]}`
+        });
+
         const buildValidation = (dta: any, node: any) => ({
-          accuracy: parseFloat(dta[accuracyKey]),
-          confusionMatrix: dta[confusionMatrixKey],
-          f1score: parseFloat(dta[f1scoreKey]),
-          falsePositiveRate: parseFloat(dta[falsePositiveRateKey]),
+          accuracy: parseFloat(dta[MEASURES.accuracy.code]),
+          confusionMatrix: dta[MEASURES.confusionMatrix.code],
+          f1score: parseFloat(dta[MEASURES.f1score.code]),
+          falsePositiveRate: parseFloat(dta[MEASURES.falsePositiveRate.code]),
           node: `${node}`,
-          precision: parseFloat(dta[precisionKey]),
-          recall: parseFloat(dta[recallKey])
+          precision: parseFloat(dta[MEASURES.precision.code]),
+          recall: parseFloat(dta[MEASURES.recall.code])
         });
 
         init.forEach((i: any) => {
@@ -228,12 +238,16 @@ const pfa = (data: any): IPfa => {
             const node = i.node;
             if (i.code === "kfold") {
               const dta: any = i.data.average;
-              output.crossValidation = buildValidation(dta, node);
+              output.crossValidation = buildKFoldValidation(dta, node);
             }
 
             if (i.code === "remote-validation") {
               const dta: any = i.data;
-              output.remoteValidations = buildValidation(dta, node);
+              if (dta.type === "RegressionScore") {
+                output.remoteValidations = buildKFoldValidation(dta, node);
+              } else {
+                output.remoteValidations = buildValidation(dta, node);
+              }
             }
           }
         });

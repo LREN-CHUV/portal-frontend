@@ -3,7 +3,7 @@ import { IExperimentContainer, INode } from "@app/types";
 import * as React from "react";
 import { Panel, Tab, Tabs } from "react-bootstrap";
 import { MIME_TYPES } from "../constants";
-import { Highchart, Plotly } from "./Experiment/";
+import { Highchart, PFA, Plotly } from "./Experiment/";
 
 export default ({
   experimentState
@@ -41,11 +41,7 @@ export default ({
               m.data.map((d: { data: any }, k: number) => (
                 <Highchart options={d} key={k} />
               ))}
-
-            {m.mime === MIME_TYPES.PFA &&
-              m.data.map((d: any, k: number) => (
-                <pre key={k}>{JSON.stringify(d, null, 2)}</pre>
-              ))}
+            {m.mime === MIME_TYPES.PFA && <PFA method={m}/>}
           </Tab>
         ))}
     </Tabs>
