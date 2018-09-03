@@ -22,15 +22,6 @@ class App extends React.Component {
   private experimentControler = new ExperimentContainer();
   private experimentListContainer = new ExperimentListContainer();
   private modelContainer = new ModelContainer();
-  // public async componentWillReceiveProps() {
-  //   const { match: matched } = this.props;
-  //   if (!matched) {
-  //     return;
-  //   }
-  //   const { uuid, slug } = matched.params;
-  //   await this.experimentContainer.load(uuid);
-  //   return await this.modelContainer.load(slug);
-  // }
 
   public render() {
     return (
@@ -46,9 +37,9 @@ class App extends React.Component {
             to={[ExperimentContainer, ExperimentListContainer, ModelContainer]}
           >
             {(
-              experimentContainer: any,
-              experimentListContainer: any,
-              modelContainer: any
+              experimentContainer: ExperimentContainer,
+              experimentListContainer: ExperimentListContainer,
+              modelContainer: ModelContainer
             ) => (
               <div className="App">
                 <header className="Navigation">
@@ -64,7 +55,6 @@ class App extends React.Component {
                     // tslint:disable-next-line jsx-no-lambda
                     render={() => (
                       <Experiments
-                        experimentContainer={experimentContainer}
                         experimentListContainer={experimentListContainer}
                       />
                     )}

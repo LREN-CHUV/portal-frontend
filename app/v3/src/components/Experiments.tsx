@@ -2,7 +2,13 @@
 import { IExperimentResult } from "@app/types";
 import * as React from "react";
 import { Label, Panel } from "react-bootstrap";
+import { ExperimentListContainer } from "../containers";
+
 import "./Experiments.css";
+
+interface IProps {
+  experimentListContainer: ExperimentListContainer;
+}
 
 const renderExperiments = (experiments: IExperimentResult[] | undefined) => {
   if (experiments === undefined) {
@@ -50,11 +56,11 @@ const renderExperiments = (experiments: IExperimentResult[] | undefined) => {
   );
 };
 
-class Experiment extends React.Component<any> {
+class Experiments extends React.Component<IProps> {
   public render() {
     const { experimentListContainer } = this.props;
     return renderExperiments(experimentListContainer.state.experiments);
   }
 }
 
-export default Experiment;
+export default Experiments;

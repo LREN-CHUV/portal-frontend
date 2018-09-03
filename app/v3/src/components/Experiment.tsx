@@ -1,24 +1,29 @@
 // tslint:disable:no-console
-import { Highchart, Plotly } from "./Experiment/";
-
 import {
   IExperimentContainer,
   IExperimentResult,
   IModelResult,
   INode
 } from "@app/types";
-import moment from "moment";
+import moment from "moment"; // FIXME: change lib, too heavy
 import * as React from "react";
 import { Button, Panel, Tab, Tabs } from "react-bootstrap";
-
-import { withRouter } from "react-router-dom";
+import { RouteComponentProps, withRouter } from "react-router-dom";
 import { Dropdown } from "../components";
+import {
+  ExperimentContainer,
+  ExperimentListContainer,
+  ModelContainer
+} from "../containers";
+import { Highchart, Plotly } from "./Experiment/";
 
 import "./Experiment.css";
-// interface IExperimentParams {
-//   slug: string;
-//   uuid: string;
-// }
+
+interface IProps extends RouteComponentProps<any> {
+  experimentContainer: ExperimentContainer;
+  experimentListContainer: ExperimentListContainer;
+  modelContainer: ModelContainer;
+}
 
 const headerDisplay = (
   experimentContainer: any | undefined,
@@ -209,7 +214,7 @@ const contentDisplay = (state: IExperimentContainer | undefined) => {
   );
 };
 
-class Experiment extends React.Component<any> {
+class Experiment extends React.Component<IProps> {
   public async componentDidMount() {
     // Get url parameters
     const { match: matched } = this.props;
@@ -249,7 +254,6 @@ class Experiment extends React.Component<any> {
             {contentDisplay(experimentContainer.state)}
           </div>
         </div>
-        )}
       </div>
     );
   }
