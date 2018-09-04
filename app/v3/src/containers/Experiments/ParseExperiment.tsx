@@ -7,7 +7,7 @@ import {
   IPolynomialClassificationScore,
   IValidationScore
 } from "@app/types";
-import { MEASURES, MIME_TYPES } from "../../constants";
+import { MIME_TYPES, SCORES } from "../../constants";
 
 class ParseExperiment {
   public static parse = (experiment: any): IExperimentResult => {
@@ -212,22 +212,22 @@ const pfa = (data: any): IPfa => {
           : [d.cells.validations.init];
 
         const buildKFoldValidation = (dta: any, node: any) => ({
-          explainedVariance: parseFloat(dta[MEASURES.explainedVariance.code]),
-          mae: parseFloat(dta[MEASURES.mae.code]),
-          mse: parseFloat(dta[MEASURES.mse.code]),
-          rmse: parseFloat(dta[MEASURES.rmse.code]),
-          rsquared: parseFloat(dta[MEASURES.rsquared.code]),
-          type: `${dta[MEASURES.type.code]}`
+          explainedVariance: parseFloat(dta[SCORES.explainedVariance.code]),
+          mae: parseFloat(dta[SCORES.mae.code]),
+          mse: parseFloat(dta[SCORES.mse.code]),
+          rmse: parseFloat(dta[SCORES.rmse.code]),
+          rsquared: parseFloat(dta[SCORES.rsquared.code]),
+          type: `${dta[SCORES.type.code]}`
         });
 
         const buildValidation = (dta: any, node: any) => ({
-          accuracy: parseFloat(dta[MEASURES.accuracy.code]),
-          confusionMatrix: dta[MEASURES.confusionMatrix.code],
-          f1score: parseFloat(dta[MEASURES.f1score.code]),
-          falsePositiveRate: parseFloat(dta[MEASURES.falsePositiveRate.code]),
+          accuracy: parseFloat(dta[SCORES.accuracy.code]),
+          confusionMatrix: dta[SCORES.confusionMatrix.code],
+          f1score: parseFloat(dta[SCORES.f1score.code]),
+          falsePositiveRate: parseFloat(dta[SCORES.falsePositiveRate.code]),
           node: `${node}`,
-          precision: parseFloat(dta[MEASURES.precision.code]),
-          recall: parseFloat(dta[MEASURES.recall.code])
+          precision: parseFloat(dta[SCORES.precision.code]),
+          recall: parseFloat(dta[SCORES.recall.code])
         });
 
         init.forEach((i: any) => {
