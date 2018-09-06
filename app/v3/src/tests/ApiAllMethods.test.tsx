@@ -49,40 +49,58 @@ test("Create new models", async () => {
   console.log("> Create new models done!");
 });
 
-test.skip(`Set experiments`, async () => {
+test(`Set experiments`, async () => {
   console.log("> Set experiments");
 
-  await Promise.all(
-    experiments.slice(5,10).map(async experiment => {
-      const experimentContainer = new ExperimentContainer();
-      const model = Object.keys(models).find(
-        key => models[key] === experiment.model
-      );
-      const exp = {
-        algorithms: experiment.methods.map(m => ({
-          code: m.code,
-          name: m.code,
-          parameters: m.parameters,
-          validation: experiment.validations.length ? true : false
-        })),
-        model,
-        name: experiment.name,
-        validations: experiment.validations
-      };
-      await experimentContainer.create(exp);
+  const r = Math.floor(Math.random() * Math.floor(experiments.length));
+  // const r = experiments.length;
+  const experimentsToRun = experiments.slice(r, r + 2);
 
-      const result: IExperimentResult | undefined =
-        experimentContainer.state.experiment;
+  console.log({ experimentsToRun });
+  jest.useFakeTimers();
+  jest.setTimeout(20000);
 
-      expect(result).toBeDefined();
-      expect(result!.name).toBe(experiment.name);
-      // expect(result!.model).toBeDefined();
-      console.log("created", exp.name);
+  return await Promise.all(
+    experimentsToRun.map(
+      (experiment, i) =>
+        new Promise(resolve => {
+          const run = () => {
+            console.log("THEN");
+            const experimentContainer = new ExperimentContainer();
+            const model = Object.keys(models).find(
+              key => models[key] === experiment.model
+            );
+            const exp = {
+              algorithms: experiment.methods.map(m => ({
+                code: m.code,
+                name: m.code,
+                parameters: m.parameters,
+                validation: experiment.validations.length ? true : false
+              })),
+              model,
+              name: experiment.name,
+              validations: experiment.validations
+            };
+            experimentContainer.create(exp);
 
-      experimentsUUID.push(result!.uuid);
-    })
+            const result: IExperimentResult | undefined =
+              experimentContainer.state.experiment;
+
+            expect(result).toBeDefined();
+            expect(result!.name).toBe(experiment.name);
+            // expect(result!.model).toBeDefined();
+            console.log("created", exp.name);
+
+            experimentsUUID.push(result!.uuid);
+
+            resolve();
+          };
+          setTimeout(run, 3);
+        })
+    )
   );
+
+  jest.runAllTimers();
   console.log(experimentsUUID);
   console.log("> Set experiments done");
 });
-

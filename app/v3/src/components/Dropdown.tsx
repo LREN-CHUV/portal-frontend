@@ -19,10 +19,12 @@ export default ({
     {items &&
       handleSelect &&
       items
-        .sort(
-          (a: IExperimentResult, b: IExperimentResult) =>
-            a.created < b.created ? 1 : 0
-        )
+        .sort((a1: IExperimentResult, b1: IExperimentResult) => {
+          const a = a1.created;
+          const b = b1.created;
+
+          return a > b ? -1 : a < b ? 1 : 0;
+        })
         .map((experiment, i: number) => (
           <MenuItem
             eventKey={i}
@@ -31,14 +33,15 @@ export default ({
             onSelect={() => handleSelect(experiment)}
           >
             {experiment.error ? (
-              <span className={"glyphicon-exclamation-sign glyph viewed"}  />
+              <span className={"glyphicon-exclamation-sign glyph viewed"} />
             ) : !experiment.nodes ? (
-              <span className={"glyphicon-transfer glyph info"}  />
+              <span className={"glyphicon-transfer glyph info"} />
             ) : experiment.resultsViewed ? (
-              <span className={"glyphicon-eye-open glyph viewed"}  />
+              <span className={"glyphicon-eye-open glyph viewed"} />
             ) : (
-              <span className={"glyphicon-eye-open glyph success"}  />
-            )}{"  "}
+              <span className={"glyphicon-eye-open glyph success"} />
+            )}
+            {"  "}
             <strong>{experiment.name}</strong>
             {" - "}
             {moment(experiment.created, "YYYYMMDD").fromNow()}

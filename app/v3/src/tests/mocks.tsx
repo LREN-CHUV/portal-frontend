@@ -10,23 +10,44 @@ const validationDatasetsValue = process.env.REACT_APP_VALIDATIONDATASETS;
 const validationDatasets: string[] = validationDatasetsValue
   ? validationDatasetsValue.split(",")
   : [];
-  const Cookie = process.env.REACT_APP_COOKIE
+const Cookie = process.env.REACT_APP_COOKIE;
 
 export const config: RequestInit =
   process.env.NODE_ENV === "production"
     ? {
         credentials: "same-origin"
       }
-    : Cookie ? {
-        headers: {
-          Authorization: process.env.REACT_APP_AUTHORIZATION!,
-          Cookie,
-          "X-XSRF-TOKEN":
-          Cookie.match(/XSRF-TOKEN=(.*)/)![1] || ""
+    : Cookie
+      ? {
+          headers: {
+            Authorization: process.env.REACT_APP_AUTHORIZATION!,
+            Cookie,
+            "X-XSRF-TOKEN": Cookie.match(/XSRF-TOKEN=(.*)/)![1] || ""
+          }
         }
-      } : {};
+      : {};
 
-export const models = {
+interface ICode {
+  code: string;
+}
+interface IModelSample {
+  coVariables: ICode[];
+  filters: string;
+  groupings: ICode[];
+  testingDatasets: string[];
+  trainingDatasets: string[];
+  validationDatasets: string[];
+  variables: ICode[];
+}
+
+interface INamedSamples {
+  classification: IModelSample;
+  classification2: IModelSample;
+  regression0: IModelSample;
+  regression2: IModelSample;
+}
+
+export const models: INamedSamples = {
   classification: {
     coVariables: [{ code: "lefthippocampus" }],
     filters: "",
@@ -49,6 +70,7 @@ export const models = {
     coVariables: [{ code: "subjectageyears" }],
     filters: "",
     groupings: [],
+    testingDatasets: [],
     trainingDatasets,
     validationDatasets,
     variables: [{ code: "lefthippocampus" }]
@@ -369,7 +391,6 @@ export const experiments = [
     status: "ko", // Error in hclustfun_col(dist_x): must have n >= 2 objects to cluster
     validations: []
   }
-
 
   // { code: "WP_VARIABLES_HISTOGRAM" },
   // { code: "PIPELINE_ISOUP_REGRESSION_TREE_SERIALIZER" },
