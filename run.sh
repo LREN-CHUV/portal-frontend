@@ -18,9 +18,9 @@ done
 
 echo "INFO: starting in $MODE mode"
 if [ $MODE = "local" ]; then
-  echo "{\"version\": \"beta 0.0\", \"instanceName\": \"CHUV-DEV\", \"mode\": \"local\"}" > app/scripts/app/config.json
+  echo "{\"version\": \"beta 0.0\", \"instanceName\": \"CHUV-DEV\", \"mode\": \"local\", \"theme\": \"colaus\"}" > app/scripts/app/config.json
 else
-  echo "{\"version\": \"beta 0.0\", \"instanceName\": \"CHUV-DEV\", \"mode\": \"federation\"}" > app/scripts/app/config.json
+  echo "{\"version\": \"beta 0.0\", \"instanceName\": \"CHUV-DEV\", \"mode\": \"federation\", \"theme\": \"colaus\"}" > app/scripts/app/config.json
 fi
 
 echo

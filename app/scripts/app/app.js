@@ -139,6 +139,7 @@ angular
     "$cookies",
     "User",
     "editableOptions",
+    "Config",
     function(
       $state,
       $location,
@@ -149,11 +150,18 @@ angular
       backendUrl,
       $cookies,
       User,
-      editableOptions
+      editableOptions,
+      Config
     ) {
       $translatePartialLoader.addPart("common");
       $translate.refresh();
       amMoment.changeLocale("en");
+
+      Config.then(config => {
+        if (config.theme && config.theme !== "mip") {
+          document.body.className += " " + config.theme;
+        }
+      });
 
       // if ($location.path() === "/") {
       $state.go("intro"); // FIXME, again
