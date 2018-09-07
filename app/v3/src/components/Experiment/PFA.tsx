@@ -28,12 +28,18 @@ export default ({ method }: { method: IMethod }) => {
     (method &&
     method.data && ( // FIXME: should iterate
         <Tabs defaultActiveKey={0} id="pfa-method">
-          <Tab eventKey={0} title={"Cross Validation"}>
-            <Highchart options={makeChart(method.data[0].crossValidation)} />
-          </Tab>
-          <Tab eventKey={1} title={"Remote Validation"}>
-            <Highchart options={makeChart(method.data[0].remoteValidations)} />
-          </Tab>
+          {method.data[0].crossValidation && (
+            <Tab eventKey={0} title={"Cross Validation"}>
+              <Highchart options={makeChart(method.data[0].crossValidation)} />
+            </Tab>
+          )}
+          {method.data[0].remoteValidations && (
+            <Tab eventKey={1} title={"Remote Validation"}>
+              <Highchart
+                options={makeChart(method.data[0].remoteValidations)}
+              />
+            </Tab>
+          )}
         </Tabs>
       )) ||
     null
