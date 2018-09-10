@@ -1,35 +1,33 @@
 table.greyGridTable {
-    border: 1px solid #333;
-    margin-top: 16px;
-    width: 100%;
-    text-align: center;
-    border-collapse: collapse;
-  }
-  table.greyGridTable td, table.greyGridTable th {
-    border: 1px solid rgb(151, 151, 151);
-    padding: 1px 1px;
-  }
-  table.greyGridTable tbody td {
-    font-size: 13px;
-  }
-  table.greyGridTable tr:nth-child(even) {
-    background: #EBEBEB;
-  }
-  table.greyGridTable thead {
-    background: #FFFFFF;
-    border-bottom: 1px solid #333333;
-  }
-  table.greyGridTable thead th {
-    font-size: 15px;
-    font-weight: bold;
-    color: #333333;
-    text-align: center;
-    border-left: 1px solid #333333;
-  }
-  table.greyGridTable thead th:first-child {
-    border-left: none;
-  }
+  margin-top: 16px;
+  margin-bottom: 16px;
+  width: 100%;
+  text-align: center;
+  border-collapse: collapse;
+  -webkit-box-shadow: 0 0 0 1px #e3e3e3;
+  box-shadow: 0 0 0 1px #e3e3e3;
+  border-radius: 2px;
+  border-style: none;
+  border: 1px solid #eee;
+}
+table.greyGridTable td,
+table.greyGridTable th {
+  border: 1px solid #e3e3e3;
+  padding: 1px 1px;
+}
 
-  table.greyGridTable tfoot td {
-    font-size: 14px;
-  }
+table.greyGridTable tr:nth-child(even) {
+  background: #ebebeb;
+}
+
+table.greyGridTable td:first-child {
+  font-weight: bold;
+}
+
+table.greyGridTable thead th {
+  font-weight: bold;
+  text-align: center;
+}
+table.greyGridTable thead th:first-child {
+  border-left: 1px solid #eee;
+}
