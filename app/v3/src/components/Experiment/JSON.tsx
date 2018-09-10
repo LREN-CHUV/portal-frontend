@@ -8,7 +8,6 @@ export default ({ data }: { data: any }) =>
 
   (data &&
     data.map((row: any, i: number) => {
-        console.log(row)
       const variables = Object.keys(row);
       const tables = variables.map(v => row[v]);
       const tableKeys = tables.map((k: any) => Object.keys(k));
