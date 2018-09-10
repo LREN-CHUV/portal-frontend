@@ -23,7 +23,7 @@ export default withRouter(
     ) => {
       const { modelDefinitionId, uuid } = selectedExperiment;
       history.push(`/v3/experiment/${modelDefinitionId}/${uuid}`);
-
+      await experimentContainer.markAsViewed(uuid);
       const load = experimentContainer && experimentContainer.load;
       return await load(uuid);
     };

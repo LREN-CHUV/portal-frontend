@@ -1,12 +1,5 @@
 // tslint:disable:no-console
-import {
-  IExperimentResult,
-  IKfoldValidationScore,
-  IMethod,
-  INode,
-  IPolynomialClassificationScore,
-  IValidationScore
-} from "@app/types";
+import { IExperimentResult, IMethod, INode, IPfa } from "@app/types";
 import { MIME_TYPES, SCORES } from "../../constants";
 
 class ParseExperiment {
@@ -167,7 +160,7 @@ class ParseExperiment {
         nodes.push(node);
       }
     });
-    experimentResult.nodes = nodes;
+    experimentResult.result = nodes;
 
     return experimentResult;
   };
@@ -183,20 +176,6 @@ const plotly = (data: any) => {
   return data;
 };
 
-interface IPfa {
-  crossValidation?:
-    | IKfoldValidationScore
-    | IValidationScore
-    | IPolynomialClassificationScore;
-  data?: any;
-  remoteValidations?:
-    | INode
-    | IKfoldValidationScore
-    | IValidationScore
-    | IPolynomialClassificationScore;
-  error?: any;
-}
-
 const pfa = (data: any): IPfa => {
   const output: IPfa = {};
 
@@ -211,21 +190,19 @@ const pfa = (data: any): IPfa => {
           ? d.cells.validations.init
           : [d.cells.validations.init];
 
-        const buildKFoldValidation = (dta: any, node: any) => ({
+        const buildRegressionScore = (dta: any, node: any) => ({
           explainedVariance: parseFloat(dta[SCORES.explainedVariance.code]),
           mae: parseFloat(dta[SCORES.mae.code]),
           mse: parseFloat(dta[SCORES.mse.code]),
           rmse: parseFloat(dta[SCORES.rmse.code]),
-          rsquared: parseFloat(dta[SCORES.rsquared.code]),
-          type: `${dta[SCORES.type.code]}`
+          rsquared: parseFloat(dta[SCORES.rsquared.code])
         });
 
-        const buildValidation = (dta: any, node: any) => ({
+        const buildClassificationScore = (dta: any, node: any) => ({
           accuracy: parseFloat(dta[SCORES.accuracy.code]),
           confusionMatrix: dta[SCORES.confusionMatrix.code],
           f1score: parseFloat(dta[SCORES.f1score.code]),
           falsePositiveRate: parseFloat(dta[SCORES.falsePositiveRate.code]),
-          node: `${node}`,
           precision: parseFloat(dta[SCORES.precision.code]),
           recall: parseFloat(dta[SCORES.recall.code])
         });
@@ -236,21 +213,33 @@ const pfa = (data: any): IPfa => {
             return;
           } else {
             const node = i.node;
-            if (i.code === "kfold") {
-              const dta: any = i.data.average;
-              output.crossValidation = buildKFoldValidation(dta, node);
-            }
-
-            if (i.code === "remote-validation") {
-              const dta: any = i.data;
-              if (dta.type === "RegressionScore") {
-                output.remoteValidations = buildKFoldValidation(dta, node);
-              } else {
-                output.remoteValidations = buildValidation(dta, node);
+            switch (i.code) {
+              case "kfold": {
+                const dta: any = i.data.average;
+                if (dta.type === "RegressionScore") {
+                  output.crossValidation = buildRegressionScore(dta, node);
+                } else {
+                  // PolynomialClassificationScore
+                  output.crossValidation = buildClassificationScore(dta, node);
+                }
+                break;
+              }
+              case "remote-validation": {
+                const dta: any = i.data;
+                if (dta.type === "RegressionScore") {
+                  output.remoteValidation = buildRegressionScore(dta, node);
+                } else if (dta.type === "PolynomialClassificationScore") {
+                  output.remoteValidation = buildClassificationScore(dta, node);
+                } else {
+                  // TODO: Recursive node validations
+                }
+                break;
               }
             }
           }
         });
+
+        console.log(output)
       }
     }
   });
