@@ -23,18 +23,18 @@ class App extends React.Component {
   private experimentListContainer = new ExperimentListContainer();
   private modelContainer = new ModelContainer();
 
-  private intervalId: NodeJS.Timer;
+  // private intervalId: NodeJS.Timer;
 
-  public componentWillMount() {
-    this.intervalId = setInterval(
-      () => this.experimentListContainer.load(),
-      10 * 1000
-    );
-  }
+  // public componentWillMount() {
+  //   this.intervalId = setInterval(
+  //     () => this.experimentListContainer.load(),
+  //     10 * 1000
+  //   );
+  // }
 
-  public componentWillUnmount() {
-    clearInterval(this.intervalId);
-  }
+  // public componentWillUnmount() {
+  //   clearInterval(this.intervalId);
+  // }
 
   public render() {
     return (

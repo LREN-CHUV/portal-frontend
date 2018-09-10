@@ -21,7 +21,6 @@ export default ({ data }: { data: any }) =>
         .map(mapCode)
         .map(s => s.label)
 
-      const computedHeaders = ["Variable"].concat(headers);
       const computedBody = variables.map((v: any, j: number) => {
         const val = headersKeys.map(key => tables[j][key]).map(n => !isNaN(n) ? n.toFixed(3) : '');
         return [v].concat(val)
@@ -31,7 +30,8 @@ export default ({ data }: { data: any }) =>
         <table key={i} className="greyGridTable">
           <thead>
             <tr>
-              {computedHeaders.map(c => (
+              <th>Variables</th>
+              {headers.map(c => (
                 <th key={c}>{c}</th>
               ))}
             </tr>
