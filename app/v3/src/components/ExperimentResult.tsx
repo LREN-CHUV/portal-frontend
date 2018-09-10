@@ -21,25 +21,27 @@ export default ({
   const methodsDisplay = (thenode: INode) => (
     <Tabs defaultActiveKey={0} id="tabs-methods">
       {thenode.methods &&
-        thenode.methods.map((m: any, j: number) => (
-          <Tab eventKey={j} title={m.algorithm} key={j}>
-            {m.mime === MIME_TYPES.ERROR && (
+        thenode.methods.map((method: any, j: number) => (
+          <Tab eventKey={j} title={method.algorithm} key={j}>
+            {method.mime === MIME_TYPES.ERROR && (
               <div>
                 <h3>An error has occured</h3>
-                <p>{m.error}</p>
+                <p>{method.error}</p>
               </div>
             )}
-            {m.mime === MIME_TYPES.JSON && <JSON data={m.data} />}
-
-            {m.mime === MIME_TYPES.PLOTLY &&
-              m.data.map((d: { data: any; layout: any }, k: number) => (
+            {method.mime === MIME_TYPES.JSON && <JSON data={method.data} />}
+            {method.mime === MIME_TYPES.PLOTLY &&
+              method.data.map((d: { data: any; layout: any }, k: number) => (
                 <Plotly data={d.data} layout={d.layout} key={k} />
               ))}
-            {m.mime === MIME_TYPES.HIGHCHARTS &&
-              m.data.map((d: { data: any }, k: number) => (
+            {method.mime === MIME_TYPES.HIGHCHARTS &&
+              method.data.map((d: { data: any }, k: number) => (
                 <Highchart options={d} key={k} />
               ))}
-            {m.mime === MIME_TYPES.PFA && <PFA method={m}/>}
+            {method.mime === MIME_TYPES.PFA &&
+              method.data.map((data: any, k: number) => (
+                <PFA key={k} method={method} data={data}/>
+              ))}
           </Tab>
         ))}
     </Tabs>

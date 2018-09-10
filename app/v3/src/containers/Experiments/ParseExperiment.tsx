@@ -218,8 +218,7 @@ const pfa = (data: any): IPfa => {
                 const dta: any = i.data.average;
                 if (dta.type === "RegressionScore") {
                   output.crossValidation = buildRegressionScore(dta, node);
-                } else {
-                  // PolynomialClassificationScore
+                } else if (dta.type === "PolynomialClassificationScore") {
                   output.crossValidation = buildClassificationScore(dta, node);
                 }
                 break;

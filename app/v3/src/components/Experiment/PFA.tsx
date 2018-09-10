@@ -1,6 +1,7 @@
 // tslint:disable:no-console
 
 import {
+  IConfusionMatrix,
   IMethod,
   IPolynomialClassificationScore,
   IRegressionScore
@@ -10,9 +11,15 @@ import { Tab, Tabs } from "react-bootstrap";
 import { SCORES } from "../../constants";
 import { Highchart } from "./";
 
-import "./JSON.css"
+import "./JSON.css";
 
-const makeChart = (
+const removeKey = (obj: any, key: string = "confusionMatrix") => {
+  const newObj = {...obj}
+  newObj[key] = undefined;
+  return JSON.parse(JSON.stringify(newObj));
+};
+
+const buildChart = (
   validation: IRegressionScore | IPolynomialClassificationScore
 ) => ({
   chart: {
@@ -20,7 +27,8 @@ const makeChart = (
   },
   series: [
     {
-      data: Object.keys(validation).map(key => validation[key])
+      data: Object.keys(validation).map(key => validation[key]),
+      name: "Scores"
     }
   ],
   title: {
@@ -29,57 +37,72 @@ const makeChart = (
   xAxis: {
     categories: Object.keys(validation).map(v => SCORES[v] && SCORES[v].label)
   },
-  yAxis: { min: 0, max: 1, title: { text: "scores" } }
+  yAxis: { min: 0, max: 1, title: { text: "Value" } }
 });
 
-export default ({ method }: { method: IMethod }) => {
+const buildTableValue = (
+  validation: IRegressionScore | IPolynomialClassificationScore
+) => {
   return (
-    (method &&
-    method.data && ( // FIXME: should iterate
-        <Tabs
-          defaultActiveKey={0}
-          id="pfa-method"
-          style={{ marginTop: "16px" }}
-        >
-          {method.data[0].crossValidation && (
-            <Tab eventKey={0} title={"Cross Validation"}>
-              {console.log("crossValidation", method.data[0].crossValidation)}
-              <Highchart options={makeChart(method.data[0].crossValidation)} />
-              <pre>
-                {JSON.stringify(method.data[0].crossValidation.confusionMatrix, null, 4)}
-              </pre>
+    <ul>
+      {Object.keys(validation).map((key, k) => (
+        <li key={k}>
+          <strong>{SCORES[key] && SCORES[key].label}</strong>:{" "}
+          {`${validation[key]}`}
+        </li>
+      ))}
+    </ul>
+  );
+};
 
-              <table className="greyGridTable">
-                <tr>
-                  <th />
-                  <th ng-repeat="elem in labels" ng-bind="elem + '*'" />
-                </tr>
-                <tr ng-repeat="row in values">
-                  <th ng-bind="labels[$index]" />
-                  <td
-                    ng-repeat="elem in row track by $index"
-                    ng-bind="elem.toFixed()"
-                  />
-                </tr>
-              </table>
+const buildConfusionMatrix = (matrix: IConfusionMatrix) => {
+  return (
+    <table className="greyGridTable">
+      <caption>
+        <strong>Confusion matrix</strong>
+      </caption>
+      <thead>
+        <tr>
+          <th />
+          {matrix.labels.map((label: string, k: number) => (
+            <th key={k}>{label}*</th>
+          ))}
+        </tr>
+      </thead>
+      <tbody>
+        {matrix.values.map((values: number[], k: number) => (
+          <tr key={k}>
+            <th>{matrix.labels[k]}</th>
+            {values.map((value, l) => (
+              <td key={l}>{value}</td>
+            ))}
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+};
 
-            </Tab>
-          )}
-          {method.data[0].remoteValidation && (
-            <Tab eventKey={1} title={"Remote Validation"}>
-              {console.log(
-                "remoteValidations",
-                method.data[0].remoteValidation
-              )}
-
-              <Highchart options={makeChart(method.data[0].remoteValidation)} />
-              <pre>
-                {JSON.stringify(method.data[0].crossValidation, null, 4)}
-              </pre>
-            </Tab>
-          )}
-        </Tabs>
-      )) ||
+export default ({ method, data }: { method: IMethod; data: any }) => {
+  return (
+    (data && (
+      <Tabs defaultActiveKey={0} id="pfa-method" style={{ marginTop: "16px" }}>
+        {data.crossValidation && (
+          <Tab eventKey={0} title={"Cross Validation"}>
+            <Highchart options={buildChart(removeKey(data.crossValidation))} />
+            {buildTableValue(removeKey(data.crossValidation))}
+            {buildConfusionMatrix(data.crossValidation.confusionMatrix)}
+          </Tab>
+        )}
+        {data.remoteValidation && (
+          <Tab eventKey={1} title={"Remote Validation"}>
+            <Highchart options={buildChart(removeKey(data.remoteValidation))} />
+            {buildTableValue(removeKey(data.remoteValidation))}
+            {buildConfusionMatrix(data.remoteValidation.confusionMatrix)}
+          </Tab>
+        )}
+      </Tabs>
+    )) ||
     null
   );
 };
