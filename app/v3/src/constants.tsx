@@ -20,7 +20,7 @@ interface ILabel {
   label: string;
 }
 
-// aglorithms labels
+// regression && classification scores labels
 const accuracy: ILabel = { code: "Accuracy", label: "Accuracy" };
 const f1score: ILabel = {
   code: "Weighted F1-score",

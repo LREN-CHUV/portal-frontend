@@ -36,13 +36,15 @@ class Navigation extends React.Component<IProps> {
           items={experimentListContainer.state.experiments}
           title="BSD"
           // tslint:disable-next-line jsx-no-lambda
-          handleSelect={(experiment: IExperimentResult) => {
+          handleSelect={async (experiment: IExperimentResult) => {
             const { modelDefinitionId, uuid } = experiment;
             this.props.history.push(
               `/v3/experiment/${modelDefinitionId}/${uuid}`
             );
-            experimentContainer.load(uuid);
-            modelContainer.load(modelDefinitionId);
+            await experimentContainer.markAsViewed(uuid);
+            await modelContainer.load(modelDefinitionId);
+
+            return await experimentContainer.load(uuid);
           }}
         />
       </nav>
