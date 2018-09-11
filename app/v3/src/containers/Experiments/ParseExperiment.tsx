@@ -237,8 +237,6 @@ const pfa = (data: any): IPfa => {
             }
           }
         });
-
-        console.log(output)
       }
     }
   });
