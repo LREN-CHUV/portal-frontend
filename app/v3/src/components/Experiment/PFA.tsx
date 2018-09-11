@@ -9,9 +9,11 @@ import {
 import * as React from "react";
 import { Tab, Tabs } from "react-bootstrap";
 import { SCORES } from "../../constants";
+import { round } from "../../utils";
 import { Highchart } from "./";
 
 import "./JSON.css";
+import "./PFA.css";
 
 const removeKey = (obj: any, key: string = "confusionMatrix") => {
   const newObj = { ...obj };
@@ -44,11 +46,11 @@ const buildTableValue = (
   validation: IRegressionScore | IPolynomialClassificationScore
 ) =>
   (validation && (
-    <ul>
+    <ul className="pfa-table">
       {Object.keys(validation).map((key, k) => (
         <li key={k}>
           <strong>{SCORES[key] && SCORES[key].label}</strong>:{" "}
-          {`${validation[key]}`}
+          {round(validation[key])}
         </li>
       ))}
     </ul>

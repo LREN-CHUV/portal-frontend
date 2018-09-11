@@ -1,29 +1,32 @@
 // tslint:disable:no-console
 
 import * as React from "react";
-import { LABELS } from '../../constants';
+import { LABELS } from "../../constants";
+import { round } from "../../utils";
 
-import './JSON.css'
+import "./JSON.css";
+
 export default ({ data }: { data: any }) =>
-
   (data &&
     data.map((row: any, i: number) => {
       const variables = Object.keys(row);
       const tables = variables.map(v => row[v]);
       const tableKeys = tables.map((k: any) => Object.keys(k));
-      const mapCode = (code: string) => LABELS.find(l => l.code === code) || { code, label: code, order: -1 }
+      const mapCode = (code: string) =>
+        LABELS.find(l => l.code === code) || { code, label: code, order: -1 };
       const headersKeys: string[] = Array.from(
-        new Set([].concat.apply([], tableKeys)))
+        new Set([].concat.apply([], tableKeys))
+      )
         .map(mapCode)
         .sort((a, b) => a.order - b.order)
-        .map(s => s.code)
-      const headers: string[] = headersKeys
-        .map(mapCode)
-        .map(s => s.label)
+        .map(s => s.code);
+      const headers: string[] = headersKeys.map(mapCode).map(s => s.label);
 
       const computedBody = variables.map((v: any, j: number) => {
-        const val = headersKeys.map(key => tables[j][key]).map(n => !isNaN(n) ? n.toFixed(3) : '');
-        return [v].concat(val)
+        const val = headersKeys
+          .map(key => tables[j][key])
+          .map(n => (!isNaN(n) ? round(n) : ""));
+        return [v].concat(val);
       });
 
       return (

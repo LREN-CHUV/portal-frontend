@@ -1,0 +1,11 @@
+ul.pfa-table {
+  display: grid;
+  grid-template-columns: 33% 33% 33%;
+  grid-gap: 10px;
+  margin-top: 16px;
+  background-color: aliceblue;
+}
+
+.pfa-table li {
+  list-style: none;
+}
