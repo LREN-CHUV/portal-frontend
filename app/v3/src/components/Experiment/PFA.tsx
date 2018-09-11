@@ -14,7 +14,7 @@ import { Highchart } from "./";
 import "./JSON.css";
 
 const removeKey = (obj: any, key: string = "confusionMatrix") => {
-  const newObj = {...obj}
+  const newObj = { ...obj };
   newObj[key] = undefined;
   return JSON.parse(JSON.stringify(newObj));
 };
@@ -42,8 +42,8 @@ const buildChart = (
 
 const buildTableValue = (
   validation: IRegressionScore | IPolynomialClassificationScore
-) => {
-  return (
+) =>
+  (validation && (
     <ul>
       {Object.keys(validation).map((key, k) => (
         <li key={k}>
@@ -52,11 +52,12 @@ const buildTableValue = (
         </li>
       ))}
     </ul>
-  );
-};
+  )) ||
+  null;
 
-const buildConfusionMatrix = (matrix: IConfusionMatrix) => {
-  return (
+const buildConfusionMatrix = (matrix: IConfusionMatrix) =>
+  matrix &&
+  ((
     <table className="greyGridTable">
       <caption>
         <strong>Confusion matrix</strong>
@@ -80,13 +81,20 @@ const buildConfusionMatrix = (matrix: IConfusionMatrix) => {
         ))}
       </tbody>
     </table>
-  );
-};
-
+  ) ||
+    null);
 export default ({ method, data }: { method: IMethod; data: any }) => {
   return (
     (data && (
       <Tabs defaultActiveKey={0} id="pfa-method" style={{ marginTop: "16px" }}>
+        {data &&
+          data.error && (
+            <div>
+              <h3>An error has occured</h3>
+              <p>{data.error}</p>
+            </div>
+          )}
+
         {data.crossValidation && (
           <Tab eventKey={0} title={"Cross Validation"}>
             <Highchart options={buildChart(removeKey(data.crossValidation))} />

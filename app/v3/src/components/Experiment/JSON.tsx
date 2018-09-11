@@ -11,7 +11,7 @@ export default ({ data }: { data: any }) =>
       const variables = Object.keys(row);
       const tables = variables.map(v => row[v]);
       const tableKeys = tables.map((k: any) => Object.keys(k));
-      const mapCode = (code: string) => LABELS.find(l => l.code === code) || {code: "", label: "", order: -1}
+      const mapCode = (code: string) => LABELS.find(l => l.code === code) || { code, label: code, order: -1 }
       const headersKeys: string[] = Array.from(
         new Set([].concat.apply([], tableKeys)))
         .map(mapCode)

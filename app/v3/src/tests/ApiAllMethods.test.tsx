@@ -49,7 +49,7 @@ test("Create new models", async () => {
   console.log("> Create new models done!");
 });
 
-test(`Set experiments`, async () => {
+test.skip(`Set experiments`, async () => {
   console.log("> Set experiments");
 
   const r = Math.floor(Math.random() * Math.floor(experiments.length));
