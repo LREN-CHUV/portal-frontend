@@ -55,7 +55,7 @@ class App extends React.Component {
               modelContainer: ModelContainer
             ) => (
               <div className="App">
-                <header className="Navigation">
+                <header>
                   <Navigation
                     experimentContainer={experimentContainer}
                     experimentListContainer={experimentListContainer}

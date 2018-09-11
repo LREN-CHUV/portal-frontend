@@ -7,6 +7,7 @@ import {
   ExperimentListContainer,
   ModelContainer
 } from "../containers";
+import logo from "../images/hbp-logo.png";
 import { Dropdown } from "./";
 
 import "./Navigation.css";
@@ -31,22 +32,33 @@ class Navigation extends React.Component<IProps> {
     } = this.props;
 
     return (
-      <nav>
-        <Dropdown
-          items={experimentListContainer.state.experiments}
-          title="BSD"
-          // tslint:disable-next-line jsx-no-lambda
-          handleSelect={async (experiment: IExperimentResult) => {
-            const { modelDefinitionId, uuid } = experiment;
-            this.props.history.push(
-              `/v3/experiment/${modelDefinitionId}/${uuid}`
-            );
-            await experimentContainer.markAsViewed(uuid);
-            await modelContainer.load(modelDefinitionId);
+      <nav className="Navigation">
+        <section>
+          <img src={logo} />
+          <button />
+          <button />
+          DEV
+          <button />
+          <button />
+          <Dropdown
+            items={experimentListContainer.state.experiments}
+            title="BSD"
+            // tslint:disable-next-line jsx-no-lambda
+            handleSelect={async (experiment: IExperimentResult) => {
+              const { modelDefinitionId, uuid } = experiment;
+              this.props.history.push(
+                `/v3/experiment/${modelDefinitionId}/${uuid}`
+              );
+              await experimentContainer.markAsViewed(uuid);
+              await modelContainer.load(modelDefinitionId);
 
-            return await experimentContainer.load(uuid);
-          }}
-        />
+              return await experimentContainer.load(uuid);
+            }}
+          />
+          <button />
+          <button />
+          <button />
+        </section>
       </nav>
     );
   }
