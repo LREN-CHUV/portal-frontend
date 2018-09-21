@@ -34,7 +34,7 @@ export default ({
           >
             {experiment.error ? (
               <span className={"glyphicon-exclamation-sign glyph viewed"} />
-            ) : !experiment.result ? (
+            ) : !experiment.results ? (
               <span className={"glyphicon-transfer glyph info"} />
             ) : experiment.resultsViewed ? (
               <span className={"glyphicon-eye-open glyph viewed"} />

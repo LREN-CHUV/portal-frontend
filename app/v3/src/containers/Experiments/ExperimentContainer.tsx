@@ -31,7 +31,6 @@ class ExperimentContainer extends Container<IExperimentContainer> {
         experiment
       });
     } catch (error) {
-      console.log({ error });
       return await this.setState({
         error: error.message
       });
@@ -56,7 +55,6 @@ class ExperimentContainer extends Container<IExperimentContainer> {
         experiment
       });
     } catch (error) {
-      console.log(error);
       return await this.setState({
         error: error.message
       });

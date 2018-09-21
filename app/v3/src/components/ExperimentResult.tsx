@@ -11,7 +11,7 @@ export default ({
   experimentState: IExperimentContainer;
 }) => {
   const experiment = experimentState && experimentState.experiment;
-  const nodes = experiment && experiment.result;
+  const nodes = experiment && experiment.results;
   const error =
     (experimentState && experimentState.error) ||
     (experiment && experiment.error);

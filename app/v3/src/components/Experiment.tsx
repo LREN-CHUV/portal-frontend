@@ -1,7 +1,5 @@
 // tslint:disable:no-console
-import {
-  IExperimentResult,
-} from "@app/types";
+import { IExperimentResult } from "@app/types";
 import * as React from "react";
 import { Panel } from "react-bootstrap";
 import { RouteComponentProps, withRouter } from "react-router-dom";
@@ -26,7 +24,12 @@ const methodDisplay = (experiment: IExperimentResult | undefined) => (
       <h3>Methods</h3>
     </Panel.Title>
     <Panel.Body>
-      {experiment && experiment.algorithms.map((m: any) => <p key={m}>{m}</p>)}
+      {experiment &&
+        experiment.algorithms.map((m: any) => <p key={m.code}>{m.name}</p>)}
+      {experiment && experiment.validations && <h3>Validation</h3>}
+      {experiment &&
+        experiment.validations &&
+        experiment.validations.map((m: any) => <p key={m.code}>{m.code}: {m.parameters.map((p: any) => p.value)}</p>)}
     </Panel.Body>
   </Panel>
 );
@@ -54,7 +57,7 @@ class Experiment extends React.Component<IProps> {
     return (
       <div className="Experiment">
         <div className="header">
-          <ExperimentHeader 
+          <ExperimentHeader
             experimentContainer={experimentContainer}
             experiments={experimentListContainer.state.experiments}
           />

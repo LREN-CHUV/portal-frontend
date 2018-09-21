@@ -1,1 +1,2 @@
-export const round = (value: number, decimals: number = 3) => Number(Math.round(parseFloat(value+'e'+decimals))+'e-'+decimals);
+export const round = (num: number, decimals: number = 3) =>
+  Math.round(num * Math.pow(10, decimals) + Number.EPSILON) / Math.pow(10, decimals);

@@ -1,6 +1,7 @@
 // tslint:disable:no-console
 import { IExperimentResult } from "@app/types";
 import * as React from "react";
+import { Glyphicon } from "react-bootstrap";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import {
   ExperimentContainer,
@@ -34,12 +35,25 @@ class Navigation extends React.Component<IProps> {
     return (
       <nav className="Navigation">
         <section>
-          <img src={logo} />
-          <button />
-          <button />
-          DEV
-          <button />
-          <button />
+          {/* tslint:disable-next-line */}
+          <a href="#" onClick={e => this.jumpToAngular(e, "/")}>
+            <img src={logo} />
+          </a>
+        </section>
+        <section>
+          <a title="My data" href="/data/mydata">
+            <span className="icon-bg">
+              <Glyphicon glyph="menu-hamburger" />
+            </span>
+          </a>
+          <Glyphicon glyph="menu-hamburger" />
+        </section>
+        <section>
+          <h1>DEV</h1>
+        </section>
+        <section>
+          <Glyphicon glyph="menu-hamburger" />
+          <Glyphicon glyph="menu-hamburger" />
           <Dropdown
             items={experimentListContainer.state.experiments}
             title="BSD"
@@ -55,13 +69,20 @@ class Navigation extends React.Component<IProps> {
               return await experimentContainer.load(uuid);
             }}
           />
-          <button />
-          <button />
-          <button />
+        </section>
+        <section>
+          <Glyphicon glyph="menu-hamburger" />
+          <Glyphicon glyph="menu-hamburger" />
+          <Glyphicon glyph="menu-hamburger" />
         </section>
       </nav>
     );
   }
+
+  private jumpToAngular = (e: any, location: string) => {
+    e.preventDefault();
+    window.location.href = `${location}`;
+  };
 }
 
 export default withRouter(Navigation);

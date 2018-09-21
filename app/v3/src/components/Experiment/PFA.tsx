@@ -2,9 +2,10 @@
 
 import {
   IConfusionMatrix,
+  IKfoldValidationScore,
   IMethod,
   IPolynomialClassificationScore,
-  IRegressionScore
+  IValidationScore
 } from "@app/types";
 import * as React from "react";
 import { Tab, Tabs } from "react-bootstrap";
@@ -15,14 +16,20 @@ import { Highchart } from "./";
 import "./JSON.css";
 import "./PFA.css";
 
-const removeKey = (obj: any, key: string = "confusionMatrix") => {
+const removeKeys = (obj: any, keys: string[] = ["confusionMatrix", "type", "node"]) => {
   const newObj = { ...obj };
-  newObj[key] = undefined;
+  keys.forEach(key => {
+    newObj[key] = undefined;
+  })
+  
   return JSON.parse(JSON.stringify(newObj));
 };
 
 const buildChart = (
-  validation: IRegressionScore | IPolynomialClassificationScore
+  validation:
+    | IKfoldValidationScore
+    | IValidationScore
+    | IPolynomialClassificationScore
 ) => ({
   chart: {
     type: "column"
@@ -39,11 +46,14 @@ const buildChart = (
   xAxis: {
     categories: Object.keys(validation).map(v => SCORES[v] && SCORES[v].label)
   },
-  yAxis: { min: 0, max: 1, title: { text: "Value" } }
+  yAxis: { title: { text: "Value" } }
 });
 
 const buildTableValue = (
-  validation: IRegressionScore | IPolynomialClassificationScore
+  validation:
+    | IKfoldValidationScore
+    | IValidationScore
+    | IPolynomialClassificationScore
 ) =>
   (validation && (
     <ul className="pfa-table">
@@ -99,15 +109,15 @@ export default ({ method, data }: { method: IMethod; data: any }) => {
 
         {data.crossValidation && (
           <Tab eventKey={0} title={"Cross Validation"}>
-            <Highchart options={buildChart(removeKey(data.crossValidation))} />
-            {buildTableValue(removeKey(data.crossValidation))}
+            <Highchart options={buildChart(removeKeys(data.crossValidation))} />
+            {buildTableValue(removeKeys(data.crossValidation))}
             {buildConfusionMatrix(data.crossValidation.confusionMatrix)}
           </Tab>
         )}
         {data.remoteValidation && (
           <Tab eventKey={1} title={"Remote Validation"}>
-            <Highchart options={buildChart(removeKey(data.remoteValidation))} />
-            {buildTableValue(removeKey(data.remoteValidation))}
+            <Highchart options={buildChart(removeKeys(data.remoteValidation))} />
+            {buildTableValue(removeKeys(data.remoteValidation))}
             {buildConfusionMatrix(data.remoteValidation.confusionMatrix)}
           </Tab>
         )}
