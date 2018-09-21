@@ -4,6 +4,10 @@
   overflow-x: hidden;
 }
 
+.App section {
+  margin-top: 116px;
+}
+
 body,
 h1,
 h2,

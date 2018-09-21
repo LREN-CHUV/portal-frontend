@@ -163,7 +163,7 @@ class ParseExperiment {
                 break;
 
               case MIME_TYPES.PLOTLY:
-                method.data = plotly(subResult);
+                method.data = plotly(normalizedResult(subResult));
                 break;
 
               case MIME_TYPES.PFA:
@@ -204,6 +204,7 @@ class ParseExperiment {
           methods: [method],
           name: r.node || "Default"
         };
+        // node.methods.push(method);
       //   nodes.push(node);
       // }
       nodes.push(node);

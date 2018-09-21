@@ -26,9 +26,9 @@ const methodDisplay = (experiment: IExperimentResult | undefined) => (
     <Panel.Body>
       {experiment &&
         experiment.algorithms.map((m: any) => <p key={m.code}>{m.name}</p>)}
-      {experiment && experiment.validations && <h3>Validation</h3>}
+      {experiment && experiment.validations && experiment.validations.length > 0 && <h3>Validation</h3>}
       {experiment &&
-        experiment.validations &&
+        experiment.validations && experiment.validations.length > 0 &&
         experiment.validations.map((m: any) => <p key={m.code}>{m.code}: {m.parameters.map((p: any) => p.value)}</p>)}
     </Panel.Body>
   </Panel>

@@ -30,7 +30,7 @@ export default ({
               </div>
             )}
             {method.mime === MIME_TYPES.JSON && <JSON data={method.data} />}
-            {method.mime === MIME_TYPES.PLOTLY &&
+            {method.mime === MIME_TYPES.PLOTLY && 
               method.data.map((d: { data: any; layout: any }, k: number) => (
                 <Plotly data={d.data} layout={d.layout} key={k} />
               ))}
