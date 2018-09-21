@@ -158,7 +158,7 @@ angular
       amMoment.changeLocale("en");
 
       Config.then(config => {
-        if (config.theme && config.theme !== "mip") {
+        if (config.theme) {
           document.body.className += " " + config.theme;
         }
       });
