@@ -1,10 +1,18 @@
 // tslint:disable:no-console
-import { IExperimentResult, IMethod, INode, IPfa } from "@app/types";
 import { MIME_TYPES, SCORES } from "../../constants";
+import {
+  IExperimentResult,
+  IKfoldValidationScore,
+  IMethod,
+  INode,
+  IPolynomialClassificationScore,
+  IValidationScore
+} from "../../types";
 
 class ParseExperiment {
   public static parse = (experiment: any): IExperimentResult => {
-    // Formats are differents in the API for 1 experiment and array of experiments, apply specific parsing to some terms
+    // Formats are differents in the API for experiment, experimentList and runExperiment,
+    // apply specific parsing to some terms
     const algorithms = parse(experiment.algorithms);
     const created = (() => {
       const d = Date.parse(experiment.created + " GMT");
@@ -14,18 +22,33 @@ class ParseExperiment {
 
       return new Date(d);
     })();
+    const modelDefinitionId = experiment.model ? experiment.model.slug : null;
+
     let experimentResult: IExperimentResult = {
-      algorithms: algorithms.map((e: any) => e.name),
+      algorithms,
       created,
-      modelDefinitionId: experiment.model.slug,
+      modelDefinition: experiment.model ? experiment.model.query : undefined,
+      modelDefinitionId,
       name: experiment.name,
       resultsViewed: experiment.resultsViewed,
       user: {
         fullname: experiment.createdBy.fullname,
         username: experiment.createdBy.username
       },
-      uuid: experiment.uuid
+      uuid: experiment.uuid,
+      validations: experiment.validations
     };
+
+    // Errors
+    if (!modelDefinitionId) {
+      experimentResult = {
+        ...experimentResult,
+        error: "No model defined",
+        modelDefinitionId: "undefined"
+      };
+
+      return experimentResult;
+    }
 
     if (experiment.hasServerError) {
       experimentResult = {
@@ -50,24 +73,32 @@ class ParseExperiment {
       return experimentResult;
     }
 
-    const result = parse(experiment.result);
+    // Results
+    const resultParsed = parse(experiment.result);
+    const result = Array.isArray(resultParsed) ? resultParsed : [resultParsed];
     const nodes: INode[] = [];
-    // const distinctNodeCount = result
-    //   .map((r: any) => r.node)
-    //   .filter((el: any, i: any, a: any) => i === a.indexOf(el)).length;
 
     result.forEach((r: any, i: number) => {
       const mime = r.type;
-
+      const algorithm =
+        experimentResult.algorithms.length - 1 === i
+          ? experimentResult.algorithms[i]
+          : experimentResult.algorithms[0];
       let method: IMethod = {
-        algorithm: r.algorithm,
+        algorithm: r.algorithm || algorithm,
         mime
       };
 
+      if (r.Error) {
+        // EXAREME
+        method.error = r.Error;
+      }
+
       // Convert to array to have consistent results
       const normalizedResult = (input: any) =>
-        (input.data && (input.data.length ? input.data : [input.data])) || null;
-
+        (input.data &&
+          (Array.isArray(input.data) ? input.data : [input.data])) ||
+        null;
       const results = normalizedResult(r);
 
       switch (mime) {
@@ -81,6 +112,30 @@ class ParseExperiment {
 
         case MIME_TYPES.PFA:
           method.data = [pfa(results)];
+          break;
+
+        case MIME_TYPES.JSON:
+          method.data = jsonTest(results);
+          break;
+
+        case MIME_TYPES.JSONDATA:
+          method.data = jsonTest(results);
+          break;
+
+        case MIME_TYPES.VISJS: // EXAREME
+          const visFunction = results[0].data.result.slice(1, -1);
+          method.data = [`<script>var network; ${visFunction}</script>`];
+          break;
+
+        case MIME_TYPES.HTML:
+          const html = results.map((result1: any) =>
+            result1.replace("\u0026lt;!DOCTYPE html\u0026gt;", "<!DOCTYPE html>")
+          );
+          method.data = html;
+          break;
+
+        case MIME_TYPES.ERROR:
+          method.error = errorTest(results, r.error);
           break;
 
         case MIME_TYPES.MIP_PFA:
@@ -108,30 +163,22 @@ class ParseExperiment {
                 break;
 
               case MIME_TYPES.PLOTLY:
-                console.log("application/vnd.plotly.v1+json");
+                method.data = plotly(subResult);
                 break;
 
               case MIME_TYPES.PFA:
                 method.data = [pfa(normalizedResult(subResult))];
                 break;
 
+              case MIME_TYPES.TEXT:
+                method.data = subResult;
+                break;
+
               default:
                 console.log("!!!!!!!! SHOULD TEST", subResult.type);
+                break;
             }
           });
-
-        case MIME_TYPES.JSON:
-          method.data = jsonTest(results);
-          break;
-
-        // case "application/vnd.dataresource+json":
-        //   break;
-
-        // case "application/vnd.visjs+javascript":
-        // break;
-
-        case MIME_TYPES.ERROR:
-          method.error = errorTest(results, r.error);
           break;
 
         default:
@@ -139,28 +186,30 @@ class ParseExperiment {
             ...method,
             algorithm: "no data",
             error: "no data",
-            mime: "no data"
+            mime
           };
       }
 
       // In case we have 2 methods on 2 same nodes
       // merge nodes
-      if (nodes.length) {
-        const node: INode | undefined = nodes.find(
-          (n: any) => n.name === r.node
-        );
-        if (node) {
-          node.methods.push(method);
-        }
-      } else {
+      // if (nodes.length) {
+      //   const node: INode | undefined =
+      //     nodes && nodes.find((n: any) => n.name === r.node);
+      //   if (node) {
+      //     console.log(`node.name ${node.name}`)
+      //     node.methods.push(method);
+      //   }
+      // } else {
         const node: INode = {
           methods: [method],
           name: r.node || "Default"
         };
-        nodes.push(node);
-      }
+      //   nodes.push(node);
+      // }
+      nodes.push(node);
     });
-    experimentResult.result = nodes;
+    // console.log({nodes})
+    experimentResult.results = nodes;
 
     return experimentResult;
   };
@@ -173,8 +222,27 @@ const highcharts = (data: any) => {
 };
 
 const plotly = (data: any) => {
-  return data;
+  return [
+    {
+      data,
+      layout: { margin: { l: 400 } }
+    }
+  ];
 };
+
+interface IPfa {
+  crossValidation?:
+    | IKfoldValidationScore
+    | IValidationScore
+    | IPolynomialClassificationScore;
+  data?: any;
+  remoteValidation?:
+    | INode
+    | IKfoldValidationScore
+    | IValidationScore
+    | IPolynomialClassificationScore;
+  error?: any;
+}
 
 const pfa = (data: any): IPfa => {
   const output: IPfa = {};
@@ -190,19 +258,21 @@ const pfa = (data: any): IPfa => {
           ? d.cells.validations.init
           : [d.cells.validations.init];
 
-        const buildRegressionScore = (dta: any, node: any) => ({
+        const buildKFoldValidation = (dta: any) => ({
           explainedVariance: parseFloat(dta[SCORES.explainedVariance.code]),
           mae: parseFloat(dta[SCORES.mae.code]),
           mse: parseFloat(dta[SCORES.mse.code]),
           rmse: parseFloat(dta[SCORES.rmse.code]),
-          rsquared: parseFloat(dta[SCORES.rsquared.code])
+          rsquared: parseFloat(dta[SCORES.rsquared.code]),
+          type: `${dta[SCORES.type.code]}`
         });
 
-        const buildClassificationScore = (dta: any, node: any) => ({
+        const buildValidation = (dta: any, node: any) => ({
           accuracy: parseFloat(dta[SCORES.accuracy.code]),
           confusionMatrix: dta[SCORES.confusionMatrix.code],
           f1score: parseFloat(dta[SCORES.f1score.code]),
           falsePositiveRate: parseFloat(dta[SCORES.falsePositiveRate.code]),
+          node: `${node}`,
           precision: parseFloat(dta[SCORES.precision.code]),
           recall: parseFloat(dta[SCORES.recall.code])
         });
@@ -213,26 +283,17 @@ const pfa = (data: any): IPfa => {
             return;
           } else {
             const node = i.node;
-            switch (i.code) {
-              case "kfold": {
-                const dta: any = i.data.average;
-                if (dta.type === "RegressionScore") {
-                  output.crossValidation = buildRegressionScore(dta, node);
-                } else if (dta.type === "PolynomialClassificationScore") {
-                  output.crossValidation = buildClassificationScore(dta, node);
-                }
-                break;
-              }
-              case "remote-validation": {
-                const dta: any = i.data;
-                if (dta.type === "RegressionScore") {
-                  output.remoteValidation = buildRegressionScore(dta, node);
-                } else if (dta.type === "PolynomialClassificationScore") {
-                  output.remoteValidation = buildClassificationScore(dta, node);
-                } else {
-                  // TODO: Recursive node validations
-                }
-                break;
+            if (i.code === "kfold") {
+              const dta: any = i.data.average;
+              output.crossValidation = buildKFoldValidation(dta);
+            }
+
+            if (i.code === "remote-validation") {
+              const dta: any = i.data;
+              if (dta.type === "RegressionScore") {
+                output.remoteValidation = buildKFoldValidation(dta);
+              } else {
+                output.remoteValidation = buildValidation(dta, node);
               }
             }
           }
