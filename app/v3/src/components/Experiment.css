@@ -1,6 +1,6 @@
 .Experiment {
   display: grid;
-  padding: 0 50px;
+  padding: 0 48px;
   grid-gap: 8px;
   grid-template-columns: 200px auto 200px;
   grid-template-areas:
@@ -10,6 +10,7 @@
 
 .sidebar {
   grid-area: sidebar;
+  display: grid;
 }
 
 .content {
@@ -20,12 +21,21 @@
   grid-area: header;
 }
 
+.header .panel {
+  margin-bottom: 0px !important;
+}
+
 .Experiment h5 {
   font-weight: 700 !important;
   line-height: 1.2 !important;
 }
 
-.experiment-header {
+.experiment-header h3 {
+  padding: 0;
+  margin: 8px 0 0 0;
+}
+
+.experiment-container {
   display: grid;
   grid-template-columns: auto 190px 200px;
 }
@@ -36,4 +46,28 @@
 
 .Experiment .btn-info {
   font-weight: 700 !important;
+}
+
+var {
+  font-style: normal;
+}
+
+.content .nav-tabs>li>a {
+  color: #03a9f4;
+  border-width: 0 0 1px;
+  border-radius: 4px 4px 0 0;
+  background-color: #fff;
+  text-transform: capitalize;
+}
+
+.content .nav-tabs li.active a,
+.content .nav-tabs li.active a:focus,
+.content .nav-tabs li.active a:hover {
+  color: #616161;
+  font-weight: 700;
+}
+
+.tab-pane {
+  border: 0.5px #eeeeee solid;
+  padding: 1em;
 }

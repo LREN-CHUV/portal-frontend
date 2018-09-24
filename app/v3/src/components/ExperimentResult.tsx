@@ -60,9 +60,6 @@ export default ({
 
   return (
     <Panel>
-      <Panel.Title>
-        <h3>Results</h3>
-      </Panel.Title>
       <Panel.Body>
         {loading ? (
           <div>

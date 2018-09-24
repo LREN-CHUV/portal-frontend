@@ -9,13 +9,15 @@ interface IDropdown {
   items: IExperimentResult[] | undefined;
   title: string;
   handleSelect: any;
+  noCaret?: boolean
 }
 export default ({
   items,
   title = "Current Model",
-  handleSelect
+  handleSelect,
+  noCaret = false
 }: IDropdown) => (
-  <DropdownButton bsStyle="default" id={"experiment-dropdown"} title={title}>
+  <DropdownButton noCaret={noCaret} bsStyle="default" id={"experiment-dropdown"} title={title}>
     {items &&
       handleSelect &&
       items
@@ -25,27 +27,32 @@ export default ({
 
           return a > b ? -1 : a < b ? 1 : 0;
         })
-        .map((experiment, i: number) => (
-          <MenuItem
-            eventKey={i}
-            key={experiment.uuid}
-            // tslint:disable-next-line jsx-no-lambda
-            onSelect={() => handleSelect(experiment)}
-          >
-            {experiment.error ? (
-              <span className={"glyphicon-exclamation-sign glyph viewed"} />
-            ) : !experiment.results ? (
-              <span className={"glyphicon-transfer glyph info"} />
-            ) : experiment.resultsViewed ? (
-              <span className={"glyphicon-eye-open glyph viewed"} />
-            ) : (
-              <span className={"glyphicon-eye-open glyph success"} />
-            )}
-            {"  "}
-            <strong>{experiment.name}</strong>
-            {" - "}
-            {moment(experiment.created, "YYYYMMDD").fromNow()}
-          </MenuItem>
-        ))}
+        .map((experiment, i: number) => {
+          let experimentState;
+
+          experimentState = experiment.error
+            ? "glyphicon-exclamation-sign glyph"
+            : !experiment.results
+              ? "glyphicon-transfer glyph loading"
+              : "glyphicon-eye-open glyph";
+          experimentState += experiment.resultsViewed
+            ? " viewed"
+            : " ready"
+
+          return (
+            <MenuItem
+              eventKey={i}
+              key={experiment.uuid}
+              // tslint:disable-next-line jsx-no-lambda
+              onSelect={() => handleSelect(experiment)}
+            >
+              <span className={experimentState} />
+              {"  "}
+              <strong>{experiment.name}</strong>
+              {" - "}
+              {moment(experiment.created, "YYYYMMDD").fromNow()}
+            </MenuItem>
+          );
+        })}
   </DropdownButton>
 );

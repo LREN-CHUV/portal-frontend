@@ -33,14 +33,19 @@ class Navigation extends React.Component<IProps> {
       modelContainer
     } = this.props;
 
+    const unreadCount =
+      experimentListContainer &&
+      experimentListContainer.state &&
+      experimentListContainer.state.experiments &&
+      experimentListContainer.state.experiments.filter(e => !e.resultsViewed)
+        .length || undefined;
+
     return (
       <header
         id="topnav"
         className="navbar navbar-default navbar-fixed-top ng-scope"
-        change-on-scroll=""
-        role="banner"
       >
-        <div className="container-fluid ng-scope">
+        <div className="container-fluid">
           <div className="logo-area">
             <a
               className="navbar-brand"
@@ -78,7 +83,7 @@ class Navigation extends React.Component<IProps> {
           </div>
 
           <div className="app-instance-name">
-            <h2 className="ng-binding">DEV</h2>
+            <h2>DEV</h2>
           </div>
 
           <ul className="nav navbar-nav toolbar pull-right">
@@ -90,7 +95,7 @@ class Navigation extends React.Component<IProps> {
                 onClick={e => this.jumpToAngular(e, "/explore")}
               >
                 <span className="icon-bg">
-                  <i className="ng-binding">EE</i>
+                  <i>EE</i>
                 </span>
               </a>
             </li>
@@ -103,7 +108,7 @@ class Navigation extends React.Component<IProps> {
                 onClick={e => this.jumpToAngular(e, "/review")}
               >
                 <span className="icon-bg">
-                  <i className="ng-binding">IA</i>
+                  <i>IA</i>
                 </span>
               </a>
             </li>
@@ -111,14 +116,6 @@ class Navigation extends React.Component<IProps> {
             <li className="toolbar-icon-bg hidden-xs">
               <a href="#" title="Biological Signature of Diseases">
                 <span className="icon-bg">
-                  <i className="ng-binding">BSD</i>
-                  <span
-                    className="unread_count_badge ng-binding ng-scope"
-                    ng-if="unread_count"
-                    ng-bind="unread_count"
-                  >
-                    7
-                  </span>
                   <Dropdown
                     items={experimentListContainer.state.experiments}
                     title="BSD"
@@ -133,7 +130,12 @@ class Navigation extends React.Component<IProps> {
 
                       return await experimentContainer.load(uuid);
                     }}
+                    noCaret={true}
                   />
+                  {unreadCount && <span className="unread_count_badge ng-binding ng-scope">
+                    {unreadCount}
+                  </span>}
+                  
                 </span>
               </a>
             </li>
@@ -142,12 +144,10 @@ class Navigation extends React.Component<IProps> {
               <a
                 href="#"
                 className="uib-dropdown-toggle username"
-                data-toggle="dropdown"
                 data-position="right"
               >
                 <img
                   className="img-circle"
-                  ng-src="/images/users/default_user.png"
                   alt="anonymous"
                   src={default_user}
                 />
@@ -156,7 +156,7 @@ class Navigation extends React.Component<IProps> {
                 <li>
                   <a ui-sref="profile" href="/profile">
                     <i className="ti ti-user" />
-                    <span className="ng-binding">Profile</span>
+                    <span>Profile</span>
                   </a>
                 </li>
 
@@ -164,7 +164,7 @@ class Navigation extends React.Component<IProps> {
                 <li>
                   <a href="" id="logout-link" ng-click="logout()">
                     <i className="ti ti-shift-right" />
-                    <span className="ng-binding">Sign out</span>
+                    <span>Sign out</span>
                   </a>
                 </li>
               </ul>

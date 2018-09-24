@@ -20,16 +20,21 @@ interface IProps extends RouteComponentProps<any> {
 
 const methodDisplay = (experiment: IExperimentResult | undefined) => (
   <Panel>
-    <Panel.Title>
-      <h3>Methods</h3>
-    </Panel.Title>
     <Panel.Body>
+      <h3>Methods</h3>
       {experiment &&
         experiment.algorithms.map((m: any) => <p key={m.code}>{m.name}</p>)}
-      {experiment && experiment.validations && experiment.validations.length > 0 && <h3>Validation</h3>}
       {experiment &&
-        experiment.validations && experiment.validations.length > 0 &&
-        experiment.validations.map((m: any) => <p key={m.code}>{m.code}: {m.parameters.map((p: any) => p.value)}</p>)}
+        experiment.validations &&
+        experiment.validations.length > 0 && <h3>Validation</h3>}
+      {experiment &&
+        experiment.validations &&
+        experiment.validations.length > 0 &&
+        experiment.validations.map((m: any) => (
+          <p key={m.code}>
+            {m.code}: {m.parameters.map((p: any) => p.value)}
+          </p>
+        ))}
     </Panel.Body>
   </Panel>
 );
@@ -64,10 +69,8 @@ class Experiment extends React.Component<IProps> {
         </div>
 
         <div className="sidebar">
-          <div>
-            {methodDisplay(experimentContainer.state.experiment)}
-            <Model model={modelContainer.state.model} />
-          </div>
+          {methodDisplay(experimentContainer.state.experiment)}
+          <Model model={modelContainer.state.model} />
         </div>
         <div className="content">
           <ExperimentResult experimentState={experimentContainer.state} />

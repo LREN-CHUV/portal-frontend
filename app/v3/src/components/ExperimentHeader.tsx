@@ -29,38 +29,37 @@ export default withRouter(
     };
 
     return (
-      <Panel>
-        <Panel.Title className="experiment-header">
-          <h3 className="item">
+      <Panel className="experiment-header">
+        <Panel.Body>
+          <h3>
             Results of Experiment <strong>{title}</strong> on{" "}
             <a href={`/models/${modelId}`}>{modelId}</a>
           </h3>
-          <div className="item">
-            <Button bsStyle="info">SHARE EXPERIMENT</Button>
+          <div className="experiment-container">
+            <h5 className="item">
+              Created{" "}
+              {experiment &&
+                moment(new Date(experiment.created), "YYYYMMDD").fromNow()}{" "}
+              by {experiment && experiment.user.username}
+            </h5>
+            <div className="item">
+              <Button bsStyle="info">SHARE EXPERIMENT</Button>
+            </div>
+            <div className="item">
+              <Dropdown
+                items={
+                  experiment &&
+                  experiments &&
+                  experiments.filter(
+                    (e: any) =>
+                      e.modelDefinitionId === experiment.modelDefinitionId
+                  )
+                }
+                title="RELATED EXPERIMENTS"
+                handleSelect={handleSelectExperiment}
+              />
+            </div>
           </div>
-          <div className="item">
-            <Dropdown
-              items={
-                experiment &&
-                experiments &&
-                experiments.filter(
-                  (e: any) =>
-                    e.modelDefinitionId === experiment.modelDefinitionId
-                )
-              }
-              title="RELATED EXPERIMENTS"
-              handleSelect={handleSelectExperiment}
-            />
-          </div>
-        </Panel.Title>
-
-        <Panel.Body>
-          <h5>
-            Created{" "}
-            {experiment &&
-              moment(new Date(experiment.created), "YYYYMMDD").fromNow()}{" "}
-            by {experiment && experiment.user.username}
-          </h5>
         </Panel.Body>
       </Panel>
     );

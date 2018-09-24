@@ -1289,7 +1289,7 @@ table > tbody > tr:last-child > td:last-child {
   }
 }
 .panel {
-  -webkit-box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
 }
 .navbar-nav > li > .dropdown-menu {
   margin-top: 0;
@@ -1328,7 +1328,6 @@ table > tbody > tr:last-child > td:last-child {
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
   border-radius: 2px;
   background-color: #fff;
-  margin-bottom: 16px !important;
 }
 .panel .panel-body {
   background-color: #fff;
@@ -1369,11 +1368,8 @@ i.ti {
 }
 
 .panel {
-  margin: 0;
   border: 0 !important;
-}
-.panel .panel-body {
-  padding: 10px;
+  margin-bottom: 8px;
 }
 
 
