@@ -23,9 +23,24 @@ export default ({ data }: { data: any }) =>
       const headers: string[] = headersKeys.map(mapCode).map(s => s.label);
 
       const computedBody = variables.map((v: any, j: number) => {
-        const val = headersKeys
-          .map(key => tables[j][key])
-          .map(n => (!isNaN(n) ? round(n) : ""));
+        const val = headersKeys.map(key => {
+          const value = tables[j][key];
+          const cValue = !isNaN(value) ? round(value) : NaN;
+          let output: number | string = cValue;
+          if (key === "PR(>F)") {
+            output =
+              cValue < 0.001
+                ? `${cValue} (***)`
+                : cValue < 0.01
+                  ? `${cValue} (**)`
+                  : cValue < 0.05
+                    ? `${cValue} (*)`
+                    : `${cValue}`;
+          }
+
+          return output;
+        });
+        // .map(n => (!isNaN(n) ? round(n) : ""));
         return [v].concat(val);
       });
 

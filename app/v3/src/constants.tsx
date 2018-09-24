@@ -69,11 +69,11 @@ interface ILabelPlus extends ILabel {
   order: number;
 }
 
-const f: ILabelPlus = { code: 'F', label: 'F-value', order: 2 };
-const meansq: ILabelPlus = { code: 'mean_sq', label: '', order: -1 };
-const prf: ILabelPlus = { code: 'PR(>F)', label: 'P-value', order: 3 };
-const sumsq: ILabelPlus = { code: 'sum_sq', label: 'Sum²', order: 0 };
-const df: ILabelPlus = { code: 'df', label: 'Degrees of freedom', order: 1 };
+const f: ILabelPlus = { code: 'F', label: 'F', order: 3 };
+const meansq: ILabelPlus = { code: 'mean_sq', label: 'mean_sq', order: 2 };
+const prf: ILabelPlus = { code: 'PR(>F)', label: 'PR(>F)', order: 4 };
+const sumsq: ILabelPlus = { code: 'sum_sq', label: 'sum_sq', order: 1 };
+const df: ILabelPlus = { code: 'df', label: 'df', order: 0 };
 
 const coef: ILabelPlus = { code: 'coef', label: 'Coefficient', order: 0 };
 const pvalues: ILabelPlus = { code: 'p_values', label: 'P-value', order: 3 };
