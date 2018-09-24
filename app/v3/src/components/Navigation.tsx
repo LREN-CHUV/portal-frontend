@@ -1,5 +1,5 @@
 // tslint:disable:no-console
-// import { IExperimentResult } from "@app/types";
+import { IExperimentResult } from "@app/types";
 import * as React from "react";
 // import { Glyphicon } from "react-bootstrap";
 import { RouteComponentProps, withRouter } from "react-router-dom";
@@ -10,7 +10,7 @@ import {
 } from "../containers";
 import default_user from "../images/default_user.png";
 // import logo from "../images/hbp-logo.png";
-// import { Dropdown } from "./";
+import { Dropdown } from "./";
 
 import "./Navigation.css";
 
@@ -27,11 +27,11 @@ class Navigation extends React.Component<IProps> {
   }
 
   public render() {
-    // const {
-    //   experimentListContainer,
-    //   experimentContainer,
-    //   modelContainer
-    // } = this.props;
+    const {
+      experimentListContainer,
+      experimentContainer,
+      modelContainer
+    } = this.props;
 
     return (
       <header
@@ -39,29 +39,24 @@ class Navigation extends React.Component<IProps> {
         className="navbar navbar-default navbar-fixed-top ng-scope"
         change-on-scroll=""
         role="banner"
-        ng-show="isLoggedIn() &amp;&amp; hasAgreedTos"
-        ng-include="'scripts/app/header/header.html'"
-        ng-controller="HeaderController"
       >
         <div className="container-fluid ng-scope">
           <div className="logo-area">
-            <a className="navbar-brand" ui-sref="home" href="/home">
+            <a
+              className="navbar-brand"
+              href="/home"
+              // tslint:disable-next-line jsx-no-lambda
+              onClick={e => this.jumpToAngular(e, "/home")}
+            >
               Human Brain Project
             </a>
 
-            <span
-              id="trigger-sidebar"
-              className="toolbar-trigger toolbar-icon-bg"
-              ng-click="toggleLeftBar()"
-              ng-show="!getLayoutOption('layoutHorizontal')"
-            >
+            <span className="toolbar-trigger toolbar-icon-bg">
               <a
-                data-toggle="tooltips"
-                data-placement="right"
                 title="My data"
-                ui-sref="data({scope: 'mydata'})"
-                ui-sref-active="active"
                 href="/data/mydata"
+                // tslint:disable-next-line jsx-no-lambda
+                onClick={e => this.jumpToAngular(e, "/data/maydata")}
               >
                 <span className="icon-bg">
                   <i className="ti ti-menu" />
@@ -70,10 +65,10 @@ class Navigation extends React.Component<IProps> {
             </span>
             <span className="toolbar-trigger toolbar-icon-bg">
               <a
-                ui-sref="data({scope: 'communitydata'})"
                 title="My community"
-                ui-sref-active="active"
                 href="/data/communitydata"
+                // tslint:disable-next-line jsx-no-lambda
+                onClick={e => this.jumpToAngular(e, "/data/communitydata")}
               >
                 <span className="icon-bg">
                   <i className="ti ti-world" />
@@ -89,11 +84,10 @@ class Navigation extends React.Component<IProps> {
           <ul className="nav navbar-nav toolbar pull-right">
             <li className="toolbar-icon-bg hidden-xs">
               <a
-                ui-sref="explore"
                 title="Epidemiological Exploration "
-                ui-sref-active="active"
                 href="/explore"
-                className=""
+                // tslint:disable-next-line jsx-no-lambda
+                onClick={e => this.jumpToAngular(e, "/explore")}
               >
                 <span className="icon-bg">
                   <i className="ng-binding">EE</i>
@@ -103,10 +97,10 @@ class Navigation extends React.Component<IProps> {
 
             <li className="toolbar-icon-bg hidden-xs">
               <a
-                ui-sref="review"
                 title="Interactive Analysis"
-                ui-sref-active="active"
                 href="/review"
+                // tslint:disable-next-line jsx-no-lambda
+                onClick={e => this.jumpToAngular(e, "/review")}
               >
                 <span className="icon-bg">
                   <i className="ng-binding">IA</i>
@@ -115,16 +109,7 @@ class Navigation extends React.Component<IProps> {
             </li>
 
             <li className="toolbar-icon-bg hidden-xs">
-              <a
-                href=""
-                title="Biological Signature of Diseases"
-                popover-trigger="'focus'"
-                popover-title="My experiments"
-                popover-is_open="is_open"
-                uib-popover-template="'/scripts/app/experiments/running-experiments-popover.html'"
-                popover-placement="bottom"
-                ui-sref-active="active"
-              >
+              <a href="#" title="Biological Signature of Diseases">
                 <span className="icon-bg">
                   <i className="ng-binding">BSD</i>
                   <span
@@ -134,6 +119,21 @@ class Navigation extends React.Component<IProps> {
                   >
                     7
                   </span>
+                  <Dropdown
+                    items={experimentListContainer.state.experiments}
+                    title="BSD"
+                    // tslint:disable-next-line jsx-no-lambda
+                    handleSelect={async (experiment: IExperimentResult) => {
+                      const { modelDefinitionId, uuid } = experiment;
+                      this.props.history.push(
+                        `/v3/experiment/${modelDefinitionId}/${uuid}`
+                      );
+                      await experimentContainer.markAsViewed(uuid);
+                      await modelContainer.load(modelDefinitionId);
+
+                      return await experimentContainer.load(uuid);
+                    }}
+                  />
                 </span>
               </a>
             </li>
@@ -196,57 +196,10 @@ class Navigation extends React.Component<IProps> {
     );
   }
 
-  //   return (
-  //     <nav className="Navigation">
-  //       <section>
-  //         {/* tslint:disable-next-line */}
-  //         <a href="#" onClick={e => this.jumpToAngular(e, "/")}>
-  //           <img src={logo} />
-  //         </a>
-  //       </section>
-  //       <section>
-  //         <a title="My data" href="/data/mydata">
-  //           <span className="icon-bg">
-  //             <Glyphicon glyph="menu-hamburger" />
-  //           </span>
-  //         </a>
-  //         <Glyphicon glyph="menu-hamburger" />
-  //       </section>
-  //       <section>
-  //         <h1>DEV</h1>
-  //       </section>
-  //       <section>
-  //         <Glyphicon glyph="menu-hamburger" />
-  //         <Glyphicon glyph="menu-hamburger" />
-  //         <Dropdown
-  //           items={experimentListContainer.state.experiments}
-  //           title="BSD"
-  //           // tslint:disable-next-line jsx-no-lambda
-  //           handleSelect={async (experiment: IExperimentResult) => {
-  //             const { modelDefinitionId, uuid } = experiment;
-  //             this.props.history.push(
-  //               `/v3/experiment/${modelDefinitionId}/${uuid}`
-  //             );
-  //             await experimentContainer.markAsViewed(uuid);
-  //             await modelContainer.load(modelDefinitionId);
-
-  //             return await experimentContainer.load(uuid);
-  //           }}
-  //         />
-  //       </section>
-  //       <section>
-  //         <Glyphicon glyph="menu-hamburger" />
-  //         <Glyphicon glyph="menu-hamburger" />
-  //         <Glyphicon glyph="menu-hamburger" />
-  //       </section>
-  //     </nav>
-  //   );
-  // }
-
-  // private jumpToAngular = (e: any, location: string) => {
-  //   e.preventDefault();
-  //   window.location.href = `${location}`;
-  // };
+  private jumpToAngular = (e: any, location: string) => {
+    e.preventDefault();
+    window.location.href = `${location}`;
+  };
 }
 
 export default withRouter(Navigation);
