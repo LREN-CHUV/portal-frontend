@@ -210,7 +210,7 @@ class ParseExperiment {
       nodes.push(node);
     });
     // console.log({nodes})
-    experimentResult.results = nodes;
+    experimentResult.results = nodes.sort((a:INode, b:INode) => a.name.localeCompare(b.name));
 
     return experimentResult;
   };
