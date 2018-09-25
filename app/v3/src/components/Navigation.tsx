@@ -34,11 +34,12 @@ class Navigation extends React.Component<IProps> {
     } = this.props;
 
     const unreadCount =
-      experimentListContainer &&
-      experimentListContainer.state &&
-      experimentListContainer.state.experiments &&
-      experimentListContainer.state.experiments.filter(e => !e.resultsViewed)
-        .length || undefined;
+      (experimentListContainer &&
+        experimentListContainer.state &&
+        experimentListContainer.state.experiments &&
+        experimentListContainer.state.experiments.filter(e => !e.resultsViewed)
+          .length) ||
+      undefined;
 
     return (
       <header
@@ -115,28 +116,27 @@ class Navigation extends React.Component<IProps> {
 
             <li className="toolbar-icon-bg hidden-xs">
               <a href="#" title="Biological Signature of Diseases">
-                <span className="icon-bg">
-                  <Dropdown
-                    items={experimentListContainer.state.experiments}
-                    title="BSD"
-                    // tslint:disable-next-line jsx-no-lambda
-                    handleSelect={async (experiment: IExperimentResult) => {
-                      const { modelDefinitionId, uuid } = experiment;
-                      this.props.history.push(
-                        `/v3/experiment/${modelDefinitionId}/${uuid}`
-                      );
-                      await experimentContainer.markAsViewed(uuid);
-                      await modelContainer.load(modelDefinitionId);
+                <Dropdown
+                  items={experimentListContainer.state.experiments}
+                  title="BSD"
+                  // tslint:disable-next-line jsx-no-lambda
+                  handleSelect={async (experiment: IExperimentResult) => {
+                    const { modelDefinitionId, uuid } = experiment;
+                    this.props.history.push(
+                      `/v3/experiment/${modelDefinitionId}/${uuid}`
+                    );
+                    await experimentContainer.markAsViewed(uuid);
+                    await modelContainer.load(modelDefinitionId);
 
-                      return await experimentContainer.load(uuid);
-                    }}
-                    noCaret={true}
-                  />
-                  {unreadCount && <span className="unread_count_badge ng-binding ng-scope">
+                    return await experimentContainer.load(uuid);
+                  }}
+                  noCaret={true}
+                />
+                {unreadCount && (
+                  <span className="unread_count_badge ng-binding ng-scope">
                     {unreadCount}
-                  </span>}
-                  
-                </span>
+                  </span>
+                )}
               </a>
             </li>
 

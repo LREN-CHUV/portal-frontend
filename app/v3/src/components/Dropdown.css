@@ -21,25 +21,3 @@
 .loading {
     color: #5bc0de;
 }
-
-#topnav .toolbar a span.icon-bg .btn-default {
-    color: #000 !important;
-    position: relative;
-    z-index: 2;
-    font-size: 16px;
-    text-indent: -0.025em;
-    font-family: "Open Sans Condensed", sans-serif;
-    font-weight: 700;
-    font-style: normal;
-}
-
-#topnav .btn-default {
-    display: block;
-    border-radius: 20px;
-    padding: 0;
-    line-height: 40px;
-    font-size: 17px;
-    text-align: center;
-    height: 40px;
-    width: 40px;
-}
