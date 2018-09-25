@@ -9,7 +9,7 @@ interface IDropdown {
   items: IExperimentResult[] | undefined;
   title: string;
   handleSelect: any;
-  noCaret?: boolean
+  noCaret?: boolean;
 }
 export default ({
   items,
@@ -17,8 +17,13 @@ export default ({
   handleSelect,
   noCaret = false
 }: IDropdown) => (
-  <DropdownButton noCaret={noCaret} bsStyle="default" id={"experiment-dropdown"} title={title}>
-    {items &&
+  <DropdownButton
+    noCaret={noCaret}
+    bsStyle="default"
+    id={"experiment-dropdown"}
+    title={title}
+  >
+    {(items &&
       handleSelect &&
       items
         .sort((a1: IExperimentResult, b1: IExperimentResult) => {
@@ -35,9 +40,7 @@ export default ({
             : !experiment.results
               ? "glyphicon-transfer glyph loading"
               : "glyphicon-eye-open glyph";
-          experimentState += experiment.resultsViewed
-            ? " viewed"
-            : " ready"
+          experimentState += experiment.resultsViewed ? " viewed" : " ready";
 
           return (
             <MenuItem
@@ -53,6 +56,14 @@ export default ({
               {moment(experiment.created, "YYYYMMDD").fromNow()}
             </MenuItem>
           );
-        })}
+        })) || (
+      <div>
+        <p>You have no running experiments.</p>
+        <p>
+          You can start one by selecting a model and configuring an experiment
+          on it.
+        </p>
+      </div>
+    )}
   </DropdownButton>
 );

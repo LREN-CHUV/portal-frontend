@@ -37,7 +37,7 @@ class Navigation extends React.Component<IProps> {
       (experimentListContainer &&
         experimentListContainer.state &&
         experimentListContainer.state.experiments &&
-        experimentListContainer.state.experiments.filter(e => !e.resultsViewed)
+        experimentListContainer.state.experiments.filter(e => !e.resultsViewed && !e.results && !e.error)
           .length) ||
       undefined;
 
