@@ -8,14 +8,10 @@
   </div>
   <div ng-repeat="experiment in experiments | orderBy:'-finished' track by $index">
     <span ng-if="!experiment.finished" class="fa fa-spin fa-spinner"></span>
-    <span ng-if="experiment.finished && !experiment.resultsViewed && experiment.hasError"
-          class="fa fa-warning" style="color: darkorange"></span>
-    <span ng-if="experiment.finished && !experiment.resultsViewed && !experiment.hasError"
-          class="fa fa-bell" style="color: darkgreen"></span>
-    <span ng-if="experiment.finished && experiment.resultsViewed"
-          class="fa fa-eye" style="color: darkgrey"></span>
-    <a ui-sref="experiment_details({model_slug: experiment.model.slug, experiment_uuid: experiment.uuid})"
-       ng-bind="experiment.name"></a>
+    <span ng-if="experiment.finished && !experiment.resultsViewed && experiment.hasError" class="fa fa-warning" style="color: darkorange"></span>
+    <span ng-if="experiment.finished && !experiment.resultsViewed && !experiment.hasError" class="fa fa-bell" style="color: darkgreen"></span>
+    <span ng-if="experiment.finished && experiment.resultsViewed" class="fa fa-eye" style="color: darkgrey"></span>
+    <a ng-click="switch_to_v3(experiment.model.slug, experiment.uuid)" ng-bind="experiment.name"></a>
     (<span style="font-size: 10px" ng-bind="experiment.created | fromNow"></span>)
   </div>
 </div>
