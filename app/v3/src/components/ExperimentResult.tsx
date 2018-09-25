@@ -29,8 +29,12 @@ export default ({
                 <p>{method.error}</p>
               </div>
             )}
-            {method.mime === MIME_TYPES.JSON && <JSON data={method.data} />}
-            {method.mime === MIME_TYPES.PLOTLY && 
+            {method.mime === MIME_TYPES.JSON &&
+              method.data.map((row: any, k: number) => (
+                <JSON key={k} row={row} />
+              ))}
+
+            {method.mime === MIME_TYPES.PLOTLY &&
               method.data.map((d: { data: any; layout: any }, k: number) => (
                 <Plotly data={d.data} layout={d.layout} key={k} />
               ))}
@@ -40,7 +44,7 @@ export default ({
               ))}
             {method.mime === MIME_TYPES.PFA &&
               method.data.map((data: any, k: number) => (
-                <PFA key={k} method={method} data={data}/>
+                <PFA key={k} method={method} data={data} />
               ))}
           </Tab>
         ))}

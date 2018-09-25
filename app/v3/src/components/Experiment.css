@@ -10,7 +10,6 @@
 
 .sidebar {
   grid-area: sidebar;
-  display: grid;
 }
 
 .content {

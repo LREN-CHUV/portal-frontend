@@ -22,6 +22,8 @@ table.greyGridTable tr:nth-child(even) {
 
 table.greyGridTable td:first-child {
   font-weight: bold;
+  text-align: left;
+  width: 250px;
 }
 
 table.greyGridTable thead th {
