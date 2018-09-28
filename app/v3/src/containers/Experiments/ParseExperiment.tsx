@@ -174,8 +174,12 @@ class ParseExperiment {
                 method.data = subResult;
                 break;
 
+              case MIME_TYPES.JSONDATA:
+                method.data = jsonTest(normalizedResult(subResult));
+                break;
+
               default:
-                console.log("!!!!!!!! SHOULD TEST", subResult.type);
+                throw new Error(`"!!!!!!!! SHOULD TEST" ${subResult.type}`)
                 break;
             }
           });
