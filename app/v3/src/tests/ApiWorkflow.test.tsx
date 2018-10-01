@@ -1,3 +1,4 @@
+import config from "../config";
 import ExperimentContainer from "../containers/Experiments/ExperimentContainer";
 import ModelContainer from "../containers/Models/ModelContainer";
 import { models } from "../tests/mocks";
@@ -13,15 +14,14 @@ beforeAll(() => {
 });
 
 test.only("initial state is: loading", () => {
-  const experimentContainer = new ExperimentContainer();
+  const experimentContainer = new ExperimentContainer(config);
   expect(experimentContainer.state.error).toBeUndefined();
   expect(experimentContainer.state.experiment).toBeUndefined();
-
 });
 
 test("Create new model", async () => {
   const key = "regression0";
-  const modelContainer = new ModelContainer();
+  const modelContainer = new ModelContainer(config);
   return await modelContainer.create({
     config: {
       hasXAxis: true,
@@ -49,7 +49,7 @@ test("Create new model", async () => {
 });
 
 test.skip("Load model", async () => {
-  const modelContainer = new ModelContainer();
+  const modelContainer = new ModelContainer(config);
   return await modelContainer.load(modelId);
 
   const result: IModelResult | undefined = modelContainer.state.model;
@@ -59,7 +59,7 @@ test.skip("Load model", async () => {
 });
 
 test.skip("Set experiment", async () => {
-  const experimentContainer = new ExperimentContainer();
+  const experimentContainer = new ExperimentContainer(config);
   const code = "tSNE";
   const algorithm = {
     algorithms: [
@@ -84,7 +84,7 @@ test.skip("Set experiment", async () => {
 });
 
 test.skip("Fetch experiment", async done => {
-  const experimentContainer = new ExperimentContainer();
+  const experimentContainer = new ExperimentContainer(config);
 
   jest.setTimeout(3 * 60 * 1000);
   return await setTimeout(async () => {

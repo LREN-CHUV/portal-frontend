@@ -10,22 +10,6 @@ const validationDatasetsValue = process.env.REACT_APP_VALIDATIONDATASETS;
 const validationDatasets: string[] = validationDatasetsValue
   ? validationDatasetsValue.split(",")
   : [];
-const Cookie = process.env.REACT_APP_COOKIE;
-
-export const config: RequestInit =
-  process.env.NODE_ENV === "production"
-    ? {
-        credentials: "same-origin"
-      }
-    : Cookie
-      ? {
-          headers: {
-            Authorization: process.env.REACT_APP_AUTHORIZATION!,
-            Cookie,
-            "X-XSRF-TOKEN": Cookie.match(/XSRF-TOKEN=(.*)/)![1] || ""
-          }
-        }
-      : {};
 
 interface ICode {
   code: string;

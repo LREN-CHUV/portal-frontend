@@ -3,9 +3,10 @@
 import ExperimentListContainer from "../containers/Experiments/ExperimentListContainer";
 import ModelContainer from "../containers/Models/ModelContainer";
 import { methods, models } from "../tests/mocks";
+import config from "../config";
 
 test("Fetch experiments", async () => {
-  const experimentListContainer = new ExperimentListContainer();
+  const experimentListContainer = new ExperimentListContainer(config);
   await experimentListContainer.load();
   const experiments: IExperimentResult | undefined =
     experimentListContainer.state.experiments;
@@ -13,8 +14,6 @@ test("Fetch experiments", async () => {
   expect(experiments).toBeDefined();
 
   experiments.forEach((experiment: IExperimentResult, index) => {
-    
-    
     expect(experiment.created).toBeDefined();
     expect(experiment.name).toBeDefined();
     expect(experiment.resultsViewed).toBeDefined();

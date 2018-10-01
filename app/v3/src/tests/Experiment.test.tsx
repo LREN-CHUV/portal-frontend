@@ -2,6 +2,7 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { BrowserRouter as Router } from "react-router-dom";
 import { Provider, Subscribe } from "unstated";
+import config from "../config";
 import {
   ExperimentContainer,
   ExperimentListContainer,
@@ -16,9 +17,9 @@ it("renders without crashing", () => {
     <Router>
       <Provider
         inject={[
-          new ExperimentContainer(),
-          new ExperimentListContainer(),
-          new ModelContainer()
+          new ExperimentContainer(config),
+          new ExperimentListContainer(config),
+          new ModelContainer(config)
         ]}
       >
         <Subscribe

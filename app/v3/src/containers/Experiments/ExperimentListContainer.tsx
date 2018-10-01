@@ -1,8 +1,8 @@
 // tslint:disable:no-console
-import { IExperimentResult } from "../../../src/types";
 import * as dotenv from "dotenv";
 import request from "request-promise-native";
 import { Container } from "unstated";
+import { IExperimentResult } from "../../../src/types";
 import { IExperimentListContainer } from "../../types";
 import ParseExperiment from "./ParseExperiment";
 dotenv.config();
@@ -14,7 +14,7 @@ export interface IResult {
 
 class ExperimentListContainer extends Container<IExperimentListContainer> {
   private baseUrl = `${process.env.REACT_APP_BACKEND_URL}/experiments`;
-  private config: any
+  private config: any;
 
   constructor(config: any) {
     super();
@@ -25,7 +25,7 @@ class ExperimentListContainer extends Container<IExperimentListContainer> {
       loading: true
     };
   }
-  
+
   public load = async () => {
     await this.setState({ loading: true });
     try {

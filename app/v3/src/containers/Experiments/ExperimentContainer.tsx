@@ -8,19 +8,19 @@ import ParseExperiment from "./ParseExperiment";
 dotenv.config();
 
 class ExperimentContainer extends Container<IExperimentContainer> {
-  private options: any
-  private baseUrl: string
-
-  constructor(config: any) {
-    super()
-    this.options = config.options;
-    this.baseUrl = `${config.baseUrl}/experiments`;
-  }
-
   public state: IExperimentContainer = {
     error: undefined,
     experiment: undefined
   };
+
+  private options: any;
+  private baseUrl: string;
+
+  constructor(config: any) {
+    super();
+    this.options = config.options;
+    this.baseUrl = `${config.baseUrl}/experiments`;
+  }
 
   public load = async (uuid: string) => {
     try {

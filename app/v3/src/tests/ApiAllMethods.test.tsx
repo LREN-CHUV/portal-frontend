@@ -1,5 +1,6 @@
 // tslint:disable:no-console
 
+import config from "../config";
 import ExperimentContainer from "../containers/Experiments/ExperimentContainer";
 import ModelContainer from "../containers/Models/ModelContainer";
 import { experiments, models } from "../tests/mocks";
@@ -10,7 +11,7 @@ const experimentsUUID: string[] = [];
 /// TESTS ///
 test("Create new models", async () => {
   console.log("> Create new models");
-  const modelContainer = new ModelContainer();
+  const modelContainer = new ModelContainer(config);
   return await Promise.all(
     Object.keys(models).map(async key => {
       await modelContainer.load(key);
@@ -66,7 +67,7 @@ test.skip(`Set experiments`, async () => {
         new Promise(resolve => {
           const run = () => {
             console.log("THEN");
-            const experimentContainer = new ExperimentContainer();
+            const experimentContainer = new ExperimentContainer(config);
             const model = Object.keys(models).find(
               key => models[key] === experiment.model
             );
