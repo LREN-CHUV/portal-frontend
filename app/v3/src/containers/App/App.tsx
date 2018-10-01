@@ -5,14 +5,15 @@ import "bootstrap/dist/css/bootstrap.css";
 import * as React from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import { Provider, Subscribe } from "unstated";
+import UNSTATED from "unstated-debug";
 import {
   ExperimentContainer,
   ExperimentListContainer,
+  Explore,
   ModelContainer
 } from "../";
-import config from "../../config";
-import UNSTATED from "unstated-debug";
 import { Experiment, Experiments, Navigation } from "../../components";
+import config from "../../config";
 
 import "./App.css";
 
