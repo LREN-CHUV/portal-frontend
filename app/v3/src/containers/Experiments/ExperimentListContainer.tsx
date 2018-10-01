@@ -1,9 +1,8 @@
 // tslint:disable:no-console
-import { IExperimentResult } from "@app/types";
+import { IExperimentResult } from "../../../src/types";
 import * as dotenv from "dotenv";
 import request from "request-promise-native";
 import { Container } from "unstated";
-import { config } from "../../tests/mocks";
 import { IExperimentListContainer } from "../../types";
 import ParseExperiment from "./ParseExperiment";
 dotenv.config();
@@ -15,9 +14,11 @@ export interface IResult {
 
 class ExperimentListContainer extends Container<IExperimentListContainer> {
   private baseUrl = `${process.env.REACT_APP_BACKEND_URL}/experiments`;
+  private config: any
 
-  constructor() {
+  constructor(config: any) {
     super();
+    this.config = config;
     this.state = {
       error: undefined,
       experiments: undefined,
@@ -28,7 +29,7 @@ class ExperimentListContainer extends Container<IExperimentListContainer> {
   public load = async () => {
     await this.setState({ loading: true });
     try {
-      const data = await request.get(`${this.baseUrl}?mine=true`, config);
+      const data = await request.get(`${this.baseUrl}?mine=true`, this.config);
       const json = await JSON.parse(data);
       if (json.error) {
         return await this.setState({

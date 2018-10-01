@@ -2,23 +2,29 @@
 import * as dotenv from "dotenv";
 import request from "request-promise-native";
 import { Container } from "unstated";
-import { config } from "../../tests/mocks";
 import { IExperimentContainer } from "../../types";
 import ParseExperiment from "./ParseExperiment";
 
 dotenv.config();
 
 class ExperimentContainer extends Container<IExperimentContainer> {
+  private options: any
+  private baseUrl: string
+
+  constructor(config: any) {
+    super()
+    this.options = config.options;
+    this.baseUrl = `${config.baseUrl}/experiments`;
+  }
+
   public state: IExperimentContainer = {
     error: undefined,
     experiment: undefined
   };
 
-  private baseUrl = `${process.env.REACT_APP_BACKEND_URL}/experiments`;
-
   public load = async (uuid: string) => {
     try {
-      const data = await request.get(`${this.baseUrl}/${uuid}`, config);
+      const data = await request.get(`${this.baseUrl}/${uuid}`, this.options);
       const json = await JSON.parse(data);
       if (json.error) {
         return await this.setState({
@@ -42,7 +48,7 @@ class ExperimentContainer extends Container<IExperimentContainer> {
       const data = await request({
         body: JSON.stringify(params),
         headers: {
-          ...config.headers,
+          ...this.options.headers,
           "Content-Type": "application/json"
         },
         method: "POST",
@@ -65,7 +71,7 @@ class ExperimentContainer extends Container<IExperimentContainer> {
     try {
       const data = await request.get(
         `${this.baseUrl}/${uuid}/markAsViewed`,
-        config
+        this.options
       );
       const json = await JSON.parse(data);
       if (json.error) {

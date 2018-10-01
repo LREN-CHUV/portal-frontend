@@ -2,12 +2,18 @@
 import * as dotenv from "dotenv";
 import request from "request-promise-native";
 import { Container } from "unstated";
-import { config } from "../../tests/mocks";
 import { IModelContainer } from "../../types";
 
 dotenv.config();
 
 class ModelContainer extends Container<IModelContainer> {
+  private config: any
+  
+  constructor(config: any) {
+    super()
+    this.config = config;
+  }
+
   public state = {
     error: undefined,
     loading: true,
@@ -18,7 +24,7 @@ class ModelContainer extends Container<IModelContainer> {
 
   public load = async (slug: string) => {
     try {
-      const data = await request.get(`${this.baseUrl}/${slug}`, config);
+      const data = await request.get(`${this.baseUrl}/${slug}`, this.config);
       const json = await JSON.parse(data);
       if (json.error) {
         return await this.setState({
@@ -42,7 +48,7 @@ class ModelContainer extends Container<IModelContainer> {
       const data = await request({
         body: JSON.stringify(params),
         headers: {
-          ...config.headers,
+          ...this.config.headers,
           'Content-Type': 'application/json',
         },
         method: 'POST',

@@ -10,7 +10,7 @@ import {
   ExperimentListContainer,
   ModelContainer
 } from "../";
-
+import config from "../../config";
 import UNSTATED from "unstated-debug";
 import { Experiment, Experiments, Navigation } from "../../components";
 
@@ -19,9 +19,9 @@ import "./App.css";
 UNSTATED.logStateChanges = process.env.NODE_ENV === "development";
 
 class App extends React.Component {
-  private experimentContainer = new ExperimentContainer();
-  private experimentListContainer = new ExperimentListContainer();
-  private modelContainer = new ModelContainer();
+  private experimentContainer = new ExperimentContainer(config);
+  private experimentListContainer = new ExperimentListContainer(config);
+  private modelContainer = new ModelContainer(config);
 
   // private intervalId: NodeJS.Timer;
 
