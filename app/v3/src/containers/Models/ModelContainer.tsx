@@ -13,18 +13,18 @@ class ModelContainer extends Container<IModelContainer> {
     model: undefined
   };
 
-  private config: any;
-
-  private baseUrl = `${process.env.REACT_APP_BACKEND_URL}/models`;
+  private options: any;
+  private baseUrl: string;
 
   constructor(config: any) {
     super();
-    this.config = config;
+    this.options = config.options;
+    this.baseUrl = `${config.baseUrl}/models`;
   }
 
   public load = async (slug: string) => {
     try {
-      const data = await request.get(`${this.baseUrl}/${slug}`, this.config);
+      const data = await request.get(`${this.baseUrl}/${slug}`, this.options);
       const json = await JSON.parse(data);
       if (json.error) {
         return await this.setState({
@@ -48,7 +48,7 @@ class ModelContainer extends Container<IModelContainer> {
       const data = await request({
         body: JSON.stringify(params),
         headers: {
-          ...this.config.headers,
+          ...this.options.headers,
           "Content-Type": "application/json"
         },
         method: "POST",

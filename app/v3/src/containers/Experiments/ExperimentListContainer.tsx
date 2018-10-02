@@ -13,12 +13,13 @@ export interface IResult {
 }
 
 class ExperimentListContainer extends Container<IExperimentListContainer> {
-  private baseUrl = `${process.env.REACT_APP_BACKEND_URL}/experiments`;
-  private config: any;
+  private baseUrl: string;
+  private options: any;
 
   constructor(config: any) {
     super();
-    this.config = config;
+    this.options = config.options;
+    this.baseUrl = `${config.baseUrl}/experiments`;
     this.state = {
       error: undefined,
       experiments: undefined,
@@ -29,7 +30,7 @@ class ExperimentListContainer extends Container<IExperimentListContainer> {
   public load = async () => {
     await this.setState({ loading: true });
     try {
-      const data = await request.get(`${this.baseUrl}?mine=true`, this.config);
+      const data = await request.get(`${this.baseUrl}?mine=true`, this.options);
       const json = await JSON.parse(data);
       if (json.error) {
         return await this.setState({

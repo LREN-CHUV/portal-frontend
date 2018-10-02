@@ -9,10 +9,10 @@ import UNSTATED from "unstated-debug";
 import {
   ExperimentContainer,
   ExperimentListContainer,
-  Explore,
+  ExploreContainer,
   ModelContainer
 } from "../";
-import { Experiment, Experiments, Navigation } from "../../components";
+import { Experiment, Experiments, Graph, Navigation } from "../../components";
 import config from "../../config";
 
 import "./App.css";
@@ -23,6 +23,7 @@ class App extends React.Component {
   private experimentContainer = new ExperimentContainer(config);
   private experimentListContainer = new ExperimentListContainer(config);
   private modelContainer = new ModelContainer(config);
+  private exploreContainer = new ExploreContainer(config);
 
   // private intervalId: NodeJS.Timer;
 
@@ -44,15 +45,17 @@ class App extends React.Component {
           inject={[
             this.experimentContainer,
             this.experimentListContainer,
+            this.exploreContainer,
             this.modelContainer
           ]}
         >
           <Subscribe
-            to={[ExperimentContainer, ExperimentListContainer, ModelContainer]}
+            to={[ExperimentContainer, ExperimentListContainer, ExploreContainer, ModelContainer]}
           >
             {(
               experimentContainer: ExperimentContainer,
               experimentListContainer: ExperimentListContainer,
+              exploreContainer: ExploreContainer,
               modelContainer: ModelContainer
             ) => (
               <div className="App">
@@ -64,6 +67,12 @@ class App extends React.Component {
                   />
                 </header>
                 <section>
+                  <Route
+                    path="/v3/explore"
+                    // tslint:disable-next-line jsx-no-lambda
+                    render={() => <Graph exploreContainer={exploreContainer} />}
+                  />
+
                   <Route
                     path="/v3/experiments"
                     // tslint:disable-next-line jsx-no-lambda
