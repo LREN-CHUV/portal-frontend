@@ -6,3 +6,4 @@ export { default as Experiments } from "../components/Experiments";
 export { default as Dropdown } from "../components/Dropdown";
 export { default as Navigation } from "../components/Navigation";
 export { default as Graph } from "@app/components/Explore/Graph";
+export { default as Browser } from "@app/components/Explore/Browser";
