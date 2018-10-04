@@ -5,4 +5,4 @@ export { default as Model } from "../components/Model";
 export { default as Experiments } from "../components/Experiments";
 export { default as Dropdown } from "../components/Dropdown";
 export { default as Navigation } from "../components/Navigation";
-export { default as Graph } from "../components/Graph";
+export { default as Graph } from "@app/components/Explore/Graph";

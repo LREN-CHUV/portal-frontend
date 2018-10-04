@@ -1,8 +1,8 @@
 // tslint:disable:no-console
+import { ExploreContainer } from "@app/containers";
 import cytoscape from "cytoscape";
 import coseBilkent from "cytoscape-cose-bilkent";
 import React, { Component } from "react";
-import { ExploreContainer } from "../containers";
 
 import "./Graph.css";
 
@@ -311,7 +311,7 @@ const layout1 = {
 
 const layout2 = {
   // Type of layout animation. The option set is {'during', 'end', false}
-  animate: 'end',
+  animate: "end",
   // Divisor to compute edge forces
   edgeElasticity: 0.45,
   // Whether to fit the network view after when done
