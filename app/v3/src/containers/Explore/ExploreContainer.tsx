@@ -16,7 +16,7 @@ class ExploreContainer extends Container<IVariableContainer> {
   public state = {
     error: undefined,
     groups: { groups: [{ code: "", label: ""}]},
-    hierarchy: { code: "", label: "", groups: [{ groups: { code: "", label: ""}}]},
+    hierarchy: { code: "", label: "", groups: [{ groups: { code: "", label: "", groups: []}}]},
     loading: true,
     variables: [{code: "", label: "", group: { code: ""}}],
   };

@@ -289,25 +289,25 @@ const style: cytoscape.CssStyleDeclaration = [
   }
 ];
 
-const layout1 = {
-  animate: true,
-  componentSpacing: 100,
-  coolingFactor: 0.95,
-  edgeElasticity: 100,
-  fit: true,
-  gravity: 0,
-  idealEdgeLength: 100,
-  initialTemp: 1000,
-  minTemp: 1.0,
-  name: "cose",
-  nestingFactor: 5,
-  nodeOverlap: 20,
-  nodeRepulsion: 4000000,
-  numIter: 1000,
-  padding: 50,
-  randomize: false,
-  refresh: 20
-};
+// const layout1 = {
+//   animate: true,
+//   componentSpacing: 100,
+//   coolingFactor: 0.95,
+//   edgeElasticity: 100,
+//   fit: true,
+//   gravity: 0,
+//   idealEdgeLength: 100,
+//   initialTemp: 1000,
+//   minTemp: 1.0,
+//   name: "cose",
+//   nestingFactor: 5,
+//   nodeOverlap: 20,
+//   nodeRepulsion: 4000000,
+//   numIter: 1000,
+//   padding: 50,
+//   randomize: false,
+//   refresh: 20
+// };
 
 const layout2 = {
   // Type of layout animation. The option set is {'during', 'end', false}
@@ -350,8 +350,6 @@ const layout2 = {
   // Amount of vertical space to put between degree zero nodes during tiling (can also be a function)
   tilingPaddingVertical: 10
 };
-
-console.log(layout1, layout2);
 
 interface IProps {
   exploreContainer: ExploreContainer;
