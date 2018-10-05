@@ -12,7 +12,13 @@ import {
   ExploreContainer,
   ModelContainer
 } from "../";
-import { Browser, Experiment, Experiments, Graph, Navigation } from "../../components";
+import {
+  Bubble,
+  Experiment,
+  Experiments,
+  Graph,
+  Navigation
+} from "../../components";
 import config from "../../config";
 
 import "./App.css";
@@ -50,7 +56,12 @@ class App extends React.Component {
           ]}
         >
           <Subscribe
-            to={[ExperimentContainer, ExperimentListContainer, ExploreContainer, ModelContainer]}
+            to={[
+              ExperimentContainer,
+              ExperimentListContainer,
+              ExploreContainer,
+              ModelContainer
+            ]}
           >
             {(
               experimentContainer: ExperimentContainer,
@@ -67,11 +78,12 @@ class App extends React.Component {
                   />
                 </header>
                 <section>
-
                   <Route
                     path="/v3/explore"
                     // tslint:disable-next-line jsx-no-lambda
-                    render={() => <Browser exploreContainer={exploreContainer} />}
+                    render={() => (
+                      <Bubble exploreContainer={exploreContainer} />
+                    )}
                   />
 
                   <Route
