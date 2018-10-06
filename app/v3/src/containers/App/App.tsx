@@ -17,7 +17,8 @@ import {
   Experiment,
   Experiments,
   Graph,
-  Navigation
+  Navigation,
+  TreeMap
 } from "../../components";
 import config from "../../config";
 
@@ -83,6 +84,13 @@ class App extends React.Component {
                     // tslint:disable-next-line jsx-no-lambda
                     render={() => (
                       <Bubble exploreContainer={exploreContainer} />
+                    )}
+                  />
+ <Route
+                    path="/v3/explore1"
+                    // tslint:disable-next-line jsx-no-lambda
+                    render={() => (
+                      <TreeMap exploreContainer={exploreContainer} />
                     )}
                   />
 

@@ -7,3 +7,4 @@ export { default as Dropdown } from "../components/Dropdown";
 export { default as Navigation } from "../components/Navigation";
 export { default as Graph } from "@app/components/Explore/Graph";
 export { default as Bubble } from "@app/components/Explore/Bubble";
+export { default as TreeMap } from "@app/components/Explore/TreeMap";

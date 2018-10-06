@@ -1,13 +1,13 @@
 // tslint:disable:no-console
 import { ExploreContainer } from "@app/containers";
-import { ResponsiveBubble } from "@nivo/circle-packing";
+import { ResponsiveTreeMap } from "@nivo/treemap";
 import React, { Component } from "react";
 
 interface IProps {
   exploreContainer: ExploreContainer;
 }
 
-class Circle extends Component<IProps, any> {
+class TreeMap extends Component<IProps, any> {
   public state = { tree: null };
   public async componentDidMount() {
     const { exploreContainer } = this.props;
@@ -16,11 +16,11 @@ class Circle extends Component<IProps, any> {
     if (!hierarchy) {
       return;
     }
-
     const iterate = (node: any): any => {
       const obj = {
         code: node.code,
-        loc: Math.random()
+        description: node.description,
+        loc: Math.random() * 1000
       };
 
       return node.groups || node.variables
@@ -38,7 +38,7 @@ class Circle extends Component<IProps, any> {
     const tree = {
       children: hierarchy.groups.map(n => iterate(n)),
       code: "/",
-      loc: Math.random()
+      loc: 34556
     };
 
     this.setState({ tree });
@@ -52,7 +52,7 @@ class Circle extends Component<IProps, any> {
     }
     return (
       <div style={{ height: "900px", width: "900px" }}>
-        <ResponsiveBubble
+        <ResponsiveTreeMap
           root={tree}
           margin={{
             bottom: 20,
@@ -62,14 +62,15 @@ class Circle extends Component<IProps, any> {
           }}
           identity="code"
           value="loc"
-          colors="blues"
           colorBy="depth"
-          padding={6}
+          innerPadding={3}
+          outerPadding={3}
           // tslint:disable-next-line jsx-no-lambda
           label={(d: any) => d.id}
           labelSkipRadius={0}
           labelTextColor="inherit:darker(0.8)"
           borderWidth={2}
+          borderColor="inherit:darker(0.3)"
           animate={true}
           motionStiffness={300}
           motionDamping={30}
@@ -79,4 +80,4 @@ class Circle extends Component<IProps, any> {
   }
 }
 
-export default Circle;
+export default TreeMap;
