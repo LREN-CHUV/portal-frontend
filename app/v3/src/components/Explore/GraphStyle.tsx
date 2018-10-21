@@ -1,36 +1,31 @@
 // tslint:disable no-console
 import cytoscape from "cytoscape";
 
-const colors = [
-  "#e63864",
-  "#5dc330",
-  "#894adb",
-  "#6ac25a",
-  "#d144ca",
-  "#42c280",
-  "#db3890",
-  "#4a8a2e",
-  "#6d5ec7",
-  "#abb83a",
-  "#5381e2",
-  "#d9a539",
-  "#c97bdc",
-  "#91811f",
-  "#a33e8e",
-  "#e0833b",
-  "#df659a",
-  "#e2462a",
-  "#c84450",
-  "#b5522c",
-  "#ff462a",
-  "#ff4450",
-  "#ff522c",
-  "#ff3864",
-  "#ffc330",
-  "#ff4adb",
-  "#ffc25a",
-
-];
+const colors = ["#4bd0e3",
+"#396ced",
+"#4cd2c3",
+"#3c62c6",
+"#229689",
+"#628df2",
+"#47b4b5",
+"#1f64b7",
+"#20d8fd",
+"#3c5da0",
+"#1db5c7",
+"#587ad3",
+"#4abfe8",
+"#505b8f",
+"#72bae8",
+"#4572ae",
+"#1da4cc",
+"#829ce5",
+"#3585b0",
+"#3295e9",
+"#98aae1",
+"#3ba7e5",
+"#848dc5",
+"#6da8ec",
+"#5d8ccb"]
 
 const clusterNodeColors = (color: string, i: number) => ({
   selector: `node[cluster = ${i}]`,
@@ -56,49 +51,31 @@ const style: cytoscape.CssStyleDeclaration = [
     selector: "node",
     style: {
       "background-color": "white",
-      "border-color": "#000",
-      "border-opacity": 0.6,
       "border-width": 0,
       color: "#000",
       height: "label",
-
       label: "data(label)",
-
       padding: 5,
-      shape: "rectangle",
+      shape: "roundrectangle",
       "text-halign": "center",
       "text-valign": "center",
       width: "label"
     }
   },
   {
-    selector: `node[group = 1]`,
+    selector: `node[isGroup = 1]`,
     style: {
       color: "white",
       "font-size": "48px",
       "font-weight": "bold",
-      height: "label",
-      shape: "rectangle",
-      "text-halign": "center",
-      "text-valign": "center",
-      width: "label"
     }
   },
-
   {
-    selector: "node[cluster = 0]",
+    selector: `node[isRoot = 1]`,
     style: {
-      // "background-color": "#6B6A68",
-      "background-color": "darkslateblue",
-      color: "white",
-      "font-size": "32px",
-      "font-weight": "bold",
-      height: "88px",
-      padding: "10px",
-      "text-background-opacity": 0,
-      "text-halign": "center",
-      "text-valign": "center",
-      width: "88px"
+      "border-width": 2,
+      color: "black",
+      padding: 15,
     }
   },
   {

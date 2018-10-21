@@ -36,7 +36,7 @@ class TreeMap extends Component<IProps, any> {
     };
 
     const tree = {
-      children: hierarchy.groups.map(n => iterate(n)),
+      children: hierarchy.groups.map((n: any) => iterate(n)),
       code: "/",
       loc: 34556
     };

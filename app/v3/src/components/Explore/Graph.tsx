@@ -1,9 +1,9 @@
 // tslint:disable:no-console
+import style from "@app/components/Explore/GraphStyle";
 import { ExploreContainer } from "@app/containers";
 import cytoscape from "cytoscape";
 import coseBilkent from "cytoscape-cose-bilkent";
 import React, { Component } from "react";
-import style from "./Style";
 
 import "./Graph.css";
 
@@ -55,6 +55,15 @@ interface IProps {
   exploreContainer: ExploreContainer;
 }
 
+interface IGroup {
+  cluster?: number;
+  code?: string;
+  groups?: IGroup[];
+  label?: string;
+  parentGroup?: IGroup;
+  variables?: IGroup[];
+}
+
 class Graph extends Component<IProps> {
   private cy: cytoscape.Core;
   private cyRef: any;
@@ -71,45 +80,32 @@ class Graph extends Component<IProps> {
 
     const nodes: any = [];
     const edges: any = [];
-    let cluster = 0
+    let cluster = 0;
 
-    // const root = {
-    //   data: {
-    //     cluster,
-    //     code: hierarchy.code,
-    //     id: hierarchy.code,
-    //     label: hierarchy.label
-    //   }
-    // };
-    // nodes.push(root);
-    
     const iter = (
-      groups: any,
-      parentGroup: any = {},
+      groups: IGroup[],
+      parentGroup: IGroup | undefined,
+      isRoot = false
     ) => {
-      groups.forEach((group: any) => {
-        ++cluster;
-        parentGroup.cluster = cluster;
-
-        if (parentGroup.data) {
-          parentGroup = parentGroup.data;
-        }
+      groups.forEach((group: IGroup) => {
 
         nodes.push({
           data: {
             cluster,
             code: group.code,
-            group: 1,
             id: group.code,
+            isGroup: 1,
+            isRoot: isRoot ? 1 : 0,
             label: group.label
           }
         });
 
-        if (parentGroup.code) {
+        if (parentGroup) {
           edges.push({
             data: {
-              cluster: parentGroup.cluster || 0,
+              cluster: parentGroup.cluster,
               id: `${parentGroup.code}-${group.code}`,
+              isGroup: 1,
               source: parentGroup.code,
               target: group.code
             }
@@ -118,15 +114,18 @@ class Graph extends Component<IProps> {
 
         if (group.variables) {
           group.variables.forEach((v: any) => {
-            nodes.push({
+            const node = {
+              classes: "dimmed",
               data: {
                 cluster,
                 code: group.code,
                 id: v.code,
                 label: v.label
-              }
-            });
+              },
+            };
+            nodes.push(node);
             edges.push({
+              classes: "dimmed",
               data: {
                 cluster,
                 id: `${v.code}-${group.code}`,
@@ -137,12 +136,19 @@ class Graph extends Component<IProps> {
           });
         }
 
+        group.cluster = cluster;
+        ++cluster;
+
         if (group.groups) {
           iter(group.groups, group);
         }
       });
     };
-    nodes.push(iter(hierarchy.groups));
+
+    if (hierarchy.groups) {
+      const groups = iter(hierarchy.groups, undefined, true);
+      nodes.push(groups);
+    }
 
     // console.log(gNodes, vNodes);
     const elements = {
@@ -205,8 +211,16 @@ class Graph extends Component<IProps> {
 
     if (target === this.cy || target === this.selectedTarget) {
       this.selectedTarget = undefined;
+      cy.animate({
+        fit: {
+          eles: cy.elements(),
+          padding: 20
+        }
+      }, {
+        duration: 1000
+      });
       cy.elements().removeClass("dimmed");
-
+      cy.elements('[isGroup != 1]').addClass("dimmed")
       return;
     }
 
@@ -228,6 +242,17 @@ class Graph extends Component<IProps> {
       const selectedChilds = selectChildsElements(target);
       cy.elements().removeClass("dimmed");
       selectedChilds.addClass("dimmed");
+
+            console.log(target.successors())
+      cy.animate({
+        fit: {
+          eles: target.connectedEdges().connectedNodes(),
+          padding: 20
+        }
+      }, {
+        duration: 1000
+      });
+
     }
     // console.log(this.foldedNodes);
   };
