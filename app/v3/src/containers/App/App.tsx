@@ -95,7 +95,7 @@ class App extends React.Component {
                   />
 
                   <Route
-                    path="/v3/graph"
+                    path="/v3/explore2"
                     // tslint:disable-next-line jsx-no-lambda
                     render={() => <Graph exploreContainer={exploreContainer} />}
                   />
