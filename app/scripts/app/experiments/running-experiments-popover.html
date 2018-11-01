@@ -11,7 +11,8 @@
     <span ng-if="experiment.finished && !experiment.resultsViewed && experiment.hasError" class="fa fa-warning" style="color: darkorange"></span>
     <span ng-if="experiment.finished && !experiment.resultsViewed && !experiment.hasError" class="fa fa-bell" style="color: darkgreen"></span>
     <span ng-if="experiment.finished && experiment.resultsViewed" class="fa fa-eye" style="color: darkgrey"></span>
-    <a ng-click="switch_to_v3(experiment.model.slug, experiment.uuid)" ng-bind="experiment.name"></a>
+    <a ng-click="switch_to_v3(experiment.model.slug, experiment.uuid)"
+    ng-bind="experiment.name"></a>
     (<span style="font-size: 10px" ng-bind="experiment.created | fromNow"></span>)
   </div>
 </div>

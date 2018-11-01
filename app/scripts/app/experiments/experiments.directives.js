@@ -75,6 +75,11 @@ angular
             $scope.experiments = [];
             $scope.unread_count = 0;
 
+            $scope.switch_to_v3 = function(slug, uuid) {
+              console.log("switch_to_v3");
+              window.location.href = `/v3/experiment/${slug}/${uuid}`;
+            };
+
             $scope.should_display = function() {
               return $scope.is_open || $state.is("experiment");
             };

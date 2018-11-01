@@ -48,10 +48,10 @@ angular.module("chuvApp.experiments").controller("NewExperimentController", [
       return method_name.charAt(0).toUpperCase() + method_name.slice(1) + "s";
     };
 
-    $scope.switch_to_v3 = function(slug, uuid) {
-      console.log("switch_to_v3");
-      window.location.href = `/v3/experiment/${slug}/${uuid}`;
-    };
+    // $scope.switch_to_v3 = function(slug, uuid) {
+    //   console.log("switch_to_v3");
+    //   window.location.href = `/v3/experiment/${slug}/${uuid}`;
+    // };
 
     // Get all the ml methods
     MLUtils.list_ml_methods().then(function(data) {
