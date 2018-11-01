@@ -1,8 +1,8 @@
 // tslint:disable:no-console
 
 import * as React from "react";
-import { LABELS } from "../../constants";
-import { round } from "../../utils";
+import { LABELS } from "../../../constants";
+import { round } from "../../../utils";
 
 import "./JSON.css";
 

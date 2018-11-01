@@ -3,14 +3,14 @@ import { IExperimentResult } from "@app/types";
 import * as React from "react";
 import { Panel } from "react-bootstrap";
 import { RouteComponentProps, withRouter } from "react-router-dom";
-import { ExperimentHeader, ExperimentResult, Model } from "../components";
+import { ExperimentHeader, ExperimentResult, Model } from "../..";
 import {
   ExperimentContainer,
   ExperimentListContainer,
   ModelContainer
-} from "../containers";
+} from "../../../containers";
 
-import "./Experiment.css";
+import "../Experiment.css";
 
 interface IProps extends RouteComponentProps<any> {
   experimentContainer: ExperimentContainer;

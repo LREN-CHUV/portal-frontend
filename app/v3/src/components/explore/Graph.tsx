@@ -1,5 +1,5 @@
 // tslint:disable:no-console
-import style from "@app/components/Explore/GraphStyle";
+import style from "@app/components/explore/GraphStyle";
 import { ExploreContainer } from "@app/containers";
 import cytoscape from "cytoscape";
 import coseBilkent from "cytoscape-cose-bilkent";

@@ -2,8 +2,8 @@
 import { IExperimentContainer, INode } from "@app/types";
 import * as React from "react";
 import { Panel, Tab, Tabs } from "react-bootstrap";
-import { MIME_TYPES } from "../constants";
-import { Highchart, JSON, PFA, Plotly } from "./Experiment/";
+import { MIME_TYPES } from "../../../constants";
+import { Highchart, JSON, PFA, Plotly } from "../formats";
 
 export default ({
   experimentState

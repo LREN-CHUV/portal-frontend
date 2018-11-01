@@ -18,6 +18,7 @@ import {
   Experiments,
   Graph,
   Navigation,
+  RunExperiment,
   TreeMap
 } from "../../components";
 import config from "../../config";
@@ -115,6 +116,17 @@ class App extends React.Component {
                     // tslint:disable-next-line jsx-no-lambda
                     render={() => (
                       <Experiment
+                        experimentContainer={experimentContainer}
+                        experimentListContainer={experimentListContainer}
+                        modelContainer={modelContainer}
+                      />
+                    )}
+                  />
+                  <Route
+                    path="/v3/experiment/:slug"
+                    // tslint:disable-next-line jsx-no-lambda
+                    render={() => (
+                      <RunExperiment
                         experimentContainer={experimentContainer}
                         experimentListContainer={experimentListContainer}
                         modelContainer={modelContainer}

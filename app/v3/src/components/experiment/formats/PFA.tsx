@@ -9,8 +9,8 @@ import {
 } from "@app/types";
 import * as React from "react";
 import { Tab, Tabs } from "react-bootstrap";
-import { SCORES } from "../../constants";
-import { round } from "../../utils";
+import { SCORES } from "../../../constants";
+import { round } from "../../../utils";
 import { Highchart } from "./";
 
 import "./JSON.css";

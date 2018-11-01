@@ -3,8 +3,8 @@ import moment from "moment"; // FIXME: change lib, too heavy
 import * as React from "react";
 import { Button, Panel } from "react-bootstrap";
 import { RouteComponentProps, withRouter } from "react-router-dom";
-import { Dropdown } from "../components";
-import { ExperimentContainer } from "../containers";
+import { Dropdown } from "../../../components";
+import { ExperimentContainer } from "../../../containers";
 
 interface IProps extends RouteComponentProps<any> {
   experimentContainer: ExperimentContainer;
@@ -32,7 +32,7 @@ export default withRouter(
       <Panel className="experiment-header">
         <Panel.Body>
           <h3>
-            Results of Experiment <strong>{title}</strong> on{" "}
+            Run Experiment <strong>{title}</strong> on{" "}
             <a href={`/models/${modelId}`}>{modelId}</a>
           </h3>
           <div className="experiment-container">

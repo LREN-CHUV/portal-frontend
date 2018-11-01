@@ -1,10 +1,11 @@
-export { default as Experiment } from "../components/Experiment";
-export { default as ExperimentResult } from "../components/ExperimentResult";
-export { default as ExperimentHeader } from "../components/ExperimentHeader";
+export { default as Experiment } from "./experiment/result/Container";
+export { default as RunExperiment } from "./experiment/run/Container";
+export { default as ExperimentResult } from "./experiment/result/ExperimentResult";
+export { default as ExperimentHeader } from "./experiment/result/Header";
 export { default as Model } from "../components/Model";
 export { default as Experiments } from "../components/Experiments";
 export { default as Dropdown } from "../components/Dropdown";
 export { default as Navigation } from "../components/Navigation";
-export { default as Graph } from "@app/components/Explore/Graph";
-export { default as Bubble } from "@app/components/Explore/Bubble";
-export { default as TreeMap } from "@app/components/Explore/TreeMap";
+export { default as Graph } from "@app/components/explore/Graph";
+export { default as Bubble } from "@app/components/explore/Bubble";
+export { default as TreeMap } from "@app/components/explore/TreeMap";
