@@ -33,14 +33,14 @@
     line-height: 1.2 !important;
   }
 
-  .experiment-header h3 {
+  .model-header h3 {
     padding: 0;
     margin: 8px 0 0 0;
   }
 
-  .experiment-container {
+  .model-container {
     display: grid;
-    grid-template-columns: auto 190px 200px;
+    grid-template-columns: auto 200px;
   }
 
   .Experiment .item {

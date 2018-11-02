@@ -40,7 +40,7 @@ export default withRouter(
     };
 
     return (
-      <Panel className="experiment-header">
+      <Panel className="model-header">
         <Panel.Body>
           <h3>
             Run Experiment on <DropdownModel
@@ -49,7 +49,8 @@ export default withRouter(
                 handleSelect={handleSelectModel}
               />
           </h3>
-          <div className="experiment-container">
+          <div className="model-container">
+          <div className="item">{" "}</div>
             <div className="item">
               <Dropdown
                 items={experiments}
