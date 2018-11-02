@@ -10,6 +10,7 @@ import {
   ExperimentContainer,
   ExperimentListContainer,
   ExploreContainer,
+  MethodContainer,
   ModelContainer
 } from "../";
 import {
@@ -23,7 +24,6 @@ import {
 } from "../../components";
 import config from "../../config";
 
-import MethodContainer from "../Methods/MethodContainer";
 import "./App.css";
 
 UNSTATED.logStateChanges = process.env.NODE_ENV === "development";
@@ -132,6 +132,7 @@ class App extends React.Component {
                       <RunExperiment
                         experimentContainer={experimentContainer}
                         experimentListContainer={experimentListContainer}
+                        exploreContainer={exploreContainer}
                         methodContainer={methodContainer}
                         modelContainer={modelContainer}
                       />

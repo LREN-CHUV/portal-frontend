@@ -30,8 +30,7 @@ export default withRouter(
       <Panel className="experiment-header">
         <Panel.Body>
           <h3>
-            Run Experiment <strong>{title}</strong> on{" "}
-            <a href={`/models/${modelId}`}>{modelId}</a>
+            Run Experiment on <a href={`/models/${modelId}`}>{title}</a>
           </h3>
           <div className="experiment-container">
             <div className="item">

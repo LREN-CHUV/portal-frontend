@@ -11,7 +11,7 @@ class Circle extends Component<IProps, any> {
   public state = { tree: null };
   public async componentDidMount() {
     const { exploreContainer } = this.props;
-    await exploreContainer.load();
+    await exploreContainer.hierarchy();
     const hierarchy = exploreContainer.state.hierarchy;
     if (!hierarchy) {
       return;

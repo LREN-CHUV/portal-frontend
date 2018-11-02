@@ -2,7 +2,7 @@
 import * as dotenv from "dotenv";
 import request from "request-promise-native";
 import { Container } from "unstated";
-import { IExperimentResult } from "../../../src/types";
+import { IExperimentResult } from "../../types";
 import { IExperimentListContainer } from "../../types";
 import ParseExperiment from "./ParseExperiment";
 dotenv.config();

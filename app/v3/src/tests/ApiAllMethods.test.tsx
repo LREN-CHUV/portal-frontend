@@ -1,8 +1,8 @@
 // tslint:disable:no-console
 
 import config from "../config";
-import ExperimentContainer from "../containers/Experiments/ExperimentContainer";
-import ModelContainer from "../containers/Models/ModelContainer";
+import ExperimentContainer from "../containers/api/ExperimentContainer";
+import ModelContainer from "../containers/api/ModelContainer";
 import { experiments, models } from "../tests/mocks";
 import { IExperimentResult, IModelResult } from "../types";
 

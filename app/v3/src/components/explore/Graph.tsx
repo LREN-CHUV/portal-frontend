@@ -72,7 +72,7 @@ class Graph extends Component<IProps> {
 
   public async componentDidMount() {
     const { exploreContainer } = this.props;
-    await exploreContainer.load();
+    await exploreContainer.hierarchy();
     const hierarchy = exploreContainer.state.hierarchy;
     if (!hierarchy) {
       return;

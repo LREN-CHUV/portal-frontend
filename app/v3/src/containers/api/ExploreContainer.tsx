@@ -5,14 +5,15 @@ import { Container } from "unstated";
 
 dotenv.config();
 
-export interface IVariableContainer {
+export interface IExploreContainer {
   error?: string;
   hierarchy?: any;
+  variables?: any;
 }
 
-class ExploreContainer extends Container<IVariableContainer> {
 
-  public state: IVariableContainer = {};
+class ExploreContainer extends Container<IExploreContainer> {
+  public state: IExploreContainer = {};
 
   private options: any;
   private baseUrl: string;
@@ -21,11 +22,11 @@ class ExploreContainer extends Container<IVariableContainer> {
   constructor(config: any) {
     super();
     this.options = config.options;
-    this.baseUrl = `${config.baseUrl}/variables/hierarchy`;
+    this.baseUrl = `${config.baseUrl}/variables`;
     // this.groupBaseUrl = `${config.baseUrl}/groups`;
   }
 
-  public load = async () => {
+  public variables = async () => {
     try {
       const data = await request.get(`${this.baseUrl}`, this.options);
       const json = await JSON.parse(data);
@@ -35,19 +36,30 @@ class ExploreContainer extends Container<IVariableContainer> {
         });
       }
 
-      // const groupData = await request.get(`${this.groupBaseUrl}`, this.options);
-      // const groupJson = await JSON.parse(groupData);
-      // if (groupJson.error) {
-      //   return await this.setState({
-      //     error: groupJson.error
-      //   });
-      // }
+      return await this.setState({
+        error: undefined,
+        variables: json
+      });
+    } catch (error) {
+      return await this.setState({
+        error: error.message
+      });
+    }
+  };
+
+  public hierarchy = async () => {
+    try {
+      const data = await request.get(`${this.baseUrl}/hierarchy`, this.options);
+      const json = await JSON.parse(data);
+      if (json.error) {
+        return await this.setState({
+          error: json.error
+        });
+      }
 
       return await this.setState({
         error: undefined,
         hierarchy: json
-        // groups: groupJson,
-        // variables: json,
       });
     } catch (error) {
       return await this.setState({

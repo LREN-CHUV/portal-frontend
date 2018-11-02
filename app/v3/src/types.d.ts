@@ -64,8 +64,11 @@ export interface IExperimentResult {
   validations?: any
 }
 
-export interface CodeEntity {
+export interface VariableEntity {
   code: string;
+  type: string;
+  sqlType: string;
+  description: string;
 }
 
 export interface Algorithm {
@@ -77,12 +80,12 @@ export interface Algorithm {
 
 export interface Query {
   filters: string;
-  variables?: CodeEntity[] | null;
-  coVariables?: CodeEntity[] | null;
-  groupings?: CodeEntity[] | null;
-  trainingDatasets?: CodeEntity[] | null;
-  testingDatasets?: CodeEntity[] | null;
-  validationDatasets?: CodeEntity[] | null;
+  variables?: VariableEntity[];
+  coVariables?: VariableEntity[];
+  groupings?: VariableEntity[];
+  trainingDatasets?: VariableEntity[];
+  testingDatasets?: VariableEntity[];
+  validationDatasets?: VariableEntity[];
 }
 
 export interface IModelResult extends IResult{
