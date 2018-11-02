@@ -65,6 +65,28 @@ class ModelContainer extends Container<IModelContainer> {
       });
     }
   };
+
+  public update = async (model: any) => {
+    try {
+      await request({
+        body: JSON.stringify(model),
+        headers: {
+          ...this.options.headers,
+          "Content-Type": "application/json"
+        },
+        method: "PUT",
+        uri: `${this.baseUrl}/${model.slug}`
+      });
+      return await this.setState({
+        error: undefined,
+        model
+      });
+    } catch (error) {
+      return await this.setState({
+        error: error.message
+      });
+    }
+  }
 }
 
 export default ModelContainer;
