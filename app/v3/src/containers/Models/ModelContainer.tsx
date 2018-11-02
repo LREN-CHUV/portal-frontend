@@ -2,14 +2,13 @@
 import * as dotenv from "dotenv";
 import request from "request-promise-native";
 import { Container } from "unstated";
-import { IModelContainer } from "../../types";
+import { IModelContainer, IModelResult } from "../../types";
 
 dotenv.config();
 
 class ModelContainer extends Container<IModelContainer> {
-  public state = {
+  public state: IModelContainer = {
     error: undefined,
-    loading: true,
     model: undefined
   };
 
@@ -25,7 +24,7 @@ class ModelContainer extends Container<IModelContainer> {
   public load = async (slug: string) => {
     try {
       const data = await request.get(`${this.baseUrl}/${slug}`, this.options);
-      const json = await JSON.parse(data);
+      const json: IModelResult = await JSON.parse(data);
       if (json.error) {
         return await this.setState({
           error: json.error

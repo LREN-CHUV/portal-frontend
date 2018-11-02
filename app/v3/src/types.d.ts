@@ -85,7 +85,7 @@ export interface Query {
   validationDatasets?: CodeEntity[] | null;
 }
 
-export interface IModelResult {
+export interface IModelResult extends IResult{
   slug: string;
   title: string;
   valid: boolean;
@@ -96,18 +96,33 @@ export interface IModelResult {
   createdBy: any;
 }
 
-export interface IExperimentListContainer {
-  error?: string;
+export interface IMethodDefinition {
+  description?: string;
+  label?: string;
+  code: string;
+}
+
+export interface IMethodResult extends IResult {
+  methods: any
+}
+
+interface IResult {
+  error?: string
+}
+
+export interface IExperimentListContainer extends IResult {
   experiments?: IExperimentResult[];
   loading: boolean;
 }
 
-export interface IExperimentContainer {
-  error?: string;
+export interface IExperimentContainer extends IResult {
   experiment?: IExperimentResult;
 }
 
-export interface IModelContainer {
-  error?: string;
+export interface IModelContainer extends IResult {
   model?: IModelResult;
+}
+
+export interface IMethodContainer extends IResult {
+  methods?: IMethodResult[];
 }

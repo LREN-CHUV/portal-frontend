@@ -115,7 +115,7 @@ class Navigation extends React.Component<IProps> {
             </li>
 
             <li className="toolbar-icon-bg hidden-xs">
-              <a href="#" title="Biological Signature of Diseases">
+              <span title="Biological Signature of Diseases">
                 <Dropdown
                   items={experimentListContainer.state.experiments}
                   title="BSD"
@@ -137,7 +137,7 @@ class Navigation extends React.Component<IProps> {
                     {unreadCount}
                   </span>
                 )}
-              </a>
+              </span>
             </li>
 
             <li className="uib-dropdown toolbar-icon-bg">

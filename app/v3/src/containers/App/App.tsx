@@ -23,6 +23,7 @@ import {
 } from "../../components";
 import config from "../../config";
 
+import MethodContainer from "../Methods/MethodContainer";
 import "./App.css";
 
 UNSTATED.logStateChanges = process.env.NODE_ENV === "development";
@@ -32,6 +33,7 @@ class App extends React.Component {
   private experimentListContainer = new ExperimentListContainer(config);
   private modelContainer = new ModelContainer(config);
   private exploreContainer = new ExploreContainer(config);
+  private methodContainer = new MethodContainer(config);
 
   // private intervalId: NodeJS.Timer;
 
@@ -54,7 +56,8 @@ class App extends React.Component {
             this.experimentContainer,
             this.experimentListContainer,
             this.exploreContainer,
-            this.modelContainer
+            this.modelContainer,
+            this.methodContainer
           ]}
         >
           <Subscribe
@@ -62,14 +65,16 @@ class App extends React.Component {
               ExperimentContainer,
               ExperimentListContainer,
               ExploreContainer,
-              ModelContainer
+              ModelContainer,
+              MethodContainer
             ]}
           >
             {(
               experimentContainer: ExperimentContainer,
               experimentListContainer: ExperimentListContainer,
               exploreContainer: ExploreContainer,
-              modelContainer: ModelContainer
+              modelContainer: ModelContainer,
+              methodContainer: MethodContainer
             ) => (
               <div className="App">
                 <header>
@@ -87,20 +92,18 @@ class App extends React.Component {
                       <Bubble exploreContainer={exploreContainer} />
                     )}
                   />
- <Route
+                  <Route
                     path="/v3/explore1"
                     // tslint:disable-next-line jsx-no-lambda
                     render={() => (
                       <TreeMap exploreContainer={exploreContainer} />
                     )}
                   />
-
                   <Route
                     path="/v3/explore2"
                     // tslint:disable-next-line jsx-no-lambda
                     render={() => <Graph exploreContainer={exploreContainer} />}
                   />
-
                   <Route
                     path="/v3/experiments"
                     // tslint:disable-next-line jsx-no-lambda
@@ -110,7 +113,6 @@ class App extends React.Component {
                       />
                     )}
                   />
-
                   <Route
                     path="/v3/experiment/:slug/:uuid"
                     // tslint:disable-next-line jsx-no-lambda
@@ -123,12 +125,14 @@ class App extends React.Component {
                     )}
                   />
                   <Route
+                    exact={true}
                     path="/v3/experiment/:slug"
                     // tslint:disable-next-line jsx-no-lambda
                     render={() => (
                       <RunExperiment
                         experimentContainer={experimentContainer}
                         experimentListContainer={experimentListContainer}
+                        methodContainer={methodContainer}
                         modelContainer={modelContainer}
                       />
                     )}

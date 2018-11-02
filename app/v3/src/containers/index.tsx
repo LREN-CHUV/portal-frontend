@@ -3,3 +3,4 @@ export { default as ExperimentContainer } from '../containers/Experiments/Experi
 export { default as ExperimentListContainer } from '../containers/Experiments/ExperimentListContainer'
 export { default as ModelContainer } from '../containers/Models/ModelContainer'
 export { default as ExploreContainer } from '../containers/Explore/ExploreContainer'
+export { default as MethodContainer } from '../containers/Methods/MethodContainer'
