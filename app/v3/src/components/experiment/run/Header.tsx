@@ -1,21 +1,24 @@
+// tslint:disable:no-console
 import { IExperimentResult, IModelResult } from "@app/types";
-import { ExperimentContainer } from "../../../containers";
+import { ExperimentContainer, ModelContainer} from "../../../containers";
 
 import * as React from "react";
 import { Panel } from "react-bootstrap";
 import { RouteComponentProps, withRouter } from "react-router-dom";
-import { Dropdown } from "../../../components";
+import Dropdown from "../Dropdown";
+import DropdownModel from "./Dropdown";
 
 interface IProps extends RouteComponentProps<any> {
   experimentContainer: ExperimentContainer;
   experiments: IExperimentResult[] | undefined;
-  model: IModelResult | undefined;
+  modelContainer: ModelContainer;
 }
 
 export default withRouter(
-  ({ experimentContainer, model, experiments, history }: IProps) => {
-    const title = model && model.title;
-    const modelId = model && model.slug;
+  ({ experimentContainer, modelContainer, experiments, history }: IProps) => {
+    const state = modelContainer.state
+    const title = state && state.model && state.model.title || "";
+    // const modelId = model && model.slug;
 
     const handleSelectExperiment = async (
       selectedExperiment: IExperimentResult
@@ -26,11 +29,25 @@ export default withRouter(
       return await load(uuid);
     };
 
+    const handleSelectModel = async (
+      selectedModel: IModelResult
+    ) => {
+      console.log(selectedModel)
+      const { slug } = selectedModel;
+      history.push(`/v3/experiment/${slug}`);
+      const load = modelContainer && modelContainer.load;
+      return await load(slug);
+    };
+
     return (
       <Panel className="experiment-header">
         <Panel.Body>
           <h3>
-            Run Experiment on <a href={`/models/${modelId}`}>{title}</a>
+            Run Experiment on <DropdownModel
+                items={modelContainer.state.models}
+                title={title}
+                handleSelect={handleSelectModel}
+              />
           </h3>
           <div className="experiment-container">
             <div className="item">

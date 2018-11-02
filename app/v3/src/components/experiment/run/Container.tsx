@@ -33,6 +33,7 @@ class Experiment extends React.Component<IProps> {
     const { exploreContainer, methodContainer, modelContainer } = this.props;
     await methodContainer.load();
     await exploreContainer.variables();
+    await modelContainer.all();
     return await modelContainer.load(slug);
   }
 
@@ -70,7 +71,7 @@ class Experiment extends React.Component<IProps> {
           <Header
             experimentContainer={experimentContainer}
             experiments={experimentListContainer.state.experiments}
-            model={modelContainer.state.model}
+            modelContainer={modelContainer}
           />
         </div>
 

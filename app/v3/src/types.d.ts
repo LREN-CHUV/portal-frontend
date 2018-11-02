@@ -88,7 +88,7 @@ export interface Query {
   validationDatasets?: VariableEntity[];
 }
 
-export interface IModelResult extends IResult{
+export interface IModelResult extends IErrorResult{
   slug: string;
   title: string;
   valid: boolean;
@@ -105,27 +105,28 @@ export interface IMethodDefinition {
   code: string;
 }
 
-export interface IMethodResult extends IResult {
+export interface IMethodResult extends IErrorResult {
   methods: any
 }
 
-interface IResult {
+export interface IErrorResult {
   error?: string
 }
 
-export interface IExperimentListContainer extends IResult {
+export interface IExperimentListContainer extends IErrorResult {
   experiments?: IExperimentResult[];
   loading: boolean;
 }
 
-export interface IExperimentContainer extends IResult {
+export interface IExperimentContainer extends IErrorResult {
   experiment?: IExperimentResult;
 }
 
-export interface IModelContainer extends IResult {
+export interface IModelContainer extends IErrorResult {
   model?: IModelResult;
+  models?: IModelResult[]
 }
 
-export interface IMethodContainer extends IResult {
+export interface IMethodContainer extends IErrorResult {
   methods?: IMethodResult[];
 }

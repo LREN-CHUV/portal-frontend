@@ -9,7 +9,8 @@ dotenv.config();
 class ModelContainer extends Container<IModelContainer> {
   public state: IModelContainer = {
     error: undefined,
-    model: undefined
+    model: undefined,
+    models: undefined
   };
 
   private options: any;
@@ -87,6 +88,27 @@ class ModelContainer extends Container<IModelContainer> {
       });
     }
   }
+
+  public all = async () => {
+    try {
+      const data = await request.get(`${this.baseUrl}`, this.options);
+      const json: IModelResult[] = await JSON.parse(data);
+      // if (json.error) {
+      //   return await this.setState({
+      //     error: json.error
+      //   });
+      // }
+
+      return await this.setState({
+        error: undefined,
+        models: json
+      });
+    } catch (error) {
+      return await this.setState({
+        error: error.message
+      });
+    }
+  };
 }
 
 export default ModelContainer;

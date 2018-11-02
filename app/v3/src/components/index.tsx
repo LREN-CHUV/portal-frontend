@@ -4,7 +4,7 @@ export { default as ExperimentResult } from "./experiment/result/ExperimentResul
 export { default as ExperimentHeader } from "./experiment/result/Header";
 export { default as Model } from "../components/Model";
 export { default as Experiments } from "../components/Experiments";
-export { default as Dropdown } from "../components/Dropdown";
+export { default as Dropdown } from "./experiment/Dropdown";
 export { default as Navigation } from "../components/Navigation";
 export { default as Graph } from "@app/components/explore/Graph";
 export { default as Bubble } from "@app/components/explore/Bubble";
