@@ -66,9 +66,9 @@ export interface IExperimentResult {
 
 export interface VariableEntity {
   code: string;
-  type: string;
-  sqlType: string;
-  description: string;
+  type?: string;
+  sqlType?: string;
+  description?: string;
 }
 
 export interface Algorithm {

@@ -1,6 +1,6 @@
 // tslint:disable:no-console
 import { IExperimentResult, IModelResult } from "@app/types";
-import { ExperimentContainer, ModelContainer} from "../../../containers";
+import { ExperimentContainer, ModelContainer } from "../../../containers";
 
 import * as React from "react";
 import { Panel } from "react-bootstrap";
@@ -16,8 +16,8 @@ interface IProps extends RouteComponentProps<any> {
 
 export default withRouter(
   ({ experimentContainer, modelContainer, experiments, history }: IProps) => {
-    const state = modelContainer.state
-    const title = state && state.model && state.model.title || "";
+    const state = modelContainer.state;
+    const title = (state && state.model && state.model.title) || "";
     // const modelId = model && model.slug;
 
     const handleSelectExperiment = async (
@@ -29,10 +29,8 @@ export default withRouter(
       return await load(uuid);
     };
 
-    const handleSelectModel = async (
-      selectedModel: IModelResult
-    ) => {
-      console.log(selectedModel)
+    const handleSelectModel = async (selectedModel: IModelResult) => {
+      console.log(selectedModel);
       const { slug } = selectedModel;
       history.push(`/v3/experiment/${slug}`);
       const load = modelContainer && modelContainer.load;
@@ -40,24 +38,24 @@ export default withRouter(
     };
 
     return (
-      <Panel className="model-header">
-        <Panel.Body>
-          <h3>
-            Run Experiment on <DropdownModel
+      <Panel>
+        <Panel.Body className="model-header">
+          <div className="item">
+            <h3>
+              Run Experiment on{" "}
+              <DropdownModel
                 items={modelContainer.state.models}
                 title={title}
                 handleSelect={handleSelectModel}
               />
-          </h3>
-          <div className="model-container">
-          <div className="item">{" "}</div>
-            <div className="item">
-              <Dropdown
-                items={experiments}
-                title="RELATED EXPERIMENTS"
-                handleSelect={handleSelectExperiment}
-              />
-            </div>
+            </h3>
+          </div>
+          <div className="item">
+            <Dropdown
+              items={experiments}
+              title="RELATED EXPERIMENTS"
+              handleSelect={handleSelectExperiment}
+            />
           </div>
         </Panel.Body>
       </Panel>

@@ -1,4 +1,4 @@
-.Experiment {
+.RunExperiment {
     display: grid;
     padding: 0 48px;
     grid-gap: 8px;
@@ -24,53 +24,19 @@
     grid-area: header;
   }
 
-  .header .panel {
-    margin-bottom: 0px !important;
-  }
-
-  .Experiment h5 {
-    font-weight: 700 !important;
-    line-height: 1.2 !important;
-  }
-
-  .model-header h3 {
+  .model-header {
     padding: 0;
-    margin: 8px 0 0 0;
+    margin: 0 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
 
-  .model-container {
-    display: grid;
-    grid-template-columns: auto 200px;
+  .RunExperiment .method a {
+    font-size: 1.2em;
   }
 
-  .Experiment .item {
-    align-self: center;
-  }
 
-  .Experiment .btn-info {
-    font-weight: 700 !important;
-  }
-
-  var {
-    font-style: normal;
-  }
-
-  .content .nav-tabs>li>a {
-    color: #03a9f4;
-    border-width: 0 0 1px;
-    border-radius: 4px 4px 0 0;
-    background-color: #fff;
-    text-transform: capitalize;
-  }
-
-  .content .nav-tabs li.active a,
-  .content .nav-tabs li.active a:focus,
-  .content .nav-tabs li.active a:hover {
-    color: #616161;
-    font-weight: 700;
-  }
-
-  .tab-pane {
-    border: 0.5px #eeeeee solid;
-    padding: 1em;
+.item {
+  flex-grow: 1
   }

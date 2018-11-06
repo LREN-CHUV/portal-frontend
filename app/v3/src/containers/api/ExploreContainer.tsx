@@ -9,8 +9,8 @@ export interface IExploreContainer {
   error?: string;
   hierarchy?: any;
   variables?: any;
+  datasets?: any;
 }
-
 
 class ExploreContainer extends Container<IExploreContainer> {
   public state: IExploreContainer = {};
@@ -22,13 +22,13 @@ class ExploreContainer extends Container<IExploreContainer> {
   constructor(config: any) {
     super();
     this.options = config.options;
-    this.baseUrl = `${config.baseUrl}/variables`;
+    this.baseUrl = `${config.baseUrl}`;
     // this.groupBaseUrl = `${config.baseUrl}/groups`;
   }
 
   public variables = async () => {
     try {
-      const data = await request.get(`${this.baseUrl}`, this.options);
+      const data = await request.get(`${this.baseUrl}/variables`, this.options);
       const json = await JSON.parse(data);
       if (json.error) {
         return await this.setState({
@@ -49,7 +49,7 @@ class ExploreContainer extends Container<IExploreContainer> {
 
   public hierarchy = async () => {
     try {
-      const data = await request.get(`${this.baseUrl}/hierarchy`, this.options);
+      const data = await request.get(`${this.baseUrl}/variables/hierarchy`, this.options);
       const json = await JSON.parse(data);
       if (json.error) {
         return await this.setState({
@@ -60,6 +60,27 @@ class ExploreContainer extends Container<IExploreContainer> {
       return await this.setState({
         error: undefined,
         hierarchy: json
+      });
+    } catch (error) {
+      return await this.setState({
+        error: error.message
+      });
+    }
+  };
+
+  public datasets = async () => {
+    try {
+      const data = await request.get(`${this.baseUrl}/datasets`, this.options);
+      const json = await JSON.parse(data);
+      if (json.error) {
+        return await this.setState({
+          error: json.error
+        });
+      }
+
+      return await this.setState({
+        datasets: json,
+        error: undefined,
       });
     } catch (error) {
       return await this.setState({

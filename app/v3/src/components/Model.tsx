@@ -2,12 +2,14 @@ import { IModelResult } from "@app/types";
 import * as React from "react";
 import { Panel } from "react-bootstrap";
 
+import './Model.css'
+
 export default ({ model }: { model: IModelResult | undefined }) => {
   const query = model && model.query;
   return (
-    <Panel>
+    <Panel className="panel-model">
+      <Panel.Title> <h3>Model {model && model.title}</h3></Panel.Title>
       <Panel.Body>
-        <h3>Model {model && model.title}</h3>
         {query && (
             <React.Fragment>
               {query.variables && <h5>Variables</h5>}

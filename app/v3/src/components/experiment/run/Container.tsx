@@ -1,6 +1,15 @@
 // tslint:disable:no-console
 import * as React from "react";
-import { Panel } from "react-bootstrap";
+import {
+  Button,
+  Checkbox,
+  Col,
+  Form,
+  FormControl,
+  FormGroup,
+  HelpBlock,
+  Panel
+} from "react-bootstrap";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { Model } from "../..";
 import {
@@ -11,8 +20,15 @@ import {
   ModelContainer
 } from "../../../containers";
 
+import { IMethod, IModelResult } from "@app/types";
 import Header from "./Header";
 import "./RunExperiment.css";
+
+enum DatasetType {
+  Training,
+  Validation,
+  Test
+}
 
 interface IProps extends RouteComponentProps<any> {
   experimentContainer: ExperimentContainer;
@@ -22,7 +38,19 @@ interface IProps extends RouteComponentProps<any> {
   modelContainer: ModelContainer;
 }
 
-class Experiment extends React.Component<IProps> {
+interface IState {
+  selectedMethod: any | undefined;
+  parameters: any | undefined;
+  model: IModelResult | undefined;
+}
+
+class Experiment extends React.Component<IProps, IState> {
+  public state: IState = {
+    model: undefined,
+    parameters: {},
+    selectedMethod: undefined
+  };
+
   public async componentDidMount() {
     // Get url parameters
     const { match: matched } = this.props;
@@ -33,8 +61,20 @@ class Experiment extends React.Component<IProps> {
     const { exploreContainer, methodContainer, modelContainer } = this.props;
     await methodContainer.load();
     await exploreContainer.variables();
+    await exploreContainer.datasets();
     await modelContainer.all();
-    return await modelContainer.load(slug);
+    await modelContainer.load(slug);
+
+    return this.setState({
+      model: modelContainer.state.model
+    });
+  }
+
+  public componentWillReceiveProps = (props: any) => {
+    const { modelContainer } = props
+    return this.setState({
+      model: modelContainer.state.model
+    });
   }
 
   public render() {
@@ -55,18 +95,23 @@ class Experiment extends React.Component<IProps> {
       [];
 
     const rawVariables = exploreContainer.state.variables;
+    const datasets = exploreContainer.state.datasets;
 
-    const query =
-      modelContainer.state.model && modelContainer.state.model.query;
+    const { model } = this.state;
+    const query = model && model.query;
     const modelVariable =
       query && query.variables && query.variables.map(v => v.code)[0];
     const modelCovariables =
       (query && query.coVariables && query.coVariables.map(v => v.code)) || [];
     const modelGroupings =
-      (query && query.coVariables && query.coVariables.map(v => v.code)) || [];
+      (query && query.groupings && query.groupings.map(v => v.code)) || [];
+
+    const { selectedMethod } = this.state;
+    const parameters =
+      (selectedMethod && selectedMethod.parameters) || undefined;
 
     return (
-      <div className="Experiment">
+      <div className="RunExperiment">
         <div className="header">
           <Header
             experimentContainer={experimentContainer}
@@ -77,6 +122,9 @@ class Experiment extends React.Component<IProps> {
 
         <div className="sidebar">
           <Panel>
+            <Panel.Title>
+              <h3>Available Methods</h3>
+            </Panel.Title>
             <Panel.Body>
               {rawVariables &&
                 query &&
@@ -89,17 +137,26 @@ class Experiment extends React.Component<IProps> {
                     const algoConstraints: any = algorithm.constraints;
 
                     const disabled = { ...algorithm, enabled: false };
-                    
+
                     const algoConstraintVariable = algoConstraints.variable;
                     const type = rawVariable && rawVariable.type;
                     if (type) {
-                      if (algoConstraintVariable.binominal && type === "binominal") {
+                      if (
+                        algoConstraintVariable.binominal &&
+                        type === "binominal"
+                      ) {
                         return disabled;
                       }
-                      if (algoConstraintVariable.integer && type === "integer") {
+                      if (
+                        algoConstraintVariable.integer &&
+                        type === "integer"
+                      ) {
                         return disabled;
                       }
-                      if (algoConstraintVariable.polynominal && type === "polynominal") {
+                      if (
+                        algoConstraintVariable.polynominal &&
+                        type === "polynominal"
+                      ) {
                         return disabled;
                       }
                       if (algoConstraintVariable.real && type === "real") {
@@ -107,7 +164,8 @@ class Experiment extends React.Component<IProps> {
                       }
                     }
 
-                    const algoConstraintCovariable = algoConstraints.covariables;
+                    const algoConstraintCovariable =
+                      algoConstraints.covariables;
                     if (
                       modelCovariables.length < algoConstraintCovariable &&
                       algoConstraintCovariable.min_count
@@ -149,12 +207,17 @@ class Experiment extends React.Component<IProps> {
                     return { ...algorithm, enabled: true };
                   })
                   .map((a: any) => (
-                    <div
-                      title={a.description}
-                      key={a.code}
-                      style={a.enabled ? { color: "green" } : { color: "gray" }}
-                    >
-                      {a.label}
+                    <div className="method" key={a.code}>
+                      <a
+                        title={a.description}
+                        // tslint:disable-next-line jsx-no-lambda
+                        onClick={event => this.handleSelectMethod(event, a)}
+                        style={
+                          a.enabled ? { color: "green" } : { color: "gray" }
+                        }
+                      >
+                        {a.label}
+                      </a>
                     </div>
                   ))}
             </Panel.Body>
@@ -162,15 +225,257 @@ class Experiment extends React.Component<IProps> {
         </div>
         <div className="content">
           <Panel>
-            <Panel.Body>content</Panel.Body>
+            <Panel.Title>
+              <h3>Your Experiment</h3>
+            </Panel.Title>
+            <Panel.Body>
+              {selectedMethod && (
+                <div>
+                  <h4>
+                    <strong>{selectedMethod.label}</strong>
+                  </h4>
+                  <p>{selectedMethod.description}</p>
+                </div>
+              )}
+              {parameters && parameters.length > 0 && <h4>Parameters</h4>}
+              <Form horizontal={true}>
+                {parameters &&
+                  parameters.map((parameter: any) => {
+                    const numberTypes = ["int", "real", "number", "numeric"];
+                    const type =
+                      numberTypes.indexOf(parameter.type) >= -1
+                        ? "number"
+                        : "text";
+                    const { constraints } = parameter;
+
+                    return (
+                      <FormGroup
+                        validationState={this.getValidationState(parameter)}
+                        key={parameter.code}
+                      >
+                        <Col sm={2}>{parameter.label}</Col>
+                        <Col sm={4}>
+                          {parameter.type !== "enumeration" && (
+                            <FormControl
+                              type={type}
+                              defaultValue={parameter.default_value}
+                              // tslint:disable-next-line jsx-no-lambda
+                              onChange={event =>
+                                this.handleChangeParameter(
+                                  event,
+                                  parameter.code
+                                )
+                              }
+                            />
+                          )}
+                          {parameter.type === "enumeration" && (
+                            <FormControl
+                              componentClass="select"
+                              placeholder="select"
+                              defaultValue={parameter.default_value}
+                              // tslint:disable-next-line jsx-no-lambda
+                              onChange={event =>
+                                this.handleChangeParameter(
+                                  event,
+                                  parameter.code
+                                )
+                              }
+                            >
+                              {parameter.values.map((v: any) => (
+                                <option key={v} value={v}>
+                                  {v}
+                                </option>
+                              ))}
+                            </FormControl>
+                          )}
+                          <FormControl.Feedback />
+                          <HelpBlock>
+                            {constraints &&
+                              constraints.min >= 0 &&
+                              "min: " + constraints.min}
+                            {constraints &&
+                              constraints.min >= 0 &&
+                              constraints.max >= 0 &&
+                              ", "}
+                            {constraints &&
+                              constraints.max >= 0 &&
+                              "max: " + constraints.max}
+                          </HelpBlock>
+                        </Col>
+                        <Col sm={6}>{parameter.description}</Col>
+                      </FormGroup>
+                    );
+                  })}
+              </Form>
+            </Panel.Body>
+          </Panel>
+          <Panel>
+            <Panel.Title>
+              <h3>Training and validation</h3>
+            </Panel.Title>
+            <Panel.Body>
+              <h5>
+                <strong>Training</strong>
+              </h5>
+              <FormGroup>
+                {datasets &&
+                  datasets.map((dataset: any) => {
+                    return (
+                      <Checkbox
+                        key={dataset.code}
+                        inline={true}
+                        // tslint:disable-next-line jsx-no-lambda
+                        onChange={event =>
+                          this.handleChangeDataset(
+                            query && query.trainingDatasets,
+                            dataset.code,
+                            DatasetType.Training
+                          )
+                        }
+                        checked={this.getDatasetCheckedState(
+                          query && query.trainingDatasets,
+                          dataset.code
+                        )}
+                      >
+                        {dataset.label}
+                      </Checkbox>
+                    );
+                  })}
+              </FormGroup>
+              <h5>
+                <strong>Validation</strong>
+              </h5>
+              <FormGroup>
+                {datasets &&
+                  datasets.map((dataset: any) => {
+                    return (
+                      <Checkbox
+                        key={dataset.code}
+                        inline={true}
+                        // tslint:disable-next-line jsx-no-lambda
+                        onChange={event =>
+                          this.handleChangeDataset(
+                            query && query.validationDatasets,
+                            dataset.code,
+                            DatasetType.Validation
+                          )
+                        }
+                        checked={this.getDatasetCheckedState(
+                          query && query.validationDatasets,
+                          dataset.code
+                        )}
+                      >
+                        {dataset.label}
+                      </Checkbox>
+                    );
+                  })}
+              </FormGroup>
+              <Button bsStyle="info" disabled={selectedMethod === undefined}>
+                Run Experiment
+              </Button>
+            </Panel.Body>
+          </Panel>
+          <Panel>
+            <Panel.Title>
+              <h3>About running experiments</h3>
+            </Panel.Title>
           </Panel>
         </div>
         <div className="sidebar2">
-          <Model model={modelContainer.state.model} />
+          <Model model={model} />
         </div>
       </div>
     );
   }
+
+  private getValidationState = (params: any) => {
+    const { constraints, code } = params;
+    if (constraints) {
+      const { parameters } = this.state;
+      const { min, max } = constraints;
+      if (parameters[code] < min || parameters[code] > max) {
+        return "error";
+      }
+    }
+
+    return "success";
+  };
+
+  private handleSelectMethod = (event: any, method: IMethod) => {
+    event.preventDefault();
+    this.setState({
+      selectedMethod: method
+    });
+  };
+
+  private handleChangeParameter = (event: any, code: string) => {
+    event.preventDefault();
+    this.setState({
+      parameters: {
+        ...this.state.parameters,
+        [code]: event.target.value
+      }
+    });
+  };
+
+  private handleChangeDataset = (datasets: any, code: any, type: DatasetType) => {
+    const { model } = this.state;
+    if (model) {
+      const { query } = model;
+      if (type === 0) {
+        query.trainingDatasets = this.toggleDataset(
+          datasets,
+          code
+        );
+
+        if (this.getDatasetCheckedState(query.trainingDatasets, code) && this.getDatasetCheckedState(query.validationDatasets, code)) {
+          query.validationDatasets = this.toggleDataset(
+            query.validationDatasets,
+            code
+          );
+        }
+
+      } else if (type === 1) {
+        query.validationDatasets = this.toggleDataset(
+          datasets,
+          code
+        );
+
+        if (this.getDatasetCheckedState(query.trainingDatasets, code) && this.getDatasetCheckedState(query.validationDatasets, code)) {
+          query.trainingDatasets = this.toggleDataset(
+            query.trainingDatasets,
+            code
+          );
+        }
+      }
+
+      model.query = query;
+      this.setState({ model });
+    }
+  };
+
+  private getDatasetCheckedState = (selectedDatasets: any = [], code: any) => {
+    if (selectedDatasets.map((d: any) => d.code).indexOf(code) === -1) {
+      return false;
+    }
+
+    return true;
+  };
+
+  private toggleDataset = (datasets: any, code: any): any => {
+    let newDataset = [];
+    if (datasets) {
+      if (datasets.map((d: any) => d.code).indexOf(code) > -1) {
+        newDataset = [...datasets.filter((d: any) => d.code !== code)];
+      } else {
+        newDataset = [...datasets, { code }];
+      }
+    } else {
+      newDataset = [{ code }];
+    }
+
+    return newDataset;
+  };
 }
 
 export default withRouter(Experiment);
