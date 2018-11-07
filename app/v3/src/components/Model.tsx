@@ -8,7 +8,7 @@ export default ({ model }: { model: IModelResult | undefined }) => {
   const query = model && model.query;
   return (
     <Panel className="panel-model">
-      <Panel.Title> <h3>Model {model && model.title}</h3></Panel.Title>
+      <Panel.Title> <h3>Model <strong>{model && model.title}</strong></h3></Panel.Title>
       <Panel.Body>
         {query && (
             <React.Fragment>

@@ -8,9 +8,11 @@ import {
   FormControl,
   FormGroup,
   HelpBlock,
-  Panel
+  Overlay,
+  Panel,
+  Popover
 } from "react-bootstrap";
-import { RouteComponentProps, withRouter } from "react-router-dom";
+import { Redirect, RouteComponentProps, withRouter } from "react-router-dom";
 import { Model } from "../..";
 import {
   ExperimentContainer,
@@ -39,17 +41,30 @@ interface IProps extends RouteComponentProps<any> {
 }
 
 interface IState {
+  experimentName: string;
   selectedMethod: any | undefined;
   parameters: any | undefined;
   model: IModelResult | undefined;
+  showPopover: boolean;
 }
 
 class Experiment extends React.Component<IProps, IState> {
   public state: IState = {
+    experimentName: "",
     model: undefined,
     parameters: {},
-    selectedMethod: undefined
+    selectedMethod: undefined,
+    showPopover: false
   };
+
+  private experimentNameRef: any;
+
+  constructor(props: IProps) {
+    super(props);
+    this.handleChangeExperimentName = this.handleChangeExperimentName.bind(
+      this
+    );
+  }
 
   public async componentDidMount() {
     // Get url parameters
@@ -71,11 +86,11 @@ class Experiment extends React.Component<IProps, IState> {
   }
 
   public componentWillReceiveProps = (props: any) => {
-    const { modelContainer } = props
+    const { modelContainer } = props;
     return this.setState({
       model: modelContainer.state.model
     });
-  }
+  };
 
   public render() {
     const {
@@ -226,7 +241,42 @@ class Experiment extends React.Component<IProps, IState> {
         <div className="content">
           <Panel>
             <Panel.Title>
-              <h3>Your Experiment</h3>
+              <div className="flexbox">
+                <h3 className="item">Your Experiment</h3>
+                <div className="item flexbox">
+                  <div ref={r => (this.experimentNameRef = r)}>
+                    <FormControl
+                      className="item experiment-name"
+                      type="text"
+                      placeholder={"Experiment name"}
+                      value={this.state.experimentName}
+                      onChange={this.handleChangeExperimentName}
+                    />
+                  </div>
+
+                  <Button
+                    className="item"
+                    onClick={this.saveModelAndRunExperiment}
+                    bsStyle="info"
+                    disabled={selectedMethod === undefined}
+                  >
+                    Run Experiment
+                  </Button>
+                  <Overlay
+                    show={this.state.showPopover}
+                    placement="bottom"
+                    container={this.experimentNameRef}
+                  >
+                    <Popover
+                      id="popover-positioned-bottom"
+                      title="Almost there"
+                      style={{ position: "relative" }}
+                    >
+                      Enter a name for your experiment.
+                    </Popover>
+                  </Overlay>
+                </div>
+              </div>
             </Panel.Title>
             <Panel.Body>
               {selectedMethod && (
@@ -235,6 +285,14 @@ class Experiment extends React.Component<IProps, IState> {
                     <strong>{selectedMethod.label}</strong>
                   </h4>
                   <p>{selectedMethod.description}</p>
+                </div>
+              )}
+              {!selectedMethod && (
+                <div>
+                  <h4>
+                    <strong>Your method</strong>
+                  </h4>
+                  <p>Please, select a method on the left pane</p>
                 </div>
               )}
               {parameters && parameters.length > 0 && <h4>Parameters</h4>}
@@ -370,9 +428,6 @@ class Experiment extends React.Component<IProps, IState> {
                     );
                   })}
               </FormGroup>
-              <Button bsStyle="info" disabled={selectedMethod === undefined}>
-                Run Experiment
-              </Button>
             </Panel.Body>
           </Panel>
           <Panel>
@@ -418,30 +473,33 @@ class Experiment extends React.Component<IProps, IState> {
     });
   };
 
-  private handleChangeDataset = (datasets: any, code: any, type: DatasetType) => {
+  private handleChangeDataset = (
+    datasets: any,
+    code: any,
+    type: DatasetType
+  ) => {
     const { model } = this.state;
     if (model) {
       const { query } = model;
       if (type === 0) {
-        query.trainingDatasets = this.toggleDataset(
-          datasets,
-          code
-        );
+        query.trainingDatasets = this.toggleDataset(datasets, code);
 
-        if (this.getDatasetCheckedState(query.trainingDatasets, code) && this.getDatasetCheckedState(query.validationDatasets, code)) {
+        if (
+          this.getDatasetCheckedState(query.trainingDatasets, code) &&
+          this.getDatasetCheckedState(query.validationDatasets, code)
+        ) {
           query.validationDatasets = this.toggleDataset(
             query.validationDatasets,
             code
           );
         }
-
       } else if (type === 1) {
-        query.validationDatasets = this.toggleDataset(
-          datasets,
-          code
-        );
+        query.validationDatasets = this.toggleDataset(datasets, code);
 
-        if (this.getDatasetCheckedState(query.trainingDatasets, code) && this.getDatasetCheckedState(query.validationDatasets, code)) {
+        if (
+          this.getDatasetCheckedState(query.trainingDatasets, code) &&
+          this.getDatasetCheckedState(query.validationDatasets, code)
+        ) {
           query.trainingDatasets = this.toggleDataset(
             query.trainingDatasets,
             code
@@ -452,6 +510,12 @@ class Experiment extends React.Component<IProps, IState> {
       model.query = query;
       this.setState({ model });
     }
+  };
+
+  private handleChangeExperimentName = (event: any) => {
+    this.setState({
+      experimentName: event.target.value
+    });
   };
 
   private getDatasetCheckedState = (selectedDatasets: any = [], code: any) => {
@@ -475,6 +539,41 @@ class Experiment extends React.Component<IProps, IState> {
     }
 
     return newDataset;
+  };
+
+  private saveModelAndRunExperiment = async (e: any) => {
+
+    if (this.state.experimentName.length <= 0) {
+      return this.setState({ showPopover: true });
+    }
+
+    this.setState({ showPopover: false });
+    const { experimentContainer, modelContainer } = this.props;
+    const { model, selectedMethod, parameters } = this.state;
+    
+    await modelContainer.update(model);
+    const validation =
+    model &&
+      model.query &&
+      model.query.validationDatasets &&
+      model.query.validationDatasets.length ? true : false
+    const exp = {
+      algorithms: {
+        code: selectedMethod.code,
+        name: selectedMethod.code,
+        parameters,
+        validation
+      },
+      model: model!.slug,
+      name: this.state.experimentName,
+      validations: validation
+    };
+
+    await experimentContainer.create(exp);
+    const experiment = experimentContainer.state.experiment
+    const uuid = experiment && experiment.uuid
+
+    return <Redirect to={`/v3/experiment/${model && model.slug}/${uuid}`} />
   };
 }
 

@@ -39,23 +39,25 @@ export default withRouter(
 
     return (
       <Panel>
-        <Panel.Body className="model-header">
-          <div className="item">
-            <h3>
-              Run Experiment on{" "}
-              <DropdownModel
-                items={modelContainer.state.models}
-                title={title}
-                handleSelect={handleSelectModel}
+        <Panel.Body>
+          <div className="flexbox">
+            <div className="item">
+              <h3>
+                Run Experiment on{" "}
+                <DropdownModel
+                  items={modelContainer.state.models}
+                  title={title}
+                  handleSelect={handleSelectModel}
+                />
+              </h3>
+            </div>
+            <div className="item">
+              <Dropdown
+                items={experiments}
+                title="RELATED EXPERIMENTS"
+                handleSelect={handleSelectExperiment}
               />
-            </h3>
-          </div>
-          <div className="item">
-            <Dropdown
-              items={experiments}
-              title="RELATED EXPERIMENTS"
-              handleSelect={handleSelectExperiment}
-            />
+            </div>
           </div>
         </Panel.Body>
       </Panel>

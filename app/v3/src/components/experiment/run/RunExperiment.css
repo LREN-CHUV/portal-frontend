@@ -24,19 +24,25 @@
     grid-area: header;
   }
 
-  .model-header {
-    padding: 0;
-    margin: 0 8px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  .RunExperiment .panel-body {
+    padding: 0 16px
   }
 
   .RunExperiment .method a {
     font-size: 1.2em;
   }
 
+  .RunExperiment .flexbox {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
 
 .item {
-  flex-grow: 1
+  flex: 0 1 auto
+  }
+
+  .experiment-name {
+    width: 180px;
+    margin: 0 4px
   }
