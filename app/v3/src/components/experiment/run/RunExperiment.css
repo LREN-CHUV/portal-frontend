@@ -2,18 +2,20 @@
     display: grid;
     padding: 0 48px;
     grid-gap: 8px;
-    grid-template-columns: 200px auto 200px;
+    grid-template-columns: 200px 200px auto ;
     grid-template-areas:
       "header  header  header"
-      "sidebar content sidebar2";
+      "sidebar2 sidebar content";
   }
 
   .sidebar {
     grid-area: sidebar;
+    overflow: hidden;
   }
 
   .sidebar2 {
     grid-area: sidebar2;
+    overflow: hidden;
   }
 
   .content {

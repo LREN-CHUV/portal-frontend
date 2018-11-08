@@ -134,7 +134,9 @@ class Experiment extends React.Component<IProps, IState> {
             modelContainer={modelContainer}
           />
         </div>
-
+        <div className="sidebar2">
+          <Model model={model} />
+        </div>
         <div className="sidebar">
           <Panel>
             <Panel.Title>
@@ -436,9 +438,7 @@ class Experiment extends React.Component<IProps, IState> {
             </Panel.Title>
           </Panel>
         </div>
-        <div className="sidebar2">
-          <Model model={model} />
-        </div>
+
       </div>
     );
   }
