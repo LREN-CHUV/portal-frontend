@@ -12,7 +12,7 @@ import {
   Panel,
   Popover
 } from "react-bootstrap";
-import { Redirect, RouteComponentProps, withRouter } from "react-router-dom";
+import { RouteComponentProps, withRouter } from "react-router-dom";
 import { Model } from "../..";
 import {
   ExperimentContainer,
@@ -438,7 +438,6 @@ class Experiment extends React.Component<IProps, IState> {
             </Panel.Title>
           </Panel>
         </div>
-
       </div>
     );
   }
@@ -458,7 +457,15 @@ class Experiment extends React.Component<IProps, IState> {
 
   private handleSelectMethod = (event: any, method: IMethod) => {
     event.preventDefault();
-    this.setState({
+    const parameters =
+      (method && method.parameters) || undefined;
+    
+      let newParams = [];
+      if (parameters) {
+        newParams = parameters.map((p:any) => ({ code: p.code, value: p.default_value }))
+      }
+      this.setState({
+      parameters: newParams,
       selectedMethod: method
     });
   };
@@ -542,7 +549,6 @@ class Experiment extends React.Component<IProps, IState> {
   };
 
   private saveModelAndRunExperiment = async (e: any) => {
-
     if (this.state.experimentName.length <= 0) {
       return this.setState({ showPopover: true });
     }
@@ -550,30 +556,42 @@ class Experiment extends React.Component<IProps, IState> {
     this.setState({ showPopover: false });
     const { experimentContainer, modelContainer } = this.props;
     const { model, selectedMethod, parameters } = this.state;
-    
+
     await modelContainer.update(model);
     const validation =
-    model &&
+      model &&
       model.query &&
       model.query.validationDatasets &&
-      model.query.validationDatasets.length ? true : false
+      model.query.validationDatasets.length
+        ? true
+        : false;
     const exp = {
-      algorithms: {
+      algorithms: [{
         code: selectedMethod.code,
         name: selectedMethod.code,
         parameters,
         validation
-      },
+      }],
       model: model!.slug,
       name: this.state.experimentName,
-      validations: validation
+      validations: []
     };
 
-    await experimentContainer.create(exp);
-    const experiment = experimentContainer.state.experiment
-    const uuid = experiment && experiment.uuid
+    const {
+      history
+    } = this.props;
 
-    return <Redirect to={`/v3/experiment/${model && model.slug}/${uuid}`} />
+    let uuid;
+    try {
+      await experimentContainer.create(exp);
+      const experiment = experimentContainer.state.experiment;
+      uuid = experiment && experiment.uuid;
+    } catch (error) {
+      console.log(error);
+    }
+
+    history.push(`/v3/experiment/${model && model.slug}/${uuid}`);
+    // return <Redirect to={`/v3/experiment/${model && model.slug}/${uuid}`} />;
   };
 }
 

@@ -40,7 +40,7 @@ angular
                   return promise.then(
                     function(result) {
                       //$state.go(result.data.uuid);
-                      window.location.href = `/v3/experiment/${$scope.model.slug}/${result.data.uuid}`;
+                      window.location.href = `/v3/experiment/${$scope.model.slug}`;
                       // $state.go("experiment_details", {
                       //   model_slug: $scope.model.slug,
                       //   experiment_uuid: result.data.uuid

@@ -31,9 +31,10 @@ export interface IPolynomialClassificationScore extends IValidationScore {
 export interface IMethod {
   algorithm: string,
   predictive?: boolean,
-  mime: string,
-  data?: any[],
-  error?: string,
+  mime: string;
+  data?: any[];
+  error?: string;
+  parameters?: any;
   // Details for the validation of a method on a single node, includes for example the folds when k-fold cross-validation is used
   crossValidation?: IKfoldValidationScore | IValidationScore | IPolynomialClassificationScore
   remoteValidation?: INode | IValidationScore

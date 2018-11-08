@@ -44,6 +44,7 @@ class ExperimentContainer extends Container<IExperimentContainer> {
   };
 
   public create = async (params: any) => {
+    console.log(JSON.stringify(params), null, 4)
     try {
       const data = await request({
         body: JSON.stringify(params),
