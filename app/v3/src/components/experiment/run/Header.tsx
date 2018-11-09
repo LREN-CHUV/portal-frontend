@@ -56,6 +56,8 @@ export default withRouter(
                 items={experiments}
                 title="RELATED EXPERIMENTS"
                 handleSelect={handleSelectExperiment}
+                handleCreateNewExperiment={null}
+
               />
             </div>
           </div>

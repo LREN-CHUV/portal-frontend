@@ -28,6 +28,10 @@ export default withRouter(
       return await load(uuid);
     };
 
+    const handleCreateNewExperiment = () => {
+      history.push(`/v3/experiment/${modelId}`);
+    };
+
     return (
       <Panel className="experiment-header">
         <Panel.Body>
@@ -57,6 +61,7 @@ export default withRouter(
                 }
                 title="RELATED EXPERIMENTS"
                 handleSelect={handleSelectExperiment}
+                handleCreateNewExperiment={handleCreateNewExperiment}
               />
             </div>
           </div>

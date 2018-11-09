@@ -43,7 +43,7 @@ interface IProps extends RouteComponentProps<any> {
 interface IState {
   experimentName: string;
   selectedMethod: any | undefined;
-  parameters: any | undefined;
+  parameters: any[];
   model: IModelResult | undefined;
   showPopover: boolean;
 }
@@ -52,7 +52,7 @@ class Experiment extends React.Component<IProps, IState> {
   public state: IState = {
     experimentName: "",
     model: undefined,
-    parameters: {},
+    parameters: [],
     selectedMethod: undefined,
     showPopover: false
   };
@@ -472,12 +472,12 @@ class Experiment extends React.Component<IProps, IState> {
 
   private handleChangeParameter = (event: any, code: string) => {
     event.preventDefault();
-    this.setState({
-      parameters: {
-        ...this.state.parameters,
-        [code]: event.target.value
-      }
-    });
+    // this.setState({
+    //   parameters: {
+    //     ...this.state.parameters,
+    //     [code]: event.target.value
+    //   }
+    // });
   };
 
   private handleChangeDataset = (

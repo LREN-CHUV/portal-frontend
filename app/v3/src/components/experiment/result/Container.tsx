@@ -40,6 +40,8 @@ const methodDisplay = (experiment: IExperimentResult | undefined) => (
 );
 
 class Experiment extends React.Component<IProps> {
+  private intervalId: NodeJS.Timer;
+
   public async componentDidMount() {
     // Get url parameters
     const { match: matched } = this.props;
@@ -51,6 +53,29 @@ class Experiment extends React.Component<IProps> {
 
     await modelContainer.load(slug);
     return await experimentContainer.load(uuid);
+  }
+
+  public componentWillMount() {
+    const { match: matched } = this.props;
+    if (!matched) {
+      return;
+    }
+    const { uuid } = matched.params;
+    const { experimentContainer } = this.props;
+    this.intervalId = setInterval(
+      async () => {
+        await experimentContainer.load(uuid);
+        const experiment = experimentContainer.state.experiment
+        if (experiment) {
+          clearInterval(this.intervalId);
+        }
+      },
+      10 * 1000
+    );
+  }
+
+  public componentWillUnmount() {
+    clearInterval(this.intervalId);
   }
 
   public render() {

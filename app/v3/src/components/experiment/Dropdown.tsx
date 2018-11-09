@@ -9,12 +9,14 @@ interface IDropdown {
   items: IExperimentResult[] | undefined;
   title: string;
   handleSelect: any;
+  handleCreateNewExperiment: any;
   noCaret?: boolean;
 }
 export default ({
   items,
   title = "Current Model",
   handleSelect,
+  handleCreateNewExperiment,
   noCaret = false
 }: IDropdown) => (
   <DropdownButton
@@ -23,6 +25,16 @@ export default ({
     id={"experiment-dropdown"}
     title={title}
   >
+    {handleCreateNewExperiment && (
+      <MenuItem
+        eventKey={"newexperiment"}
+        key={"newexperiment"}
+        // tslint:disable-next-line jsx-no-lambda
+        onSelect={() => handleCreateNewExperiment()}
+      >
+        <strong>Create New Experiment</strong>
+      </MenuItem>
+    )}
     {(items &&
       handleSelect &&
       items
@@ -38,8 +50,8 @@ export default ({
           experimentState = experiment.error
             ? "glyphicon-exclamation-sign glyph"
             : !experiment.results
-              ? "glyphicon-transfer glyph loading"
-              : "glyphicon-eye-open glyph";
+            ? "glyphicon-transfer glyph loading"
+            : "glyphicon-eye-open glyph";
           experimentState += experiment.resultsViewed ? " viewed" : " ready";
 
           return (

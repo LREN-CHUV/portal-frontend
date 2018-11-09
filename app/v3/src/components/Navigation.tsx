@@ -130,6 +130,7 @@ class Navigation extends React.Component<IProps> {
 
                     return await experimentContainer.load(uuid);
                   }}
+                  handleCreateNewExperiment={null}
                   noCaret={true}
                 />
                 {unreadCount && (

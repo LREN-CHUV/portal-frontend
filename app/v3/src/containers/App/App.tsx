@@ -35,18 +35,18 @@ class App extends React.Component {
   private exploreContainer = new ExploreContainer(config);
   private methodContainer = new MethodContainer(config);
 
-  // private intervalId: NodeJS.Timer;
+  private intervalId: NodeJS.Timer;
 
-  // public componentWillMount() {
-  //   this.intervalId = setInterval(
-  //     () => this.experimentListContainer.load(),
-  //     10 * 1000
-  //   );
-  // }
+  public componentWillMount() {
+    this.intervalId = setInterval(
+      () => this.experimentListContainer.load(),
+      10 * 1000
+    );
+  }
 
-  // public componentWillUnmount() {
-  //   clearInterval(this.intervalId);
-  // }
+  public componentWillUnmount() {
+    clearInterval(this.intervalId);
+  }
 
   public render() {
     return (
