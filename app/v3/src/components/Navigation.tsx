@@ -119,7 +119,7 @@ class Navigation extends React.Component<IProps> {
                       `/v3/experiment/${modelDefinitionId}/${uuid}`
                     );
                     await experimentContainer.markAsViewed(uuid);
-                    await modelContainer.load(modelDefinitionId);
+                    await modelContainer.one(modelDefinitionId);
 
                     return await experimentContainer.one(uuid);
                   }}

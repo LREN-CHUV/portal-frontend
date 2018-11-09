@@ -49,7 +49,7 @@ class Experiment extends React.Component<IProps> {
     const { uuid, slug } = matched.params;
     const { experimentContainer, modelContainer } = this.props;
 
-    await modelContainer.load(slug);
+    await modelContainer.one(slug);
     return await experimentContainer.one(uuid);
   }
 

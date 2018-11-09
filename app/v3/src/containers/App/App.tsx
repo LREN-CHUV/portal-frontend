@@ -9,7 +9,6 @@ import UNSTATED from "unstated-debug";
 import {
   ExperimentContainer,
   ExploreContainer,
-  MethodContainer,
   ModelContainer
 } from "../";
 import {
@@ -31,7 +30,6 @@ class App extends React.Component {
   private experimentContainer = new ExperimentContainer(config);
   private modelContainer = new ModelContainer(config);
   private exploreContainer = new ExploreContainer(config);
-  private methodContainer = new MethodContainer(config);
 
   private intervalId: NodeJS.Timer;
 
@@ -54,7 +52,6 @@ class App extends React.Component {
             this.experimentContainer,
             this.exploreContainer,
             this.modelContainer,
-            this.methodContainer
           ]}
         >
           <Subscribe
@@ -62,14 +59,12 @@ class App extends React.Component {
               ExperimentContainer,
               ExploreContainer,
               ModelContainer,
-              MethodContainer
             ]}
           >
             {(
               experimentContainer: ExperimentContainer,
               exploreContainer: ExploreContainer,
               modelContainer: ModelContainer,
-              methodContainer: MethodContainer
             ) => (
               <div className="App">
                 <header>
@@ -125,7 +120,6 @@ class App extends React.Component {
                       <RunExperiment
                         experimentContainer={experimentContainer}
                         exploreContainer={exploreContainer}
-                        methodContainer={methodContainer}
                         modelContainer={modelContainer}
                       />
                     )}

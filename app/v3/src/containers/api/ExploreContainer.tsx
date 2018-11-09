@@ -10,6 +10,7 @@ export interface IExploreContainer {
   hierarchy?: any;
   variables?: any;
   datasets?: any;
+  methods?: any;
 }
 
 class ExploreContainer extends Container<IExploreContainer> {
@@ -81,6 +82,27 @@ class ExploreContainer extends Container<IExploreContainer> {
       return await this.setState({
         datasets: json,
         error: undefined,
+      });
+    } catch (error) {
+      return await this.setState({
+        error: error.message
+      });
+    }
+  };
+
+  public methods = async () => {
+    try {
+      const data = await request.get(`${this.baseUrl}/methods`, this.options);
+      const json = await JSON.parse(data);
+      if (json.error) {
+        return await this.setState({
+          error: json.error
+        });
+      }
+
+      return await this.setState({
+        error: undefined,
+        methods: json
       });
     } catch (error) {
       return await this.setState({

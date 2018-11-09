@@ -17,7 +17,6 @@ import { Model } from "../..";
 import {
   ExperimentContainer,
   ExploreContainer,
-  MethodContainer,
   ModelContainer
 } from "../../../containers";
 
@@ -34,7 +33,6 @@ enum DatasetType {
 interface IProps extends RouteComponentProps<any> {
   experimentContainer: ExperimentContainer;
   exploreContainer: ExploreContainer;
-  methodContainer: MethodContainer;
   modelContainer: ModelContainer;
 }
 
@@ -71,12 +69,14 @@ class Experiment extends React.Component<IProps, IState> {
       return;
     }
     const { slug } = matched.params;
-    const { exploreContainer, methodContainer, modelContainer } = this.props;
-    await methodContainer.load();
-    await exploreContainer.variables();
-    await exploreContainer.datasets();
-    await modelContainer.all();
-    await modelContainer.load(slug);
+    const { exploreContainer, modelContainer } = this.props;
+    await Promise.all([
+      exploreContainer.variables(),
+      exploreContainer.datasets(),
+      exploreContainer.methods(),
+      modelContainer.all(),
+      modelContainer.one(slug)
+    ]);
 
     return this.setState({
       model: modelContainer.state.model
@@ -94,17 +94,13 @@ class Experiment extends React.Component<IProps, IState> {
     const {
       experimentContainer,
       exploreContainer,
-      methodContainer,
       modelContainer
     } = this.props;
     const algorithms =
-      (methodContainer &&
-        methodContainer.state &&
-        methodContainer.state.methods &&
-        methodContainer.state.methods &&
-        methodContainer.state.methods.algorithms &&
-        methodContainer.state.methods.algorithms) ||
-      [];
+      exploreContainer &&
+        exploreContainer.state &&
+        exploreContainer.state.methods &&
+        exploreContainer.state.methods.algorithms || [];
 
     const rawVariables = exploreContainer.state.variables;
     const datasets = exploreContainer.state.datasets;
@@ -453,14 +449,16 @@ class Experiment extends React.Component<IProps, IState> {
 
   private handleSelectMethod = (event: any, method: IMethod) => {
     event.preventDefault();
-    const parameters =
-      (method && method.parameters) || undefined;
-    
-      let newParams = [];
-      if (parameters) {
-        newParams = parameters.map((p:any) => ({ code: p.code, value: p.default_value }))
-      }
-      this.setState({
+    const parameters = (method && method.parameters) || undefined;
+
+    let newParams = [];
+    if (parameters) {
+      newParams = parameters.map((p: any) => ({
+        code: p.code,
+        value: p.default_value
+      }));
+    }
+    this.setState({
       parameters: newParams,
       selectedMethod: method
     });
@@ -562,20 +560,20 @@ class Experiment extends React.Component<IProps, IState> {
         ? true
         : false;
     const exp = {
-      algorithms: [{
-        code: selectedMethod.code,
-        name: selectedMethod.code,
-        parameters,
-        validation
-      }],
+      algorithms: [
+        {
+          code: selectedMethod.code,
+          name: selectedMethod.code,
+          parameters,
+          validation
+        }
+      ],
       model: model!.slug,
       name: this.state.experimentName,
       validations: []
     };
 
-    const {
-      history
-    } = this.props;
+    const { history } = this.props;
 
     let uuid;
     try {

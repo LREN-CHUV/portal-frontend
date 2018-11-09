@@ -22,7 +22,7 @@ class ModelContainer extends Container<IModelContainer> {
     this.baseUrl = `${config.baseUrl}/models`;
   }
 
-  public load = async (slug: string) => {
+  public one = async (slug: string) => {
     try {
       const data = await request.get(`${this.baseUrl}/${slug}`, this.options);
       const json: IModelResult = await JSON.parse(data);

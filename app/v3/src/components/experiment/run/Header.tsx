@@ -32,7 +32,7 @@ const experiments = experimentContainer.state.experiments
       console.log(selectedModel);
       const { slug } = selectedModel;
       history.push(`/v3/experiment/${slug}`);
-      const load = modelContainer && modelContainer.load;
+      const load = modelContainer && modelContainer.one;
       return await load(slug);
     };
 
