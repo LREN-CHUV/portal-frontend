@@ -6,7 +6,6 @@ import { RouteComponentProps, withRouter } from "react-router-dom";
 import { ExperimentHeader, ExperimentResult, Model } from "../..";
 import {
   ExperimentContainer,
-  ExperimentListContainer,
   ModelContainer
 } from "../../../containers";
 
@@ -14,7 +13,6 @@ import "../Experiment.css";
 
 interface IProps extends RouteComponentProps<any> {
   experimentContainer: ExperimentContainer;
-  experimentListContainer: ExperimentListContainer;
   modelContainer: ModelContainer;
 }
 
@@ -52,7 +50,7 @@ class Experiment extends React.Component<IProps> {
     const { experimentContainer, modelContainer } = this.props;
 
     await modelContainer.load(slug);
-    return await experimentContainer.load(uuid);
+    return await experimentContainer.one(uuid);
   }
 
   public componentWillMount() {
@@ -64,7 +62,7 @@ class Experiment extends React.Component<IProps> {
     const { experimentContainer } = this.props;
     this.intervalId = setInterval(
       async () => {
-        await experimentContainer.load(uuid);
+        await experimentContainer.one(uuid);
         const experiment = experimentContainer.state.experiment
         if (experiment) {
           clearInterval(this.intervalId);
@@ -81,7 +79,6 @@ class Experiment extends React.Component<IProps> {
   public render() {
     const {
       experimentContainer,
-      experimentListContainer,
       modelContainer
     } = this.props;
     return (
@@ -89,7 +86,6 @@ class Experiment extends React.Component<IProps> {
         <div className="header">
           <ExperimentHeader
             experimentContainer={experimentContainer}
-            experiments={experimentListContainer.state.experiments}
           />
         </div>
 

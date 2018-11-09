@@ -1,13 +1,13 @@
 // tslint:disable:no-console
+import { ExperimentContainer } from "@app/containers";
 import { IExperimentResult } from "@app/types";
 import * as React from "react";
 import { Label, Panel } from "react-bootstrap";
-import { ExperimentListContainer } from "../containers";
 
 import "./Experiments.css";
 
 interface IProps {
-  experimentListContainer: ExperimentListContainer;
+  experimentContainer: ExperimentContainer;
 }
 
 const renderExperiments = (experiments: IExperimentResult[] | undefined) => {
@@ -26,12 +26,11 @@ const renderExperiments = (experiments: IExperimentResult[] | undefined) => {
         const status: [string, string] = loading
           ? ["loading", "info"]
           : experiment.error
-            ? [experiment.error, "danger"]
-            : ["OK", "success"];
+          ? [experiment.error, "danger"]
+          : ["OK", "success"];
         return (
           <div className="Experiments" key={experiment.uuid}>
             <Panel
-              
               id="collapsible-panel-{experiment.uuid}"
               defaultExpanded={false}
             >
@@ -60,8 +59,8 @@ const renderExperiments = (experiments: IExperimentResult[] | undefined) => {
 
 class Experiments extends React.Component<IProps> {
   public render() {
-    const { experimentListContainer } = this.props;
-    return renderExperiments(experimentListContainer.state.experiments);
+    const { experimentContainer } = this.props;
+    return renderExperiments(experimentContainer.state.experiments);
   }
 }
 

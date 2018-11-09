@@ -10,22 +10,21 @@ import DropdownModel from "./Dropdown";
 
 interface IProps extends RouteComponentProps<any> {
   experimentContainer: ExperimentContainer;
-  experiments: IExperimentResult[] | undefined;
   modelContainer: ModelContainer;
 }
 
 export default withRouter(
-  ({ experimentContainer, modelContainer, experiments, history }: IProps) => {
+  ({ experimentContainer, modelContainer, history }: IProps) => {
     const state = modelContainer.state;
     const title = (state && state.model && state.model.title) || "";
-    // const modelId = model && model.slug;
-
+const experiments = experimentContainer.state.experiments
+    
     const handleSelectExperiment = async (
       selectedExperiment: IExperimentResult
     ) => {
       const { modelDefinitionId, uuid } = selectedExperiment;
       history.push(`/v3/experiment/${modelDefinitionId}/${uuid}`);
-      const load = experimentContainer && experimentContainer.load;
+      const load = experimentContainer && experimentContainer.one;
       return await load(uuid);
     };
 

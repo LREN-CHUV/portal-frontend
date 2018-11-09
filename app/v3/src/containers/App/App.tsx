@@ -8,7 +8,6 @@ import { Provider, Subscribe } from "unstated";
 import UNSTATED from "unstated-debug";
 import {
   ExperimentContainer,
-  ExperimentListContainer,
   ExploreContainer,
   MethodContainer,
   ModelContainer
@@ -30,7 +29,6 @@ UNSTATED.logStateChanges = process.env.NODE_ENV === "development";
 
 class App extends React.Component {
   private experimentContainer = new ExperimentContainer(config);
-  private experimentListContainer = new ExperimentListContainer(config);
   private modelContainer = new ModelContainer(config);
   private exploreContainer = new ExploreContainer(config);
   private methodContainer = new MethodContainer(config);
@@ -39,7 +37,7 @@ class App extends React.Component {
 
   public componentWillMount() {
     this.intervalId = setInterval(
-      () => this.experimentListContainer.load(),
+      () => this.experimentContainer.all(),
       10 * 1000
     );
   }
@@ -54,7 +52,6 @@ class App extends React.Component {
         <Provider
           inject={[
             this.experimentContainer,
-            this.experimentListContainer,
             this.exploreContainer,
             this.modelContainer,
             this.methodContainer
@@ -63,7 +60,6 @@ class App extends React.Component {
           <Subscribe
             to={[
               ExperimentContainer,
-              ExperimentListContainer,
               ExploreContainer,
               ModelContainer,
               MethodContainer
@@ -71,7 +67,6 @@ class App extends React.Component {
           >
             {(
               experimentContainer: ExperimentContainer,
-              experimentListContainer: ExperimentListContainer,
               exploreContainer: ExploreContainer,
               modelContainer: ModelContainer,
               methodContainer: MethodContainer
@@ -80,7 +75,6 @@ class App extends React.Component {
                 <header>
                   <Navigation
                     experimentContainer={experimentContainer}
-                    experimentListContainer={experimentListContainer}
                     modelContainer={modelContainer}
                   />
                 </header>
@@ -109,7 +103,7 @@ class App extends React.Component {
                     // tslint:disable-next-line jsx-no-lambda
                     render={() => (
                       <Experiments
-                        experimentListContainer={experimentListContainer}
+                      experimentContainer={experimentContainer}
                       />
                     )}
                   />
@@ -119,7 +113,6 @@ class App extends React.Component {
                     render={() => (
                       <Experiment
                         experimentContainer={experimentContainer}
-                        experimentListContainer={experimentListContainer}
                         modelContainer={modelContainer}
                       />
                     )}
@@ -131,7 +124,6 @@ class App extends React.Component {
                     render={() => (
                       <RunExperiment
                         experimentContainer={experimentContainer}
-                        experimentListContainer={experimentListContainer}
                         exploreContainer={exploreContainer}
                         methodContainer={methodContainer}
                         modelContainer={modelContainer}

@@ -2,7 +2,7 @@
 import * as dotenv from "dotenv";
 import request from "request-promise-native";
 import { Container } from "unstated";
-import { IExperimentContainer } from "../../types";
+import { IExperimentContainer, IExperimentResult } from "../../types";
 import ParseExperiment from "./ParseExperiment";
 
 dotenv.config();
@@ -10,7 +10,8 @@ dotenv.config();
 class ExperimentContainer extends Container<IExperimentContainer> {
   public state: IExperimentContainer = {
     error: undefined,
-    experiment: undefined
+    experiment: undefined,
+    experiments: undefined
   };
 
   private options: any;
@@ -22,7 +23,7 @@ class ExperimentContainer extends Container<IExperimentContainer> {
     this.baseUrl = `${config.baseUrl}/experiments`;
   }
 
-  public load = async (uuid: string) => {
+  public one = async (uuid: string) => {
     try {
       const data = await request.get(`${this.baseUrl}/${uuid}`, this.options);
       const json = await JSON.parse(data);
@@ -39,6 +40,29 @@ class ExperimentContainer extends Container<IExperimentContainer> {
     } catch (error) {
       return await this.setState({
         error: error.message
+      });
+    }
+  };
+
+  public all = async () => {
+    try {
+      const data = await request.get(`${this.baseUrl}?mine=true`, this.options);
+      const json = await JSON.parse(data);
+      if (json.error) {
+        return await this.setState({
+          error: json.error,
+        });
+      }
+
+      return await this.setState({
+        error: undefined,
+        experiments: json.map((j: IExperimentResult) =>
+          ParseExperiment.parse(j)
+        ),
+      });
+    } catch (error) {
+      return await this.setState({
+        error: error.message,
       });
     }
   };

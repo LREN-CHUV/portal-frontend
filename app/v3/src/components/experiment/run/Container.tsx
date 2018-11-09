@@ -16,7 +16,6 @@ import { RouteComponentProps, withRouter } from "react-router-dom";
 import { Model } from "../..";
 import {
   ExperimentContainer,
-  ExperimentListContainer,
   ExploreContainer,
   MethodContainer,
   ModelContainer
@@ -34,7 +33,6 @@ enum DatasetType {
 
 interface IProps extends RouteComponentProps<any> {
   experimentContainer: ExperimentContainer;
-  experimentListContainer: ExperimentListContainer;
   exploreContainer: ExploreContainer;
   methodContainer: MethodContainer;
   modelContainer: ModelContainer;
@@ -95,7 +93,6 @@ class Experiment extends React.Component<IProps, IState> {
   public render() {
     const {
       experimentContainer,
-      experimentListContainer,
       exploreContainer,
       methodContainer,
       modelContainer
@@ -130,7 +127,6 @@ class Experiment extends React.Component<IProps, IState> {
         <div className="header">
           <Header
             experimentContainer={experimentContainer}
-            experiments={experimentListContainer.state.experiments}
             modelContainer={modelContainer}
           />
         </div>

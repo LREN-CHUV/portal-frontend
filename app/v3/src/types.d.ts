@@ -114,13 +114,9 @@ export interface IErrorResult {
   error?: string
 }
 
-export interface IExperimentListContainer extends IErrorResult {
-  experiments?: IExperimentResult[];
-  loading: boolean;
-}
-
 export interface IExperimentContainer extends IErrorResult {
   experiment?: IExperimentResult;
+  experiments?: IExperimentResult[];
 }
 
 export interface IModelContainer extends IErrorResult {

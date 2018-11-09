@@ -8,15 +8,15 @@ import { ExperimentContainer } from "../../../containers";
 
 interface IProps extends RouteComponentProps<any> {
   experimentContainer: ExperimentContainer;
-  experiments: IExperimentResult[] | undefined;
 }
 
 export default withRouter(
-  ({ experimentContainer, experiments, history }: IProps) => {
+  ({ experimentContainer, history }: IProps) => {
     const state = experimentContainer && experimentContainer.state;
     const experiment = state && state.experiment;
     const title = experiment && experiment.name;
     const modelId = experiment && experiment.modelDefinitionId;
+    const experiments = experimentContainer.state.experiments;
 
     const handleSelectExperiment = async (
       selectedExperiment: IExperimentResult
@@ -24,7 +24,7 @@ export default withRouter(
       const { modelDefinitionId, uuid } = selectedExperiment;
       history.push(`/v3/experiment/${modelDefinitionId}/${uuid}`);
       await experimentContainer.markAsViewed(uuid);
-      const load = experimentContainer && experimentContainer.load;
+      const load = experimentContainer && experimentContainer.one;
       return await load(uuid);
     };
 
