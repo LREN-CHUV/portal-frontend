@@ -1,30 +1,21 @@
 // tslint:disable:no-console
+import { ICoreDataContainer } from "@app/types";
 import * as dotenv from "dotenv";
 import request from "request-promise-native";
 import { Container } from "unstated";
 
 dotenv.config();
 
-export interface IExploreContainer {
-  error?: string;
-  hierarchy?: any;
-  variables?: any;
-  datasets?: any;
-  methods?: any;
-}
+class CoreDataContainer extends Container<ICoreDataContainer> {
+  public state: ICoreDataContainer = {};
 
-class ExploreContainer extends Container<IExploreContainer> {
-  public state: IExploreContainer = {};
-
-  private options: any;
+  private options: RequestInit;
   private baseUrl: string;
-  // private groupBaseUrl: string;
 
   constructor(config: any) {
     super();
     this.options = config.options;
     this.baseUrl = `${config.baseUrl}`;
-    // this.groupBaseUrl = `${config.baseUrl}/groups`;
   }
 
   public variables = async () => {
@@ -50,7 +41,10 @@ class ExploreContainer extends Container<IExploreContainer> {
 
   public hierarchy = async () => {
     try {
-      const data = await request.get(`${this.baseUrl}/variables/hierarchy`, this.options);
+      const data = await request.get(
+        `${this.baseUrl}/variables/hierarchy`,
+        this.options
+      );
       const json = await JSON.parse(data);
       if (json.error) {
         return await this.setState({
@@ -81,7 +75,7 @@ class ExploreContainer extends Container<IExploreContainer> {
 
       return await this.setState({
         datasets: json,
-        error: undefined,
+        error: undefined
       });
     } catch (error) {
       return await this.setState({
@@ -90,7 +84,7 @@ class ExploreContainer extends Container<IExploreContainer> {
     }
   };
 
-  public methods = async () => {
+  public algorithms = async () => {
     try {
       const data = await request.get(`${this.baseUrl}/methods`, this.options);
       const json = await JSON.parse(data);
@@ -112,4 +106,4 @@ class ExploreContainer extends Container<IExploreContainer> {
   };
 }
 
-export default ExploreContainer;
+export default CoreDataContainer;

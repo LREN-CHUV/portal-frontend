@@ -13,7 +13,7 @@ class ModelContainer extends Container<IModelContainer> {
     models: undefined
   };
 
-  private options: any;
+  private options: RequestInit;
   private baseUrl: string;
 
   constructor(config: any) {
@@ -93,11 +93,6 @@ class ModelContainer extends Container<IModelContainer> {
     try {
       const data = await request.get(`${this.baseUrl}`, this.options);
       const json: IModelResult[] = await JSON.parse(data);
-      // if (json.error) {
-      //   return await this.setState({
-      //     error: json.error
-      //   });
-      // }
 
       return await this.setState({
         error: undefined,

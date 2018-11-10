@@ -14,7 +14,7 @@ class ExperimentContainer extends Container<IExperimentContainer> {
     experiments: undefined
   };
 
-  private options: any;
+  private options: RequestInit;
   private baseUrl: string;
 
   constructor(config: any) {

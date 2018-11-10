@@ -1,10 +1,10 @@
 // tslint:disable:no-console
-import { ExploreContainer } from "@app/containers";
+import { CoreDataContainer } from "@app/containers";
 import { ResponsiveBubble } from "@nivo/circle-packing";
 import React, { Component } from "react";
 
 interface IProps {
-  exploreContainer: ExploreContainer;
+  exploreContainer: CoreDataContainer;
 }
 
 class Circle extends Component<IProps, any> {

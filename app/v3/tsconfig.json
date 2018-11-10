@@ -21,6 +21,10 @@
     "paths": {
       "@app/*": ["src/*"]
     },
+    // "typeRoots": ["./node_modules/@types", "./"]
+    // "types": [
+    //     "vscode",
+    // ]
   },
   "exclude": [
     "node_modules",

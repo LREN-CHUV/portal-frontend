@@ -1,8 +1,8 @@
 // tslint:disable:no-console
+import { IExperimentResult } from "@app/types";
 import * as moment from "moment";
 import * as React from "react";
 import { DropdownButton, MenuItem } from "react-bootstrap";
-import { IExperimentResult } from "../../types";
 
 import "./Dropdown.css";
 interface IDropdown {

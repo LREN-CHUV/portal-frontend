@@ -1,6 +1,6 @@
 // tslint:disable:no-console
 import style from "@app/components/explore/GraphStyle";
-import { ExploreContainer } from "@app/containers";
+import { CoreDataContainer } from "@app/containers";
 import cytoscape from "cytoscape";
 import coseBilkent from "cytoscape-cose-bilkent";
 import React, { Component } from "react";
@@ -52,7 +52,7 @@ const layout = {
 };
 
 interface IProps {
-  exploreContainer: ExploreContainer;
+  exploreContainer: CoreDataContainer;
 }
 
 interface IGroup {

@@ -1,4 +1,5 @@
 // tslint:disable:no-console
+import { IModelResult } from "@app/types";
 import * as React from "react";
 import {
   Button,
@@ -15,12 +16,11 @@ import {
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { Model } from "../..";
 import {
+  CoreDataContainer,
   ExperimentContainer,
-  ExploreContainer,
   ModelContainer
 } from "../../../containers";
 
-import { IMethod, IModelResult } from "@app/types";
 import Header from "./Header";
 import "./RunExperiment.css";
 
@@ -32,7 +32,7 @@ enum DatasetType {
 
 interface IProps extends RouteComponentProps<any> {
   experimentContainer: ExperimentContainer;
-  exploreContainer: ExploreContainer;
+  exploreContainer: CoreDataContainer;
   modelContainer: ModelContainer;
 }
 
@@ -73,7 +73,7 @@ class Experiment extends React.Component<IProps, IState> {
     await Promise.all([
       exploreContainer.variables(),
       exploreContainer.datasets(),
-      exploreContainer.methods(),
+      exploreContainer.algorithms(),
       modelContainer.all(),
       modelContainer.one(slug)
     ]);
@@ -91,21 +91,21 @@ class Experiment extends React.Component<IProps, IState> {
   };
 
   public render() {
+    const { model } = this.state;
     const {
       experimentContainer,
       exploreContainer,
       modelContainer
     } = this.props;
-    const algorithms =
+
+    const methods =
       exploreContainer &&
-        exploreContainer.state &&
-        exploreContainer.state.methods &&
-        exploreContainer.state.methods.algorithms || [];
+      exploreContainer.state &&
+      exploreContainer.state.methods;
 
     const rawVariables = exploreContainer.state.variables;
     const datasets = exploreContainer.state.datasets;
 
-    const { model } = this.state;
     const query = model && model.query;
     const modelVariable =
       query && query.variables && query.variables.map(v => v.code)[0];
@@ -138,8 +138,9 @@ class Experiment extends React.Component<IProps, IState> {
               {rawVariables &&
                 query &&
                 modelVariable &&
-                algorithms
-                  .map((algorithm: any) => {
+                methods &&
+                methods.algorithms
+                  .map(algorithm => {
                     const rawVariable = rawVariables.find(
                       (v: any) => v.code === modelVariable
                     );
@@ -447,7 +448,7 @@ class Experiment extends React.Component<IProps, IState> {
     return "success";
   };
 
-  private handleSelectMethod = (event: any, method: IMethod) => {
+  private handleSelectMethod = (event: any, method: any) => {
     event.preventDefault();
     const parameters = (method && method.parameters) || undefined;
 

@@ -6,11 +6,7 @@ import * as React from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import { Provider, Subscribe } from "unstated";
 import UNSTATED from "unstated-debug";
-import {
-  ExperimentContainer,
-  ExploreContainer,
-  ModelContainer
-} from "../";
+import { CoreDataContainer, ExperimentContainer, ModelContainer } from "../";
 import {
   Bubble,
   Experiment,
@@ -29,7 +25,7 @@ UNSTATED.logStateChanges = process.env.NODE_ENV === "development";
 class App extends React.Component {
   private experimentContainer = new ExperimentContainer(config);
   private modelContainer = new ModelContainer(config);
-  private exploreContainer = new ExploreContainer(config);
+  private exploreContainer = new CoreDataContainer(config);
 
   private intervalId: NodeJS.Timer;
 
@@ -51,20 +47,16 @@ class App extends React.Component {
           inject={[
             this.experimentContainer,
             this.exploreContainer,
-            this.modelContainer,
+            this.modelContainer
           ]}
         >
           <Subscribe
-            to={[
-              ExperimentContainer,
-              ExploreContainer,
-              ModelContainer,
-            ]}
+            to={[ExperimentContainer, CoreDataContainer, ModelContainer]}
           >
             {(
               experimentContainer: ExperimentContainer,
-              exploreContainer: ExploreContainer,
-              modelContainer: ModelContainer,
+              exploreContainer: CoreDataContainer,
+              modelContainer: ModelContainer
             ) => (
               <div className="App">
                 <header>
@@ -97,9 +89,7 @@ class App extends React.Component {
                     path="/v3/experiments"
                     // tslint:disable-next-line jsx-no-lambda
                     render={() => (
-                      <Experiments
-                      experimentContainer={experimentContainer}
-                      />
+                      <Experiments experimentContainer={experimentContainer} />
                     )}
                   />
                   <Route
