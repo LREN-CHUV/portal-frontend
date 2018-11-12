@@ -20,6 +20,7 @@ RUN gulp build
 
 WORKDIR /frontend/app/v3/
 RUN yarn global add react-scripts-ts
+RUN yarn global add typescript
 RUN yarn build
 
 
