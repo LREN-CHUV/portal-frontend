@@ -45,6 +45,11 @@
   grid-template-columns: auto 190px 200px;
 }
 
+.create-experiment-container {
+  display: flex;
+  justify-content: flex-end
+}
+
 .Experiment .item {
   align-self: center;
 }

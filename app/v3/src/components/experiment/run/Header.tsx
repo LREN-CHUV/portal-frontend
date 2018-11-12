@@ -18,7 +18,7 @@ interface IProps extends RouteComponentProps<any> {
   modelContainer: ModelContainer;
 }
 
-// private experimentNameRef: any;
+let experimentNameRef: any;
 
 export default withRouter(
   ({
@@ -63,41 +63,38 @@ export default withRouter(
               handleSelect={handleSelectModel}
             />
           </h3>
-          <div className="item flexbox">
-            {/* <div ref={r => (this.experimentNameRef = r)}> */}
-            <FormControl
-              className="item experiment-name"
-              type="text"
-              placeholder={"Experiment name"}
-              value={experimentName}
-              onChange={handleChangeExperimentName}
-            />
-            {/* </div> */}
-
-            <Button
-              className="item"
-              onClick={handleSaveAndRunExperiment}
-              bsStyle="info"
-              disabled={selectedMethod === undefined}
-            >
-              Run Experiment
-            </Button>
-            <Overlay
-              show={showPopover}
-              placement="bottom"
-              // container={this.experimentNameRef}
-            >
-              <Popover
-                id="popover-positioned-bottom"
-                title="Almost there"
-                style={{ position: "relative" }}
+          <div className="create-experiment-container">
+            <div className="item" ref={r => (experimentNameRef = r)}>
+              <FormControl
+                className="item experiment-name"
+                type="text"
+                placeholder={"Experiment name"}
+                value={experimentName}
+                onChange={handleChangeExperimentName}
+              />
+            </div>
+            <div className="item">
+              <Button
+                onClick={handleSaveAndRunExperiment}
+                bsStyle="info"
+                disabled={selectedMethod === undefined}
               >
-                Enter a name for your experiment.
-              </Popover>
-            </Overlay>
-          </div>
-          <div className="experiment-container">
-            <h5 className="item">Hex</h5>
+                Run Experiment
+              </Button>
+              <Overlay
+                show={showPopover}
+                placement="bottom"
+                container={experimentNameRef}
+              >
+                <Popover
+                  id="popover-positioned-bottom"
+                  title="Almost there"
+                  style={{ position: "relative" }}
+                >
+                  Enter a name for your experiment.
+                </Popover>
+              </Overlay>
+            </div>
             <div className="item">
               <Dropdown
                 items={experiments}
