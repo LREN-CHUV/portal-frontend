@@ -84,7 +84,8 @@ var {
 
 
 .RunExperiment .method a {
-  font-size: 1.2em;
+  font-size: 1em;
+  font-weight: bold;
 }
 
 .item {
@@ -94,4 +95,15 @@ flex: 0 1 auto
 .experiment-name {
   width: 180px;
   margin: 0 4px
+}
+
+fieldset {
+  border: 1px solid lightgrey !important;
+  padding: 8px;
+  margin-bottom: 16px;
+}
+
+#popover-positioned-bottom {
+  position: absolute;
+  z-index: 100;
 }

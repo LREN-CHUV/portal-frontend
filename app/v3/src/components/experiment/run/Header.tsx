@@ -88,8 +88,7 @@ export default withRouter(
               >
                 <Popover
                   id="popover-positioned-bottom"
-                  title="Almost there"
-                  style={{ position: "relative" }}
+                  title="One more thing"
                 >
                   Enter a name for your experiment.
                 </Popover>

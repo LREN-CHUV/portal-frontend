@@ -38,7 +38,7 @@ interface IProps extends RouteComponentProps<any> {
 interface IState {
   experimentName: string;
   selectedMethod: any | undefined;
-  parameters: any[];
+  parameters: object;
   model: IModelResult | undefined;
   showPopover: boolean;
 }
@@ -47,7 +47,7 @@ class Experiment extends React.Component<IProps, IState> {
   public state: IState = {
     experimentName: "",
     model: undefined,
-    parameters: [],
+    parameters: {},
     selectedMethod: undefined,
     showPopover: false
   };
@@ -100,9 +100,8 @@ class Experiment extends React.Component<IProps, IState> {
       exploreContainer.state &&
       exploreContainer.state.methods;
 
-    const rawVariables = exploreContainer.state.variables;
+    const apiVariables = exploreContainer.state.variables;
     const datasets = exploreContainer.state.datasets;
-
     const query = model && model.query;
     const modelVariable =
       query && query.variables && query.variables.map(v => v.code)[0];
@@ -114,12 +113,15 @@ class Experiment extends React.Component<IProps, IState> {
     const { selectedMethod } = this.state;
     const parameters =
       (selectedMethod && selectedMethod.parameters) || undefined;
+    const isPredictiveMethod =
+      (selectedMethod && selectedMethod.type[0] === "predictive_model") ||
+      false;
 
     return (
       <div className="Experiment RunExperiment">
         <div className="header">
           <Header
-            handleSaveAndRunExperiment={this.saveModelAndRunExperiment}
+            handleSaveAndRunExperiment={this.handleSaveModelAndRunExperiment}
             handleChangeExperimentName={this.handleChangeExperimentName}
             selectedMethod={selectedMethod}
             experimentName={this.state.experimentName}
@@ -137,42 +139,26 @@ class Experiment extends React.Component<IProps, IState> {
               <h3>Available Methods</h3>
             </Panel.Title>
             <Panel.Body>
-              {rawVariables &&
+              {apiVariables &&
                 query &&
                 modelVariable &&
                 methods &&
                 methods.algorithms
                   .map(algorithm => {
-                    const rawVariable = rawVariables.find(
-                      (v: any) => v.code === modelVariable
-                    );
-                    const algoConstraints: any = algorithm.constraints;
-
+                    let isEnabled = false;
                     const disabled = { ...algorithm, enabled: false };
-
+                    const enabled = { ...algorithm, enabled: true };
+                    
+                    const apiVariable = apiVariables.find((v: any) => v.code === modelVariable);
+                    const algoConstraints: any = algorithm.constraints;
                     const algoConstraintVariable = algoConstraints.variable;
-                    const type = rawVariable && rawVariable.type;
-                    if (type) {
+                    const apiVariableType = apiVariable && apiVariable.type;
+
+                    if (apiVariableType) {
                       if (
-                        algoConstraintVariable.binominal &&
-                        type === "binominal"
+                        algoConstraintVariable[apiVariableType] 
                       ) {
-                        return disabled;
-                      }
-                      if (
-                        algoConstraintVariable.integer &&
-                        type === "integer"
-                      ) {
-                        return disabled;
-                      }
-                      if (
-                        algoConstraintVariable.polynominal &&
-                        type === "polynominal"
-                      ) {
-                        return disabled;
-                      }
-                      if (algoConstraintVariable.real && type === "real") {
-                        return disabled;
+                        isEnabled = true;
                       }
                     }
 
@@ -182,14 +168,14 @@ class Experiment extends React.Component<IProps, IState> {
                       modelCovariables.length < algoConstraintCovariable &&
                       algoConstraintCovariable.min_count
                     ) {
-                      return disabled;
+                      isEnabled = false;
                     }
 
                     if (
                       modelCovariables.length < algoConstraintCovariable &&
                       algoConstraintCovariable.max_count
                     ) {
-                      return disabled;
+                      isEnabled = false
                     }
 
                     const algoConstraintGrouping = algoConstraints.groupings;
@@ -197,14 +183,14 @@ class Experiment extends React.Component<IProps, IState> {
                       modelGroupings.length < algoConstraintGrouping &&
                       algoConstraintGrouping.min_count
                     ) {
-                      return disabled;
+                      isEnabled = false
                     }
 
                     if (
                       modelGroupings.length < algoConstraintGrouping &&
                       algoConstraintGrouping.max_count
                     ) {
-                      return disabled;
+                      isEnabled = false
                     }
 
                     const mixed = algoConstraints.mixed;
@@ -213,10 +199,10 @@ class Experiment extends React.Component<IProps, IState> {
                       modelCovariables.length > 0 &&
                       !mixed
                     ) {
-                      return disabled;
+                      isEnabled = false
                     }
 
-                    return { ...algorithm, enabled: true };
+                    return isEnabled ? enabled : disabled;
                   })
                   .map((a: any) => (
                     <div className="method" key={a.code}>
@@ -243,7 +229,10 @@ class Experiment extends React.Component<IProps, IState> {
               </div>
             </Panel.Title>
             <Panel.Body>
-              <Tabs defaultActiveKey={1} id="uncontrolled-tab-example">
+              <Tabs
+                defaultActiveKey={1}
+                id="uncontrolled-create-experiment-tab"
+              >
                 <Tab eventKey={1} title="Method">
                   {selectedMethod && (
                     <div>
@@ -260,6 +249,73 @@ class Experiment extends React.Component<IProps, IState> {
                       </h4>
                       <p>Please, select a method on the right pane</p>
                     </div>
+                  )}
+                  {selectedMethod && (
+                    <fieldset>
+                      <h5>
+                        {isPredictiveMethod && (
+                          <strong>Training & kfold</strong>
+                        )}
+                        {!isPredictiveMethod && <strong>Datasets</strong>}
+                      </h5>
+                      <FormGroup>
+                        {datasets &&
+                          datasets.map((dataset: any) => {
+                            return (
+                              <Checkbox
+                                key={dataset.code}
+                                inline={true}
+                                // tslint:disable-next-line jsx-no-lambda
+                                onChange={event =>
+                                  this.handleChangeDataset(
+                                    query && query.trainingDatasets,
+                                    dataset.code,
+                                    DatasetType.Training
+                                  )
+                                }
+                                checked={this.getDatasetCheckedState(
+                                  query && query.trainingDatasets,
+                                  dataset.code
+                                )}
+                              >
+                                {dataset.label}
+                              </Checkbox>
+                            );
+                          })}
+                      </FormGroup>
+                      {isPredictiveMethod && (
+                        <div>
+                          <h5>
+                            <strong>Remote-validation</strong>
+                          </h5>
+                          <FormGroup>
+                            {datasets &&
+                              datasets.map((dataset: any) => {
+                                return (
+                                  <Checkbox
+                                    key={dataset.code}
+                                    inline={true}
+                                    // tslint:disable-next-line jsx-no-lambda
+                                    onChange={event =>
+                                      this.handleChangeDataset(
+                                        query && query.validationDatasets,
+                                        dataset.code,
+                                        DatasetType.Validation
+                                      )
+                                    }
+                                    checked={this.getDatasetCheckedState(
+                                      query && query.validationDatasets,
+                                      dataset.code
+                                    )}
+                                  >
+                                    {dataset.label}
+                                  </Checkbox>
+                                );
+                              })}
+                          </FormGroup>
+                        </div>
+                      )}
+                    </fieldset>
                   )}
                   {parameters && parameters.length > 0 && <h4>Parameters</h4>}
                   <Form horizontal={true}>
@@ -337,73 +393,31 @@ class Experiment extends React.Component<IProps, IState> {
                       })}
                   </Form>
                 </Tab>
-                <Tab eventKey={2} title="Training and validation">
-                  <h5>
-                    <strong>Training</strong>
-                  </h5>
-                  <FormGroup>
-                    {datasets &&
-                      datasets.map((dataset: any) => {
-                        return (
-                          <Checkbox
-                            key={dataset.code}
-                            inline={true}
-                            // tslint:disable-next-line jsx-no-lambda
-                            onChange={event =>
-                              this.handleChangeDataset(
-                                query && query.trainingDatasets,
-                                dataset.code,
-                                DatasetType.Training
-                              )
-                            }
-                            checked={this.getDatasetCheckedState(
-                              query && query.trainingDatasets,
-                              dataset.code
-                            )}
-                          >
-                            {dataset.label}
-                          </Checkbox>
-                        );
-                      })}
-                  </FormGroup>
-                  <h5>
-                    <strong>Validation</strong>
-                  </h5>
-                  <FormGroup>
-                    {datasets &&
-                      datasets.map((dataset: any) => {
-                        return (
-                          <Checkbox
-                            key={dataset.code}
-                            inline={true}
-                            // tslint:disable-next-line jsx-no-lambda
-                            onChange={event =>
-                              this.handleChangeDataset(
-                                query && query.validationDatasets,
-                                dataset.code,
-                                DatasetType.Validation
-                              )
-                            }
-                            checked={this.getDatasetCheckedState(
-                              query && query.validationDatasets,
-                              dataset.code
-                            )}
-                          >
-                            {dataset.label}
-                          </Checkbox>
-                        );
-                      })}
-                  </FormGroup>
+                <Tab eventKey={2} title="About running experiments">
+                  <p>
+                    An experiment is a set of algorithm(s) and their
+                    configuration applied to the variables already selected. You
+                    may choose same algorithms more than once providing that you
+                    change the configuration parameters.
+                  </p>
+                  <p>
+                    You can design your own MIP Experiment by doing the
+                    following:
+                  </p>
+                  <ol>
+                    <li>Select an algorithms on the right</li>
+                    <li>If required, configure parameters (e.g. "k")</li>
+                    <li>Give a name to the Experiment</li>
+                    <li>
+                      Select your k-fold Validation (to be applied to predictive
+                      model algorithms)
+                    </li>
+                    <li>Run Experiment</li>
+                    <li>Wait for results.</li>
+                  </ol>
                 </Tab>
               </Tabs>
-              ;
             </Panel.Body>
-          </Panel>
-
-          <Panel>
-            <Panel.Title>
-              <h3>About running experiments</h3>
-            </Panel.Title>
           </Panel>
         </div>
       </div>
@@ -423,31 +437,31 @@ class Experiment extends React.Component<IProps, IState> {
     return "success";
   };
 
-  private handleSelectMethod = (event: any, method: any) => {
+  private handleSelectMethod = (event: any, selectedMethod: any) => {
     event.preventDefault();
-    const parameters = (method && method.parameters) || undefined;
+    const methodParameters =
+      (selectedMethod && selectedMethod.parameters) || undefined;
 
-    let newParams = [];
-    if (parameters) {
-      newParams = parameters.map((p: any) => ({
-        code: p.code,
-        value: p.default_value
-      }));
+    const parameters = {};
+    if (methodParameters) {
+      methodParameters.forEach((p: any) => {
+        parameters[p.code] = p.default_value;
+      });
     }
     this.setState({
-      parameters: newParams,
-      selectedMethod: method
+      parameters,
+      selectedMethod
     });
   };
 
   private handleChangeParameter = (event: any, code: string) => {
     event.preventDefault();
-    // this.setState({
-    //   parameters: {
-    //     ...this.state.parameters,
-    //     [code]: event.target.value
-    //   }
-    // });
+    this.setState({
+      parameters: {
+        ...this.state.parameters,
+        [code]: event.target.value
+      }
+    });
   };
 
   private handleChangeDataset = (
@@ -518,7 +532,7 @@ class Experiment extends React.Component<IProps, IState> {
     return newDataset;
   };
 
-  private saveModelAndRunExperiment = async (e: any) => {
+  private handleSaveModelAndRunExperiment = async (e: any) => {
     if (this.state.experimentName.length <= 0) {
       return this.setState({ showPopover: true });
     }
@@ -540,7 +554,7 @@ class Experiment extends React.Component<IProps, IState> {
         {
           code: selectedMethod.code,
           name: selectedMethod.code,
-          parameters,
+          parameters: [parameters],
           validation
         }
       ],
@@ -549,7 +563,7 @@ class Experiment extends React.Component<IProps, IState> {
       validations: []
     };
 
-    const { history } = this.props;
+    console.log(exp)
 
     let uuid;
     try {
@@ -560,6 +574,7 @@ class Experiment extends React.Component<IProps, IState> {
       console.log(error);
     }
 
+    const { history } = this.props;
     history.push(`/v3/experiment/${model && model.slug}/${uuid}`);
     // return <Redirect to={`/v3/experiment/${model && model.slug}/${uuid}`} />;
   };

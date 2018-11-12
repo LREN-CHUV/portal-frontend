@@ -34,6 +34,7 @@ class App extends React.Component {
       () => this.experimentContainer.all(),
       10 * 1000
     );
+    this.experimentContainer.all()
   }
 
   public componentWillUnmount() {

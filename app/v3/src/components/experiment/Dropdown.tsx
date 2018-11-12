@@ -69,7 +69,7 @@ export default ({
             </MenuItem>
           );
         })) || (
-      <div>
+      <div style={{ margin: '8px' }}>
         <p>You have no running experiments.</p>
         <p>
           You can start one by selecting a model and configuring an experiment

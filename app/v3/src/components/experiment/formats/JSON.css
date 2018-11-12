@@ -13,7 +13,7 @@ table.greyGridTable {
 table.greyGridTable td,
 table.greyGridTable th {
   border: 1px solid #e3e3e3;
-  padding: 1px 1px;
+  padding: 1px 4px;
 }
 
 table.greyGridTable tr:nth-child(even) {
