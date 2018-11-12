@@ -4,10 +4,7 @@ import * as React from "react";
 import { Panel } from "react-bootstrap";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { ExperimentHeader, ExperimentResult, Model } from "../..";
-import {
-  ExperimentContainer,
-  ModelContainer
-} from "../../../containers";
+import { ExperimentContainer, ModelContainer } from "../../../containers";
 
 import "../Experiment.css";
 
@@ -60,16 +57,13 @@ class Experiment extends React.Component<IProps> {
     }
     const { uuid } = matched.params;
     const { experimentContainer } = this.props;
-    this.intervalId = setInterval(
-      async () => {
-        await experimentContainer.one(uuid);
-        const experiment = experimentContainer.state.experiment
-        if (experiment) {
-          clearInterval(this.intervalId);
-        }
-      },
-      10 * 1000
-    );
+    this.intervalId = setInterval(async () => {
+      await experimentContainer.one(uuid);
+      const experiment = experimentContainer.state.experiment;
+      if (experiment) {
+        clearInterval(this.intervalId);
+      }
+    }, 10 * 1000);
   }
 
   public componentWillUnmount() {
@@ -77,25 +71,20 @@ class Experiment extends React.Component<IProps> {
   }
 
   public render() {
-    const {
-      experimentContainer,
-      modelContainer
-    } = this.props;
+    const { experimentContainer, modelContainer } = this.props;
     return (
       <div className="Experiment">
         <div className="header">
-          <ExperimentHeader
-            experimentContainer={experimentContainer}
-          />
+          <ExperimentHeader experimentContainer={experimentContainer} />
         </div>
 
-        <div className="sidebar">
-          {methodDisplay(experimentContainer.state.experiment)}
+        <div className="sidebar2">
           <Model model={modelContainer.state.model} />
         </div>
         <div className="content">
           <ExperimentResult experimentState={experimentContainer.state} />
         </div>
+        <div className="sidebar">{methodDisplay(experimentContainer.state.experiment)}</div>
       </div>
     );
   }

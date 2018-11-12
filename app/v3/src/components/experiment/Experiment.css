@@ -1,15 +1,21 @@
-.Experiment {
+.Experiment, .RunExperiment{
   display: grid;
   padding: 0 48px;
   grid-gap: 8px;
   grid-template-columns: 200px auto 200px;
   grid-template-areas:
     "header  header  header"
-    "sidebar content content";
+    "sidebar2 content sidebar";
 }
 
 .sidebar {
   grid-area: sidebar;
+  overflow: hidden;
+}
+
+.sidebar2 {
+  grid-area: sidebar2;
+  overflow: hidden;
 }
 
 .content {
@@ -69,4 +75,18 @@ var {
 .tab-pane {
   border: 0.5px #eeeeee solid;
   padding: 1em;
+}
+
+
+.RunExperiment .method a {
+  font-size: 1.2em;
+}
+
+.item {
+flex: 0 1 auto
+}
+
+.experiment-name {
+  width: 180px;
+  margin: 0 4px
 }

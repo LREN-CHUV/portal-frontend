@@ -2,16 +2,15 @@
 import { IModelResult } from "@app/types";
 import * as React from "react";
 import {
-  Button,
   Checkbox,
   Col,
   Form,
   FormControl,
   FormGroup,
   HelpBlock,
-  Overlay,
   Panel,
-  Popover
+  Tab,
+  Tabs
 } from "react-bootstrap";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { Model } from "../..";
@@ -21,8 +20,8 @@ import {
   ModelContainer
 } from "../../../containers";
 
+import "../Experiment.css";
 import Header from "./Header";
-import "./RunExperiment.css";
 
 enum DatasetType {
   Training,
@@ -52,8 +51,6 @@ class Experiment extends React.Component<IProps, IState> {
     selectedMethod: undefined,
     showPopover: false
   };
-
-  private experimentNameRef: any;
 
   constructor(props: IProps) {
     super(props);
@@ -119,9 +116,14 @@ class Experiment extends React.Component<IProps, IState> {
       (selectedMethod && selectedMethod.parameters) || undefined;
 
     return (
-      <div className="RunExperiment">
+      <div className="Experiment RunExperiment">
         <div className="header">
           <Header
+            handleSaveAndRunExperiment={this.saveModelAndRunExperiment}
+            handleChangeExperimentName={this.handleChangeExperimentName}
+            selectedMethod={selectedMethod}
+            experimentName={this.state.experimentName}
+            showPopover={this.state.showPopover}
             experimentContainer={experimentContainer}
             modelContainer={modelContainer}
           />
@@ -238,193 +240,166 @@ class Experiment extends React.Component<IProps, IState> {
             <Panel.Title>
               <div className="flexbox">
                 <h3 className="item">Your Experiment</h3>
-                <div className="item flexbox">
-                  <div ref={r => (this.experimentNameRef = r)}>
-                    <FormControl
-                      className="item experiment-name"
-                      type="text"
-                      placeholder={"Experiment name"}
-                      value={this.state.experimentName}
-                      onChange={this.handleChangeExperimentName}
-                    />
-                  </div>
-
-                  <Button
-                    className="item"
-                    onClick={this.saveModelAndRunExperiment}
-                    bsStyle="info"
-                    disabled={selectedMethod === undefined}
-                  >
-                    Run Experiment
-                  </Button>
-                  <Overlay
-                    show={this.state.showPopover}
-                    placement="bottom"
-                    container={this.experimentNameRef}
-                  >
-                    <Popover
-                      id="popover-positioned-bottom"
-                      title="Almost there"
-                      style={{ position: "relative" }}
-                    >
-                      Enter a name for your experiment.
-                    </Popover>
-                  </Overlay>
-                </div>
               </div>
             </Panel.Title>
             <Panel.Body>
-              {selectedMethod && (
-                <div>
-                  <h4>
-                    <strong>{selectedMethod.label}</strong>
-                  </h4>
-                  <p>{selectedMethod.description}</p>
-                </div>
-              )}
-              {!selectedMethod && (
-                <div>
-                  <h4>
-                    <strong>Your method</strong>
-                  </h4>
-                  <p>Please, select a method on the left pane</p>
-                </div>
-              )}
-              {parameters && parameters.length > 0 && <h4>Parameters</h4>}
-              <Form horizontal={true}>
-                {parameters &&
-                  parameters.map((parameter: any) => {
-                    const numberTypes = ["int", "real", "number", "numeric"];
-                    const type =
-                      numberTypes.indexOf(parameter.type) >= -1
-                        ? "number"
-                        : "text";
-                    const { constraints } = parameter;
+              <Tabs defaultActiveKey={1} id="uncontrolled-tab-example">
+                <Tab eventKey={1} title="Method">
+                  {selectedMethod && (
+                    <div>
+                      <h4>
+                        <strong>{selectedMethod.label}</strong>
+                      </h4>
+                      <p>{selectedMethod.description}</p>
+                    </div>
+                  )}
+                  {!selectedMethod && (
+                    <div>
+                      <h4>
+                        <strong>Your method</strong>
+                      </h4>
+                      <p>Please, select a method on the right pane</p>
+                    </div>
+                  )}
+                  {parameters && parameters.length > 0 && <h4>Parameters</h4>}
+                  <Form horizontal={true}>
+                    {parameters &&
+                      parameters.map((parameter: any) => {
+                        const numberTypes = [
+                          "int",
+                          "real",
+                          "number",
+                          "numeric"
+                        ];
+                        const type =
+                          numberTypes.indexOf(parameter.type) >= -1
+                            ? "number"
+                            : "text";
+                        const { constraints } = parameter;
 
-                    return (
-                      <FormGroup
-                        validationState={this.getValidationState(parameter)}
-                        key={parameter.code}
-                      >
-                        <Col sm={2}>{parameter.label}</Col>
-                        <Col sm={4}>
-                          {parameter.type !== "enumeration" && (
-                            <FormControl
-                              type={type}
-                              defaultValue={parameter.default_value}
-                              // tslint:disable-next-line jsx-no-lambda
-                              onChange={event =>
-                                this.handleChangeParameter(
-                                  event,
-                                  parameter.code
-                                )
-                              }
-                            />
-                          )}
-                          {parameter.type === "enumeration" && (
-                            <FormControl
-                              componentClass="select"
-                              placeholder="select"
-                              defaultValue={parameter.default_value}
-                              // tslint:disable-next-line jsx-no-lambda
-                              onChange={event =>
-                                this.handleChangeParameter(
-                                  event,
-                                  parameter.code
-                                )
-                              }
-                            >
-                              {parameter.values.map((v: any) => (
-                                <option key={v} value={v}>
-                                  {v}
-                                </option>
-                              ))}
-                            </FormControl>
-                          )}
-                          <FormControl.Feedback />
-                          <HelpBlock>
-                            {constraints &&
-                              constraints.min >= 0 &&
-                              "min: " + constraints.min}
-                            {constraints &&
-                              constraints.min >= 0 &&
-                              constraints.max >= 0 &&
-                              ", "}
-                            {constraints &&
-                              constraints.max >= 0 &&
-                              "max: " + constraints.max}
-                          </HelpBlock>
-                        </Col>
-                        <Col sm={6}>{parameter.description}</Col>
-                      </FormGroup>
-                    );
-                  })}
-              </Form>
+                        return (
+                          <FormGroup
+                            validationState={this.getValidationState(parameter)}
+                            key={parameter.code}
+                          >
+                            <Col sm={2}>{parameter.label}</Col>
+                            <Col sm={4}>
+                              {parameter.type !== "enumeration" && (
+                                <FormControl
+                                  type={type}
+                                  defaultValue={parameter.default_value}
+                                  // tslint:disable-next-line jsx-no-lambda
+                                  onChange={event =>
+                                    this.handleChangeParameter(
+                                      event,
+                                      parameter.code
+                                    )
+                                  }
+                                />
+                              )}
+                              {parameter.type === "enumeration" && (
+                                <FormControl
+                                  componentClass="select"
+                                  placeholder="select"
+                                  defaultValue={parameter.default_value}
+                                  // tslint:disable-next-line jsx-no-lambda
+                                  onChange={event =>
+                                    this.handleChangeParameter(
+                                      event,
+                                      parameter.code
+                                    )
+                                  }
+                                >
+                                  {parameter.values.map((v: any) => (
+                                    <option key={v} value={v}>
+                                      {v}
+                                    </option>
+                                  ))}
+                                </FormControl>
+                              )}
+                              <FormControl.Feedback />
+                              <HelpBlock>
+                                {constraints &&
+                                  constraints.min >= 0 &&
+                                  "min: " + constraints.min}
+                                {constraints &&
+                                  constraints.min >= 0 &&
+                                  constraints.max >= 0 &&
+                                  ", "}
+                                {constraints &&
+                                  constraints.max >= 0 &&
+                                  "max: " + constraints.max}
+                              </HelpBlock>
+                            </Col>
+                            <Col sm={6}>{parameter.description}</Col>
+                          </FormGroup>
+                        );
+                      })}
+                  </Form>
+                </Tab>
+                <Tab eventKey={2} title="Training and validation">
+                  <h5>
+                    <strong>Training</strong>
+                  </h5>
+                  <FormGroup>
+                    {datasets &&
+                      datasets.map((dataset: any) => {
+                        return (
+                          <Checkbox
+                            key={dataset.code}
+                            inline={true}
+                            // tslint:disable-next-line jsx-no-lambda
+                            onChange={event =>
+                              this.handleChangeDataset(
+                                query && query.trainingDatasets,
+                                dataset.code,
+                                DatasetType.Training
+                              )
+                            }
+                            checked={this.getDatasetCheckedState(
+                              query && query.trainingDatasets,
+                              dataset.code
+                            )}
+                          >
+                            {dataset.label}
+                          </Checkbox>
+                        );
+                      })}
+                  </FormGroup>
+                  <h5>
+                    <strong>Validation</strong>
+                  </h5>
+                  <FormGroup>
+                    {datasets &&
+                      datasets.map((dataset: any) => {
+                        return (
+                          <Checkbox
+                            key={dataset.code}
+                            inline={true}
+                            // tslint:disable-next-line jsx-no-lambda
+                            onChange={event =>
+                              this.handleChangeDataset(
+                                query && query.validationDatasets,
+                                dataset.code,
+                                DatasetType.Validation
+                              )
+                            }
+                            checked={this.getDatasetCheckedState(
+                              query && query.validationDatasets,
+                              dataset.code
+                            )}
+                          >
+                            {dataset.label}
+                          </Checkbox>
+                        );
+                      })}
+                  </FormGroup>
+                </Tab>
+              </Tabs>
+              ;
             </Panel.Body>
           </Panel>
-          <Panel>
-            <Panel.Title>
-              <h3>Training and validation</h3>
-            </Panel.Title>
-            <Panel.Body>
-              <h5>
-                <strong>Training</strong>
-              </h5>
-              <FormGroup>
-                {datasets &&
-                  datasets.map((dataset: any) => {
-                    return (
-                      <Checkbox
-                        key={dataset.code}
-                        inline={true}
-                        // tslint:disable-next-line jsx-no-lambda
-                        onChange={event =>
-                          this.handleChangeDataset(
-                            query && query.trainingDatasets,
-                            dataset.code,
-                            DatasetType.Training
-                          )
-                        }
-                        checked={this.getDatasetCheckedState(
-                          query && query.trainingDatasets,
-                          dataset.code
-                        )}
-                      >
-                        {dataset.label}
-                      </Checkbox>
-                    );
-                  })}
-              </FormGroup>
-              <h5>
-                <strong>Validation</strong>
-              </h5>
-              <FormGroup>
-                {datasets &&
-                  datasets.map((dataset: any) => {
-                    return (
-                      <Checkbox
-                        key={dataset.code}
-                        inline={true}
-                        // tslint:disable-next-line jsx-no-lambda
-                        onChange={event =>
-                          this.handleChangeDataset(
-                            query && query.validationDatasets,
-                            dataset.code,
-                            DatasetType.Validation
-                          )
-                        }
-                        checked={this.getDatasetCheckedState(
-                          query && query.validationDatasets,
-                          dataset.code
-                        )}
-                      >
-                        {dataset.label}
-                      </Checkbox>
-                    );
-                  })}
-              </FormGroup>
-            </Panel.Body>
-          </Panel>
+
           <Panel>
             <Panel.Title>
               <h3>About running experiments</h3>

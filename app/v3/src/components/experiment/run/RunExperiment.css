@@ -1,50 +1,40 @@
-.RunExperiment {
-    display: grid;
-    padding: 0 48px;
-    grid-gap: 8px;
-    grid-template-columns: 200px 200px auto ;
-    grid-template-areas:
-      "header  header  header"
-      "sidebar2 sidebar content";
-  }
+.sidebar {
+  grid-area: sidebar;
+  overflow: hidden;
+}
 
-  .sidebar {
-    grid-area: sidebar;
-    overflow: hidden;
-  }
+.sidebar2 {
+  grid-area: sidebar2;
+  overflow: hidden;
+}
 
-  .sidebar2 {
-    grid-area: sidebar2;
-    overflow: hidden;
-  }
+.content {
+  grid-area: content;
+}
 
-  .content {
-    grid-area: content;
-  }
+.header {
+  grid-area: header;
+}
 
-  .header {
-    grid-area: header;
-  }
+.RunExperiment .panel-body {
+  padding: 0 16px;
+}
 
-  .RunExperiment .panel-body {
-    padding: 0 16px
-  }
+.RunExperiment .method a {
+  font-size: 1.2em;
+}
 
-  .RunExperiment .method a {
-    font-size: 1.2em;
-  }
-
-  .RunExperiment .flexbox {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
+.flexbox {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 
 .item {
-  flex: 0 1 auto
-  }
+  flex: 0 1 auto;
+}
 
-  .experiment-name {
-    width: 180px;
-    margin: 0 4px
-  }
+.experiment-name {
+  width: 180px;
+  margin: 0 4px;
+}

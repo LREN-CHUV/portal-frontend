@@ -64,6 +64,11 @@ export default ({
 
   return (
     <Panel>
+      <Panel.Title>
+        <div className="flexbox">
+          <h3 className="item">Your Experiment</h3>
+        </div>
+      </Panel.Title>
       <Panel.Body>
         {loading ? (
           <div>
