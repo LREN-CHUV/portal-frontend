@@ -46,24 +46,30 @@ class Experiment extends React.Component<IProps> {
     const { uuid, slug } = matched.params;
     const { experimentContainer, modelContainer } = this.props;
 
-    await modelContainer.one(slug);
-    return await experimentContainer.one(uuid);
+    await experimentContainer.one(uuid);
+    if (!experimentContainer.loaded) {
+      this.pollFetchExperiment(uuid);
+    }
+
+    return await modelContainer.one(slug);
   }
 
-  public componentWillMount() {
-    const { match: matched } = this.props;
-    if (!matched) {
+  public componentDidUpdate(prevProps: IProps) {
+    const { match } = this.props;
+    if (!match) {
       return;
     }
-    const { uuid } = matched.params;
-    const { experimentContainer } = this.props;
-    this.intervalId = setInterval(async () => {
-      await experimentContainer.one(uuid);
-      const experiment = experimentContainer.state.experiment;
-      if (experiment) {
-        clearInterval(this.intervalId);
-      }
-    }, 10 * 1000);
+
+    const { uuid } = match.params;
+    const previousId =
+      prevProps &&
+      prevProps.match &&
+      prevProps.match.params &&
+      prevProps.match.params.uuid;
+
+    if (uuid !== previousId) {
+      this.pollFetchExperiment(uuid);
+    }
   }
 
   public componentWillUnmount() {
@@ -84,10 +90,24 @@ class Experiment extends React.Component<IProps> {
         <div className="content">
           <ExperimentResult experimentState={experimentContainer.state} />
         </div>
-        <div className="sidebar">{methodDisplay(experimentContainer.state.experiment)}</div>
+        <div className="sidebar">
+          {methodDisplay(experimentContainer.state.experiment)}
+        </div>
       </div>
     );
   }
+
+  private pollFetchExperiment = (uuid: string) => {
+    clearInterval(this.intervalId);
+    const { experimentContainer } = this.props;
+    this.intervalId = setInterval(async () => {
+      await experimentContainer.one(uuid);
+      const experiment = experimentContainer.state.experiment;
+      if (experiment) {
+        clearInterval(this.intervalId);
+      }
+    }, 10 * 1000);
+  };
 }
 
 export default withRouter(Experiment);

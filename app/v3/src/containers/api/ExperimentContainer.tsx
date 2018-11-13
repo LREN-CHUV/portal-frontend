@@ -14,6 +14,12 @@ class ExperimentContainer extends Container<IExperimentContainer> {
     experiments: undefined
   };
 
+  public loaded =
+    this.state.experiment &&
+    (this.state.experiment.results || this.state.experiment.error) === undefined
+      ? false
+      : true;
+
   private options: RequestInit;
   private baseUrl: string;
 
@@ -50,7 +56,7 @@ class ExperimentContainer extends Container<IExperimentContainer> {
       const json = await JSON.parse(data);
       if (json.error) {
         return await this.setState({
-          error: json.error,
+          error: json.error
         });
       }
 
@@ -58,17 +64,17 @@ class ExperimentContainer extends Container<IExperimentContainer> {
         error: undefined,
         experiments: json.map((j: IExperimentResult) =>
           ParseExperiment.parse(j)
-        ),
+        )
       });
     } catch (error) {
       return await this.setState({
-        error: error.message,
+        error: error.message
       });
     }
   };
 
   public create = async (params: any) => {
-    console.log(JSON.stringify(params), null, 4)
+    console.log(JSON.stringify(params), null, 4);
     try {
       const data = await request({
         body: JSON.stringify(params),
