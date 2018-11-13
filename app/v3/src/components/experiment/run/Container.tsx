@@ -49,12 +49,12 @@ interface IState {
 
 class Experiment extends React.Component<IProps, IState> {
   public state: IState = {
-    alertMessage: '',
+    alertMessage: "",
     experimentName: "",
     model: undefined,
     parameters: {},
     selectedMethod: undefined,
-    showAlert: false,
+    showAlert: false
   };
 
   constructor(props: IProps) {
@@ -66,11 +66,11 @@ class Experiment extends React.Component<IProps, IState> {
 
   public async componentDidMount() {
     // Get url parameters
-    const { match: matched } = this.props;
-    if (!matched) {
+    const { match } = this.props;
+    if (!match) {
       return;
     }
-    const { slug } = matched.params;
+    const { slug } = match.params;
     const { exploreContainer, modelContainer } = this.props;
     await Promise.all([
       exploreContainer.variables(),
@@ -233,7 +233,12 @@ class Experiment extends React.Component<IProps, IState> {
               </div>
             </Panel.Title>
             <Panel.Body>
-              <Alert show={this.state.showAlert} message={this.state.alertMessage} title={this.state.alertTitle} style={this.state.alertStyle}/>
+              <Alert
+                show={this.state.showAlert}
+                message={this.state.alertMessage}
+                title={this.state.alertTitle}
+                style={this.state.alertStyle}
+              />
               <Tabs
                 defaultActiveKey={1}
                 id="uncontrolled-create-experiment-tab"
@@ -539,7 +544,12 @@ class Experiment extends React.Component<IProps, IState> {
 
   private handleSaveModelAndRunExperiment = async (e: any) => {
     if (this.state.experimentName.length <= 0) {
-      return this.setState({ alertTitle: 'Missing title', alertStyle: 'info', showAlert: true, alertMessage: 'Please enter a name for your experiment' });
+      return this.setState({
+        alertMessage: "Please enter a name for your experiment",
+        alertStyle: "info",
+        alertTitle: "Missing title",
+        showAlert: true
+      });
     }
 
     this.setState({ showAlert: false });
@@ -576,9 +586,9 @@ class Experiment extends React.Component<IProps, IState> {
       this.setState({
         alertMessage: `${error}`,
         showAlert: true
-      })
+      });
 
-      return
+      return;
     }
 
     uuid = experiment && experiment.uuid;

@@ -38,12 +38,11 @@ class Experiment extends React.Component<IProps> {
   private intervalId: NodeJS.Timer;
 
   public async componentDidMount() {
-    // Get url parameters
-    const { match: matched } = this.props;
-    if (!matched) {
+    const params = this.urlParams();
+    if (!params) {
       return;
     }
-    const { uuid, slug } = matched.params;
+    const { uuid, slug } = params;
     const { experimentContainer, modelContainer } = this.props;
 
     await experimentContainer.one(uuid);
@@ -55,12 +54,11 @@ class Experiment extends React.Component<IProps> {
   }
 
   public componentDidUpdate(prevProps: IProps) {
-    const { match } = this.props;
-    if (!match) {
+    const params = this.urlParams();
+    if (!params) {
       return;
     }
-
-    const { uuid } = match.params;
+    const { uuid } = params;
     const previousId =
       prevProps &&
       prevProps.match &&
@@ -81,9 +79,13 @@ class Experiment extends React.Component<IProps> {
     return (
       <div className="Experiment">
         <div className="header">
-          <ExperimentHeader experimentContainer={experimentContainer} />
+          <ExperimentHeader
+            experiment={experimentContainer.state.experiment}
+            experiments={experimentContainer.state.experiments}
+            handleSelectExperiment={this.handleSelectExperiment}
+            handleCreateNewExperiment={this.handleCreateNewExperiment}
+          />
         </div>
-
         <div className="sidebar2">
           <Model model={modelContainer.state.model} />
         </div>
@@ -96,6 +98,36 @@ class Experiment extends React.Component<IProps> {
       </div>
     );
   }
+
+  private urlParams = ():
+    | {
+        uuid: string;
+        slug: string;
+      }
+    | undefined => {
+    const { match } = this.props;
+    if (!match) {
+      return;
+    }
+    return match.params;
+  };
+
+  private handleSelectExperiment = async (
+    selectedExperiment: IExperimentResult
+  ) => {
+    const { modelDefinitionId, uuid } = selectedExperiment;
+    const { history, experimentContainer } = this.props;
+    history.push(`/v3/experiment/${modelDefinitionId}/${uuid}`);
+    await experimentContainer.markAsViewed(uuid);
+    return await experimentContainer.one(uuid);
+  };
+
+  private handleCreateNewExperiment = () => {
+    const { history } = this.props;
+    const params = this.urlParams();
+    if (!params) { return }
+    history.push(`/v3/experiment/${params.slug}`);
+  };
 
   private pollFetchExperiment = (uuid: string) => {
     clearInterval(this.intervalId);
