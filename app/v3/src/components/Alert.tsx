@@ -4,6 +4,8 @@ import { Alert } from "react-bootstrap";
 interface IProps {
   message: string;
   show: boolean;
+  style?: string;
+  title?: string;
 }
 
 class AlertDismissable extends React.Component<IProps> {
@@ -13,8 +15,8 @@ class AlertDismissable extends React.Component<IProps> {
 
   public render() {
     return this.props.show ? (
-      <Alert bsStyle="danger">
-        <h4>There was an error</h4>
+      <Alert bsStyle={this.props.style || "danger"}>
+        <h4>{this.props.title || "Error"}</h4>
         <p>{this.props.message}</p>
       </Alert>
     ) : null;

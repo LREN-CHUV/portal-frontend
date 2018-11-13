@@ -43,6 +43,8 @@ interface IState {
   model: IModelResult | undefined;
   showAlert: boolean;
   alertMessage: string;
+  alertTitle?: string;
+  alertStyle?: string;
 }
 
 class Experiment extends React.Component<IProps, IState> {
@@ -52,7 +54,7 @@ class Experiment extends React.Component<IProps, IState> {
     model: undefined,
     parameters: {},
     selectedMethod: undefined,
-    showAlert: false
+    showAlert: false,
   };
 
   constructor(props: IProps) {
@@ -231,7 +233,7 @@ class Experiment extends React.Component<IProps, IState> {
               </div>
             </Panel.Title>
             <Panel.Body>
-              <Alert show={this.state.showAlert} message={this.state.alertMessage}/>
+              <Alert show={this.state.showAlert} message={this.state.alertMessage} title={this.state.alertTitle} style={this.state.alertStyle}/>
               <Tabs
                 defaultActiveKey={1}
                 id="uncontrolled-create-experiment-tab"
@@ -537,7 +539,7 @@ class Experiment extends React.Component<IProps, IState> {
 
   private handleSaveModelAndRunExperiment = async (e: any) => {
     if (this.state.experimentName.length <= 0) {
-      return this.setState({ showAlert: true, alertMessage: 'Please enter a name for your experiment' });
+      return this.setState({ alertTitle: 'Missing title', alertStyle: 'info', showAlert: true, alertMessage: 'Please enter a name for your experiment' });
     }
 
     this.setState({ showAlert: false });
