@@ -19,6 +19,7 @@ import {
   ExperimentContainer,
   ModelContainer
 } from "../../../containers";
+import Alert from "../../Alert";
 
 import "../Experiment.css";
 import Header from "./Header";
@@ -40,16 +41,18 @@ interface IState {
   selectedMethod: any | undefined;
   parameters: object;
   model: IModelResult | undefined;
-  showPopover: boolean;
+  showAlert: boolean;
+  alertMessage: string;
 }
 
 class Experiment extends React.Component<IProps, IState> {
   public state: IState = {
+    alertMessage: '',
     experimentName: "",
     model: undefined,
     parameters: {},
     selectedMethod: undefined,
-    showPopover: false
+    showAlert: false
   };
 
   constructor(props: IProps) {
@@ -125,7 +128,6 @@ class Experiment extends React.Component<IProps, IState> {
             handleChangeExperimentName={this.handleChangeExperimentName}
             selectedMethod={selectedMethod}
             experimentName={this.state.experimentName}
-            showPopover={this.state.showPopover}
             experimentContainer={experimentContainer}
             modelContainer={modelContainer}
           />
@@ -148,16 +150,16 @@ class Experiment extends React.Component<IProps, IState> {
                     let isEnabled = false;
                     const disabled = { ...algorithm, enabled: false };
                     const enabled = { ...algorithm, enabled: true };
-                    
-                    const apiVariable = apiVariables.find((v: any) => v.code === modelVariable);
+
+                    const apiVariable = apiVariables.find(
+                      (v: any) => v.code === modelVariable
+                    );
                     const algoConstraints: any = algorithm.constraints;
                     const algoConstraintVariable = algoConstraints.variable;
                     const apiVariableType = apiVariable && apiVariable.type;
 
                     if (apiVariableType) {
-                      if (
-                        algoConstraintVariable[apiVariableType] 
-                      ) {
+                      if (algoConstraintVariable[apiVariableType]) {
                         isEnabled = true;
                       }
                     }
@@ -175,7 +177,7 @@ class Experiment extends React.Component<IProps, IState> {
                       modelCovariables.length < algoConstraintCovariable &&
                       algoConstraintCovariable.max_count
                     ) {
-                      isEnabled = false
+                      isEnabled = false;
                     }
 
                     const algoConstraintGrouping = algoConstraints.groupings;
@@ -183,14 +185,14 @@ class Experiment extends React.Component<IProps, IState> {
                       modelGroupings.length < algoConstraintGrouping &&
                       algoConstraintGrouping.min_count
                     ) {
-                      isEnabled = false
+                      isEnabled = false;
                     }
 
                     if (
                       modelGroupings.length < algoConstraintGrouping &&
                       algoConstraintGrouping.max_count
                     ) {
-                      isEnabled = false
+                      isEnabled = false;
                     }
 
                     const mixed = algoConstraints.mixed;
@@ -199,7 +201,7 @@ class Experiment extends React.Component<IProps, IState> {
                       modelCovariables.length > 0 &&
                       !mixed
                     ) {
-                      isEnabled = false
+                      isEnabled = false;
                     }
 
                     return isEnabled ? enabled : disabled;
@@ -229,6 +231,7 @@ class Experiment extends React.Component<IProps, IState> {
               </div>
             </Panel.Title>
             <Panel.Body>
+              <Alert show={this.state.showAlert} message={this.state.alertMessage}/>
               <Tabs
                 defaultActiveKey={1}
                 id="uncontrolled-create-experiment-tab"
@@ -534,10 +537,10 @@ class Experiment extends React.Component<IProps, IState> {
 
   private handleSaveModelAndRunExperiment = async (e: any) => {
     if (this.state.experimentName.length <= 0) {
-      return this.setState({ showPopover: true });
+      return this.setState({ showAlert: true, alertMessage: 'Please enter a name for your experiment' });
     }
 
-    this.setState({ showPopover: false });
+    this.setState({ showAlert: false });
     const { experimentContainer, modelContainer } = this.props;
     const { model, selectedMethod, parameters } = this.state;
 
@@ -563,20 +566,23 @@ class Experiment extends React.Component<IProps, IState> {
       validations: []
     };
 
-    console.log(exp)
-
     let uuid;
-    try {
-      await experimentContainer.create(exp);
-      const experiment = experimentContainer.state.experiment;
-      uuid = experiment && experiment.uuid;
-    } catch (error) {
-      console.log(error);
+    await experimentContainer.create(exp);
+    const { experiment, error } = experimentContainer.state;
+
+    if (error) {
+      this.setState({
+        alertMessage: `${error}`,
+        showAlert: true
+      })
+
+      return
     }
+
+    uuid = experiment && experiment.uuid;
 
     const { history } = this.props;
     history.push(`/v3/experiment/${model && model.slug}/${uuid}`);
-    // return <Redirect to={`/v3/experiment/${model && model.slug}/${uuid}`} />;
   };
 }
 

@@ -3,7 +3,7 @@ import { IExperimentResult, IModelResult } from "@app/types";
 import { ExperimentContainer, ModelContainer } from "../../../containers";
 
 import * as React from "react";
-import { Button, FormControl, Overlay, Panel, Popover } from "react-bootstrap";
+import { Button, FormControl, Panel } from "react-bootstrap";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import Dropdown from "../Dropdown";
 import DropdownModel from "./Dropdown";
@@ -13,12 +13,9 @@ interface IProps extends RouteComponentProps<any> {
   handleChangeExperimentName: any;
   selectedMethod: any;
   experimentName: string;
-  showPopover: boolean;
   experimentContainer: ExperimentContainer;
   modelContainer: ModelContainer;
 }
-
-let experimentNameRef: any;
 
 export default withRouter(
   ({
@@ -26,7 +23,6 @@ export default withRouter(
     handleChangeExperimentName,
     selectedMethod,
     experimentName,
-    showPopover,
     experimentContainer,
     modelContainer,
     history
@@ -64,7 +60,7 @@ export default withRouter(
             />
           </h3>
           <div className="create-experiment-container">
-            <div className="item" ref={r => (experimentNameRef = r)}>
+            <div className="item">
               <FormControl
                 className="item experiment-name"
                 type="text"
@@ -81,18 +77,6 @@ export default withRouter(
               >
                 Run Experiment
               </Button>
-              <Overlay
-                show={showPopover}
-                placement="bottom"
-                container={experimentNameRef}
-              >
-                <Popover
-                  id="popover-positioned-bottom"
-                  title="One more thing"
-                >
-                  Enter a name for your experiment.
-                </Popover>
-              </Overlay>
             </div>
             <div className="item">
               <Dropdown
