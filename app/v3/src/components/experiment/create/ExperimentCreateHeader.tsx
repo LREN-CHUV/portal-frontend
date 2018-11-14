@@ -5,8 +5,8 @@ import { ExperimentContainer, ModelContainer } from "../../../containers";
 import * as React from "react";
 import { Button, FormControl, Panel } from "react-bootstrap";
 import { RouteComponentProps, withRouter } from "react-router-dom";
-import Dropdown from "../Dropdown";
-import DropdownModel from "./Dropdown";
+import { Dropdown } from "../..";
+import DropdownModel from "./DropdownModel";
 
 interface IProps extends RouteComponentProps<any> {
   handleSaveAndRunExperiment: any;

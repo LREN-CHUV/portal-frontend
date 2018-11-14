@@ -3,10 +3,8 @@ import { IExperimentResult } from "@app/types";
 import * as React from "react";
 import { Panel } from "react-bootstrap";
 import { RouteComponentProps, withRouter } from "react-router-dom";
-import { ExperimentHeader, ExperimentResult, Model } from "../..";
-import { ExperimentContainer, ModelContainer } from "../../../containers";
-
-import "../Experiment.css";
+import { ExperimentContainer, ModelContainer } from ".";
+import { ExperimentHeader, ExperimentResult, Model } from "../components";
 
 interface IProps extends RouteComponentProps<any> {
   experimentContainer: ExperimentContainer;
@@ -38,7 +36,7 @@ class Experiment extends React.Component<IProps> {
   private intervalId: NodeJS.Timer;
 
   public async componentDidMount() {
-    const params = this.urlParams();
+    const params = this.urlParams(this.props);
     if (!params) {
       return;
     }
@@ -54,18 +52,15 @@ class Experiment extends React.Component<IProps> {
   }
 
   public componentDidUpdate(prevProps: IProps) {
-    const params = this.urlParams();
+    const params = this.urlParams(this.props);
     if (!params) {
       return;
     }
     const { uuid } = params;
-    const previousId =
-      prevProps &&
-      prevProps.match &&
-      prevProps.match.params &&
-      prevProps.match.params.uuid;
+    const previousParams = this.urlParams(prevProps);
+    const previousUUID = previousParams && previousParams.uuid;
 
-    if (uuid !== previousId) {
+    if (uuid !== previousUUID) {
       this.pollFetchExperiment(uuid);
     }
   }
@@ -99,13 +94,15 @@ class Experiment extends React.Component<IProps> {
     );
   }
 
-  private urlParams = ():
+  private urlParams = (
+    props: IProps
+  ):
     | {
         uuid: string;
         slug: string;
       }
     | undefined => {
-    const { match } = this.props;
+    const { match } = props;
     if (!match) {
       return;
     }
@@ -123,8 +120,10 @@ class Experiment extends React.Component<IProps> {
 
   private handleCreateNewExperiment = () => {
     const { history } = this.props;
-    const params = this.urlParams();
-    if (!params) { return }
+    const params = this.urlParams(this.props);
+    if (!params) {
+      return;
+    }
     history.push(`/v3/experiment/${params.slug}`);
   };
 
@@ -133,8 +132,7 @@ class Experiment extends React.Component<IProps> {
     const { experimentContainer } = this.props;
     this.intervalId = setInterval(async () => {
       await experimentContainer.one(uuid);
-      const experiment = experimentContainer.state.experiment;
-      if (experiment) {
+      if (experimentContainer.loaded) {
         clearInterval(this.intervalId);
       }
     }, 10 * 1000);

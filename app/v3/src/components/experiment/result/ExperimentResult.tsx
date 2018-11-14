@@ -1,9 +1,11 @@
 // tslint:disable:no-console
+import { MIME_TYPES } from "@app/constants";
 import { IExperimentContainer, INode } from "@app/types";
 import * as React from "react";
 import { Panel, Tab, Tabs } from "react-bootstrap";
-import { MIME_TYPES } from "../../../constants";
-import { Highchart, JSON, PFA, Plotly } from "../formats";
+import { Highchart, JSON, PFA, Plotly } from "./formats";
+
+import "../Experiment.css";
 
 export default ({
   experimentState

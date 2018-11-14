@@ -22,7 +22,7 @@ import {
 import Alert from "../../Alert";
 
 import "../Experiment.css";
-import Header from "./Header";
+import Header from "./ExperimentCreateHeader";
 
 enum DatasetType {
   Training,

@@ -3,7 +3,8 @@ import * as React from "react";
 import { DropdownButton, MenuItem } from "react-bootstrap";
 import { IModelResult } from "../../../types";
 
-import "./Dropdown.css";
+import "../Dropdown.css";
+
 interface IDropdown {
   items: IModelResult[] | undefined;
   title: string;
