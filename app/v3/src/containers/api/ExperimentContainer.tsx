@@ -15,10 +15,9 @@ class ExperimentContainer extends Container<IExperimentContainer> {
   };
 
   public loaded =
-    this.state.experiment &&
-    (this.state.experiment.results || this.state.experiment.error) === undefined
-      ? false
-      : true;
+    this.state.experiment !== undefined &&
+    this.state.experiment.results !== undefined &&
+    this.state.experiment.error !== undefined;
 
   private options: RequestInit;
   private baseUrl: string;

@@ -1,7 +1,7 @@
-export { default as Experiment } from "./experiment/result/Container";
-export { default as RunExperiment } from "./experiment/run/Container";
+export { default as Experiment } from "../containers/ExperimentResultContainer";
+export { default as RunExperiment } from "./experiment/create/Container";
 export { default as ExperimentResult } from "./experiment/result/ExperimentResult";
-export { default as ExperimentHeader } from "./experiment/result/Header";
+export { default as ExperimentHeader } from "./experiment/result/ExperimentResultHeader";
 export { default as Model } from "../components/Model";
 export { default as Experiments } from "../components/Experiments";
 export { default as Dropdown } from "./experiment/Dropdown";
