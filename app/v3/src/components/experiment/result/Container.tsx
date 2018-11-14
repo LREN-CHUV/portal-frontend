@@ -118,8 +118,7 @@ class Experiment extends React.Component<IProps> {
     const { modelDefinitionId, uuid } = selectedExperiment;
     const { history, experimentContainer } = this.props;
     history.push(`/v3/experiment/${modelDefinitionId}/${uuid}`);
-    await experimentContainer.markAsViewed(uuid);
-    return await experimentContainer.one(uuid);
+    experimentContainer.markAsViewed(uuid);
   };
 
   private handleCreateNewExperiment = () => {

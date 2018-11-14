@@ -65,20 +65,13 @@ class Experiment extends React.Component<IProps, IState> {
   }
 
   public async componentDidMount() {
-    // Get url parameters
     const { match } = this.props;
     if (!match) {
       return;
     }
     const { slug } = match.params;
-    const { exploreContainer, modelContainer } = this.props;
-    await Promise.all([
-      exploreContainer.variables(),
-      exploreContainer.datasets(),
-      exploreContainer.algorithms(),
-      modelContainer.all(),
-      modelContainer.one(slug)
-    ]);
+    const { modelContainer } = this.props;
+    await modelContainer.one(slug)
 
     return this.setState({
       model: modelContainer.state.model

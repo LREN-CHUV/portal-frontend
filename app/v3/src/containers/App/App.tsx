@@ -29,12 +29,20 @@ class App extends React.Component {
 
   private intervalId: NodeJS.Timer;
 
-  public componentWillMount() {
+  public async componentWillMount() {
     this.intervalId = setInterval(
       () => this.experimentContainer.all(),
       10 * 1000
     );
     this.experimentContainer.all()
+
+    return await Promise.all([
+      this.exploreContainer.variables(),
+      this.exploreContainer.datasets(),
+      this.exploreContainer.algorithms(),
+      this.modelContainer.all(),
+      // modelConstainer.one(slug)
+    ]);
   }
 
   public componentWillUnmount() {
