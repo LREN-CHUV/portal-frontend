@@ -1,7 +1,7 @@
 // tslint:disable:no-console
-import { ExperimentContainer, ModelContainer } from "@app/api";
+import { APIExperiment, APIModel } from "@app/components/API";
 // import logo from "../images/hbp-logo.png";
-import Dropdown from "@app/components/ui/Dropdown";
+import Dropdown from "@app/components/UI/Dropdown";
 import default_user from "@app/images/default_user.png";
 import { IExperimentResult } from "@app/types";
 import * as React from "react";
@@ -11,8 +11,8 @@ import { RouteComponentProps, withRouter } from "react-router-dom";
 import "./Navigation.css";
 
 interface IProps extends RouteComponentProps<any> {
-  experimentContainer: ExperimentContainer;
-  modelContainer: ModelContainer;
+  experimentContainer: APIExperiment;
+  modelContainer: APIModel;
 }
 
 class Navigation extends React.Component<IProps> {

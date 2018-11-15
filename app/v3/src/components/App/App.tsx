@@ -2,10 +2,10 @@
 // tslint:disable:no-console
 
 import {
-  CoreDataContainer,
-  ExperimentContainer,
-  ModelContainer
-} from "@app/api";
+  APICoreData,
+  APIExperiment,
+  APIModel
+} from "@app/components/API";
 import "bootstrap/dist/css/bootstrap.css";
 import * as React from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
@@ -27,9 +27,9 @@ import "./App.css";
 UNSTATED.logStateChanges = process.env.NODE_ENV === "development";
 
 class App extends React.Component {
-  private experimentContainer = new ExperimentContainer(config);
-  private modelContainer = new ModelContainer(config);
-  private exploreContainer = new CoreDataContainer(config);
+  private experimentContainer = new APIExperiment(config);
+  private modelContainer = new APIModel(config);
+  private exploreContainer = new APICoreData(config);
 
   private intervalId: NodeJS.Timer;
 
@@ -64,12 +64,12 @@ class App extends React.Component {
           ]}
         >
           <Subscribe
-            to={[ExperimentContainer, CoreDataContainer, ModelContainer]}
+            to={[APIExperiment, APICoreData, APIModel]}
           >
             {(
-              experimentContainer: ExperimentContainer,
-              exploreContainer: CoreDataContainer,
-              modelContainer: ModelContainer
+              experimentContainer: APIExperiment,
+              exploreContainer: APICoreData,
+              modelContainer: APIModel
             ) => (
               <div className="App">
                 <header>

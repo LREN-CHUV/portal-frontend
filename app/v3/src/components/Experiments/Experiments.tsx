@@ -1,5 +1,5 @@
 // tslint:disable:no-console
-import { ExperimentContainer } from "@app/api";
+import { APIExperiment } from "@app/components/API";
 import { IExperimentResult } from "@app/types";
 import * as React from "react";
 import { Label, Panel } from "react-bootstrap";
@@ -7,7 +7,7 @@ import { Label, Panel } from "react-bootstrap";
 import "./Experiments.css";
 
 interface IProps {
-  experimentContainer: ExperimentContainer;
+  experimentContainer: APIExperiment;
 }
 
 const renderExperiments = (experiments: IExperimentResult[] | undefined) => {

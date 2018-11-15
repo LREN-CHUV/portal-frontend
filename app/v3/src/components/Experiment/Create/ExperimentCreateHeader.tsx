@@ -1,8 +1,8 @@
 // tslint:disable:no-console
-import { ExperimentContainer, ModelContainer } from "@app/api";
+import { APIExperiment, APIModel } from "@app/components/API";
 import { IExperimentResult, IModelResult } from "@app/types";
 
-import DropdownModel from "@app/components/ui/DropdownModel";
+import DropdownModel from "@app/components/UI/DropdownModel";
 import * as React from "react";
 import { Button, FormControl, Panel } from "react-bootstrap";
 import { RouteComponentProps, withRouter } from "react-router-dom";
@@ -13,8 +13,8 @@ interface IProps extends RouteComponentProps<any> {
   handleChangeExperimentName: any;
   selectedMethod: any;
   experimentName: string;
-  experimentContainer: ExperimentContainer;
-  modelContainer: ModelContainer;
+  experimentContainer: APIExperiment;
+  modelContainer: APIModel;
 }
 
 export default withRouter(

@@ -1,10 +1,10 @@
 // tslint:disable:no-console
-import { CoreDataContainer } from "@app/api";
+import { APICoreData } from "@app/components/API";
 import { ResponsiveTreeMap } from "@nivo/treemap";
 import React, { Component } from "react";
 
 interface IProps {
-  exploreContainer: CoreDataContainer;
+  exploreContainer: APICoreData;
 }
 
 class TreeMap extends Component<IProps, any> {

@@ -1,10 +1,10 @@
 // tslint:disable:no-console
 import {
-  CoreDataContainer,
-  ExperimentContainer,
-  ModelContainer
-} from "@app/api";
-import Alert from "@app/components/ui/Alert";
+  APICoreData,
+  APIExperiment,
+  APIModel
+} from "@app/components/API";
+import Alert from "@app/components/UI/Alert";
 import { IModelResult } from "@app/types";
 import * as React from "react";
 import {
@@ -31,9 +31,9 @@ enum DatasetType {
 }
 
 interface IProps extends RouteComponentProps<any> {
-  experimentContainer: ExperimentContainer;
-  exploreContainer: CoreDataContainer;
-  modelContainer: ModelContainer;
+  experimentContainer: APIExperiment;
+  exploreContainer: APICoreData;
+  modelContainer: APIModel;
 }
 
 interface IState {

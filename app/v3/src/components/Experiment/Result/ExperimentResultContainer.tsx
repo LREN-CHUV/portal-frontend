@@ -1,6 +1,6 @@
 // tslint:disable:no-console
-import { ExperimentContainer, ModelContainer } from "@app/api";
-import Model from "@app/components/ui/Model";
+import { APIExperiment, APIModel } from "@app/components/API";
+import Model from "@app/components/UI/Model";
 import { IExperimentResult } from "@app/types";
 import * as React from "react";
 import { Panel } from "react-bootstrap";
@@ -9,8 +9,8 @@ import ExperimentResult from "./ExperimentResult";
 import ExperimentHeader from "./ExperimentResultHeader";
 
 interface IProps extends RouteComponentProps<any> {
-  experimentContainer: ExperimentContainer;
-  modelContainer: ModelContainer;
+  experimentContainer: APIExperiment;
+  modelContainer: APIModel;
 }
 
 const methodDisplay = (experiment: IExperimentResult | undefined) => (
