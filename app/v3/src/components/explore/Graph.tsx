@@ -1,6 +1,6 @@
 // tslint:disable:no-console
+import { CoreDataContainer } from "@app/api";
 import style from "@app/components/explore/GraphStyle";
-import { CoreDataContainer } from "@app/containers";
 import cytoscape from "cytoscape";
 import coseBilkent from "cytoscape-cose-bilkent";
 import React, { Component } from "react";
@@ -88,7 +88,6 @@ class Graph extends Component<IProps> {
       isRoot = false
     ) => {
       groups.forEach((group: IGroup) => {
-
         nodes.push({
           data: {
             cluster,
@@ -121,7 +120,7 @@ class Graph extends Component<IProps> {
                 code: group.code,
                 id: v.code,
                 label: v.label
-              },
+              }
             };
             nodes.push(node);
             edges.push({
@@ -211,16 +210,19 @@ class Graph extends Component<IProps> {
 
     if (target === this.cy || target === this.selectedTarget) {
       this.selectedTarget = undefined;
-      cy.animate({
-        fit: {
-          eles: cy.elements(),
-          padding: 20
+      cy.animate(
+        {
+          fit: {
+            eles: cy.elements(),
+            padding: 20
+          }
+        },
+        {
+          duration: 1000
         }
-      }, {
-        duration: 1000
-      });
+      );
       cy.elements().removeClass("dimmed");
-      cy.elements('[isGroup != 1]').addClass("dimmed")
+      cy.elements("[isGroup != 1]").addClass("dimmed");
       return;
     }
 
@@ -243,16 +245,18 @@ class Graph extends Component<IProps> {
       cy.elements().removeClass("dimmed");
       selectedChilds.addClass("dimmed");
 
-            console.log(target.successors())
-      cy.animate({
-        fit: {
-          eles: target.connectedEdges().connectedNodes(),
-          padding: 20
+      console.log(target.successors());
+      cy.animate(
+        {
+          fit: {
+            eles: target.connectedEdges().connectedNodes(),
+            padding: 20
+          }
+        },
+        {
+          duration: 1000
         }
-      }, {
-        duration: 1000
-      });
-
+      );
     }
     // console.log(this.foldedNodes);
   };

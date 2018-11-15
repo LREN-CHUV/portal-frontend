@@ -1,4 +1,10 @@
 // tslint:disable:no-console
+import {
+  CoreDataContainer,
+  ExperimentContainer,
+  ModelContainer
+} from "@app/api";
+import Alert from "@app/components/ui/Alert";
 import { IModelResult } from "@app/types";
 import * as React from "react";
 import {
@@ -14,12 +20,6 @@ import {
 } from "react-bootstrap";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { Model } from "../..";
-import {
-  CoreDataContainer,
-  ExperimentContainer,
-  ModelContainer
-} from "../../../containers";
-import Alert from "../../Alert";
 
 import "../Experiment.css";
 import Header from "./ExperimentCreateHeader";
@@ -71,7 +71,7 @@ class Experiment extends React.Component<IProps, IState> {
     }
     const { slug } = match.params;
     const { modelContainer } = this.props;
-    await modelContainer.one(slug)
+    await modelContainer.one(slug);
 
     return this.setState({
       model: modelContainer.state.model

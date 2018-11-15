@@ -1,5 +1,5 @@
 // tslint:disable:no-console
-import { CoreDataContainer } from "@app/containers";
+import { CoreDataContainer } from "@app/api";
 import { ResponsiveTreeMap } from "@nivo/treemap";
 import React, { Component } from "react";
 

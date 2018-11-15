@@ -1,5 +1,5 @@
 // tslint:disable:no-console
-import { CoreDataContainer } from "@app/containers";
+import { CoreDataContainer } from "@app/api";
 import { ResponsiveBubble } from "@nivo/circle-packing";
 import React, { Component } from "react";
 

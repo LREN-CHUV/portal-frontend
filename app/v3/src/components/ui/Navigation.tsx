@@ -1,15 +1,12 @@
 // tslint:disable:no-console
+import { ExperimentContainer, ModelContainer } from "@app/api";
+// import logo from "../images/hbp-logo.png";
+import Dropdown from "@app/components/ui/Dropdown";
+import default_user from "@app/images/default_user.png";
 import { IExperimentResult } from "@app/types";
 import * as React from "react";
 // import { Glyphicon } from "react-bootstrap";
 import { RouteComponentProps, withRouter } from "react-router-dom";
-import {
-  ExperimentContainer,
-  ModelContainer
-} from "../containers";
-import default_user from "../images/default_user.png";
-// import logo from "../images/hbp-logo.png";
-import { Dropdown } from "./";
 
 import "./Navigation.css";
 
@@ -19,19 +16,16 @@ interface IProps extends RouteComponentProps<any> {
 }
 
 class Navigation extends React.Component<IProps> {
-
   public render() {
-    const {
-      experimentContainer,
-      modelContainer
-    } = this.props;
+    const { experimentContainer, modelContainer } = this.props;
 
     const unreadCount =
       (experimentContainer &&
         experimentContainer.state &&
         experimentContainer.state.experiments &&
-        experimentContainer.state.experiments.filter(e => !e.resultsViewed && !e.results && !e.error)
-          .length) ||
+        experimentContainer.state.experiments.filter(
+          e => !e.resultsViewed && !e.results && !e.error
+        ).length) ||
       undefined;
 
     return (

@@ -1,8 +1,8 @@
 // tslint:disable:no-console
+import { IExperimentContainer, IExperimentResult } from "@app/types";
 import * as dotenv from "dotenv";
 import request from "request-promise-native";
 import { Container } from "unstated";
-import { IExperimentContainer, IExperimentResult } from "../../types";
 import ParseExperiment from "./ParseExperiment";
 
 dotenv.config();

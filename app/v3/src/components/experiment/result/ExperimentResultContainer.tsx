@@ -1,10 +1,12 @@
 // tslint:disable:no-console
+import { ExperimentContainer, ModelContainer } from "@app/api";
+import Model from "@app/components/ui/Model";
 import { IExperimentResult } from "@app/types";
 import * as React from "react";
 import { Panel } from "react-bootstrap";
 import { RouteComponentProps, withRouter } from "react-router-dom";
-import { ExperimentContainer, ModelContainer } from ".";
-import { ExperimentHeader, ExperimentResult, Model } from "../components";
+import ExperimentResult from "./ExperimentResult";
+import ExperimentHeader from "./ExperimentResultHeader";
 
 interface IProps extends RouteComponentProps<any> {
   experimentContainer: ExperimentContainer;

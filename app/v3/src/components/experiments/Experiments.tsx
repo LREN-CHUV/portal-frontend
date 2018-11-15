@@ -1,5 +1,5 @@
 // tslint:disable:no-console
-import { ExperimentContainer } from "@app/containers";
+import { ExperimentContainer } from "@app/api";
 import { IExperimentResult } from "@app/types";
 import * as React from "react";
 import { Label, Panel } from "react-bootstrap";

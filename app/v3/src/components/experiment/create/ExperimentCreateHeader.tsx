@@ -1,12 +1,12 @@
 // tslint:disable:no-console
+import { ExperimentContainer, ModelContainer } from "@app/api";
 import { IExperimentResult, IModelResult } from "@app/types";
-import { ExperimentContainer, ModelContainer } from "../../../containers";
 
+import DropdownModel from "@app/components/ui/DropdownModel";
 import * as React from "react";
 import { Button, FormControl, Panel } from "react-bootstrap";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { Dropdown } from "../..";
-import DropdownModel from "./DropdownModel";
 
 interface IProps extends RouteComponentProps<any> {
   handleSaveAndRunExperiment: any;

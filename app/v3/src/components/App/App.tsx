@@ -1,12 +1,16 @@
 // import "./Bootstrap-custom.css"
 // tslint:disable:no-console
 
+import {
+  CoreDataContainer,
+  ExperimentContainer,
+  ModelContainer
+} from "@app/api";
 import "bootstrap/dist/css/bootstrap.css";
 import * as React from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import { Provider, Subscribe } from "unstated";
 import UNSTATED from "unstated-debug";
-import { CoreDataContainer, ExperimentContainer, ModelContainer } from "../";
 import {
   Bubble,
   Experiment,
@@ -34,13 +38,13 @@ class App extends React.Component {
       () => this.experimentContainer.all(),
       10 * 1000
     );
-    this.experimentContainer.all()
+    this.experimentContainer.all();
 
     return await Promise.all([
       this.exploreContainer.variables(),
       this.exploreContainer.datasets(),
       this.exploreContainer.algorithms(),
-      this.modelContainer.all(),
+      this.modelContainer.all()
       // modelConstainer.one(slug)
     ]);
   }
