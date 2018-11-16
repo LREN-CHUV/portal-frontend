@@ -6,9 +6,9 @@ class NativeBubble extends Component<any> {
 
   private rootNode: any;
   public async componentDidMount() {
-    const { exploreContainer } = this.props;
-    await exploreContainer.load();
-    const hierarchy = exploreContainer.state.hierarchy;
+    const { apiCore } = this.props;
+    await apiCore.load();
+    const hierarchy = apiCore.state.hierarchy;
     if (!hierarchy) {
       return;
     }

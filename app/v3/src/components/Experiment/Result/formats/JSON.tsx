@@ -1,8 +1,8 @@
 // tslint:disable:no-console
 
+import { LABELS } from "@app/constants";
+import { round } from "@app/utils";
 import * as React from "react";
-import { LABELS } from "../../../constants";
-import { round } from "../../../utils";
 
 import "./JSON.css";
 
@@ -30,10 +30,10 @@ export default ({ row }: { row: any }) => {
           cValue < 0.001
             ? `${cValue} (***)`
             : cValue < 0.01
-              ? `${cValue} (**)`
-              : cValue < 0.05
-                ? `${cValue} (*)`
-                : `${cValue}`;
+            ? `${cValue} (**)`
+            : cValue < 0.05
+            ? `${cValue} (*)`
+            : `${cValue}`;
       }
 
       return output;

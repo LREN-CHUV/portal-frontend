@@ -1,5 +1,5 @@
 // tslint:disable:no-console
-import { MIME_TYPES, SCORES } from "../../constants";
+import { MIME_TYPES, SCORES } from "@app/constants";
 import {
   IExperimentResult,
   IKfoldValidationScore,
@@ -7,7 +7,7 @@ import {
   INode,
   IPolynomialClassificationScore,
   IValidationScore
-} from "../../types";
+} from "@app/types";
 
 class ParseExperiment {
   public static parse = (experiment: any): IExperimentResult => {

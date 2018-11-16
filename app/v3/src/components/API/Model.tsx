@@ -1,13 +1,13 @@
 // tslint:disable:no-console
+import { IModel, IModelResult } from "@app/types";
 import * as dotenv from "dotenv";
 import request from "request-promise-native";
 import { Container } from "unstated";
-import { IModelContainer, IModelResult } from "../../types";
 
 dotenv.config();
 
-class ModelContainer extends Container<IModelContainer> {
-  public state: IModelContainer = {
+class Model extends Container<IModel> {
+  public state: IModel = {
     error: undefined,
     model: undefined,
     models: undefined
@@ -87,7 +87,7 @@ class ModelContainer extends Container<IModelContainer> {
         error: error.message
       });
     }
-  }
+  };
 
   public all = async () => {
     try {
@@ -106,4 +106,4 @@ class ModelContainer extends Container<IModelContainer> {
   };
 }
 
-export default ModelContainer;
+export default Model;

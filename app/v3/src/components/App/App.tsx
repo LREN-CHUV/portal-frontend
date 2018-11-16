@@ -1,40 +1,40 @@
 // import "./Bootstrap-custom.css"
 // tslint:disable:no-console
 
+import { APICore, APIExperiment, APIModel } from "@app/components/API";
+import ExperimentCreate from "@app/components/Experiment/Create/Create";
+import ExperimentResult from "@app/components/Experiment/Result/Result";
+import Experiments from "@app/components/Experiments/Experiments";
+import { ExploreBubble } from "@app/components/Explore";
+import Navigation from "@app/components/UI/Navigation";
+import config from "@app/config";
 import "bootstrap/dist/css/bootstrap.css";
 import * as React from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import { Provider, Subscribe } from "unstated";
 import UNSTATED from "unstated-debug";
-import { CoreDataContainer, ExperimentContainer, ModelContainer } from "../";
-import {
-  Bubble,
-  Experiment,
-  Experiments,
-  Graph,
-  Navigation,
-  RunExperiment,
-  TreeMap
-} from "../../components";
-import config from "../../config";
 
 import "./App.css";
 
 UNSTATED.logStateChanges = process.env.NODE_ENV === "development";
 
 class App extends React.Component {
-  private experimentContainer = new ExperimentContainer(config);
-  private modelContainer = new ModelContainer(config);
-  private exploreContainer = new CoreDataContainer(config);
+  private apiExperiment = new APIExperiment(config);
+  private apiModel = new APIModel(config);
+  private apiCore = new APICore(config);
 
   private intervalId: NodeJS.Timer;
 
-  public componentWillMount() {
-    this.intervalId = setInterval(
-      () => this.experimentContainer.all(),
-      10 * 1000
-    );
-    this.experimentContainer.all()
+  public async componentWillMount() {
+    this.intervalId = setInterval(() => this.apiExperiment.all(), 10 * 1000);
+
+    return await Promise.all([
+      this.apiExperiment.all(),
+      this.apiCore.variables(),
+      this.apiCore.datasets(),
+      this.apiCore.algorithms(),
+      this.apiModel.all()
+    ]);
   }
 
   public componentWillUnmount() {
@@ -44,62 +44,50 @@ class App extends React.Component {
   public render() {
     return (
       <Router>
-        <Provider
-          inject={[
-            this.experimentContainer,
-            this.exploreContainer,
-            this.modelContainer
-          ]}
-        >
-          <Subscribe
-            to={[ExperimentContainer, CoreDataContainer, ModelContainer]}
-          >
+        <Provider inject={[this.apiExperiment, this.apiCore, this.apiModel]}>
+          <Subscribe to={[APIExperiment, APICore, APIModel]}>
             {(
-              experimentContainer: ExperimentContainer,
-              exploreContainer: CoreDataContainer,
-              modelContainer: ModelContainer
+              apiExperiment: APIExperiment,
+              apiCore: APICore,
+              apiModel: APIModel
             ) => (
               <div className="App">
                 <header>
                   <Navigation
-                    experimentContainer={experimentContainer}
-                    modelContainer={modelContainer}
+                    apiExperiment={apiExperiment}
+                    apiModel={apiModel}
                   />
                 </header>
                 <section>
                   <Route
                     path="/v3/explore"
                     // tslint:disable-next-line jsx-no-lambda
-                    render={() => (
-                      <Bubble exploreContainer={exploreContainer} />
-                    )}
+                    render={() => <ExploreBubble apiCore={apiCore} />}
                   />
-                  <Route
+                  {/* <Route
                     path="/v3/explore1"
                     // tslint:disable-next-line jsx-no-lambda
                     render={() => (
-                      <TreeMap exploreContainer={exploreContainer} />
+                      <TreeMap apiCore={apiCore} />
                     )}
                   />
                   <Route
                     path="/v3/explore2"
                     // tslint:disable-next-line jsx-no-lambda
-                    render={() => <Graph exploreContainer={exploreContainer} />}
-                  />
+                    render={() => <Graph apiCore={apiCore} />}
+                  /> */}
                   <Route
                     path="/v3/experiments"
                     // tslint:disable-next-line jsx-no-lambda
-                    render={() => (
-                      <Experiments experimentContainer={experimentContainer} />
-                    )}
+                    render={() => <Experiments apiExperiment={apiExperiment} />}
                   />
                   <Route
                     path="/v3/experiment/:slug/:uuid"
                     // tslint:disable-next-line jsx-no-lambda
                     render={() => (
-                      <Experiment
-                        experimentContainer={experimentContainer}
-                        modelContainer={modelContainer}
+                      <ExperimentResult
+                        apiExperiment={apiExperiment}
+                        apiModel={apiModel}
                       />
                     )}
                   />
@@ -108,10 +96,10 @@ class App extends React.Component {
                     path="/v3/experiment/:slug"
                     // tslint:disable-next-line jsx-no-lambda
                     render={() => (
-                      <RunExperiment
-                        experimentContainer={experimentContainer}
-                        exploreContainer={exploreContainer}
-                        modelContainer={modelContainer}
+                      <ExperimentCreate
+                        apiExperiment={apiExperiment}
+                        apiCore={apiCore}
+                        apiModel={apiModel}
                       />
                     )}
                   />

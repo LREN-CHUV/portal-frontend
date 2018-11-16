@@ -1,5 +1,5 @@
 // tslint:disable:no-console
-import { ExperimentContainer } from "@app/containers";
+import { APIExperiment } from "@app/components/API";
 import { IExperimentResult } from "@app/types";
 import * as React from "react";
 import { Label, Panel } from "react-bootstrap";
@@ -7,7 +7,7 @@ import { Label, Panel } from "react-bootstrap";
 import "./Experiments.css";
 
 interface IProps {
-  experimentContainer: ExperimentContainer;
+  apiExperiment: APIExperiment;
 }
 
 const renderExperiments = (experiments: IExperimentResult[] | undefined) => {
@@ -59,8 +59,8 @@ const renderExperiments = (experiments: IExperimentResult[] | undefined) => {
 
 class Experiments extends React.Component<IProps> {
   public render() {
-    const { experimentContainer } = this.props;
-    return renderExperiments(experimentContainer.state.experiments);
+    const { apiExperiment } = this.props;
+    return renderExperiments(apiExperiment.state.experiments);
   }
 }
 

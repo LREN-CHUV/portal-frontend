@@ -1,6 +1,6 @@
 // tslint:disable:no-console
-import style from "@app/components/explore/GraphStyle";
-import { CoreDataContainer } from "@app/containers";
+import { APICore } from "@app/components/API";
+import style from "@app/components/Explore/GraphStyle";
 import cytoscape from "cytoscape";
 import coseBilkent from "cytoscape-cose-bilkent";
 import React, { Component } from "react";
@@ -52,7 +52,7 @@ const layout = {
 };
 
 interface IProps {
-  exploreContainer: CoreDataContainer;
+  apiCore: APICore;
 }
 
 interface IGroup {
@@ -71,9 +71,9 @@ class Graph extends Component<IProps> {
   private selectedTarget: cytoscape.NodeDefinition | undefined;
 
   public async componentDidMount() {
-    const { exploreContainer } = this.props;
-    await exploreContainer.hierarchy();
-    const hierarchy = exploreContainer.state.hierarchy;
+    const { apiCore } = this.props;
+    await apiCore.hierarchy();
+    const hierarchy = apiCore.state.hierarchy;
     if (!hierarchy) {
       return;
     }
@@ -88,7 +88,6 @@ class Graph extends Component<IProps> {
       isRoot = false
     ) => {
       groups.forEach((group: IGroup) => {
-
         nodes.push({
           data: {
             cluster,
@@ -121,7 +120,7 @@ class Graph extends Component<IProps> {
                 code: group.code,
                 id: v.code,
                 label: v.label
-              },
+              }
             };
             nodes.push(node);
             edges.push({
@@ -211,16 +210,19 @@ class Graph extends Component<IProps> {
 
     if (target === this.cy || target === this.selectedTarget) {
       this.selectedTarget = undefined;
-      cy.animate({
-        fit: {
-          eles: cy.elements(),
-          padding: 20
+      cy.animate(
+        {
+          fit: {
+            eles: cy.elements(),
+            padding: 20
+          }
+        },
+        {
+          duration: 1000
         }
-      }, {
-        duration: 1000
-      });
+      );
       cy.elements().removeClass("dimmed");
-      cy.elements('[isGroup != 1]').addClass("dimmed")
+      cy.elements("[isGroup != 1]").addClass("dimmed");
       return;
     }
 
@@ -243,16 +245,18 @@ class Graph extends Component<IProps> {
       cy.elements().removeClass("dimmed");
       selectedChilds.addClass("dimmed");
 
-            console.log(target.successors())
-      cy.animate({
-        fit: {
-          eles: target.connectedEdges().connectedNodes(),
-          padding: 20
+      console.log(target.successors());
+      cy.animate(
+        {
+          fit: {
+            eles: target.connectedEdges().connectedNodes(),
+            padding: 20
+          }
+        },
+        {
+          duration: 1000
         }
-      }, {
-        duration: 1000
-      });
-
+      );
     }
     // console.log(this.foldedNodes);
   };

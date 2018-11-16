@@ -1,18 +1,18 @@
 // tslint:disable:no-console
-import { CoreDataContainer } from "@app/containers";
+import { APICore } from "@app/components/API";
 import { ResponsiveTreeMap } from "@nivo/treemap";
 import React, { Component } from "react";
 
 interface IProps {
-  exploreContainer: CoreDataContainer;
+  apiCore: APICore;
 }
 
 class TreeMap extends Component<IProps, any> {
   public state = { tree: null };
   public async componentDidMount() {
-    const { exploreContainer } = this.props;
-    await exploreContainer.hierarchy();
-    const hierarchy = exploreContainer.state.hierarchy;
+    const { apiCore } = this.props;
+    await apiCore.hierarchy();
+    const hierarchy = apiCore.state.hierarchy;
     if (!hierarchy) {
       return;
     }

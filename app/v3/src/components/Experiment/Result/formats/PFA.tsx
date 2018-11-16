@@ -1,5 +1,6 @@
 // tslint:disable:no-console
 
+import { SCORES } from "@app/constants";
 import {
   IConfusionMatrix,
   IKfoldValidationScore,
@@ -7,21 +8,23 @@ import {
   IPolynomialClassificationScore,
   IValidationScore
 } from "@app/types";
+import { round } from "@app/utils";
 import * as React from "react";
 import { Tab, Tabs } from "react-bootstrap";
-import { SCORES } from "../../../constants";
-import { round } from "../../../utils";
 import { Highchart } from "./";
 
 import "./JSON.css";
 import "./PFA.css";
 
-const removeKeys = (obj: any, keys: string[] = ["confusionMatrix", "type", "node"]) => {
+const removeKeys = (
+  obj: any,
+  keys: string[] = ["confusionMatrix", "type", "node"]
+) => {
   const newObj = { ...obj };
   keys.forEach(key => {
     newObj[key] = undefined;
-  })
-  
+  });
+
   return JSON.parse(JSON.stringify(newObj));
 };
 
@@ -99,13 +102,12 @@ export default ({ method, data }: { method: IMethod; data: any }) => {
   return (
     (data && (
       <Tabs defaultActiveKey={0} id="pfa-method" style={{ marginTop: "16px" }}>
-        {data &&
-          data.error && (
-            <div>
-              <h3>An error has occured</h3>
-              <p>{data.error}</p>
-            </div>
-          )}
+        {data && data.error && (
+          <div>
+            <h3>An error has occured</h3>
+            <p>{data.error}</p>
+          </div>
+        )}
 
         {data.crossValidation && (
           <Tab eventKey={0} title={"Cross Validation"}>
@@ -116,7 +118,9 @@ export default ({ method, data }: { method: IMethod; data: any }) => {
         )}
         {data.remoteValidation && (
           <Tab eventKey={1} title={"Remote Validation"}>
-            <Highchart options={buildChart(removeKeys(data.remoteValidation))} />
+            <Highchart
+              options={buildChart(removeKeys(data.remoteValidation))}
+            />
             {buildTableValue(removeKeys(data.remoteValidation))}
             {buildConfusionMatrix(data.remoteValidation.confusionMatrix)}
           </Tab>

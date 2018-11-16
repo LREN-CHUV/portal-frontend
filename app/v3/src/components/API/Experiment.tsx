@@ -1,14 +1,14 @@
 // tslint:disable:no-console
+import { IExperiment, IExperimentResult } from "@app/types";
 import * as dotenv from "dotenv";
 import request from "request-promise-native";
 import { Container } from "unstated";
-import { IExperimentContainer, IExperimentResult } from "../../types";
 import ParseExperiment from "./ParseExperiment";
 
 dotenv.config();
 
-class ExperimentContainer extends Container<IExperimentContainer> {
-  public state: IExperimentContainer = {
+class Experiment extends Container<IExperiment> {
+  public state: IExperiment = {
     error: undefined,
     experiment: undefined,
     experiments: undefined
@@ -50,7 +50,7 @@ class ExperimentContainer extends Container<IExperimentContainer> {
       const json = await JSON.parse(data);
       if (json.error) {
         return await this.setState({
-          error: json.error,
+          error: json.error
         });
       }
 
@@ -58,17 +58,17 @@ class ExperimentContainer extends Container<IExperimentContainer> {
         error: undefined,
         experiments: json.map((j: IExperimentResult) =>
           ParseExperiment.parse(j)
-        ),
+        )
       });
     } catch (error) {
       return await this.setState({
-        error: error.message,
+        error: error.message
       });
     }
   };
 
   public create = async (params: any) => {
-    console.log(JSON.stringify(params), null, 4)
+    console.log(JSON.stringify(params), null, 4);
     try {
       const data = await request({
         body: JSON.stringify(params),
@@ -118,4 +118,4 @@ class ExperimentContainer extends Container<IExperimentContainer> {
   };
 }
 
-export default ExperimentContainer;
+export default Experiment;

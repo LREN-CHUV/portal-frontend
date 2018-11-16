@@ -1,37 +1,31 @@
 // tslint:disable:no-console
+import { APIExperiment, APIModel } from "@app/components/API";
+// import logo from "../images/hbp-logo.png";
+import Dropdown from "@app/components/UI/Dropdown";
+import default_user from "@app/images/default_user.png";
 import { IExperimentResult } from "@app/types";
 import * as React from "react";
 // import { Glyphicon } from "react-bootstrap";
 import { RouteComponentProps, withRouter } from "react-router-dom";
-import {
-  ExperimentContainer,
-  ModelContainer
-} from "../containers";
-import default_user from "../images/default_user.png";
-// import logo from "../images/hbp-logo.png";
-import { Dropdown } from "./";
 
 import "./Navigation.css";
 
 interface IProps extends RouteComponentProps<any> {
-  experimentContainer: ExperimentContainer;
-  modelContainer: ModelContainer;
+  apiExperiment: APIExperiment;
+  apiModel: APIModel;
 }
 
 class Navigation extends React.Component<IProps> {
-
   public render() {
-    const {
-      experimentContainer,
-      modelContainer
-    } = this.props;
+    const { apiExperiment, apiModel } = this.props;
 
     const unreadCount =
-      (experimentContainer &&
-        experimentContainer.state &&
-        experimentContainer.state.experiments &&
-        experimentContainer.state.experiments.filter(e => !e.resultsViewed && !e.results && !e.error)
-          .length) ||
+      (apiExperiment &&
+        apiExperiment.state &&
+        apiExperiment.state.experiments &&
+        apiExperiment.state.experiments.filter(
+          e => !e.resultsViewed && !e.results && !e.error
+        ).length) ||
       undefined;
 
     return (
@@ -110,7 +104,7 @@ class Navigation extends React.Component<IProps> {
             <li className="toolbar-icon-bg hidden-xs">
               <span title="Biological Signature of Diseases">
                 <Dropdown
-                  items={experimentContainer.state.experiments}
+                  items={apiExperiment.state.experiments}
                   title="BSD"
                   // tslint:disable-next-line jsx-no-lambda
                   handleSelect={async (experiment: IExperimentResult) => {
@@ -118,10 +112,10 @@ class Navigation extends React.Component<IProps> {
                     this.props.history.push(
                       `/v3/experiment/${modelDefinitionId}/${uuid}`
                     );
-                    await experimentContainer.markAsViewed(uuid);
-                    await modelContainer.one(modelDefinitionId);
+                    await apiExperiment.markAsViewed(uuid);
+                    await apiModel.one(modelDefinitionId);
 
-                    return await experimentContainer.one(uuid);
+                    return await apiExperiment.one(uuid);
                   }}
                   handleCreateNewExperiment={null}
                   noCaret={true}
