@@ -7,7 +7,7 @@ export interface IAlert {
   title?: string;
 }
 
-class Alert extends React.Component<IAlert> {
+export class Alert extends React.Component<IAlert> {
   constructor(props: any) {
     super(props);
   }
@@ -20,5 +20,3 @@ class Alert extends React.Component<IAlert> {
 
   }
 }
-
-export default Alert;

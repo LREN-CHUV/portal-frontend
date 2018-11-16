@@ -3,9 +3,9 @@
 
 import { APICore, APIExperiment, APIModel } from "@app/components/API";
 import ExperimentCreate from "@app/components/Experiment/Create/Create";
-import ExperimentResult from "@app/components/Experiment/Result/Result";
+import ExperimentResult from "@app/components/Experiment/Result/Container";
 import Experiments from "@app/components/Experiments/Experiments";
-import { ExploreBubble } from "@app/components/Explore";
+import ExploreBubble from "@app/components/Explore/Bubble";
 import Navigation from "@app/components/UI/Navigation";
 import config from "@app/config";
 import "bootstrap/dist/css/bootstrap.css";
