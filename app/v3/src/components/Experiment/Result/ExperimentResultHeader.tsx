@@ -1,8 +1,8 @@
+import Dropdown from "@app/components/UI/Dropdown";
 import { IExperimentResult } from "@app/types";
 import moment from "moment"; // FIXME: change lib, too heavy
 import * as React from "react";
 import { Button, Panel } from "react-bootstrap";
-import { Dropdown } from "../..";
 
 interface IProps {
   experiment: IExperimentResult | undefined;
@@ -25,9 +25,7 @@ export default ({
       <Panel.Body>
         <h3>
           Results of Experiment <strong>{name}</strong> on{" "}
-          <a href={`/models/${modelDefinitionId}`}>
-            {modelDefinitionId}
-          </a>
+          <a href={`/models/${modelDefinitionId}`}>{modelDefinitionId}</a>
         </h3>
         <div className="experiment-container">
           <h5 className="item">

@@ -109,7 +109,7 @@
     error?: string;
   }
 
-  export interface IExperimentContainer extends IErrorResult {
+  export interface IExperiment extends IErrorResult {
     experiment?: IExperimentResult;
     experiments?: IExperimentResult[];
   }
@@ -135,7 +135,7 @@
     createdBy: IUser;
   }
 
-  export interface IModelContainer extends IErrorResult {
+  export interface IModel extends IErrorResult {
     model?: IModelResult;
     models?: IModelResult[];
   }

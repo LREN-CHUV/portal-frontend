@@ -1,5 +1,5 @@
 // tslint:disable:no-console
-import { APICoreData } from "@app/components/API";
+import { APICore } from "@app/components/API";
 import style from "@app/components/Explore/GraphStyle";
 import cytoscape from "cytoscape";
 import coseBilkent from "cytoscape-cose-bilkent";
@@ -52,7 +52,7 @@ const layout = {
 };
 
 interface IProps {
-  exploreContainer: APICoreData;
+  apiCore: APICore;
 }
 
 interface IGroup {
@@ -71,9 +71,9 @@ class Graph extends Component<IProps> {
   private selectedTarget: cytoscape.NodeDefinition | undefined;
 
   public async componentDidMount() {
-    const { exploreContainer } = this.props;
-    await exploreContainer.hierarchy();
-    const hierarchy = exploreContainer.state.hierarchy;
+    const { apiCore } = this.props;
+    await apiCore.hierarchy();
+    const hierarchy = apiCore.state.hierarchy;
     if (!hierarchy) {
       return;
     }

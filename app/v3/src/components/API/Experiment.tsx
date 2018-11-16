@@ -1,5 +1,5 @@
 // tslint:disable:no-console
-import { IExperimentContainer, IExperimentResult } from "@app/types";
+import { IExperiment, IExperimentResult } from "@app/types";
 import * as dotenv from "dotenv";
 import request from "request-promise-native";
 import { Container } from "unstated";
@@ -7,8 +7,8 @@ import ParseExperiment from "./ParseExperiment";
 
 dotenv.config();
 
-class ExperimentContainer extends Container<IExperimentContainer> {
-  public state: IExperimentContainer = {
+class Experiment extends Container<IExperiment> {
+  public state: IExperiment = {
     error: undefined,
     experiment: undefined,
     experiments: undefined
@@ -123,4 +123,4 @@ class ExperimentContainer extends Container<IExperimentContainer> {
   };
 }
 
-export default ExperimentContainer;
+export default Experiment;

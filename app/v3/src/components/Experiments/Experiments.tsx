@@ -7,7 +7,7 @@ import { Label, Panel } from "react-bootstrap";
 import "./Experiments.css";
 
 interface IProps {
-  experimentContainer: APIExperiment;
+  apiExperiment: APIExperiment;
 }
 
 const renderExperiments = (experiments: IExperimentResult[] | undefined) => {
@@ -59,8 +59,8 @@ const renderExperiments = (experiments: IExperimentResult[] | undefined) => {
 
 class Experiments extends React.Component<IProps> {
   public render() {
-    const { experimentContainer } = this.props;
-    return renderExperiments(experimentContainer.state.experiments);
+    const { apiExperiment } = this.props;
+    return renderExperiments(apiExperiment.state.experiments);
   }
 }
 

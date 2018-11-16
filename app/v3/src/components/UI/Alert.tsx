@@ -1,26 +1,24 @@
 import * as React from "react";
-import { Alert } from "react-bootstrap";
+import { Alert as BSAlert } from "react-bootstrap";
 
-interface IProps {
+export interface IAlert {
   message: string;
-  show: boolean;
   style?: string;
   title?: string;
 }
 
-class AlertDismissable extends React.Component<IProps> {
+class Alert extends React.Component<IAlert> {
   constructor(props: any) {
     super(props);
   }
 
   public render() {
-    return this.props.show ? (
-      <Alert bsStyle={this.props.style || "danger"}>
+    return <BSAlert bsStyle={this.props.style || "danger"}>
         <h4>{this.props.title || "Error"}</h4>
         <p>{this.props.message}</p>
-      </Alert>
-    ) : null;
+      </BSAlert>
+
   }
 }
 
-export default AlertDismissable;
+export default Alert;
