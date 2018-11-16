@@ -13,7 +13,7 @@ class Model extends Container<IModel> {
     models: undefined
   };
 
-  private options: RequestInit;
+  private options: request.Options;
   private baseUrl: string;
 
   constructor(config: any) {

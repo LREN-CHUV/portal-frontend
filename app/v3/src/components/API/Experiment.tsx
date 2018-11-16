@@ -14,12 +14,7 @@ class Experiment extends Container<IExperiment> {
     experiments: undefined
   };
 
-  public loaded =
-    this.state.experiment !== undefined &&
-    this.state.experiment.results !== undefined &&
-    this.state.experiment.error !== undefined;
-
-  private options: RequestInit;
+  private options: request.Options;
   private baseUrl: string;
 
   constructor(config: any) {
