@@ -6,7 +6,7 @@ import { Container } from "unstated";
 
 dotenv.config();
 
-class APICore extends Container<ICoreDataContainer> {
+class Core extends Container<ICoreDataContainer> {
   public state: ICoreDataContainer = {};
 
   private options: RequestInit;
@@ -106,4 +106,4 @@ class APICore extends Container<ICoreDataContainer> {
   };
 }
 
-export default APICore;
+export default Core;

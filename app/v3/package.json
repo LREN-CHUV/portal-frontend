@@ -3,15 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@nivo/circle-packing": "^0.49.0",
-    "@nivo/treemap": "^0.49.0",
-    "@types/highcharts": "^5.0.27",
-    "@types/react-plotly.js": "^2.2.1",
     "bootstrap": "3.3.7",
-    "cytoscape": "^3.2.17",
-    "cytoscape-cola": "^2.2.3",
-    "cytoscape-cose-bilkent": "^4.0.0",
-    "cytoscape-dagre": "^2.2.2",
     "dotenv": "^6.0.0",
     "highcharts": "^6.1.2",
     "highcharts-react-official": "^1.4.0",
@@ -35,6 +27,8 @@
     "eject": "react-scripts-ts eject"
   },
   "devDependencies": {
+    "@types/highcharts": "^5.0.27",
+    "@types/react-plotly.js": "^2.2.1",
     "@types/cytoscape": "^3.2.7",
     "@types/dotenv": "^4.0.3",
     "@types/jest": "^23.3.1",
