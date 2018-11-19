@@ -2,14 +2,15 @@
 // tslint:disable:no-console
 
 import { APICore, APIExperiment, APIModel } from "@app/components/API";
-import ExperimentCreate from "@app/components/Experiment/Create/Create";
 import ExperimentResult from "@app/components/Experiment/Result/Container";
 import Experiments from "@app/components/Experiments/Experiments";
 import Explore from "@app/components/Explore/NativeBubble";
 import Navigation from "@app/components/UI/Navigation";
-import "bootstrap/dist/css/bootstrap.css";
+import ScreenExperimentCreate from "@app/screens/Experiment/Create";
 import * as React from "react";
 import { Route } from "react-router-dom";
+
+import "node_modules/bootstrap/dist/css/bootstrap.css";
 import "./App.css";
 
 interface IProps {
@@ -39,7 +40,7 @@ const App = ({ apiExperiment, apiCore, apiModel }: IProps) => (
         exact={true}
         path="/v3/experiment/:slug"
         render={() => (
-          <ExperimentCreate
+          <ScreenExperimentCreate
             apiExperiment={apiExperiment}
             apiCore={apiCore}
             apiModel={apiModel}

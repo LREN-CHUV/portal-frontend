@@ -1,63 +1,51 @@
-// tslint:disable:no-console
-import { APIExperiment, APIModel } from "@app/components/API";
-import { IExperimentResult, IModelResult } from "@app/types";
-
 import Dropdown from "@app/components/UI/Dropdown";
 import DropdownModel from "@app/components/UI/DropdownModel";
+import { IExperimentResult, IMethodDefinition, IModelResult } from "@app/types";
 import * as React from "react";
 import { Button, FormControl, Panel } from "react-bootstrap";
-import { RouteComponentProps, withRouter } from "react-router-dom";
 
-interface IProps extends RouteComponentProps<any> {
+interface IProps {
+  title: string | undefined;
+  models: IModelResult[] | undefined;
+  experiments: IExperimentResult[] | undefined;
+  handleSelectModel: any;
+  handleSelectExperiment: any;
   handleSaveAndRunExperiment: any;
-  handleChangeExperimentName: any;
-  selectedMethod: any;
+}
+interface IState {
   experimentName: string;
-  apiExperiment: APIExperiment;
-  apiModel: APIModel;
+  selectedMethod: IMethodDefinition | undefined;
 }
 
-export default withRouter(
-  ({
-    handleSaveAndRunExperiment,
-    handleChangeExperimentName,
-    selectedMethod,
-    experimentName,
-    apiExperiment,
-    apiModel,
-    history
-  }: IProps) => {
-    const state = apiModel.state;
-    const title = (state && state.model && state.model.title) || "";
-    const experiments = apiExperiment.state.experiments;
+export default class Header extends React.Component<IProps, IState> {
+  public state = {
+    experimentName: "",
+    selectedMethod: undefined
+  };
 
-    const handleSelectExperiment = async (
-      selectedExperiment: IExperimentResult
-    ) => {
-      const { modelDefinitionId, uuid } = selectedExperiment;
-      history.push(`/v3/experiment/${modelDefinitionId}/${uuid}`);
-      const load = apiExperiment && apiExperiment.one;
-      return await load(uuid);
-    };
-
-    const handleSelectModel = async (selectedModel: IModelResult) => {
-      console.log(selectedModel);
-      const { slug } = selectedModel;
-      history.push(`/v3/experiment/${slug}`);
-      const load = apiModel && apiModel.one;
-      return await load(slug);
-    };
+  public render() {
+    const {
+      experiments,
+      models,
+      title,
+      handleSelectModel,
+      handleSelectExperiment,
+      handleSaveAndRunExperiment
+    } = this.props;
+    const { experimentName, selectedMethod } = this.state;
 
     return (
       <Panel className="experiment-header">
         <Panel.Body>
           <h3>
             Create Experiment on{" "}
-            <DropdownModel
-              items={apiModel.state.models}
-              title={title}
-              handleSelect={handleSelectModel}
-            />
+            {models && (
+              <DropdownModel
+                items={models}
+                title={title}
+                handleSelect={handleSelectModel}
+              />
+            )}
           </h3>
           <div className="create-experiment-container">
             <div className="item">
@@ -66,12 +54,17 @@ export default withRouter(
                 type="text"
                 placeholder={"Experiment name"}
                 value={experimentName}
-                onChange={handleChangeExperimentName}
+                onChange={this.handleChangeExperimentName}
               />
             </div>
             <div className="item">
               <Button
-                onClick={handleSaveAndRunExperiment}
+              //tslint:disable 
+                onClick={() =>
+                  handleSaveAndRunExperiment({
+                    selectedMethod
+                  })
+                }
                 bsStyle="info"
                 disabled={selectedMethod === undefined}
               >
@@ -91,4 +84,10 @@ export default withRouter(
       </Panel>
     );
   }
-);
+
+  private handleChangeExperimentName = (event: any) => {
+    this.setState({
+      experimentName: event.target.value
+    });
+  };
+}

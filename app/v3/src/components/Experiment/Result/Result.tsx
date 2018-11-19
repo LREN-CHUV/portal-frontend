@@ -5,7 +5,7 @@ import * as React from "react";
 import { Panel, Tab, Tabs } from "react-bootstrap";
 import { Highchart, JSON, PFA, Plotly } from "./formats";
 
-import "../Experiment.css";
+// import "../Experiment.css";
 
 export default ({
   experimentState

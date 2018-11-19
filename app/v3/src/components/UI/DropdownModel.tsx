@@ -7,7 +7,7 @@ import "./Dropdown.css";
 
 interface IDropdown {
   items: IModelResult[] | undefined;
-  title: string;
+  title?: string;
   handleSelect: any;
   noCaret?: boolean;
 }
