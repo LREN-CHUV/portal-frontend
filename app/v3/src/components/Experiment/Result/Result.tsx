@@ -4,8 +4,6 @@ import * as React from "react";
 import { Panel, Tab, Tabs } from "react-bootstrap";
 import { Highchart, JSON, PFA, Plotly } from "./formats";
 
-// import "../Experiment.css";
-
 export default ({ experimentState }: { experimentState: IExperiment }) => {
   const experiment = experimentState && experimentState.experiment;
   const nodes = experiment && experiment.results;
@@ -62,9 +60,7 @@ export default ({ experimentState }: { experimentState: IExperiment }) => {
   return (
     <Panel>
       <Panel.Title>
-        <div className="flexbox">
-          <h3 className="item">Your Experiment</h3>
-        </div>
+          <h3>Your Experiment</h3>
       </Panel.Title>
       <Panel.Body>
         {loading ? (

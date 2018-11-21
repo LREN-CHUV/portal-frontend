@@ -1,19 +1,23 @@
-import { APICore } from "@app/components/API";
-import { IModelResult } from "@app/types";
+import {
+  IAlgorithm,
+  IMethods,
+  IModelResult,
+  IVariableEntity
+} from "@app/types";
 import * as React from "react";
 import { Button } from "react-bootstrap";
 
 const AvailableMethods = ({
-  apiCore,
+  methods,
+  variables,
   handleSelectMethod,
   model
 }: {
-  apiCore: APICore;
-  handleSelectMethod: any;
+  methods: IMethods | undefined;
+  variables: IVariableEntity[] | undefined;
+  handleSelectMethod: (method: IAlgorithm) => void;
   model: IModelResult | undefined;
 }) => {
-  const methods = apiCore && apiCore.state && apiCore.state.methods;
-  const apiVariables = apiCore.state.variables;
   const query = model && model.query;
   const modelVariable =
     query && query.variables && query.variables.map(v => v.code)[0];
@@ -23,7 +27,7 @@ const AvailableMethods = ({
     (query && query.groupings && query.groupings.map(v => v.code)) || [];
 
   const availableMethods =
-    (apiVariables &&
+    (variables &&
       query &&
       modelVariable &&
       methods &&
@@ -32,7 +36,7 @@ const AvailableMethods = ({
         const disabled = { ...algorithm, enabled: false };
         const enabled = { ...algorithm, enabled: true };
 
-        const apiVariable = apiVariables.find(
+        const apiVariable = variables.find(
           (v: any) => v.code === modelVariable
         );
         const algoConstraints: any = algorithm.constraints;
@@ -90,18 +94,22 @@ const AvailableMethods = ({
 
   return (
     <React.Fragment>
-      {availableMethods.map((a: any) => (
-        <div className="method" key={a.code}>
+      {availableMethods.map((method: any) => (
+        <div className="method" key={method.code}>
           <Button
-            key={a.code}
+            key={method.code}
             bsStyle="link"
-            title={a.description}
+            title={method.description}
             // tslint:disable-next-line jsx-no-lambda
-            onClick={event => handleSelectMethod(event, a)}
-            style={{ "textTransform": "none", "padding": 0, color: a.enabled ? "#337ab7" : "gray"}}
-            disabled={!a.enabled}
+            onClick={() => handleSelectMethod(method)}
+            style={{
+              color: method.enabled ? "#03a9f4" : "gray",
+              padding: 0,
+              textTransform: "none"
+            }}
+            disabled={!method.enabled}
           >
-            {a.label}
+            {method.label}
           </Button>
         </div>
       ))}

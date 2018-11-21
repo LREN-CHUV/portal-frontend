@@ -21,8 +21,8 @@ interface IProps {
   apiExperiment: APIExperiment;
   apiCore: APICore;
   model: IModelResult | undefined;
-  handleUpdateModel: any;
-  selectedMethod: any | undefined;
+  handleUpdateModel: (model: IModelResult) => void;
+  nethod: any | undefined;
 }
 
 interface IState {
@@ -30,7 +30,7 @@ interface IState {
   parameters: object;
 }
 
-class Create extends React.Component<IProps, IState> {
+class MethodParameters extends React.Component<IProps, IState> {
   public state: IState = {
     experimentName: "",
     parameters: {}
@@ -44,29 +44,24 @@ class Create extends React.Component<IProps, IState> {
   }
 
   public render() {
-    const { apiCore, model, selectedMethod } = this.props;
+    const { apiCore, model, nethod } = this.props;
     const datasets = apiCore.state.datasets;
     const query = model && model.query;
-    const parameters =
-      (selectedMethod && selectedMethod.parameters) || undefined;
+    const parameters = (nethod && nethod.parameters) || undefined;
     const isPredictiveMethod =
-      (selectedMethod && selectedMethod.type[0] === "predictive_model") ||
-      false;
-
-    // const state = apiModel.state;
-    // const title = (state && state.model && state.model.title) || "";
+      (nethod && nethod.type[0] === "predictive_model") || false;
 
     return (
       <div>
-        {selectedMethod && (
+        {nethod && (
           <div>
             <h4>
-              <strong>{selectedMethod.label}</strong>
+              <strong>{nethod.label}</strong>
             </h4>
-            <p>{selectedMethod.description}</p>
+            <p>{nethod.description}</p>
           </div>
         )}
-        {!selectedMethod && (
+        {!nethod && (
           <div>
             <h4>
               <strong>Your method</strong>
@@ -74,7 +69,7 @@ class Create extends React.Component<IProps, IState> {
             <p>Please, select a method on the right pane</p>
           </div>
         )}
-        {selectedMethod && (
+        {nethod && (
           <fieldset style={{ padding: "8px" }}>
             <h5>
               {isPredictiveMethod && <strong>Training & kfold</strong>}
@@ -299,4 +294,4 @@ class Create extends React.Component<IProps, IState> {
   };
 }
 
-export default Create;
+export default MethodParameters;

@@ -21,13 +21,13 @@ export default ({
   const modelDefinitionId = experiment && experiment.modelDefinitionId;
 
   return (
-    <Panel className="experiment-header">
+    <Panel>
       <Panel.Body>
         <h3>
           Results of Experiment <strong>{name}</strong> on{" "}
           <a href={`/models/${modelDefinitionId}`}>{modelDefinitionId}</a>
         </h3>
-        <div className="experiment-container">
+        <div className="info-actions">
           <h5 className="item">
             Created{" "}
             {experiment &&

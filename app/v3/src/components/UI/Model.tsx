@@ -10,8 +10,16 @@ const ruleOperator = (operator: string) => {
       return ">";
       break;
 
+    case "less":
+      return "<";
+      break;
+
     case "equal":
       return "=";
+      break;
+
+    case "not equal":
+      return "!=";
       break;
 
     default:
@@ -61,9 +69,8 @@ const formatFilter = (filter: any) => {
 export default ({ model }: { model: IModelResult | undefined }) => {
   const query = model && model.query;
   return (
-    <Panel className="panel-model">
+    <Panel className="model">
       <Panel.Title>
-        {" "}
         <h3>
           Model <strong>{model && model.title}</strong>
         </h3>

@@ -1,11 +1,11 @@
 // tslint:disable jsx-no-lambda
 
 import { APICore, APIExperiment, APIModel } from "@app/components/API";
+import ExperimentCreate from "@app/components/Experiment/Create/Container";
 import ExperimentResult from "@app/components/Experiment/Result/Container";
 import Experiments from "@app/components/Experiments/Experiments";
 import Explore from "@app/components/Explore/NativeBubble";
 import Navigation from "@app/components/UI/Navigation";
-import ScreenExperimentCreate from "@app/screens/Experiment/Create";
 import * as React from "react";
 import { Route } from "react-router-dom";
 
@@ -39,7 +39,7 @@ const App = ({ apiExperiment, apiCore, apiModel }: IProps) => (
         exact={true}
         path="/v3/experiment/:slug"
         render={() => (
-          <ScreenExperimentCreate
+          <ExperimentCreate
             apiExperiment={apiExperiment}
             apiCore={apiCore}
             apiModel={apiModel}

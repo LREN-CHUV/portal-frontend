@@ -3,15 +3,14 @@ import DropdownModel from "@app/components/UI/DropdownModel";
 import { IExperimentResult, IMethodDefinition, IModelResult } from "@app/types";
 import * as React from "react";
 import { Button, FormControl, Panel } from "react-bootstrap";
-
 interface IProps {
   title: string | undefined;
   models: IModelResult[] | undefined;
   experiments: IExperimentResult[] | undefined;
-  selectedMethod: IMethodDefinition | undefined;
-  handleSelectModel: any;
-  handleSelectExperiment: any;
-  handleSaveAndRunExperiment: any;
+  method: IMethodDefinition | undefined;
+  handleSelectModel: (model: IModelResult) => Promise<any>;
+  handleSelectExperiment: (experiment: IExperimentResult) => Promise<any>;
+  handleSaveAndRunExperiment: (experimentName: string) => Promise<any>;
 }
 interface IState {
   experimentName: string;
@@ -27,7 +26,7 @@ export default class Header extends React.Component<IProps, IState> {
       experiments,
       models,
       title,
-      selectedMethod,
+      method,
       handleSelectModel,
       handleSelectExperiment,
       handleSaveAndRunExperiment
@@ -35,7 +34,7 @@ export default class Header extends React.Component<IProps, IState> {
     const { experimentName } = this.state;
 
     return (
-      <Panel className="experiment-header">
+      <Panel>
         <Panel.Body>
           <h3>
             Create Experiment on{" "}
@@ -47,7 +46,7 @@ export default class Header extends React.Component<IProps, IState> {
               />
             )}
           </h3>
-          <div className="create-experiment-container">
+          <div className="actions">
             <div className="item">
               <FormControl
                 className="item experiment-name"
@@ -62,7 +61,7 @@ export default class Header extends React.Component<IProps, IState> {
                 //tslint:disable
                 onClick={() => handleSaveAndRunExperiment(experimentName)}
                 bsStyle="info"
-                disabled={selectedMethod === undefined}
+                disabled={method === undefined}
               >
                 Run Experiment
               </Button>

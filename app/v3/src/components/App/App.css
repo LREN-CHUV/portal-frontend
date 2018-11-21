@@ -1,3 +1,7 @@
+body {
+  overflow-y: scroll !important;
+}
+
 @font-face {
   font-family: Open Sans Condensed;
   src: url(../../fonts/open-sans-condensed-v12-latin-700.eot);
@@ -5,7 +9,8 @@
       format("embedded-opentype"),
     url(../../fonts/open-sans-condensed-v12-latin-700.woff) format("woff"),
     url(../../fonts/open-sans-condensed-v12-latin-700.ttf) format("truetype"),
-    url(../../fonts/open-sans-condensed-v12-latin-700.svg#OpenSans) format("svg");
+    url(../../fonts/open-sans-condensed-v12-latin-700.svg#OpenSans)
+      format("svg");
   font-weight: 700;
   font-style: normal;
 }

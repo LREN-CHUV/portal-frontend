@@ -81,14 +81,16 @@ class Experiment extends React.Component<IProps> {
             handleCreateNewExperiment={this.handleCreateNewExperiment}
           />
         </div>
-        <div className="sidebar2">
+        <div className="content">
+        <div className="sidebar">
           <Model model={apiModel.state.model} />
         </div>
-        <div className="content">
+        <div className="results">
           <ExperimentResult experimentState={apiExperiment.state} />
         </div>
-        <div className="sidebar">
+        <div className="sidebar2">
           {methodDisplay(apiExperiment.state.experiment)}
+        </div>
         </div>
       </div>
     );

@@ -1,5 +1,5 @@
 import { APICore, APIExperiment, APIModel } from "@app/components/API"; // as interfaces
-import ScreenApp from "@app/components/App/App";
+import App from "@app/components/App/App";
 import config from "@app/config";
 import * as React from "react";
 import { BrowserRouter as Router } from "react-router-dom";
@@ -8,7 +8,7 @@ import UNSTATED from "unstated-debug";
 
 UNSTATED.logStateChanges = process.env.NODE_ENV === "development";
 
-class App extends React.Component {
+class AppContainer extends React.Component {
   private apiExperiment = new APIExperiment(config);
   private apiModel = new APIModel(config);
   private apiCore = new APICore(config);
@@ -42,7 +42,7 @@ class App extends React.Component {
               apiModel: APIModel
             ) => {
               return (
-                <ScreenApp
+                <App
                   apiExperiment={apiExperiment}
                   apiCore={apiCore}
                   apiModel={apiModel}
@@ -56,4 +56,4 @@ class App extends React.Component {
   }
 }
 
-export default App;
+export default AppContainer;
