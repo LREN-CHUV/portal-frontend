@@ -1,4 +1,3 @@
-// tslint:disable:no-console
 import { IModelResult } from "@app/types";
 import * as React from "react";
 import { DropdownButton, MenuItem } from "react-bootstrap";

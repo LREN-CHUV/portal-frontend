@@ -1,4 +1,3 @@
-// tslint:disable:no-console
 import { MIME_TYPES, SCORES } from "@app/constants";
 import {
   IExperimentResult,
@@ -129,7 +128,10 @@ class ParseExperiment {
 
         case MIME_TYPES.HTML:
           const html = results.map((result1: any) =>
-            result1.replace("\u0026lt;!DOCTYPE html\u0026gt;", "<!DOCTYPE html>")
+            result1.replace(
+              "\u0026lt;!DOCTYPE html\u0026gt;",
+              "<!DOCTYPE html>"
+            )
           );
           method.data = html;
           break;
@@ -179,7 +181,7 @@ class ParseExperiment {
                 break;
 
               default:
-                throw new Error(`"!!!!!!!! SHOULD TEST" ${subResult.type}`)
+                throw new Error(`"!!!!!!!! SHOULD TEST" ${subResult.type}`);
                 break;
             }
           });
@@ -204,17 +206,19 @@ class ParseExperiment {
       //     node.methods.push(method);
       //   }
       // } else {
-        const node: INode = {
-          methods: [method],
-          name: r.node || "Default"
-        };
-        // node.methods.push(method);
+      const node: INode = {
+        methods: [method],
+        name: r.node || "Default"
+      };
+      // node.methods.push(method);
       //   nodes.push(node);
       // }
       nodes.push(node);
     });
     // console.log({nodes})
-    experimentResult.results = nodes.sort((a:INode, b:INode) => a.name.localeCompare(b.name));
+    experimentResult.results = nodes.sort((a: INode, b: INode) =>
+      a.name.localeCompare(b.name)
+    );
 
     return experimentResult;
   };

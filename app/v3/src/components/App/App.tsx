@@ -1,61 +1,53 @@
-// tslint:disable:no-console
+// tslint:disable jsx-no-lambda
 
-import { APICore, APIExperiment, APIModel } from "@app/components/API"; // as interfaces
-import config from "@app/config";
-import ScreenApp from "@app/screens/App";
+import { APICore, APIExperiment, APIModel } from "@app/components/API";
+import ExperimentResult from "@app/components/Experiment/Result/Container";
+import Experiments from "@app/components/Experiments/Experiments";
+import Explore from "@app/components/Explore/NativeBubble";
+import Navigation from "@app/components/UI/Navigation";
+import ScreenExperimentCreate from "@app/screens/Experiment/Create";
 import * as React from "react";
-import { BrowserRouter as Router } from "react-router-dom";
-import { Provider, Subscribe } from "unstated";
-import UNSTATED from "unstated-debug";
+import { Route } from "react-router-dom";
 
-UNSTATED.logStateChanges = process.env.NODE_ENV === "development";
+import "node_modules/bootstrap/dist/css/bootstrap.css";
+import "./App.css";
 
-class App extends React.Component {
-  private apiExperiment = new APIExperiment(config);
-  private apiModel = new APIModel(config);
-  private apiCore = new APICore(config);
-
-  private intervalId: NodeJS.Timer;
-
-  public async componentWillMount() {
-    this.intervalId = setInterval(() => this.apiExperiment.all(), 10 * 1000);
-
-    return await Promise.all([
-      this.apiExperiment.all(),
-      this.apiCore.variables(),
-      this.apiCore.datasets(),
-      this.apiCore.algorithms(),
-      this.apiModel.all()
-    ]);
-  }
-
-  public componentWillUnmount() {
-    clearInterval(this.intervalId);
-  }
-
-  public render() {
-    return (
-      <Router>
-        <Provider inject={[this.apiExperiment, this.apiCore, this.apiModel]}>
-          <Subscribe to={[APIExperiment, APICore, APIModel]}>
-            {(
-              apiExperiment: APIExperiment,
-              apiCore: APICore,
-              apiModel: APIModel
-            ) => {
-              return (
-                <ScreenApp
-                  apiExperiment={apiExperiment}
-                  apiCore={apiCore}
-                  apiModel={apiModel}
-                />
-              );
-            }}
-          </Subscribe>
-        </Provider>
-      </Router>
-    );
-  }
+interface IProps {
+  apiExperiment: APIExperiment;
+  apiCore: APICore;
+  apiModel: APIModel;
 }
+
+const App = ({ apiExperiment, apiCore, apiModel }: IProps) => (
+  <div className="App">
+    <header>
+      <Navigation apiExperiment={apiExperiment} apiModel={apiModel} />
+    </header>
+    <section>
+      <Route path="/v3/explore" render={() => <Explore apiCore={apiCore} />} />
+      <Route
+        path="/v3/experiments"
+        render={() => <Experiments apiExperiment={apiExperiment} />}
+      />
+      <Route
+        path="/v3/experiment/:slug/:uuid"
+        render={() => (
+          <ExperimentResult apiExperiment={apiExperiment} apiModel={apiModel} />
+        )}
+      />
+      <Route
+        exact={true}
+        path="/v3/experiment/:slug"
+        render={() => (
+          <ScreenExperimentCreate
+            apiExperiment={apiExperiment}
+            apiCore={apiCore}
+            apiModel={apiModel}
+          />
+        )}
+      />
+    </section>
+  </div>
+);
 
 export default App;

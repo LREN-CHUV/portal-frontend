@@ -1,4 +1,3 @@
-// tslint:disable:no-console
 import { APIExperiment } from "@app/components/API";
 import { IExperimentResult } from "@app/types";
 import * as React from "react";

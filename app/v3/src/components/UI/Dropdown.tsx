@@ -1,4 +1,3 @@
-// tslint:disable:no-console
 import { IExperimentResult } from "@app/types";
 import * as moment from "moment";
 import * as React from "react";
@@ -70,7 +69,7 @@ export default ({
             </MenuItem>
           );
         })) || (
-      <div style={{ margin: '8px' }}>
+      <div style={{ margin: "8px" }}>
         <p>You have no running experiments.</p>
         <p>
           You can start one by selecting a model and configuring an experiment

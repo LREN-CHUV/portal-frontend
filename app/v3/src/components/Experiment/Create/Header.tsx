@@ -8,19 +8,18 @@ interface IProps {
   title: string | undefined;
   models: IModelResult[] | undefined;
   experiments: IExperimentResult[] | undefined;
+  selectedMethod: IMethodDefinition | undefined;
   handleSelectModel: any;
   handleSelectExperiment: any;
   handleSaveAndRunExperiment: any;
 }
 interface IState {
   experimentName: string;
-  selectedMethod: IMethodDefinition | undefined;
 }
 
 export default class Header extends React.Component<IProps, IState> {
   public state = {
-    experimentName: "",
-    selectedMethod: undefined
+    experimentName: ""
   };
 
   public render() {
@@ -28,11 +27,12 @@ export default class Header extends React.Component<IProps, IState> {
       experiments,
       models,
       title,
+      selectedMethod,
       handleSelectModel,
       handleSelectExperiment,
       handleSaveAndRunExperiment
     } = this.props;
-    const { experimentName, selectedMethod } = this.state;
+    const { experimentName } = this.state;
 
     return (
       <Panel className="experiment-header">
@@ -59,12 +59,8 @@ export default class Header extends React.Component<IProps, IState> {
             </div>
             <div className="item">
               <Button
-              //tslint:disable 
-                onClick={() =>
-                  handleSaveAndRunExperiment({
-                    selectedMethod
-                  })
-                }
+                //tslint:disable
+                onClick={() => handleSaveAndRunExperiment(experimentName)}
                 bsStyle="info"
                 disabled={selectedMethod === undefined}
               >

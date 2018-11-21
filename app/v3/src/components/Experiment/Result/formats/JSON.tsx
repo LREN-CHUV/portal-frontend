@@ -1,5 +1,3 @@
-// tslint:disable:no-console
-
 import { LABELS } from "@app/constants";
 import { round } from "@app/utils";
 import * as React from "react";

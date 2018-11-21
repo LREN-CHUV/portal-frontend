@@ -1,6 +1,6 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import { default as App } from "./components/App/App";
+import { default as App } from "./components/App/AppContainer";
 import "./index.css";
 import { unregister } from "./registerServiceWorker";
 

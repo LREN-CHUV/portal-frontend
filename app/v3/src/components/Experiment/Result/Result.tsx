@@ -1,4 +1,3 @@
-// tslint:disable:no-console
 import { MIME_TYPES } from "@app/constants";
 import { IExperiment, INode } from "@app/types";
 import * as React from "react";
@@ -7,11 +6,7 @@ import { Highchart, JSON, PFA, Plotly } from "./formats";
 
 // import "../Experiment.css";
 
-export default ({
-  experimentState
-}: {
-  experimentState: IExperiment;
-}) => {
+export default ({ experimentState }: { experimentState: IExperiment }) => {
   const experiment = experimentState && experimentState.experiment;
   const nodes = experiment && experiment.results;
   const error =

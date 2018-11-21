@@ -1,4 +1,3 @@
-// tslint:disable:no-console
 import { APIExperiment, APIModel } from "@app/components/API";
 import Model from "@app/components/UI/Model";
 import { IExperimentResult } from "@app/types";

@@ -14,13 +14,13 @@ class NativeBubble extends Component<any> {
     }
 
     const iterate = (node: any): any => {
-    //   const r = (Math.random * 600);
+      //   const r = (Math.random * 600);
       const obj = {
-          code: node.code,
-          loc: Math.random(),
-          r: 1,
-          x: 0,
-          y: 0
+        code: node.code,
+        loc: Math.random(),
+        r: 1,
+        x: 0,
+        y: 0
       };
 
       return node.groups || node.variables
@@ -29,8 +29,8 @@ class NativeBubble extends Component<any> {
             children: node.groups
               ? node.groups.map((n: any) => iterate(n))
               : node.variables
-                ? node.variables.map((n: any) => iterate(n))
-                : null
+              ? node.variables.map((n: any) => iterate(n))
+              : null
           }
         : obj;
     };

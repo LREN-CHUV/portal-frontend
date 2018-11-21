@@ -1,17 +1,12 @@
-// tslint:disable:no-console
 import { APICore, APIExperiment, APIModel } from "@app/components/API";
 import ExperimentCreate from "@app/components/Experiment/Create/Create";
 import ExperimentCreateHeader from "@app/components/Experiment/Create/Header";
+import { Alert, IAlert } from "@app/components/UI/Alert";
 import AvailableMethods from "@app/components/UI/AvailableMethods";
-// import { Alert, IAlert } from "@app/components/UI/Alert";
 import UIModel from "@app/components/UI/Model";
-import { IExperimentResult, IMethodDefinition, IModelResult } from "@app/types";
+import { IAlgorithm, IExperimentResult, IModelResult } from "@app/types";
 import * as React from "react";
-import {
-  Panel,
-  Tab,
-  Tabs
-} from "react-bootstrap";
+import { Panel, Tab, Tabs } from "react-bootstrap";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 
 import "./Experiment.css";
@@ -24,17 +19,39 @@ interface IProps extends RouteComponentProps<any> {
 
 interface IState {
   parameters?: object;
-  // alert: IAlert | undefined;
+  model: IModelResult | undefined;
+  selectedMethod: IAlgorithm | undefined;
+  alert: IAlert;
 }
 
 class Create extends React.Component<IProps, IState> {
-  public state = {
-    // alert: undefined
+  public state: IState;
+
+  public async componentDidMount() {
+    const {
+      match: {
+        params: { slug }
+      }
+    } = this.props;
+    const { apiModel } = this.props;
+    await apiModel.one(slug);
+
+    return this.setState({ model: apiModel.state.model });
+  }
+
+  public componentWillReceiveProps = (props: any) => {
+    const {
+      apiModel: {
+        state: { model }
+      }
+    } = props;
+
+    return this.setState({ model });
   };
 
   public render() {
     const { apiCore, apiModel, apiExperiment } = this.props;
-    // const { alert } = this.state;
+    const alert = this.state && this.state.alert;
     const title = apiModel.state.model && apiModel.state.model.title;
 
     return (
@@ -44,6 +61,7 @@ class Create extends React.Component<IProps, IState> {
             title={title}
             models={apiModel.state.models}
             experiments={apiExperiment.state.experiments}
+            selectedMethod={this.state && this.state.selectedMethod}
             handleSelectModel={this.handleSelectModel}
             handleSelectExperiment={this.handleSelectExperiment}
             handleSaveAndRunExperiment={this.handleSaveAndRunExperiment}
@@ -60,13 +78,13 @@ class Create extends React.Component<IProps, IState> {
               </div>
             </Panel.Title>
             <Panel.Body>
-              {/* {alert && (
+              {alert && (
                 <Alert
-                  message={alert!.message}
+                  message={alert.message}
                   title={alert.title}
                   style={alert.style}
                 />
-              )} */}
+              )}
               <Tabs
                 defaultActiveKey={1}
                 id="uncontrolled-create-experiment-tab"
@@ -75,7 +93,9 @@ class Create extends React.Component<IProps, IState> {
                   <ExperimentCreate
                     apiExperiment={apiExperiment}
                     apiCore={apiCore}
-                    apiModel={apiModel}
+                    model={this.state && this.state.model}
+                    handleUpdateModel={this.handleUpdateModel}
+                    selectedMethod={this.state && this.state.selectedMethod}
                   />
                 </Tab>
                 <Tab eventKey={2} title="About running experiments">
@@ -130,8 +150,25 @@ class Create extends React.Component<IProps, IState> {
     return await apiModel.one(slug);
   };
 
-  private handleSelectMethod = (event: any, selectedMethod: any) => {
-    console.log(event, selectedMethod);
+  private handleSelectMethod = (event: any, selectedMethod: IAlgorithm) => {
+    event.preventDefault();
+    const methodParameters =
+      (selectedMethod && selectedMethod.parameters) || undefined;
+
+    const parameters = {};
+    if (methodParameters) {
+      methodParameters.forEach((p: any) => {
+        parameters[p.code] = p.default_value;
+      });
+    }
+    this.setState({
+      parameters,
+      selectedMethod
+    });
+  };
+
+  private handleUpdateModel = (model: IModelResult) => {
+    this.setState({ model });
   };
 
   private handleSelectExperiment = async (
@@ -144,53 +181,74 @@ class Create extends React.Component<IProps, IState> {
     return await apiExperiment.one(uuid);
   };
 
-  private handleSaveAndRunExperiment = async (
-    selectedMethod: IMethodDefinition
-  ) => {
-    console.log(selectedMethod);
-    // this.setState({ alert: undefined });
-    // const { apiModel, apiExperiment, history} = this.props
-    // const { model } = this.state;
+  private handleSaveAndRunExperiment = async (experimentName: string) => {
+    const { apiModel, apiExperiment, history } = this.props;
 
-    // await apiModel.update(model);
-    // const validation =
-    //  public    //   model &&
-    //   model.query &&
-    //   model.query.validationDatasets &&
-    //   model.query.validationDatasets.length
-    //     ? true
-    //     : false;
-    // const exp = {
-    //   algorithms: [
-    //     {
-    //       code: selectedMethod.code,
-    //       name: selectedMethod.code,
-    //       parameters: [parameters],
-    //       validation
-    //     }
-    //   ],
-    //   model: model!.slug,
-    //   name: selectedMethod,
-    //   validations: []
-    // };
+    if (!this.state) {
+      return;
+    }
+    const { model, parameters } = this.state;
 
-    // let uuid;
-    // await apiExperiment.create(exp);
-    // const { experiment, error } = apiExperiment.state;
+    if (!model) {
+      return;
+    }
 
-    // if (error) {
-    //   this.setState({
-    //     alert: {
-    //       message: `${error}`
-    //     }
-    //   });
+    const selectedMethod = this.state && this.state.selectedMethod;
+    if (!experimentName) {
+      this.setState({
+        alert: {
+          message: "Please enter a name for the experiment",
+          style: "info",
+          title: "Info"
+        }
+      });
+      return;
+    }
 
-    //   return;
-    // }
+    if (!selectedMethod) {
+      this.setState({ alert: { message: "selectedMethod" } });
+      return;
+    }
 
-    // uuid = experiment && experiment.uuid;
+    await apiModel.update(model);
+    const validation =
+      model &&
+      model.query &&
+      model.query.validationDatasets &&
+      model.query.validationDatasets.length
+        ? true
+        : false;
+    const exp = {
+      algorithms: [
+        {
+          code: selectedMethod.code,
+          name: selectedMethod.code,
+          parameters: [parameters],
+          validation
+        }
+      ],
+      model: model.slug,
+      name: experimentName,
+      validations: []
+    };
 
-    // history.push(`/v3/experiment/${model && model.slug}/${uuid}`);
+    let uuid;
+    await apiExperiment.create(exp);
+    const { experiment, error } = apiExperiment.state;
+
+    if (error) {
+      this.setState({
+        alert: {
+          message: `${error}`
+        }
+      });
+
+      return;
+    }
+
+    uuid = experiment && experiment.uuid;
+
+    history.push(`/v3/experiment/${model && model.slug}/${uuid}`);
   };
 }
 

@@ -1,4 +1,3 @@
-// tslint:disable:no-console
 import { APIExperiment, APIModel } from "@app/components/API";
 // import logo from "../images/hbp-logo.png";
 import Dropdown from "@app/components/UI/Dropdown";

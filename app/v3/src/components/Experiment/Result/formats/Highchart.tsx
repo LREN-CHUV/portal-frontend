@@ -1,5 +1,3 @@
-// tslint:disable:no-console
-
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import * as React from "react";

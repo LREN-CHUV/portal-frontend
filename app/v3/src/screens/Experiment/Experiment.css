@@ -2,11 +2,15 @@
   display: grid;
   padding: 0 48px;
   grid-gap: 8px;
-  grid-template-columns: 200px auto 200px;
+  grid-template-columns: 224px auto 224px;
   grid-template-areas:
     "header  header  header"
     "sidebar2 content sidebar";
 }
+
+/* .caret {
+  display: none !important
+} */
 
 .sidebar {
   grid-area: sidebar;
@@ -54,6 +58,10 @@
   align-self: center;
 }
 
+.create-experiment-container .item {
+  margin: 0 8px;
+}
+
 .Experiment .btn-info {
   font-weight: 700 !important;
 }
@@ -93,8 +101,8 @@ flex: 0 1 auto
 }
 
 .experiment-name {
-  width: 180px;
-  margin: 0 4px
+  width: 160px;
+  margin: 0 16px
 }
 
 fieldset {

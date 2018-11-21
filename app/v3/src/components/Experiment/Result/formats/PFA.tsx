@@ -1,5 +1,3 @@
-// tslint:disable:no-console
-
 import { SCORES } from "@app/constants";
 import {
   IConfusionMatrix,

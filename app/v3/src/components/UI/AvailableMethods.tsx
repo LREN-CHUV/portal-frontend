@@ -1,6 +1,7 @@
 import { APICore } from "@app/components/API";
 import { IModelResult } from "@app/types";
 import * as React from "react";
+import { Button } from "react-bootstrap";
 
 const AvailableMethods = ({
   apiCore,
@@ -91,14 +92,17 @@ const AvailableMethods = ({
     <React.Fragment>
       {availableMethods.map((a: any) => (
         <div className="method" key={a.code}>
-          <a
+          <Button
+            key={a.code}
+            bsStyle="link"
             title={a.description}
             // tslint:disable-next-line jsx-no-lambda
             onClick={event => handleSelectMethod(event, a)}
-            style={a.enabled ? { color: "green" } : { color: "gray" }}
+            style={{ "textTransform": "none", "padding": 0, color: a.enabled ? "#337ab7" : "gray"}}
+            disabled={!a.enabled}
           >
             {a.label}
-          </a>
+          </Button>
         </div>
       ))}
     </React.Fragment>

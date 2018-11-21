@@ -1,4 +1,3 @@
-// tslint:disable:no-console
 import { ICoreDataContainer } from "@app/types";
 import * as dotenv from "dotenv";
 import request from "request-promise-native";

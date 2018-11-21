@@ -2,7 +2,7 @@ import * as React from "react";
 import { Alert as BSAlert } from "react-bootstrap";
 
 export interface IAlert {
-  message: string;
+  message: string | undefined;
   style?: string;
   title?: string;
 }

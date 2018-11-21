@@ -1,4 +1,3 @@
-// tslint:disable:no-console
 import { IModel, IModelResult } from "@app/types";
 import * as dotenv from "dotenv";
 import request from "request-promise-native";
