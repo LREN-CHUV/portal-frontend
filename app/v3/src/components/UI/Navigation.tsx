@@ -100,7 +100,7 @@ class Navigation extends React.Component<IProps> {
               </a>
             </li>
 
-            <li className="toolbar-icon-bg hidden-xs">
+            <li className="toolbar-icon-bg hidden-xs bsd">
               <span title="Biological Signature of Diseases">
                 <Dropdown
                   items={apiExperiment.state.experiments}

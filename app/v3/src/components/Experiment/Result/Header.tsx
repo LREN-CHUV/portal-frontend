@@ -27,13 +27,14 @@ export default ({
           Results of Experiment <strong>{name}</strong> on{" "}
           <a href={`/models/${modelDefinitionId}`}>{modelDefinitionId}</a>
         </h3>
-        <div className="info-actions">
+        <div className="actions status">
           <h5 className="item">
             Created{" "}
             {experiment &&
               moment(new Date(experiment.created), "YYYYMMDD").fromNow()}{" "}
             by {experiment && experiment.user.username}
           </h5>
+          <div className="item text">{" "}</div>
           <div className="item">
             <Button bsStyle="info">SHARE EXPERIMENT</Button>
           </div>

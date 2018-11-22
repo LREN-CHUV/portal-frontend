@@ -1,4 +1,9 @@
-.glyph {
+.dropdown-menu {
+  overflow: hidden;
+  min-width: 256px !important;
+}
+
+.dropdown-menu .glyph {
   position: relative;
   top: 2px;
   display: inline-block;
@@ -10,14 +15,19 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.viewed {
-    color: gray;
+.dropdown-menu .viewed {
+  color: gray;
 }
 
-.ready {
-    color: #4cae4c
+.dropdown-menu .ready {
+  color: #4cae4c;
 }
 
-.loading {
-    color: #5bc0de;
+.dropdown-menu .loading {
+  color: #5bc0de;
+}
+
+#model-dropdown .caret:before,
+#experiment-dropdown .caret:before {
+  display: none !important;
 }

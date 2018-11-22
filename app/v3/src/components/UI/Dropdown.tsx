@@ -26,14 +26,17 @@ export default ({
     title={title}
   >
     {handleCreateNewExperiment && (
-      <MenuItem
-        eventKey={"newexperiment"}
-        key={"newexperiment"}
-        // tslint:disable-next-line jsx-no-lambda
-        onSelect={() => handleCreateNewExperiment()}
-      >
-        <strong>Create New Experiment</strong>
-      </MenuItem>
+      <React.Fragment>
+        <MenuItem
+          eventKey={"newexperiment"}
+          key={"newexperiment"}
+          // tslint:disable-next-line jsx-no-lambda
+          onSelect={() => handleCreateNewExperiment()}
+        >
+          <strong>Create New Experiment</strong>
+        </MenuItem>
+        <MenuItem>---------------------------</MenuItem>
+      </React.Fragment>
     )}
     {(items &&
       handleSelect &&

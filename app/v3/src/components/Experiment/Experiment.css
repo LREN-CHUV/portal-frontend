@@ -10,7 +10,7 @@
 
 .Experiment .header h3 {
   padding: 0 !important;
-  margin: 8px 0 0 0;
+  height: 34px;
 }
 
 .Experiment .header .actions {
@@ -18,13 +18,17 @@
   justify-content: flex-end;
 }
 
-.Experiment .header .info-actions {
-  display: grid;
-  grid-template-columns: auto 190px 200px;
+.Experiment .header .status {
+  display: flex;
+  justify-content: flex-start;
 }
 
 .Experiment .header .actions .item {
-  margin-left: 8px;
+  margin-left: 4px;
+}
+
+.Experiment .header .actions .text {
+  flex: 1 auto
 }
 
 /* design header */
@@ -55,8 +59,9 @@
   margin-left: 8px;
 }
 
-.Experiment .content .parameters {
-  flex: 1 1 auto;
+.Experiment .content .parameters,
+.Experiment .content .results {
+  flex: 1 auto;
 }
 
 /* design content */
