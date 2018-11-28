@@ -18,6 +18,12 @@ COPY . /frontend
 
 RUN gulp build
 
+WORKDIR /frontend/app/v3/
+RUN yarn global add react-scripts-ts
+RUN yarn global add typescript
+RUN yarn install
+RUN yarn build
+
 
 FROM nginx:1.13.0-alpine
 
@@ -51,6 +57,7 @@ COPY docker/runner/run.sh /
 # Add front end resources
 # COPY ./dist/ /usr/share/nginx/html/
 COPY --from=builder /frontend/dist /usr/share/nginx/html/
+COPY --from=builder /frontend/app/v3/build /usr/share/nginx/html/v3/
 
 # Protected files folder
 ENV PROTECTED_DIR /protected

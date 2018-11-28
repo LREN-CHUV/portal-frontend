@@ -1,0 +1,14 @@
+.model h5 {
+    font-weight: bold;
+}
+
+.model .level-1 {
+    margin-left: 8px;
+}
+.model .level-2 {
+    margin-left: 8px;
+}
+
+.model var {
+    font-style: normal;
+  }

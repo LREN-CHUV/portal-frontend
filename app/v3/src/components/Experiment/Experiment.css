@@ -1,0 +1,97 @@
+/* layout header */
+
+.Experiment .header {
+  padding: 0 48px 8px 48px;
+}
+
+.Experiment .header .panel {
+  margin-bottom: 0px !important;
+}
+
+.Experiment .header h3 {
+  padding: 0 !important;
+  height: 34px;
+}
+
+.Experiment .header .actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.Experiment .header .status {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.Experiment .header .actions .item {
+  margin-left: 4px;
+}
+
+.Experiment .header .actions .text {
+  flex: 1 auto
+}
+
+/* design header */
+
+.Experiment .header .experiment-name {
+  width: 200px;
+}
+
+/* layout content */
+
+.Experiment .content {
+  display: flex;
+  padding: 0 48px;
+}
+
+.Experiment .content .sidebar,
+.Experiment .content .sidebar2 {
+  overflow: hidden;
+  width: 224px;
+  flex: 0 0 auto;
+}
+
+.Experiment .content .sidebar {
+  margin-right: 8px;
+}
+
+.Experiment .content .sidebar2 {
+  margin-left: 8px;
+}
+
+.Experiment .content .parameters,
+.Experiment .content .results {
+  flex: 1 auto;
+}
+
+/* design content */
+
+.Experiment .content .nav-tabs>li>a {
+  color: #03a9f4;
+  border-radius: 4px 4px 0 0;
+  background-color: #fff;
+  text-transform: capitalize;
+}
+
+.Experiment .content .nav-tabs li.active a,
+.Experiment .content .nav-tabs li.active a:focus,
+.Experiment .content .nav-tabs li.active a:hover {
+  color: #616161;
+  font-weight: 700;
+}
+
+.Experiment .content .tab-pane {
+  border: 0.5px #eeeeee solid;
+  padding: 1em;
+}
+
+.Experiment .content .method a {
+  font-size: 1em;
+  font-weight: bold;
+}
+
+.Experiment .content fieldset {
+  border: 1px solid lightgrey !important;
+  padding: 8px;
+  margin-bottom: 16px;
+}

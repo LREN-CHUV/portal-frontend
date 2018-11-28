@@ -26,10 +26,12 @@ angular.module("chuvApp.models").controller("ModelFooterController", [
 
     $scope.open_experiment = function() {
       if ($scope.model && $scope.model.slug) {
-        return $state.go("new_experiment", { model_slug: $scope.model.slug });
+        window.location.href = `/v3/experiment/${$scope.model.slug}`;
+        // return $state.go("new_experiment", { model_slug: $scope.model.slug });
       } else {
         $scope.saveModel();
       }
+      d;
     };
 
     $scope.copyModel = function() {

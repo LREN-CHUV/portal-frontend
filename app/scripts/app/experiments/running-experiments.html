@@ -1,16 +1,28 @@
 <li class="toolbar-icon-bg hidden-xs">
-  <a
-    href=""
-    title="{{'header.menu.bsd.title' | translate}}"
-    popover-trigger="'focus'"
-    popover-title="My experiments"
-    popover-is_open="is_open"
-    uib-popover-template="'/scripts/app/experiments/running-experiments-popover.html'"
-    popover-placement="bottom"
-    ui-sref-active="active">
+  <a>
     <span class="icon-bg">
       <i class="ng-binding">{{'header.menu.bsd' | translate}}</i>
       <span class="unread_count_badge" ng-if="unread_count" ng-bind="unread_count"></span>
     </span>
   </a>
+
+<div class="experiments-popover">
+  <div ng-if="experiments.length == 0">
+    <p>You have no running experiments.</p>
+    <p>
+      You can start one by selecting a model
+      and configuring an experiment on it.
+    </p>
+  </div>
+  <div class="bsd-menu-popover" ng-repeat="experiment in experiments | orderBy:'-finished' track by $index">
+    <span ng-if="!experiment.finished" class="fa fa-spin fa-spinner"></span>
+    <span ng-if="experiment.finished && !experiment.resultsViewed && experiment.hasError" class="fa fa-warning" style="color: darkorange"></span>
+    <span ng-if="experiment.finished && !experiment.resultsViewed && !experiment.hasError" class="fa fa-bell" style="color: darkgreen"></span>
+    <span ng-if="experiment.finished && experiment.resultsViewed" class="fa fa-eye" style="color: darkgrey"></span>
+    <a ng-click="switch_to_v3(experiment.model.slug, experiment.uuid)"
+    ng-bind="experiment.name"></a>
+    (<span style="font-size: 10px" ng-bind="experiment.created | fromNow"></span>)
+  </div>
+</div>
+
 </li>

@@ -77,6 +77,10 @@ http {
         error_page 404 401 /index.html;
       }
 
+      location ^~ /v3/ {
+        try_files $uri /v3/index.html;
+      }
+
       location /protected/ {
         internal;
         alias   /protected/;

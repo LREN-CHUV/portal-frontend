@@ -40,10 +40,11 @@ angular
                   return promise.then(
                     function(result) {
                       //$state.go(result.data.uuid);
-                      $state.go("experiment_details", {
-                        model_slug: $scope.model.slug,
-                        experiment_uuid: result.data.uuid
-                      });
+                      window.location.href = `/v3/experiment/${$scope.model.slug}`;
+                      // $state.go("experiment_details", {
+                      //   model_slug: $scope.model.slug,
+                      //   experiment_uuid: result.data.uuid
+                      // });
                     },
                     function() {
                       $scope.error = true;
@@ -73,6 +74,11 @@ angular
             $scope.is_open = false;
             $scope.experiments = [];
             $scope.unread_count = 0;
+
+            $scope.switch_to_v3 = function(slug, uuid) {
+              console.log("switch_to_v3");
+              window.location.href = `/v3/experiment/${slug}/${uuid}`;
+            };
 
             $scope.should_display = function() {
               return $scope.is_open || $state.is("experiment");
@@ -197,7 +203,7 @@ angular
                   })
                   .join("") +
                 "</table>" +
-                '<p><a href="/experiment/' +
+                '<p><a href="/v3/experiment/' +
                 experiment.model.slug +
                 "/" +
                 experiment.uuid +

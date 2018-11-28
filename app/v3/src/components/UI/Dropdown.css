@@ -1,0 +1,33 @@
+.dropdown-menu {
+  overflow: hidden;
+  min-width: 256px !important;
+}
+
+.dropdown-menu .glyph {
+  position: relative;
+  top: 2px;
+  display: inline-block;
+  font-family: "Glyphicons Halflings";
+  font-style: normal;
+  font-weight: normal;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.dropdown-menu .viewed {
+  color: gray;
+}
+
+.dropdown-menu .ready {
+  color: #4cae4c;
+}
+
+.dropdown-menu .loading {
+  color: #5bc0de;
+}
+
+#model-dropdown .caret:before,
+#experiment-dropdown .caret:before {
+  display: none !important;
+}

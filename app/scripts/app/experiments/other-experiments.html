@@ -13,7 +13,9 @@
     </li>
     <li class="divider"></li>
     <li ng-repeat="experiment in model_experiments | orderBy:'-created'">
-      <a ui-sref="experiment_details({model_slug: modelSlug, experiment_uuid: experiment.uuid})" ui-draggable="true" drag="get_drag_data(experiment)">
+      <a
+        ng-click="switch_to_v3(modelSlug, experiment.uuid)"
+        ui-draggable="true" drag="get_drag_data(experiment)">
         <b ng-bind="experiment.name"></b>
         <span style="font-size: 12px">
           -
