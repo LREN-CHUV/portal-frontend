@@ -1,18 +1,32 @@
 .dropdown-menu {
-  overflow: hidden;
   min-width: 256px !important;
+  padding: 12px 0 !important;
+}
+
+.dropdown-menu li {
+  overflow-wrap: break-word !important;
+  word-wrap: break-word !important;
+}
+
+.dropdown-menu li a {
+  line-height: 150% !important;
+  white-space: pre-line !important;
 }
 
 .dropdown-menu .glyph {
   position: relative;
-  top: 2px;
-  display: inline-block;
+  top: 3px;
   font-family: "Glyphicons Halflings";
   font-style: normal;
   font-weight: normal;
   line-height: 1;
+  margin-right: 4px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.dropdown-menu .time {
+  font-size: 0.8em;
 }
 
 .dropdown-menu .viewed {

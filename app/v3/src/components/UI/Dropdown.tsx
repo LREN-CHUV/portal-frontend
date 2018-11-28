@@ -65,10 +65,10 @@ export default ({
               onSelect={() => handleSelect(experiment)}
             >
               <span className={experimentState} />
-              {"  "}
-              <strong>{experiment.name}</strong>
-              {" - "}
-              {moment(experiment.created, "YYYYMMDD").fromNow()}
+              {" "}
+              {experiment.name}
+              {" "}
+              <span className={'time'}>({moment(experiment.created, "YYYYMMDD").fromNow()})</span>
             </MenuItem>
           );
         })) || (

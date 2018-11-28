@@ -11,4 +11,5 @@
 
 .model var {
     font-style: normal;
+    overflow-wrap: break-word;
   }

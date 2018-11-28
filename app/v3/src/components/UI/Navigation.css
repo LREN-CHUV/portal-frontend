@@ -279,17 +279,7 @@ button {
   font-size: inherit;
   line-height: inherit;
 }
-a,
-a:focus,
-a:hover {
-  color: #03a9f4;
-  text-decoration: none;
-}
-a:focus {
-  outline: dotted thin;
-  outline: -webkit-focus-ring-color auto 5px;
-  outline-offset: -2px;
-}
+
 .img-circle {
   border-radius: 50%;
 }
@@ -1132,13 +1122,7 @@ i.ti {
   transition: all 0.3s ease;
   color: #000;
 }
-#topnav .navbar-nav .dropdown-menu li a:hover {
-  background: #f0f0f0;
-  color: #ff8c8c;
-}
-#topnav .navbar-nav .dropdown-menu li a:hover i {
-  color: #ff8c8c;
-}
+
 #topnav .toolbar a {
   padding: 0 2px;
   margin: 0;
