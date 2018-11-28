@@ -30,6 +30,7 @@ class ParseExperiment {
       modelDefinitionId,
       name: experiment.name,
       resultsViewed: experiment.resultsViewed,
+      shared: experiment.shared,
       user: {
         fullname: experiment.createdBy.fullname,
         username: experiment.createdBy.username

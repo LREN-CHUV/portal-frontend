@@ -8,6 +8,7 @@ interface IProps {
   experiment: IExperimentResult | undefined;
   experiments: IExperimentResult[] | undefined;
   handleSelectExperiment: any;
+  handleShareExperiment: any;
   handleCreateNewExperiment: any;
 }
 
@@ -15,10 +16,12 @@ export default ({
   experiment,
   experiments,
   handleSelectExperiment,
+  handleShareExperiment,
   handleCreateNewExperiment
 }: IProps) => {
   const name = experiment && experiment.name;
   const modelDefinitionId = experiment && experiment.modelDefinitionId;
+  const shared = experiment && experiment.shared;
 
   return (
     <Panel>
@@ -34,9 +37,14 @@ export default ({
               moment(new Date(experiment.created), "YYYYMMDD").fromNow()}{" "}
             by {experiment && experiment.user.username}
           </h5>
-          <div className="item text">{" "}</div>
+          <div className="item text">&nbsp;</div>
           <div className="item">
-            <Button bsStyle="info">SHARE EXPERIMENT</Button>
+            <Button
+              bsStyle={'info'}
+              onClick={handleShareExperiment}
+            >
+              {shared ? 'UNSHARE EXPERIMENT' : 'SHARE EXPERIMENT'}
+            </Button>
           </div>
           <div className="item">
             <Dropdown

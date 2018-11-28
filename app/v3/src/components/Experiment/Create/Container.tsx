@@ -157,7 +157,7 @@ class Container extends React.Component<IProps, IState> {
     const { apiExperiment, history } = this.props;
     history.push(`/v3/experiment/${modelDefinitionId}/${uuid}`);
 
-    return await apiExperiment.one(uuid);
+    return await apiExperiment.one({ uuid });
   };
 
   private handleSaveAndRunExperiment = async (

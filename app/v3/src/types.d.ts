@@ -65,6 +65,7 @@
     algorithms: IAlgorithm[];
     modelDefinition?: IQuery;
     validations?: any;
+    shared: boolean;
   }
 
   export interface IVariableEntity {

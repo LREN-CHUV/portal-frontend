@@ -111,10 +111,10 @@ class Navigation extends React.Component<IProps> {
                     this.props.history.push(
                       `/v3/experiment/${modelDefinitionId}/${uuid}`
                     );
-                    await apiExperiment.markAsViewed(uuid);
+                    await apiExperiment.markAsViewed({ uuid });
                     await apiModel.one(modelDefinitionId);
 
-                    return await apiExperiment.one(uuid);
+                    return await apiExperiment.one({ uuid });
                   }}
                   handleCreateNewExperiment={null}
                   noCaret={true}

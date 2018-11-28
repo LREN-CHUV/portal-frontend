@@ -43,7 +43,7 @@ class Experiment extends React.Component<IProps> {
     const { uuid, slug } = params;
     const { apiExperiment, apiModel } = this.props;
 
-    await apiExperiment.one(uuid);
+    await apiExperiment.one({ uuid });
     if (!apiExperiment.loaded) {
       this.pollFetchExperiment(uuid);
     }
@@ -78,6 +78,7 @@ class Experiment extends React.Component<IProps> {
             experiment={apiExperiment.state.experiment}
             experiments={apiExperiment.state.experiments}
             handleSelectExperiment={this.handleSelectExperiment}
+            handleShareExperiment={this.handleShareExperiment}
             handleCreateNewExperiment={this.handleCreateNewExperiment}
           />
         </div>
@@ -111,14 +112,28 @@ class Experiment extends React.Component<IProps> {
     return match.params;
   };
 
-  private handleSelectExperiment = async (
-    selectedExperiment: IExperimentResult
-  ) => {
-    const { modelDefinitionId, uuid } = selectedExperiment;
+  private handleSelectExperiment = async (experiment: IExperimentResult) => {
+    const { modelDefinitionId, uuid } = experiment;
     const { history, apiExperiment } = this.props;
     history.push(`/v3/experiment/${modelDefinitionId}/${uuid}`);
-    await apiExperiment.markAsViewed(uuid);
-    return await apiExperiment.one(uuid);
+    await apiExperiment.markAsViewed({ uuid });
+    return await apiExperiment.one({ uuid });
+  };
+
+  private handleShareExperiment = async () => {
+    const { apiExperiment } = this.props;
+    const experiment = apiExperiment.state.experiment;
+    const shared = experiment && experiment.shared;
+    const params = this.urlParams(this.props);
+
+    if (!params) {
+      return;
+    }
+    
+    const { uuid } = params;
+    return shared
+      ? await apiExperiment.markAsUnshared({ uuid })
+      : await apiExperiment.markAsShared({ uuid });
   };
 
   private handleCreateNewExperiment = () => {
@@ -134,7 +149,7 @@ class Experiment extends React.Component<IProps> {
     clearInterval(this.intervalId);
     const { apiExperiment } = this.props;
     this.intervalId = setInterval(async () => {
-      await apiExperiment.one(uuid);
+      await apiExperiment.one({ uuid });
       if (apiExperiment.loaded) {
         clearInterval(this.intervalId);
       }

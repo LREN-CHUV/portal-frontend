@@ -6,6 +6,10 @@ import ParseExperiment from "./ParseExperiment";
 
 dotenv.config();
 
+interface IUUID {
+  uuid: string
+}
+
 class Experiment extends Container<IExperiment> {
   public state: IExperiment = {
     error: undefined,
@@ -27,7 +31,7 @@ class Experiment extends Container<IExperiment> {
     this.baseUrl = `${config.baseUrl}/experiments`;
   }
 
-  public one = async (uuid: string) => {
+  public one = async ({ uuid }: IUUID) => {
     try {
       const data = await request.get(`${this.baseUrl}/${uuid}`, this.options);
       const json = await JSON.parse(data);
@@ -96,10 +100,19 @@ class Experiment extends Container<IExperiment> {
     }
   };
 
-  public markAsViewed = async (uuid: string) => {
+  public markAsViewed = async ({ uuid }: IUUID) =>
+    this.markExperiment(uuid, "markAsViewed");
+
+  public markAsShared = async ({ uuid }: IUUID) =>
+    this.markExperiment(uuid, "markAsShared");
+
+  public markAsUnshared = async ({ uuid }: IUUID) =>
+    this.markExperiment(uuid, "markAsUnshared");
+
+  private markExperiment = async (uuid: string, action: string) => {
     try {
       const data = await request.get(
-        `${this.baseUrl}/${uuid}/markAsViewed`,
+        `${this.baseUrl}/${uuid}/${action}`,
         this.options
       );
       const json = await JSON.parse(data);
