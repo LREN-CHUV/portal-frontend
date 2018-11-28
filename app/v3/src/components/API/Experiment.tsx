@@ -7,7 +7,7 @@ import ParseExperiment from "./ParseExperiment";
 dotenv.config();
 
 interface IUUID {
-  uuid: string
+  uuid: string;
 }
 
 class Experiment extends Container<IExperiment> {
@@ -75,11 +75,10 @@ class Experiment extends Container<IExperiment> {
     }
   };
 
-  public create = async (params: any) => {
-    console.log(JSON.stringify(params), null, 4);
+  public create = async ({ experiment }: { experiment: any }) => {
     try {
       const data = await request({
-        body: JSON.stringify(params),
+        body: JSON.stringify(experiment),
         headers: {
           ...this.options.headers,
           "Content-Type": "application/json"
@@ -88,10 +87,10 @@ class Experiment extends Container<IExperiment> {
         uri: `${this.baseUrl}`
       });
       const json = await JSON.parse(data);
-      const experiment = ParseExperiment.parse(json);
+      const result = ParseExperiment.parse(json);
       return await this.setState({
         error: undefined,
-        experiment
+        experiment: result
       });
     } catch (error) {
       return await this.setState({

@@ -213,7 +213,7 @@ class Container extends React.Component<IProps, IState> {
       model.query.validationDatasets.length
         ? true
         : false;
-    const exp = {
+    const experiment = {
       algorithms: [
         {
           code: selectedMethod.code,
@@ -228,8 +228,8 @@ class Container extends React.Component<IProps, IState> {
     };
 
     let uuid;
-    await apiExperiment.create(exp);
-    const { experiment, error } = apiExperiment.state;
+    await apiExperiment.create({ experiment });
+    const { experiment: e, error } = apiExperiment.state;
 
     if (error) {
       this.setState({
@@ -241,8 +241,7 @@ class Container extends React.Component<IProps, IState> {
       return;
     }
 
-    uuid = experiment && experiment.uuid;
-
+    uuid = e && e.uuid;
     history.push(`/v3/experiment/${model && model.slug}/${uuid}`);
   };
 }
