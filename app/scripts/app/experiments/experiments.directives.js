@@ -137,6 +137,14 @@ angular
         controller: [
           "$scope",
           function($scope) {
+            $scope.switch_to_v3 = function(slug, uuid) {
+              window.location.href = `/v3/experiment/${slug}/${uuid}`;
+            };
+
+            $scope.switch_to_v3_experiment = function(slug) {
+              window.location.href = `/v3/experiment/${slug}`;
+            };
+
             $scope.open_popover = function() {
               MLUtils.list_experiments($scope.modelSlug).then(function(
                 response
