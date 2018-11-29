@@ -1,10 +1,16 @@
 import { APICore, APIExperiment, APIModel } from "@app/components/API";
+import Form from "@app/components/Experiment/Create/Form";
 import ExperimentCreateHeader from "@app/components/Experiment/Create/Header";
-import MethodParameters from "@app/components/Experiment/Create/MethodParameters";
 import { Alert, IAlert } from "@app/components/UI/Alert";
 import AvailableMethods from "@app/components/UI/AvailableMethods";
 import UIModel from "@app/components/UI/Model";
-import { IAlgorithm, IExperimentResult, IModelResult } from "@app/types";
+import {
+  IAlgorithm,
+  IExperimentParameters,
+  IExperimentResult,
+  IModelResult,
+  IQuery
+} from "@app/types";
 import * as React from "react";
 import { Panel, Tab, Tabs } from "react-bootstrap";
 import { RouteComponentProps, withRouter } from "react-router-dom";
@@ -18,10 +24,11 @@ interface IProps extends RouteComponentProps<any> {
 }
 
 interface IState {
-  parameters?: object;
-  model: IModelResult | undefined;
+  parameters?: any;
+  query: IQuery | undefined;
   method: IAlgorithm | undefined;
   alert: IAlert;
+  kfold: number;
 }
 
 class Container extends React.Component<IProps, IState> {
@@ -36,7 +43,9 @@ class Container extends React.Component<IProps, IState> {
     const { apiModel } = this.props;
     await apiModel.one(slug);
 
-    return this.setState({ model: apiModel.state.model });
+    return this.setState({
+      query: apiModel.state.model && apiModel.state.model.query
+    });
   }
 
   public componentWillReceiveProps = (props: any) => {
@@ -46,7 +55,7 @@ class Container extends React.Component<IProps, IState> {
       }
     } = props;
 
-    return this.setState({ model });
+    return this.setState({ query: model ? model.query : undefined });
   };
 
   public render() {
@@ -89,12 +98,13 @@ class Container extends React.Component<IProps, IState> {
                   id="uncontrolled-create-experiment-tab"
                 >
                   <Tab eventKey={1} title="Method">
-                    <MethodParameters
-                      apiExperiment={apiExperiment}
-                      apiCore={apiCore}
-                      model={this.state && this.state.model}
-                      handleUpdateModel={this.handleUpdateModel}
-                      nethod={this.state && this.state.method}
+                    <Form
+                      datasets={apiCore.state.datasets}
+                      query={this.state && this.state.query}
+                      method={this.state && this.state.method}
+                      handleUpdateQuery={this.handleUpdateQuery}
+                      handleChangeParameters={this.handleChangeParameters}
+                      handleChangeKFold={this.handleChangeKFold}
                     />
                   </Tab>
                   <Tab eventKey={2} title="About running experiments">
@@ -146,8 +156,19 @@ class Container extends React.Component<IProps, IState> {
     });
   };
 
-  private handleUpdateModel = (model: IModelResult): void => {
-    this.setState({ model });
+  private handleUpdateQuery = (query: IQuery): void => {
+    this.setState({ query });
+  };
+
+  private handleChangeKFold = (kfold: number) => {
+    this.setState({ kfold });
+  };
+
+  private handleChangeParameters = (parameters: any) => {
+    this.setState(state => ({
+      ...state,
+      ...parameters
+    }));
   };
 
   private handleSelectExperiment = async (
@@ -175,12 +196,13 @@ class Container extends React.Component<IProps, IState> {
       });
       return;
     }
-    const { model, parameters } = this.state;
+    const { query, parameters } = this.state;
 
+    const model = apiModel.state.model;
     if (!model) {
       this.setState({
         alert: {
-          message: "An error occured, pleae choose a model",
+          message: "An error occured, please choose a model",
           style: "error",
           title: "Info"
         }
@@ -205,7 +227,9 @@ class Container extends React.Component<IProps, IState> {
       return;
     }
 
+    model.query = query ? query : model.query;
     await apiModel.update(model);
+  
     const validation =
       model &&
       model.query &&
@@ -213,7 +237,23 @@ class Container extends React.Component<IProps, IState> {
       model.query.validationDatasets.length
         ? true
         : false;
-    const experiment = {
+
+    const validations =
+      this.state.kfold > 0
+        ? [
+            {
+              code: "kfold",
+              name: "validation",
+              parameters: [
+                {
+                  code: "k",
+                  value: this.state.kfold
+                }
+              ]
+            }
+          ]
+        : [];
+    const experiment: IExperimentParameters = {
       algorithms: [
         {
           code: selectedMethod.code,
@@ -224,7 +264,7 @@ class Container extends React.Component<IProps, IState> {
       ],
       model: model.slug,
       name: experimentName,
-      validations: []
+      validations
     };
 
     let uuid;

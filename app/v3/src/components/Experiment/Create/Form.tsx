@@ -1,6 +1,4 @@
-import { APICore, APIExperiment } from "@app/components/API";
-
-import { IModelResult } from "@app/types";
+import { IQuery } from "@app/types";
 import * as React from "react";
 import {
   Checkbox,
@@ -18,50 +16,43 @@ enum DatasetType {
 }
 
 interface IProps {
-  apiExperiment: APIExperiment;
-  apiCore: APICore;
-  model: IModelResult | undefined;
-  handleUpdateModel: (model: IModelResult) => void;
-  nethod: any | undefined;
+  datasets: any | undefined;
+  query: IQuery | undefined;
+  method: any | undefined;
+  handleUpdateQuery: (query: IQuery) => void;
+  handleChangeParameters: (parameters: any) => void;
+  handleChangeKFold: (kfold: number) => void;
+
 }
 
 interface IState {
-  experimentName: string;
-  parameters: object;
+  parameters: any;
+  kfold: number;
 }
 
-class MethodParameters extends React.Component<IProps, IState> {
+class FForm extends React.Component<IProps, IState> {
   public state: IState = {
-    experimentName: "",
+    kfold: 0,
     parameters: {}
   };
 
-  constructor(props: IProps) {
-    super(props);
-    this.handleChangeExperimentName = this.handleChangeExperimentName.bind(
-      this
-    );
-  }
-
   public render() {
-    const { apiCore, model, nethod } = this.props;
-    const datasets = apiCore.state.datasets;
-    const query = model && model.query;
-    const parameters = (nethod && nethod.parameters) || undefined;
+    const { datasets, query, method } = this.props;
+    const parameters = (method && method.parameters) || undefined;
     const isPredictiveMethod =
-      (nethod && nethod.type[0] === "predictive_model") || false;
+      (method && method.type[0] === "predictive_model") || false;
 
     return (
       <div>
-        {nethod && (
+        {method && (
           <div>
             <h4>
-              <strong>{nethod.label}</strong>
+              <strong>{method.label}</strong>
             </h4>
-            <p>{nethod.description}</p>
+            <p>{method.description}</p>
           </div>
         )}
-        {!nethod && (
+        {!method && (
           <div>
             <h4>
               <strong>Your method</strong>
@@ -69,12 +60,35 @@ class MethodParameters extends React.Component<IProps, IState> {
             <p>Please, select a method on the right pane</p>
           </div>
         )}
-        {nethod && (
+
+        {isPredictiveMethod && 
+        <Form horizontal={true}>
+                <FormGroup validationState={this.getKFoldValidationState()}
+                  key={'kfold'}>
+                  <Col sm={2}>K-Fold:</Col>
+                  <Col sm={4}>
+                    <FormControl
+                      defaultValue={"0"}
+                      type="number"
+                      onChange={this.handleChangeKFold}
+                    />
+<HelpBlock>
+                      min: 0, max 20
+                    </HelpBlock>
+                    <FormControl.Feedback />
+                  </Col>
+                  <Col sm={6}>Defines the number of folds used in the cross-validation. Typical numbers are 2 or 10. More information: https://en.wikipedia.org/wiki/Cross-validation_(statistics)</Col>
+                </FormGroup>
+                </Form>
+              }
+              
+              {method && (
           <fieldset style={{ padding: "8px" }}>
             <h5>
-              {isPredictiveMethod && <strong>Training & kfold</strong>}
+              {isPredictiveMethod && <strong>Training and kfold</strong>}
               {!isPredictiveMethod && <strong>Datasets</strong>}
             </h5>
+
             <FormGroup>
               {datasets &&
                 datasets.map((dataset: any) => {
@@ -134,6 +148,7 @@ class MethodParameters extends React.Component<IProps, IState> {
             )}
           </fieldset>
         )}
+
         {parameters && parameters.length > 0 && <h4>Parameters</h4>}
         <Form horizontal={true}>
           {parameters &&
@@ -213,14 +228,29 @@ class MethodParameters extends React.Component<IProps, IState> {
     return "success";
   };
 
+  private getKFoldValidationState = () => {
+    const { kfold } = this.state;
+    return kfold > -1 ? 'success' : 'error' 
+  }
+
+  private handleChangeKFold = (event: any) => {
+    event.preventDefault();
+    const kfold = event.target.value
+    this.setState({ kfold });
+    this.props.handleChangeKFold(kfold)
+  }
+
   private handleChangeParameter = (event: any, code: string) => {
     event.preventDefault();
+    const parameters = {
+      ...this.state.parameters,
+      [code]: event.target.value
+    }
     this.setState({
-      parameters: {
-        ...this.state.parameters,
-        [code]: event.target.value
-      }
+      parameters
     });
+
+    this.props.handleChangeParameters(parameters)
   };
 
   private handleChangeDataset = (
@@ -228,9 +258,8 @@ class MethodParameters extends React.Component<IProps, IState> {
     code: string,
     type: DatasetType
   ) => {
-    const { model } = this.props;
-    if (model) {
-      const { query } = model;
+    const { query } = this.props;
+    if (query) {
       if (type === 0) {
         query.trainingDatasets = this.toggleDataset(datasets, code);
 
@@ -257,17 +286,8 @@ class MethodParameters extends React.Component<IProps, IState> {
         }
       }
 
-      model.query = query;
-
-      const { handleUpdateModel } = this.props;
-      handleUpdateModel(model);
+      this.props.handleUpdateQuery(query);
     }
-  };
-
-  private handleChangeExperimentName = (event: any) => {
-    this.setState({
-      experimentName: event.target.value
-    });
   };
 
   private getDatasetCheckedState = (selectedDatasets: any = [], code: any) => {
@@ -294,4 +314,4 @@ class MethodParameters extends React.Component<IProps, IState> {
   };
 }
 
-export default MethodParameters;
+export default FForm;

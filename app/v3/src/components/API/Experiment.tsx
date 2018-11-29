@@ -1,4 +1,8 @@
-import { IExperiment, IExperimentResult } from "@app/types";
+import {
+  IExperiment,
+  IExperimentParameters,
+  IExperimentResult
+} from "@app/types";
 import * as dotenv from "dotenv";
 import request from "request-promise-native";
 import { Container } from "unstated";
@@ -75,7 +79,11 @@ class Experiment extends Container<IExperiment> {
     }
   };
 
-  public create = async ({ experiment }: { experiment: any }) => {
+  public create = async ({
+    experiment
+  }: {
+    experiment: IExperimentParameters;
+  }) => {
     try {
       const data = await request({
         body: JSON.stringify(experiment),

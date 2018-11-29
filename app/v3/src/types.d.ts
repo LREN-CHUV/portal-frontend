@@ -1,3 +1,11 @@
+
+  export interface IExperimentParameters {
+    algorithms: [IAlgorithm];
+    model: string;
+    name: string;
+    validations: any;
+  }
+
   export interface ICoreDataContainer {
     error?: string;
     hierarchy?: any;
@@ -83,7 +91,7 @@
     name: string;
     parameters: any;
     validation: boolean;
-    constraints: any;
+    constraints?: any;
   }
 
   export interface IQuery {
