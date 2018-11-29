@@ -102,6 +102,8 @@ class Container extends React.Component<IProps, IState> {
                       datasets={apiCore.state.datasets}
                       query={this.state && this.state.query}
                       method={this.state && this.state.method}
+                      parameters={this.state && this.state.parameters}
+                      kfold={this.state && this.state.kfold}
                       handleUpdateQuery={this.handleUpdateQuery}
                       handleChangeParameters={this.handleChangeParameters}
                       handleChangeKFold={this.handleChangeKFold}
@@ -142,14 +144,7 @@ class Container extends React.Component<IProps, IState> {
   };
 
   private handleSelectMethod = (method: IAlgorithm): void => {
-    const methodParameters = (method && method.parameters) || undefined;
-
-    const parameters = {};
-    if (methodParameters) {
-      methodParameters.forEach((p: any) => {
-        parameters[p.code] = p.default_value;
-      });
-    }
+    const parameters = (method && method.parameters);
     this.setState({
       method,
       parameters
@@ -166,8 +161,7 @@ class Container extends React.Component<IProps, IState> {
 
   private handleChangeParameters = (parameters: any) => {
     this.setState(state => ({
-      ...state,
-      ...parameters
+      parameters
     }));
   };
 

@@ -19,26 +19,18 @@ interface IProps {
   datasets: any | undefined;
   query: IQuery | undefined;
   method: any | undefined;
+  parameters: any | undefined;
+  kfold: number | undefined;
   handleUpdateQuery: (query: IQuery) => void;
   handleChangeParameters: (parameters: any) => void;
   handleChangeKFold: (kfold: number) => void;
 
 }
 
-interface IState {
-  parameters: any;
-  kfold: number;
-}
-
-class FForm extends React.Component<IProps, IState> {
-  public state: IState = {
-    kfold: 0,
-    parameters: {}
-  };
+class FForm extends React.Component<IProps> {
 
   public render() {
-    const { datasets, query, method } = this.props;
-    const parameters = (method && method.parameters) || undefined;
+    const { datasets, query, method, parameters } = this.props;
     const isPredictiveMethod =
       (method && method.type[0] === "predictive_model") || false;
 
@@ -218,7 +210,7 @@ class FForm extends React.Component<IProps, IState> {
   private getValidationState = (params: any) => {
     const { constraints, code } = params;
     if (constraints) {
-      const { parameters } = this.state;
+      const { parameters } = this.props;
       const { min, max } = constraints;
       if (parameters[code] < min || parameters[code] > max) {
         return "error";
@@ -229,28 +221,28 @@ class FForm extends React.Component<IProps, IState> {
   };
 
   private getKFoldValidationState = () => {
-    const { kfold } = this.state;
-    return kfold > -1 ? 'success' : 'error' 
+    const { kfold } = this.props;
+    if (!kfold) {
+      return 'success'
+    }
+    return kfold && kfold > -1 ? 'success' : 'error' 
   }
 
   private handleChangeKFold = (event: any) => {
     event.preventDefault();
     const kfold = event.target.value
-    this.setState({ kfold });
     this.props.handleChangeKFold(kfold)
   }
 
   private handleChangeParameter = (event: any, code: string) => {
     event.preventDefault();
     const parameters = {
-      ...this.state.parameters,
+      ...this.props.parameters,
       [code]: event.target.value
     }
-    this.setState({
-      parameters
-    });
 
     this.props.handleChangeParameters(parameters)
+    
   };
 
   private handleChangeDataset = (
