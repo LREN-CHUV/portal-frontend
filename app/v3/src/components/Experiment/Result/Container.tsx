@@ -11,27 +11,45 @@ interface IProps extends RouteComponentProps<any> {
   apiModel: APIModel;
 }
 
-const methodDisplay = (experiment: IExperimentResult | undefined) => (
-  <Panel>
-    <Panel.Body>
-      <h3>Methods</h3>
-      {experiment &&
-        experiment.algorithms.map((m: any) => <p key={m.code}>{m.name}</p>)}
-      {experiment &&
-        experiment.validations &&
-        experiment.validations.length > 0 && <h3>Validation</h3>}
-      {experiment &&
-        experiment.validations &&
-        experiment.validations.length > 0 &&
-        experiment.validations.map((m: any) => (
-          <p key={m.code}>
-            {m.code}: {m.parameters.map((p: any) => p.value)}
-          </p>
-        ))}
-    </Panel.Body>
-  </Panel>
-);
+const methodDisplay = (experiment: IExperimentResult | undefined) => {
+  const algorithms = experiment && experiment.algorithms;
+  const validations = experiment && experiment.validations;
 
+  return (
+    algorithms &&
+    validations && (
+      <Panel>
+        <Panel.Body>
+          <h3>Methods</h3>
+          {algorithms.map((algorithm: any) => (
+            <div>
+              <p key={algorithm.code}>
+                <strong>{algorithm.name}</strong>
+              </p>
+              {algorithm.parameters && algorithm.parameters.length > 0 && (
+                <h3>Parameters</h3>
+              )}
+              {algorithm.parameters &&
+                algorithm.parameters.length > 0 &&
+                algorithm.parameters.map((m: any) => (
+                  <p key={algorithm.code}>
+                    {algorithm.code}: {algorithm.parameters.map((p: any) => p.value)}
+                  </p>
+                ))}
+            </div>
+          ))}
+          {validations.length > 0 && <h3>Validation</h3>}
+          {validations.length > 0 &&
+            validations.map((m: any) => (
+              <p key={m.code}>
+                {m.code}: {m.parameters.map((p: any) => p.value)}
+              </p>
+            ))}
+        </Panel.Body>
+      </Panel>
+    )
+  );
+};
 class Experiment extends React.Component<IProps> {
   private intervalId: NodeJS.Timer;
 
@@ -129,7 +147,7 @@ class Experiment extends React.Component<IProps> {
     if (!params) {
       return;
     }
-    
+
     const { uuid } = params;
     return shared
       ? await apiExperiment.markAsUnshared({ uuid })

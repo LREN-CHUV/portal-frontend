@@ -4,8 +4,10 @@ import ExperimentCreateHeader from "@app/components/Experiment/Create/Header";
 import { Alert, IAlert } from "@app/components/UI/Alert";
 import AvailableMethods from "@app/components/UI/AvailableMethods";
 import UIModel from "@app/components/UI/Model";
+import Validation from "@app/components/UI/Validation";
 import {
   IAlgorithm,
+  IAlgorithmParameter,
   IExperimentParameters,
   IExperimentResult,
   IModelResult,
@@ -24,7 +26,7 @@ interface IProps extends RouteComponentProps<any> {
 }
 
 interface IState {
-  parameters?: any;
+  parameters?: [IAlgorithmParameter] | [];
   query: IQuery | undefined;
   method: IAlgorithm | undefined;
   alert: IAlert;
@@ -62,6 +64,9 @@ class Container extends React.Component<IProps, IState> {
     const { apiCore, apiModel, apiExperiment } = this.props;
     const alert = this.state && this.state.alert;
     const title = apiModel.state.model && apiModel.state.model.title;
+    const method = this.state && this.state.method;
+    const isPredictiveMethod =
+      (method && method.type && method.type[0] === "predictive_model") || false;
 
     return (
       <div className="Experiment">
@@ -99,15 +104,19 @@ class Container extends React.Component<IProps, IState> {
                 >
                   <Tab eventKey={1} title="Method">
                     <Form
-                      datasets={apiCore.state.datasets}
-                      query={this.state && this.state.query}
                       method={this.state && this.state.method}
                       parameters={this.state && this.state.parameters}
                       kfold={this.state && this.state.kfold}
-                      handleUpdateQuery={this.handleUpdateQuery}
                       handleChangeParameters={this.handleChangeParameters}
                       handleChangeKFold={this.handleChangeKFold}
-                    />
+                    >
+                      <Validation
+                        isPredictiveMethod={isPredictiveMethod}
+                        datasets={apiCore.state.datasets}
+                        query={this.state && this.state.query}
+                        handleUpdateQuery={this.handleUpdateQuery}
+                      />
+                    </Form>
                   </Tab>
                   <Tab eventKey={2} title="About running experiments">
                     <Help />
@@ -144,10 +153,10 @@ class Container extends React.Component<IProps, IState> {
   };
 
   private handleSelectMethod = (method: IAlgorithm): void => {
-    const parameters = (method && method.parameters);
+    const parameters = method && method.parameters;
     this.setState({
       method,
-      parameters
+      parameters,
     });
   };
 
@@ -159,10 +168,8 @@ class Container extends React.Component<IProps, IState> {
     this.setState({ kfold });
   };
 
-  private handleChangeParameters = (parameters: any) => {
-    this.setState(state => ({
-      parameters
-    }));
+  private handleChangeParameters = (parameters: [IAlgorithmParameter]) => {
+    this.setState({ parameters });
   };
 
   private handleSelectExperiment = async (
@@ -223,7 +230,7 @@ class Container extends React.Component<IProps, IState> {
 
     model.query = query ? query : model.query;
     await apiModel.update(model);
-  
+
     const validation =
       model &&
       model.query &&
@@ -247,12 +254,13 @@ class Container extends React.Component<IProps, IState> {
             }
           ]
         : [];
+
     const experiment: IExperimentParameters = {
       algorithms: [
         {
           code: selectedMethod.code,
           name: selectedMethod.code,
-          parameters: [parameters],
+          parameters: parameters ? parameters : [],
           validation
         }
       ],
