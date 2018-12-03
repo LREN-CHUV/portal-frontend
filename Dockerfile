@@ -22,7 +22,7 @@ WORKDIR /frontend/app/v3/
 RUN yarn global add react-scripts-ts
 RUN yarn global add typescript
 RUN yarn install
-RUN yarn build
+RUN yarn --max-old-space-size=4000 build
 
 
 FROM nginx:1.13.0-alpine
