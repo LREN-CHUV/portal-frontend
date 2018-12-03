@@ -11,7 +11,7 @@ import {
 
 interface IProps {
   method: any | undefined;
-  parameters?: [IAlgorithmParameter] | [];
+  parameters?: [IAlgorithmParameter] | undefined;
   kfold: number | undefined;
   handleChangeParameters: (parameters: any) => void;
   handleChangeKFold: (kfold: number) => void;
@@ -42,6 +42,8 @@ class FForm extends React.Component<IProps> {
           </div>
         )}
 
+        {this.props.children}
+
         {isPredictiveMethod && 
           <Form horizontal={true}>
             <FormGroup validationState={this.getKFoldValidationState()}
@@ -63,12 +65,10 @@ class FForm extends React.Component<IProps> {
             </Form>
           }
           
-        {this.props.children}
-
         {parameters && parameters.length > 0 && <h4>Parameters</h4>}
         {parameters && parameters.length > 0 && 
           <Form horizontal={true}>
-            {parameters && parameters.length && parameters.map((parameter: any) => {
+            {parameters && parameters.length && parameters.map((parameter: IAlgorithmParameter) => {
               const numberTypes = ["int", "real", "number", "numeric"];
               const type =
                 numberTypes.indexOf(parameter.type) >= -1 ? "number" : "text";
@@ -101,7 +101,7 @@ class FForm extends React.Component<IProps> {
                           this.handleChangeParameter(event, parameter.code)
                         }
                       >
-                        {parameter.values.map((v: any) => (
+                        {parameter.values && parameter.values.map((v: any) => (
                           <option key={v} value={v}>
                             {v}
                           </option>
@@ -137,7 +137,8 @@ class FForm extends React.Component<IProps> {
     const { parameters } = this.props;
     if (constraints && parameters) {
       const { min, max } = constraints;
-      if (parameters[code] < min || parameters[code] > max) {
+      const parameter = parameters.find((p: IAlgorithmParameter) => p.code === code);
+      if (parameter && parameter.value < min || parameter && parameter.value > max) {
         
         return "error";
       }

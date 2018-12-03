@@ -26,7 +26,7 @@ interface IProps extends RouteComponentProps<any> {
 }
 
 interface IState {
-  parameters?: [IAlgorithmParameter] | [];
+  parameters?: [IAlgorithmParameter];
   query: IQuery | undefined;
   method: IAlgorithm | undefined;
   alert: IAlert;
@@ -156,7 +156,7 @@ class Container extends React.Component<IProps, IState> {
     const parameters = method && method.parameters;
     this.setState({
       method,
-      parameters,
+      parameters
     });
   };
 
@@ -260,7 +260,12 @@ class Container extends React.Component<IProps, IState> {
         {
           code: selectedMethod.code,
           name: selectedMethod.code,
-          parameters: parameters ? parameters : [],
+          parameters: parameters
+            ? parameters.map((p: any) => ({
+                ...p,
+                value: p.value || p.default_value
+              }))
+            : [],
           validation
         }
       ],

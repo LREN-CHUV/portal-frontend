@@ -60,7 +60,13 @@ export default class Header extends React.Component<IProps, IState> {
               <Button
                 //tslint:disable
                 onClick={() => handleSaveAndRunExperiment(experimentName)}
+                onKeyDown={event => {
+                  if (event.key === "Enter") {
+                    handleSaveAndRunExperiment(experimentName);
+                  }
+                }}
                 bsStyle="info"
+                type="submit"
                 disabled={method === undefined}
               >
                 Run Experiment

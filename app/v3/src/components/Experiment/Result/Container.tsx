@@ -1,55 +1,15 @@
 import { APIExperiment, APIModel } from "@app/components/API";
+import Methods from "@app/components/Experiment/Result/Methods";
 import Model from "@app/components/UI/Model";
 import { IExperimentResult } from "@app/types";
 import * as React from "react";
-import { Panel } from "react-bootstrap";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { ExperimentResult, ExperimentResultHeader } from "./";
-
 interface IProps extends RouteComponentProps<any> {
   apiExperiment: APIExperiment;
   apiModel: APIModel;
 }
 
-const methodDisplay = (experiment: IExperimentResult | undefined) => {
-  const algorithms = experiment && experiment.algorithms;
-  const validations = experiment && experiment.validations;
-
-  return (
-    algorithms &&
-    validations && (
-      <Panel>
-        <Panel.Body>
-          <h3>Methods</h3>
-          {algorithms.map((algorithm: any) => (
-            <div>
-              <p key={algorithm.code}>
-                <strong>{algorithm.name}</strong>
-              </p>
-              {algorithm.parameters && algorithm.parameters.length > 0 && (
-                <h3>Parameters</h3>
-              )}
-              {algorithm.parameters &&
-                algorithm.parameters.length > 0 &&
-                algorithm.parameters.map((m: any) => (
-                  <p key={algorithm.code}>
-                    {algorithm.code}: {algorithm.parameters.map((p: any) => p.value)}
-                  </p>
-                ))}
-            </div>
-          ))}
-          {validations.length > 0 && <h3>Validation</h3>}
-          {validations.length > 0 &&
-            validations.map((m: any) => (
-              <p key={m.code}>
-                {m.code}: {m.parameters.map((p: any) => p.value)}
-              </p>
-            ))}
-        </Panel.Body>
-      </Panel>
-    )
-  );
-};
 class Experiment extends React.Component<IProps> {
   private intervalId: NodeJS.Timer;
 
@@ -108,7 +68,7 @@ class Experiment extends React.Component<IProps> {
             <ExperimentResult experimentState={apiExperiment.state} />
           </div>
           <div className="sidebar2">
-            {methodDisplay(apiExperiment.state.experiment)}
+            <Methods experiment={apiExperiment.state.experiment} />
           </div>
         </div>
       </div>

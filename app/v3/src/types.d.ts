@@ -91,6 +91,7 @@ export interface IAlgorithmParameter {
   constraints: any;
   default_value: any;
   value: any;
+  values?: any;
   description: string;
   label: string;
   type: string;
@@ -99,7 +100,7 @@ export interface IAlgorithmParameter {
 export interface IAlgorithm {
   code: string;
   name: string;
-  parameters: [IAlgorithmParameter] | [];
+  parameters?: [IAlgorithmParameter] | any;
   validation: boolean;
   constraints?: any;
   type?: [string]
