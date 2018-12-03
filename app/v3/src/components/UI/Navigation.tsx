@@ -30,7 +30,7 @@ class Navigation extends React.Component<IProps> {
     return (
       <header
         id="topnav"
-        className="navbar navbar-default navbar-fixed-top ng-scope"
+        className="navbar navbar-default navbar-fixed-top "
       >
         <div className="container-fluid">
           <div className="logo-area">
@@ -120,7 +120,7 @@ class Navigation extends React.Component<IProps> {
                   noCaret={true}
                 />
                 {unreadCount && (
-                  <span className="unread_count_badge ng-binding ng-scope">
+                  <span className="unread_count_badge">
                     {unreadCount}
                   </span>
                 )}
