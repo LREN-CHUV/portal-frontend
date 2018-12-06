@@ -6,11 +6,7 @@ import { Container } from "unstated";
 dotenv.config();
 
 class Model extends Container<MIP.Store.IModelState> {
-  public state: MIP.Store.IModelState = {
-    error: undefined,
-    model: undefined,
-    models: undefined
-  };
+  public state: MIP.Store.IModelState = {};
 
   private options: request.Options;
   private baseUrl: string;
@@ -48,7 +44,7 @@ class Model extends Container<MIP.Store.IModelState> {
         body: JSON.stringify(params),
         headers: {
           ...this.options.headers,
-          "Content-Type": "application/json"
+          "Content-Type": "application/json;charset=UTF-8"
         },
         method: "POST",
         uri: `${this.baseUrl}`
@@ -72,7 +68,7 @@ class Model extends Container<MIP.Store.IModelState> {
         body: JSON.stringify(model),
         headers: {
           ...this.options.headers,
-          "Content-Type": "application/json"
+          "Content-Type": "application/json;charset=UTF-8"
         },
         method: "PUT",
         uri: `${this.baseUrl}/${model.slug}`

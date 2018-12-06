@@ -2,23 +2,31 @@ import * as dotenv from "dotenv";
 
 dotenv.config();
 
-const Cookie = process.env.REACT_APP_COOKIE;
+const baseUrl = process.env.REACT_APP_BACKEND_URL;
+const fileCookie = process.env.REACT_APP_COOKIE;
+const Authorization = process.env.REACT_APP_AUTHORIZATION!;
+
+const XSRFToken = (cookie: string) =>
+  (cookie && cookie.match(/XSRF-TOKEN=(.*)/)![1]) || "";
 
 const options: RequestInit =
   process.env.NODE_ENV === "production"
     ? {
-        credentials: "same-origin"
-      }
-    : Cookie
-      ? {
-          headers: {
-            Authorization: process.env.REACT_APP_AUTHORIZATION!,
-            Cookie,
-            "X-XSRF-TOKEN": Cookie.match(/XSRF-TOKEN=(.*)/)![1] || ""
-          }
+        credentials: "include",
+        headers: {
+          "X-XSRF-TOKEN": XSRFToken(document.cookie)
         }
-      : {};
+      }
+    : fileCookie
+    ? {
+        headers: {
+          Authorization,
+          Cookie: fileCookie,
+          "X-XSRF-TOKEN": XSRFToken(fileCookie)
+        }
+      }
+    : {};
 
-const baseUrl = `${process.env.REACT_APP_BACKEND_URL}`;
+console.log(process.env.NODE_ENV, JSON.stringify(options, null, 4));
 
-export default  { options, baseUrl };
+export default { options, baseUrl };

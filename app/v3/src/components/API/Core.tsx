@@ -6,7 +6,7 @@ import { Container } from "unstated";
 dotenv.config();
 
 class Core extends Container<MIP.Store.ICoreState> {
-  public state: MIP.Store.ICoreState;
+  public state: MIP.Store.ICoreState = {};
 
   private options: RequestInit;
   private baseUrl: string;

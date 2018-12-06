@@ -45,6 +45,7 @@
     "moment": "2.20.1",
     "ng-csv": "0.3.6",
     "ng-table-to-csv": "0.3.3",
+    "node-fetch": "^2.3.0",
     "plotly.js": "1.36.0",
     "showdown": "0.3.4",
     "sql-parser": "0.5.0",

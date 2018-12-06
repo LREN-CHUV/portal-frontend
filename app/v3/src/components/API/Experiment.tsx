@@ -11,14 +11,10 @@ interface IUUID {
 }
 
 class Experiment extends Container<MIP.Store.IExperimentState> {
-  public state: MIP.Store.IExperimentState = {
-    error: undefined,
-    experiment: undefined,
-    experiments: undefined
-  };
+  public state: MIP.Store.IExperimentState = {};
 
   public loaded =
-    this.state.experiment !== undefined &&
+  this.state && this.state.experiment !== undefined &&
     this.state.experiment.results !== undefined &&
     this.state.experiment.error !== undefined;
 
@@ -85,7 +81,7 @@ class Experiment extends Container<MIP.Store.IExperimentState> {
         body: JSON.stringify(experiment),
         headers: {
           ...this.options.headers,
-          "Content-Type": "application/json"
+          "Content-Type": "application/json;charset=UTF-8"
         },
         method: "POST",
         uri: `${this.baseUrl}`
