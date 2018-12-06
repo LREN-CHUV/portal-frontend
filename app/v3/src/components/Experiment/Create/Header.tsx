@@ -1,15 +1,17 @@
 import Dropdown from "@app/components/UI/Dropdown";
 import DropdownModel from "@app/components/UI/DropdownModel";
-import { IExperimentResult, IMethodDefinition, IModelResult } from "@app/types";
+import {  MIP } from "@app/types";
 import * as React from "react";
 import { Button, FormControl, Panel } from "react-bootstrap";
 interface IProps {
   title: string | undefined;
-  models: IModelResult[] | undefined;
-  experiments: IExperimentResult[] | undefined;
-  method: IMethodDefinition | undefined;
-  handleSelectModel: (model: IModelResult) => Promise<any>;
-  handleSelectExperiment: (experiment: IExperimentResult) => Promise<any>;
+  models: MIP.API.IModelResult[] | undefined;
+  experiments: MIP.API.IExperimentResult[] | undefined;
+  method: MIP.API.IMethod | undefined;
+  handleSelectModel: (model: MIP.API.IModelResult) => Promise<any>;
+  handleSelectExperiment: (
+    experiment: MIP.API.IExperimentResult
+  ) => Promise<any>;
   handleSaveAndRunExperiment: (experimentName: string) => Promise<any>;
 }
 interface IState {

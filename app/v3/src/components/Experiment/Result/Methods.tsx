@@ -1,11 +1,11 @@
-import { IExperimentResult } from "@app/types";
+import { MIP } from "@app/types";
 import * as React from "react";
 import { Panel } from "react-bootstrap";
 
 const Methods = ({
   experiment
 }: {
-  experiment: IExperimentResult | undefined;
+  experiment: MIP.API.IExperimentResult | undefined;
 }) => {
   const algorithms = experiment && experiment.algorithms;
   const validations = experiment && experiment.validations;

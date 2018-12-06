@@ -1,4 +1,4 @@
-import { IExperimentResult } from "@app/types";
+import { MIP } from "@app/types";
 import * as moment from "moment";
 import * as React from "react";
 import { DropdownButton, MenuItem } from "react-bootstrap";
@@ -6,7 +6,7 @@ import { DropdownButton, MenuItem } from "react-bootstrap";
 import "./Dropdown.css";
 
 interface IDropdown {
-  items: IExperimentResult[] | undefined;
+  items: MIP.API.IExperimentResult[] | undefined;
   title: string;
   handleSelect: any;
   handleCreateNewExperiment: any;
@@ -41,7 +41,7 @@ export default ({
     {(items &&
       handleSelect &&
       items
-        .sort((a1: IExperimentResult, b1: IExperimentResult) => {
+        .sort((a1: MIP.API.IExperimentResult, b1: MIP.API.IExperimentResult) => {
           const a = a1.created;
           const b = b1.created;
 

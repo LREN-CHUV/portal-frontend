@@ -1,7 +1,7 @@
 import { APIExperiment, APIModel } from "@app/components/API";
 import Methods from "@app/components/Experiment/Result/Methods";
 import Model from "@app/components/UI/Model";
-import { IExperimentResult } from "@app/types";
+import { MIP } from "@app/types";
 import * as React from "react";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { ExperimentResult, ExperimentResultHeader } from "./";
@@ -90,7 +90,7 @@ class Experiment extends React.Component<IProps> {
     return match.params;
   };
 
-  private handleSelectExperiment = async (experiment: IExperimentResult) => {
+  private handleSelectExperiment = async (experiment: MIP.API.IExperimentResult) => {
     const { modelDefinitionId, uuid } = experiment;
     const { history, apiExperiment } = this.props;
     history.push(`/v3/experiment/${modelDefinitionId}/${uuid}`);

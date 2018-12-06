@@ -1,9 +1,4 @@
-import {
-  IAlgorithm,
-  IMethods,
-  IModelResult,
-  IVariableEntity
-} from "@app/types";
+import { MIP } from "@app/types";
 import * as React from "react";
 import { Button } from "react-bootstrap";
 
@@ -13,10 +8,10 @@ const AvailableMethods = ({
   handleSelectMethod,
   model
 }: {
-  methods: IMethods | undefined;
-  variables: IVariableEntity[] | undefined;
-  handleSelectMethod: (method: IAlgorithm) => void;
-  model: IModelResult | undefined;
+  methods: MIP.API.IMethods | undefined;
+  variables: MIP.API.IVariableEntity[] | undefined;
+  handleSelectMethod: (method: MIP.API.IMethod) => void;
+  model: MIP.API.IModelResult | undefined;
 }) => {
   const query = model && model.query;
   const modelVariable =

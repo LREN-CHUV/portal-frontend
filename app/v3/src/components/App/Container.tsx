@@ -22,7 +22,7 @@ class AppContainer extends React.Component {
       this.apiExperiment.all(),
       this.apiCore.variables(),
       this.apiCore.datasets(),
-      this.apiCore.algorithms(),
+      this.apiCore.methods(),
       this.apiModel.all()
     ]);
   }

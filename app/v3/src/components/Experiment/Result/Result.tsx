@@ -1,10 +1,14 @@
 import { MIME_TYPES } from "@app/constants";
-import { IExperiment, INode } from "@app/types";
+import { MIP } from "@app/types";
 import * as React from "react";
 import { Panel, Tab, Tabs } from "react-bootstrap";
 import { Highchart, JSON, PFA, Plotly } from "./formats";
 
-export default ({ experimentState }: { experimentState: IExperiment }) => {
+export default ({
+  experimentState
+}: {
+  experimentState: MIP.Store.IExperimentState;
+}) => {
   const experiment = experimentState && experimentState.experiment;
   const nodes = experiment && experiment.results;
   const error =
@@ -13,7 +17,7 @@ export default ({ experimentState }: { experimentState: IExperiment }) => {
 
   const loading = !nodes && !error;
 
-  const methodsDisplay = (thenode: INode) => (
+  const methodsDisplay = (thenode: MIP.API.INode) => (
     <Tabs defaultActiveKey={0} id="tabs-methods">
       {thenode.methods &&
         thenode.methods.map((method: any, j: number) => (
@@ -46,7 +50,7 @@ export default ({ experimentState }: { experimentState: IExperiment }) => {
     </Tabs>
   );
 
-  const nodesDisplay = (thenodes: INode[]) => (
+  const nodesDisplay = (thenodes: MIP.API.INode[]) => (
     <Tabs defaultActiveKey={0} id="tabs-node">
       {thenodes &&
         thenodes.map((node: any, i: number) => (
@@ -60,7 +64,7 @@ export default ({ experimentState }: { experimentState: IExperiment }) => {
   return (
     <Panel>
       <Panel.Title>
-          <h3>Your Experiment</h3>
+        <h3>Your Experiment</h3>
       </Panel.Title>
       <Panel.Body>
         {loading ? (

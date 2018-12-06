@@ -1,5 +1,5 @@
 import { APIExperiment } from "@app/components/API";
-import { IExperimentResult } from "@app/types";
+import { MIP } from "@app/types";
 import * as React from "react";
 import { Label, Panel } from "react-bootstrap";
 
@@ -9,14 +9,14 @@ interface IProps {
   apiExperiment: APIExperiment;
 }
 
-const renderExperiments = (experiments: IExperimentResult[] | undefined) => {
+const renderExperiments = (experiments: MIP.API.IExperimentResult[] | undefined) => {
   if (experiments === undefined) {
     return <React.Fragment />;
   }
 
   return (
     <div>
-      {experiments.map((experiment: IExperimentResult) => {
+      {experiments.map((experiment: MIP.API.IExperimentResult) => {
         const nodes = experiment && experiment.results;
         const error = experiment && experiment.error;
 

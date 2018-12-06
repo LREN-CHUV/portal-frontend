@@ -1,15 +1,8 @@
 import { MIME_TYPES, SCORES } from "@app/constants";
-import {
-  IExperimentResult,
-  IKfoldValidationScore,
-  IMethod,
-  INode,
-  IPolynomialClassificationScore,
-  IValidationScore
-} from "@app/types";
+import { MIP } from "@app/types";
 
 class ParseExperiment {
-  public static parse = (experiment: any): IExperimentResult => {
+  public static parse = (experiment: any): MIP.API.IExperimentResult => {
     // Formats are differents in the API for experiment, experimentList and runExperiment,
     // apply specific parsing to some terms
     const algorithms = parse(experiment.algorithms);
@@ -23,7 +16,7 @@ class ParseExperiment {
     })();
     const modelDefinitionId = experiment.model ? experiment.model.slug : null;
 
-    let experimentResult: IExperimentResult = {
+    let experimentResult: MIP.API.IExperimentResult = {
       algorithms,
       created,
       modelDefinition: experiment.model ? experiment.model.query : undefined,
@@ -76,7 +69,7 @@ class ParseExperiment {
     // Results
     const resultParsed = parse(experiment.result);
     const result = Array.isArray(resultParsed) ? resultParsed : [resultParsed];
-    const nodes: INode[] = [];
+    const nodes: MIP.API.INode[] = [];
 
     result.forEach((r: any, i: number) => {
       const mime = r.type;
@@ -84,7 +77,7 @@ class ParseExperiment {
         experimentResult.algorithms.length - 1 === i
           ? experimentResult.algorithms[i]
           : experimentResult.algorithms[0];
-      let method: IMethod = {
+      let method: any = {
         algorithm: r.algorithm || algorithm,
         mime
       };
@@ -207,7 +200,7 @@ class ParseExperiment {
       //     node.methods.push(method);
       //   }
       // } else {
-      const node: INode = {
+      const node: MIP.API.INode = {
         methods: [method],
         name: r.node || "Default"
       };
@@ -217,7 +210,7 @@ class ParseExperiment {
       nodes.push(node);
     });
     // console.log({nodes})
-    experimentResult.results = nodes.sort((a: INode, b: INode) =>
+    experimentResult.results = nodes.sort((a: MIP.API.INode, b: MIP.API.INode) =>
       a.name.localeCompare(b.name)
     );
 
@@ -242,15 +235,15 @@ const plotly = (data: any) => {
 
 interface IPfa {
   crossValidation?:
-    | IKfoldValidationScore
-    | IValidationScore
-    | IPolynomialClassificationScore;
+    | MIP.API.IKfoldValidationScore
+    | MIP.API.IValidationScore
+    | MIP.API.IPolynomialClassificationScore;
   data?: any;
   remoteValidation?:
-    | INode
-    | IKfoldValidationScore
-    | IValidationScore
-    | IPolynomialClassificationScore;
+    | MIP.API.INode
+    | MIP.API.IKfoldValidationScore
+    | MIP.API.IValidationScore
+    | MIP.API.IPolynomialClassificationScore;
   error?: any;
 }
 

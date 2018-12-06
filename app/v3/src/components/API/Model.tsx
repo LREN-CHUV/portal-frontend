@@ -1,12 +1,12 @@
-import { IModel, IModelResult } from "@app/types";
+import { MIP } from "@app/types";
 import * as dotenv from "dotenv";
 import request from "request-promise-native";
 import { Container } from "unstated";
 
 dotenv.config();
 
-class Model extends Container<IModel> {
-  public state: IModel = {
+class Model extends Container<MIP.Store.IModelState> {
+  public state: MIP.Store.IModelState = {
     error: undefined,
     model: undefined,
     models: undefined
@@ -24,7 +24,7 @@ class Model extends Container<IModel> {
   public one = async (slug: string) => {
     try {
       const data = await request.get(`${this.baseUrl}/${slug}`, this.options);
-      const json: IModelResult = await JSON.parse(data);
+      const json: MIP.API.IModelResult = await JSON.parse(data);
       if (json.error) {
         return await this.setState({
           error: json.error
@@ -91,7 +91,7 @@ class Model extends Container<IModel> {
   public all = async () => {
     try {
       const data = await request.get(`${this.baseUrl}`, this.options);
-      const json: IModelResult[] = await JSON.parse(data);
+      const json: MIP.API.IModelResult[] = await JSON.parse(data);
 
       return await this.setState({
         error: undefined,

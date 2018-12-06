@@ -1,4 +1,4 @@
-import { IModelResult } from "@app/types";
+import { MIP } from "@app/types";
 import * as React from "react";
 import { Panel } from "react-bootstrap";
 
@@ -66,7 +66,7 @@ const formatFilter = (filter: any) => {
   });
 };
 
-export default ({ model }: { model: IModelResult | undefined }) => {
+export default ({ model }: { model: MIP.API.IModelResult | undefined }) => {
   const query = model && model.query;
   return (
     <Panel className="model">

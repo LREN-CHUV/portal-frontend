@@ -1,4 +1,4 @@
-import { IAlgorithmParameter } from "@app/types";
+import { MIP } from "@app/types";
 import * as React from "react";
 import {
   Col,
@@ -11,7 +11,7 @@ import {
 
 interface IProps {
   method: any | undefined;
-  parameters?: [IAlgorithmParameter] | undefined;
+  parameters?: [MIP.API.IMethodParameter] | undefined;
   kfold: number | undefined;
   handleChangeParameters: (parameters: any) => void;
   handleChangeKFold: (kfold: number) => void;
@@ -68,7 +68,7 @@ class FForm extends React.Component<IProps> {
         {parameters && parameters.length > 0 && <h4>Parameters</h4>}
         {parameters && parameters.length > 0 && 
           <Form horizontal={true}>
-            {parameters && parameters.length && parameters.map((parameter: IAlgorithmParameter) => {
+            {parameters && parameters.length && parameters.map((parameter: MIP.API.IMethodParameter) => {
               const numberTypes = ["int", "real", "number", "numeric"];
               const type =
                 numberTypes.indexOf(parameter.type) >= -1 ? "number" : "text";
@@ -137,7 +137,7 @@ class FForm extends React.Component<IProps> {
     const { parameters } = this.props;
     if (constraints && parameters) {
       const { min, max } = constraints;
-      const parameter = parameters.find((p: IAlgorithmParameter) => p.code === code);
+      const parameter = parameters.find((p: MIP.API.IMethodParameter) => p.code === code);
       if (parameter && parameter.value < min || parameter && parameter.value > max) {
         
         return "error";

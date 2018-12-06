@@ -1,8 +1,4 @@
-import {
-  IExperiment,
-  IExperimentParameters,
-  IExperimentResult
-} from "@app/types";
+import { MIP } from "@app/types";
 import * as dotenv from "dotenv";
 import request from "request-promise-native";
 import { Container } from "unstated";
@@ -14,8 +10,8 @@ interface IUUID {
   uuid: string;
 }
 
-class Experiment extends Container<IExperiment> {
-  public state: IExperiment = {
+class Experiment extends Container<MIP.Store.IExperimentState> {
+  public state: MIP.Store.IExperimentState = {
     error: undefined,
     experiment: undefined,
     experiments: undefined
@@ -68,7 +64,7 @@ class Experiment extends Container<IExperiment> {
 
       return await this.setState({
         error: undefined,
-        experiments: json.map((j: IExperimentResult) =>
+        experiments: json.map((j: MIP.API.IExperimentResult) =>
           ParseExperiment.parse(j)
         )
       });
@@ -82,7 +78,7 @@ class Experiment extends Container<IExperiment> {
   public create = async ({
     experiment
   }: {
-    experiment: IExperimentParameters;
+    experiment: MIP.API.IExperimentParameters;
   }) => {
     try {
       const data = await request({

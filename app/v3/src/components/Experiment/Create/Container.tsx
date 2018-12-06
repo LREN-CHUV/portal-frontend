@@ -5,14 +5,7 @@ import { Alert, IAlert } from "@app/components/UI/Alert";
 import AvailableMethods from "@app/components/UI/AvailableMethods";
 import UIModel from "@app/components/UI/Model";
 import Validation from "@app/components/UI/Validation";
-import {
-  IAlgorithm,
-  IAlgorithmParameter,
-  IExperimentParameters,
-  IExperimentResult,
-  IModelResult,
-  IQuery
-} from "@app/types";
+import { MIP } from "@app/types";
 import * as React from "react";
 import { Panel, Tab, Tabs } from "react-bootstrap";
 import { RouteComponentProps, withRouter } from "react-router-dom";
@@ -26,9 +19,9 @@ interface IProps extends RouteComponentProps<any> {
 }
 
 interface IState {
-  parameters?: [IAlgorithmParameter];
-  query: IQuery | undefined;
-  method: IAlgorithm | undefined;
+  parameters?: [MIP.API.IMethodParameter];
+  query: MIP.API.IQuery | undefined;
+  method: MIP.API.IMethod | undefined;
   alert: IAlert;
   kfold: number;
 }
@@ -144,7 +137,7 @@ class Container extends React.Component<IProps, IState> {
       </div>
     );
   }
-  private handleSelectModel = async (model: IModelResult): Promise<any> => {
+  private handleSelectModel = async (model: MIP.API.IModelResult): Promise<any> => {
     const { slug } = model;
     const { apiModel, history } = this.props;
     history.push(`/v3/experiment/${slug}`);
@@ -152,7 +145,7 @@ class Container extends React.Component<IProps, IState> {
     return await apiModel.one(slug);
   };
 
-  private handleSelectMethod = (method: IAlgorithm): void => {
+  private handleSelectMethod = (method: MIP.API.IMethod): void => {
     const parameters = method && method.parameters;
     this.setState({
       method,
@@ -160,7 +153,7 @@ class Container extends React.Component<IProps, IState> {
     });
   };
 
-  private handleUpdateQuery = (query: IQuery): void => {
+  private handleUpdateQuery = (query: MIP.API.IQuery): void => {
     this.setState({ query });
   };
 
@@ -168,12 +161,12 @@ class Container extends React.Component<IProps, IState> {
     this.setState({ kfold });
   };
 
-  private handleChangeParameters = (parameters: [IAlgorithmParameter]) => {
+  private handleChangeParameters = (parameters: [MIP.API.IMethodParameter]) => {
     this.setState({ parameters });
   };
 
   private handleSelectExperiment = async (
-    experiment: IExperimentResult
+    experiment: MIP.API.IExperimentResult
   ): Promise<any> => {
     const { modelDefinitionId, uuid } = experiment;
     const { apiExperiment, history } = this.props;
@@ -255,7 +248,7 @@ class Container extends React.Component<IProps, IState> {
           ]
         : [];
 
-    const experiment: IExperimentParameters = {
+    const experiment: MIP.API.IExperimentParameters = {
       algorithms: [
         {
           code: selectedMethod.code,

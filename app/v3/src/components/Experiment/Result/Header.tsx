@@ -1,12 +1,12 @@
 import Dropdown from "@app/components/UI/Dropdown";
-import { IExperimentResult } from "@app/types";
+import { MIP } from "@app/types";
 import moment from "moment"; // FIXME: change lib, too heavy
 import * as React from "react";
 import { Button, Panel } from "react-bootstrap";
 
 interface IProps {
-  experiment: IExperimentResult | undefined;
-  experiments: IExperimentResult[] | undefined;
+  experiment: MIP.API.IExperimentResult | undefined;
+  experiments: MIP.API.IExperimentResult[] | undefined;
   handleSelectExperiment: any;
   handleShareExperiment: any;
   handleCreateNewExperiment: any;

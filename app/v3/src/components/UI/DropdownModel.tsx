@@ -1,11 +1,11 @@
-import { IModelResult } from "@app/types";
+import { MIP } from "@app/types";
 import * as React from "react";
 import { DropdownButton, MenuItem } from "react-bootstrap";
 
 import "./Dropdown.css";
 
 interface IDropdown {
-  items: IModelResult[] | undefined;
+  items: MIP.API.IModelResult[] | undefined;
   title?: string;
   handleSelect: any;
   noCaret?: boolean;

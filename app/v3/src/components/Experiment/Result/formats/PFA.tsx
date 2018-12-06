@@ -1,11 +1,5 @@
 import { SCORES } from "@app/constants";
-import {
-  IConfusionMatrix,
-  IKfoldValidationScore,
-  IMethod,
-  IPolynomialClassificationScore,
-  IValidationScore
-} from "@app/types";
+import { MIP } from "@app/types";
 import { round } from "@app/utils";
 import * as React from "react";
 import { Tab, Tabs } from "react-bootstrap";
@@ -28,9 +22,9 @@ const removeKeys = (
 
 const buildChart = (
   validation:
-    | IKfoldValidationScore
-    | IValidationScore
-    | IPolynomialClassificationScore
+    | MIP.API.IKfoldValidationScore
+    | MIP.API.IValidationScore
+    | MIP.API.IPolynomialClassificationScore
 ) => ({
   chart: {
     type: "column"
@@ -52,9 +46,9 @@ const buildChart = (
 
 const buildTableValue = (
   validation:
-    | IKfoldValidationScore
-    | IValidationScore
-    | IPolynomialClassificationScore
+    | MIP.API.IKfoldValidationScore
+    | MIP.API.IValidationScore
+    | MIP.API.IPolynomialClassificationScore
 ) =>
   (validation && (
     <ul className="pfa-table">
@@ -68,7 +62,7 @@ const buildTableValue = (
   )) ||
   null;
 
-const buildConfusionMatrix = (matrix: IConfusionMatrix) =>
+const buildConfusionMatrix = (matrix: MIP.API.IConfusionMatrix) =>
   matrix &&
   ((
     <table className="greyGridTable">
@@ -96,7 +90,7 @@ const buildConfusionMatrix = (matrix: IConfusionMatrix) =>
     </table>
   ) ||
     null);
-export default ({ method, data }: { method: IMethod; data: any }) => {
+export default ({ method, data }: { method: MIP.API.IMethod; data: any }) => {
   return (
     (data && (
       <Tabs defaultActiveKey={0} id="pfa-method" style={{ marginTop: "16px" }}>

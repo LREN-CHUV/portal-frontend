@@ -2,7 +2,7 @@ import { APIExperiment, APIModel } from "@app/components/API";
 // import logo from "../images/hbp-logo.png";
 import Dropdown from "@app/components/UI/Dropdown";
 import default_user from "@app/images/default_user.png";
-import { IExperimentResult } from "@app/types";
+import { MIP } from "@app/types";
 import * as React from "react";
 // import { Glyphicon } from "react-bootstrap";
 import { RouteComponentProps, withRouter } from "react-router-dom";
@@ -106,7 +106,7 @@ class Navigation extends React.Component<IProps> {
                   items={apiExperiment.state.experiments}
                   title="BSD"
                   // tslint:disable-next-line jsx-no-lambda
-                  handleSelect={async (experiment: IExperimentResult) => {
+                  handleSelect={async (experiment: MIP.API.IExperimentResult) => {
                     const { modelDefinitionId, uuid } = experiment;
                     this.props.history.push(
                       `/v3/experiment/${modelDefinitionId}/${uuid}`

@@ -1,12 +1,12 @@
-import { ICoreDataContainer } from "@app/types";
+import { MIP } from "@app/types";
 import * as dotenv from "dotenv";
 import request from "request-promise-native";
 import { Container } from "unstated";
 
 dotenv.config();
 
-class Core extends Container<ICoreDataContainer> {
-  public state: ICoreDataContainer = {};
+class Core extends Container<MIP.Store.ICoreState> {
+  public state: MIP.Store.ICoreState;
 
   private options: RequestInit;
   private baseUrl: string;
@@ -83,7 +83,7 @@ class Core extends Container<ICoreDataContainer> {
     }
   };
 
-  public algorithms = async () => {
+  public methods = async () => {
     try {
       const data = await request.get(`${this.baseUrl}/methods`, this.options);
       const json = await JSON.parse(data);
