@@ -10,6 +10,7 @@
     "allowJs": true,
     "jsx": "react",
     "moduleResolution": "node",
+    "resolveJsonModule": true,
     "rootDir": "src",
     "forceConsistentCasingInFileNames": true,
     "noImplicitReturns": true,
@@ -20,7 +21,7 @@
     "noUnusedLocals": true,
     "paths": {
       "@app/*": ["src/*"]
-    },
+    }
     // "typeRoots": ["./node_modules/@types", "./"]
     // "types": [
     //     "vscode",

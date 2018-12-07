@@ -1012,7 +1012,7 @@ i.ti {
 #topnav .container-fluid .app-instance-name > h2 {
   -o-text-overflow: ellipsis;
   text-overflow: ellipsis;
-  overflow: hidden;
+  /* overflow: hidden; */
   height: 100%;
 }
 #topnav .container-fluid .nav.navbar-nav {

@@ -1,10 +1,9 @@
 import { APIExperiment, APIModel } from "@app/components/API";
-// import logo from "../images/hbp-logo.png";
 import Dropdown from "@app/components/UI/Dropdown";
 import default_user from "@app/images/default_user.png";
+import config from "@app/mip-config.json";
 import { MIP } from "@app/types";
 import * as React from "react";
-// import { Glyphicon } from "react-bootstrap";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 
 import "./Navigation.css";
@@ -17,6 +16,7 @@ interface IProps extends RouteComponentProps<any> {
 class Navigation extends React.Component<IProps> {
   public render() {
     const { apiExperiment, apiModel } = this.props;
+    const instanceName = config.instanceName || "MIP";
 
     const unreadCount =
       (apiExperiment &&
@@ -28,10 +28,7 @@ class Navigation extends React.Component<IProps> {
       undefined;
 
     return (
-      <header
-        id="topnav"
-        className="navbar navbar-default navbar-fixed-top "
-      >
+      <header id="topnav" className="navbar navbar-default navbar-fixed-top ">
         <div className="container-fluid">
           <div className="logo-area">
             <a
@@ -70,7 +67,7 @@ class Navigation extends React.Component<IProps> {
           </div>
 
           <div className="app-instance-name">
-            <h2>DEV</h2>
+            <h2>{instanceName}</h2>
           </div>
 
           <ul className="nav navbar-nav toolbar pull-right">
@@ -106,7 +103,9 @@ class Navigation extends React.Component<IProps> {
                   items={apiExperiment.state.experiments}
                   title="BSD"
                   // tslint:disable-next-line jsx-no-lambda
-                  handleSelect={async (experiment: MIP.API.IExperimentResult) => {
+                  handleSelect={async (
+                    experiment: MIP.API.IExperimentResult
+                  ) => {
                     const { modelDefinitionId, uuid } = experiment;
                     this.props.history.push(
                       `/v3/experiment/${modelDefinitionId}/${uuid}`
@@ -120,9 +119,7 @@ class Navigation extends React.Component<IProps> {
                   noCaret={true}
                 />
                 {unreadCount && (
-                  <span className="unread_count_badge">
-                    {unreadCount}
-                  </span>
+                  <span className="unread_count_badge">{unreadCount}</span>
                 )}
               </span>
             </li>
