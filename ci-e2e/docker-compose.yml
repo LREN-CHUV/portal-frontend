@@ -290,7 +290,7 @@ services:
       - portalbackend
 
   frontend:
-    image: hbpmip/portal-frontend:2.13.3
+    image: hbpmip/portal-frontend:2.13.4
     depends_on:
       - portalbackend
     ports:
