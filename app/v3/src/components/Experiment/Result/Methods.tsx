@@ -17,9 +17,9 @@ const Methods = ({
           <h3>Methods</h3>
         </Panel.Title>
         <Panel.Body>
-          {algorithms.map((algorithm: any) => (
-            <div>
-              <p key={algorithm.code}>
+          {algorithms.map((algorithm: any, j: number) => (
+            <div key={`name-${algorithm.code}-${j}`}>
+              <p>
                 <strong>{algorithm.name}</strong>
               </p>
               {algorithm.parameters && algorithm.parameters.length > 0 && (
@@ -27,8 +27,8 @@ const Methods = ({
               )}
               {algorithm.parameters &&
                 algorithm.parameters.length > 0 &&
-                algorithm.parameters.map((m: any) => (
-                  <p key={algorithm.code}>
+                algorithm.parameters.map((m: any, i: number) => (
+                  <p key={`parameters-${algorithm.code}-${i}`}>
                     {m.code}: {m.value}
                   </p>
                 ))}
@@ -36,8 +36,8 @@ const Methods = ({
           ))}
           {validations.length > 0 && <h3>Validation</h3>}
           {validations.length > 0 &&
-            validations.map((m: any) => (
-              <p key={m.code}>
+            validations.map((m: any, k: number) => (
+              <p key={`validation-${m.code}-${k}`}>
                 {m.code}: {m.parameters.map((p: any) => p.value)}
               </p>
             ))}

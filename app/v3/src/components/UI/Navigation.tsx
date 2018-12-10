@@ -1,7 +1,6 @@
 import { APIExperiment, APIModel } from "@app/components/API";
 import Dropdown from "@app/components/UI/Dropdown";
 import default_user from "@app/images/default_user.png";
-import config from "@app/mip-config.json";
 import { MIP } from "@app/types";
 import * as React from "react";
 import { RouteComponentProps, withRouter } from "react-router-dom";
@@ -9,14 +8,16 @@ import { RouteComponentProps, withRouter } from "react-router-dom";
 import "./Navigation.css";
 
 interface IProps extends RouteComponentProps<any> {
+  appConfig: any;
   apiExperiment: APIExperiment;
   apiModel: APIModel;
 }
 
 class Navigation extends React.Component<IProps> {
+
   public render() {
-    const { apiExperiment, apiModel } = this.props;
-    const instanceName = config.instanceName || "MIP";
+    const { apiExperiment, apiModel, appConfig } = this.props;
+    const instanceName = appConfig.instanceName || "MIP";
 
     const unreadCount =
       (apiExperiment &&

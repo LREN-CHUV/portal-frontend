@@ -13,15 +13,16 @@ import "node_modules/bootstrap/dist/css/bootstrap.css";
 import "./App.css";
 
 interface IProps {
+  appConfig: any;
   apiExperiment: APIExperiment;
   apiCore: APICore;
   apiModel: APIModel;
 }
 
-const App = ({ apiExperiment, apiCore, apiModel }: IProps) => (
+const App = ({ appConfig, apiExperiment, apiCore, apiModel }: IProps) => (
   <div className="App">
     <header>
-      <Navigation apiExperiment={apiExperiment} apiModel={apiModel} />
+      <Navigation apiExperiment={apiExperiment} apiModel={apiModel} appConfig={appConfig} />
     </header>
     <section>
       <Route path="/v3/explore" render={() => <Explore apiCore={apiCore} />} />

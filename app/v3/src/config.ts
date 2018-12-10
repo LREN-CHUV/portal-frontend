@@ -27,6 +27,4 @@ const options: RequestInit =
       }
     : {};
 
-console.log(process.env.NODE_ENV, JSON.stringify(options, null, 4));
-
 export default { options, baseUrl };

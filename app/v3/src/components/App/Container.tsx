@@ -3,12 +3,18 @@ import App from "@app/components/App/App";
 import config from "@app/config";
 import * as React from "react";
 import { BrowserRouter as Router } from "react-router-dom";
+import request from "request-promise-native";
 import { Provider, Subscribe } from "unstated";
 import UNSTATED from "unstated-debug";
 
 UNSTATED.logStateChanges = process.env.NODE_ENV === "development";
 
-class AppContainer extends React.Component {
+interface IState {
+  appConfig: any;
+}
+
+class AppContainer extends React.Component<any, IState> {
+  public state: IState = { appConfig: {} };
   private apiExperiment = new APIExperiment(config);
   private apiModel = new APIModel(config);
   private apiCore = new APICore(config);
@@ -17,6 +23,21 @@ class AppContainer extends React.Component {
 
   public async componentWillMount() {
     this.intervalId = setInterval(() => this.apiExperiment.all(), 10 * 1000);
+
+    // Conf written by dockerize
+    const json = await request.get(
+      `http://${location.host}/scripts/app/config.json`
+    );
+    try {
+      const appConfig = JSON.parse(json);
+      this.setState({ appConfig });
+    } catch (e) {
+      this.setState({
+        appConfig: {
+          instanceName: "MIP"
+        }
+      });
+    }
 
     return await Promise.all([
       this.apiExperiment.all(),
@@ -43,6 +64,7 @@ class AppContainer extends React.Component {
             ) => {
               return (
                 <App
+                  appConfig={this.state.appConfig}
                   apiExperiment={apiExperiment}
                   apiCore={apiCore}
                   apiModel={apiModel}
