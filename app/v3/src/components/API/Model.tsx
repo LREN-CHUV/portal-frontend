@@ -20,7 +20,7 @@ class Model extends Container<MIP.Store.IModelState> {
   public one = async (slug: string) => {
     try {
       const data = await request.get(`${this.baseUrl}/${slug}`, this.options);
-      const json: MIP.API.IModelResult = await JSON.parse(data);
+      const json: MIP.API.IModelResponse = await JSON.parse(data);
       if (json.error) {
         return await this.setState({
           error: json.error
@@ -87,7 +87,7 @@ class Model extends Container<MIP.Store.IModelState> {
   public all = async () => {
     try {
       const data = await request.get(`${this.baseUrl}`, this.options);
-      const json: MIP.API.IModelResult[] = await JSON.parse(data);
+      const json: MIP.API.IModelResponse[] = await JSON.parse(data);
 
       return await this.setState({
         error: undefined,

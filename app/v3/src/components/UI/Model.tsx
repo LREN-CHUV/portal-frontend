@@ -66,7 +66,7 @@ const formatFilter = (filter: any) => {
   });
 };
 
-export default ({ model }: { model: MIP.API.IModelResult | undefined }) => {
+export default ({ model }: { model: MIP.API.IModelResponse | undefined }) => {
   const query = model && model.query;
   return (
     <Panel className="model">

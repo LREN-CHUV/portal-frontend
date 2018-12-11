@@ -90,7 +90,7 @@ class Experiment extends React.Component<IProps> {
     return match.params;
   };
 
-  private handleSelectExperiment = async (experiment: MIP.API.IExperimentResult) => {
+  private handleSelectExperiment = async (experiment: MIP.API.IExperimentResponse) => {
     const { modelDefinitionId, uuid } = experiment;
     const { history, apiExperiment } = this.props;
     history.push(`/v3/experiment/${modelDefinitionId}/${uuid}`);

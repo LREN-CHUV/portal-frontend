@@ -13,18 +13,22 @@ export declare namespace MIP.Store {
   }
 
   export interface IExperimentState extends IError {
-    experiment?: MIP.API.IExperimentResult;
-    experiments?: MIP.API.IExperimentResult[];
+    experiment?: MIP.API.IExperimentResponse;
+    experiments?: MIP.API.IExperimentResponse[];
+  }
+
+  export interface IMiningState extends IError {
+    mining?: MIP.API.IExperimentResponse;
   }
 
   export interface IModelState extends IError {
-    model?: MIP.API.IModelResult;
-    models?: MIP.API.IModelResult[];
+    model?: MIP.API.IModelResponse;
+    models?: MIP.API.IModelResponse[];
   }
 }
 
 export declare namespace MIP.API {
-  export interface IExperimentResult {
+  export interface IExperimentResponse {
     created: Date;
     error?: string;
     name: string;
@@ -32,21 +36,30 @@ export declare namespace MIP.API {
     uuid: string;
     modelDefinitionId: string;
     results?: INode[];
-    user: MIP.API.IUser;
+    user?: MIP.API.IUser;
     algorithms: MIP.API.IMethod[];
     modelDefinition?: MIP.API.IQuery;
     validations?: any;
     shared: boolean;
   }
 
-  export interface IExperimentParameters {
+  export interface IExperimentPayload {
     algorithms: [MIP.API.IMethod];
     model: string;
     name: string;
     validations: any;
   }
 
-  export interface IModelResult extends IError {
+  export interface IExperimentMiningPayload {
+    algorithm: MIP.API.IMethod;
+    variables: IVariableEntity[];
+    grouping: IVariableEntity[];
+    covariables: IVariableEntity[];
+    datasets: IVariableEntity[];
+    filters: string;
+  }
+
+  export interface IModelResponse extends IError {
     slug: string;
     title: string;
     valid: boolean;
@@ -60,7 +73,7 @@ export declare namespace MIP.API {
   export interface IMethod {
     code: string;
     name: string;
-    parameters?: [IMethodParameter] | any;
+    parameters?: [IMethodPayload] | any;
     validation: boolean;
     constraints?: any;
     type?: [string];
@@ -70,7 +83,7 @@ export declare namespace MIP.API {
     algorithms: IMethod[];
   }
 
-  export interface IMethodParameter {
+  export interface IMethodPayload {
     code: string;
     constraints: any;
     default_value: any;

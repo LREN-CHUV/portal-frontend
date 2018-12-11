@@ -3,7 +3,7 @@ import Dropdown from "@app/components/UI/Dropdown";
 import default_user from "@app/images/default_user.png";
 import { MIP } from "@app/types";
 import * as React from "react";
-import { RouteComponentProps, withRouter } from "react-router-dom";
+import { Link, RouteComponentProps, withRouter } from "react-router-dom";
 
 import "./Navigation.css";
 
@@ -14,7 +14,6 @@ interface IProps extends RouteComponentProps<any> {
 }
 
 class Navigation extends React.Component<IProps> {
-
   public render() {
     const { apiExperiment, apiModel, appConfig } = this.props;
     const instanceName = appConfig.instanceName || "MIP";
@@ -86,16 +85,16 @@ class Navigation extends React.Component<IProps> {
             </li>
 
             <li className="toolbar-icon-bg hidden-xs">
-              <a
+              <Link
                 title="Interactive Analysis"
-                href="/review"
+                to="/v3/review"
                 // tslint:disable-next-line jsx-no-lambda
                 onClick={e => this.jumpToAngular(e, "/review")}
               >
                 <span className="icon-bg">
                   <i>IA</i>
                 </span>
-              </a>
+              </Link>
             </li>
 
             <li className="toolbar-icon-bg hidden-xs bsd">
@@ -105,7 +104,7 @@ class Navigation extends React.Component<IProps> {
                   title="BSD"
                   // tslint:disable-next-line jsx-no-lambda
                   handleSelect={async (
-                    experiment: MIP.API.IExperimentResult
+                    experiment: MIP.API.IExperimentResponse
                   ) => {
                     const { modelDefinitionId, uuid } = experiment;
                     this.props.history.push(

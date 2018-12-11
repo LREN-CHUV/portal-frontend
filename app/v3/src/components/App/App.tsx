@@ -1,8 +1,14 @@
 // tslint:disable jsx-no-lambda
 
-import { APICore, APIExperiment, APIModel } from "@app/components/API";
+import {
+  APICore,
+  APIExperiment,
+  APIMining,
+  APIModel
+} from "@app/components/API";
 import ExperimentCreate from "@app/components/Experiment/Create/Container";
 import ExperimentResult from "@app/components/Experiment/Result/Container";
+import ExperimentReview from "@app/components/Experiment/Review/Container";
 import Experiments from "@app/components/Experiments/Experiments";
 import Explore from "@app/components/Explore/NativeBubble";
 import Navigation from "@app/components/UI/Navigation";
@@ -17,15 +23,36 @@ interface IProps {
   apiExperiment: APIExperiment;
   apiCore: APICore;
   apiModel: APIModel;
+  apiMining: APIMining;
 }
 
-const App = ({ appConfig, apiExperiment, apiCore, apiModel }: IProps) => (
+const App = ({
+  appConfig,
+  apiExperiment,
+  apiCore,
+  apiModel,
+  apiMining
+}: IProps) => (
   <div className="App">
     <header>
-      <Navigation apiExperiment={apiExperiment} apiModel={apiModel} appConfig={appConfig} />
+      <Navigation
+        apiExperiment={apiExperiment}
+        apiModel={apiModel}
+        appConfig={appConfig}
+      />
     </header>
     <section>
       <Route path="/v3/explore" render={() => <Explore apiCore={apiCore} />} />
+      <Route
+        path="/v3/review/:slug"
+        render={() => (
+          <ExperimentReview
+            apiMining={apiMining}
+            apiModel={apiModel}
+            apiCore={apiCore}
+          />
+        )}
+      />
       <Route
         path="/v3/experiments"
         render={() => <Experiments apiExperiment={apiExperiment} />}

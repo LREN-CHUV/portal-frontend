@@ -11,7 +11,7 @@ const AvailableMethods = ({
   methods: MIP.API.IMethods | undefined;
   variables: MIP.API.IVariableEntity[] | undefined;
   handleSelectMethod: (method: MIP.API.IMethod) => void;
-  model: MIP.API.IModelResult | undefined;
+  model: MIP.API.IModelResponse | undefined;
 }) => {
   const query = model && model.query;
   const modelVariable =

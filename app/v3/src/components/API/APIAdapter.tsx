@@ -1,8 +1,8 @@
 import { MIME_TYPES, SCORES } from "@app/constants";
 import { MIP } from "@app/types";
 
-class ParseExperiment {
-  public static parse = (experiment: any): MIP.API.IExperimentResult => {
+class APIAdapter {
+  public static parse = (experiment: any): MIP.API.IExperimentResponse => {
     // Formats are differents in the API for experiment, experimentList and runExperiment,
     // apply specific parsing to some terms
     const algorithms = parse(experiment.algorithms);
@@ -16,7 +16,7 @@ class ParseExperiment {
     })();
     const modelDefinitionId = experiment.model ? experiment.model.slug : null;
 
-    let experimentResult: MIP.API.IExperimentResult = {
+    let experimentResponse: MIP.API.IExperimentResponse = {
       algorithms,
       created,
       modelDefinition: experiment.model ? experiment.model.query : undefined,
@@ -24,46 +24,47 @@ class ParseExperiment {
       name: experiment.name,
       resultsViewed: experiment.resultsViewed,
       shared: experiment.shared,
-      user: {
-        fullname: experiment.createdBy.fullname,
-        username: experiment.createdBy.username
-      },
       uuid: experiment.uuid,
       validations: experiment.validations
     };
 
+    experimentResponse.user = experiment.createdBy ?  ({
+      fullname: experiment.createdBy.fullname,
+      username: experiment.createdBy.username
+    }) : undefined
+
     // Errors
     if (!modelDefinitionId) {
-      experimentResult = {
-        ...experimentResult,
+      experimentResponse = {
+        ...experimentResponse,
         error: "No model defined",
         modelDefinitionId: "undefined"
       };
 
-      return experimentResult;
+      return experimentResponse;
     }
 
     if (experiment.hasServerError) {
-      experimentResult = {
-        ...experimentResult,
+      experimentResponse = {
+        ...experimentResponse,
         error: `${experiment.result}`
       };
 
-      return experimentResult;
+      return experimentResponse;
     }
 
     if (!experiment.result) {
       const elapsed: number =
-        (new Date().getTime() - experimentResult.created.getTime()) / 1000;
+        (new Date().getTime() - experimentResponse.created.getTime()) / 1000;
 
       if (elapsed > 60 * 5) {
-        experimentResult = {
-          ...experimentResult,
+        experimentResponse = {
+          ...experimentResponse,
           error: "Timeout after 5 mn"
         };
       }
 
-      return experimentResult;
+      return experimentResponse;
     }
 
     // Results
@@ -74,9 +75,9 @@ class ParseExperiment {
     result.forEach((r: any, i: number) => {
       const mime = r.type;
       const algorithm =
-        experimentResult.algorithms.length - 1 === i
-          ? experimentResult.algorithms[i]
-          : experimentResult.algorithms[0];
+        experimentResponse.algorithms.length - 1 === i
+          ? experimentResponse.algorithms[i]
+          : experimentResponse.algorithms[0];
       let method: any = {
         algorithm: r.algorithm || algorithm,
         mime
@@ -210,15 +211,15 @@ class ParseExperiment {
       nodes.push(node);
     });
     // console.log({nodes})
-    experimentResult.results = nodes.sort((a: MIP.API.INode, b: MIP.API.INode) =>
+    experimentResponse.results = nodes.sort((a: MIP.API.INode, b: MIP.API.INode) =>
       a.name.localeCompare(b.name)
     );
 
-    return experimentResult;
+    return experimentResponse;
   };
 }
 
-export default ParseExperiment;
+export default APIAdapter;
 
 const highcharts = (data: any) => {
   return data;

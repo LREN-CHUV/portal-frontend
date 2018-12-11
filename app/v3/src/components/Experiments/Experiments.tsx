@@ -9,14 +9,14 @@ interface IProps {
   apiExperiment: APIExperiment;
 }
 
-const renderExperiments = (experiments: MIP.API.IExperimentResult[] | undefined) => {
+const renderExperiments = (experiments: MIP.API.IExperimentResponse[] | undefined) => {
   if (experiments === undefined) {
     return <React.Fragment />;
   }
 
   return (
     <div>
-      {experiments.map((experiment: MIP.API.IExperimentResult) => {
+      {experiments.map((experiment: MIP.API.IExperimentResponse) => {
         const nodes = experiment && experiment.results;
         const error = experiment && experiment.error;
 

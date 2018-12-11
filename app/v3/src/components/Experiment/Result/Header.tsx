@@ -3,10 +3,11 @@ import { MIP } from "@app/types";
 import moment from "moment"; // FIXME: change lib, too heavy
 import * as React from "react";
 import { Button, Panel } from "react-bootstrap";
+import { Link } from "react-router-dom"
 
 interface IProps {
-  experiment: MIP.API.IExperimentResult | undefined;
-  experiments: MIP.API.IExperimentResult[] | undefined;
+  experiment?: MIP.API.IExperimentResponse;
+  experiments?: MIP.API.IExperimentResponse[];
   handleSelectExperiment: any;
   handleShareExperiment: any;
   handleCreateNewExperiment: any;
@@ -28,14 +29,14 @@ export default ({
       <Panel.Body>
         <h3>
           Results of Experiment <strong>{name}</strong> on{" "}
-          <a href={`/models/${modelDefinitionId}`}>{modelDefinitionId}</a>
+          <Link to={`/v3/review/${modelDefinitionId}`}>{modelDefinitionId}</Link>
         </h3>
         <div className="actions status">
           <h5 className="item">
             Created{" "}
             {experiment &&
               moment(new Date(experiment.created), "YYYYMMDD").fromNow()}{" "}
-            by {experiment && experiment.user.username}
+            by {experiment && experiment.user && experiment.user.username}
           </h5>
           <div className="item text">&nbsp;</div>
           <div className="item">

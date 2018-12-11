@@ -1,4 +1,9 @@
-import { APICore, APIExperiment, APIModel } from "@app/components/API"; // as interfaces
+import {
+  APICore,
+  APIExperiment,
+  APIMining,
+  APIModel
+} from "@app/components/API"; // as interfaces
 import App from "@app/components/App/App";
 import config from "@app/config";
 import * as React from "react";
@@ -18,6 +23,7 @@ class AppContainer extends React.Component<any, IState> {
   private apiExperiment = new APIExperiment(config);
   private apiModel = new APIModel(config);
   private apiCore = new APICore(config);
+  private apiMining = new APIMining(config);
 
   private intervalId: NodeJS.Timer;
 
@@ -55,12 +61,20 @@ class AppContainer extends React.Component<any, IState> {
   public render() {
     return (
       <Router>
-        <Provider inject={[this.apiExperiment, this.apiCore, this.apiModel]}>
-          <Subscribe to={[APIExperiment, APICore, APIModel]}>
+        <Provider
+          inject={[
+            this.apiExperiment,
+            this.apiCore,
+            this.apiModel,
+            this.apiMining
+          ]}
+        >
+          <Subscribe to={[APIExperiment, APICore, APIModel, APIMining]}>
             {(
               apiExperiment: APIExperiment,
               apiCore: APICore,
-              apiModel: APIModel
+              apiModel: APIModel,
+              apiMining: APIMining
             ) => {
               return (
                 <App
@@ -68,6 +82,7 @@ class AppContainer extends React.Component<any, IState> {
                   apiExperiment={apiExperiment}
                   apiCore={apiCore}
                   apiModel={apiModel}
+                  apiMining={apiMining}
                 />
               );
             }}

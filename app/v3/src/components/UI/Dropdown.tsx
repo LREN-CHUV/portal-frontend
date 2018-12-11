@@ -6,7 +6,7 @@ import { DropdownButton, MenuItem } from "react-bootstrap";
 import "./Dropdown.css";
 
 interface IDropdown {
-  items: MIP.API.IExperimentResult[] | undefined;
+  items: MIP.API.IExperimentResponse[] | undefined;
   title: string;
   handleSelect: any;
   handleCreateNewExperiment: any;
@@ -41,7 +41,7 @@ export default ({
     {(items &&
       handleSelect &&
       items
-        .sort((a1: MIP.API.IExperimentResult, b1: MIP.API.IExperimentResult) => {
+        .sort((a1: MIP.API.IExperimentResponse, b1: MIP.API.IExperimentResponse) => {
           const a = a1.created;
           const b = b1.created;
 

@@ -5,7 +5,7 @@ import { Panel } from "react-bootstrap";
 const Methods = ({
   experiment
 }: {
-  experiment: MIP.API.IExperimentResult | undefined;
+  experiment?: MIP.API.IExperimentResponse;
 }) => {
   const algorithms = experiment && experiment.algorithms;
   const validations = experiment && experiment.validations;

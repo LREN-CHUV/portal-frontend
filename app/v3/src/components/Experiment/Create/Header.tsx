@@ -4,13 +4,13 @@ import {  MIP } from "@app/types";
 import * as React from "react";
 import { Button, FormControl, Panel } from "react-bootstrap";
 interface IProps {
-  title: string | undefined;
-  models: MIP.API.IModelResult[] | undefined;
-  experiments: MIP.API.IExperimentResult[] | undefined;
-  method: MIP.API.IMethod | undefined;
-  handleSelectModel: (model: MIP.API.IModelResult) => Promise<any>;
+  title?: string;
+  models?: MIP.API.IModelResponse[];
+  experiments?: MIP.API.IExperimentResponse[];
+  method?: MIP.API.IMethod;
+  handleSelectModel: (model: MIP.API.IModelResponse) => Promise<any>;
   handleSelectExperiment: (
-    experiment: MIP.API.IExperimentResult
+    experiment: MIP.API.IExperimentResponse
   ) => Promise<any>;
   handleSaveAndRunExperiment: (experimentName: string) => Promise<any>;
 }

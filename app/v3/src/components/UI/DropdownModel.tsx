@@ -5,7 +5,7 @@ import { DropdownButton, MenuItem } from "react-bootstrap";
 import "./Dropdown.css";
 
 interface IDropdown {
-  items: MIP.API.IModelResult[] | undefined;
+  items: MIP.API.IModelResponse[] | undefined;
   title?: string;
   handleSelect: any;
   noCaret?: boolean;

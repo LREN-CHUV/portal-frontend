@@ -2,7 +2,7 @@ import { MIP } from "@app/types";
 import * as dotenv from "dotenv";
 import request from "request-promise-native";
 import { Container } from "unstated";
-import ParseExperiment from "./ParseExperiment";
+import APIAdapter from "./APIAdapter";
 
 dotenv.config();
 
@@ -36,7 +36,7 @@ class Experiment extends Container<MIP.Store.IExperimentState> {
           error: json.error
         });
       }
-      const experiment = ParseExperiment.parse(json);
+      const experiment = APIAdapter.parse(json);
       return await this.setState({
         error: undefined,
         experiment
@@ -60,8 +60,8 @@ class Experiment extends Container<MIP.Store.IExperimentState> {
 
       return await this.setState({
         error: undefined,
-        experiments: json.map((j: MIP.API.IExperimentResult) =>
-          ParseExperiment.parse(j)
+        experiments: json.map((j: MIP.API.IExperimentResponse) =>
+        APIAdapter.parse(j)
         )
       });
     } catch (error) {
@@ -74,7 +74,7 @@ class Experiment extends Container<MIP.Store.IExperimentState> {
   public create = async ({
     experiment
   }: {
-    experiment: MIP.API.IExperimentParameters;
+    experiment: MIP.API.IExperimentPayload;
   }) => {
     try {
       const data = await request({
@@ -87,7 +87,7 @@ class Experiment extends Container<MIP.Store.IExperimentState> {
         uri: `${this.baseUrl}`
       });
       const json = await JSON.parse(data);
-      const result = ParseExperiment.parse(json);
+      const result = APIAdapter.parse(json);
       return await this.setState({
         error: undefined,
         experiment: result
@@ -120,7 +120,7 @@ class Experiment extends Container<MIP.Store.IExperimentState> {
           error: json.error
         });
       }
-      const experiment = ParseExperiment.parse(json);
+      const experiment = APIAdapter.parse(json);
       return await this.setState({
         error: undefined,
         experiment

@@ -10,9 +10,9 @@ import {
 
 
 interface IProps {
-  method: any | undefined;
-  parameters?: [MIP.API.IMethodParameter] | undefined;
-  kfold: number | undefined;
+  method?: any;
+  parameters?: [MIP.API.IMethodPayload];
+  kfold?: number;
   handleChangeParameters: (parameters: any) => void;
   handleChangeKFold: (kfold: number) => void;
 }
@@ -68,7 +68,7 @@ class FForm extends React.Component<IProps> {
         {parameters && parameters.length > 0 && <h4>Parameters</h4>}
         {parameters && parameters.length > 0 && 
           <Form horizontal={true}>
-            {parameters && parameters.length && parameters.map((parameter: MIP.API.IMethodParameter) => {
+            {parameters && parameters.length && parameters.map((parameter: MIP.API.IMethodPayload) => {
               const numberTypes = ["int", "real", "number", "numeric"];
               const type =
                 numberTypes.indexOf(parameter.type) >= -1 ? "number" : "text";
@@ -137,7 +137,7 @@ class FForm extends React.Component<IProps> {
     const { parameters } = this.props;
     if (constraints && parameters) {
       const { min, max } = constraints;
-      const parameter = parameters.find((p: MIP.API.IMethodParameter) => p.code === code);
+      const parameter = parameters.find((p: MIP.API.IMethodPayload) => p.code === code);
       if (parameter && parameter.value < min || parameter && parameter.value > max) {
         
         return "error";
