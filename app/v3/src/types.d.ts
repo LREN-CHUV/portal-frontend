@@ -18,7 +18,7 @@ export declare namespace MIP.Store {
   }
 
   export interface IMiningState extends IError {
-    mining?: MIP.API.IExperimentResponse;
+    mining?: any[];
   }
 
   export interface IModelState extends IError {
@@ -51,7 +51,7 @@ export declare namespace MIP.API {
   }
 
   export interface IExperimentMiningPayload {
-    algorithm: MIP.API.IMethod;
+    algorithm?: MIP.API.IMethod;
     variables: IVariableEntity[];
     grouping: IVariableEntity[];
     covariables: IVariableEntity[];

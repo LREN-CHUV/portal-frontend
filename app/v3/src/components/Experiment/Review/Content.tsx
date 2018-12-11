@@ -26,7 +26,7 @@ const Content = ({ apiMining }: IProps) =>
           <Tabs defaultActiveKey={1} id="uncontrolled-review-model-tab">
             <Tab eventKey={1} title="Table">
               <Table
-                experiment={
+                mining={
                   apiMining.state && apiMining.state.mining
                 }
               />

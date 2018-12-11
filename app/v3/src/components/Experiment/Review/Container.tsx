@@ -4,6 +4,7 @@ import Model from "@app/components/UI/Model";
 import Validation from "@app/components/UI/Validation";
 import { MIP } from "@app/types";
 import * as React from "react";
+import { Panel } from "react-bootstrap";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import Content from "./Content";
 
@@ -35,12 +36,6 @@ class Container extends React.Component<IProps, IState> {
     if (model) {
       const { query } = model;
       const payload: MIP.API.IExperimentMiningPayload = {
-        algorithm: {
-          code: "statisticsSummary",
-          name: "statisticsSummary",
-          parameters: [],
-          validation: false
-        },
         covariables: query.coVariables ? query.coVariables : [],
         datasets: query.trainingDatasets ? query.trainingDatasets : [],
         filters: query.filters,
@@ -48,7 +43,7 @@ class Container extends React.Component<IProps, IState> {
         variables: query.variables ? query.variables : []
       };
 
-      return apiMining.create({ payload });
+      return apiMining.createAll({ payload });
     }
 
     return this.setState({ alert: { message: "Fail" } });
@@ -62,12 +57,16 @@ class Container extends React.Component<IProps, IState> {
         <div className="content">
           <div className="sidebar">
             <Model model={apiModel.state.model} />
-            <Validation
-              isPredictiveMethod={false}
-              datasets={apiCore.state.datasets}
-              query={this.state.query}
-              handleUpdateQuery={this.handleUpdateQuery}
-            />
+            <Panel className="model">
+              <Panel.Body>
+                <Validation
+                  isPredictiveMethod={false}
+                  datasets={apiCore.state.datasets}
+                  query={this.state.query}
+                  handleUpdateQuery={this.handleUpdateQuery}
+                />
+              </Panel.Body>
+            </Panel>
           </div>
           <div className="results">
             <Content apiMining={apiMining} />
