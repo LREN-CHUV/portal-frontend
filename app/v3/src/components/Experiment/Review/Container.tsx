@@ -14,9 +14,12 @@ interface IProps extends RouteComponentProps<any> {
   apiMining: APIMining;
 }
 
+let loading = false;
+
 interface IState {
   alert?: IAlert;
   query?: MIP.API.IQuery;
+  mining?: any;
 }
 
 class Container extends React.Component<IProps, IState> {
@@ -28,25 +31,22 @@ class Container extends React.Component<IProps, IState> {
       return;
     }
     const { slug } = params;
-    const { apiModel, apiMining } = this.props;
+    await this.loadModel({ slug });
 
-    await apiModel.one(slug);
+    return this.loadData()
+  }
 
-    const model = apiModel.state.model;
-    if (model) {
-      const { query } = model;
-      const payload: MIP.API.IExperimentMiningPayload = {
-        covariables: query.coVariables ? query.coVariables : [],
-        datasets: query.trainingDatasets ? query.trainingDatasets : [],
-        filters: query.filters,
-        grouping: query.groupings ? query.groupings : [],
-        variables: query.variables ? query.variables : []
-      };
+  public async componentDidUpdate(prevProps: IProps, prevState: IState) {
+    const params = this.urlParams(this.props);
+    const slug = params && params.slug;
+    const prevParams = this.urlParams(prevProps);
+    const prevSlug = prevParams && prevParams.slug;
 
-      return apiMining.createAll({ payload });
+    if (prevSlug !== slug && slug) {
+      await this.loadModel({ slug });
     }
 
-    return this.setState({ alert: { message: "Fail" } });
+    return this.loadData()
   }
 
   public render() {
@@ -56,7 +56,7 @@ class Container extends React.Component<IProps, IState> {
       <div className="Experiment">
         <div className="content">
           <div className="sidebar">
-            <Model model={apiModel.state.model} />
+            <Model model={apiModel.state.model} showDatasets={false} />
             <Panel className="model">
               <Panel.Body>
                 <Validation
@@ -69,11 +69,49 @@ class Container extends React.Component<IProps, IState> {
             </Panel>
           </div>
           <div className="results">
-            <Content apiMining={apiMining} />
+            <Content
+              apiMining={apiMining}
+              selectedDatasets={
+                this.state.query && this.state.query.trainingDatasets
+              }
+            />
           </div>
         </div>
       </div>
     );
+  }
+
+  private loadModel = async ({ slug }: { slug: string }) => {
+    const { apiModel } = this.props;
+    await apiModel.one(slug);
+
+    const model = apiModel.state.model;
+    if (!model) {
+      return this.setState({ alert: { message: "Fail to load model" } });
+    }
+
+    const { query } = model;
+    return this.setState({ query });
+  };
+
+  private loadData = async () => {
+    const { apiCore, apiMining } = this.props;
+    const datasets = apiCore.state.datasets;
+    const query = this.state.query;
+    
+    if (datasets && query && !loading) {
+      loading = true;
+      const payload: MIP.API.IExperimentMiningPayload = {
+        covariables: query.coVariables ? query.coVariables : [],
+        datasets,
+        filters: query.filters,
+        grouping: query.groupings ? query.groupings : [],
+        variables: query.variables ? query.variables : []
+      };
+
+      await apiMining.createAll({ payload });
+      return this.setState({ mining: apiMining.state.minings });
+    }
   }
 
   private handleUpdateQuery = (query: MIP.API.IQuery): void => {

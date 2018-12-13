@@ -82,7 +82,7 @@ const Validation = ({
   query: any;
   handleUpdateQuery: any;
 }) => (
-  <fieldset style={{ padding: "8px" }}>
+  <div>
     <h5>
       {isPredictiveMethod && <strong>Training and kfold</strong>}
       {!isPredictiveMethod && <strong>Datasets</strong>}
@@ -149,7 +149,7 @@ const Validation = ({
         </FormGroup>
       </div>
     )}
-  </fieldset>
+  </div>
 );
 
 export default Validation;

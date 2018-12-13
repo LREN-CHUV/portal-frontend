@@ -3,20 +3,23 @@ import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
 import * as React from "react";
 
+import { MIP } from "@app/types";
 import "primeicons/primeicons.css";
 import "primereact/resources/primereact.min.css";
 import "primereact/resources/themes/nova-light/theme.css";
 
 interface IProps {
-  mining?: any[];
+  minings?: any[];
+  selectedDatasets?: MIP.API.IVariableEntity[];
 }
 
-const Table = ({ mining: datasets }: IProps) => {
-  if (!datasets) {
+const Table = ({ minings, selectedDatasets }: IProps) => {
+  if (!minings) {
     return null;
   }
 
-  const datasetDatas = datasets.map(
+
+  const datasetDatas = minings.map(
     dataset =>
       (dataset.data &&
         dataset.data.data &&
@@ -29,11 +32,11 @@ const Table = ({ mining: datasets }: IProps) => {
 
   // get variables indexes
   const indexes =
-    datasetDatas.length && datasetDatas[0].map((d: any) => d.index);
+    datasetDatas.length && datasetDatas[0].map((d: any) => d.index) || [];
 
   // populate each variable data by row
   const rows: any[] = [];
-  indexes.forEach((index: any) => {
+  indexes.map((index: any) => {
     const row: any = {};
     datasetDatas.map((datasetData: any, i: number) => {
       const dataRow = datasetData.find((d: any) => d.index === index);
@@ -49,7 +52,6 @@ const Table = ({ mining: datasets }: IProps) => {
     const polynominalRows: any[] = [];
     let polynominalRow: any;
 
-    console.log(row)
     Object.keys(row).map((rowKey: any) => {
       const col = row[rowKey];
       computedRow.variable = col.label;
@@ -59,7 +61,7 @@ const Table = ({ mining: datasets }: IProps) => {
         Object.keys(col.frequency).map((k: any) => {
           polynominalRow = polynominalRows.find(p => p.variable === k);
           if (!polynominalRow) {
-            polynominalRow = {}
+            polynominalRow = {};
             polynominalRows.push(polynominalRow);
           }
           polynominalRow[rowKey] = col.frequency[k];
@@ -67,10 +69,12 @@ const Table = ({ mining: datasets }: IProps) => {
         });
       } else {
         const mean = round(row[rowKey].mean, 2);
-        const min = round(row[rowKey].min, 2);;
-        const max = round(row[rowKey].max, 2);;
-        const std = round(row[rowKey].std, 2);;
-        computedRow[rowKey] = mean ? `${mean} (${min}-${max}) - std: ${std}` : '-';
+        const min = round(row[rowKey].min, 2);
+        const max = round(row[rowKey].max, 2);
+        const std = round(row[rowKey].std, 2);
+        computedRow[rowKey] = mean
+          ? `${mean} (${min}-${max}) - std: ${std}`
+          : "-";
       }
     });
 
@@ -82,7 +86,7 @@ const Table = ({ mining: datasets }: IProps) => {
 
   const columns = [
     <Column header="variable" field="variable" key={"variable"} />,
-    ...datasets.map((dataset: any, index: number) => (
+    ...minings.map((dataset: any, index: number) => (
       <Column header={dataset.name} field={`${index}`} key={index} />
     ))
   ];
