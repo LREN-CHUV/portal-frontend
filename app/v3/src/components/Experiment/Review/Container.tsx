@@ -3,11 +3,11 @@ import { IAlert } from "@app/components/UI/Alert";
 import Model from "@app/components/UI/Model";
 import Validation from "@app/components/UI/Validation";
 import { MIP } from "@app/types";
+import { round } from "@app/utils";
 import * as React from "react";
 import { Panel } from "react-bootstrap";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import Content from "./Content";
-
 interface IProps extends RouteComponentProps<any> {
   apiModel: APIModel;
   apiCore: APICore;
@@ -21,6 +21,10 @@ interface IState {
   query?: MIP.API.IQuery;
   mining?: any;
 }
+interface IComputeData {
+  minings?: any[];
+  selectedDatasets?: MIP.API.IVariableEntity[];
+}
 
 class Container extends React.Component<IProps, IState> {
   public state: IState = {};
@@ -33,7 +37,7 @@ class Container extends React.Component<IProps, IState> {
     const { slug } = params;
     await this.loadModel({ slug });
 
-    return this.loadData()
+    return this.loadData();
   }
 
   public async componentDidUpdate(prevProps: IProps, prevState: IState) {
@@ -46,12 +50,15 @@ class Container extends React.Component<IProps, IState> {
       await this.loadModel({ slug });
     }
 
-    return this.loadData()
+    return this.loadData();
   }
 
   public render() {
     const { apiCore, apiModel, apiMining } = this.props;
-
+    const computedData = this.computeData({
+      minings: apiMining.state && apiMining.state.minings,
+      selectedDatasets: this.state.query && this.state.query.trainingDatasets
+    });
     return (
       <div className="Experiment">
         <div className="content">
@@ -74,12 +81,87 @@ class Container extends React.Component<IProps, IState> {
               selectedDatasets={
                 this.state.query && this.state.query.trainingDatasets
               }
+              computedData={computedData}
             />
           </div>
         </div>
       </div>
     );
   }
+
+  private computeData = ({ minings, selectedDatasets }: IComputeData) : any => {
+    const computedRows: any[] = [];
+    
+    if (!minings) {
+      return computedRows;
+    }
+
+    const datasetDatas = minings.map(
+      dataset =>
+        (dataset.data &&
+          dataset.data &&
+          dataset.data.length &&
+          dataset.data.filter(
+            (r: any) => r.group && r.group[0] === "all"
+          )) ||
+        {}
+    );
+
+    const indexes =
+      (datasetDatas.length && datasetDatas[0].map((d: any) => d.index)) || [];
+
+    // populate each variable data by row
+    const rows: any[] = [];
+    indexes.map((index: any) => {
+      const row: any = {};
+      datasetDatas.map((datasetData: any, i: number) => {
+        const dataRow = datasetData.find((d: any) => d.index === index);
+        row[i] = dataRow;
+      });
+      rows.push(row);
+    });
+
+    // compute rows data for output
+    rows.map((row: any) => {
+      const computedRow: any = {};
+      const polynominalRows: any[] = [];
+      let polynominalRow: any;
+
+      Object.keys(row).map((rowKey: any) => {
+        const col = row[rowKey];
+        computedRow.variable = col.label;
+
+        if (col.frequency) {
+          computedRow[rowKey] = row[rowKey].count;
+          Object.keys(col.frequency).map((k: any) => {
+            polynominalRow = polynominalRows.find(p => p.variable === k);
+            if (!polynominalRow) {
+              polynominalRow = {};
+              polynominalRows.push(polynominalRow);
+            }
+            polynominalRow[rowKey] = col.frequency[k];
+            polynominalRow.variable = k;
+          });
+        } else {
+          const mean = round(row[rowKey].mean, 2);
+          const min = round(row[rowKey].min, 2);
+          const max = round(row[rowKey].max, 2);
+          const std = round(row[rowKey].std, 2);
+          computedRow[rowKey] = mean
+            ? `${mean} (${min}-${max}) - std: ${std}`
+            : "-";
+        }
+      });
+
+      computedRows.push(computedRow);
+      polynominalRows.map((p: any) => {
+        computedRows.push(p);
+      });
+    });
+
+    return computedRows;
+    
+  };
 
   private loadModel = async ({ slug }: { slug: string }) => {
     const { apiModel } = this.props;
@@ -98,7 +180,7 @@ class Container extends React.Component<IProps, IState> {
     const { apiCore, apiMining } = this.props;
     const datasets = apiCore.state.datasets;
     const query = this.state.query;
-    
+
     if (datasets && query && !loading) {
       loading = true;
       const payload: MIP.API.IExperimentMiningPayload = {
@@ -112,7 +194,7 @@ class Container extends React.Component<IProps, IState> {
       await apiMining.createAll({ payload });
       return this.setState({ mining: apiMining.state.minings });
     }
-  }
+  };
 
   private handleUpdateQuery = (query: MIP.API.IQuery): void => {
     this.setState({ query });

@@ -3,14 +3,16 @@ import { Alert } from "@app/components/UI/Alert";
 import { MIP } from "@app/types";
 import * as React from "react";
 import { Panel, Tab, Tabs } from "react-bootstrap";
+import Boxplot from "./Boxplot";
 import Table from "./Table";
 
 interface IProps {
   apiMining?: APIMining;
   selectedDatasets?: MIP.API.IVariableEntity[];
+  computedData?: any[]
 }
 
-const Content = ({ apiMining, selectedDatasets }: IProps) =>
+const Content = ({ apiMining, selectedDatasets, computedData }: IProps) =>
   (apiMining && (
     <Panel>
       <Panel.Title>
@@ -24,16 +26,16 @@ const Content = ({ apiMining, selectedDatasets }: IProps) =>
             style={"info"}
           />
         )}
-        {/* {apiMining && apiMining.loaded ? ( */}
         <Tabs defaultActiveKey={1} id="uncontrolled-review-model-tab">
           <Tab eventKey={1} title="Table">
             <Table
               minings={apiMining.state && apiMining.state.minings}
-              selectedDatasets={selectedDatasets}
+              computedData={computedData}
             />
           </Tab>
           <Tab eventKey={2} title="Boxplot">
-            Boxplot
+            <Boxplot minings={apiMining.state && apiMining.state.minings}
+              selectedDatasets={selectedDatasets}/> 
           </Tab>
           <Tab eventKey={3} title="Heatmap">
             Heatmap

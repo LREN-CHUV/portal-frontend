@@ -44,6 +44,7 @@ class Mining extends Container<MIP.Store.IMiningState> {
     }));
 
     try {
+      // not loaded in parallel because we want to stream results
       payloads.map(async pl => {
         const data = await request({
           body: JSON.stringify(pl),
@@ -55,7 +56,7 @@ class Mining extends Container<MIP.Store.IMiningState> {
           uri: `${this.baseUrl}/mining`
         });
 
-        const json = JSON.parse(data);
+        const json = JSON.parse(data).data;
 
         await this.setState((prevState: any) => {
           const minings = [ ...prevState.minings, ...json];
