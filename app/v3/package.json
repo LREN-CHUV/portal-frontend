@@ -15,6 +15,7 @@
     "react-bootstrap": "^0.32.4",
     "react-dom": "^16.6.3",
     "react-plotly.js": "^2.2.0",
+    "react-querybuilder": "^1.4.3",
     "react-router-dom": "^4.3.1",
     "react-scripts-ts": "3.1.0",
     "request": "^2.88.0",

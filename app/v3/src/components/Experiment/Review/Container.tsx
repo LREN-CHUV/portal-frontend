@@ -8,6 +8,8 @@ import * as React from "react";
 import { Panel } from "react-bootstrap";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import Content from "./Content";
+import Filter from "./Filter";
+
 interface IProps extends RouteComponentProps<any> {
   apiModel: APIModel;
   apiCore: APICore;
@@ -59,11 +61,48 @@ class Container extends React.Component<IProps, IState> {
       minings: apiMining.state && apiMining.state.minings,
       selectedDatasets: this.state.query && this.state.query.trainingDatasets
     });
+
+    const variables = apiCore.state.variables;
+    const model = apiModel.state.model;
+    const query = model && model.query;
+
+    let fields: any[] = [];
+    function buildFilter(id: string) {
+      return (
+        (variables &&
+          query &&
+          query[id] &&
+          query[id].map((v: any) => {
+            const code = v.code;
+            const canonicalVar = variables.find(
+              (variable: MIP.API.IVariableEntity) => variable.code === code
+            );
+            return canonicalVar
+              ? {
+                  enumerations: canonicalVar.enumerations,
+                  label: canonicalVar.label,
+                  name: v.code
+                }
+              : {};
+          })) ||
+        []
+      );
+    }
+    fields = [].concat.apply(
+      [],
+      ["variables", "coVariables", "groupings"].map(buildFilter)
+    );
+
     return (
       <div className="Experiment">
         <div className="content">
           <div className="sidebar">
             <Model model={apiModel.state.model} showDatasets={false} />
+            <Filter
+              query={this.state.query && this.state.query.filters}
+              fields={fields}
+              handleChangeFilter={this.handleChangeFilter}
+            />
             <Panel className="model">
               <Panel.Body>
                 <Validation
@@ -89,9 +128,13 @@ class Container extends React.Component<IProps, IState> {
     );
   }
 
-  private computeData = ({ minings, selectedDatasets }: IComputeData) : any => {
+  private handleChangeFilter = (args: any) => {
+    console.log(args);
+  };
+
+  private computeData = ({ minings, selectedDatasets }: IComputeData): any => {
     const computedRows: any[] = [];
-    
+
     if (!minings) {
       return computedRows;
     }
@@ -101,9 +144,7 @@ class Container extends React.Component<IProps, IState> {
         (dataset.data &&
           dataset.data &&
           dataset.data.length &&
-          dataset.data.filter(
-            (r: any) => r.group && r.group[0] === "all"
-          )) ||
+          dataset.data.filter((r: any) => r.group && r.group[0] === "all")) ||
         {}
     );
 
@@ -160,7 +201,6 @@ class Container extends React.Component<IProps, IState> {
     });
 
     return computedRows;
-    
   };
 
   private loadModel = async ({ slug }: { slug: string }) => {

@@ -111,11 +111,17 @@ export declare namespace MIP.API {
     validationDatasets?: MIP.API.IVariableEntity[];
   }
 
-  export interface IVariableEntity {
-    code: string;
+  export interface IVariable {
+    code: string,
+    label?: string
+  }
+
+  export interface IVariableEntity extends IVariable {
     type?: string;
     sqlType?: string;
     description?: string;
+    enumerations?: IVariable[]
+    group?: IVariable[]
   }
 
   export interface IUser {
