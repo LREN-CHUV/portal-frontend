@@ -10,6 +10,7 @@ import { RouteComponentProps, withRouter } from "react-router-dom";
 import Content from "./Content";
 import Filter from "./Filter";
 
+import "./Review.css";
 interface IProps extends RouteComponentProps<any> {
   apiModel: APIModel;
   apiCore: APICore;
@@ -67,7 +68,7 @@ class Container extends React.Component<IProps, IState> {
     const query = model && model.query;
 
     let fields: any[] = [];
-    function buildFilter(id: string) {
+    const buildFilter = (id: string) => {
       return (
         (variables &&
           query &&
@@ -80,6 +81,7 @@ class Container extends React.Component<IProps, IState> {
             return canonicalVar
               ? {
                   enumerations: canonicalVar.enumerations,
+                  id: v.code,
                   label: canonicalVar.label,
                   name: v.code
                 }
@@ -87,22 +89,17 @@ class Container extends React.Component<IProps, IState> {
           })) ||
         []
       );
-    }
+    };
     fields = [].concat.apply(
       [],
       ["variables", "coVariables", "groupings"].map(buildFilter)
     );
 
     return (
-      <div className="Experiment">
+      <div className="Experiment Review">
         <div className="content">
           <div className="sidebar">
             <Model model={apiModel.state.model} showDatasets={false} />
-            <Filter
-              query={this.state.query && this.state.query.filters}
-              fields={fields}
-              handleChangeFilter={this.handleChangeFilter}
-            />
             <Panel className="model">
               <Panel.Body>
                 <Validation
@@ -121,7 +118,15 @@ class Container extends React.Component<IProps, IState> {
                 this.state.query && this.state.query.trainingDatasets
               }
               computedData={computedData}
-            />
+            >
+              {fields && fields.length > 0 && (
+                <Filter
+                  rules={this.state.query && this.state.query.filters && JSON.parse(this.state.query.filters)}
+                  filters={fields}
+                  handleChangeFilter={this.handleChangeFilter}
+                />
+              )}
+            </Content>
           </div>
         </div>
       </div>

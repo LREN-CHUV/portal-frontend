@@ -9,16 +9,18 @@ import Table from "./Table";
 interface IProps {
   apiMining?: APIMining;
   selectedDatasets?: MIP.API.IVariableEntity[];
-  computedData?: any[]
+  computedData?: any[];
+  children: any
 }
 
-const Content = ({ apiMining, selectedDatasets, computedData }: IProps) =>
+const Content = ({ apiMining, selectedDatasets, computedData, children }: IProps) =>
   (apiMining && (
     <Panel>
       <Panel.Title>
         <h3>Model Analysis</h3>
       </Panel.Title>
       <Panel.Body>
+        {children}
         {apiMining && apiMining.state && apiMining.state.error && (
           <Alert
             message={apiMining.state && apiMining.state.error}
