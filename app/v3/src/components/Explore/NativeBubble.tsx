@@ -1,13 +1,17 @@
+import { APICore } from "@app/components/API";
 import * as d3 from "d3";
 import React, { Component } from "react";
 
-class NativeBubble extends Component<any> {
+interface IProps {
+  apiCore: APICore;
+}
+class NativeBubble extends Component<IProps> {
   public state = { tree: null };
 
   private rootNode: any;
   public async componentDidMount() {
     const { apiCore } = this.props;
-    await apiCore.load();
+    await apiCore.hierarchy();
     const hierarchy = apiCore.state.hierarchy;
     if (!hierarchy) {
       return;
