@@ -75,17 +75,33 @@ class Container extends React.Component<IProps, IState> {
           query[id] &&
           query[id].map((v: any) => {
             const code = v.code;
-            const canonicalVar = variables.find(
+            const originalVar = variables.find(
               (variable: MIP.API.IVariableEntity) => variable.code === code
             );
-            return canonicalVar
+
+            const output: any = originalVar
               ? {
-                  enumerations: canonicalVar.enumerations,
                   id: v.code,
-                  label: canonicalVar.label,
+                  label: originalVar.label,
                   name: v.code
                 }
               : {};
+
+            if (originalVar && originalVar.enumerations) {
+              output.values = originalVar.enumerations.map((c: any) => ({
+                [c.code]: c.label
+              }));
+              output.input = "select";
+            }
+
+            const type = originalVar && originalVar.type;
+            if (type === 'real') {
+              output.type = 'double'
+              output.input = 'number'
+              output.operators = ['less_or_equal']
+            }
+
+            return output;
           })) ||
         []
       );
@@ -119,13 +135,28 @@ class Container extends React.Component<IProps, IState> {
               }
               computedData={computedData}
             >
-              {fields && fields.length > 0 && (
-                <Filter
-                  rules={this.state.query && this.state.query.filters && JSON.parse(this.state.query.filters)}
-                  filters={fields}
-                  handleChangeFilter={this.handleChangeFilter}
-                />
-              )}
+              <Panel className="filters" defaultExpanded={true}>
+
+                  <Panel.Title toggle={true}>
+                    Filters
+                  </Panel.Title>
+ 
+                <Panel.Collapse>
+                  <Panel.Body collapsible={true}>
+                    {fields && fields.length > 0 && (
+                      <Filter
+                        rules={
+                          this.state.query &&
+                          this.state.query.filters &&
+                          JSON.parse(this.state.query.filters)
+                        }
+                        filters={fields}
+                        handleChangeFilter={this.handleChangeFilter}
+                      />
+                    )}
+                  </Panel.Body>
+                </Panel.Collapse>
+              </Panel>
             </Content>
           </div>
         </div>
@@ -134,7 +165,12 @@ class Container extends React.Component<IProps, IState> {
   }
 
   private handleChangeFilter = (args: any) => {
-    console.log(args);
+    const { apiModel } = this.props;
+    const model = apiModel.state.model;
+    if (model) {
+      model.query = args;
+    }
+    apiModel.update(model);
   };
 
   private computeData = ({ minings, selectedDatasets }: IComputeData): any => {
