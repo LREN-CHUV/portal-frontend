@@ -8,10 +8,10 @@ import "primereact/resources/themes/nova-light/theme.css";
 
 interface IProps {
   minings?: any[];
-  computedData?: any;
+  tableData: any[];
 }
 
-const Table = ({ minings, computedData }: IProps) => {
+const Table = ({ minings, tableData }: IProps) => {
   const columns = minings ? [
     <Column header="variable" field="variable" key={"variable"} />,
     ...minings.map((dataset: any, index: number) => (
@@ -21,9 +21,9 @@ const Table = ({ minings, computedData }: IProps) => {
 
   return (
     <div>
-      {!computedData && computedData && computedData.length && <p>loading...</p>}
-      {computedData && computedData.length !== 0 && (
-        <DataTable value={computedData}>{columns}</DataTable>
+      {tableData.length === 0 && <p>loading...</p>}
+      {tableData.length > 0 && (
+        <DataTable value={tableData}>{columns}</DataTable>
       )}
     </div>
   );

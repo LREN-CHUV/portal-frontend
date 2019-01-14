@@ -3,7 +3,7 @@ import QueryBuilder from "jQuery-QueryBuilder";
 import * as React from "react";
 import { Button } from "react-bootstrap";
 
-console.log(QueryBuilder);
+console.log(QueryBuilder); // prevents ts-lint to complain about ununused inport
 
 interface IProps {
   rules: any;
@@ -11,32 +11,54 @@ interface IProps {
   handleChangeFilter: any;
 }
 
-class Filter extends React.PureComponent<IProps> {
+interface IState {
+  loading: boolean;
+  saveDisabled: boolean;
+}
+
+class Filter extends React.Component<IProps, IState> {
+  public state: IState = { saveDisabled: true, loading: false };
   private ref: any;
 
   public componentDidMount = () => {
     const { filters, rules } = this.props;
     this.ref.queryBuilder({ filters, rules });
-    // this.ref.queryBuilder("rulesChanged", console.log)
+    this.ref.queryBuilder("on", "rulesChanged", () => {
+      this.setState({ saveDisabled: false });
+    });
+  }
+
+  public componentDidUpdate = () => {
+    const { filters, rules } = this.props;
+    this.ref.queryBuilder({ filters, rules });
   };
 
   public componentWillUnmount = () => {
     this.ref.queryBuilder("destroy");
   };
 
-  public handleGetRulesClick = () => {
+  public handleSave = () => {
+    this.setState({ loading: true, saveDisabled: true });
     const rules = this.ref.queryBuilder("getRules");
     const { handleChangeFilter } = this.props;
-    handleChangeFilter(JSON.stringify(rules));
+    handleChangeFilter(rules).then(() => {
+      this.setState({ loading: false, saveDisabled: false });
+    });
   };
 
   public render = () => {
     return (
       <div>
         <div id="query-builder" ref={this.createRef} />
-        <Button bsStyle={"primary"} onClick={this.handleGetRulesClick}>
-          SAVE
-        </Button>
+        <div className={"save-filter"}>
+          <Button
+            bsStyle={"primary"}
+            onClick={this.handleSave}
+            disabled={this.state.saveDisabled}
+          >
+            {this.state.loading ? "Saving..." : "Save"}
+          </Button>
+        </div>
       </div>
     );
   };

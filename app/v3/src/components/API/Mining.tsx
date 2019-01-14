@@ -10,7 +10,7 @@ dotenv.config();
 // const d3 = {name: "brescia", "jobId":"e8b5aa1b-b438-4c0f-ac20-3346a504782b","node":"local","function":"python-summary-statistics","shape":"application/vnd.dataresource+json","timestamp":"Dec 11, 2018 8:49:01 AM","data":{"schema":{"fields":[{"name":"group_variables","type":"array"},{"name":"group","type":"array"},{"name":"index","type":"string"},{"name":"label","type":"string"},{"name":"type","type":"string"},{"name":"count","type":"integer"},{"name":"null_count","type":"integer"},{"name":"unique","type":"integer"},{"name":"top","type":"string"},{"name":"frequency","type":"any"},{"name":"mean","type":"number"},{"name":"std","type":"number"},{"name":"EX^2","type":"number"},{"name":"min","type":"number"},{"name":"max","type":"number"},{"name":"25%","type":"number"},{"name":"50%","type":"number"},{"name":"75%","type":"number"}]},"data":[{"count":0,"group_variables":["Gender"],"label":"Left Hippocampus","null_count":0,"type":"real","group":["M"],"index":"lefthippocampus"},{"count":0,"group_variables":["Gender"],"label":"Total proteines g","null_count":0,"type":"real","group":["M"],"index":"proteinestotglcr"},{"count":0,"group_variables":["Gender"],"label":"Age Years","null_count":0,"type":"integer","group":["M"],"index":"subjectageyears"},{"count":0,"group_variables":["Gender"],"label":"Gender","null_count":0,"frequency":{"F":0,"M":0},"type":"binominal","group":["M"],"unique":0,"index":"gender"},{"count":0,"group_variables":["Gender"],"label":"Left Hippocampus","null_count":0,"type":"real","group":["F"],"index":"lefthippocampus"},{"count":0,"group_variables":["Gender"],"label":"Total proteines g","null_count":0,"type":"real","group":["F"],"index":"proteinestotglcr"},{"count":0,"group_variables":["Gender"],"label":"Age Years","null_count":0,"type":"integer","group":["F"],"index":"subjectageyears"},{"count":0,"group_variables":["Gender"],"label":"Gender","null_count":0,"frequency":{"F":0,"M":0},"type":"binominal","group":["F"],"unique":0,"index":"gender"},{"count":0,"group_variables":[],"label":"Left Hippocampus","null_count":0,"type":"real","group":["all"],"index":"lefthippocampus"},{"count":0,"group_variables":[],"label":"Total proteines g","null_count":0,"type":"real","group":["all"],"index":"proteinestotglcr"},{"count":0,"group_variables":[],"label":"Age Years","null_count":0,"type":"integer","group":["all"],"index":"subjectageyears"},{"count":0,"group_variables":[],"label":"Gender","null_count":0,"frequency":{"F":0,"M":0},"type":"binominal","group":["all"],"unique":0,"index":"gender"}]}}
 
 class Mining extends Container<MIP.Store.IMiningState> {
-  public state: MIP.Store.IMiningState = { minings: []};
+  public state: MIP.Store.IMiningState = { minings: [] };
 
   public loaded = this.state.minings !== undefined;
 
@@ -28,10 +28,6 @@ class Mining extends Container<MIP.Store.IMiningState> {
   }: {
     payload: MIP.API.IExperimentMiningPayload;
   }) => {
-    // return await this.setState({
-    //       error: undefined,
-    //       mining: [d1, d2, d3]
-    //     });
     const payloads = payload.datasets.map(dataset => ({
       algorithm: {
         code: "statisticsSummary",
@@ -43,9 +39,9 @@ class Mining extends Container<MIP.Store.IMiningState> {
       datasets: [dataset]
     }));
 
-    try {
-      // not loaded in parallel because we want to stream results
-      payloads.map(async pl => {
+    // not loaded in parallel because we want to stream results
+    payloads.map(async pl => {
+      try {
         const data = await request({
           body: JSON.stringify(pl),
           headers: {
@@ -58,19 +54,20 @@ class Mining extends Container<MIP.Store.IMiningState> {
 
         const json = JSON.parse(data).data;
 
-        await this.setState((prevState: any) => {
-          const minings = [ ...prevState.minings, ...json];
+        return await this.setState((prevState: any) => {
+          const minings = [...prevState.minings, ...json];
           return {
             error: undefined,
             minings
           };
         });
-      });
-    } catch (error) {
-      return await this.setState({
-        error: error.message
-      });
-    }
+      } catch (error) {
+        return await this.setState((prevState: any) => ({
+          error: error.message,
+          minings: prevState.minings
+        }));
+      }
+    });
   };
 }
 

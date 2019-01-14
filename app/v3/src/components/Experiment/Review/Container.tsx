@@ -24,7 +24,7 @@ interface IState {
   query?: MIP.API.IQuery;
   mining?: any;
 }
-interface IComputeData {
+interface IComputeMiningResult {
   minings?: any[];
   selectedDatasets?: MIP.API.IVariableEntity[];
 }
@@ -40,7 +40,7 @@ class Container extends React.Component<IProps, IState> {
     const { slug } = params;
     await this.loadModel({ slug });
 
-    return this.loadData();
+    return this.createMining();
   }
 
   public async componentDidUpdate(prevProps: IProps, prevState: IState) {
@@ -53,12 +53,12 @@ class Container extends React.Component<IProps, IState> {
       await this.loadModel({ slug });
     }
 
-    return this.loadData();
+    return this.createMining();
   }
 
   public render() {
     const { apiCore, apiModel, apiMining } = this.props;
-    const computedData = this.computeData({
+    const tableData = this.computeMiningResultToTable({
       minings: apiMining.state && apiMining.state.minings,
       selectedDatasets: this.state.query && this.state.query.trainingDatasets
     });
@@ -92,13 +92,34 @@ class Container extends React.Component<IProps, IState> {
                 [c.code]: c.label
               }));
               output.input = "select";
+              output.operators = ["equal", "not_equal", "in", "not_in"];
             }
 
             const type = originalVar && originalVar.type;
-            if (type === 'real') {
-              output.type = 'double'
-              output.input = 'number'
-              output.operators = ['less_or_equal']
+            if (type === "real") {
+              output.type = "double";
+              output.input = "number";
+              output.operators = [
+                "equal",
+                "not_equal",
+                "less",
+                "greater",
+                "between",
+                "not_between"
+              ];
+            }
+
+            if (type === "integer") {
+              output.type = "integer";
+              output.input = "number";
+              output.operators = [
+                "equal",
+                "not_equal",
+                "less",
+                "greater",
+                "between",
+                "not_between"
+              ];
             }
 
             return output;
@@ -110,6 +131,8 @@ class Container extends React.Component<IProps, IState> {
       [],
       ["variables", "coVariables", "groupings"].map(buildFilter)
     );
+
+    const filters = this.state.query && this.state.query.filters && JSON.parse(this.state.query.filters) 
 
     return (
       <div className="Experiment Review">
@@ -133,23 +156,18 @@ class Container extends React.Component<IProps, IState> {
               selectedDatasets={
                 this.state.query && this.state.query.trainingDatasets
               }
-              computedData={computedData}
+              tableData={tableData}
+              handleRunAnalysis={this.handleRunAnalysis}
             >
               <Panel className="filters" defaultExpanded={true}>
-
-                  <Panel.Title toggle={true}>
-                    Filters
-                  </Panel.Title>
- 
+                <Panel.Title toggle={true}>
+                  <h3>Filters</h3>
+                </Panel.Title>
                 <Panel.Collapse>
                   <Panel.Body collapsible={true}>
-                    {fields && fields.length > 0 && (
+                    {filters && fields && fields.length > 0 && (
                       <Filter
-                        rules={
-                          this.state.query &&
-                          this.state.query.filters &&
-                          JSON.parse(this.state.query.filters)
-                        }
+                        rules={filters}
                         filters={fields}
                         handleChangeFilter={this.handleChangeFilter}
                       />
@@ -164,16 +182,29 @@ class Container extends React.Component<IProps, IState> {
     );
   }
 
-  private handleChangeFilter = (args: any) => {
+  private handleChangeFilter = async (filters: string): Promise<boolean> => {
     const { apiModel } = this.props;
     const model = apiModel.state.model;
     if (model) {
-      model.query = args;
+      model.query.filters = JSON.stringify(filters);
     }
-    apiModel.update(model);
+    await apiModel.update(model);
+    this.createMining();
+
+    return Promise.resolve(true);
   };
 
-  private computeData = ({ minings, selectedDatasets }: IComputeData): any => {
+  private handleRunAnalysis = () => {
+    const params = this.urlParams(this.props);
+    const slug = params && params.slug;
+    const { history } = this.props;
+    history.push(`/v3/experiment/${slug}`);
+  };
+
+  private computeMiningResultToTable = ({
+    minings,
+    selectedDatasets
+  }: IComputeMiningResult): any => {
     const computedRows: any[] = [];
 
     if (!minings) {
@@ -257,7 +288,7 @@ class Container extends React.Component<IProps, IState> {
     return this.setState({ query });
   };
 
-  private loadData = async () => {
+  private createMining = async () => {
     const { apiCore, apiMining } = this.props;
     const datasets = apiCore.state.datasets;
     const query = this.state.query;
