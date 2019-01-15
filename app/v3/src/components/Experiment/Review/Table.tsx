@@ -15,7 +15,7 @@ interface IProps {
 const Table = ({ minings, tableData }: IProps) => {
   const columns = minings
     ? [
-        <Column header="variable" field="variable" key={"variable"} />,
+        <Column header="VARIABLES" field="variable" key={"variable"} />,
         ...minings.map((dataset: any, index: number) => (
           <Column header={dataset.name} field={`${index}`} key={index} />
         ))

@@ -9,6 +9,7 @@ import { Panel } from "react-bootstrap";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import Content from "./Content";
 import Filter from "./Filter";
+import ExperimentReviewHeader from "./Header";
 
 import "./Review.css";
 interface IProps extends RouteComponentProps<any> {
@@ -139,6 +140,9 @@ class Container extends React.Component<IProps, IState> {
 
     return (
       <div className="Experiment Review">
+        <div className="header">
+          <ExperimentReviewHeader handleRunAnalysis={this.handleRunAnalysis} />
+        </div>
         <div className="content">
           <div className="sidebar">
             <Model model={apiModel.state.model} showDatasets={false} />
@@ -161,7 +165,6 @@ class Container extends React.Component<IProps, IState> {
                 this.state.query && this.state.query.trainingDatasets
               }
               tableData={tableData}
-              handleRunAnalysis={this.handleRunAnalysis}
             >
               <Panel className="filters" defaultExpanded={false}>
                 <Panel.Title toggle={true}>
@@ -198,7 +201,10 @@ class Container extends React.Component<IProps, IState> {
     return Promise.resolve(true);
   };
 
-  private handleRunAnalysis = () => {
+  private handleRunAnalysis = async (name: string) => {
+    const { apiModel } = this.props;
+    const model = apiModel.state.model;
+    await apiModel.update(model);
     const params = this.urlParams(this.props);
     const slug = params && params.slug;
     const { history } = this.props;
