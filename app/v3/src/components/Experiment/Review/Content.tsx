@@ -52,7 +52,7 @@ const Content = ({
               </Tab>
               <Tab eventKey={2} title="Boxplot">
                 <Boxplot
-                  minings={apiMining.state && apiMining.state.minings}
+                  miningState={apiMining.state}
                   selectedDatasets={selectedDatasets}
                 />
               </Tab>

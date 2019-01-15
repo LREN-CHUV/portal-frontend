@@ -132,7 +132,10 @@ class Container extends React.Component<IProps, IState> {
       ["variables", "coVariables", "groupings"].map(buildFilter)
     );
 
-    const filters = this.state.query && this.state.query.filters && JSON.parse(this.state.query.filters) 
+    const filters =
+      this.state.query &&
+      this.state.query.filters &&
+      JSON.parse(this.state.query.filters);
 
     return (
       <div className="Experiment Review">
@@ -159,7 +162,7 @@ class Container extends React.Component<IProps, IState> {
               tableData={tableData}
               handleRunAnalysis={this.handleRunAnalysis}
             >
-              <Panel className="filters" defaultExpanded={true}>
+              <Panel className="filters" defaultExpanded={false}>
                 <Panel.Title toggle={true}>
                   <h3>Filters</h3>
                 </Panel.Title>
