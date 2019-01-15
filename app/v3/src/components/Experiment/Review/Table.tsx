@@ -1,3 +1,4 @@
+import Loader from "@app/components/UI/Loader";
 import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
 import * as React from "react";
@@ -12,16 +13,18 @@ interface IProps {
 }
 
 const Table = ({ minings, tableData }: IProps) => {
-  const columns = minings ? [
-    <Column header="variable" field="variable" key={"variable"} />,
-    ...minings.map((dataset: any, index: number) => (
-      <Column header={dataset.name} field={`${index}`} key={index} />
-     ))
-  ] : [];
+  const columns = minings
+    ? [
+        <Column header="variable" field="variable" key={"variable"} />,
+        ...minings.map((dataset: any, index: number) => (
+          <Column header={dataset.name} field={`${index}`} key={index} />
+        ))
+      ]
+    : [];
 
   return (
     <div>
-      {tableData.length === 0 && <p>loading...</p>}
+      {tableData.length === 0 && <Loader loading={true} />}
       {tableData.length > 0 && (
         <DataTable value={tableData}>{columns}</DataTable>
       )}

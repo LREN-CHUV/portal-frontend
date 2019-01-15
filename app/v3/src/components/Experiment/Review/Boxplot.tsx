@@ -1,3 +1,4 @@
+import Loader from "@app/components/UI/Loader";
 import { MIP } from "@app/types";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
@@ -13,8 +14,10 @@ interface IProps {
 
 const Boxplot = ({ miningState, selectedDatasets }: IProps) => {
   const minings = (miningState && miningState.minings) || [];
-  const filteredByGroupAll = minings.map((mining: any) =>
-    mining.data.filter((d: any) => d.mean && d.group[0] === "all")
+  const filteredByGroupAll = minings.map(
+    (mining: any) =>
+      mining.data &&
+      mining.data.filter((d: any) => d.mean && d.group[0] === "all")
   );
   const flattened: any = [].concat.apply([], filteredByGroupAll);
   const uniqueVariables = Array.from(
@@ -30,9 +33,7 @@ const Boxplot = ({ miningState, selectedDatasets }: IProps) => {
       u["75%"],
       u.max
     ]);
-    const name = Array.from(
-      new Set(uniqueMinings.map((f: any) => f.label))
-    )[0];
+    const name = Array.from(new Set(uniqueMinings.map((f: any) => f.label)))[0];
     return {
       chart: {
         type: "boxplot"
@@ -56,8 +57,9 @@ const Boxplot = ({ miningState, selectedDatasets }: IProps) => {
 
   return (
     <div>
+      {highchartsOptions.length === 0 ? <Loader loading={true} /> : null}
       {highchartsOptions.map((options: any, k: number) => (
-        <HighchartsReact highcharts={Highcharts} options={options} key={k}/>
+        <HighchartsReact highcharts={Highcharts} options={options} key={k} />
       ))}
     </div>
   );
