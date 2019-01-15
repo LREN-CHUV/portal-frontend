@@ -156,6 +156,7 @@ class Container extends React.Component<IProps, IState> {
           <div className="results">
             <Content
               apiMining={apiMining}
+              model={apiModel.state.model}
               selectedDatasets={
                 this.state.query && this.state.query.trainingDatasets
               }
@@ -220,7 +221,7 @@ class Container extends React.Component<IProps, IState> {
           dataset.data &&
           dataset.data.length &&
           dataset.data.filter((r: any) => r.group && r.group[0] === "all")) ||
-        {}
+        []
     );
 
     const indexes =
@@ -231,7 +232,7 @@ class Container extends React.Component<IProps, IState> {
     indexes.map((index: any) => {
       const row: any = {};
       datasetDatas.map((datasetData: any, i: number) => {
-        const dataRow = datasetData.find((d: any) => d.index === index);
+        const dataRow = datasetData.find((d: any) => d.index === index) || {};
         row[i] = dataRow;
       });
       rows.push(row);

@@ -5,20 +5,21 @@ import * as React from "react";
 import { Button, Panel, Tab, Tabs } from "react-bootstrap";
 import { Body } from "react-bootstrap/lib/Modal";
 import Boxplot from "./Boxplot";
+import HeatMap from "./HeatMap";
 import Table from "./Table";
 
 interface IProps {
   apiMining?: APIMining;
+  model?: MIP.API.IModelResponse;
   handleRunAnalysis: () => void;
   selectedDatasets?: MIP.API.IVariableEntity[];
   tableData: any[];
   children: any;
 }
 
-
-
 const Content = ({
   apiMining,
+  model,
   handleRunAnalysis,
   selectedDatasets,
   tableData,
@@ -57,14 +58,11 @@ const Content = ({
                 />
               </Tab>
               <Tab eventKey={3} title="Heatmap">
-                Heatmap
+                <HeatMap apiMining={apiMining} model={model} />
               </Tab>
             </Tabs>
           </Body>
         </Panel>
-        {/* ) : (
-          "Loading"
-        )} */}
       </Panel.Body>
     </Panel>
   )) ||
