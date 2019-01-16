@@ -1,22 +1,17 @@
 import React from "react";
 import { RingLoader } from "react-spinners";
 
-interface IState {
-  loading: boolean;
-}
 
-
-class Loader extends React.Component<IState> {
-  public state = { loading: true };
+class Loader extends React.Component {
 
   public render() {
     return (
       <div>
         <RingLoader
           sizeUnit={"px"}
-          size={48}
+          size={16}
           color={"#0c6c94"}
-          loading={this.state.loading}
+          loading={true}
         />
       </div>
     );

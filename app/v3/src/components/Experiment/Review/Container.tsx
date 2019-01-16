@@ -17,11 +17,9 @@ interface IProps extends RouteComponentProps<any> {
   apiCore: APICore;
   apiMining: APIMining;
 }
-
-let loading = false;
-
 interface IState {
   alert?: IAlert;
+  loadingSummary?: boolean;
   query?: MIP.API.IQuery;
   mining?: any;
 }
@@ -40,11 +38,13 @@ class Container extends React.Component<IProps, IState> {
     }
     const { slug } = params;
     await this.loadModel({ slug });
-
-    return this.createMining();
+    const query = this.state.query;
+    if (query) {
+      this.createMining({ query });
+    }
   }
 
-  public async componentDidUpdate(prevProps: IProps, prevState: IState) {
+  public async componentWillReceiveProps(prevProps: IProps, prevState: IState) {
     const params = this.urlParams(this.props);
     const slug = params && params.slug;
     const prevParams = this.urlParams(prevProps);
@@ -52,16 +52,17 @@ class Container extends React.Component<IProps, IState> {
 
     if (prevSlug !== slug && slug) {
       await this.loadModel({ slug });
+      const query = this.state.query;
+      if (query) {
+        this.createMining({ query });
+      }
     }
-
-    return this.createMining();
   }
 
   public render() {
     const { apiCore, apiModel, apiMining } = this.props;
     const tableData = this.computeMiningResultToTable({
-      minings: apiMining.state && apiMining.state.minings,
-      selectedDatasets: this.state.query && this.state.query.trainingDatasets
+      minings: apiMining.state && apiMining.state.minings
     });
 
     const variables = apiCore.state.variables;
@@ -141,7 +142,11 @@ class Container extends React.Component<IProps, IState> {
     return (
       <div className="Experiment Review">
         <div className="header">
-          <ExperimentReviewHeader handleRunAnalysis={this.handleRunAnalysis} />
+          <ExperimentReviewHeader
+            handleSaveOrUpdateModel={this.handleSaveOrUpdateModel}
+            handleRunAnalysis={this.handleRunAnalysis}
+            modelName={apiModel.state.model && apiModel.state.model.title}
+          />
         </div>
         <div className="content">
           <div className="sidebar">
@@ -152,7 +157,7 @@ class Container extends React.Component<IProps, IState> {
                   isPredictiveMethod={false}
                   datasets={apiCore.state.datasets}
                   query={this.state.query}
-                  handleUpdateQuery={this.handleUpdateQuery}
+                  handleUpdateQuery={this.handleUpdateDataset}
                 />
               </Panel.Body>
             </Panel>
@@ -176,7 +181,7 @@ class Container extends React.Component<IProps, IState> {
                       <Filter
                         rules={filters}
                         filters={fields}
-                        handleChangeFilter={this.handleChangeFilter}
+                        handleChangeFilter={this.handleUpdateFilter}
                       />
                     )}
                   </Panel.Body>
@@ -189,22 +194,30 @@ class Container extends React.Component<IProps, IState> {
     );
   }
 
-  private handleChangeFilter = async (filters: string): Promise<boolean> => {
-    const { apiModel } = this.props;
+  private handleUpdateFilter = async (filters: string): Promise<boolean> => {
+    const { apiModel, apiMining } = this.props;
     const model = apiModel.state.model;
     if (model) {
       model.query.filters = JSON.stringify(filters);
     }
     await apiModel.update(model);
-    this.createMining();
+    const query = this.state.query;
+    if (query) {
+      apiMining.clear()
+      this.createMining({ query });
+    }
 
     return Promise.resolve(true);
   };
 
-  private handleRunAnalysis = async (name: string) => {
+  private handleSaveOrUpdateModel = async (name: string | undefined) => {
+    console.log(name);
     const { apiModel } = this.props;
     const model = apiModel.state.model;
-    await apiModel.update(model);
+    return await apiModel.update(model);
+  };
+
+  private handleRunAnalysis = async () => {
     const params = this.urlParams(this.props);
     const slug = params && params.slug;
     const { history } = this.props;
@@ -213,7 +226,6 @@ class Container extends React.Component<IProps, IState> {
 
   private computeMiningResultToTable = ({
     minings,
-    selectedDatasets
   }: IComputeMiningResult): any => {
     const computedRows: any[] = [];
 
@@ -298,13 +310,11 @@ class Container extends React.Component<IProps, IState> {
     return this.setState({ query });
   };
 
-  private createMining = async () => {
-    const { apiCore, apiMining } = this.props;
-    const datasets = apiCore.state.datasets;
-    const query = this.state.query;
+  private createMining = async ({ query }: { query: MIP.API.IQuery }) => {
+    const { apiMining } = this.props;
+    const datasets = query.trainingDatasets;
 
-    if (datasets && query && !loading) {
-      loading = true;
+    if (datasets && query) {
       const payload: MIP.API.IExperimentMiningPayload = {
         covariables: query.coVariables ? query.coVariables : [],
         datasets,
@@ -314,12 +324,22 @@ class Container extends React.Component<IProps, IState> {
       };
 
       await apiMining.createAll({ payload });
-      return this.setState({ mining: apiMining.state.minings });
+      return this.setState({
+        mining: apiMining.state.minings
+      });
     }
   };
 
-  private handleUpdateQuery = (query: MIP.API.IQuery): void => {
+  // private handleUpdateQuery = (query: MIP.API.IQuery): void => {
+  //   this.setState({ query });
+  //   const { apiMining } = this.props;
+  //   apiMining.clear();
+  //   this.createMining({ query })
+  // };
+
+  private handleUpdateDataset = (query: MIP.API.IQuery): void => {
     this.setState({ query });
+    this.createMining({ query })
   };
 
   private urlParams = (

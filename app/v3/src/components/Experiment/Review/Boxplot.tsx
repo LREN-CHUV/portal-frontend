@@ -8,17 +8,19 @@ import * as React from "react";
 addHighchartsMore(Highcharts);
 
 interface IProps {
+  loading: boolean;
   miningState?: MIP.Store.IMiningState;
   selectedDatasets?: MIP.API.IVariableEntity[];
 }
 
-const Boxplot = ({ miningState, selectedDatasets }: IProps) => {
+const Boxplot = ({ loading, miningState, selectedDatasets }: IProps) => {
   const minings = (miningState && miningState.minings) || [];
   const filteredByGroupAll = minings.map(
     (mining: any) =>
       mining.data &&
       mining.data.filter((d: any) => d.mean && d.group[0] === "all")
   );
+  const categories = minings.map(m => m.dataset.code)
   const flattened: any = [].concat.apply([], filteredByGroupAll);
   const uniqueVariables = Array.from(
     new Set(flattened.map((f: any) => f.index))
@@ -46,7 +48,7 @@ const Boxplot = ({ miningState, selectedDatasets }: IProps) => {
       ],
       title: null,
       xAxis: {
-        categories: data,
+        categories,
         title: null
       },
       yAxis: {
@@ -57,7 +59,7 @@ const Boxplot = ({ miningState, selectedDatasets }: IProps) => {
 
   return (
     <div>
-      {highchartsOptions.length === 0 ? <Loader loading={true} /> : null}
+      {loading ? <Loader /> : null}
       {highchartsOptions.map((options: any, k: number) => (
         <HighchartsReact highcharts={Highcharts} options={options} key={k} />
       ))}

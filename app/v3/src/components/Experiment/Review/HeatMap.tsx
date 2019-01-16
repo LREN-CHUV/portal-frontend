@@ -17,7 +17,7 @@ interface IState {
 class HeatMap extends React.Component<IProps, IState> {
   public state = { loading: false, heatmap: [] };
 
-  public componentDidUpdate() {
+  public componentWillReceiveProps() {
     if (this.state.heatmap.length === 0 && !this.state.loading) {
       this.createMining();
     }
@@ -25,7 +25,7 @@ class HeatMap extends React.Component<IProps, IState> {
 
   public render = () => (
     <div>
-      {this.state.loading && <Loader loading={true} />}
+      {this.state.loading && <Loader />}
       <Plotly data={this.state.heatmap} layout={{ margin: { l: 400 } }} />
     </div>
   );
@@ -46,7 +46,7 @@ class HeatMap extends React.Component<IProps, IState> {
       };
 
       await apiMining.heatmap({ payload });
-      return await this.setState({
+      await this.setState({
         heatmap: apiMining.state.heatmap,
         loading: false
       });

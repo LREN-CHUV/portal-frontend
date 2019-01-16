@@ -1,18 +1,21 @@
 import * as React from "react";
-import { Button, FormControl, Panel } from "react-bootstrap";
+import { Button, Panel } from "react-bootstrap";
 
 interface IProps {
-  handleRunAnalysis: (name: string) => void;
+  handleRunAnalysis: () => void;
+  handleSaveOrUpdateModel: (name: string | undefined) => void;
+  modelName?: string;
 }
-
 export default class Header extends React.Component<IProps> {
-    public state = {
-        modelName: ""
-      };
-      
-      public render() {
-    const { handleRunAnalysis } = this.props;
-    const { modelName } = this.state;
+  private input: any;
+
+  constructor(props: IProps) {
+    super(props);
+    this.input = React.createRef();
+  }
+
+  public render() {
+    const { handleRunAnalysis, handleSaveOrUpdateModel } = this.props;
 
     return (
       <Panel>
@@ -20,26 +23,41 @@ export default class Header extends React.Component<IProps> {
           <h3>Interactive Analysis</h3>
           <div className="actions">
             <div className="item">
-              <FormControl
-                className="item experiment-name"
+              <input
                 type="text"
-                placeholder={"Experiment name"}
-                value={modelName}
-                onChange={this.handleChangeModelName}
+                ref={this.input}
+                className={"form-control"}
+                defaultValue={this.props.modelName}
               />
             </div>
             <div className="item">
               <Button
                 //tslint:disable
-                onClick={() => handleRunAnalysis(modelName)}
-                onKeyDown={event => {
-                  if (event.key === "Enter") {
-                    handleRunAnalysis(modelName);
-                  }
-                }}
+                onClick={() => handleSaveOrUpdateModel(this.input.current.value)}
+                // onKeyDown={event => {
+                //   if (event.key === "Enter") {
+                //     handleRunAnalysis(this.input.current.value);
+                //   }
+                // }}
                 bsStyle="info"
                 type="submit"
-                disabled={modelName === undefined}
+                // disabled={this.input.current.value === undefined}
+              >
+                Save model
+              </Button>
+            </div>
+            <div className="item">
+              <Button
+                //tslint:disable
+                onClick={handleRunAnalysis}
+                // onKeyDown={event => {
+                //   if (event.key === "Enter") {
+                //     handleRunAnalysis(this.input.current.value);
+                //   }
+                // }}
+                bsStyle="info"
+                type="submit"
+                // disabled={this.input.current.value === undefined}
               >
                 RUN MACHINE LEARNING EXPERIMENT
               </Button>
@@ -50,9 +68,9 @@ export default class Header extends React.Component<IProps> {
     );
   }
 
-  private handleChangeModelName = (event: any) => {
-    this.setState({
-      modelName: event.target.value
-    });
-  };
+  // private handleChangeModelName = (event: any) => {
+  //   this.setState({
+  //     modelName: event.target.value
+  //   });
+  // };
 }

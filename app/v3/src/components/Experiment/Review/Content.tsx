@@ -42,12 +42,14 @@ const Content = ({
             <Tabs defaultActiveKey={1} id="uncontrolled-review-model-tab">
               <Tab eventKey={1} title="Table">
                 <Table
+                  loading={apiMining.state.loadingMinings}
                   minings={apiMining.state.minings}
                   tableData={tableData}
                 />
               </Tab>
               <Tab eventKey={2} title="Boxplot">
                 <Boxplot
+                loading={apiMining.state.loadingMinings}
                   miningState={apiMining.state}
                   selectedDatasets={selectedDatasets}
                 />
