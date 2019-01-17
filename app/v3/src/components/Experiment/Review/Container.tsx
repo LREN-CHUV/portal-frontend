@@ -4,6 +4,7 @@ import Model from "@app/components/UI/Model";
 import Validation from "@app/components/UI/Validation";
 import { MIP } from "@app/types";
 import { round } from "@app/utils";
+import queryString from "query-string";
 import * as React from "react";
 import { Panel } from "react-bootstrap";
 import { RouteComponentProps, withRouter } from "react-router-dom";
@@ -32,15 +33,51 @@ class Container extends React.Component<IProps, IState> {
   public state: IState = {};
 
   public async componentDidMount() {
-    const params = this.urlParams(this.props);
-    if (!params) {
-      return;
-    }
-    const { slug } = params;
-    await this.loadModel({ slug });
-    const query = this.state.query;
-    if (query) {
+    const qs = queryString.parse(this.props.location.search);
+
+    if (qs.execute) {
+      const variables = [{ code: qs.variable as string }];
+      const coVariables =
+        (qs.covariable as string) !== ""
+          ? (qs.covariable as string).split(",").map(v => ({
+              code: v
+            }))
+          : undefined;
+      const groupings =
+        (qs.grouping as string) !== ""
+          ? (qs.grouping as string).split(",").map(v => ({
+              code: v
+            }))
+          : undefined;
+      const trainingDatasets =
+        (qs.trainingDatasets as string) !== ""
+          ? (qs.trainingDatasets as string).split(",").map(v => ({
+              code: v
+            }))
+          : undefined;
+
+      const query: MIP.API.IQuery = {
+        coVariables,
+        filters: qs.filter as string,
+        groupings,
+        trainingDatasets,
+        variables
+      };
+
+      const { apiModel } = this.props;
+      await apiModel.set(query);
+      await this.setState({ query });
       this.createMining({ query });
+    } else {
+      const params = this.urlParams(this.props);
+      const slug = params && params.slug;
+      if (slug) {
+        await this.loadModel({ slug });
+        const query = this.state.query;
+        if (query) {
+          this.createMining({ query });
+        }
+      }
     }
   }
 
@@ -143,6 +180,7 @@ class Container extends React.Component<IProps, IState> {
       <div className="Experiment Review">
         <div className="header">
           <ExperimentReviewHeader
+            handleGoBackToExplore={this.handleGoBackToExplore}
             handleSaveOrUpdateModel={this.handleSaveOrUpdateModel}
             handleRunAnalysis={this.handleRunAnalysis}
             modelName={apiModel.state.model && apiModel.state.model.title}
@@ -203,7 +241,7 @@ class Container extends React.Component<IProps, IState> {
     await apiModel.update(model);
     const query = this.state.query;
     if (query) {
-      apiMining.clear()
+      apiMining.clear();
       this.createMining({ query });
     }
 
@@ -224,8 +262,44 @@ class Container extends React.Component<IProps, IState> {
     history.push(`/v3/experiment/${slug}`);
   };
 
+  private handleGoBackToExplore = () => {
+    const { apiModel } = this.props;
+    const model = apiModel.state.model;
+    const query = model && model.query;
+    if (query) {
+      const variable = query.variables && query.variables.map(v => v.code)[0];
+      const covariable =
+        query.coVariables && query.coVariables.map(v => v.code).join(",");
+      const grouping =
+        query.groupings && query.groupings.map(v => v.code).join(",");
+      const trainingDatasets =
+        query.trainingDatasets &&
+        query.trainingDatasets.map(v => v.code).join(",");
+
+      const json = JSON.parse(query.filters);
+      const filterVariables: any = [];
+      const extractVariablesFromFilter = (data: any) => {
+        data.rules.forEach((rule: any, index: number) => {
+          if (rule.condition) {
+            extractVariablesFromFilter(rule);
+            return;
+          }
+
+          filterVariables.push(rule.field);
+        });
+      };
+      extractVariablesFromFilter(json);
+      const filter =
+        filterVariables && Array.from(new Set(filterVariables)).join(",");
+
+      window.location.href = `/explore?configure=true&variable=${variable}&covariable=${covariable}&grouping=${grouping}&filter=${filter}&trainingDatasets=${trainingDatasets}`;
+    } else {
+      window.location.href = `/explore`;
+    }
+  };
+
   private computeMiningResultToTable = ({
-    minings,
+    minings
   }: IComputeMiningResult): any => {
     const computedRows: any[] = [];
 
@@ -339,7 +413,7 @@ class Container extends React.Component<IProps, IState> {
 
   private handleUpdateDataset = (query: MIP.API.IQuery): void => {
     this.setState({ query });
-    this.createMining({ query })
+    this.createMining({ query });
   };
 
   private urlParams = (
@@ -353,7 +427,7 @@ class Container extends React.Component<IProps, IState> {
     if (!match) {
       return;
     }
-    return match.params;
+    return Object.keys(match.params).length === 0 ? undefined : match.params;
   };
 }
 

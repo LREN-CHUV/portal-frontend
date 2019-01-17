@@ -17,6 +17,26 @@ class Model extends Container<MIP.Store.IModelState> {
     this.baseUrl = `${config.baseUrl}/models`;
   }
 
+  public set = async (query: MIP.API.IQuery) => {
+    const newModel: MIP.API.IModelResponse = {
+      config: "",
+      createdAt: 5,
+      createdBy: {
+        fullname: "anonymous",
+        username: "anonymous"
+      },
+      dataset: "",
+      query,
+      slug: "",
+      title: "No title",
+      valid: false
+    };
+    return await this.setState({
+      error: undefined,
+      model: newModel
+    });
+  };
+
   public one = async (slug: string) => {
     try {
       const data = await request.get(`${this.baseUrl}/${slug}`, this.options);

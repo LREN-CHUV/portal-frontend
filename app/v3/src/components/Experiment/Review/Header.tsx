@@ -2,6 +2,7 @@ import * as React from "react";
 import { Button, Panel } from "react-bootstrap";
 
 interface IProps {
+  handleGoBackToExplore: () => void;
   handleRunAnalysis: () => void;
   handleSaveOrUpdateModel: (name: string | undefined) => void;
   modelName?: string;
@@ -15,13 +16,29 @@ export default class Header extends React.Component<IProps> {
   }
 
   public render() {
-    const { handleRunAnalysis, handleSaveOrUpdateModel } = this.props;
+    const {
+      handleGoBackToExplore,
+      handleRunAnalysis,
+      handleSaveOrUpdateModel
+    } = this.props;
 
     return (
       <Panel>
         <Panel.Body>
           <h3>Interactive Analysis</h3>
-          <div className="actions">
+          <div className="actions status">
+            
+            <div className="item">
+              <Button
+                //tslint:disable
+                onClick={handleGoBackToExplore}
+                bsStyle="info"
+                type="submit"
+              >
+                Explore
+              </Button>
+            </div>
+            <div className="item text">&nbsp;</div>
             <div className="item">
               <input
                 type="text"
@@ -33,7 +50,9 @@ export default class Header extends React.Component<IProps> {
             <div className="item">
               <Button
                 //tslint:disable
-                onClick={() => handleSaveOrUpdateModel(this.input.current.value)}
+                onClick={() =>
+                  handleSaveOrUpdateModel(this.input.current.value)
+                }
                 // onKeyDown={event => {
                 //   if (event.key === "Enter") {
                 //     handleRunAnalysis(this.input.current.value);

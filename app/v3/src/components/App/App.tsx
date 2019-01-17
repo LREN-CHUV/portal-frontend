@@ -44,7 +44,7 @@ const App = ({
     <section>
       <Route path="/v3/explore" render={() => <Explore apiCore={apiCore} />} />
       <Route
-        path="/v3/review/:slug"
+        path="/v3/review"
         render={() => (
           <ExperimentReview
             apiMining={apiMining}
