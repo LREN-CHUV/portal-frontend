@@ -112,7 +112,9 @@ angular.module("chuvApp.mydata").controller("MyDataController", [
                   });
                 $timeout(function() {
                   _.each($scope.rows, function(row) {
-                    if (row.showChart === false) {row.showChart = true;}
+                    if (row.showChart === false) {
+                      row.showChart = true;
+                    }
                   });
                 });
 
@@ -136,7 +138,9 @@ angular.module("chuvApp.mydata").controller("MyDataController", [
     };
 
     $scope.getModel = function(slug) {
-      if (!slug) {return;}
+      if (!slug) {
+        return;
+      }
 
       var deferred = $q.defer();
       Model.get({ slug: slug }).$promise.then(function(model) {
@@ -162,6 +166,11 @@ angular.module("chuvApp.mydata").controller("MyDataController", [
 
     $scope.showArticleModal = function(article) {
       ModalUtil.showModal($scope, article);
+    };
+
+    $scope.go_to_model = function(slug) {
+      console.log("switch_to_v3");
+      window.location.href = "/v3/review/" + slug;
     };
   }
 ]);

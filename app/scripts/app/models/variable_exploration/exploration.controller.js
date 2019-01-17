@@ -129,19 +129,19 @@ angular.module("chuvApp.models").controller("ExploreController", [
       ? "&filterQuery=" + $location.search().filterQuery
       : "";
     $scope.go_to_review = function() {
-      $location.url(
+      console.log("switch_to_v3");
+      window.location.href =
         "/review?execute=true&" +
-          Object.keys($scope.configuration)
-            .map(function(category) {
-              return (
-                category +
-                "=" +
-                Object.keys($scope.configuration[category]).join(",")
-              );
-            })
-            .join("&") +
-          filterQuery
-      );
+        Object.keys($scope.configuration)
+          .map(function(category) {
+            return (
+              category +
+              "=" +
+              Object.keys($scope.configuration[category]).join(",")
+            );
+          })
+          .join("&") +
+        filterQuery;
     };
 
     var config_keys = Object.keys($scope.configuration);
