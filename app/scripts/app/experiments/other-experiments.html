@@ -9,7 +9,7 @@
   </a>
   <ul class="dropdown-menu" uib-dropdown-menu  aria-labelledby="simple-dropdown">
     <li>
-      <a ui-sref="switch_to_v3_experiment(modelSlug)">Create New Experiment</a>
+      <a ng-click="switch_to_v3_experiment(modelSlug)">Create New Experiment</a>
     </li>
     <li class="divider"></li>
     <li ng-repeat="experiment in model_experiments | orderBy:'-created'">

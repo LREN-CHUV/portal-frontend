@@ -24,7 +24,7 @@
           <div class="action">
             <other-experiments model-slug="item.data.slug" minimal="true"></other-experiments>
             <a ng-if="isMine(item.data)"
-               ui-sref="models-edit({slug: item.data.slug, isCopy: false})"
+               ng-click="go_to_model(item.data.slug);"
                class="icon-tl">
                 <span class="icon-bg">
                     <i class="icon-html"></i>

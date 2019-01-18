@@ -103,12 +103,14 @@ class Container extends React.Component<IProps, IState> {
                       handleChangeParameters={this.handleChangeParameters}
                       handleChangeKFold={this.handleChangeKFold}
                     >
-                      <Validation
-                        isPredictiveMethod={isPredictiveMethod}
-                        datasets={apiCore.state.datasets}
-                        query={this.state && this.state.query}
-                        handleUpdateQuery={this.handleUpdateQuery}
-                      />
+                      <fieldset style={{ padding: "8px" }}>
+                        <Validation
+                          isPredictiveMethod={isPredictiveMethod}
+                          datasets={apiCore.state.datasets}
+                          query={this.state && this.state.query}
+                          handleUpdateQuery={this.handleUpdateQuery}
+                        />
+                      </fieldset>
                     </Form>
                   </Tab>
                   <Tab eventKey={2} title="About running experiments">
@@ -137,7 +139,9 @@ class Container extends React.Component<IProps, IState> {
       </div>
     );
   }
-  private handleSelectModel = async (model: MIP.API.IModelResponse): Promise<any> => {
+  private handleSelectModel = async (
+    model: MIP.API.IModelResponse
+  ): Promise<any> => {
     const { slug } = model;
     const { apiModel, history } = this.props;
     history.push(`/v3/experiment/${slug}`);

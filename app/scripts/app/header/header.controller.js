@@ -65,5 +65,10 @@ angular.module("chuvApp.header").controller("HeaderController", [
     Config.then(function(config) {
       $scope.name = config.instanceName;
     });
+
+    $scope.go_to_review = function() {
+      console.log("switch_to_v3");
+      window.location.href = "/v3/review";
+    };
   }
 ]);

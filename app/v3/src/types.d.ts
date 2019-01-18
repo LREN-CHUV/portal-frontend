@@ -18,7 +18,9 @@ export declare namespace MIP.Store {
   }
 
   export interface IMiningState extends IError {
-    mining?: any[];
+    minings?: any[];
+    heatmap?: any;
+    loadingMinings: boolean;
   }
 
   export interface IModelState extends IError {
@@ -53,8 +55,8 @@ export declare namespace MIP.API {
   export interface IExperimentMiningPayload {
     algorithm?: MIP.API.IMethod;
     variables: IVariableEntity[];
-    grouping: IVariableEntity[];
-    covariables: IVariableEntity[];
+    grouping?: IVariableEntity[];
+    covariables?: IVariableEntity[];
     datasets: IVariableEntity[];
     filters: string;
   }
@@ -111,11 +113,17 @@ export declare namespace MIP.API {
     validationDatasets?: MIP.API.IVariableEntity[];
   }
 
-  export interface IVariableEntity {
+  export interface IVariable {
     code: string;
+    label?: string;
+  }
+
+  export interface IVariableEntity extends IVariable {
     type?: string;
     sqlType?: string;
     description?: string;
+    enumerations?: IVariable[];
+    group?: IVariable[];
   }
 
   export interface IUser {
@@ -154,4 +162,10 @@ export declare namespace MIP.API {
   }
 
   export interface IPolynomialClassificationScore extends IValidationScore {}
+}
+
+export declare namespace MIP.Internal {
+  export interface IQuery extends MIP.API.IQuery {
+    filtersFromParams?: any[];
+  }
 }

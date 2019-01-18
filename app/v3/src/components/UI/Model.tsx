@@ -30,32 +30,36 @@ const ruleOperator = (operator: string) => {
 
 const formatFilter = (filter: any) => {
   // TODO: refactor
-  const json = JSON.parse(filter);
   const humanRules: any = [];
+  try {
+    const json = JSON.parse(filter);
 
-  let level = 0;
-  const stringifyRules = (data: any) => {
-    data.rules.forEach((rule: any, index: number) => {
-      if (rule.condition) {
-        stringifyRules(rule);
-        return;
-      }
+    let level = 0;
+    const stringifyRules = (data: any) => {
+      data.rules.forEach((rule: any, index: number) => {
+        if (rule.condition) {
+          stringifyRules(rule);
+          return;
+        }
 
-      humanRules.push({
-        data: `${rule.field} ${ruleOperator(rule.operator)} ${rule.value}`,
-        level
-      });
-      if (index < data.rules.length - 1) {
         humanRules.push({
-          data: `${data.condition}`,
+          data: `${rule.field} ${ruleOperator(rule.operator)} ${rule.value}`,
           level
         });
-      }
+        if (index < data.rules.length - 1) {
+          humanRules.push({
+            data: `${data.condition}`,
+            level
+          });
+        }
 
-      level++;
-    });
-  };
-  stringifyRules(json);
+        level++;
+      });
+    };
+    stringifyRules(json);
+  } catch (e) {
+    console.log(e);
+  }
 
   return humanRules.map((box: any, index: number) => {
     return (
@@ -66,7 +70,13 @@ const formatFilter = (filter: any) => {
   });
 };
 
-export default ({ model }: { model: MIP.API.IModelResponse | undefined }) => {
+export default ({
+  model,
+  showDatasets = true
+}: {
+  model: MIP.API.IModelResponse | undefined;
+  showDatasets?: boolean;
+}) => {
   const query = model && model.query;
   return (
     <Panel className="model">
@@ -91,18 +101,21 @@ export default ({ model }: { model: MIP.API.IModelResponse | undefined }) => {
             {query.filters && <h5>Filters</h5>}
             {query.filters && formatFilter(query.filters)}
 
-            {query.trainingDatasets && query.trainingDatasets.length > 0 && (
-              <h5>Training datasets</h5>
-            )}
-            {query.trainingDatasets &&
+            {showDatasets &&
+              query.trainingDatasets &&
+              query.trainingDatasets.length > 0 && <h5>Training datasets</h5>}
+            {showDatasets &&
+              query.trainingDatasets &&
               query.trainingDatasets.map((v: any) => (
                 <var key={v.code}>{v.code}</var>
               ))}
-            {query.validationDatasets &&
+            {showDatasets &&
+              query.validationDatasets &&
               query.validationDatasets.length > 0 && (
                 <h5>Validation dataset</h5>
               )}
-            {query.validationDatasets &&
+            {showDatasets &&
+              query.validationDatasets &&
               query.validationDatasets.map((v: any) => (
                 <var key={v.code}>{v.code}</var>
               ))}

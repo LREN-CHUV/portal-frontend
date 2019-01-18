@@ -18,7 +18,7 @@ const handleChangeDataset = (
   handleUpdateQuery: any
 ) => {
   if (query) {
-    if (type === 0) {
+    if (type === DatasetType.Training) {
       query.trainingDatasets = toggleDataset(datasets, code);
 
       if (
@@ -30,7 +30,7 @@ const handleChangeDataset = (
           code
         );
       }
-    } else if (type === 1) {
+    } else if (type === DatasetType.Validation) {
       query.validationDatasets = toggleDataset(datasets, code);
 
       if (
@@ -82,7 +82,7 @@ const Validation = ({
   query: any;
   handleUpdateQuery: any;
 }) => (
-  <fieldset style={{ padding: "8px" }}>
+  <div>
     <h5>
       {isPredictiveMethod && <strong>Training and kfold</strong>}
       {!isPredictiveMethod && <strong>Datasets</strong>}
@@ -149,7 +149,7 @@ const Validation = ({
         </FormGroup>
       </div>
     )}
-  </fieldset>
+  </div>
 );
 
 export default Validation;

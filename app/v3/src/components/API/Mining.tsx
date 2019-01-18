@@ -6,10 +6,11 @@ import { Container } from "unstated";
 dotenv.config();
 
 class Mining extends Container<MIP.Store.IMiningState> {
-  public state: MIP.Store.IMiningState = {};
+  public state: MIP.Store.IMiningState = { loadingMinings: false, heatmap: [], minings: [] };
+  public loaded = this.state.minings !== undefined;
 
-  public loaded = this.state.mining !== undefined;
-
+  private cachedMinings: any[] = [];
+  private requestedMinings: any = new Set();
   private options: request.Options;
   private baseUrl: string;
 
@@ -19,46 +20,122 @@ class Mining extends Container<MIP.Store.IMiningState> {
     this.baseUrl = `${config.baseUrl}`;
   }
 
+  public clear = () => {
+    this.cachedMinings = [];
+    this.requestedMinings.clear();
+    return this.setState((prevState: any) => ({
+      error: undefined,
+      heatmap: undefined,
+      loadingMinings: false,
+      minings: undefined
+    }));
+  };
+
+  public heatmap = async ({
+    payload
+  }: {
+    payload: MIP.API.IExperimentMiningPayload;
+  }) => {
+    const pl = {
+      algorithm: {
+        code: "correlationHeatmap",
+        name: "Correlation heatmap",
+        parameters: [],
+        validation: false
+      },
+      ...payload
+    };
+    try {
+      const data = await request({
+        body: JSON.stringify(pl),
+        headers: {
+          ...this.options.headers,
+          "Content-Type": "application/json;charset=UTF-8"
+        },
+        method: "POST",
+        uri: `${this.baseUrl}/mining`
+      });
+
+      const json = JSON.parse(data).data;
+
+      return await this.setState((prevState: any) => ({
+        error: prevState.error,
+        heatmap: json,
+        minings: prevState.minings
+      }));
+    } catch (error) {
+      return await this.setState((prevState: any) => ({
+        error: error.message,
+        heatmap: [],
+        minings: prevState.minings
+      }));
+    }
+  };
+
   public createAll = async ({
     payload
   }: {
     payload: MIP.API.IExperimentMiningPayload;
   }) => {
-    const payloads = payload.datasets.map(dataset => ({
-      algorithm: {
-        code: "statisticsSummary",
-        name: "statisticsSummary",
-        parameters: [],
-        validation: false
-      },
-      ...payload,
-      datasets: [dataset]
-    }));
+    const selectedDatasets: string[] = payload.datasets.map(d => d.code) || [];
+    const selectedMinings = this.cachedMinings.filter(
+      (mining: any) => selectedDatasets.indexOf(mining.dataset.code) > -1
+    );
 
-    try {
-      const data = await Promise.all(
-        payloads.map(pl =>
-          request({
-            body: JSON.stringify(pl),
-            headers: {
-              ...this.options.headers,
-              "Content-Type": "application/json;charset=UTF-8"
-            },
-            method: "POST",
-            uri: `${this.baseUrl}/mining`
-          })
-        )
-      );
+    this.setState({ minings: selectedMinings });
 
-      return await this.setState({
-        error: undefined,
-        mining: data.map((d:any) => JSON.parse(d) )
+    // Filter non fetched datasets
+    const payloads = payload.datasets
+      .filter(
+        dataset => Array.from(this.requestedMinings).indexOf(dataset.code) === -1
+      )
+      .map(dataset => ({
+        algorithm: {
+          code: "statisticsSummary",
+          name: "statisticsSummary",
+          parameters: [],
+          validation: false
+        },
+        ...payload,
+        datasets: [dataset]
+      }));
+
+    selectedDatasets.map(s => this.requestedMinings.add(s));
+
+    // We have to fetch for each dataset, otherwise values are aggregated
+    payloads.map(async pl => {
+      this.setState({
+        loadingMinings: true,
       });
-    } catch (error) {
-      return await this.setState({
-        error: error.message
-      });
-    }
+      try {
+        const data = await request({
+          body: JSON.stringify(pl),
+          headers: {
+            ...this.options.headers,
+            "Content-Type": "application/json;charset=UTF-8"
+          },
+          method: "POST",
+          uri: `${this.baseUrl}/mining`
+        });
+
+        const json = JSON.parse(data).data;
+        json.dataset = pl.datasets[0];
+
+        this.cachedMinings.push(json);
+
+        return await this.setState((prevState: any) => ({
+          error: prevState.error,
+          loadingMinings: false,
+          minings: prevState.minings ? [...prevState.minings, json] : [json]
+        }));
+      } catch (error) {
+        return await this.setState((prevState: any) => ({
+          error: error.message,
+          loadingMinings: false,
+          minings: prevState.minings
+        }));
+      }
+    });
   };
 }
 
