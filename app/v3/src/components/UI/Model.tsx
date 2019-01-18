@@ -30,32 +30,36 @@ const ruleOperator = (operator: string) => {
 
 const formatFilter = (filter: any) => {
   // TODO: refactor
-  const json = JSON.parse(filter);
   const humanRules: any = [];
+  try {
+    const json = JSON.parse(filter);
 
-  let level = 0;
-  const stringifyRules = (data: any) => {
-    data.rules.forEach((rule: any, index: number) => {
-      if (rule.condition) {
-        stringifyRules(rule);
-        return;
-      }
+    let level = 0;
+    const stringifyRules = (data: any) => {
+      data.rules.forEach((rule: any, index: number) => {
+        if (rule.condition) {
+          stringifyRules(rule);
+          return;
+        }
 
-      humanRules.push({
-        data: `${rule.field} ${ruleOperator(rule.operator)} ${rule.value}`,
-        level
-      });
-      if (index < data.rules.length - 1) {
         humanRules.push({
-          data: `${data.condition}`,
+          data: `${rule.field} ${ruleOperator(rule.operator)} ${rule.value}`,
           level
         });
-      }
+        if (index < data.rules.length - 1) {
+          humanRules.push({
+            data: `${data.condition}`,
+            level
+          });
+        }
 
-      level++;
-    });
-  };
-  stringifyRules(json);
+        level++;
+      });
+    };
+    stringifyRules(json);
+  } catch (e) {
+    console.log(e);
+  }
 
   return humanRules.map((box: any, index: number) => {
     return (

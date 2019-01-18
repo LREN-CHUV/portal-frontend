@@ -114,16 +114,16 @@ export declare namespace MIP.API {
   }
 
   export interface IVariable {
-    code: string,
-    label?: string
+    code: string;
+    label?: string;
   }
 
   export interface IVariableEntity extends IVariable {
     type?: string;
     sqlType?: string;
     description?: string;
-    enumerations?: IVariable[]
-    group?: IVariable[]
+    enumerations?: IVariable[];
+    group?: IVariable[];
   }
 
   export interface IUser {
@@ -162,4 +162,10 @@ export declare namespace MIP.API {
   }
 
   export interface IPolynomialClassificationScore extends IValidationScore {}
+}
+
+export declare namespace MIP.Internal {
+  export interface IQuery extends MIP.API.IQuery {
+    filtersFromParams?: any[];
+  }
 }

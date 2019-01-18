@@ -21,7 +21,7 @@ const Boxplot = ({ loading, miningState, selectedDatasets }: IProps) => {
       mining.data.filter((d: any) => d.mean && d.group[0] === "all")
   );
   const categories = minings.map(m => m.dataset.code)
-  const flattened: any = [].concat.apply([], filteredByGroupAll);
+  const flattened = filteredByGroupAll.reduce((a, i) => [...a, ...i], [])
   const uniqueVariables = Array.from(
     new Set(flattened.map((f: any) => f.index))
   );

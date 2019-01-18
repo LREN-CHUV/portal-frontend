@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Button, Panel } from "react-bootstrap";
+import { Button, Glyphicon, Panel } from "react-bootstrap";
 
 interface IProps {
   handleGoBackToExplore: () => void;
@@ -35,7 +35,7 @@ export default class Header extends React.Component<IProps> {
                 bsStyle="info"
                 type="submit"
               >
-                Explore
+                <Glyphicon glyph="chevron-left" />{" "}Explore
               </Button>
             </div>
             <div className="item text">&nbsp;</div>
@@ -78,7 +78,7 @@ export default class Header extends React.Component<IProps> {
                 type="submit"
                 // disabled={this.input.current.value === undefined}
               >
-                RUN MACHINE LEARNING EXPERIMENT
+                RUN MACHINE LEARNING EXPERIMENT {" "} <Glyphicon glyph="chevron-right" />{" "}
               </Button>
             </div>
           </div>

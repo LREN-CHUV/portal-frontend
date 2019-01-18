@@ -22,14 +22,20 @@ class Filter extends React.Component<IProps, IState> {
 
   public componentDidMount = () => {
     const { filters, rules } = this.props;
-    this.ref.queryBuilder({ filters, rules });
+
+    if (!rules) {
+      this.ref.queryBuilder({ filters });
+    } else {
+      this.ref.queryBuilder({ filters, rules });
+    }
+    
     this.ref.queryBuilder("on", "rulesChanged", () => {
       this.setState({ saveDisabled: false });
     });
   }
 
-  public componentDidUpdate = () => {
-    const { filters, rules } = this.props;
+  public componentWillReceiveProps = (nextProps: any) => {
+    const { filters, rules } = nextProps;
     this.ref.queryBuilder({ filters, rules });
   };
 

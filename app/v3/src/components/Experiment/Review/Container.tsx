@@ -38,27 +38,35 @@ class Container extends React.Component<IProps, IState> {
     if (qs.execute) {
       const variables = [{ code: qs.variable as string }];
       const coVariables =
-        (qs.covariable as string) !== ""
+      qs.covariable  && (qs.covariable as string) !== ""
           ? (qs.covariable as string).split(",").map(v => ({
               code: v
             }))
           : undefined;
       const groupings =
-        (qs.grouping as string) !== ""
+      qs.grouping && (qs.grouping as string) !== ""
           ? (qs.grouping as string).split(",").map(v => ({
               code: v
             }))
           : undefined;
       const trainingDatasets =
-        (qs.trainingDatasets as string) !== ""
+      qs.trainingDatasets && (qs.trainingDatasets as string) !== ""
           ? (qs.trainingDatasets as string).split(",").map(v => ({
               code: v
             }))
           : undefined;
+      const filterQuery = qs.filterQuery && decodeURI(qs.filterQuery as string) || "";
+      const filters =
+      qs.filter  && (qs.filter as string) !== ""
+          ? (qs.filter as string).split(",").map(v => ({
+            code: v
+          }))
+          : undefined;
 
-      const query: MIP.API.IQuery = {
+      const query: MIP.Internal.IQuery = {
         coVariables,
-        filters: qs.filter as string,
+        filters: filterQuery ,
+        filtersFromParams: filters,
         groupings,
         trainingDatasets,
         variables
@@ -174,7 +182,7 @@ class Container extends React.Component<IProps, IState> {
     const filters =
       this.state.query &&
       this.state.query.filters &&
-      JSON.parse(this.state.query.filters);
+      JSON.parse(this.state.query.filters) || "";
 
     return (
       <div className="Experiment Review">
@@ -215,7 +223,7 @@ class Container extends React.Component<IProps, IState> {
                 </Panel.Title>
                 <Panel.Collapse>
                   <Panel.Body collapsible={true}>
-                    {filters && fields && fields.length > 0 && (
+                    {fields && fields.length > 0 && (
                       <Filter
                         rules={filters}
                         filters={fields}
@@ -236,7 +244,7 @@ class Container extends React.Component<IProps, IState> {
     const { apiModel, apiMining } = this.props;
     const model = apiModel.state.model;
     if (model) {
-      model.query.filters = JSON.stringify(filters);
+      model.query.filters = filters && JSON.stringify(filters) || "";
     }
     await apiModel.update(model);
     const query = this.state.query;
@@ -269,30 +277,16 @@ class Container extends React.Component<IProps, IState> {
     if (query) {
       const variable = query.variables && query.variables.map(v => v.code)[0];
       const covariable =
-        query.coVariables && query.coVariables.map(v => v.code).join(",");
-      const grouping =
-        query.groupings && query.groupings.map(v => v.code).join(",");
+        query.coVariables && query.coVariables.map(v => v.code).join(",") || "";
+      const grouping = 
+        query.groupings && query.groupings.map(v => v.code).join(",") || "";
       const trainingDatasets =
         query.trainingDatasets &&
-        query.trainingDatasets.map(v => v.code).join(",");
+        query.trainingDatasets.map(v => v.code).join(",") || "";
 
-      const json = JSON.parse(query.filters);
-      const filterVariables: any = [];
-      const extractVariablesFromFilter = (data: any) => {
-        data.rules.forEach((rule: any, index: number) => {
-          if (rule.condition) {
-            extractVariablesFromFilter(rule);
-            return;
-          }
+      const filterQuery = query.filters && encodeURI(query.filters) || "";
 
-          filterVariables.push(rule.field);
-        });
-      };
-      extractVariablesFromFilter(json);
-      const filter =
-        filterVariables && Array.from(new Set(filterVariables)).join(",");
-
-      window.location.href = `/explore?configure=true&variable=${variable}&covariable=${covariable}&grouping=${grouping}&filter=${filter}&trainingDatasets=${trainingDatasets}`;
+      window.location.href = `/explore?configure=true&variable=${variable}&covariable=${covariable}&grouping=${grouping}&filterQuery=${filterQuery}&trainingDatasets=${trainingDatasets}`;
     } else {
       window.location.href = `/explore`;
     }
@@ -423,11 +417,10 @@ class Container extends React.Component<IProps, IState> {
         slug: string;
       }
     | undefined => {
-    const { match } = props;
-    if (!match) {
-      return;
-    }
-    return Object.keys(match.params).length === 0 ? undefined : match.params;
+    const { location } = props;
+    const slug = location.pathname.split("/").pop() || ""
+
+    return { slug };
   };
 }
 
