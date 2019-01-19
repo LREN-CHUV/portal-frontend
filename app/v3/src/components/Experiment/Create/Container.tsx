@@ -69,6 +69,7 @@ class Container extends React.Component<IProps, IState> {
             models={apiModel.state.models}
             experiments={apiExperiment.state.experiments}
             method={this.state && this.state.method}
+            handleGoBackToReview={this.handleGoBackToReview}
             handleSelectModel={this.handleSelectModel}
             handleSelectExperiment={this.handleSelectExperiment}
             handleSaveAndRunExperiment={this.handleSaveAndRunExperiment}
@@ -180,6 +181,14 @@ class Container extends React.Component<IProps, IState> {
     return await apiExperiment.one({ uuid });
   };
 
+  private handleGoBackToReview = () => {
+    const { apiModel, history } = this.props;
+    const model = apiModel.state.model;
+    if (model) {
+      history.push(`/v3/review/${model.slug}`);
+    }
+  };
+
   private handleSaveAndRunExperiment = async (
     experimentName: string
   ): Promise<any> => {
@@ -252,10 +261,10 @@ class Container extends React.Component<IProps, IState> {
             }
           ]
         : [];
-        if (!model.slug) {
-          this.setState({ alert: { message: "Model was not saved" } });
-          return;
-        }
+    if (!model.slug) {
+      this.setState({ alert: { message: "Model was not saved" } });
+      return;
+    }
 
     const experiment: MIP.API.IExperimentPayload = {
       algorithms: [

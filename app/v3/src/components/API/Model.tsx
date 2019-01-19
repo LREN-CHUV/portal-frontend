@@ -129,7 +129,7 @@ class Model extends Container<MIP.Store.IModelState> {
         model: json
       });
 
-      return json
+      return json.slug;
     } catch (error) {
       return await this.setState({
         error: error.message
