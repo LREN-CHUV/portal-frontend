@@ -1,3 +1,5 @@
+import DropdownModel from "@app/components/UI/DropdownModel";
+import { MIP } from "@app/types";
 import * as React from "react";
 import { Button, Glyphicon, Panel } from "react-bootstrap";
 
@@ -5,7 +7,9 @@ interface IProps {
   handleGoBackToExplore: () => void;
   handleRunAnalysis: () => void;
   handleSaveOrUpdateModel: (name: string | undefined) => void;
+  handleSelectModel: (model: MIP.API.IModelResponse) => void;
   modelName?: string;
+  models?: MIP.API.IModelResponse[];
 }
 export default class Header extends React.Component<IProps> {
   private input: any;
@@ -17,17 +21,28 @@ export default class Header extends React.Component<IProps> {
 
   public render() {
     const {
+      models,
+      modelName,
       handleGoBackToExplore,
       handleRunAnalysis,
-      handleSaveOrUpdateModel
+      handleSaveOrUpdateModel,
+      handleSelectModel
     } = this.props;
 
     return (
       <Panel>
         <Panel.Body>
-          <h3>Interactive Analysis</h3>
+          <h3>
+            Interactive Analysis on{" "}
+            {models && (
+              <DropdownModel
+                items={models}
+                title={modelName}
+                handleSelect={handleSelectModel}
+              />
+            )}
+          </h3>
           <div className="actions status">
-            
             <div className="item">
               <Button
                 //tslint:disable
@@ -35,7 +50,7 @@ export default class Header extends React.Component<IProps> {
                 bsStyle="info"
                 type="submit"
               >
-                <Glyphicon glyph="chevron-left" />{" "}Explore
+                <Glyphicon glyph="chevron-left" /> Explore
               </Button>
             </div>
             <div className="item text">&nbsp;</div>
@@ -78,7 +93,8 @@ export default class Header extends React.Component<IProps> {
                 type="submit"
                 // disabled={this.input.current.value === undefined}
               >
-                RUN MACHINE LEARNING EXPERIMENT {" "} <Glyphicon glyph="chevron-right" />{" "}
+                RUN MACHINE LEARNING EXPERIMENT{" "}
+                <Glyphicon glyph="chevron-right" />{" "}
               </Button>
             </div>
           </div>

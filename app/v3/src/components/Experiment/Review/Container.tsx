@@ -38,34 +38,35 @@ class Container extends React.Component<IProps, IState> {
     if (qs.execute) {
       const variables = [{ code: qs.variable as string }];
       const coVariables =
-      qs.covariable  && (qs.covariable as string) !== ""
+        qs.covariable && (qs.covariable as string) !== ""
           ? (qs.covariable as string).split(",").map(v => ({
               code: v
             }))
           : undefined;
       const groupings =
-      qs.grouping && (qs.grouping as string) !== ""
+        qs.grouping && (qs.grouping as string) !== ""
           ? (qs.grouping as string).split(",").map(v => ({
               code: v
             }))
           : undefined;
       const trainingDatasets =
-      qs.trainingDatasets && (qs.trainingDatasets as string) !== ""
+        qs.trainingDatasets && (qs.trainingDatasets as string) !== ""
           ? (qs.trainingDatasets as string).split(",").map(v => ({
               code: v
             }))
           : undefined;
-      const filterQuery = qs.filterQuery && decodeURI(qs.filterQuery as string) || "";
+      const filterQuery =
+        (qs.filterQuery && decodeURI(qs.filterQuery as string)) || "";
       const filters =
-      qs.filter  && (qs.filter as string) !== ""
+        qs.filter && (qs.filter as string) !== ""
           ? (qs.filter as string).split(",").map(v => ({
-            code: v
-          }))
+              code: v
+            }))
           : undefined;
 
       const query: MIP.Internal.IQuery = {
         coVariables,
-        filters: filterQuery ,
+        filters: filterQuery,
         filtersFromParams: filters,
         groupings,
         trainingDatasets,
@@ -89,16 +90,17 @@ class Container extends React.Component<IProps, IState> {
     }
   }
 
-  public async componentWillReceiveProps(prevProps: IProps, prevState: IState) {
-    const params = this.urlParams(this.props);
+  public async componentWillReceiveProps(nextProps: IProps, prevState: IState) {
+    const params = this.urlParams(nextProps);
     const slug = params && params.slug;
-    const prevParams = this.urlParams(prevProps);
+    const prevParams = this.urlParams(this.props);
     const prevSlug = prevParams && prevParams.slug;
 
-    if (prevSlug !== slug && slug) {
+    if (slug && prevSlug !== slug) {
       await this.loadModel({ slug });
       const query = this.state.query;
       if (query) {
+        this.props.apiMining.clear();
         this.createMining({ query });
       }
     }
@@ -180,9 +182,10 @@ class Container extends React.Component<IProps, IState> {
     );
 
     const filters =
-      this.state.query &&
-      this.state.query.filters &&
-      JSON.parse(this.state.query.filters) || "";
+      (this.state.query &&
+        this.state.query.filters &&
+        JSON.parse(this.state.query.filters)) ||
+      "";
 
     return (
       <div className="Experiment Review">
@@ -192,7 +195,9 @@ class Container extends React.Component<IProps, IState> {
             handleSaveOrUpdateModel={this.handleSaveOrUpdateModel}
             handleRunAnalysis={this.handleRunAnalysis}
             modelName={apiModel.state.model && apiModel.state.model.title}
-          />
+            models={apiModel.state.models}
+            handleSelectModel={this.handleSelectModel}
+         />
         </div>
         <div className="content">
           <div className="sidebar">
@@ -244,7 +249,7 @@ class Container extends React.Component<IProps, IState> {
     const { apiModel, apiMining } = this.props;
     const model = apiModel.state.model;
     if (model) {
-      model.query.filters = filters && JSON.stringify(filters) || "";
+      model.query.filters = (filters && JSON.stringify(filters)) || "";
     }
     await apiModel.update(model);
     const query = this.state.query;
@@ -277,19 +282,31 @@ class Container extends React.Component<IProps, IState> {
     if (query) {
       const variable = query.variables && query.variables.map(v => v.code)[0];
       const covariable =
-        query.coVariables && query.coVariables.map(v => v.code).join(",") || "";
-      const grouping = 
-        query.groupings && query.groupings.map(v => v.code).join(",") || "";
+        (query.coVariables && query.coVariables.map(v => v.code).join(",")) ||
+        "";
+      const grouping =
+        (query.groupings && query.groupings.map(v => v.code).join(",")) || "";
       const trainingDatasets =
-        query.trainingDatasets &&
-        query.trainingDatasets.map(v => v.code).join(",") || "";
+        (query.trainingDatasets &&
+          query.trainingDatasets.map(v => v.code).join(",")) ||
+        "";
 
-      const filterQuery = query.filters && encodeURI(query.filters) || "";
+      const filterQuery = (query.filters && encodeURI(query.filters)) || "";
 
       window.location.href = `/explore?configure=true&variable=${variable}&covariable=${covariable}&grouping=${grouping}&filterQuery=${filterQuery}&trainingDatasets=${trainingDatasets}`;
     } else {
       window.location.href = `/explore`;
     }
+  };
+
+  private handleSelectModel = (
+    model: MIP.API.IModelResponse
+  ) => {
+    const { slug } = model;
+    const { history } = this.props;
+    history.push(`/v3/review/${slug}`);
+
+    // return await apiModel.one(slug);
   };
 
   private computeMiningResultToTable = ({
@@ -418,7 +435,7 @@ class Container extends React.Component<IProps, IState> {
       }
     | undefined => {
     const { location } = props;
-    const slug = location.pathname.split("/").pop() || ""
+    const slug = location.pathname.split("/").pop() || "";
 
     return { slug };
   };

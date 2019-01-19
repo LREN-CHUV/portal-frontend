@@ -28,15 +28,25 @@ class Filter extends React.Component<IProps, IState> {
     } else {
       this.ref.queryBuilder({ filters, rules });
     }
-    
+
     this.ref.queryBuilder("on", "rulesChanged", () => {
       this.setState({ saveDisabled: false });
     });
-  }
+  };
 
   public componentWillReceiveProps = (nextProps: any) => {
-    const { filters, rules } = nextProps;
-    this.ref.queryBuilder({ filters, rules });
+    const { filters: nextFilters, rules: nextRules } = nextProps;
+    const { filters, rules } = this.props;
+    if (nextFilters && nextFilters !== filters) {
+      this.ref.queryBuilder("destroy");
+
+      if (nextRules && nextRules !== rules) {
+        this.ref.queryBuilder({ filters: nextFilters, rules: nextRules });
+        return;
+      }
+
+      this.ref.queryBuilder({ filters: nextFilters });
+    }
   };
 
   public componentWillUnmount = () => {
