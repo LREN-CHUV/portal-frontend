@@ -35,6 +35,11 @@ class Filter extends React.Component<IProps, IState> {
   };
 
   public componentWillReceiveProps = (nextProps: any) => {
+    
+    if (!this.state.saveDisabled) {
+      return
+    }
+    
     const { filters: nextFilters, rules: nextRules } = nextProps;
     const { filters, rules } = this.props;
     if (nextFilters && nextFilters !== filters) {
