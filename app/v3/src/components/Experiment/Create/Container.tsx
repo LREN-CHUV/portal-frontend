@@ -145,8 +145,9 @@ class Container extends React.Component<IProps, IState> {
     const { slug } = model;
     const { apiModel, history } = this.props;
     history.push(`/v3/experiment/${slug}`);
-
-    return await apiModel.one(slug);
+    if (slug) {
+      return await apiModel.one(slug);
+    }
   };
 
   private handleSelectMethod = (method: MIP.API.IMethod): void => {
@@ -221,7 +222,7 @@ class Container extends React.Component<IProps, IState> {
     }
 
     if (!selectedMethod) {
-      this.setState({ alert: { message: "selectedMethod" } });
+      this.setState({ alert: { message: "No method selected" } });
       return;
     }
 
@@ -251,6 +252,10 @@ class Container extends React.Component<IProps, IState> {
             }
           ]
         : [];
+        if (!model.slug) {
+          this.setState({ alert: { message: "Model was not saved" } });
+          return;
+        }
 
     const experiment: MIP.API.IExperimentPayload = {
       algorithms: [

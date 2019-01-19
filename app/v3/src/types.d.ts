@@ -24,7 +24,7 @@ export declare namespace MIP.Store {
   }
 
   export interface IModelState extends IError {
-    model?: MIP.API.IModelResponse;
+    model?: MIP.API.IModelResponse | MIP.Internal.IModelMock;
     models?: MIP.API.IModelResponse[];
   }
 }
@@ -62,14 +62,15 @@ export declare namespace MIP.API {
   }
 
   export interface IModelResponse extends IError {
-    slug: string;
+    slug?: string;
     title: string;
-    valid: boolean;
-    createdAt: number;
+    valid?: boolean;
+    createdAt?: number;
     query: MIP.API.IQuery;
-    dataset: any; // FIXME: not used in api
-    config: any; // FIXME: not used in api
-    createdBy: IUser;
+    dataset?: any; // FIXME: not used in api
+    config?: any; // FIXME: not used in api
+    createdBy?: IUser;
+    isMock?: boolean
   }
 
   export interface IMethod {
@@ -167,5 +168,11 @@ export declare namespace MIP.API {
 export declare namespace MIP.Internal {
   export interface IQuery extends MIP.API.IQuery {
     filtersFromParams?: any[];
+  }
+
+  export interface IModelMock extends MIP.API.IModelResponse {
+    title: string;
+    query: MIP.Internal.IQuery;
+    isMock: boolean;
   }
 }

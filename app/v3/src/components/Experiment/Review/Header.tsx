@@ -6,10 +6,11 @@ import { Button, Glyphicon, Panel } from "react-bootstrap";
 interface IProps {
   handleGoBackToExplore: () => void;
   handleRunAnalysis: () => void;
-  handleSaveOrUpdateModel: (name: string | undefined) => void;
+  handleSaveModel: ({ title } : { title: string }) => void;
   handleSelectModel: (model: MIP.API.IModelResponse) => void;
   modelName?: string;
   models?: MIP.API.IModelResponse[];
+  isMock?: boolean;
 }
 export default class Header extends React.Component<IProps> {
   private input: any;
@@ -23,9 +24,10 @@ export default class Header extends React.Component<IProps> {
     const {
       models,
       modelName,
+      isMock,
       handleGoBackToExplore,
       handleRunAnalysis,
-      handleSaveOrUpdateModel,
+      handleSaveModel,
       handleSelectModel
     } = this.props;
 
@@ -54,19 +56,21 @@ export default class Header extends React.Component<IProps> {
               </Button>
             </div>
             <div className="item text">&nbsp;</div>
-            <div className="item">
-              <input
-                type="text"
-                ref={this.input}
-                className={"form-control"}
-                defaultValue={this.props.modelName}
-              />
-            </div>
-            <div className="item">
+            {isMock && (
+              <div className="item">
+                <input
+                  type="text"
+                  ref={this.input}
+                  className={"form-control"}
+                  defaultValue={this.props.modelName}
+                />
+              </div>
+            )}
+            {isMock && <div className="item">
               <Button
                 //tslint:disable
                 onClick={() =>
-                  handleSaveOrUpdateModel(this.input.current.value)
+                  handleSaveModel({title: this.input.current.value})
                 }
                 // onKeyDown={event => {
                 //   if (event.key === "Enter") {
@@ -80,6 +84,7 @@ export default class Header extends React.Component<IProps> {
                 Save model
               </Button>
             </div>
+            }
             <div className="item">
               <Button
                 //tslint:disable
@@ -91,7 +96,7 @@ export default class Header extends React.Component<IProps> {
                 // }}
                 bsStyle="info"
                 type="submit"
-                // disabled={this.input.current.value === undefined}
+                disabled={isMock}
               >
                 RUN MACHINE LEARNING EXPERIMENT{" "}
                 <Glyphicon glyph="chevron-right" />{" "}

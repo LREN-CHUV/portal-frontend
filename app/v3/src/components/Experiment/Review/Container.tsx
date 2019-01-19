@@ -74,7 +74,7 @@ class Container extends React.Component<IProps, IState> {
       };
 
       const { apiModel } = this.props;
-      await apiModel.set(query);
+      await apiModel.setMock(query);
       await this.setState({ query });
       this.createMining({ query });
     } else {
@@ -192,12 +192,13 @@ class Container extends React.Component<IProps, IState> {
         <div className="header">
           <ExperimentReviewHeader
             handleGoBackToExplore={this.handleGoBackToExplore}
-            handleSaveOrUpdateModel={this.handleSaveOrUpdateModel}
+            handleSaveModel={this.handleSaveModel}
             handleRunAnalysis={this.handleRunAnalysis}
             modelName={apiModel.state.model && apiModel.state.model.title}
             models={apiModel.state.models}
+            isMock={apiModel.state.model && apiModel.state.model.isMock}
             handleSelectModel={this.handleSelectModel}
-         />
+          />
         </div>
         <div className="content">
           <div className="sidebar">
@@ -251,7 +252,9 @@ class Container extends React.Component<IProps, IState> {
     if (model) {
       model.query.filters = (filters && JSON.stringify(filters)) || "";
     }
-    await apiModel.update(model);
+    if (model && !model.isMock) {
+      await apiModel.update(model);
+    }
     const query = this.state.query;
     if (query) {
       apiMining.clear();
@@ -261,14 +264,21 @@ class Container extends React.Component<IProps, IState> {
     return Promise.resolve(true);
   };
 
-  private handleSaveOrUpdateModel = async (name: string | undefined) => {
-    console.log(name);
+  private handleSaveModel = async ({ title }: { title: string }) => {
     const { apiModel } = this.props;
     const model = apiModel.state.model;
-    return await apiModel.update(model);
+    const slug = await apiModel.save({ model, title });
+    this.setState({ alert: { message: "Model saved" } });
+
+    const { history } = this.props;
+    history.push(`/v3/review/${slug}`);
   };
 
   private handleRunAnalysis = async () => {
+    const { apiModel } = this.props;
+    const model = apiModel.state.model;
+     await apiModel.update({ model });
+
     const params = this.urlParams(this.props);
     const slug = params && params.slug;
     const { history } = this.props;
@@ -299,14 +309,10 @@ class Container extends React.Component<IProps, IState> {
     }
   };
 
-  private handleSelectModel = (
-    model: MIP.API.IModelResponse
-  ) => {
+  private handleSelectModel = (model: MIP.API.IModelResponse) => {
     const { slug } = model;
     const { history } = this.props;
     history.push(`/v3/review/${slug}`);
-
-    // return await apiModel.one(slug);
   };
 
   private computeMiningResultToTable = ({

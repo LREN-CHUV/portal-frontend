@@ -18,7 +18,7 @@ export default ({
 }: IDropdown) => (
   <DropdownButton
     noCaret={noCaret}
-    bsStyle="default"
+    bsSize="small"
     id={"model-dropdown"}
     title={title}
   >
