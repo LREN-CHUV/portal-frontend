@@ -13,11 +13,11 @@ interface IProps {
 
 interface IState {
   loading: boolean;
-  saveDisabled: boolean;
+  rulesChanged: boolean;
 }
 
 class Filter extends React.Component<IProps, IState> {
-  public state: IState = { saveDisabled: true, loading: false };
+  public state: IState = { rulesChanged: false, loading: false };
   private ref: any;
 
   public componentDidMount = () => {
@@ -29,28 +29,29 @@ class Filter extends React.Component<IProps, IState> {
       this.ref.queryBuilder({ filters, rules });
     }
 
-    this.ref.queryBuilder("on", "rulesChanged", () => {
-      this.setState({ saveDisabled: false });
-    });
+    this.onRulesChanged();
   };
 
   public componentWillReceiveProps = (nextProps: any) => {
-    
-    if (!this.state.saveDisabled) {
-      return
+    if (this.state.rulesChanged) {
+      return; // user is editing
     }
-    
+
     const { filters: nextFilters, rules: nextRules } = nextProps;
-    const { filters, rules } = this.props;
-    if (nextFilters && nextFilters !== filters) {
+    // const { filters, rules } = this.props;
+    if (nextFilters) { // FIXME: && nextFilters !== filters) {
       this.ref.queryBuilder("destroy");
 
-      if (nextRules && nextRules !== rules) {
+      if (nextRules) { // FIXME: && nextRules !== rules) {
         this.ref.queryBuilder({ filters: nextFilters, rules: nextRules });
+        this.onRulesChanged();
+
         return;
       }
 
       this.ref.queryBuilder({ filters: nextFilters });
+      this.onRulesChanged();
+      this.setState({ rulesChanged: false });
     }
   };
 
@@ -59,11 +60,11 @@ class Filter extends React.Component<IProps, IState> {
   };
 
   public handleSave = () => {
-    this.setState({ loading: true, saveDisabled: true });
+    this.setState({ loading: true, rulesChanged: false });
     const rules = this.ref.queryBuilder("getRules");
     const { handleChangeFilter } = this.props;
     handleChangeFilter(rules).then(() => {
-      this.setState({ loading: false, saveDisabled: false });
+      this.setState({ loading: false });
     });
   };
 
@@ -75,7 +76,7 @@ class Filter extends React.Component<IProps, IState> {
           <Button
             bsStyle={"primary"}
             onClick={this.handleSave}
-            disabled={this.state.saveDisabled}
+            disabled={!this.state.rulesChanged}
           >
             {this.state.loading ? "Saving..." : "Save"}
           </Button>
@@ -88,6 +89,15 @@ class Filter extends React.Component<IProps, IState> {
     if (!this.ref) {
       this.ref = $(ref) as any;
     }
+  };
+
+  private onRulesChanged = () => {
+    this.ref.queryBuilder("on", "rulesChanged", () => {
+      this.setState({ rulesChanged: true });
+    });
+    setTimeout(() => {
+      this.setState({ rulesChanged: false });
+    }, 100);
   };
 }
 
