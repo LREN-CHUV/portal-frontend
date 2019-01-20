@@ -74,20 +74,22 @@ class Model extends Container<MIP.Store.IModelState> {
   //   }
   // };
 
-  public update = async (model: any) => {
+  public update = async ({ model }: { model: any }) => {
     try {
-      await request({
+      const { slug } = model;
+      const data = await request({
         body: JSON.stringify(model),
         headers: {
           ...this.options.headers,
           "Content-Type": "application/json;charset=UTF-8"
         },
         method: "PUT",
-        uri: `${this.baseUrl}/${model.slug}`
+        uri: `${this.baseUrl}/${slug}`
       });
+      const json = await JSON.parse(data);
       return await this.setState({
         error: undefined,
-        model
+        model: json
       });
     } catch (error) {
       return await this.setState({
@@ -96,8 +98,13 @@ class Model extends Container<MIP.Store.IModelState> {
     }
   };
 
-  public save = async ({ model, title }: { model: any; title: string }) : Promise<any> => {
-
+  public save = async ({
+    model,
+    title
+  }: {
+    model: any;
+    title: string;
+  }): Promise<any> => {
     const modelTemplate = {
       config: {
         title: {
@@ -106,7 +113,7 @@ class Model extends Container<MIP.Store.IModelState> {
       },
       createdAt: 1540561037000,
       dataset: {
-        code: 'DS1540825503020'
+        code: "DS1540825503020"
       },
       query: model.query,
       title,

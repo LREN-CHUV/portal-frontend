@@ -235,8 +235,8 @@ class Container extends React.Component<IProps, IState> {
       return;
     }
 
-    model.query = query ? query : model.query;
-    await apiModel.update(model);
+    model.query = query!;
+    await apiModel.update({ model });
 
     const validation =
       model &&

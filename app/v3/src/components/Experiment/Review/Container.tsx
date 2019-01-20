@@ -253,7 +253,7 @@ class Container extends React.Component<IProps, IState> {
       model.query.filters = (filters && JSON.stringify(filters)) || "";
     }
     if (model && !model.isMock) {
-      await apiModel.update(model);
+      await apiModel.update({ model });
     }
     const query = this.state.query;
     if (query) {
@@ -277,7 +277,7 @@ class Container extends React.Component<IProps, IState> {
   private handleRunAnalysis = async () => {
     const { apiModel } = this.props;
     const model = apiModel.state.model;
-     await apiModel.update({ model });
+    await apiModel.update({ model });
 
     const params = this.urlParams(this.props);
     const slug = params && params.slug;
