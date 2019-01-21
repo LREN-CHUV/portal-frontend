@@ -13,14 +13,13 @@ interface IProps {
   selectedDatasets?: MIP.API.IVariableEntity[];
 }
 
-const Boxplot = ({ loading, miningState, selectedDatasets }: IProps) => {
+const Boxplot = ({ loading, miningState }: IProps) => {
   const minings = (miningState && miningState.minings) || [];
   const filteredByGroupAll = minings.map(
     (mining: any) =>
       mining.data &&
-      mining.data.filter((d: any) => d.mean && d.group[0] === "all")
+      mining.data.filter((d: any) => d.mean && d.group[0] !== "all")
   );
-  const categories = minings.map(m => m.dataset.code)
   const flattened = filteredByGroupAll.reduce((a, i) => [...a, ...i], [])
   const uniqueVariables = Array.from(
     new Set(flattened.map((f: any) => f.index))
@@ -35,6 +34,7 @@ const Boxplot = ({ loading, miningState, selectedDatasets }: IProps) => {
       u["75%"],
       u.max
     ]);
+    const categories = uniqueMinings.map((u:any) => `${u.dataset.code}-${u.group.join("-")}`)
     const name = Array.from(new Set(uniqueMinings.map((f: any) => f.label)))[0];
     return {
       chart: {

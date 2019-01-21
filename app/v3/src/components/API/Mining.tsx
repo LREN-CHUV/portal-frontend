@@ -6,7 +6,11 @@ import { Container } from "unstated";
 dotenv.config();
 
 class Mining extends Container<MIP.Store.IMiningState> {
-  public state: MIP.Store.IMiningState = { loadingMinings: false, heatmap: [], minings: [] };
+  public state: MIP.Store.IMiningState = {
+    heatmap: [],
+    loadingMinings: false,
+    minings: []
+  };
   public loaded = this.state.minings !== undefined;
 
   private cachedMinings: any[] = [];
@@ -87,7 +91,8 @@ class Mining extends Container<MIP.Store.IMiningState> {
     // Filter non fetched datasets
     const payloads = payload.datasets
       .filter(
-        dataset => Array.from(this.requestedMinings).indexOf(dataset.code) === -1
+        dataset =>
+          Array.from(this.requestedMinings).indexOf(dataset.code) === -1
       )
       .map(dataset => ({
         algorithm: {
@@ -105,7 +110,7 @@ class Mining extends Container<MIP.Store.IMiningState> {
     // We have to fetch for each dataset, otherwise values are aggregated
     payloads.map(async pl => {
       this.setState({
-        loadingMinings: true,
+        loadingMinings: true
       });
       try {
         const data = await request({
@@ -119,14 +124,27 @@ class Mining extends Container<MIP.Store.IMiningState> {
         });
 
         const json = JSON.parse(data).data;
-        json.dataset = pl.datasets[0];
+        const dataset = pl.datasets && pl.datasets.length > 0 && pl.datasets[0];
+        const augmentedData = json.data.map((d: any) => ({
+          dataset,
+          ...d
+        }));
+        const augmentedJson = {
+          ...json,
+          data: augmentedData,
+          dataset
+        };
 
-        this.cachedMinings.push(json);
+        console.log(augmentedJson);
+
+        this.cachedMinings.push(augmentedJson);
 
         return await this.setState((prevState: any) => ({
           error: prevState.error,
           loadingMinings: false,
-          minings: prevState.minings ? [...prevState.minings, json] : [json]
+          minings: prevState.minings
+            ? [...prevState.minings, augmentedJson]
+            : [augmentedJson]
         }));
       } catch (error) {
         return await this.setState((prevState: any) => ({
