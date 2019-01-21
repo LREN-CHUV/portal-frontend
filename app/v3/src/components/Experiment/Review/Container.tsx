@@ -109,7 +109,8 @@ class Container extends React.Component<IProps, IState> {
   public render() {
     const { apiCore, apiModel, apiMining } = this.props;
     const tableData = this.computeMiningResultToTable({
-      minings: apiMining.state && apiMining.state.minings
+      minings: apiMining.state && apiMining.state.minings,
+      selectedDatasets: this.state.query && this.state.query.trainingDatasets
     });
 
     const variables = apiCore.state.variables;
@@ -316,15 +317,19 @@ class Container extends React.Component<IProps, IState> {
   };
 
   private computeMiningResultToTable = ({
-    minings
+    minings,
+    selectedDatasets
   }: IComputeMiningResult): any => {
     const computedRows: any[] = [];
 
-    if (!minings) {
+    if (!minings || !selectedDatasets) {
       return computedRows;
     }
 
-    const datasetDatas = minings.map(
+    const datasetOrder = selectedDatasets.map((s:any) => s.code)
+    const orderedMinings = datasetOrder.map((d: any) => minings.find((m:any) => m.dataset.code === d) || [])
+
+    const datasetDatas = orderedMinings.map(
       dataset =>
         (dataset.data &&
           dataset.data &&
@@ -334,7 +339,7 @@ class Container extends React.Component<IProps, IState> {
     );
 
     const indexes =
-      (datasetDatas.length && datasetDatas[0].map((d: any) => d.index)) || [];
+      (datasetDatas.length > 0 && datasetDatas[0].map((d: any) => d.index)) || [];
 
     // populate each variable data by row
     const rows: any[] = [];
@@ -345,7 +350,7 @@ class Container extends React.Component<IProps, IState> {
         row[i] = dataRow;
       });
       rows.push(row);
-    });
+    })
 
     // compute rows data for output
     rows.map((row: any) => {
@@ -355,7 +360,7 @@ class Container extends React.Component<IProps, IState> {
 
       Object.keys(row).map((rowKey: any) => {
         const col = row[rowKey];
-        computedRow.variable = col.label;
+        computedRow.variable = row[0].label;
 
         if (col.frequency) {
           const currentRow = row[rowKey];

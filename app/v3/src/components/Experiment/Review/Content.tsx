@@ -44,6 +44,7 @@ const Content = ({
                 <Table
                   loading={apiMining.state.loadingMinings}
                   minings={apiMining.state.minings}
+                  selectedDatasets={selectedDatasets}
                   tableData={tableData}
                 />
               </Tab>

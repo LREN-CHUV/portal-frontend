@@ -10,15 +10,24 @@ import "primereact/resources/themes/nova-light/theme.css";
 interface IProps {
   loading: boolean;
   minings?: any[];
+  selectedDatasets?: any[];
   tableData: any[];
 }
 
-const Table = ({ loading, minings, tableData }: IProps) => {
-  const columns = minings
+const Table = ({ loading, minings, selectedDatasets, tableData }: IProps) => {
+  // const columns = minings
+  //   ? [
+  //       <Column header="VARIABLES" field="variable" key={"variable"} />,
+  //       ...minings.map((mining: any, index: number) => (
+  //         <Column header={mining.dataset.code} field={`${index}`} key={index} />
+  //       ))
+  //     ]
+  //   : [];
+    const columns = selectedDatasets
     ? [
         <Column header="VARIABLES" field="variable" key={"variable"} />,
-        ...minings.map((mining: any, index: number) => (
-          <Column header={mining.dataset.code} field={`${index}`} key={index} />
+        ...selectedDatasets.map((mining: any, index: number) => (
+          <Column header={mining.code} field={`${index}`} key={index} />
         ))
       ]
     : [];
