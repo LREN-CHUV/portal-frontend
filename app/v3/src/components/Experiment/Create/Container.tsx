@@ -69,6 +69,7 @@ class Container extends React.Component<IProps, IState> {
             models={apiModel.state.models}
             experiments={apiExperiment.state.experiments}
             method={this.state && this.state.method}
+            handleGoBackToReview={this.handleGoBackToReview}
             handleSelectModel={this.handleSelectModel}
             handleSelectExperiment={this.handleSelectExperiment}
             handleSaveAndRunExperiment={this.handleSaveAndRunExperiment}
@@ -145,8 +146,9 @@ class Container extends React.Component<IProps, IState> {
     const { slug } = model;
     const { apiModel, history } = this.props;
     history.push(`/v3/experiment/${slug}`);
-
-    return await apiModel.one(slug);
+    if (slug) {
+      return await apiModel.one(slug);
+    }
   };
 
   private handleSelectMethod = (method: MIP.API.IMethod): void => {
@@ -177,6 +179,14 @@ class Container extends React.Component<IProps, IState> {
     history.push(`/v3/experiment/${modelDefinitionId}/${uuid}`);
 
     return await apiExperiment.one({ uuid });
+  };
+
+  private handleGoBackToReview = () => {
+    const { apiModel, history } = this.props;
+    const model = apiModel.state.model;
+    if (model) {
+      history.push(`/v3/review/${model.slug}`);
+    }
   };
 
   private handleSaveAndRunExperiment = async (
@@ -221,12 +231,12 @@ class Container extends React.Component<IProps, IState> {
     }
 
     if (!selectedMethod) {
-      this.setState({ alert: { message: "selectedMethod" } });
+      this.setState({ alert: { message: "No method selected" } });
       return;
     }
 
-    model.query = query ? query : model.query;
-    await apiModel.update(model);
+    model.query = query!;
+    await apiModel.update({ model });
 
     const validation =
       model &&
@@ -251,6 +261,10 @@ class Container extends React.Component<IProps, IState> {
             }
           ]
         : [];
+    if (!model.slug) {
+      this.setState({ alert: { message: "Model was not saved" } });
+      return;
+    }
 
     const experiment: MIP.API.IExperimentPayload = {
       algorithms: [

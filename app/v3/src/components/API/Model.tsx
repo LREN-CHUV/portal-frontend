@@ -17,19 +17,11 @@ class Model extends Container<MIP.Store.IModelState> {
     this.baseUrl = `${config.baseUrl}/models`;
   }
 
-  public set = async (query: MIP.API.IQuery) => {
-    const newModel: MIP.API.IModelResponse = {
-      config: "",
-      createdAt: 5,
-      createdBy: {
-        fullname: "anonymous",
-        username: "anonymous"
-      },
-      dataset: "",
+  public setMock = async (query: MIP.Internal.IQuery) => {
+    const newModel: MIP.Internal.IModelMock = {
+      isMock: true,
       query,
-      slug: "",
-      title: "No title",
-      valid: false
+      title: "No title"
     };
     return await this.setState({
       error: undefined,
@@ -58,10 +50,79 @@ class Model extends Container<MIP.Store.IModelState> {
     }
   };
 
-  public create = async (params: any) => {
+  // public create = async (params: any) => {
+  //   try {
+  //     const data = await request({
+  //       body: JSON.stringify(params),
+  //       headers: {
+  //         ...this.options.headers,
+  //         "Content-Type": "application/json;charset=UTF-8"
+  //       },
+  //       method: "POST",
+  //       uri: `${this.baseUrl}`
+  //     });
+  //     const json = await JSON.parse(data);
+  //     return await this.setState({
+  //       error: undefined,
+  //       model: json
+  //     });
+  //   } catch (error) {
+  //     // console.log(error);
+  //     return await this.setState({
+  //       error: error.message
+  //     });
+  //   }
+  // };
+
+  public update = async ({ model }: { model: any }) => {
+    try {
+      const { slug } = model;
+      const data = await request({
+        body: JSON.stringify(model),
+        headers: {
+          ...this.options.headers,
+          "Content-Type": "application/json;charset=UTF-8"
+        },
+        method: "PUT",
+        uri: `${this.baseUrl}/${slug}`
+      });
+      const json = await JSON.parse(data);
+      return await this.setState({
+        error: undefined,
+        model: json
+      });
+    } catch (error) {
+      return await this.setState({
+        error: error.message
+      });
+    }
+  };
+
+  public save = async ({
+    model,
+    title
+  }: {
+    model: any;
+    title: string;
+  }): Promise<any> => {
+    const modelTemplate = {
+      config: {
+        title: {
+          text: title
+        }
+      },
+      createdAt: 1540561037000,
+      dataset: {
+        code: "DS1540825503020"
+      },
+      query: model.query,
+      title,
+      valid: true
+    };
+
     try {
       const data = await request({
-        body: JSON.stringify(params),
+        body: JSON.stringify(modelTemplate),
         headers: {
           ...this.options.headers,
           "Content-Type": "application/json;charset=UTF-8"
@@ -70,33 +131,12 @@ class Model extends Container<MIP.Store.IModelState> {
         uri: `${this.baseUrl}`
       });
       const json = await JSON.parse(data);
-      return await this.setState({
+      await this.setState({
         error: undefined,
         model: json
       });
-    } catch (error) {
-      // console.log(error);
-      return await this.setState({
-        error: error.message
-      });
-    }
-  };
 
-  public update = async (model: any) => {
-    try {
-      await request({
-        body: JSON.stringify(model),
-        headers: {
-          ...this.options.headers,
-          "Content-Type": "application/json;charset=UTF-8"
-        },
-        method: "PUT",
-        uri: `${this.baseUrl}/${model.slug}`
-      });
-      return await this.setState({
-        error: undefined,
-        model
-      });
+      return json.slug;
     } catch (error) {
       return await this.setState({
         error: error.message

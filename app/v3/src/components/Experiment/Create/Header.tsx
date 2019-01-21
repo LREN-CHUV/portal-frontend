@@ -1,13 +1,14 @@
 import Dropdown from "@app/components/UI/Dropdown";
 import DropdownModel from "@app/components/UI/DropdownModel";
-import {  MIP } from "@app/types";
+import { MIP } from "@app/types";
 import * as React from "react";
-import { Button, FormControl, Panel } from "react-bootstrap";
+import { Button, FormControl, Glyphicon, Panel } from "react-bootstrap";
 interface IProps {
   title?: string;
   models?: MIP.API.IModelResponse[];
   experiments?: MIP.API.IExperimentResponse[];
   method?: MIP.API.IMethod;
+  handleGoBackToReview: () => void;
   handleSelectModel: (model: MIP.API.IModelResponse) => Promise<any>;
   handleSelectExperiment: (
     experiment: MIP.API.IExperimentResponse
@@ -29,6 +30,7 @@ export default class Header extends React.Component<IProps, IState> {
       models,
       title,
       method,
+      handleGoBackToReview,
       handleSelectModel,
       handleSelectExperiment,
       handleSaveAndRunExperiment
@@ -49,6 +51,17 @@ export default class Header extends React.Component<IProps, IState> {
             )}
           </h3>
           <div className="actions">
+            <div className="item">
+              <Button
+                //tslint:disable
+                onClick={handleGoBackToReview}
+                bsStyle="info"
+                type="submit"
+              >
+                <Glyphicon glyph="chevron-left" /> Review
+              </Button>
+            </div>
+            <div className="item text">&nbsp;</div>
             <div className="item">
               <FormControl
                 className="item experiment-name"
