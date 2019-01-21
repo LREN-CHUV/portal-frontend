@@ -50,30 +50,6 @@ class Model extends Container<MIP.Store.IModelState> {
     }
   };
 
-  // public create = async (params: any) => {
-  //   try {
-  //     const data = await request({
-  //       body: JSON.stringify(params),
-  //       headers: {
-  //         ...this.options.headers,
-  //         "Content-Type": "application/json;charset=UTF-8"
-  //       },
-  //       method: "POST",
-  //       uri: `${this.baseUrl}`
-  //     });
-  //     const json = await JSON.parse(data);
-  //     return await this.setState({
-  //       error: undefined,
-  //       model: json
-  //     });
-  //   } catch (error) {
-  //     // console.log(error);
-  //     return await this.setState({
-  //       error: error.message
-  //     });
-  //   }
-  // };
-
   public update = async ({ model }: { model: any }) => {
     try {
       const { slug } = model;

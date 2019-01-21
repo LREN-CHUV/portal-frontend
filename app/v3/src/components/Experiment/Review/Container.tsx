@@ -358,7 +358,9 @@ class Container extends React.Component<IProps, IState> {
         computedRow.variable = col.label;
 
         if (col.frequency) {
-          computedRow[rowKey] = row[rowKey].count;
+          const currentRow = row[rowKey];
+          const nullCount = currentRow.null_count
+          computedRow[rowKey] = nullCount !== 0 ? `${currentRow.count} (${nullCount})`: currentRow.count;
           Object.keys(col.frequency).map((k: any) => {
             polynominalRow = polynominalRows.find(p => p.variable === k);
             if (!polynominalRow) {

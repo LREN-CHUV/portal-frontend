@@ -10,9 +10,9 @@ import * as React from "react";
 import { BrowserRouter as Router } from "react-router-dom";
 import request from "request-promise-native";
 import { Provider, Subscribe } from "unstated";
-import UNSTATED from "unstated-debug";
+// import UNSTATED from "unstated-debug";
 
-UNSTATED.logStateChanges = process.env.NODE_ENV === "development";
+// UNSTATED.logStateChanges = process.env.NODE_ENV === "development";
 
 interface IState {
   appConfig: any;

@@ -96,6 +96,7 @@ export default ({
               query.coVariables.map((v: any) => (
                 <var key={v.code}>{v.code}</var>
               ))}
+              {query.groupings && <h5>Groupings</h5>}
             {query.groupings &&
               query.groupings.map((v: any) => <var key={v.code}>{v.code}</var>)}
             {query.filters && <h5>Filters</h5>}
