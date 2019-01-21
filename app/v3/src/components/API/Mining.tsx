@@ -135,8 +135,6 @@ class Mining extends Container<MIP.Store.IMiningState> {
           dataset
         };
 
-        console.log(augmentedJson);
-
         this.cachedMinings.push(augmentedJson);
 
         return await this.setState((prevState: any) => ({
