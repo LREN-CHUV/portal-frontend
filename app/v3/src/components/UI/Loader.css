@@ -1,0 +1,8 @@
+.loader {
+  display: flex;
+  margin: 8px;
+}
+
+.loader p {
+  padding-left: 8px;
+}
