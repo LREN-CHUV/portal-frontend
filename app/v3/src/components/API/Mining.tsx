@@ -1,3 +1,4 @@
+import { backendURL } from "@app/components/API";
 import { MIP } from "@app/types";
 import * as dotenv from "dotenv";
 import request from "request-promise-native";
@@ -21,7 +22,7 @@ class Mining extends Container<MIP.Store.IMiningState> {
   constructor(config: any) {
     super();
     this.options = config.options;
-    this.baseUrl = `${config.baseUrl}`;
+    this.baseUrl = `${backendURL}`;
   }
 
   public clear = () => {
