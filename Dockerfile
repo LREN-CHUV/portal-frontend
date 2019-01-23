@@ -6,9 +6,6 @@ WORKDIR /frontend
 RUN npm install -g gulp
 RUN npm link gulp
 
-RUN npm install -g webdriver-manager
-RUN webdriver-manager update --standalone --versions.chrome 2.28 --gecko false
-
 RUN curl -o- -L https://yarnpkg.com/install.sh | bash
 
 COPY package.json /frontend
@@ -19,8 +16,6 @@ COPY . /frontend
 RUN gulp build
 
 WORKDIR /frontend/app/v3/
-RUN yarn global add react-scripts-ts
-RUN yarn global add typescript
 RUN yarn install
 RUN yarn --max-old-space-size=4000 build
 
