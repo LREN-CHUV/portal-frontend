@@ -117,70 +117,78 @@ class Container extends React.Component<IProps, IState> {
     const model = apiModel.state.model;
     const query = model && model.query;
 
+    // FIXME
     let fields: any[] = [];
-    const buildFilter = (id: string) => {
-      return (
-        (variables &&
-          query &&
-          query[id] &&
-          query[id].map((v: any) => {
-            const code = v.code;
-            const originalVar = variables.find(
-              (variable: MIP.API.IVariableEntity) => variable.code === code
-            );
+    const buildFilter = (code: string) => {
+      if (!variables) {
+        return;
+      }
 
-            const output: any = originalVar
-              ? {
-                  id: v.code,
-                  label: originalVar.label,
-                  name: v.code
-                }
-              : {};
-
-            if (originalVar && originalVar.enumerations) {
-              output.values = originalVar.enumerations.map((c: any) => ({
-                [c.code]: c.label
-              }));
-              output.input = "select";
-              output.operators = ["equal", "not_equal", "in", "not_in"];
-            }
-
-            const type = originalVar && originalVar.type;
-            if (type === "real") {
-              output.type = "double";
-              output.input = "number";
-              output.operators = [
-                "equal",
-                "not_equal",
-                "less",
-                "greater",
-                "between",
-                "not_between"
-              ];
-            }
-
-            if (type === "integer") {
-              output.type = "integer";
-              output.input = "number";
-              output.operators = [
-                "equal",
-                "not_equal",
-                "less",
-                "greater",
-                "between",
-                "not_between"
-              ];
-            }
-
-            return output;
-          })) ||
-        []
+      const originalVar = variables.find(
+        (variable: MIP.API.IVariableEntity) => variable.code === code
       );
+
+      const output: any = originalVar
+        ? {
+            id: code,
+            label: originalVar.label,
+            name: code
+          }
+        : {};
+
+      if (originalVar && originalVar.enumerations) {
+        output.values = originalVar.enumerations.map((c: any) => ({
+          [c.code]: c.label
+        }));
+        output.input = "select";
+        output.operators = ["equal", "not_equal", "in", "not_in"];
+      }
+
+      const type = originalVar && originalVar.type;
+      if (type === "real") {
+        output.type = "double";
+        output.input = "number";
+        output.operators = [
+          "equal",
+          "not_equal",
+          "less",
+          "greater",
+          "between",
+          "not_between"
+        ];
+      }
+
+      if (type === "integer") {
+        output.type = "integer";
+        output.input = "number";
+        output.operators = [
+          "equal",
+          "not_equal",
+          "less",
+          "greater",
+          "between",
+          "not_between"
+        ];
+      }
+
+      return output;
     };
-    fields = [].concat.apply(
-      [],
-      ["variables", "coVariables", "groupings"].map(buildFilter)
-    );
+
+    const keys = ["variables", "coVariables", "groupings"];
+    const allVariables: string[] = [];
+    if (query) {
+      keys.forEach((key: string) => {
+        query[key].forEach((v: any) => {
+          allVariables.push(v.code);
+        });
+      });
+    }
+
+    // backward compatibility
+    allVariables.push("subjectageyears");
+    allVariables.push("gender");
+    const allUniqVariables = Array.from(new Set(allVariables));
+    fields = variables && [].concat.apply([], allUniqVariables.map(buildFilter)) || [];
 
     const filters =
       (this.state.query &&
