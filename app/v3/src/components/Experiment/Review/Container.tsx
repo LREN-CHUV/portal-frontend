@@ -178,9 +178,12 @@ class Container extends React.Component<IProps, IState> {
     const allVariables: string[] = [];
     if (query) {
       keys.forEach((key: string) => {
-        query[key].forEach((v: any) => {
-          allVariables.push(v.code);
-        });
+        const rows = query[key];
+        if (rows) {
+          rows.forEach((v: any) => {
+            allVariables.push(v.code);
+          });
+        }
       });
     }
 
@@ -188,7 +191,9 @@ class Container extends React.Component<IProps, IState> {
     allVariables.push("subjectageyears");
     allVariables.push("gender");
     const allUniqVariables = Array.from(new Set(allVariables));
-    fields = variables && [].concat.apply([], allUniqVariables.map(buildFilter)) || [];
+    fields =
+      (variables && [].concat.apply([], allUniqVariables.map(buildFilter))) ||
+      [];
 
     const filters =
       (this.state.query &&
@@ -211,7 +216,11 @@ class Container extends React.Component<IProps, IState> {
         </div>
         <div className="content">
           <div className="sidebar">
-            <Model model={apiModel.state.model} showDatasets={false} />
+            <Model
+              model={apiModel.state.model}
+              showDatasets={false}
+              variables={apiCore.state.variables}
+            />
             <Panel className="model">
               <Panel.Body>
                 <Validation
