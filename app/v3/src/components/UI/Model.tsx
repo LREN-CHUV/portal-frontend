@@ -91,13 +91,13 @@ export default ({
             {query.variables && <h5>Variables</h5>}
             {query.variables &&
               query.variables.map((v: any) => <var key={v.code}>{v.code}</var>)}
-            {query.coVariables && <h5>CoVariables</h5>}
-            {query.coVariables &&
+            {query.coVariables && query.coVariables.length > 0 && <h5>CoVariables</h5>}
+            {query.coVariables && query.coVariables.length > 0 &&
               query.coVariables.map((v: any) => (
                 <var key={v.code}>{v.code}</var>
               ))}
-              {query.groupings && <h5>Groupings</h5>}
-            {query.groupings &&
+              {query.groupings && query.groupings.length > 0 && <h5>Groupings</h5>}
+            {query.groupings && query.groupings.length > 0 &&
               query.groupings.map((v: any) => <var key={v.code}>{v.code}</var>)}
             {query.filters && <h5>Filters</h5>}
             {query.filters && formatFilter(query.filters)}
