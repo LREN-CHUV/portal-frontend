@@ -15,11 +15,19 @@ interface IProps {
 
 const Boxplot = ({ loading, miningState }: IProps) => {
   const minings = (miningState && miningState.minings) || [];
-  const filteredByGroupAll = minings.map(
+  // FIXME:
+  let filteredByGroupAll = minings.map(
     (mining: any) =>
       mining.data &&
-      mining.data.filter((d: any) => d.mean && d.group[0] !== "all")
+      mining.data.filter((d: any) => d.mean && d.group[0] === "all")
   );
+  if (!filteredByGroupAll) {
+    filteredByGroupAll = minings.map(
+      (mining: any) =>
+        mining.data &&
+        mining.data.filter((d: any) => d.mean && d.group[0] !== "all")
+    );
+  }
   const flattened = filteredByGroupAll.reduce((a, i) => [...a, ...i], [])
   const uniqueVariables = Array.from(
     new Set(flattened.map((f: any) => f.index))
