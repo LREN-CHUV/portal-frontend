@@ -44,14 +44,14 @@ body {
 }
 
 .filters .panel-title h3::after {
-  font-family: 'FontAwesome';
-  content: '\f106';
+  font-family: 'themify';
+  content: '\e64b';
   float: right;
 }
 
 .filters .panel-title .collapsed h3::after {
-  font-family: 'FontAwesome';
-  content: '\f107';
+  font-family: 'themify';
+  content: '\e648';
   float: right;
 }
 
@@ -193,18 +193,6 @@ button::-moz-focus-inner {
   margin-bottom: 0;
   font-size: 16px;
   color: inherit;
-}
-
-.filters .panel-title h3::after {
-  font-family: "FontAwesome";
-  content: "\f106";
-  float: right;
-}
-
-.filters .panel-title .collapsed h3::after {
-  font-family: "FontAwesome";
-  content: "\f107";
-  float: right;
 }
 
 .panel.panel-default {
