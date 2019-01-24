@@ -2,8 +2,8 @@ import { APICore, APIMining, APIModel } from "@app/components/API";
 import { IAlert } from "@app/components/UI/Alert";
 import Model from "@app/components/UI/Model";
 import Validation from "@app/components/UI/Validation";
+import { round } from "@app/components/utils";
 import { MIP } from "@app/types";
-import { round } from "@app/utils";
 import queryString from "query-string";
 import * as React from "react";
 import { Panel } from "react-bootstrap";
@@ -326,8 +326,10 @@ class Container extends React.Component<IProps, IState> {
       return computedRows;
     }
 
-    const datasetOrder = selectedDatasets.map((s:any) => s.code)
-    const orderedMinings = datasetOrder.map((d: any) => minings.find((m:any) => m.dataset.code === d) || [])
+    const datasetOrder = selectedDatasets.map((s: any) => s.code);
+    const orderedMinings = datasetOrder.map(
+      (d: any) => minings.find((m: any) => m.dataset.code === d) || []
+    );
 
     const datasetDatas = orderedMinings.map(
       dataset =>
@@ -339,7 +341,8 @@ class Container extends React.Component<IProps, IState> {
     );
 
     const indexes =
-      (datasetDatas.length > 0 && datasetDatas[0].map((d: any) => d.index)) || [];
+      (datasetDatas.length > 0 && datasetDatas[0].map((d: any) => d.index)) ||
+      [];
 
     // populate each variable data by row
     const rows: any[] = [];
@@ -350,7 +353,7 @@ class Container extends React.Component<IProps, IState> {
         row[i] = dataRow;
       });
       rows.push(row);
-    })
+    });
 
     // compute rows data for output
     rows.map((row: any) => {
@@ -364,8 +367,11 @@ class Container extends React.Component<IProps, IState> {
 
         if (col.frequency) {
           const currentRow = row[rowKey];
-          const nullCount = currentRow.null_count
-          computedRow[rowKey] = nullCount !== 0 ? `${currentRow.count} (${nullCount})`: currentRow.count;
+          const nullCount = currentRow.null_count;
+          computedRow[rowKey] =
+            nullCount !== 0
+              ? `${currentRow.count} (${nullCount})`
+              : currentRow.count;
           Object.keys(col.frequency).map((k: any) => {
             polynominalRow = polynominalRows.find(p => p.variable === k);
             if (!polynominalRow) {

@@ -1,11 +1,8 @@
 import { backendURL } from "@app/components/API";
 import { MIP } from "@app/types";
-import * as dotenv from "dotenv";
 import request from "request-promise-native";
 import { Container } from "unstated";
 import APIAdapter from "./APIAdapter";
-
-dotenv.config();
 
 interface IUUID {
   uuid: string;

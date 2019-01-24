@@ -1,4 +1,4 @@
-import { MIME_TYPES, SCORES } from "@app/constants";
+import { MIME_TYPES, SCORES } from "@app/components/constants";
 import { MIP } from "@app/types";
 
 class APIAdapter {
@@ -28,10 +28,12 @@ class APIAdapter {
       validations: experiment.validations
     };
 
-    experimentResponse.user = experiment.createdBy ?  ({
-      fullname: experiment.createdBy.fullname,
-      username: experiment.createdBy.username
-    }) : undefined
+    experimentResponse.user = experiment.createdBy
+      ? {
+          fullname: experiment.createdBy.fullname,
+          username: experiment.createdBy.username
+        }
+      : undefined;
 
     // Errors
     if (!modelDefinitionId) {
@@ -211,8 +213,8 @@ class APIAdapter {
       nodes.push(node);
     });
     // console.log({nodes})
-    experimentResponse.results = nodes.sort((a: MIP.API.INode, b: MIP.API.INode) =>
-      a.name.localeCompare(b.name)
+    experimentResponse.results = nodes.sort(
+      (a: MIP.API.INode, b: MIP.API.INode) => a.name.localeCompare(b.name)
     );
 
     return experimentResponse;

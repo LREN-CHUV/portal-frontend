@@ -1,5 +1,5 @@
-import { LABELS } from "@app/constants";
-import { round } from "@app/utils";
+import { LABELS } from "@app/components/constants";
+import { round } from "@app/components/utils";
 import * as React from "react";
 
 import "./JSON.css";

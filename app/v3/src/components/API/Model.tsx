@@ -1,10 +1,8 @@
 import { backendURL } from "@app/components/API";
 import { MIP } from "@app/types";
-import * as dotenv from "dotenv";
 import request from "request-promise-native";
 import { Container } from "unstated";
 
-dotenv.config();
 class Model extends Container<MIP.Store.IModelState> {
   public state: MIP.Store.IModelState = {};
 
