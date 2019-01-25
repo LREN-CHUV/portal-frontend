@@ -51,16 +51,16 @@ class FForm extends React.Component<IProps> {
               <Col sm={2}>K-Fold:</Col>
               <Col sm={4}>
                 <FormControl
-                  defaultValue={"0"}
+                  defaultValue={"2"}
                   type="number"
                   onChange={this.handleChangeKFold}
                 />
 <HelpBlock>
-                  min: 0, max 20
+                  min: 2, max 20
                 </HelpBlock>
                 <FormControl.Feedback />
               </Col>
-              <Col sm={6}>Defines the number of folds used in the cross-validation. Typical numbers are 2 or 10. More information: https://en.wikipedia.org/wiki/Cross-validation_(statistics)</Col>
+              <Col sm={6}>Defines the number of folds used in the cross-validation. Typical numbers are 5 or 10. More information: <a target="_blank" href="https://en.wikipedia.org/wiki/Cross-validation_(statistics)">https://en.wikipedia.org/wiki/Cross-validation_(statistics)</a></Col>
             </FormGroup>
             </Form>
           }
@@ -152,7 +152,7 @@ class FForm extends React.Component<IProps> {
     if (!kfold) {
       return 'success'
     }
-    return kfold && kfold > -1 ? 'success' : 'error' 
+    return kfold && kfold > 1 ? 'success' : 'error' 
   }
 
   private handleChangeKFold = (event: any) => {
