@@ -12,7 +12,6 @@ interface IProps {
   apiMining?: APIMining;
   model?: MIP.API.IModelResponse;
   selectedDatasets?: MIP.API.IVariableEntity[];
-  tableData: any[];
   children: any;
 }
 
@@ -20,7 +19,6 @@ const Content = ({
   apiMining,
   model,
   selectedDatasets,
-  tableData,
   children
 }: IProps) =>
   (apiMining && (
@@ -45,7 +43,6 @@ const Content = ({
                   loading={apiMining.state.loadingMinings}
                   minings={apiMining.state.minings}
                   selectedDatasets={selectedDatasets}
-                  tableData={tableData}
                 />
               </Tab>
               <Tab eventKey={2} title="Boxplot">

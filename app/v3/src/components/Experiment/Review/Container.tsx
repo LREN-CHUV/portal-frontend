@@ -2,7 +2,6 @@ import { APICore, APIMining, APIModel } from "@app/components/API";
 import { IAlert } from "@app/components/UI/Alert";
 import Model from "@app/components/UI/Model";
 import Validation from "@app/components/UI/Validation";
-import { round } from "@app/components/utils";
 import { MIP } from "@app/types";
 import queryString from "query-string";
 import * as React from "react";
@@ -24,10 +23,7 @@ interface IState {
   query?: MIP.API.IQuery;
   mining?: any;
 }
-interface IComputeMiningResult {
-  minings?: any[];
-  selectedDatasets?: MIP.API.IVariableEntity[];
-}
+
 
 class Container extends React.Component<IProps, IState> {
   public state: IState = {};
@@ -108,11 +104,6 @@ class Container extends React.Component<IProps, IState> {
 
   public render() {
     const { apiCore, apiModel, apiMining } = this.props;
-    const tableData = this.computeMiningResultToTable({
-      minings: apiMining.state && apiMining.state.minings,
-      selectedDatasets: this.state.query && this.state.query.trainingDatasets
-    });
-
     const variables = apiCore.state.variables;
     const model = apiModel.state.model;
     const query = model && model.query;
@@ -239,7 +230,6 @@ class Container extends React.Component<IProps, IState> {
               selectedDatasets={
                 this.state.query && this.state.query.trainingDatasets
               }
-              tableData={tableData}
             >
               <Panel className="filters" defaultExpanded={false}>
                 <Panel.Title toggle={true}>
@@ -333,90 +323,7 @@ class Container extends React.Component<IProps, IState> {
     history.push(`/v3/review/${slug}`);
   };
 
-  private computeMiningResultToTable = ({
-    minings,
-    selectedDatasets
-  }: IComputeMiningResult): any => {
-    const computedRows: any[] = [];
 
-    if (!minings || !selectedDatasets) {
-      return computedRows;
-    }
-
-    const datasetOrder = selectedDatasets.map((s: any) => s.code);
-    const orderedMinings = datasetOrder.map(
-      (d: any) => minings.find((m: any) => m.dataset.code === d) || []
-    );
-
-    const datasetDatas = orderedMinings.map(
-      dataset =>
-        (dataset.data &&
-          dataset.data &&
-          dataset.data.length &&
-          dataset.data.filter((r: any) => r.group && r.group[0] === "all")) ||
-        []
-    );
-
-    const indexes =
-      (datasetDatas.length > 0 && datasetDatas[0].map((d: any) => d.index)) ||
-      [];
-
-    // populate each variable data by row
-    const rows: any[] = [];
-    indexes.map((index: any) => {
-      const row: any = {};
-      datasetDatas.map((datasetData: any, i: number) => {
-        const dataRow = datasetData.find((d: any) => d.index === index) || {};
-        row[i] = dataRow;
-      });
-      rows.push(row);
-    });
-
-    // compute rows data for output
-    rows.map((row: any) => {
-      const computedRow: any = {};
-      const polynominalRows: any[] = [];
-      let polynominalRow: any;
-
-      Object.keys(row).map((rowKey: any) => {
-        const col = row[rowKey];
-        computedRow.variable = row[0].label;
-
-        if (col.frequency) {
-          const currentRow = row[rowKey];
-          const nullCount = currentRow.null_count;
-          computedRow[rowKey] =
-            nullCount !== 0
-              ? `${currentRow.count} (${nullCount})`
-              : currentRow.count;
-          Object.keys(col.frequency).map((k: any) => {
-            polynominalRow = polynominalRows.find(p => p.variable === k);
-            if (!polynominalRow) {
-              polynominalRow = {};
-              polynominalRows.push(polynominalRow);
-            }
-            polynominalRow[rowKey] = col.frequency[k];
-            polynominalRow.variable = k;
-          });
-        } else {
-          const mean = round(row[rowKey].mean, 2);
-          const min = round(row[rowKey].min, 2);
-          const max = round(row[rowKey].max, 2);
-          const std = round(row[rowKey].std, 2);
-          computedRow[rowKey] = mean
-            ? `${mean} (${min}-${max}) - std: ${std}`
-            : "-";
-        }
-      });
-
-      computedRows.push(computedRow);
-      polynominalRows.map((p: any) => {
-        computedRows.push(p);
-      });
-    });
-
-    return computedRows;
-  };
 
   private loadModel = async ({ slug }: { slug: string }) => {
     const { apiModel } = this.props;
