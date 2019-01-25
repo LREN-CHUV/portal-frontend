@@ -620,13 +620,7 @@ table > tbody > tr:last-child > td:last-child {
   vertical-align: initial;
   line-height: 1;
 }
-.caret:before {
-  content: "\F107";
-  font-family: FontAwesome;
-  font-style: normal;
-  font-weight: 400;
-  text-decoration: inherit;
-}
+
 .dropdown-menu {
   left: auto;
   right: 0;

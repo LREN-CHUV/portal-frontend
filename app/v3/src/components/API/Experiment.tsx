@@ -1,10 +1,8 @@
+import { backendURL } from "@app/components/API";
 import { MIP } from "@app/types";
-import * as dotenv from "dotenv";
 import request from "request-promise-native";
 import { Container } from "unstated";
 import APIAdapter from "./APIAdapter";
-
-dotenv.config();
 
 interface IUUID {
   uuid: string;
@@ -14,7 +12,8 @@ class Experiment extends Container<MIP.Store.IExperimentState> {
   public state: MIP.Store.IExperimentState = {};
 
   public loaded =
-  this.state && this.state.experiment !== undefined &&
+    this.state &&
+    this.state.experiment !== undefined &&
     this.state.experiment.results !== undefined &&
     this.state.experiment.error !== undefined;
 
@@ -24,7 +23,7 @@ class Experiment extends Container<MIP.Store.IExperimentState> {
   constructor(config: any) {
     super();
     this.options = config.options;
-    this.baseUrl = `${config.baseUrl}/experiments`;
+    this.baseUrl = `${backendURL}/experiments`;
   }
 
   public one = async ({ uuid }: IUUID) => {
@@ -61,7 +60,7 @@ class Experiment extends Container<MIP.Store.IExperimentState> {
       return await this.setState({
         error: undefined,
         experiments: json.map((j: MIP.API.IExperimentResponse) =>
-        APIAdapter.parse(j)
+          APIAdapter.parse(j)
         )
       });
     } catch (error) {

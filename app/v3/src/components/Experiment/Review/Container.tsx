@@ -2,8 +2,8 @@ import { APICore, APIMining, APIModel } from "@app/components/API";
 import { IAlert } from "@app/components/UI/Alert";
 import Model from "@app/components/UI/Model";
 import Validation from "@app/components/UI/Validation";
+import { round } from "@app/components/utils";
 import { MIP } from "@app/types";
-import { round } from "@app/utils";
 import queryString from "query-string";
 import * as React from "react";
 import { Panel } from "react-bootstrap";
@@ -117,70 +117,83 @@ class Container extends React.Component<IProps, IState> {
     const model = apiModel.state.model;
     const query = model && model.query;
 
+    // FIXME
     let fields: any[] = [];
-    const buildFilter = (id: string) => {
-      return (
-        (variables &&
-          query &&
-          query[id] &&
-          query[id].map((v: any) => {
-            const code = v.code;
-            const originalVar = variables.find(
-              (variable: MIP.API.IVariableEntity) => variable.code === code
-            );
+    const buildFilter = (code: string) => {
+      if (!variables) {
+        return;
+      }
 
-            const output: any = originalVar
-              ? {
-                  id: v.code,
-                  label: originalVar.label,
-                  name: v.code
-                }
-              : {};
-
-            if (originalVar && originalVar.enumerations) {
-              output.values = originalVar.enumerations.map((c: any) => ({
-                [c.code]: c.label
-              }));
-              output.input = "select";
-              output.operators = ["equal", "not_equal", "in", "not_in"];
-            }
-
-            const type = originalVar && originalVar.type;
-            if (type === "real") {
-              output.type = "double";
-              output.input = "number";
-              output.operators = [
-                "equal",
-                "not_equal",
-                "less",
-                "greater",
-                "between",
-                "not_between"
-              ];
-            }
-
-            if (type === "integer") {
-              output.type = "integer";
-              output.input = "number";
-              output.operators = [
-                "equal",
-                "not_equal",
-                "less",
-                "greater",
-                "between",
-                "not_between"
-              ];
-            }
-
-            return output;
-          })) ||
-        []
+      const originalVar = variables.find(
+        (variable: MIP.API.IVariableEntity) => variable.code === code
       );
+
+      const output: any = originalVar
+        ? {
+            id: code,
+            label: originalVar.label,
+            name: code
+          }
+        : {};
+
+      if (originalVar && originalVar.enumerations) {
+        output.values = originalVar.enumerations.map((c: any) => ({
+          [c.code]: c.label
+        }));
+        output.input = "select";
+        output.operators = ["equal", "not_equal", "in", "not_in"];
+      }
+
+      const type = originalVar && originalVar.type;
+      if (type === "real") {
+        output.type = "double";
+        output.input = "number";
+        output.operators = [
+          "equal",
+          "not_equal",
+          "less",
+          "greater",
+          "between",
+          "not_between"
+        ];
+      }
+
+      if (type === "integer") {
+        output.type = "integer";
+        output.input = "number";
+        output.operators = [
+          "equal",
+          "not_equal",
+          "less",
+          "greater",
+          "between",
+          "not_between"
+        ];
+      }
+
+      return output;
     };
-    fields = [].concat.apply(
-      [],
-      ["variables", "coVariables", "groupings"].map(buildFilter)
-    );
+
+    const keys = ["variables", "coVariables", "groupings"];
+    const allVariables: string[] = [];
+    if (query) {
+      keys.forEach((key: string) => {
+        const rows = query[key];
+        if (rows) {
+          rows.forEach((v: any) => {
+            allVariables.push(v.code);
+          });
+        }
+      });
+    }
+
+    // backward compatibility
+    allVariables.push("subjectageyears");
+    allVariables.push("gender");
+    const allUniqVariables = Array.from(new Set(allVariables));
+    fields =
+      (variables && [].concat.apply([], allUniqVariables.map(buildFilter))) ||
+      [];
 
     const filters =
       (this.state.query &&
@@ -203,7 +216,11 @@ class Container extends React.Component<IProps, IState> {
         </div>
         <div className="content">
           <div className="sidebar">
-            <Model model={apiModel.state.model} showDatasets={false} />
+            <Model
+              model={apiModel.state.model}
+              showDatasets={false}
+              variables={apiCore.state.variables}
+            />
             <Panel className="model">
               <Panel.Body>
                 <Validation
@@ -326,8 +343,10 @@ class Container extends React.Component<IProps, IState> {
       return computedRows;
     }
 
-    const datasetOrder = selectedDatasets.map((s:any) => s.code)
-    const orderedMinings = datasetOrder.map((d: any) => minings.find((m:any) => m.dataset.code === d) || [])
+    const datasetOrder = selectedDatasets.map((s: any) => s.code);
+    const orderedMinings = datasetOrder.map(
+      (d: any) => minings.find((m: any) => m.dataset.code === d) || []
+    );
 
     const datasetDatas = orderedMinings.map(
       dataset =>
@@ -339,7 +358,8 @@ class Container extends React.Component<IProps, IState> {
     );
 
     const indexes =
-      (datasetDatas.length > 0 && datasetDatas[0].map((d: any) => d.index)) || [];
+      (datasetDatas.length > 0 && datasetDatas[0].map((d: any) => d.index)) ||
+      [];
 
     // populate each variable data by row
     const rows: any[] = [];
@@ -350,7 +370,7 @@ class Container extends React.Component<IProps, IState> {
         row[i] = dataRow;
       });
       rows.push(row);
-    })
+    });
 
     // compute rows data for output
     rows.map((row: any) => {
@@ -364,8 +384,11 @@ class Container extends React.Component<IProps, IState> {
 
         if (col.frequency) {
           const currentRow = row[rowKey];
-          const nullCount = currentRow.null_count
-          computedRow[rowKey] = nullCount !== 0 ? `${currentRow.count} (${nullCount})`: currentRow.count;
+          const nullCount = currentRow.null_count;
+          computedRow[rowKey] =
+            nullCount !== 0
+              ? `${currentRow.count} (${nullCount})`
+              : currentRow.count;
           Object.keys(col.frequency).map((k: any) => {
             polynominalRow = polynominalRows.find(p => p.variable === k);
             if (!polynominalRow) {

@@ -1,6 +1,6 @@
-import { SCORES } from "@app/constants";
+import { SCORES } from "@app/components/constants";
+import { round } from "@app/components/utils";
 import { MIP } from "@app/types";
-import { round } from "@app/utils";
 import * as React from "react";
 import { Tab, Tabs } from "react-bootstrap";
 import { Highchart } from "./";

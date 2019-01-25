@@ -1,9 +1,7 @@
+import { backendURL } from "@app/components/API";
 import { MIP } from "@app/types";
-import * as dotenv from "dotenv";
 import request from "request-promise-native";
 import { Container } from "unstated";
-
-dotenv.config();
 
 class Model extends Container<MIP.Store.IModelState> {
   public state: MIP.Store.IModelState = {};
@@ -14,7 +12,7 @@ class Model extends Container<MIP.Store.IModelState> {
   constructor(config: any) {
     super();
     this.options = config.options;
-    this.baseUrl = `${config.baseUrl}/models`;
+    this.baseUrl = `${backendURL}/models`;
   }
 
   public setMock = async (query: MIP.Internal.IQuery) => {

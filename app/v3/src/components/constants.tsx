@@ -70,19 +70,19 @@ interface ILabelPlus extends ILabel {
 }
 
 const f: ILabelPlus = { code: 'F', label: 'F', order: 3 };
-const meansq: ILabelPlus = { code: 'mean_sq', label: 'mean_sq', order: 2 };
+const meansq: ILabelPlus = { code: 'mean_sq', label: 'mean-sq', order: 2 };
 const prf: ILabelPlus = { code: 'PR(>F)', label: 'PR(>F)', order: 4 };
-const sumsq: ILabelPlus = { code: 'sum_sq', label: 'sum_sq', order: 1 };
+const sumsq: ILabelPlus = { code: 'sum_sq', label: 'sum-sq', order: 1 };
 const df: ILabelPlus = { code: 'df', label: 'df', order: 0 };
 
-const coef: ILabelPlus = { code: 'coef', label: 'Coefficient', order: 0 };
-const pvalues: ILabelPlus = { code: 'p_values', label: 'P-value', order: 3 };
+const coef: ILabelPlus = { code: 'coef', label: 'coef', order: 0 };
+const pvalues: ILabelPlus = { code: 'p_values', label: 'p-value', order: 3 };
 const stderr: ILabelPlus = {
   code: 'std_err',
-  label: 'Standard Error',
+  label: 'std-err',
   order: 2,
 };
-const tvalues: ILabelPlus = { code: 't_values', label: 'T-value', order: 2 };
+const tvalues: ILabelPlus = { code: 't_values', label: 't-value', order: 2 };
 
 export const LABELS: ILabelPlus[] = [
   coef,

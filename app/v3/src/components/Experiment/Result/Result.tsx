@@ -1,4 +1,4 @@
-import { MIME_TYPES } from "@app/constants";
+import { MIME_TYPES } from "@app/components/constants";
 import { MIP } from "@app/types";
 import * as React from "react";
 import { Panel, Tab, Tabs } from "react-bootstrap";

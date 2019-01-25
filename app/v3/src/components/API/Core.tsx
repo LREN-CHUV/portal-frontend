@@ -1,25 +1,21 @@
+import { backendURL } from "@app/components/API";
 import { MIP } from "@app/types";
-import * as dotenv from "dotenv";
 import request from "request-promise-native";
 import { Container } from "unstated";
-
-dotenv.config();
 
 class Core extends Container<MIP.Store.ICoreState> {
   public state: MIP.Store.ICoreState = {};
 
-  private options: RequestInit;
-  private baseUrl: string;
+  private backendURL: string;
 
   constructor(config: any) {
     super();
-    this.options = config.options;
-    this.baseUrl = `${config.baseUrl}`;
+    this.backendURL = backendURL;
   }
 
   public variables = async () => {
     try {
-      const data = await request.get(`${this.baseUrl}/variables`, this.options);
+      const data = await request.get(`${this.backendURL}/variables`);
       const json = await JSON.parse(data);
       if (json.error) {
         return await this.setState({
@@ -40,10 +36,7 @@ class Core extends Container<MIP.Store.ICoreState> {
 
   public hierarchy = async () => {
     try {
-      const data = await request.get(
-        `${this.baseUrl}/variables/hierarchy`,
-        this.options
-      );
+      const data = await request.get(`${this.backendURL}/variables/hierarchy`);
       const json = await JSON.parse(data);
       if (json.error) {
         return await this.setState({
@@ -64,7 +57,7 @@ class Core extends Container<MIP.Store.ICoreState> {
 
   public datasets = async () => {
     try {
-      const data = await request.get(`${this.baseUrl}/datasets`, this.options);
+      const data = await request.get(`${this.backendURL}/datasets`);
       const json = await JSON.parse(data);
       if (json.error) {
         return await this.setState({
@@ -85,7 +78,7 @@ class Core extends Container<MIP.Store.ICoreState> {
 
   public methods = async () => {
     try {
-      const data = await request.get(`${this.baseUrl}/methods`, this.options);
+      const data = await request.get(`${this.backendURL}/methods`);
       const json = await JSON.parse(data);
       if (json.error) {
         return await this.setState({
