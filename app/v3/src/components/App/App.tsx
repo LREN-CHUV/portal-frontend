@@ -60,7 +60,7 @@ const App = ({
       <Route
         path="/v3/experiment/:slug/:uuid"
         render={() => (
-          <ExperimentResult apiExperiment={apiExperiment} apiModel={apiModel} />
+          <ExperimentResult apiExperiment={apiExperiment} apiModel={apiModel} apiCore={apiCore}/>
         )}
       />
       <Route

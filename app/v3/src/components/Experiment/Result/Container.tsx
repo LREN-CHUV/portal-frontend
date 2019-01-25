@@ -1,4 +1,4 @@
-import { APIExperiment, APIModel } from "@app/components/API";
+import { APICore, APIExperiment, APIModel } from "@app/components/API";
 import Methods from "@app/components/Experiment/Result/Methods";
 import Model from "@app/components/UI/Model";
 import { MIP } from "@app/types";
@@ -8,6 +8,7 @@ import { ExperimentResult, ExperimentResultHeader } from "./";
 interface IProps extends RouteComponentProps<any> {
   apiExperiment: APIExperiment;
   apiModel: APIModel;
+  apiCore: APICore;
 }
 
 class Experiment extends React.Component<IProps> {
@@ -48,7 +49,7 @@ class Experiment extends React.Component<IProps> {
   }
 
   public render() {
-    const { apiExperiment, apiModel } = this.props;
+    const { apiExperiment, apiModel, apiCore } = this.props;
     return (
       <div className="Experiment">
         <div className="header">
@@ -62,7 +63,7 @@ class Experiment extends React.Component<IProps> {
         </div>
         <div className="content">
           <div className="sidebar">
-            <Model model={apiModel.state.model} />
+            <Model model={apiModel.state.model} variables={apiCore.state.variables}/>
           </div>
           <div className="results">
             <ExperimentResult experimentState={apiExperiment.state} />
