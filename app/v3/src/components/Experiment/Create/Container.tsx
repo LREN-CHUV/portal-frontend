@@ -77,7 +77,10 @@ class Container extends React.Component<IProps, IState> {
         </div>
         <div className="content">
           <div className="sidebar">
-            <Model model={apiModel.state.model} variables={apiCore.state.variables}/>
+            <Model
+              model={apiModel.state.model}
+              variables={apiCore.state.variables}
+            />
           </div>
           <div className="parameters">
             <Panel>
@@ -219,22 +222,6 @@ class Container extends React.Component<IProps, IState> {
     }
 
     const selectedMethod = this.state && this.state.method;
-    if (!experimentName) {
-      this.setState({
-        alert: {
-          message: "Please enter a name for the experiment",
-          style: "info",
-          title: "Info"
-        }
-      });
-      return;
-    }
-
-    if (!selectedMethod) {
-      this.setState({ alert: { message: "No method selected" } });
-      return;
-    }
-
     model.query = query!;
     await apiModel.update({ model });
 
@@ -263,6 +250,11 @@ class Container extends React.Component<IProps, IState> {
         : [];
     if (!model.slug) {
       this.setState({ alert: { message: "Model was not saved" } });
+      return;
+    }
+
+    if (!selectedMethod) {
+      this.setState({ alert: { message: "Select a method" } });
       return;
     }
 

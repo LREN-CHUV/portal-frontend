@@ -85,6 +85,11 @@ export default class Header extends React.Component<IProps> {
                   disabled={
                     this.input.current && this.input.current.value === ""
                   }
+                  title={
+                    this.input.current && this.input.current.value === ""
+                      ? "Please enter a title for your model"
+                      : ""
+                  }
                 >
                   Save model
                 </Button>
@@ -96,6 +101,11 @@ export default class Header extends React.Component<IProps> {
                 bsStyle="info"
                 type="submit"
                 disabled={isMock}
+                title={
+                  this.input.current && this.input.current.value === ""
+                    ? "Please enter a title for your model"
+                    : ""
+                }
               >
                 RUN MACHINE LEARNING EXPERIMENT{" "}
                 <Glyphicon glyph="chevron-right" />{" "}

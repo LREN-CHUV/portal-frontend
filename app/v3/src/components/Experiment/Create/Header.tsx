@@ -80,9 +80,16 @@ export default class Header extends React.Component<IProps, IState> {
                     handleSaveAndRunExperiment(experimentName);
                   }
                 }}
+                title={
+                  method === undefined
+                    ? "Please choose an experiment on the right"
+                    : experimentName === ""
+                    ? "Please enter a title for your experiment"
+                    : ""
+                }
                 bsStyle="info"
                 type="submit"
-                disabled={method === undefined}
+                disabled={method === undefined || experimentName === ""}
               >
                 Run Experiment
               </Button>
