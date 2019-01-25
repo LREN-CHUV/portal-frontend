@@ -3,7 +3,7 @@ import Form from "@app/components/Experiment/Create/Form";
 import ExperimentCreateHeader from "@app/components/Experiment/Create/Header";
 import { Alert, IAlert } from "@app/components/UI/Alert";
 import AvailableMethods from "@app/components/UI/AvailableMethods";
-import UIModel from "@app/components/UI/Model";
+import Model from "@app/components/UI/Model";
 import Validation from "@app/components/UI/Validation";
 import { MIP } from "@app/types";
 import * as React from "react";
@@ -77,7 +77,7 @@ class Container extends React.Component<IProps, IState> {
         </div>
         <div className="content">
           <div className="sidebar">
-            <UIModel model={apiModel.state.model} />
+            <Model model={apiModel.state.model} variables={apiCore.state.variables}/>
           </div>
           <div className="parameters">
             <Panel>
