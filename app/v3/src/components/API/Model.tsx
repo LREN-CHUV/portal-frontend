@@ -19,7 +19,7 @@ class Model extends Container<MIP.Store.IModelState> {
     const newModel: MIP.Internal.IModelMock = {
       isMock: true,
       query,
-      title: "No title"
+      title: ""
     };
     return await this.setState({
       error: undefined,

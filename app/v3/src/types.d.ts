@@ -171,7 +171,6 @@ export declare namespace MIP.Internal {
   }
 
   export interface IModelMock extends MIP.API.IModelResponse {
-    title: string;
     query: MIP.Internal.IQuery;
     isMock: boolean;
   }

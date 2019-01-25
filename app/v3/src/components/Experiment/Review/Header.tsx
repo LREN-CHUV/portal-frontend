@@ -6,7 +6,7 @@ import { Button, Glyphicon, Panel } from "react-bootstrap";
 interface IProps {
   handleGoBackToExplore: () => void;
   handleRunAnalysis: () => void;
-  handleSaveModel: ({ title } : { title: string }) => void;
+  handleSaveModel: ({ title }: { title: string }) => void;
   handleSelectModel: (model: MIP.API.IModelResponse) => void;
   modelName?: string;
   models?: MIP.API.IModelResponse[];
@@ -35,22 +35,28 @@ export default class Header extends React.Component<IProps> {
       <Panel>
         <Panel.Body>
           <h3>
-            Interactive Analysis on{" "}
-            {models && (
-              <DropdownModel
-                items={models}
-                title={modelName}
-                handleSelect={handleSelectModel}
-              />
+            Interactive Analysis{" "}
+            {modelName && (
+              <span>
+                on{" "}
+                {models && (
+                  <DropdownModel
+                    items={models}
+                    title={modelName}
+                    handleSelect={handleSelectModel}
+                  />
+                )}
+              </span>
             )}
           </h3>
           <div className="actions status">
             <div className="item">
               <Button
-                //tslint:disable
+                // tslint:disable
                 onClick={handleGoBackToExplore}
                 bsStyle="info"
                 type="submit"
+                // tslint:enable
               >
                 <Glyphicon glyph="chevron-left" /> Explore
               </Button>
@@ -61,39 +67,32 @@ export default class Header extends React.Component<IProps> {
                 <input
                   type="text"
                   ref={this.input}
+                  placeholder={"Your model name"}
                   className={"form-control"}
-                  defaultValue={this.props.modelName}
                 />
               </div>
             )}
-            {isMock && <div className="item">
-              <Button
-                //tslint:disable
-                onClick={() =>
-                  handleSaveModel({title: this.input.current.value})
-                }
-                // onKeyDown={event => {
-                //   if (event.key === "Enter") {
-                //     handleRunAnalysis(this.input.current.value);
-                //   }
-                // }}
-                bsStyle="info"
-                type="submit"
-                // disabled={this.input.current.value === undefined}
-              >
-                Save model
-              </Button>
-            </div>
-            }
+            {isMock && (
+              <div className="item">
+                <Button
+                  // tslint:disable
+                  onClick={() =>
+                    handleSaveModel({ title: this.input.current.value })
+                  }
+                  // tslint:enable
+                  bsStyle={"info"}
+                  type="submit"
+                  disabled={
+                    this.input.current && this.input.current.value === ""
+                  }
+                >
+                  Save model
+                </Button>
+              </div>
+            )}
             <div className="item">
               <Button
-                //tslint:disable
                 onClick={handleRunAnalysis}
-                // onKeyDown={event => {
-                //   if (event.key === "Enter") {
-                //     handleRunAnalysis(this.input.current.value);
-                //   }
-                // }}
                 bsStyle="info"
                 type="submit"
                 disabled={isMock}
