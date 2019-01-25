@@ -11,17 +11,10 @@ interface IProps {
 }
 
 class Model extends React.Component<IProps> {
-
   public render() {
     const { model, showDatasets, variables } = this.props;
     const query = model && model.query;
-    const lookup = (code: string) : string => {
-      const originalVar = variables && variables.find(
-        variable => variable.code === code
-      ) ;
-  
-      return originalVar && originalVar.label || code ;
-    }
+
     return (
       <Panel className="model">
         <Panel.Title>
@@ -35,7 +28,7 @@ class Model extends React.Component<IProps> {
               {query.variables && <h5>Variables</h5>}
               {query.variables &&
                 query.variables.map((v: any) => (
-                  <var key={v.code}>{lookup(v.code)}</var>
+                  <var key={v.code}>{this.lookup(v.code)}</var>
                 ))}
               {query.coVariables && query.coVariables.length > 0 && (
                 <h5>CoVariables</h5>
@@ -43,7 +36,7 @@ class Model extends React.Component<IProps> {
               {query.coVariables &&
                 query.coVariables.length > 0 &&
                 query.coVariables.map((v: any) => (
-                  <var key={v.code}>{lookup(v.code)}</var>
+                  <var key={v.code}>{this.lookup(v.code)}</var>
                 ))}
               {query.groupings && query.groupings.length > 0 && (
                 <h5>Groupings</h5>
@@ -51,7 +44,7 @@ class Model extends React.Component<IProps> {
               {query.groupings &&
                 query.groupings.length > 0 &&
                 query.groupings.map((v: any) => (
-                  <var key={v.code}>{lookup(v.code)}</var>
+                  <var key={v.code}>{this.lookup(v.code)}</var>
                 ))}
               {query.filters && <h5>Filters</h5>}
               {query.filters && this.formatFilter(query.filters)}
@@ -80,6 +73,13 @@ class Model extends React.Component<IProps> {
       </Panel>
     );
   }
+  private lookup = (code: string): string => {
+    const { variables } = this.props;
+    const originalVar =
+      variables && variables.find(variable => variable.code === code);
+
+    return (originalVar && originalVar.label) || code;
+  };
   private ruleOperator = (operator: string) => {
     switch (operator) {
       case "greater":
@@ -119,7 +119,7 @@ class Model extends React.Component<IProps> {
           }
 
           humanRules.push({
-            data: `${rule.field} ${this.ruleOperator(rule.operator)} ${
+            data: `${this.lookup(rule.field)} ${this.ruleOperator(rule.operator)} ${
               rule.value
             }`,
             level
