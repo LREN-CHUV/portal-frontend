@@ -12,10 +12,15 @@ interface IProps {
 interface IState {
   heatmap?: any;
   loading: boolean;
+  datasets?: any;
 }
 
 class HeatMap extends React.Component<IProps, IState> {
-  public state = { loading: false, heatmap: [] };
+  public state = {
+    datasets: undefined,
+    heatmap: [],
+    loading: false
+  };
 
   public componentWillReceiveProps() {
     if (this.state.heatmap.length === 0 && !this.state.loading) {
@@ -26,16 +31,24 @@ class HeatMap extends React.Component<IProps, IState> {
   public render = () => (
     <div>
       {this.state.loading && <Loader />}
-      <Plotly data={this.state.heatmap} layout={{ margin: { l: 400 } }} />
+      {!this.state.loading && (
+        <Plotly data={this.state.heatmap} layout={{ margin: { l: 400 } }} />
+      )}
     </div>
   );
 
   private createMining = async () => {
     const { model, apiMining } = this.props;
     const query = model && model.query;
-    const datasets = query && query.trainingDatasets;
+    const datasets =
+      query && query.trainingDatasets && query.trainingDatasets.sort();
+    const previousDatasets = this.state.datasets;
 
-    if (datasets && query) {
+    if (
+      datasets &&
+      query &&
+      JSON.stringify(datasets) !== JSON.stringify(previousDatasets)
+    ) {
       this.setState({ loading: true });
       const payload: MIP.API.IExperimentMiningPayload = {
         covariables: query.coVariables ? query.coVariables : [],
@@ -47,6 +60,7 @@ class HeatMap extends React.Component<IProps, IState> {
 
       await apiMining.heatmap({ payload });
       await this.setState({
+        datasets: datasets.sort(),
         heatmap: apiMining.state.heatmap,
         loading: false
       });
