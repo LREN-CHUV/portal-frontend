@@ -1,6 +1,5 @@
 import { APIMining } from "@app/components/API";
 import Plotly from "@app/components/Experiment/Result/formats/Plotly";
-import Loader from "@app/components/UI/Loader";
 import { MIP } from "@app/types";
 import * as React from "react";
 
@@ -30,7 +29,6 @@ class HeatMap extends React.Component<IProps, IState> {
 
   public render = () => (
     <div>
-      {this.state.loading && <Loader />}
       {!this.state.loading && (
         <Plotly data={this.state.heatmap} layout={{ margin: { l: 400 } }} />
       )}

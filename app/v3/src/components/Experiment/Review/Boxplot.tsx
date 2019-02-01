@@ -1,4 +1,3 @@
-import Loader from "@app/components/UI/Loader";
 import { MIP } from "@app/types";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
@@ -8,12 +7,11 @@ import * as React from "react";
 addHighchartsMore(Highcharts);
 
 interface IProps {
-  loading: boolean;
   miningState?: MIP.Store.IMiningState;
   selectedDatasets?: MIP.API.IVariableEntity[];
 }
 
-const Boxplot = ({ loading, miningState }: IProps) => {
+const Boxplot = ({ miningState }: IProps) => {
   const minings = (miningState && miningState.minings) || [];
   // FIXME:
   let filteredByGroupAll = minings.map(
@@ -67,7 +65,6 @@ const Boxplot = ({ loading, miningState }: IProps) => {
 
   return (
     <div>
-      {loading ? <Loader /> : null}
       {highchartsOptions.map((options: any, k: number) => (
         <HighchartsReact highcharts={Highcharts} options={options} key={k} />
       ))}

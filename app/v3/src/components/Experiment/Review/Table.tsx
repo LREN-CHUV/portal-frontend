@@ -1,4 +1,3 @@
-import Loader from "@app/components/UI/Loader";
 import { round } from "@app/components/utils";
 import { MIP } from "@app/types";
 import { Column } from "primereact/column";
@@ -11,7 +10,6 @@ import "primereact/resources/themes/nova-light/theme.css";
 import "./Table.css";
 
 interface IProps {
-  loading: boolean;
   minings?: any[];
   selectedDatasets?: any[];
 }
@@ -92,7 +90,7 @@ const computeMiningResultToTable = ({
         const std = round(row[rowKey].std, 2);
         computedRow[rowKey] = mean
           ? `${mean} (${min}-${max}) - std: ${std}`
-          : "-";
+          : "";
       }
     });
 
@@ -106,12 +104,14 @@ const computeMiningResultToTable = ({
 };
 
 const variableTemplate = (rowData: any, column: any) => (
-  <span className={rowData.category ? "datatable category" : "datatable variable"}>
+  <span
+    className={rowData.category ? "datatable category" : "datatable variable"}
+  >
     {rowData.category ? rowData.category : rowData.variable}
   </span>
 );
 
-const Table = ({ loading, minings, selectedDatasets }: IProps) => {
+const Table = ({ minings, selectedDatasets }: IProps) => {
   const tableData = computeMiningResultToTable({
     minings,
     selectedDatasets
@@ -131,13 +131,6 @@ const Table = ({ loading, minings, selectedDatasets }: IProps) => {
       ]
     : [];
 
-  return (
-    <div>
-      {loading && <Loader />}
-      {tableData.length > 0 && (
-        <DataTable value={tableData}>{columns}</DataTable>
-      )}
-    </div>
-  );
+  return <DataTable value={tableData}>{columns}</DataTable>;
 };
 export default Table;
