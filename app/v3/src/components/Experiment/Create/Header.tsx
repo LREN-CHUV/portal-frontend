@@ -4,7 +4,7 @@ import { MIP } from "@app/types";
 import * as React from "react";
 import { Button, FormControl, Glyphicon, Panel } from "react-bootstrap";
 interface IProps {
-  title?: string;
+  model?: MIP.API.IModelResponse;
   models?: MIP.API.IModelResponse[];
   experiments?: MIP.API.IExperimentResponse[];
   method?: MIP.API.IMethod;
@@ -28,7 +28,7 @@ export default class Header extends React.Component<IProps, IState> {
     const {
       experiments,
       models,
-      title,
+      model,
       method,
       handleGoBackToReview,
       handleSelectModel,
@@ -45,7 +45,7 @@ export default class Header extends React.Component<IProps, IState> {
             {models && (
               <DropdownModel
                 items={models}
-                title={title}
+                title={model && model.title}
                 handleSelect={handleSelectModel}
               />
             )}
@@ -96,7 +96,12 @@ export default class Header extends React.Component<IProps, IState> {
             </div>
             <div className="item">
               <Dropdown
-                items={experiments}
+                items={model &&
+                  experiments &&
+                  experiments.filter(
+                    (e: any) =>
+                      e.modelDefinitionId === model.slug
+                  )}
                 title="RELATED EXPERIMENTS"
                 handleSelect={handleSelectExperiment}
                 handleCreateNewExperiment={null}

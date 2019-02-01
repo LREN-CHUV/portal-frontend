@@ -56,7 +56,6 @@ class Container extends React.Component<IProps, IState> {
   public render() {
     const { apiCore, apiModel, apiExperiment } = this.props;
     const alert = this.state && this.state.alert;
-    const title = apiModel.state.model && apiModel.state.model.title;
     const method = this.state && this.state.method;
     const isPredictiveMethod =
       (method && method.type && method.type[0] === "predictive_model") || false;
@@ -65,7 +64,7 @@ class Container extends React.Component<IProps, IState> {
       <div className="Experiment">
         <div className="header">
           <ExperimentCreateHeader
-            title={title}
+            model={apiModel.state.model}
             models={apiModel.state.models}
             experiments={apiExperiment.state.experiments}
             method={this.state && this.state.method}
