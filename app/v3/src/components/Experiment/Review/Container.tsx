@@ -24,7 +24,6 @@ interface IState {
   mining?: any;
 }
 
-
 class Container extends React.Component<IProps, IState> {
   public state: IState = {};
 
@@ -323,8 +322,6 @@ class Container extends React.Component<IProps, IState> {
     history.push(`/v3/review/${slug}`);
   };
 
-
-
   private loadModel = async ({ slug }: { slug: string }) => {
     const { apiModel } = this.props;
     await apiModel.one(slug);
@@ -374,13 +371,13 @@ class Container extends React.Component<IProps, IState> {
     props: IProps
   ):
     | {
-        slug: string;
+        slug: string | undefined;
       }
     | undefined => {
     const { location } = props;
-    const slug = location.pathname.split("/").pop() || "";
+    const slug = location.pathname.split("/").pop() || undefined;
 
-    return { slug };
+    return { slug: slug !== "review" ? slug : undefined };
   };
 }
 

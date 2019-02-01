@@ -36,18 +36,16 @@ export default class Header extends React.Component<IProps> {
         <Panel.Body>
           <h3>
             Interactive Analysis{" "}
-            {modelName && (
-              <span>
-                on{" "}
-                {models && (
-                  <DropdownModel
-                    items={models}
-                    title={modelName}
-                    handleSelect={handleSelectModel}
-                  />
-                )}
-              </span>
-            )}
+            <span>
+              on{" "}
+              {models && (
+                <DropdownModel
+                  items={models}
+                  title={modelName}
+                  handleSelect={handleSelectModel}
+                />
+              )}
+            </span>
           </h3>
           <div className="actions status">
             <div className="item">

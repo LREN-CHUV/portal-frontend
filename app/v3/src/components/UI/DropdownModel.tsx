@@ -12,7 +12,7 @@ interface IDropdown {
 }
 export default ({
   items,
-  title = "Current Model",
+  title = "No Model",
   handleSelect,
   noCaret = false
 }: IDropdown) => (

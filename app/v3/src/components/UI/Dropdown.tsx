@@ -14,7 +14,7 @@ interface IDropdown {
 }
 export default ({
   items,
-  title = "Current Model",
+  title = "No Model",
   handleSelect,
   handleCreateNewExperiment,
   noCaret = false
