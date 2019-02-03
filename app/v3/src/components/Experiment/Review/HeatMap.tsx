@@ -30,7 +30,7 @@ class HeatMap extends React.Component<IProps, IState> {
   public render = () => (
     <div>
       {!this.state.loading && (
-        <Plotly data={this.state.heatmap} layout={{ margin: { l: 400 } }} />
+        <Plotly data={this.state.heatmap} layout={{ margin: { l: 0 } }} />
       )}
     </div>
   );
