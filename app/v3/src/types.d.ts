@@ -17,10 +17,15 @@ export declare namespace MIP.Store {
     experiments?: MIP.API.IExperimentResponse[];
   }
 
+  export interface IMiningResponseShape {
+    data: any | undefined;
+    error: string | undefined;
+  }
+
   export interface IMiningState extends IError {
-    minings?: any[];
-    heatmap?: any;
-    loadingMinings: boolean;
+    minings?: MIP.API.IMiningResponse[];
+    heatmap?: MIP.Store.IMiningResponseShape;
+    loadingMinings?: boolean;
   }
 
   export interface IModelState extends IError {
@@ -52,7 +57,16 @@ export declare namespace MIP.API {
     validations: any;
   }
 
-  export interface IExperimentMiningPayload {
+  export interface IMiningResponse {
+    jobId: string;
+    node: string;
+    function: string;
+    shape: string;
+    timestamp: string;
+    data: any;
+  }
+
+  export interface IMiningPayload {
     algorithm?: MIP.API.IMethod;
     variables: IVariableEntity[];
     grouping?: IVariableEntity[];

@@ -3,10 +3,9 @@ import { MIP } from "@app/types";
 import request from "request-promise-native";
 import { Container } from "unstated";
 
-
 class Mining extends Container<MIP.Store.IMiningState> {
   public state: MIP.Store.IMiningState = {
-    heatmap: [],
+    heatmap: undefined,
     loadingMinings: false,
     minings: []
   };
@@ -34,23 +33,14 @@ class Mining extends Container<MIP.Store.IMiningState> {
     }));
   };
 
-  public heatmap = async ({
+  public create = async ({
     payload
   }: {
-    payload: MIP.API.IExperimentMiningPayload;
-  }) => {
-    const pl = {
-      algorithm: {
-        code: "correlationHeatmap",
-        name: "Correlation heatmap",
-        parameters: [],
-        validation: false
-      },
-      ...payload
-    };
+    payload: MIP.API.IMiningPayload;
+  }): Promise<MIP.Store.IMiningResponseShape> => {
     try {
-      const data = await request({
-        body: JSON.stringify(pl),
+      const response = await request({
+        body: JSON.stringify(payload),
         headers: {
           ...this.options.headers,
           "Content-Type": "application/json;charset=UTF-8"
@@ -59,26 +49,40 @@ class Mining extends Container<MIP.Store.IMiningState> {
         uri: `${this.baseUrl}/mining`
       });
 
-      const json = JSON.parse(data).data;
+      const data = JSON.parse(response).data;
 
-      return await this.setState((prevState: any) => ({
-        error: prevState.error,
-        heatmap: json,
-        minings: prevState.minings
-      }));
+      return { data, error: undefined };
     } catch (error) {
-      return await this.setState((prevState: any) => ({
-        error: error.message,
-        heatmap: [],
-        minings: prevState.minings
-      }));
+      return { data: undefined, error: error.message };
     }
+  };
+
+  public heatmap = async ({
+    payload
+  }: {
+    payload: MIP.API.IMiningPayload;
+  }): Promise<any> => {
+    // FIXME: return type should be MIP.Store.IMiningState
+    await this.setState({ heatmap: { data: undefined, error: undefined } });
+    const heatmap = await this.create({
+      payload: {
+        algorithm: {
+          code: "correlationHeatmap",
+          name: "Correlation heatmap",
+          parameters: [],
+          validation: false
+        },
+        ...payload
+      }
+    });
+
+    return await this.setState({ heatmap });
   };
 
   public createAll = async ({
     payload
   }: {
-    payload: MIP.API.IExperimentMiningPayload;
+    payload: MIP.API.IMiningPayload;
   }) => {
     const selectedDatasets: string[] = payload.datasets.map(d => d.code) || [];
     const selectedMinings = this.cachedMinings.filter(

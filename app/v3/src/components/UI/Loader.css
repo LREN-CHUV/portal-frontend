@@ -9,3 +9,7 @@
   padding-left: 8px;
   color: cadetblue
 }
+
+.hidden {
+  display: none;
+}

@@ -3,17 +3,21 @@ import { RingLoader } from "react-spinners";
 
 import "./Loader.css";
 
-class Loader extends React.Component {
+interface IProps {
+  visible: boolean;
+}
+class Loader extends React.Component<IProps> {
   public render() {
+    const { visible } = this.props;
     return (
       <div className="loader">
         <RingLoader
           sizeUnit={"px"}
           size={16}
           color={"#0c6c94"}
-          loading={true}
+          loading={visible}
         />
-        <p>loading data...</p>
+        <p className={visible ? "" : "hidden"}>loading data...</p>
       </div>
     );
   }

@@ -1,5 +1,7 @@
 import { APIMining } from "@app/components/API";
 import Plotly from "@app/components/Experiment/Result/formats/Plotly";
+import { Alert } from "@app/components/UI/Alert";
+import Loader from "@app/components/UI/Loader";
 import { MIP } from "@app/types";
 import * as React from "react";
 
@@ -9,33 +11,19 @@ interface IProps {
 }
 
 interface IState {
-  heatmap?: any;
   loading: boolean;
   datasets?: any;
 }
 
 class HeatMap extends React.Component<IProps, IState> {
-  public state = {
-    datasets: undefined,
-    heatmap: [],
-    loading: false
-  };
+  public state: IState;
 
-  public componentWillReceiveProps() {
-    if (this.state.heatmap.length === 0 && !this.state.loading) {
-      this.createMining();
-    }
+  constructor(props: IProps) {
+    super(props);
+    this.state = { loading: false };
   }
 
-  public render = () => (
-    <div>
-      {!this.state.loading && (
-        <Plotly data={this.state.heatmap} layout={{ margin: { l: 0 } }} />
-      )}
-    </div>
-  );
-
-  private createMining = async () => {
+  public componentWillReceiveProps() {
     const { model, apiMining } = this.props;
     const query = model && model.query;
     const datasets =
@@ -43,26 +31,44 @@ class HeatMap extends React.Component<IProps, IState> {
     const previousDatasets = this.state.datasets;
 
     if (
+      !this.state.loading &&
       datasets &&
       query &&
       JSON.stringify(datasets) !== JSON.stringify(previousDatasets)
     ) {
-      this.setState({ loading: true });
-      const payload: MIP.API.IExperimentMiningPayload = {
-        covariables: query.coVariables ? query.coVariables : [],
-        datasets,
-        filters: query.filters,
-        grouping: query.groupings ? query.groupings : [],
-        variables: query.variables ? query.variables : []
-      };
-
-      await apiMining.heatmap({ payload });
-      await this.setState({
-        datasets: datasets.sort(),
-        heatmap: apiMining.state.heatmap,
-        loading: false
-      });
+      this.createMining(query, datasets, apiMining);
     }
+  }
+
+  public render = () => {
+    const { apiMining } = this.props;
+    const heatmap = apiMining.state.heatmap;
+    const data = (heatmap && heatmap.data) || [];
+    const error = heatmap && heatmap.error;
+
+    return (
+      <div style={{ padding: "16px" }}>
+        <Loader visible={!error && data.length === 0} />
+        {error && <Alert message={error} title={"Error"} />}
+        {!error && <Plotly data={data} layout={{ margin: { l: 0 } }} />}
+      </div>
+    );
+  };
+
+  private createMining = async (query: any, datasets: any, apiMining: any) => {
+    this.setState({ loading: true });
+    const payload: MIP.API.IMiningPayload = {
+      covariables: query.coVariables ? query.coVariables : [],
+      datasets,
+      filters: query.filters,
+      grouping: query.groupings ? query.groupings : [],
+      variables: query.variables ? query.variables : []
+    };
+    await apiMining.heatmap({ payload });
+    await this.setState({
+      datasets: datasets.sort(),
+      loading: false
+    });
   };
 }
 

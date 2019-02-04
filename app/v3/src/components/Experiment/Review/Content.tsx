@@ -1,6 +1,6 @@
 import { APIMining } from "@app/components/API";
 import { Alert } from "@app/components/UI/Alert";
-import Loader from "@app/components/UI/Loader";
+// import Loader from "@app/components/UI/Loader";
 import { MIP } from "@app/types";
 import * as React from "react";
 import { Panel, Tab, Tabs } from "react-bootstrap";
@@ -31,7 +31,7 @@ const Content = ({ apiMining, model, selectedDatasets, children }: IProps) =>
         <Panel>
           <Panel.Title className="model-analysis-title">
             <h3>
-              Model Analysis {apiMining.state.loadingMinings && <Loader />}
+              Model Analysis {/*apiMining.state.loadingMinings && <Loader /> */}
             </h3>
           </Panel.Title>
           <Body>
