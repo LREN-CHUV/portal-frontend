@@ -58,13 +58,19 @@ class HeatMap extends React.Component<IProps, IState> {
   private createMining = async (query: any, datasets: any, apiMining: any) => {
     this.setState({ loading: true });
     const payload: MIP.API.IMiningPayload = {
+      algorithm: {
+        code: "correlationHeatmap",
+        name: "Correlation heatmap",
+        parameters: [],
+        validation: false
+      },
       covariables: query.coVariables ? query.coVariables : [],
       datasets,
       filters: query.filters,
       grouping: query.groupings ? query.groupings : [],
       variables: query.variables ? query.variables : []
     };
-    await apiMining.heatmap({ payload });
+    await apiMining.one({ payload });
     await this.setState({
       datasets: datasets.sort(),
       loading: false

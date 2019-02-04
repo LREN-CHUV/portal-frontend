@@ -33,48 +33,14 @@ class Mining extends Container<MIP.Store.IMiningState> {
     }));
   };
 
-  public create = async ({
-    payload
-  }: {
-    payload: MIP.API.IMiningPayload;
-  }): Promise<MIP.Store.IMiningResponseShape> => {
-    try {
-      const response = await request({
-        body: JSON.stringify(payload),
-        headers: {
-          ...this.options.headers,
-          "Content-Type": "application/json;charset=UTF-8"
-        },
-        method: "POST",
-        uri: `${this.baseUrl}/mining`
-      });
-
-      const data = JSON.parse(response).data;
-
-      return { data, error: undefined };
-    } catch (error) {
-      return { data: undefined, error: error.message };
-    }
-  };
-
-  public heatmap = async ({
+  public one = async ({
     payload
   }: {
     payload: MIP.API.IMiningPayload;
   }): Promise<any> => {
     // FIXME: return type should be MIP.Store.IMiningState
     await this.setState({ heatmap: { data: undefined, error: undefined } });
-    const heatmap = await this.create({
-      payload: {
-        algorithm: {
-          code: "correlationHeatmap",
-          name: "Correlation heatmap",
-          parameters: [],
-          validation: false
-        },
-        ...payload
-      }
-    });
+    const heatmap = await this.fetch({ payload });
 
     return await this.setState({ heatmap });
   };
@@ -155,6 +121,30 @@ class Mining extends Container<MIP.Store.IMiningState> {
         }));
       }
     });
+  };
+
+  private fetch = async ({
+    payload
+  }: {
+    payload: MIP.API.IMiningPayload;
+  }): Promise<MIP.Store.IMiningResponseShape> => {
+    try {
+      const response = await request({
+        body: JSON.stringify(payload),
+        headers: {
+          ...this.options.headers,
+          "Content-Type": "application/json;charset=UTF-8"
+        },
+        method: "POST",
+        uri: `${this.baseUrl}/mining`
+      });
+
+      const data = JSON.parse(response).data;
+
+      return { data, error: undefined };
+    } catch (error) {
+      return { data: undefined, error: error.message };
+    }
   };
 }
 
