@@ -20,12 +20,12 @@ export declare namespace MIP.Store {
   export interface IMiningResponseShape {
     data: any | undefined;
     error: string | undefined;
+    dataset?: MIP.API.IVariableEntity;
   }
 
   export interface IMiningState extends IError {
-    minings?: MIP.API.IMiningResponse[];
+    minings?: MIP.Store.IMiningResponseShape[];
     heatmap?: MIP.Store.IMiningResponseShape;
-    loadingMinings?: boolean;
   }
 
   export interface IModelState extends IError {

@@ -40,7 +40,12 @@ const handleChangeDataset = (
         query.trainingDatasets = toggleDataset(query.trainingDatasets, code);
       }
     }
-
+    console.log(
+      "handleChangeDataset",
+      query &&
+        query.trainingDatasets &&
+        query.trainingDatasets.map((d:any) => d.code).join(", ")
+    );
     handleUpdateQuery(query);
   }
 };

@@ -4,18 +4,18 @@ import { RingLoader } from "react-spinners";
 import "./Loader.css";
 
 interface IProps {
-  visible: boolean;
+  visible?: boolean;
 }
 class Loader extends React.Component<IProps> {
   public render() {
-    const { visible } = this.props;
+    const { visible } = this.props || true;
     return (
       <div className="loader">
         <RingLoader
           sizeUnit={"px"}
           size={16}
           color={"#0c6c94"}
-          loading={visible}
+          loading={visible ? visible : true}
         />
         <p className={visible ? "" : "hidden"}>loading data...</p>
       </div>

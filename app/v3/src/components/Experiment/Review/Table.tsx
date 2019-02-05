@@ -10,12 +10,12 @@ import "primereact/resources/themes/nova-light/theme.css";
 import "./Table.css";
 
 interface IProps {
-  minings?: any[];
+  minings?: MIP.Store.IMiningResponseShape[];
   selectedDatasets?: any[];
 }
 
 interface IComputeMiningResult {
-  minings?: any[];
+  minings?: MIP.Store.IMiningResponseShape[];
   selectedDatasets?: MIP.API.IVariableEntity[];
 }
 
@@ -23,37 +23,53 @@ const computeMiningResultToTable = ({
   minings,
   selectedDatasets
 }: IComputeMiningResult): any => {
-  const computedRows: any[] = [];
+  const computedRows: string[] = [];
 
   if (!minings || !selectedDatasets) {
     return computedRows;
   }
 
   const datasetOrder = selectedDatasets.map((s: any) => s.code);
-  const orderedMinings = datasetOrder.map(
-    (d: any) => minings.find((m: any) => m.dataset.code === d) || []
+  const orderedMinings = datasetOrder.map((d: any) =>
+    minings.find((m: any) => m.dataset.code === d)
   );
+
+  if (orderedMinings.length === 0) {
+    return computedRows;
+  }
+
+  const datasetError = orderedMinings.map(dataset => dataset && dataset.error);
 
   const datasetDatas = orderedMinings.map(
     dataset =>
-      (dataset.data &&
+      (dataset &&
         dataset.data &&
-        dataset.data.length &&
-        dataset.data.filter((r: any) => r.group && r.group[0] === "all")) ||
+        dataset.data.data &&
+        dataset.data.data.filter(
+          (r: any) => r.group && r.group[0] === "all"
+        )) ||
       []
   );
 
-  const indexes =
+  const variables =
     (datasetDatas.length > 0 && datasetDatas[0].map((d: any) => d.index)) || [];
 
+  if (datasetError.length > 0) {
+    variables.unshift("Error");
+  }
+
   // populate each variable data by row
-  const rows: any[] = [];
-  indexes.map((index: any) => {
+  const rows: string[] = [];
+  variables.map((index: any) => {
     const row: any = {};
     datasetDatas.map((datasetData: any, i: number) => {
       const dataRow = datasetData.find((d: any) => d.index === index) || {};
       row[i] = dataRow;
     });
+    datasetError.map((error: any, i: number) => {
+      row[i] = { label : "Status", error };
+    });
+
     rows.push(row);
   });
 
@@ -67,7 +83,10 @@ const computeMiningResultToTable = ({
       const col = row[rowKey];
       computedRow.variable = row[0].label;
 
-      if (col.frequency) {
+      if (col.error) {
+        computedRow[rowKey] = col.error
+      }
+      else if (col.frequency) {
         const currentRow = row[rowKey];
         const nullCount = currentRow.null_count;
         computedRow[rowKey] =
@@ -112,6 +131,8 @@ const variableTemplate = (rowData: any, column: any) => (
 );
 
 const Table = ({ minings, selectedDatasets }: IProps) => {
+  console.log(minings);
+
   const tableData = computeMiningResultToTable({
     minings,
     selectedDatasets

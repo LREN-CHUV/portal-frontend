@@ -103,9 +103,8 @@ class Container extends React.Component<IProps, IState> {
 
   public render() {
     const { apiCore, apiModel, apiMining } = this.props;
+    const { query } = this.state;
     const variables = apiCore.state.variables;
-    const model = apiModel.state.model;
-    const query = model && model.query;
 
     // FIXME
     let fields: any[] = [];
@@ -186,9 +185,9 @@ class Container extends React.Component<IProps, IState> {
       [];
 
     const filters =
-      (this.state.query &&
-        this.state.query.filters &&
-        JSON.parse(this.state.query.filters)) ||
+      (query &&
+        query.filters &&
+        JSON.parse(query.filters)) ||
       "";
 
     return (
@@ -216,7 +215,7 @@ class Container extends React.Component<IProps, IState> {
                 <Validation
                   isPredictiveMethod={false}
                   datasets={apiCore.state.datasets}
-                  query={this.state.query}
+                  query={query}
                   handleUpdateQuery={this.handleUpdateDataset}
                 />
               </Panel.Body>
@@ -227,7 +226,7 @@ class Container extends React.Component<IProps, IState> {
               apiMining={apiMining}
               model={apiModel.state.model}
               selectedDatasets={
-                this.state.query && this.state.query.trainingDatasets
+                query && query.trainingDatasets
               }
             >
               <Panel className="filters" defaultExpanded={false}>
@@ -348,19 +347,12 @@ class Container extends React.Component<IProps, IState> {
         variables: query.variables ? query.variables : []
       };
 
-      await apiMining.createAll({ payload });
+      await apiMining.allParallel({ payload });
       return this.setState({
         mining: apiMining.state.minings
       });
     }
   };
-
-  // private handleUpdateQuery = (query: MIP.API.IQuery): void => {
-  //   this.setState({ query });
-  //   const { apiMining } = this.props;
-  //   apiMining.clear();
-  //   this.createMining({ query })
-  // };
 
   private handleUpdateDataset = (query: MIP.API.IQuery): void => {
     this.setState({ query });
