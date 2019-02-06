@@ -11,115 +11,112 @@ import "./Table.css";
 
 interface IProps {
   minings?: MIP.Store.IMiningResponseShape[];
-  selectedDatasets?: any[];
+  selectedDatasets?: MIP.API.IVariable[];
+  query?: MIP.API.IQuery;
+  lookup: (code: string) => MIP.API.IVariableEntity;
 }
 
 interface IComputeMiningResult {
   minings?: MIP.Store.IMiningResponseShape[];
   selectedDatasets?: MIP.API.IVariableEntity[];
+  variables?: MIP.API.IVariableEntity[];
+}
+
+interface ITableRow {
+  variable?: string;
+  category?: string;
 }
 
 const computeMiningResultToTable = ({
   minings,
-  selectedDatasets
-}: IComputeMiningResult): any => {
-  const computedRows: string[] = [];
+  selectedDatasets,
+  variables
+}: IComputeMiningResult): ITableRow[] => {
+  const computedRows: ITableRow[] = [];
 
-  if (!minings || !selectedDatasets) {
+  if (!minings || !selectedDatasets || !variables) {
     return computedRows;
   }
 
-  const datasetOrder = selectedDatasets.map((s: any) => s.code);
-  const orderedMinings = datasetOrder.map((d: any) =>
-    minings.find((m: any) => m.dataset.code === d)
-  );
-
-  if (orderedMinings.length === 0) {
-    return computedRows;
-  }
-
-  const datasetError = orderedMinings.map(dataset => dataset && dataset.error);
-
-  const datasetDatas = orderedMinings.map(
-    dataset =>
-      (dataset &&
-        dataset.data &&
-        dataset.data.data &&
-        dataset.data.data.filter(
-          (r: any) => r.group && r.group[0] === "all"
-        )) ||
-      []
-  );
-
-  const variables =
-    (datasetDatas.length > 0 && datasetDatas[0].map((d: any) => d.index)) || [];
-
-  if (datasetError.length > 0) {
-    variables.unshift("Error");
-  }
-
-  // populate each variable data by row
-  const rows: string[] = [];
-  variables.map((index: any) => {
-    const row: any = {};
-    datasetDatas.map((datasetData: any, i: number) => {
-      const dataRow = datasetData.find((d: any) => d.index === index) || {};
-      row[i] = dataRow;
-    });
-    datasetError.map((error: any, i: number) => {
-      row[i] = { label : "Status", error };
-    });
-
-    rows.push(row);
-  });
-
-  // compute rows data for output
-  rows.map((row: any) => {
-    const computedRow: any = {};
+  const processData = (code: string, data: any) => {
+    const theData = data.data;
+    let value = "data";
     const polynominalRows: any[] = [];
-    let polynominalRow: any;
 
-    Object.keys(row).map((rowKey: any) => {
-      const col = row[rowKey];
-      computedRow.variable = row[0].label;
+    if (theData) {
+      const variableData = theData.find(
+        (r: any) => r.group && (r.group[0] === "all" && r.index === code)
+      );
 
-      if (col.error) {
-        computedRow[rowKey] = col.error
+      if (variableData) {
+        if (variableData.frequency) {
+          value = `${variableData.count} (null: ${variableData.null_count})`;
+          Object.keys(variableData.frequency).map((k: any) => {
+            polynominalRows.push(`${variableData.frequency[k]}`);
+            // category = k
+          });
+        } else {
+          const mean = round(variableData.mean, 2);
+          const min = round(variableData.min, 2);
+          const max = round(variableData.max, 2);
+          const std = round(variableData.std, 2);
+          value = mean ? `${mean} (${min}-${max}) - std: ${std}` : "null";
+        }
       }
-      else if (col.frequency) {
-        const currentRow = row[rowKey];
-        const nullCount = currentRow.null_count;
-        computedRow[rowKey] =
-          nullCount !== 0
-            ? `${currentRow.count} (null: ${nullCount})`
-            : currentRow.count;
-        Object.keys(col.frequency).map((k: any) => {
-          polynominalRow = polynominalRows.find(p => p.category === k);
-          if (!polynominalRow) {
-            polynominalRow = {};
-            polynominalRows.push(polynominalRow);
-          }
-          polynominalRow[rowKey] = col.frequency[k];
-          polynominalRow.category = k;
-        });
+    }
+
+    return value;
+  };
+
+  const rows: ITableRow[] = [];
+  variables.forEach(variable => {
+    const isPolynominal =
+      variable.type === "polynominal" && variable.enumerations;
+    selectedDatasets.map(dataset => {
+      const row: ITableRow = {};
+      let polynominalRows: ITableRow[] = [];
+
+      // set labels, Variables + polynominal categories rows
+      if (isPolynominal) {
+        row.variable = variable.label;
+        // tslint:disable
+        variable.enumerations &&
+          variable.enumerations.forEach(e => {
+            polynominalRows.push({
+              category: e.label
+            });
+          });
+        // tslint:enable
       } else {
-        const mean = round(row[rowKey].mean, 2);
-        const min = round(row[rowKey].min, 2);
-        const max = round(row[rowKey].max, 2);
-        const std = round(row[rowKey].std, 2);
-        computedRow[rowKey] = mean
-          ? `${mean} (${min}-${max}) - std: ${std}`
-          : "";
+        row.variable = variable.label;
       }
-    });
 
-    computedRows.push(computedRow);
-    polynominalRows.map((p: any) => {
-      computedRows.push(p);
+      // Process data
+      const code = dataset.code;
+      const mining = minings.find((m: any) => m.dataset.code === code);
+      if (mining) {
+        const { error, data } = mining;
+        if (!error && !data) {
+          row[code] = "loading...";
+          if (isPolynominal) {
+            polynominalRows = polynominalRows.map(r => ({ ...r, [code]: "loading..."}))
+          } 
+        } else if (error) {
+          row[code] = "error";
+          if (isPolynominal) {
+            polynominalRows = polynominalRows.map(r => ({ ...r, [code]: "error"}))
+          } 
+        } else if (data) {
+          const value = processData(variable.code, data);
+          row[code] = value;
+        }
+      }
+      rows.push(row);
+      polynominalRows.forEach(r => rows.push(r));
     });
   });
 
-  return computedRows;
+  return rows;
 };
 
 const variableTemplate = (rowData: any, column: any) => (
@@ -130,12 +127,18 @@ const variableTemplate = (rowData: any, column: any) => (
   </span>
 );
 
-const Table = ({ minings, selectedDatasets }: IProps) => {
-  console.log(minings);
-
-  const tableData = computeMiningResultToTable({
+const Table = ({ minings, selectedDatasets, query, lookup }: IProps) => {
+  const rows = computeMiningResultToTable({
     minings,
-    selectedDatasets
+    selectedDatasets,
+    variables:
+      query &&
+      query.variables &&
+      query.coVariables &&
+      query.groupings &&
+      [...query.variables, ...query.coVariables, ...query.groupings].map(v =>
+        lookup(v.code)
+      )
   });
 
   const columns = selectedDatasets
@@ -146,12 +149,12 @@ const Table = ({ minings, selectedDatasets }: IProps) => {
           key={"variable"}
           body={variableTemplate}
         />,
-        ...selectedDatasets.map((mining: any, index: number) => (
-          <Column header={mining.code} field={`${index}`} key={index} />
+        ...selectedDatasets.map((mining: MIP.API.IVariable) => (
+          <Column header={mining.code} field={mining.code} key={mining.code} />
         ))
       ]
     : [];
 
-  return <DataTable value={tableData}>{columns}</DataTable>;
+  return <DataTable value={rows}>{columns}</DataTable>;
 };
 export default Table;

@@ -5,7 +5,7 @@ import {
   APIModel
 } from "@app/components/API"; // as interfaces
 import { webURL } from "@app/components/API";
-import config from "@app/components/API/Headers";
+import config from "@app/components/API/RequestHeaders";
 import App from "@app/components/App/App";
 import * as React from "react";
 import { BrowserRouter as Router } from "react-router-dom";

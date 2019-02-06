@@ -228,6 +228,7 @@ class Container extends React.Component<IProps, IState> {
               selectedDatasets={
                 query && query.trainingDatasets
               }
+              lookup={apiCore.lookup}
             >
               <Panel className="filters" defaultExpanded={false}>
                 <Panel.Title toggle={true}>

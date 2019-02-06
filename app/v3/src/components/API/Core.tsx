@@ -13,6 +13,14 @@ class Core extends Container<MIP.Store.ICoreState> {
     this.backendURL = backendURL;
   }
 
+  public lookup = (code: string): MIP.API.IVariableEntity => {
+    const variables = this.state.variables;
+    const originalVar =
+      variables && variables.find(variable => variable.code === code);
+
+    return originalVar || { code, label: code};
+  };
+
   public variables = async () => {
     try {
       const data = await request.get(`${this.backendURL}/variables`);

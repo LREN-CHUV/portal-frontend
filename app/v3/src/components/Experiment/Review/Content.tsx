@@ -13,10 +13,11 @@ interface IProps {
   apiMining?: APIMining;
   model?: MIP.API.IModelResponse;
   selectedDatasets?: MIP.API.IVariableEntity[];
+  lookup: (code: string) => MIP.API.IVariableEntity;
   children: any;
 }
 
-const Content = ({ apiMining, model, selectedDatasets, children }: IProps) =>
+const Content = ({ apiMining, model, selectedDatasets, lookup, children }: IProps) =>
   (apiMining && (
     <Panel>
       <Panel.Body>
@@ -40,6 +41,8 @@ const Content = ({ apiMining, model, selectedDatasets, children }: IProps) =>
                 <Table
                   minings={apiMining.state.minings}
                   selectedDatasets={selectedDatasets}
+                  query={model && model.query}
+                  lookup={lookup}
                 />
               </Tab>
               {/* <Tab eventKey={2} title="Boxplot">

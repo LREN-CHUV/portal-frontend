@@ -15,9 +15,8 @@ class Mining extends Container<MIP.Store.IMiningState> {
     super();
     this.state = { minings: undefined, heatmap: undefined };
     this.options = config.options;
-    this.baseUrl = `${backendURL}`;
+    this.baseUrl = backendURL;
   }
-
   public clear = () => {
     this.cachedMinings = [];
     this.requestedDatasets.clear();
@@ -33,8 +32,15 @@ class Mining extends Container<MIP.Store.IMiningState> {
   }: {
     payload: MIP.API.IMiningPayload;
   }): Promise<any> => {
-    // FIXME: return type should be MIP.Store.IMiningState
-    await this.setState({ heatmap: { data: undefined, error: undefined } });
+    // TODO: return type should be MIP.Store.IMiningState
+    // FIXME: datasets: payload.datasets
+    await this.setState({
+      heatmap: {
+        data: undefined,
+        dataset: payload.datasets[0],
+        error: undefined
+      }
+    });
     const heatmap = await this.fetchOne({ payload });
 
     return await this.setState({ heatmap });
@@ -46,19 +52,13 @@ class Mining extends Container<MIP.Store.IMiningState> {
   }: {
     payload: MIP.API.IMiningPayload;
   }): Promise<any> => {
-    const selectedDatasets = payload.datasets.map(d => d.code) || [];
-    const selectedMinings = this.cachedMinings.filter(
-      mining =>
-        mining.dataset && selectedDatasets.indexOf(mining.dataset.code) > -1
-    );
-
-    this.setState({ minings: selectedMinings });
-
     // Filter remaining datasets
     const remainingDatasets = payload.datasets.filter(
-      dataset => Array.from(this.requestedDatasets).map(d => d.code).indexOf(dataset.code) === -1
+      dataset =>
+        Array.from(this.requestedDatasets)
+          .map(d => d.code)
+          .indexOf(dataset.code) === -1
     );
-
     const remainingPayloads: MIP.API.IMiningPayload[] = remainingDatasets.map(
       dataset => ({
         algorithm: {
@@ -71,13 +71,11 @@ class Mining extends Container<MIP.Store.IMiningState> {
         datasets: [dataset]
       })
     );
-    function addAll(set: any, items: any) {
-      for (const it of items) {
-        set.add(it);
-      }
-      return set;
-    }
-    this.requestedDatasets = addAll(this.requestedDatasets, remainingDatasets);
+
+    this.requestedDatasets = this.addAll(
+      this.requestedDatasets,
+      remainingDatasets
+    );
 
     remainingPayloads.map(async pl => {
       const placeholderMining = {
@@ -86,13 +84,16 @@ class Mining extends Container<MIP.Store.IMiningState> {
         error: undefined
       };
       await this.setState((prevState: any) => {
-        const nextState = prevState.minings.filter(
-          (m: MIP.Store.IMiningResponseShape) =>
-            m.dataset &&
-            m.dataset.code !== placeholderMining.dataset.code
-        );
+        const nextState =
+          prevState.minings &&
+          prevState.minings.filter(
+            (m: MIP.Store.IMiningResponseShape) =>
+              m.dataset && m.dataset.code !== placeholderMining.dataset.code
+          );
         return {
-          minings: prevState.minings ? [...nextState, placeholderMining] : [placeholderMining]
+          minings: prevState.minings
+            ? [...nextState, placeholderMining]
+            : [placeholderMining]
         };
       });
 
@@ -100,17 +101,26 @@ class Mining extends Container<MIP.Store.IMiningState> {
       this.cachedMinings.push(mining);
 
       return await this.setState((prevState: any) => {
-        const nextState = prevState.minings.filter(
-          (m: MIP.Store.IMiningResponseShape) =>
-            m.dataset &&
-            mining.dataset &&
-            m.dataset.code !== mining.dataset.code
-        );
+        const nextState =
+          prevState.minings &&
+          prevState.minings.filter(
+            (m: MIP.Store.IMiningResponseShape) =>
+              m.dataset &&
+              mining.dataset &&
+              m.dataset.code !== mining.dataset.code
+          );
         return {
           minings: prevState.minings ? [...nextState, mining] : [mining]
         };
       });
     });
+  };
+
+  private addAll = (set: any, items: any) => {
+    for (const it of items) {
+      set.add(it);
+    }
+    return set;
   };
 
   private fetchOne = async ({
