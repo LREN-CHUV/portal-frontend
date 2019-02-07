@@ -15,7 +15,7 @@ class Loader extends React.Component<IProps> {
           sizeUnit={"px"}
           size={16}
           color={"#0c6c94"}
-          loading={visible ? visible : true}
+          loading={visible}
         />
         <p className={visible ? "" : "hidden"}>loading data...</p>
       </div>

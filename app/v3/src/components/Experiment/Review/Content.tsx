@@ -1,11 +1,10 @@
 import { APIMining } from "@app/components/API";
 import { Alert } from "@app/components/UI/Alert";
-// import Loader from "@app/components/UI/Loader";
 import { MIP } from "@app/types";
 import * as React from "react";
 import { Panel, Tab, Tabs } from "react-bootstrap";
 import { Body } from "react-bootstrap/lib/Modal";
-// import Boxplot from "./Boxplot";
+import Boxplot from "./Boxplot";
 import HeatMap from "./HeatMap";
 import Table from "./Table";
 
@@ -45,12 +44,12 @@ const Content = ({ apiMining, model, selectedDatasets, lookup, children }: IProp
                   lookup={lookup}
                 />
               </Tab>
-              {/* <Tab eventKey={2} title="Boxplot">
+              <Tab eventKey={2} title="Boxplot">
                 <Boxplot
                   miningState={apiMining.state}
                   selectedDatasets={selectedDatasets}
                 />
-              </Tab> */}
+              </Tab>
               <Tab eventKey={3} title="Heatmap">
                 <HeatMap apiMining={apiMining} model={model} />
               </Tab>
