@@ -44,8 +44,6 @@ const Boxplot = ({ miningState }: IProps) => {
   };
 
   const filtered = findData(minings);
-
-  console.log(filtered);
   const flattened = filtered.reduce((a, i) => [...a, ...i], []);
   const uniqueVariables =
     flattened && Array.from(new Set(flattened.map((f: any) => f.index)));

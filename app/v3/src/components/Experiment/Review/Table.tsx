@@ -31,15 +31,13 @@ const Table = ({ minings, selectedDatasets, query, lookup }: IProps) => {
   const rows = computeMinings({
     minings,
     selectedDatasets,
-    // FIXME: what about undefined ?
     variables:
       query &&
-      query.variables &&
-      query.coVariables &&
-      query.groupings &&
-      [...query.variables, ...query.coVariables, ...query.groupings].map(v =>
-        lookup(v.code)
-      )
+      [
+        ...(query.variables || []),
+        ...(query.coVariables || []),
+        ...(query.groupings || [])
+      ].map(v => lookup(v.code))
   });
 
   const columns = selectedDatasets

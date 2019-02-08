@@ -20,6 +20,11 @@ export default class Header extends React.Component<IProps> {
     this.input = React.createRef();
   }
 
+  private handleSaveModel1 = () => {
+    const { handleSaveModel  } = this.props;
+    handleSaveModel({ title: this.input.current.value });
+  };
+
   public render() {
     const {
       models,
@@ -27,7 +32,6 @@ export default class Header extends React.Component<IProps> {
       isMock,
       handleGoBackToExplore,
       handleRunAnalysis,
-      handleSaveModel,
       handleSelectModel
     } = this.props;
 
@@ -73,11 +77,7 @@ export default class Header extends React.Component<IProps> {
             {isMock && (
               <div className="item">
                 <Button
-                  // tslint:disable
-                  onClick={() =>
-                    handleSaveModel({ title: this.input.current.value })
-                  }
-                  // tslint:enable
+                  onClick={this.handleSaveModel1}
                   bsStyle={"info"}
                   type="submit"
                   disabled={
