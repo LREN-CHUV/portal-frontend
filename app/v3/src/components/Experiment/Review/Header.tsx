@@ -21,7 +21,7 @@ export default class Header extends React.Component<IProps> {
   }
 
   private handleSaveModel1 = () => {
-    const { handleSaveModel  } = this.props;
+    const { handleSaveModel } = this.props;
     handleSaveModel({ title: this.input.current.value });
   };
 
@@ -71,6 +71,7 @@ export default class Header extends React.Component<IProps> {
                   ref={this.input}
                   placeholder={"Your model name"}
                   className={"form-control"}
+                  onKeyDown={this.handleKeyPress}
                 />
               </div>
             )}
@@ -114,10 +115,12 @@ export default class Header extends React.Component<IProps> {
       </Panel>
     );
   }
-
-  // private handleChangeModelName = (event: any) => {
-  //   this.setState({
-  //     modelName: event.target.value
-  //   });
-  // };
+  private handleKeyPress = (event: any) => {
+    const code = event.keyCode || event.charCode;
+    if (code === 13) {
+      event.preventDefault();
+      event.stopPropagation();
+      this.handleSaveModel1();
+    }
+  };
 }

@@ -63,7 +63,7 @@ class Experiment extends React.Component<IProps> {
         </div>
         <div className="content">
           <div className="sidebar">
-            <Model model={apiModel.state.model} variables={apiCore.state.variables}/>
+            <Model model={apiModel.state.model} variables={apiCore.state.variables} showDatasets={true}/>
           </div>
           <div className="results">
             <ExperimentResult experimentState={apiExperiment.state} />

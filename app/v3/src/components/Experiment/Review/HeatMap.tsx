@@ -43,14 +43,17 @@ class HeatMap extends React.Component<IProps, IState> {
   public render = () => {
     const { apiMining } = this.props;
     const heatmap = apiMining.state.heatmap;
-    const data = (heatmap && heatmap.data) || [];
+    const data = heatmap && heatmap.data && heatmap.data.data;
     const error = heatmap && heatmap.error;
-
+  
     return (
       <div style={{ padding: "16px" }}>
-        <Loader visible={!error && data.length === 0} />
+        <Loader visible={!error && !data} />
         {error && <Alert message={error} title={"Error"} />}
-        {!error && <Plotly data={data} layout={{ margin: { l: 0 } }} />}
+        {!error &&
+          data && data.map((d: any, i: number) => (
+            d && <Plotly data={[d]} layout={{ margin: { l: 0 } }} key={`${i}`} />
+          ))}
       </div>
     );
   };

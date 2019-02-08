@@ -1,3 +1,4 @@
+import { Alert } from "@app/components/UI/Alert";
 import Loader from "@app/components/UI/Loader";
 import { MIP } from "@app/types";
 import Highcharts from "highcharts";
@@ -16,22 +17,25 @@ const Boxplot = ({ miningState }: IProps) => {
   const minings = (miningState && miningState.minings) || [];
   const loading = minings.map(m => !m.error && !m.data).every(m => m);
   const error = minings.map(m => m.error);
-  const filtered = minings.reduce((acc, m) => {
-    const d: any[] =
-      m.data &&
-      m.data.data &&
-      m.data.data
-        .filter(
-          (r: any) =>
-            r.group &&
-            r.count !== 0 &&
-            r.type !== "polynominal" &&
-            r.type !== "binominal" &&
-            (r.group[0] === "all" || r.group[0] !== "all")
-        )
-        .map((e: any) => ({ ...e, dataset: m.dataset.code }));
-    return [...acc, ...(d || [])];
-  }, []);
+  const filtered = minings.reduce(
+    (acc, m) => [
+      ...acc,
+      ...((m.data &&
+        m.data.data &&
+        m.data.data
+          .filter(
+            (r: any) =>
+              r.group &&
+              r.count !== 0 &&
+              r.type !== "polynominal" &&
+              r.type !== "binominal" &&
+              (r.group[0] === "all" || r.group[0] !== "all")
+          )
+          .map((e: any) => ({ ...e, dataset: m.dataset.code }))) ||
+        [])
+    ],
+    []
+  );
 
   const uniqueVariables =
     filtered && Array.from(new Set(filtered.map((f: any) => f.index)));
@@ -72,8 +76,9 @@ const Boxplot = ({ miningState }: IProps) => {
 
   return (
     <div>
-      {loading && <Loader />}
-      {error && <div>{error}</div>}
+      <Loader visible={loading} />
+      {error &&
+        error.map((e, i) => <Alert message={e} title={"Error"} key={`${i}`} />)}
       {highchartsOptions.map((options: any, k: number) => (
         <HighchartsReact highcharts={Highcharts} options={options} key={k} />
       ))}

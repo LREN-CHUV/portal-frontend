@@ -33,7 +33,6 @@ export default class Header extends React.Component<IProps, IState> {
       handleGoBackToReview,
       handleSelectModel,
       handleSelectExperiment,
-      handleSaveAndRunExperiment
     } = this.props;
     const { experimentName } = this.state;
 
@@ -53,7 +52,6 @@ export default class Header extends React.Component<IProps, IState> {
           <div className="actions">
             <div className="item">
               <Button
-                //tslint:disable
                 onClick={handleGoBackToReview}
                 bsStyle="info"
                 type="submit"
@@ -69,17 +67,12 @@ export default class Header extends React.Component<IProps, IState> {
                 placeholder={"Experiment name"}
                 value={experimentName}
                 onChange={this.handleChangeExperimentName}
+                onKeyDown={this.handleKeyPress}
               />
             </div>
             <div className="item">
               <Button
-                //tslint:disable
-                onClick={() => handleSaveAndRunExperiment(experimentName)}
-                onKeyDown={event => {
-                  if (event.key === "Enter") {
-                    handleSaveAndRunExperiment(experimentName);
-                  }
-                }}
+                onClick={this.handleSaveAndRunExperiment}
                 title={
                   method === undefined
                     ? "Please choose an experiment on the right"
@@ -96,12 +89,13 @@ export default class Header extends React.Component<IProps, IState> {
             </div>
             <div className="item">
               <Dropdown
-                items={model &&
+                items={
+                  model &&
                   experiments &&
                   experiments.filter(
-                    (e: any) =>
-                      e.modelDefinitionId === model.slug
-                  )}
+                    (e: any) => e.modelDefinitionId === model.slug
+                  )
+                }
                 title="RELATED EXPERIMENTS"
                 handleSelect={handleSelectExperiment}
                 handleCreateNewExperiment={null}
@@ -117,5 +111,22 @@ export default class Header extends React.Component<IProps, IState> {
     this.setState({
       experimentName: event.target.value
     });
+  };
+
+  private handleKeyPress = (event: any) => {
+    const code = event.keyCode || event.charCode;
+    if (code === 13) {
+      event.preventDefault();
+      event.stopPropagation();
+      const { handleSaveAndRunExperiment } = this.props;
+      handleSaveAndRunExperiment(this.state.experimentName);
+    }
+  };
+
+  private handleSaveAndRunExperiment = (event: any) => {
+    event.preventDefault();
+    event.stopPropagation();
+    const { handleSaveAndRunExperiment } = this.props;
+    handleSaveAndRunExperiment(this.state.experimentName);
   };
 }
