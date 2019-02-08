@@ -120,7 +120,7 @@ const computeMinings = ({
 
   const rows: ITableRow[] = [];
   variables.forEach(variable => {
-    const isPolynominal = variable.type === "polynominal";
+    const isPolynominal = variable.type === "polynominal" || variable.type === "binominal";
     const row: ITableRow = {};
     let polynominalRows: ITableRow[] = [];
 
