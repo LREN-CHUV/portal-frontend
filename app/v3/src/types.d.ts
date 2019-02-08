@@ -93,7 +93,7 @@ export declare namespace MIP.API {
     parameters?: [IMethodPayload] | any;
     validation: boolean;
     constraints?: any;
-    type?: [string];
+    type?: string[];
   }
 
   export interface IMethods {

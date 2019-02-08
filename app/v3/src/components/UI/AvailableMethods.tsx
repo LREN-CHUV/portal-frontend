@@ -21,7 +21,7 @@ const AvailableMethods = ({
   const modelGroupings =
     (query && query.groupings && query.groupings.map(v => v.code)) || [];
 
-  const availableMethods =
+  const availableAlgorithms =
     (variables &&
       query &&
       modelVariable &&
@@ -87,24 +87,37 @@ const AvailableMethods = ({
       })) ||
     [];
 
+  const sortedAlgorithms =
+    availableAlgorithms &&
+    availableAlgorithms.sort((a: MIP.API.IMethod, b: MIP.API.IMethod) => {
+      try {
+        const typea = a && a.type && a.type.length > 0 && a.type[0] || "";
+        const typeb = b && b.type && b.type.length > 0 && b.type[0] || "";
+
+        return typea < typeb ? 1 : typea > typeb ? -1 : 0;
+      } catch (e) {
+        return 0;
+      }
+    });
+
   return (
     <React.Fragment>
-      {availableMethods.map((method: any) => (
-        <div className="method" key={method.code}>
+      {sortedAlgorithms.map((algorithm: any) => (
+        <div className="method" key={algorithm.code}>
           <Button
-            key={method.code}
+            key={algorithm.code}
             bsStyle="link"
-            title={method.description}
+            title={`${algorithm.type} - ${algorithm.description}`}
             // tslint:disable-next-line jsx-no-lambda
-            onClick={() => handleSelectMethod(method)}
+            onClick={() => handleSelectMethod(algorithm)}
             style={{
-              color: method.enabled ? "#03a9f4" : "gray",
+              color: algorithm.enabled ? "#03a9f4" : "gray",
               padding: 0,
               textTransform: "none"
             }}
-            disabled={!method.enabled}
+            disabled={!algorithm.enabled}
           >
-            {method.label}
+            {algorithm.label}
           </Button>
         </div>
       ))}
