@@ -17,21 +17,24 @@ const Boxplot = ({ miningState }: IProps) => {
   const loading = minings.map(m => !m.error && !m.data).every(m => m);
   const error = minings.map(m => m.error);
   const filtered = minings.reduce((acc, m) => {
-    const d:any[] =
-        m.data &&
-        m.data.data &&
-        m.data.data.filter(
+    const d: any[] =
+      m.data &&
+      m.data.data &&
+      m.data.data
+        .filter(
           (r: any) =>
             r.group &&
             r.count !== 0 &&
-            r.type !== "polynominal" || r.type !== "binominal" && 
+            r.type !== "polynominal" &&
+            r.type !== "binominal" &&
             (r.group[0] === "all" || r.group[0] !== "all")
         )
-        .map((e:any) => ({ ...e, dataset: m.dataset.code}))
-      return [...acc, ...d || []]
-  }, [])
+        .map((e: any) => ({ ...e, dataset: m.dataset.code }));
+    return [...acc, ...(d || [])];
+  }, []);
+
   const uniqueVariables =
-  filtered && Array.from(new Set(filtered.map((f: any) => f.index)));
+    filtered && Array.from(new Set(filtered.map((f: any) => f.index)));
 
   const highchartsOptions: any[] = uniqueVariables.map((v: any) => {
     const uniqueMinings = filtered.filter((f: any) => f.index === v);
