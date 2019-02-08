@@ -16,42 +16,25 @@ const Boxplot = ({ miningState }: IProps) => {
   const minings = (miningState && miningState.minings) || [];
   const loading = minings.map(m => !m.error && !m.data).every(m => m);
   const error = minings.map(m => m.error);
-
-  const findData = (miningz: MIP.Store.IMiningResponseShape[]) => {
-    const data: any[] = [];
-    miningz.forEach(m => {
-      const d =
+  const filtered = minings.reduce((acc, m) => {
+    const d:any[] =
         m.data &&
         m.data.data &&
         m.data.data.filter(
           (r: any) =>
             r.group &&
             r.count !== 0 &&
-            r.type !== "polynominal" && 
+            r.type !== "polynominal" || r.type !== "binominal" && 
             (r.group[0] === "all" || r.group[0] !== "all")
-        );
-      // tslint:disable
-
-      d &&
-        d.forEach((e: any) => {
-          e.dataset = m.dataset.code;
-          data.push(e);
-        });
-      // tslint:enable
-    });
-
-    return data;
-  };
-
-  const filtered = findData(minings);
-
-  console.log(filtered);
-  const flattened = filtered.reduce((a, i) => [...a, ...i], []);
+        )
+        .map((e:any) => ({ ...e, dataset: m.dataset.code}))
+      return [...acc, ...d || []]
+  }, [])
   const uniqueVariables =
-    flattened && Array.from(new Set(flattened.map((f: any) => f.index)));
+  filtered && Array.from(new Set(filtered.map((f: any) => f.index)));
 
   const highchartsOptions: any[] = uniqueVariables.map((v: any) => {
-    const uniqueMinings = flattened.filter((f: any) => f.index === v);
+    const uniqueMinings = filtered.filter((f: any) => f.index === v);
     const data = uniqueMinings.map((u: any) => [
       u.min,
       u["25%"],
