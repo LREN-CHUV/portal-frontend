@@ -78,6 +78,7 @@ class Container extends React.Component<IProps, IState> {
           <div className="sidebar">
             <Model
               model={apiModel.state.model}
+              showDatasets={true}
               variables={apiCore.state.variables}
             />
           </div>
@@ -102,19 +103,19 @@ class Container extends React.Component<IProps, IState> {
                     <Form
                       method={this.state && this.state.method}
                       parameters={this.state && this.state.parameters}
-                      kfold={this.state && this.state.kfold}
                       handleChangeParameters={this.handleChangeParameters}
-                      handleChangeKFold={this.handleChangeKFold}
-                    >
-                      <fieldset style={{ padding: "8px" }}>
-                        <Validation
-                          isPredictiveMethod={isPredictiveMethod}
-                          datasets={apiCore.state.datasets}
-                          query={this.state && this.state.query}
-                          handleUpdateQuery={this.handleUpdateQuery}
-                        />
-                      </fieldset>
-                    </Form>
+                    />
+
+                    <fieldset style={{ padding: "8px" }}>
+                      <Validation
+                        kfold={this.state && this.state.kfold}
+                        handleChangeKFold={this.handleChangeKFold}
+                        isPredictiveMethod={isPredictiveMethod}
+                        datasets={apiCore.state.datasets}
+                        query={this.state && this.state.query}
+                        handleUpdateQuery={this.handleUpdateQuery}
+                      />
+                    </fieldset>
                   </Tab>
                   <Tab eventKey={2} title="About running experiments">
                     <Help />
