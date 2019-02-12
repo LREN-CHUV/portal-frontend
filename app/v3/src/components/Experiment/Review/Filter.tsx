@@ -3,8 +3,6 @@ import QueryBuilder from "jQuery-QueryBuilder";
 import * as React from "react";
 import { Button } from "react-bootstrap";
 
-console.log(QueryBuilder); // prevents ts-lint to complain about ununused inport
-
 interface IProps {
   rules: any;
   filters: any;
@@ -18,6 +16,7 @@ interface IState {
 
 class Filter extends React.Component<IProps, IState> {
   public state: IState = { rulesChanged: false, loading: false };
+  protected queryBuilder = QueryBuilder; // prevents ts-lint to complain about ununused inport
   private ref: any;
 
   public componentDidMount = () => {
@@ -39,10 +38,12 @@ class Filter extends React.Component<IProps, IState> {
 
     const { filters: nextFilters, rules: nextRules } = nextProps;
     // const { filters, rules } = this.props;
-    if (nextFilters) { // FIXME: && nextFilters !== filters) {
+    if (nextFilters) {
+      // FIXME: && nextFilters !== filters) {
       this.ref.queryBuilder("destroy");
 
-      if (nextRules) { // FIXME: && nextRules !== rules) {
+      if (nextRules) {
+        // FIXME: && nextRules !== rules) {
         this.ref.queryBuilder({ filters: nextFilters, rules: nextRules });
         this.onRulesChanged();
 

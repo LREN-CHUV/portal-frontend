@@ -12,9 +12,8 @@ import { BrowserRouter as Router } from "react-router-dom";
 import request from "request-promise-native";
 import { Provider, Subscribe } from "unstated";
 
-// import UNSTATED from "unstated-debug";
-
-// UNSTATED.logStateChanges = process.env.NODE_ENV === "development";
+import UNSTATED from "unstated-debug";
+UNSTATED.logStateChanges = process.env.NODE_ENV === "development";
 
 interface IState {
   appConfig: any;
@@ -29,7 +28,7 @@ class AppContainer extends React.Component<any, IState> {
 
   private intervalId: NodeJS.Timer;
 
-  public async componentWillMount() {
+  public async componentDidMount() {
     this.intervalId = setInterval(() => this.apiExperiment.all(), 10 * 1000);
 
     // Conf written by dockerize
@@ -38,11 +37,12 @@ class AppContainer extends React.Component<any, IState> {
       const appConfig = JSON.parse(json);
       this.setState({ appConfig });
     } catch (e) {
-      this.setState({
-        appConfig: {
-          instanceName: "MIP"
-        }
-      });
+      // FIXME: 
+      // this.setState({
+      //   appConfig: {
+      //     instanceName: "MIP"
+      //   }
+      // });
     }
 
     return await Promise.all([
