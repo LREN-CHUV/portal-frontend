@@ -138,6 +138,7 @@ class APIAdapter {
           break;
 
         case MIME_TYPES.MIP_PFA:
+        case MIME_TYPES.MIP_COMPOUND: 
           results.forEach((aResult: any) => {
             let subResult = aResult;
 

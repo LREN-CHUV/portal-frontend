@@ -4,6 +4,7 @@ export enum MIME_TYPES {
   HIGHCHARTS = 'application/vnd.highcharts+json',
   JSON = 'application/json',
   MIP_PFA = 'application/vnd.hbp.mip.experiment.pfa+json',
+  MIP_COMPOUND = 'application/vnd.hbp.mip.compound+json',
   PFA = 'application/pfa+json',
   PLOTLY = 'application/vnd.plotly.v1+json',
   VISJS = 'application/vnd.visjs+javascript',
