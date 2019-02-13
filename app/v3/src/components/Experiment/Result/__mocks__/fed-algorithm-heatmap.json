@@ -1,0 +1,105 @@
+{
+  "jobId": "",
+  "node": "Federation QA",
+  "function": "",
+  "shape": "application/vnd.hbp.mip.compound+json",
+  "timestamp": "Feb 11, 2019 4:23:06 PM",
+  "data": [
+    {
+      "timestamp": 1549902184,
+      "data": [
+        {
+          "x": [
+            "subjectageyears",
+            "lefthippocampus",
+            "righthippocampus",
+            "montrealcognitiveassessment"
+          ],
+          "y": [
+            "montrealcognitiveassessment",
+            "righthippocampus",
+            "lefthippocampus",
+            "subjectageyears"
+          ],
+          "zmin": -1,
+          "type": "heatmap",
+          "zmax": 1,
+          "z": [
+            [-0.1933069291, 0.331216955, 0.2807979462, 1.0],
+            [-0.21339238, 0.91571762, 1.0, 0.2807979462],
+            [-0.2517135993, 1.0, 0.91571762, 0.331216955],
+            [1.0, -0.2517135993, -0.21339238, -0.1933069291]
+          ]
+        }
+      ],
+      "algorithm": "python-correlation-heatmap",
+      "jobId": "c6c2f090-3ed2-4921-98e2-2c2bb6110548",
+      "node": "localhost",
+      "type": "application/vnd.plotly.v1+json"
+    },
+    {
+      "timestamp": 1549902183,
+      "data": [
+        {
+          "x": [
+            "subjectageyears",
+            "lefthippocampus",
+            "righthippocampus",
+            "montrealcognitiveassessment"
+          ],
+          "y": [
+            "montrealcognitiveassessment",
+            "righthippocampus",
+            "lefthippocampus",
+            "subjectageyears"
+          ],
+          "zmin": -1,
+          "type": "heatmap",
+          "zmax": 1,
+          "z": [
+            [-0.4159996112, 0.4658669069, 0.4395768386, 1.0],
+            [-0.4137748959, 0.9464279329, 1.0, 0.4395768386],
+            [-0.4488432552, 1.0, 0.9464279329, 0.4658669069],
+            [1.0, -0.4488432552, -0.4137748959, -0.4159996112]
+          ]
+        }
+      ],
+      "algorithm": "python-correlation-heatmap",
+      "jobId": "c4c8c5bc-4037-4d2d-b264-e1f3f14b47d9",
+      "node": "QA Node1 - Brescia FBF",
+      "type": "application/vnd.plotly.v1+json"
+    },
+    {
+      "timestamp": 1549902186,
+      "data": [
+        {
+          "x": [
+            "subjectageyears",
+            "lefthippocampus",
+            "righthippocampus",
+            "montrealcognitiveassessment"
+          ],
+          "y": [
+            "montrealcognitiveassessment",
+            "righthippocampus",
+            "lefthippocampus",
+            "subjectageyears"
+          ],
+          "zmin": -1,
+          "type": "heatmap",
+          "zmax": 1,
+          "z": [
+            [-0.2143090817, 0.3381562067, 0.2889912469, 1.0],
+            [-0.223499418, 0.9215784478, 1.0, 0.2889912469],
+            [-0.2713981148, 1.0, 0.9215784478, 0.3381562067],
+            [1.0, -0.2713981148, -0.223499418, -0.2143090817]
+          ]
+        }
+      ],
+      "algorithm": "python-correlation-heatmap",
+      "jobId": "157f3dc5-2cf2-4ee6-a1f8-d711ce7bc00a",
+      "node": "QA Node2 - CHUV CLM",
+      "type": "application/vnd.plotly.v1+json"
+    }
+  ]
+}

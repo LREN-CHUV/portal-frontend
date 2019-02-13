@@ -68,7 +68,7 @@ export default ({
       </Panel.Title>
       <Panel.Body>
         {loading ? (
-          <div>
+          <div className="loading">
             <h3>Your experiment is currently running...</h3>
             <p>
               Please check back in a few minutes. This page will automatically
@@ -77,7 +77,7 @@ export default ({
           </div>
         ) : null}
         {error ? (
-          <div>
+          <div className="error">
             <h3>An error has occured</h3>
             <p>{error}</p>
           </div>
