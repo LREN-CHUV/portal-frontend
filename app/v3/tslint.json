@@ -1,7 +1,15 @@
 {
   "extends": ["tslint:recommended", "tslint-react", "tslint-config-prettier"],
   "linterOptions": {
-    "exclude": ["config/**/*.js", "node_modules/**/*.ts", "*.json", "**/*.json"]
+    "exclude": [
+      "config/**/*.js",
+      "node_modules/**",
+      "**/*.ts",
+      "*.json",
+      "**/*.json",
+      "*.test.tsx",
+      "**/*.test.tsx"
+    ]
   },
   "rules": {
     "no-console": false

@@ -33,6 +33,10 @@
     "eject": "react-scripts-ts eject"
   },
   "devDependencies": {
+    "@types/react-test-renderer": "^16.8.0",
+    "enzyme": "^3.8.0",
+    "enzyme-adapter-react-16": "^1.9.1",
+    "react-test-renderer": "^16.8.1",
     "@types/d3": "^5.7.0",
     "@types/dotenv": "^6.1.0",
     "@types/highcharts": "^5.0.36",
