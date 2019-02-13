@@ -37,12 +37,7 @@ class AppContainer extends React.Component<any, IState> {
       const appConfig = JSON.parse(json);
       this.setState({ appConfig });
     } catch (e) {
-      // FIXME: 
-      // this.setState({
-      //   appConfig: {
-      //     instanceName: "MIP"
-      //   }
-      // });
+      // console.log(e)
     }
 
     return await Promise.all([
