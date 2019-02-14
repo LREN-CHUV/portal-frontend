@@ -3,7 +3,7 @@ import * as React from "react";
 import renderer from "react-test-renderer";
 import { mount } from "enzyme";
 import APIAdapter from "../../../API/APIAdapter";
-import { MIP } from "@app/types";
+import { MIP } from "../../../../types";
 
 const stringify = (json: any): void => {
   console.log(JSON.stringify(json, null, 2));
