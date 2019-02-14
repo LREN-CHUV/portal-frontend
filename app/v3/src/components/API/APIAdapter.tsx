@@ -292,7 +292,11 @@ const pfa = (data: any): IPfa => {
             const node = i.node;
             if (i.code === "kfold") {
               const dta: any = i.data.average;
-              output.crossValidation = buildKFoldValidation(dta);
+              if (dta.type === 'PolynomialClassificationScore') {
+                output.crossValidation = buildValidation(dta, node);
+              } else {
+                output.crossValidation = buildKFoldValidation(dta);
+              }
             }
 
             if (i.code === "remote-validation") {
