@@ -1,0 +1,503 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test App component App snapshot renders correctly 1`] = `
+<div
+  className="App"
+>
+  <header>
+    <header
+      className="navbar navbar-default navbar-fixed-top "
+      id="topnav"
+    >
+      <div
+        className="container-fluid"
+      >
+        <div
+          className="logo-area"
+        >
+          <a
+            className="navbar-brand"
+            href="/home"
+            onClick={[Function]}
+          >
+            Human Brain Project
+          </a>
+          <span
+            className="toolbar-trigger toolbar-icon-bg"
+          >
+            <a
+              href="/data/mydata"
+              onClick={[Function]}
+              title="My data"
+            >
+              <span
+                className="icon-bg"
+              >
+                <i
+                  className="ti ti-menu"
+                />
+              </span>
+            </a>
+          </span>
+          <span
+            className="toolbar-trigger toolbar-icon-bg"
+          >
+            <a
+              href="/data/communitydata"
+              onClick={[Function]}
+              title="My community"
+            >
+              <span
+                className="icon-bg"
+              >
+                <i
+                  className="ti ti-world"
+                />
+              </span>
+            </a>
+          </span>
+        </div>
+        <div
+          className="app-instance-name"
+        >
+          <h2>
+            MIP
+          </h2>
+        </div>
+        <ul
+          className="nav navbar-nav toolbar pull-right"
+        >
+          <li
+            className="toolbar-icon-bg hidden-xs"
+          >
+            <a
+              href="/explore"
+              onClick={[Function]}
+              title="Epidemiological Exploration "
+            >
+              <span
+                className="icon-bg"
+              >
+                <i>
+                  EE
+                </i>
+              </span>
+            </a>
+          </li>
+          <li
+            className="toolbar-icon-bg hidden-xs"
+          >
+            <a
+              aria-current={null}
+              className={undefined}
+              href="/v3/review"
+              onClick={[Function]}
+              style={undefined}
+              title="Interactive Analysis"
+            >
+              <span
+                className="icon-bg"
+              >
+                <i>
+                  IA
+                </i>
+              </span>
+            </a>
+          </li>
+          <li
+            className="toolbar-icon-bg hidden-xs bsd"
+          >
+            <span
+              title="Biological Signature of Diseases"
+            >
+              <div
+                className="dropdown btn-group btn-group-default"
+              >
+                <button
+                  aria-expanded={false}
+                  aria-haspopup={true}
+                  className="dropdown-toggle btn btn-default"
+                  disabled={false}
+                  id="experiment-dropdown"
+                  onClick={[Function]}
+                  onKeyDown={[Function]}
+                  role="button"
+                  type="button"
+                >
+                  BSD
+                </button>
+                <ul
+                  aria-labelledby="experiment-dropdown"
+                  className="dropdown-menu"
+                  role="menu"
+                >
+                  <div
+                    onKeyDown={[Function]}
+                    onSelect={[Function]}
+                    style={
+                      Object {
+                        "margin": "8px",
+                      }
+                    }
+                  >
+                    <p>
+                      You have no running experiments.
+                    </p>
+                    <p>
+                      You can start one by selecting a model and configuring an experiment on it.
+                    </p>
+                  </div>
+                </ul>
+              </div>
+            </span>
+          </li>
+          <li
+            className="uib-dropdown toolbar-icon-bg"
+          >
+            <a
+              className="uib-dropdown-toggle username"
+              data-position="right"
+              href="#"
+            >
+              <img
+                alt="anonymous"
+                className="img-circle"
+                src="default_user.png"
+              />
+            </a>
+            <ul
+              className="dropdown-menu userinfo arrow"
+            >
+              <li>
+                <a
+                  href="/profile"
+                  ui-sref="profile"
+                >
+                  <i
+                    className="ti ti-user"
+                  />
+                  <span>
+                    Profile
+                  </span>
+                </a>
+              </li>
+              <li
+                className="divider"
+              />
+              <li>
+                <a
+                  href=""
+                  id="logout-link"
+                  ng-click="logout()"
+                >
+                  <i
+                    className="ti ti-shift-right"
+                  />
+                  <span>
+                    Sign out
+                  </span>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li
+            className="toolbar-trigger toolbar-icon-bg"
+          >
+            <a
+              href="https://hbpmedical.github.io/documentation/HBP_SP8_UserGuide_latest.pdf"
+              target="_help"
+              title="Knowledge base"
+            >
+              <span
+                className="icon-bg"
+                style={
+                  Object {
+                    "fontWeight": 900,
+                  }
+                }
+              >
+                ?
+              </span>
+            </a>
+          </li>
+          <li
+            className="toolbar-trigger toolbar-icon-bg"
+          >
+            <a
+              href="/hbpapps"
+              title="App"
+              ui-sref="hbpapps"
+            >
+              <span
+                className="icon-bg"
+              >
+                <i
+                  className="ti ti-layout-grid3-alt "
+                  style={
+                    Object {
+                      "fontFamily": "themify",
+                      "fontWeight": "normal",
+                    }
+                  }
+                />
+              </span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </header>
+  </header>
+  <section />
+</div>
+`;
+
+exports[`Test App component AppContainer snapshot renders correctly 1`] = `
+<div
+  className="App"
+>
+  <header>
+    <header
+      className="navbar navbar-default navbar-fixed-top "
+      id="topnav"
+    >
+      <div
+        className="container-fluid"
+      >
+        <div
+          className="logo-area"
+        >
+          <a
+            className="navbar-brand"
+            href="/home"
+            onClick={[Function]}
+          >
+            Human Brain Project
+          </a>
+          <span
+            className="toolbar-trigger toolbar-icon-bg"
+          >
+            <a
+              href="/data/mydata"
+              onClick={[Function]}
+              title="My data"
+            >
+              <span
+                className="icon-bg"
+              >
+                <i
+                  className="ti ti-menu"
+                />
+              </span>
+            </a>
+          </span>
+          <span
+            className="toolbar-trigger toolbar-icon-bg"
+          >
+            <a
+              href="/data/communitydata"
+              onClick={[Function]}
+              title="My community"
+            >
+              <span
+                className="icon-bg"
+              >
+                <i
+                  className="ti ti-world"
+                />
+              </span>
+            </a>
+          </span>
+        </div>
+        <div
+          className="app-instance-name"
+        >
+          <h2>
+            MIP
+          </h2>
+        </div>
+        <ul
+          className="nav navbar-nav toolbar pull-right"
+        >
+          <li
+            className="toolbar-icon-bg hidden-xs"
+          >
+            <a
+              href="/explore"
+              onClick={[Function]}
+              title="Epidemiological Exploration "
+            >
+              <span
+                className="icon-bg"
+              >
+                <i>
+                  EE
+                </i>
+              </span>
+            </a>
+          </li>
+          <li
+            className="toolbar-icon-bg hidden-xs"
+          >
+            <a
+              aria-current={null}
+              className={undefined}
+              href="/v3/review"
+              onClick={[Function]}
+              style={undefined}
+              title="Interactive Analysis"
+            >
+              <span
+                className="icon-bg"
+              >
+                <i>
+                  IA
+                </i>
+              </span>
+            </a>
+          </li>
+          <li
+            className="toolbar-icon-bg hidden-xs bsd"
+          >
+            <span
+              title="Biological Signature of Diseases"
+            >
+              <div
+                className="dropdown btn-group btn-group-default"
+              >
+                <button
+                  aria-expanded={false}
+                  aria-haspopup={true}
+                  className="dropdown-toggle btn btn-default"
+                  disabled={false}
+                  id="experiment-dropdown"
+                  onClick={[Function]}
+                  onKeyDown={[Function]}
+                  role="button"
+                  type="button"
+                >
+                  BSD
+                </button>
+                <ul
+                  aria-labelledby="experiment-dropdown"
+                  className="dropdown-menu"
+                  role="menu"
+                >
+                  <div
+                    onKeyDown={[Function]}
+                    onSelect={[Function]}
+                    style={
+                      Object {
+                        "margin": "8px",
+                      }
+                    }
+                  >
+                    <p>
+                      You have no running experiments.
+                    </p>
+                    <p>
+                      You can start one by selecting a model and configuring an experiment on it.
+                    </p>
+                  </div>
+                </ul>
+              </div>
+            </span>
+          </li>
+          <li
+            className="uib-dropdown toolbar-icon-bg"
+          >
+            <a
+              className="uib-dropdown-toggle username"
+              data-position="right"
+              href="#"
+            >
+              <img
+                alt="anonymous"
+                className="img-circle"
+                src="default_user.png"
+              />
+            </a>
+            <ul
+              className="dropdown-menu userinfo arrow"
+            >
+              <li>
+                <a
+                  href="/profile"
+                  ui-sref="profile"
+                >
+                  <i
+                    className="ti ti-user"
+                  />
+                  <span>
+                    Profile
+                  </span>
+                </a>
+              </li>
+              <li
+                className="divider"
+              />
+              <li>
+                <a
+                  href=""
+                  id="logout-link"
+                  ng-click="logout()"
+                >
+                  <i
+                    className="ti ti-shift-right"
+                  />
+                  <span>
+                    Sign out
+                  </span>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li
+            className="toolbar-trigger toolbar-icon-bg"
+          >
+            <a
+              href="https://hbpmedical.github.io/documentation/HBP_SP8_UserGuide_latest.pdf"
+              target="_help"
+              title="Knowledge base"
+            >
+              <span
+                className="icon-bg"
+                style={
+                  Object {
+                    "fontWeight": 900,
+                  }
+                }
+              >
+                ?
+              </span>
+            </a>
+          </li>
+          <li
+            className="toolbar-trigger toolbar-icon-bg"
+          >
+            <a
+              href="/hbpapps"
+              title="App"
+              ui-sref="hbpapps"
+            >
+              <span
+                className="icon-bg"
+              >
+                <i
+                  className="ti ti-layout-grid3-alt "
+                  style={
+                    Object {
+                      "fontFamily": "themify",
+                      "fontWeight": "normal",
+                    }
+                  }
+                />
+              </span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </header>
+  </header>
+  <section />
+</div>
+`;
