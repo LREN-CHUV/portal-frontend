@@ -1,8 +1,7 @@
 import Result from "../Result";
 import * as React from "react";
 import renderer from "react-test-renderer";
-import { shallow, mount } from "enzyme";
-import APIAdapter from "../../../API/APIAdapter";
+import { shallow } from "enzyme";
 
 const stringify = (json: any): void => {
   console.log(JSON.stringify(json, null, 2))
@@ -57,18 +56,4 @@ describe("Test Experiment results", () => {
     expect(error).toHaveLength(1);
   });
 
-  it("Federated linearRegression algorithm renders correctly", () => {
-    const response = require("../__mocks__/responses/fed-linearRegression.json");
-    const experiment = APIAdapter.parse(response);
-    const props = {
-      experimentState: {
-        experiment
-      }
-    };
-    const wrapper = mount(<Result {...props} />);
-
-    expect(wrapper.find(".error")).toHaveLength(0);
-    expect(wrapper.find(".loading")).toHaveLength(0);
-    expect(wrapper.find("div#tabs-methods")).toHaveLength(1);
-  });
 });

@@ -14,18 +14,23 @@ import renderer from "react-test-renderer";
 
 jest.mock("request-promise-native");
 
-describe("Test App component", () => {
+describe("Test App components", () => {
   const apiExperiment = new APIExperiment(config);
   const apiModel = new APIModel(config);
   const apiCore = new APICore(config);
   const apiMining = new APIMining(config);
-  const props = {
-    appConfig: { appConfig: "MIP" },
-    apiExperiment,
-    apiCore,
-    apiModel,
-    apiMining
-  };
+
+  let props;
+
+  beforeEach(() => {
+    props = {
+      appConfig: { appConfig: "MIP" },
+      apiExperiment,
+      apiCore,
+      apiModel,
+      apiMining
+    };
+  });
 
   it("AppContainer dom renders correctly", () => {
     const wrapper = shallow(<AppContainer />);

@@ -1,0 +1,193 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test Result components Result snapshot renders correctly 1`] = `
+<div
+  className="Experiment"
+>
+  <div
+    className="header"
+  >
+    <div
+      className="panel panel-default"
+    >
+      <div
+        className="panel-body"
+      >
+        <h3>
+          Results of Experiment 
+          <strong />
+           on
+           
+          <a
+            href="/v3/review/undefined"
+            onClick={[Function]}
+          />
+        </h3>
+        <div
+          className="actions status"
+        >
+          <h5
+            className="item"
+          >
+            Created
+             
+             
+            by 
+          </h5>
+          <div
+            className="item text"
+          >
+             
+          </div>
+          <div
+            className="item"
+          >
+            <button
+              className="btn btn-info"
+              disabled={false}
+              onClick={[Function]}
+              type="button"
+            >
+              SHARE EXPERIMENT
+            </button>
+          </div>
+          <div
+            className="item"
+          >
+            <div
+              className="dropdown btn-group btn-group-default"
+            >
+              <button
+                aria-expanded={false}
+                aria-haspopup={true}
+                className="dropdown-toggle btn btn-default"
+                disabled={false}
+                id="experiment-dropdown"
+                onClick={[Function]}
+                onKeyDown={[Function]}
+                role="button"
+                type="button"
+              >
+                RELATED EXPERIMENTS
+                 
+                <span
+                  className="caret"
+                />
+              </button>
+              <ul
+                aria-labelledby="experiment-dropdown"
+                className="dropdown-menu"
+                role="menu"
+              >
+                <li
+                  className=""
+                  role="presentation"
+                  style={undefined}
+                >
+                  <a
+                    href="#"
+                    onClick={[Function]}
+                    onKeyDown={[Function]}
+                    role="menuitem"
+                    tabIndex="-1"
+                  >
+                    <strong>
+                      Create New Experiment
+                    </strong>
+                  </a>
+                </li>
+                <li
+                  className=""
+                  role="presentation"
+                  style={undefined}
+                >
+                  <a
+                    href="#"
+                    onClick={[Function]}
+                    onKeyDown={[Function]}
+                    role="menuitem"
+                    tabIndex="-1"
+                  >
+                    ---------------------------
+                  </a>
+                </li>
+                <div
+                  onKeyDown={[Function]}
+                  onSelect={[Function]}
+                  style={
+                    Object {
+                      "margin": "8px",
+                    }
+                  }
+                >
+                  <p>
+                    You have no running experiments.
+                  </p>
+                  <p>
+                    You can start one by selecting a model and configuring an experiment on it.
+                  </p>
+                </div>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    className="content"
+  >
+    <div
+      className="sidebar"
+    >
+      <div
+        className="model panel panel-default"
+      >
+        <div
+          className="panel-title"
+        >
+          <h3>
+            Model 
+            <strong />
+          </h3>
+        </div>
+        <div
+          className="panel-body"
+        />
+      </div>
+    </div>
+    <div
+      className="results"
+    >
+      <div
+        className="panel panel-default"
+      >
+        <div
+          className="panel-title"
+        >
+          <h3>
+            Your Experiment
+          </h3>
+        </div>
+        <div
+          className="panel-body"
+        >
+          <div
+            className="loading"
+          >
+            <h3>
+              Your experiment is currently running...
+            </h3>
+            <p>
+              Please check back in a few minutes. This page will automatically refresh once your experiment has finished executing.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      className="sidebar2"
+    />
+  </div>
+</div>
+`;

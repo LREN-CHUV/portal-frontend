@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Test App component App snapshot renders correctly 1`] = `
+exports[`Test App components App snapshot renders correctly 1`] = `
 <div
   className="App"
 >
@@ -251,7 +251,7 @@ exports[`Test App component App snapshot renders correctly 1`] = `
 </div>
 `;
 
-exports[`Test App component AppContainer snapshot renders correctly 1`] = `
+exports[`Test App components AppContainer snapshot renders correctly 1`] = `
 <div
   className="App"
 >

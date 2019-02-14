@@ -5,24 +5,37 @@ import { BrowserRouter as Router } from "react-router-dom";
 import renderer from "react-test-renderer";
 import * as ReactDOM from "react-dom";
 import { APICore, APIExperiment, APIModel } from "@app/components/API";
-
+import { shallow } from "enzyme";
 
 jest.mock("request-promise-native");
-it("renders without crashing", () => {
+describe("Test Result components", () => {
   const apiExperiment = new APIExperiment(config);
   const apiModel = new APIModel(config);
   const apiCore = new APICore(config);
 
-  const div = document.createElement("div");
-  ReactDOM.render(
-    <Router>
-      <Container
-        apiExperiment={apiExperiment}
-        apiCore={apiCore}
-        apiModel={apiModel}
-      />
-    </Router>,
-    div
-  );
-  ReactDOM.unmountComponentAtNode(div);
+  let props;
+  let component;
+
+  beforeEach(() => {
+    props = {
+      apiExperiment,
+      apiCore,
+      apiModel
+    };
+    component = (
+      <Router>
+        <Container {...props} />
+      </Router>
+    );
+  });
+
+  it("Result dom renders correctly", () => {
+    const wrapper = shallow(component);
+    expect(wrapper).toBeDefined();
+  });
+
+  it("Result snapshot renders correctly", () => {
+    const tree = renderer.create(component).toJSON();
+    expect(tree).toMatchSnapshot();
+  });
 });
