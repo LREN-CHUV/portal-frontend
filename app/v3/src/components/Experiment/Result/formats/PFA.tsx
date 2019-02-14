@@ -90,6 +90,7 @@ const buildConfusionMatrix = (matrix: MIP.API.IConfusionMatrix) =>
     </table>
   ) ||
     null);
+
 export default ({ method, data }: { method: MIP.API.IMethod; data: any }) => {
   return (
     (data && (
