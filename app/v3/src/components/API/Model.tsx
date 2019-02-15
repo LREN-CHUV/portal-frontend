@@ -51,7 +51,7 @@ class Model extends Container<MIP.Store.IModelState> {
   public update = async ({ model }: { model: any }) => {
     try {
       const { slug } = model;
-      const data = await request({
+      await request({
         body: JSON.stringify(model),
         headers: {
           ...this.options.headers,
@@ -60,10 +60,9 @@ class Model extends Container<MIP.Store.IModelState> {
         method: "PUT",
         uri: `${this.baseUrl}/${slug}`
       });
-      const json = await JSON.parse(data);
       return await this.setState({
         error: undefined,
-        model: json
+        model
       });
     } catch (error) {
       return await this.setState({
