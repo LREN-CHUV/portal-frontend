@@ -26,7 +26,7 @@ describe("Test Mining API", () => {
       grouping: query.groupings ? query.groupings : [],
       variables: query.variables ? query.variables : []
     };
-    await apiMining.allParallel({ payload });
+    await apiMining.allByDataset({ payload });
     const result = apiMining.state.minings;
     console.log(result);
     const error = apiMining.state.error;

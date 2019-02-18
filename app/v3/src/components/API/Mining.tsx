@@ -47,7 +47,7 @@ class Mining extends Container<MIP.Store.IMiningState> {
   };
 
   // fetch for each dataset, otherwise values are aggregated for all datasets
-  public allParallel = async ({
+  public allByDataset = async ({
     payload
   }: {
     payload: MIP.API.IMiningPayload;
