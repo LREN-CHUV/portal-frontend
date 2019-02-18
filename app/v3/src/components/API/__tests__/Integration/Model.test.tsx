@@ -1,11 +1,10 @@
 import * as React from "react";
 import renderer from "react-test-renderer";
 import { mount } from "enzyme";
-import { MIP } from "../../../types";
-import APIModel from "../Model";
-import config from "../RequestHeaders";
+import APIModel from "../../Model";
+import config from "../../RequestHeaders";
 
-describe("Test API", () => {
+describe("Test Model API", () => {
   const apiModel = new APIModel(config);
   let model = {
     query: {
