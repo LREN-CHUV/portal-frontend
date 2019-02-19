@@ -1,6 +1,6 @@
-import { APIMining } from "@app/components/API";
-import { Alert } from "@app/components/UI/Alert";
-import { MIP } from "@app/types";
+import { APIMining } from "../../API";
+import { Alert } from "../../UI/Alert";
+import { MIP } from "../../../types";
 import * as React from "react";
 import { Panel, Tab, Tabs } from "react-bootstrap";
 import { Body } from "react-bootstrap/lib/Modal";

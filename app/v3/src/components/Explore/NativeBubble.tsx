@@ -1,4 +1,4 @@
-import { APICore } from "@app/components/API";
+import { APICore } from "../API";
 import * as d3 from "d3";
 import React, { Component } from "react";
 

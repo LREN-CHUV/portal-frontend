@@ -1,5 +1,5 @@
-import Dropdown from "@app/components/UI/Dropdown";
-import { MIP } from "@app/types";
+import Dropdown from "../../UI/Dropdown";
+import { MIP } from "../../../types";
 import moment from "moment"; // FIXME: change lib, too heavy
 import * as React from "react";
 import { Button, Panel } from "react-bootstrap";

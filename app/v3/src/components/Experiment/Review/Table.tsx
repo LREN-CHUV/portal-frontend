@@ -1,5 +1,5 @@
-import { round } from "@app/components/utils";
-import { MIP } from "@app/types";
+import { round } from "../../utils";
+import { MIP } from "../../../types";
 import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
 import * as React from "react";
@@ -25,6 +25,7 @@ interface IComputeMiningResult {
 interface ITableRow {
   variable?: string;
   category?: MIP.API.IVariable;
+  [key: string]: string | MIP.API.IVariable | undefined; 
 }
 
 const Table = ({ minings, selectedDatasets, query, lookup }: IProps) => {
@@ -128,7 +129,7 @@ const computeMinings = ({
     if (isPolynominal && variable.enumerations) {
       row.variable = variable.label;
       polynominalRows = variable.enumerations.reduce(
-        (acc, val) => [
+        (acc: any[], val: any) => [
           ...acc,
           { category: { code: val.code, label: val.label } }
         ],

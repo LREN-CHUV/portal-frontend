@@ -1,7 +1,7 @@
-import { APIExperiment, APIModel } from "@app/components/API";
-import Dropdown from "@app/components/UI/Dropdown";
-import default_user from "@app/images/default_user.png";
-import { MIP } from "@app/types";
+import { APIExperiment, APIModel } from "../API";
+import Dropdown from "../UI/Dropdown";
+import default_user from "../../images/default_user.png";
+import { MIP } from "../../types";
 import * as React from "react";
 import { NavLink, RouteComponentProps, withRouter } from "react-router-dom";
 

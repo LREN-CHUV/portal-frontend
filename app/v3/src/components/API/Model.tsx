@@ -1,5 +1,5 @@
-import { backendURL } from "@app/components/API";
-import { MIP } from "@app/types";
+import { backendURL } from "../API";
+import { MIP } from "../../types";
 import request from "request-promise-native";
 import { Container } from "unstated";
 

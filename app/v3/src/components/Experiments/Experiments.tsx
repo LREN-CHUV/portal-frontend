@@ -1,5 +1,5 @@
-import { APIExperiment } from "@app/components/API";
-import { MIP } from "@app/types";
+import { APIExperiment } from "../API";
+import { MIP } from "../../types";
 import * as React from "react";
 import { Label, Panel } from "react-bootstrap";
 

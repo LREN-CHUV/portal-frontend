@@ -1,6 +1,6 @@
-import Dropdown from "@app/components/UI/Dropdown";
-import DropdownModel from "@app/components/UI/DropdownModel";
-import { MIP } from "@app/types";
+import Dropdown from "../../UI/Dropdown";
+import DropdownModel from "../../UI/DropdownModel";
+import { MIP } from "../../../types";
 import * as React from "react";
 import { Button, FormControl, Glyphicon, Panel } from "react-bootstrap";
 interface IProps {

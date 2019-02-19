@@ -1,8 +1,8 @@
-import { APICore, APIMining, APIModel } from "@app/components/API";
-import { IAlert } from "@app/components/UI/Alert";
-import Model from "@app/components/UI/Model";
-import Validation from "@app/components/UI/Validation";
-import { MIP } from "@app/types";
+import { APICore, APIMining, APIModel } from "../../API";
+import { IAlert } from "../../UI/Alert";
+import Model from "../../UI/Model";
+import Validation from "../../UI/Validation";
+import { MIP } from "../../../types";
 import queryString from "query-string";
 import * as React from "react";
 import { Panel } from "react-bootstrap";

@@ -1,8 +1,8 @@
-import { APIMining } from "@app/components/API";
-import Plotly from "@app/components/Experiment/Result/formats/Plotly";
-import { Alert } from "@app/components/UI/Alert";
-import Loader from "@app/components/UI/Loader";
-import { MIP } from "@app/types";
+import { APIMining } from "../../API";
+import Plotly from "../../Experiment/Result/formats/Plotly";
+import { Alert } from "../../UI/Alert";
+import Loader from "../../UI/Loader";
+import { MIP } from "../../../types";
 import * as React from "react";
 
 interface IProps {

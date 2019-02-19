@@ -3,10 +3,10 @@ import {
   APIExperiment,
   APIMining,
   APIModel
-} from "@app/components/API"; // as interfaces
-import { webURL } from "@app/components/API";
-import config from "@app/components/API/RequestHeaders";
-import App from "@app/components/App/App";
+} from "../API"; // as interfaces
+import { webURL } from "../API";
+import config from "../API/RequestHeaders";
+import App from "../App/App";
 import * as React from "react";
 import { BrowserRouter as Router } from "react-router-dom";
 import request from "request-promise-native";
@@ -26,7 +26,7 @@ class AppContainer extends React.Component<any, IState> {
   private apiCore = new APICore(config);
   private apiMining = new APIMining(config);
 
-  private intervalId: NodeJS.Timer;
+  private intervalId:  any; // FIXME: NodeJS.Timer | undefined;
 
   public async componentDidMount() {
     this.intervalId = setInterval(() => this.apiExperiment.all(), 10 * 1000);

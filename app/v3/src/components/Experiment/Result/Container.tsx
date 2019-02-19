@@ -1,7 +1,7 @@
-import { APICore, APIExperiment, APIModel } from "@app/components/API";
-import Methods from "@app/components/Experiment/Result/Methods";
-import Model from "@app/components/UI/Model";
-import { MIP } from "@app/types";
+import { APICore, APIExperiment, APIModel } from "../../API";
+import Methods from "../../Experiment/Result/Methods";
+import Model from "../../UI/Model";
+import { MIP } from "../../../types";
 import * as React from "react";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { ExperimentResult, ExperimentResultHeader } from "./";
@@ -12,7 +12,7 @@ interface IProps extends RouteComponentProps<any> {
 }
 
 class Experiment extends React.Component<IProps> {
-  private intervalId: NodeJS.Timer;
+  private intervalId: any;
 
   public async componentDidMount() {
     const params = this.urlParams(this.props);

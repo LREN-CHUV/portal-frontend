@@ -1,5 +1,5 @@
-import { MIME_TYPES, SCORES } from "@app/components/constants";
-import { MIP } from "@app/types";
+import { MIME_TYPES, SCORES } from "../constants";
+import { MIP } from "../../types";
 
 class APIAdapter {
   public static parse = (experiment: any): MIP.API.IExperimentResponse => {

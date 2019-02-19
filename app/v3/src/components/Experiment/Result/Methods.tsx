@@ -1,4 +1,4 @@
-import { MIP } from "@app/types";
+import { MIP } from "../../../types";
 import * as React from "react";
 import { Panel } from "react-bootstrap";
 

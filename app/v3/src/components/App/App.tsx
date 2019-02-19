@@ -5,17 +5,17 @@ import {
   APIExperiment,
   APIMining,
   APIModel
-} from "@app/components/API";
-import ExperimentCreate from "@app/components/Experiment/Create/Container";
-import ExperimentResult from "@app/components/Experiment/Result/Container";
-import ExperimentReview from "@app/components/Experiment/Review/Container";
-import Experiments from "@app/components/Experiments/Experiments";
-import Explore from "@app/components/Explore/NativeBubble";
-import Navigation from "@app/components/UI/Navigation";
+} from "../API";
+import ExperimentCreate from "../Experiment/Create/Container";
+import ExperimentResult from "../Experiment/Result/Container";
+import ExperimentReview from "../Experiment/Review/Container";
+import Experiments from "../Experiments/Experiments";
+import Explore from "../Explore/NativeBubble";
+import Navigation from "../UI/Navigation";
 import * as React from "react";
 import { Route } from "react-router-dom";
 
-import "node_modules/bootstrap/dist/css/bootstrap.css";
+import "bootstrap/dist/css/bootstrap.css";
 import "./App.css";
 
 interface IProps {

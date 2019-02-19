@@ -1,5 +1,5 @@
-import DropdownModel from "@app/components/UI/DropdownModel";
-import { MIP } from "@app/types";
+import DropdownModel from "../../UI/DropdownModel";
+import { MIP } from "../../../types";
 import * as React from "react";
 import { Button, Glyphicon, Panel } from "react-bootstrap";
 

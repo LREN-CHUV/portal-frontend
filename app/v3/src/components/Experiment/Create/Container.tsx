@@ -1,11 +1,11 @@
-import { APICore, APIExperiment, APIModel } from "@app/components/API";
-import Form from "@app/components/Experiment/Create/Form";
-import ExperimentCreateHeader from "@app/components/Experiment/Create/Header";
-import { Alert, IAlert } from "@app/components/UI/Alert";
-import AvailableMethods from "@app/components/UI/AvailableMethods";
-import Model from "@app/components/UI/Model";
-import Validation from "@app/components/UI/Validation";
-import { MIP } from "@app/types";
+import { APICore, APIExperiment, APIModel } from "../../API";
+import Form from "../../Experiment/Create/Form";
+import ExperimentCreateHeader from "../../Experiment/Create/Header";
+import { Alert, IAlert } from "../../UI/Alert";
+import AvailableMethods from "../../UI/AvailableMethods";
+import Model from "../../UI/Model";
+import Validation from "../../UI/Validation";
+import { MIP } from "../../../types";
 import * as React from "react";
 import { Panel, Tab, Tabs } from "react-bootstrap";
 import { RouteComponentProps, withRouter } from "react-router-dom";
@@ -27,7 +27,7 @@ interface IState {
 }
 
 class Container extends React.Component<IProps, IState> {
-  public state: IState;
+  public state!: IState; // TODO: double check init https://mariusschulz.com/blog/typescript-2-7-strict-property-initialization
 
   public async componentDidMount() {
     const {

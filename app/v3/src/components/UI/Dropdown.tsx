@@ -1,4 +1,4 @@
-import { MIP } from "@app/types";
+import { MIP } from "../../types";
 import * as moment from "moment";
 import * as React from "react";
 import { DropdownButton, MenuItem } from "react-bootstrap";
@@ -68,7 +68,7 @@ export default ({
               {" "}
               {experiment.name}
               {" "}
-              <span className={'time'}>({moment(experiment.created, "YYYYMMDD").fromNow()})</span>
+              {/* <span className={'time'}>({moment(experiment.created, "YYYYMMDD").fromNow()})</span> */}
             </MenuItem>
           );
         })) || (
