@@ -27,7 +27,7 @@ describe("Test Model API", () => {
       }
     });
 
-    return true
+    return datasets
   });
 
   it("create model", async () => {

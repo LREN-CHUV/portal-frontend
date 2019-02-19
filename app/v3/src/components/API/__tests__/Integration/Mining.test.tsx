@@ -21,16 +21,29 @@ describe("Test Mining API", () => {
     const query = model.query;
     const payload = {
       covariables: query.coVariables ? query.coVariables : [],
-      datasets: query.trainingDatasets,
+      datasets: [query.trainingDatasets.pop()], // load one dataset only
       filters: query.filters,
       grouping: query.groupings ? query.groupings : [],
       variables: query.variables ? query.variables : []
     };
     await apiMining.allByDataset({ payload });
-    const result = apiMining.state.minings;
-    console.log(result);
-    const error = apiMining.state.error;
+    let { minings, error } = apiMining.state.minings;
+
+    const timer = new Promise(async () => {
+      const timerId = setInterval(async () => {
+        const { minings, error } = apiMining.state;
+        console.log({ minings, error })
+        const loading = !(error || minings);
+        if (!loading) {
+          clearInterval(timerId);
+          Promise.resolve();
+        }
+      }, 1000);
+    });
+
+    await timer;
+
     expect(error).toBeFalsy();
-    expect(result).toBeTruthy();
+    expect(minings).toBeTruthy();
   });
 });
