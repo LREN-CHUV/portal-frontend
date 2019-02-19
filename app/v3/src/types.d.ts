@@ -126,6 +126,7 @@ export declare namespace MIP.API {
     trainingDatasets?: MIP.API.IVariableEntity[];
     testingDatasets?: MIP.API.IVariableEntity[];
     validationDatasets?: MIP.API.IVariableEntity[];
+    [key: string]: any;
   }
 
   export interface IVariable {
