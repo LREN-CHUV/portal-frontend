@@ -1,10 +1,10 @@
-import config from "@app/components/API/RequestHeaders";
-import Container from "@app/components/Experiment/Result/Container";
+import config from "../../../API/RequestHeaders";
+import Container from "../../../Experiment/Result/Container";
 import * as React from "react";
 import { BrowserRouter as Router } from "react-router-dom";
 import renderer from "react-test-renderer";
 import * as ReactDOM from "react-dom";
-import { APICore, APIExperiment, APIModel } from "@app/components/API";
+import { APICore, APIExperiment, APIModel } from "../../../API";
 import { shallow } from "enzyme";
 
 jest.mock("request-promise-native");

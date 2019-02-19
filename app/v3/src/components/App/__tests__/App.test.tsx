@@ -3,10 +3,10 @@ import {
   APIExperiment,
   APIMining,
   APIModel
-} from "@app/components/API";
-import config from "@app/components/API/RequestHeaders";
-import App from "@app/components/App/App";
-import AppContainer from "@app/components/App/Container";
+} from "../../API";
+import config from "../../API/RequestHeaders";
+import App from "../../App/App";
+import AppContainer from "../../App/Container";
 import * as React from "react";
 import { BrowserRouter as Router } from "react-router-dom";
 import { shallow } from "enzyme";

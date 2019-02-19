@@ -1,6 +1,6 @@
-import { APICore, APIExperiment, APIModel } from "@app/components/API";
-import config from "@app/components/API/RequestHeaders";
-import ExperimentCreate from "@app/components/Experiment/Create/Container";
+import { APICore, APIExperiment, APIModel } from "../../../API";
+import config from "../../../API/RequestHeaders";
+import ExperimentCreate from "../../../Experiment/Create/Container";
 import * as React from "react";
 import { BrowserRouter as Router } from "react-router-dom";
 import { shallow } from "enzyme";
