@@ -89,10 +89,8 @@ exports[`Test App components App snapshot renders correctly 1`] = `
           >
             <a
               aria-current={null}
-              className={undefined}
               href="/v3/review"
               onClick={[Function]}
-              style={undefined}
               title="Interactive Analysis"
             >
               <span
@@ -340,10 +338,8 @@ exports[`Test App components AppContainer snapshot renders correctly 1`] = `
           >
             <a
               aria-current={null}
-              className={undefined}
               href="/v3/review"
               onClick={[Function]}
-              style={undefined}
               title="Interactive Analysis"
             >
               <span

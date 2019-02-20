@@ -82,7 +82,6 @@ exports[`Test Result components Result snapshot renders correctly 1`] = `
                 <li
                   className=""
                   role="presentation"
-                  style={undefined}
                 >
                   <a
                     href="#"
@@ -99,7 +98,6 @@ exports[`Test Result components Result snapshot renders correctly 1`] = `
                 <li
                   className=""
                   role="presentation"
-                  style={undefined}
                 >
                   <a
                     href="#"

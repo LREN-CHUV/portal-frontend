@@ -1,14 +1,14 @@
-import APIMining from "../../Mining";
-import APIModel from "../../Model";
-import config from "../../RequestHeaders";
+import APIMining from '../../Mining';
+import APIModel from '../../Model';
+import config from '../../RequestHeaders';
 
-describe("Test Mining API", () => {
+describe('Test Mining API', () => {
   const apiMining = new APIMining(config);
   let model;
 
   beforeAll(async () => {
     const apiModel = new APIModel(config);
-    await apiModel.one("model");
+    await apiModel.one('model');
     model = apiModel.state.model;
     const error = apiModel.state.error;
     expect(error).toBeFalsy();
@@ -17,7 +17,7 @@ describe("Test Mining API", () => {
     return model;
   });
 
-  it("create mining", async () => {
+  it('create mining', async () => {
     const query = model.query;
     const payload = {
       covariables: query.coVariables ? query.coVariables : [],
@@ -27,16 +27,15 @@ describe("Test Mining API", () => {
       variables: query.variables ? query.variables : []
     };
     await apiMining.allByDataset({ payload });
-    let { minings, error } = apiMining.state.minings;
+    let { minings, error } = apiMining.state;
 
-    const timer = new Promise(async () => {
+    const timer = new Promise(resolve => {
       const timerId = setInterval(async () => {
         const { minings, error } = apiMining.state;
-        console.log({ minings, error });
         const loading = !(error || minings);
         if (!loading) {
           clearInterval(timerId);
-          Promise.resolve();
+          resolve();
         }
       }, 1000);
     });
