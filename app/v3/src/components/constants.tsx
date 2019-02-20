@@ -18,6 +18,22 @@ interface ILabel {
   label: string;
 }
 
+interface ISCORES {
+  accuracy: ILabel;
+    confusionMatrix: ILabel;
+    explainedVariance: ILabel;
+    f1score: ILabel;
+    falsePositiveRate: ILabel;
+    mae: ILabel;
+    mse: ILabel;
+    precision: ILabel;
+    recall: ILabel;
+    rmse: ILabel;
+    rsquared: ILabel;
+    type: ILabel;
+    [key: string]: any
+}
+
 // regression && classification scores labels
 const accuracy: ILabel = { code: 'Accuracy', label: 'Accuracy' };
 const f1score: ILabel = {
@@ -51,7 +67,7 @@ const rsquared: ILabel = {
 const rmse: ILabel = { code: 'RMSE', label: 'Root mean square error' };
 const type: ILabel = { code: 'type', label: 'Explained variance' };
 
-export const SCORES = {
+export const SCORES: ISCORES = {
   accuracy,
   confusionMatrix,
   explainedVariance,

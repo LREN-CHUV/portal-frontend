@@ -166,6 +166,7 @@ export declare namespace MIP.API {
     weighted?: boolean;
     confusionMatrix?: IConfusionMatrix;
     node: string;
+    [key: string]: any;
   }
 
   export interface IKfoldValidationScore {
@@ -175,6 +176,7 @@ export declare namespace MIP.API {
     rsquared: number;
     rmse: number;
     type: string;
+    [key: string]: any;
   }
 
   export interface IPolynomialClassificationScore extends IValidationScore {}

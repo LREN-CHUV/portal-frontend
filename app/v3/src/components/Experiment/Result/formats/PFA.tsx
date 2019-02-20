@@ -1,6 +1,6 @@
-import { SCORES } from "@app/components/constants";
-import { round } from "@app/components/utils";
-import { MIP } from "@app/types";
+import { SCORES } from "../../../constants";
+import { round } from "../../../utils";
+import { MIP } from "../../../../types";
 import * as React from "react";
 import { Tab, Tabs } from "react-bootstrap";
 import { Highchart } from "./";
@@ -25,7 +25,8 @@ const buildChart = (
     | MIP.API.IKfoldValidationScore
     | MIP.API.IValidationScore
     | MIP.API.IPolynomialClassificationScore
-) => ({
+) => {
+  return {
   chart: {
     type: "column"
   },
@@ -42,7 +43,7 @@ const buildChart = (
     categories: Object.keys(validation).map(v => SCORES[v] && SCORES[v].label)
   },
   yAxis: { title: { text: "Value" } }
-});
+}};
 
 const buildTableValue = (
   validation:
