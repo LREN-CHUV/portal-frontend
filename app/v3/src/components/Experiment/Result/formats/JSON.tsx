@@ -1,5 +1,5 @@
-import { LABELS } from "@app/components/constants";
-import { round } from "@app/components/utils";
+import { LABELS } from "../../../constants";
+import { round } from "../../../utils";
 import * as React from "react";
 
 import "./JSON.css";
@@ -7,13 +7,10 @@ import "./JSON.css";
 export default ({ row }: { row: any }) => {
   const variables = Object.keys(row);
   const tables = variables.map(v => row[v]);
-  const tableKeys = tables.map((k: any) => Object.keys(k));
+  const tableKeys = tables.map((k: any) => Object.keys(k)).pop() || [];
   const mapCode = (code: string) =>
     LABELS.find(l => l.code === code) || { code, label: code, order: -1 };
-  const headersKeys: string[] = Array.from(
-    new Set([].concat.apply([], tableKeys))
-  )
-    .map(mapCode)
+  const headersKeys: string[] = tableKeys.map(mapCode)
     .sort((a, b) => a.order - b.order)
     .map(s => s.code);
   const headers: string[] = headersKeys.map(mapCode).map(s => s.label);

@@ -29,11 +29,10 @@
   "scripts": {
     "watch": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom --runInBand",
+    "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
   "devDependencies": {
-    "react-scripts": "^2.1.5",
     "@types/d3": "^5.7.0",
     "@types/dotenv": "^6.1.0",
     "@types/enzyme": "^3.1.18",
@@ -54,17 +53,14 @@
     "@types/request-promise-native": "^1.0.15",
     "enzyme": "^3.8.0",
     "enzyme-adapter-react-16": "^1.9.1",
+    "jest-canvas-mock": "^2.0.0-alpha.3",
     "prettier-tslint": "^0.4.2",
+    "react-scripts": "^2.1.5",
     "react-test-renderer": "^16.8.1",
     "typescript": "^3.3.3"
   },
   "homepage": "/v3",
-  "jest": {
-    "moduleNameMapper": {
-      "^@app/(.*)$": "<rootDir>/src/$1",
-      "\\.(css|less)$": "<rootDir>/__mocks__/styleMock.ts"
-    }
-  },
+  "jest": {},
   "browserslist": [
     ">0.2%",
     "not dead",

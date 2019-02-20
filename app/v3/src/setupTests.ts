@@ -1,5 +1,6 @@
 import { configure } from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
+import 'jest-canvas-mock';
 
 function noOp() {}
 
@@ -8,6 +9,5 @@ if (typeof window.URL.createObjectURL === "undefined") {
 }
 
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 2 * 60 * 1000;
-// jest.setTimeout(2 * 60 * 1000);
 
 configure({ adapter: new Adapter() });
