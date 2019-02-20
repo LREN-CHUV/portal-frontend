@@ -10,7 +10,8 @@ export default ({ row }: { row: any }) => {
   const tableKeys = tables.map((k: any) => Object.keys(k)).pop() || [];
   const mapCode = (code: string) =>
     LABELS.find(l => l.code === code) || { code, label: code, order: -1 };
-  const headersKeys: string[] = tableKeys.map(mapCode)
+  const headersKeys: string[] = tableKeys
+    .map(mapCode)
     .sort((a, b) => a.order - b.order)
     .map(s => s.code);
   const headers: string[] = headersKeys.map(mapCode).map(s => s.label);

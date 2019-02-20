@@ -18,7 +18,10 @@ const Boxplot = ({ miningState }: IProps) => {
   const loading = minings.map(m => !m.error && !m.data).every(m => m);
   const error = minings.map(m => m.error);
   const filtered = minings.reduce(
-    (acc: MIP.Store.IMiningResponseShape[], m: MIP.Store.IMiningResponseShape) => [
+    (
+      acc: MIP.Store.IMiningResponseShape[],
+      m: MIP.Store.IMiningResponseShape
+    ) => [
       ...acc,
       ...((m.data &&
         m.data.data &&

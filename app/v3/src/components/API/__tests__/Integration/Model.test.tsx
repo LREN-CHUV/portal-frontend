@@ -6,7 +6,7 @@ describe("Test Model API", () => {
   const apiModel = new APIModel(config);
   let datasets, model;
 
-  beforeAll( async () => {
+  beforeAll(async () => {
     const apiCore = new APICore(config);
     await apiCore.datasets();
     datasets = apiCore.state.datasets;
@@ -14,7 +14,7 @@ describe("Test Model API", () => {
     expect(error).toBeFalsy();
     expect(datasets).toBeTruthy();
 
-    model = ({
+    model = {
       query: {
         coVariables: [{ code: "alzheimerbroadcategory" }],
         groupings: [],
@@ -25,9 +25,9 @@ describe("Test Model API", () => {
         validationDatasets: [],
         variables: [{ code: "lefthippocampus" }]
       }
-    });
+    };
 
-    return datasets
+    return datasets;
   });
 
   it("create model", async () => {

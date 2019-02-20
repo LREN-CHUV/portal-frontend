@@ -27,23 +27,24 @@ const buildChart = (
     | MIP.API.IPolynomialClassificationScore
 ) => {
   return {
-  chart: {
-    type: "column"
-  },
-  series: [
-    {
-      data: Object.keys(validation).map(key => validation[key]),
-      name: "Scores"
-    }
-  ],
-  title: {
-    text: ""
-  },
-  xAxis: {
-    categories: Object.keys(validation).map(v => SCORES[v] && SCORES[v].label)
-  },
-  yAxis: { title: { text: "Value" } }
-}};
+    chart: {
+      type: "column"
+    },
+    series: [
+      {
+        data: Object.keys(validation).map(key => validation[key]),
+        name: "Scores"
+      }
+    ],
+    title: {
+      text: ""
+    },
+    xAxis: {
+      categories: Object.keys(validation).map(v => SCORES[v] && SCORES[v].label)
+    },
+    yAxis: { title: { text: "Value" } }
+  };
+};
 
 const buildTableValue = (
   validation:

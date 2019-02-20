@@ -3,7 +3,7 @@ import { MIP } from "../../../types";
 import moment from "moment"; // FIXME: change lib, too heavy
 import * as React from "react";
 import { Button, Panel } from "react-bootstrap";
-import { Link } from "react-router-dom"
+import { Link } from "react-router-dom";
 
 interface IProps {
   experiment?: MIP.API.IExperimentResponse;
@@ -29,7 +29,9 @@ export default ({
       <Panel.Body>
         <h3>
           Results of Experiment <strong>{name}</strong> on{" "}
-          <Link to={`/v3/review/${modelDefinitionId}`}>{modelDefinitionId}</Link>
+          <Link to={`/v3/review/${modelDefinitionId}`}>
+            {modelDefinitionId}
+          </Link>
         </h3>
         <div className="actions status">
           <h5 className="item">
@@ -40,11 +42,8 @@ export default ({
           </h5>
           <div className="item text">&nbsp;</div>
           <div className="item">
-            <Button
-              bsStyle={'info'}
-              onClick={handleShareExperiment}
-            >
-              {shared ? 'UNSHARE EXPERIMENT' : 'SHARE EXPERIMENT'}
+            <Button bsStyle={"info"} onClick={handleShareExperiment}>
+              {shared ? "UNSHARE EXPERIMENT" : "SHARE EXPERIMENT"}
             </Button>
           </div>
           <div className="item">

@@ -65,9 +65,7 @@ const Validation = ({
 
     {isPredictiveMethod && handleChangeKFold && (
       <Form horizontal={true}>
-        <FormGroup
-          key={"kfold"}
-        >
+        <FormGroup key={"kfold"}>
           <Col sm={2}>K-Fold:</Col>
           <Col sm={4}>
             <FormControl

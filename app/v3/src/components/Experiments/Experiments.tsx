@@ -9,7 +9,9 @@ interface IProps {
   apiExperiment: APIExperiment;
 }
 
-const renderExperiments = (experiments: MIP.API.IExperimentResponse[] | undefined) => {
+const renderExperiments = (
+  experiments: MIP.API.IExperimentResponse[] | undefined
+) => {
   if (experiments === undefined) {
     return <React.Fragment />;
   }

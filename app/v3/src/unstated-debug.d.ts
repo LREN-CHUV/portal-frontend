@@ -1,1 +1,1 @@
-declare module 'unstated-debug'
+declare module "unstated-debug";

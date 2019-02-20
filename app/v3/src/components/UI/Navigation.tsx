@@ -85,7 +85,11 @@ class Navigation extends React.Component<IProps> {
             </li>
 
             <li className="toolbar-icon-bg hidden-xs">
-              <NavLink title="Interactive Analysis" to="/v3/review" activeClassName="active" >
+              <NavLink
+                title="Interactive Analysis"
+                to="/v3/review"
+                activeClassName="active"
+              >
                 <span className="icon-bg">
                   <i>IA</i>
                 </span>

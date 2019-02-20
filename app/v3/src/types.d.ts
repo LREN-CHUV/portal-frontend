@@ -84,7 +84,7 @@ export declare namespace MIP.API {
     dataset?: any; // FIXME: not used in api
     config?: any; // FIXME: not used in api
     createdBy?: IUser;
-    isMock?: boolean
+    isMock?: boolean;
   }
 
   export interface IMethod {

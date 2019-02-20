@@ -1,9 +1,4 @@
-import {
-  APICore,
-  APIExperiment,
-  APIMining,
-  APIModel
-} from "../../API";
+import { APICore, APIExperiment, APIMining, APIModel } from "../../API";
 import config from "../../API/RequestHeaders";
 import App from "../../App/App";
 import AppContainer from "../../App/Container";
@@ -43,9 +38,7 @@ describe("Test App components", () => {
   });
 
   it("App dom renders correctly", () => {
-    const wrapper = shallow(
-        <App {...props} />
-    );
+    const wrapper = shallow(<App {...props} />);
     expect(wrapper).toBeDefined();
   });
 

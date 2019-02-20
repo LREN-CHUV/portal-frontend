@@ -63,7 +63,11 @@ class Experiment extends React.Component<IProps> {
         </div>
         <div className="content">
           <div className="sidebar">
-            <Model model={apiModel.state.model} variables={apiCore.state.variables} showDatasets={true}/>
+            <Model
+              model={apiModel.state.model}
+              variables={apiCore.state.variables}
+              showDatasets={true}
+            />
           </div>
           <div className="results">
             <ExperimentResult experimentState={apiExperiment.state} />
@@ -91,7 +95,9 @@ class Experiment extends React.Component<IProps> {
     return match.params;
   };
 
-  private handleSelectExperiment = async (experiment: MIP.API.IExperimentResponse) => {
+  private handleSelectExperiment = async (
+    experiment: MIP.API.IExperimentResponse
+  ) => {
     const { modelDefinitionId, uuid } = experiment;
     const { history, apiExperiment } = this.props;
     history.push(`/v3/experiment/${modelDefinitionId}/${uuid}`);

@@ -25,7 +25,7 @@ interface IComputeMiningResult {
 interface ITableRow {
   variable?: string;
   category?: MIP.API.IVariable;
-  [key: string]: string | MIP.API.IVariable | undefined; 
+  [key: string]: string | MIP.API.IVariable | undefined;
 }
 
 const Table = ({ minings, selectedDatasets, query, lookup }: IProps) => {
@@ -121,7 +121,8 @@ const computeMinings = ({
 
   const rows: ITableRow[] = [];
   variables.forEach(variable => {
-    const isPolynominal = variable.type === "polynominal" || variable.type === "binominal";
+    const isPolynominal =
+      variable.type === "polynominal" || variable.type === "binominal";
     const row: ITableRow = {};
     let polynominalRows: ITableRow[] = [];
 

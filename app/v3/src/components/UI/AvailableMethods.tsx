@@ -91,8 +91,8 @@ const AvailableMethods = ({
     availableAlgorithms &&
     availableAlgorithms.sort((a: MIP.API.IMethod, b: MIP.API.IMethod) => {
       try {
-        const typea = a && a.type && a.type.length > 0 && a.type[0] || "";
-        const typeb = b && b.type && b.type.length > 0 && b.type[0] || "";
+        const typea = (a && a.type && a.type.length > 0 && a.type[0]) || "";
+        const typeb = (b && b.type && b.type.length > 0 && b.type[0]) || "";
 
         return typea < typeb ? 1 : typea > typeb ? -1 : 0;
       } catch (e) {

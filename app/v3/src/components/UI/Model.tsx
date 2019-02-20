@@ -119,9 +119,9 @@ class Model extends React.Component<IProps> {
           }
 
           humanRules.push({
-            data: `${this.lookup(rule.field)} ${this.ruleOperator(rule.operator)} ${
-              rule.value
-            }`,
+            data: `${this.lookup(rule.field)} ${this.ruleOperator(
+              rule.operator
+            )} ${rule.value}`,
             level
           });
           if (index < data.rules.length - 1) {

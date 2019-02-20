@@ -41,12 +41,17 @@ export default ({
     {(items &&
       handleSelect &&
       items
-        .sort((a1: MIP.API.IExperimentResponse, b1: MIP.API.IExperimentResponse) => {
-          const a = a1.created;
-          const b = b1.created;
+        .sort(
+          (
+            a1: MIP.API.IExperimentResponse,
+            b1: MIP.API.IExperimentResponse
+          ) => {
+            const a = a1.created;
+            const b = b1.created;
 
-          return a > b ? -1 : a < b ? 1 : 0;
-        })
+            return a > b ? -1 : a < b ? 1 : 0;
+          }
+        )
         .map((experiment, i: number) => {
           let experimentState;
 
@@ -64,10 +69,7 @@ export default ({
               // tslint:disable-next-line jsx-no-lambda
               onSelect={() => handleSelect(experiment)}
             >
-              <span className={experimentState} />
-              {" "}
-              {experiment.name}
-              {" "}
+              <span className={experimentState} /> {experiment.name}{" "}
               {/* <span className={'time'}>({moment(experiment.created, "YYYYMMDD").fromNow()})</span> */}
             </MenuItem>
           );

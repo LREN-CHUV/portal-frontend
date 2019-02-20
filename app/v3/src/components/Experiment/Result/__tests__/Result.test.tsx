@@ -4,8 +4,8 @@ import renderer from "react-test-renderer";
 import { shallow } from "enzyme";
 
 const stringify = (json: any): void => {
-  console.log(JSON.stringify(json, null, 2))
-}
+  console.log(JSON.stringify(json, null, 2));
+};
 
 describe("Test Experiment results", () => {
   let props;
@@ -55,5 +55,4 @@ describe("Test Experiment results", () => {
     const error = wrapper.find(".error");
     expect(error).toHaveLength(1);
   });
-
 });

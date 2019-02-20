@@ -278,9 +278,8 @@ const models = [
   }
 ];
 
-
 export default class MockModel {
-  state = {}
+  state = {};
   // constructor() {
   //   console.log("Mock Model constructor");
   // }

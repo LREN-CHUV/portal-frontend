@@ -16,7 +16,13 @@ interface IProps {
   children: any;
 }
 
-const Content = ({ apiMining, model, selectedDatasets, lookup, children }: IProps) =>
+const Content = ({
+  apiMining,
+  model,
+  selectedDatasets,
+  lookup,
+  children
+}: IProps) =>
   (apiMining && (
     <Panel>
       <Panel.Body>

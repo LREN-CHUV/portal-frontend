@@ -18,7 +18,7 @@ class Core extends Container<MIP.Store.ICoreState> {
     const originalVar =
       variables && variables.find(variable => variable.code === code);
 
-    return originalVar || { code, label: code};
+    return originalVar || { code, label: code };
   };
 
   public variables = async () => {

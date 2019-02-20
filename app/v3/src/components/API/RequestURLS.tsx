@@ -1,7 +1,10 @@
 import * as dotenv from "dotenv";
 
 dotenv.config();
-const devBackendURL = process.env.NODE_ENV !== "production" ? process.env.REACT_APP_BACKEND_URL : undefined;
+const devBackendURL =
+  process.env.NODE_ENV !== "production"
+    ? process.env.REACT_APP_BACKEND_URL
+    : undefined;
 const URL = `${location.protocol}//${location.host}`;
 
 export const webURL = URL;

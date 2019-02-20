@@ -32,7 +32,7 @@ describe("Test Mining API", () => {
     const timer = new Promise(async () => {
       const timerId = setInterval(async () => {
         const { minings, error } = apiMining.state;
-        console.log({ minings, error })
+        console.log({ minings, error });
         const loading = !(error || minings);
         if (!loading) {
           clearInterval(timerId);

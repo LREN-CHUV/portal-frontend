@@ -1,11 +1,6 @@
 // tslint:disable jsx-no-lambda
 
-import {
-  APICore,
-  APIExperiment,
-  APIMining,
-  APIModel
-} from "../API";
+import { APICore, APIExperiment, APIMining, APIModel } from "../API";
 import ExperimentCreate from "../Experiment/Create/Container";
 import ExperimentResult from "../Experiment/Result/Container";
 import ExperimentReview from "../Experiment/Review/Container";
@@ -60,7 +55,11 @@ const App = ({
       <Route
         path="/v3/experiment/:slug/:uuid"
         render={() => (
-          <ExperimentResult apiExperiment={apiExperiment} apiModel={apiModel} apiCore={apiCore}/>
+          <ExperimentResult
+            apiExperiment={apiExperiment}
+            apiModel={apiModel}
+            apiCore={apiCore}
+          />
         )}
       />
       <Route

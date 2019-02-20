@@ -184,11 +184,7 @@ class Container extends React.Component<IProps, IState> {
       (variables && [].concat.apply([], allUniqVariables.map(buildFilter))) ||
       [];
 
-    const filters =
-      (query &&
-        query.filters &&
-        JSON.parse(query.filters)) ||
-      "";
+    const filters = (query && query.filters && JSON.parse(query.filters)) || "";
 
     return (
       <div className="Experiment Review">
@@ -225,9 +221,7 @@ class Container extends React.Component<IProps, IState> {
             <Content
               apiMining={apiMining}
               model={apiModel.state.model}
-              selectedDatasets={
-                query && query.trainingDatasets
-              }
+              selectedDatasets={query && query.trainingDatasets}
               lookup={apiCore.lookup}
             >
               <Panel className="filters" defaultExpanded={false}>

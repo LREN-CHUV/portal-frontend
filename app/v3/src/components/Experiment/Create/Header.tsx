@@ -32,7 +32,7 @@ export default class Header extends React.Component<IProps, IState> {
       method,
       handleGoBackToReview,
       handleSelectModel,
-      handleSelectExperiment,
+      handleSelectExperiment
     } = this.props;
     const { experimentName } = this.state;
 

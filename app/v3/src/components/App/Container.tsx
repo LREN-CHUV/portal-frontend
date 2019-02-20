@@ -1,9 +1,4 @@
-import {
-  APICore,
-  APIExperiment,
-  APIMining,
-  APIModel
-} from "../API"; // as interfaces
+import { APICore, APIExperiment, APIMining, APIModel } from "../API"; // as interfaces
 import { webURL } from "../API";
 import config from "../API/RequestHeaders";
 import App from "../App/App";
@@ -26,7 +21,7 @@ class AppContainer extends React.Component<any, IState> {
   private apiCore = new APICore(config);
   private apiMining = new APIMining(config);
 
-  private intervalId:  any; // FIXME: NodeJS.Timer | undefined;
+  private intervalId: any; // FIXME: NodeJS.Timer | undefined;
 
   public async componentDidMount() {
     this.intervalId = setInterval(() => this.apiExperiment.all(), 10 * 1000);
