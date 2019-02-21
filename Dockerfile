@@ -17,7 +17,7 @@ RUN gulp build
 
 WORKDIR /frontend/app/v3/
 RUN yarn install
-RUN yarn --max-old-space-size=4000 build
+RUN yarn build
 
 
 FROM nginx:1.13.0-alpine
