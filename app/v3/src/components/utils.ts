@@ -1,3 +1,3 @@
-export const round = (num: number, decimals: number = 3): number =>
-  Math.round(num * Math.pow(10, decimals) + Number.EPSILON) /
-  Math.pow(10, decimals);
+import numeral from 'numeral';
+
+export const round = (num: number, decimals: number = 3) =>  numeral(num).format(`0.${'0'.repeat(decimals)}`)
