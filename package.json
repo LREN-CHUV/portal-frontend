@@ -47,6 +47,7 @@
     "ng-table-to-csv": "0.3.3",
     "node-fetch": "^2.3.0",
     "plotly.js": "1.36.0",
+    "react-plotlyjs": "^0.4.4",
     "showdown": "0.3.4",
     "sql-parser": "0.5.0",
     "textangular": "1.5.16",
@@ -57,6 +58,7 @@
   },
   "repository": {},
   "devDependencies": {
+    "@types/plotly.js": "^1.43.1",
     "angular-mocks": "1.6.9",
     "babel-core": "6.26.0",
     "babel-preset-es2015": "6.24.1",
