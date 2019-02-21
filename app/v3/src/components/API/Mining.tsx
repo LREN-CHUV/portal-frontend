@@ -1,7 +1,7 @@
-import { backendURL } from "../API";
-import { MIP } from "../../types";
-import request from "request-promise-native";
-import { Container } from "unstated";
+import request from 'request-promise-native';
+import { Container } from 'unstated';
+import { MIP } from '../../types';
+import { backendURL } from '../API';
 
 class Mining extends Container<MIP.Store.IMiningState> {
   public state: MIP.Store.IMiningState;
@@ -27,7 +27,7 @@ class Mining extends Container<MIP.Store.IMiningState> {
     }));
   };
 
-  public one = async ({
+  public heatmap = async ({
     payload
   }: {
     payload: MIP.API.IMiningPayload;
@@ -41,6 +41,15 @@ class Mining extends Container<MIP.Store.IMiningState> {
         error: undefined
       }
     });
+    payload = {
+      ...payload,
+      algorithm: {
+        code: 'correlationHeatmap',
+        name: 'Correlation heatmap',
+        parameters: [],
+        validation: false
+      }
+    };
     const heatmap = await this.fetchOne({ payload });
 
     return await this.setState({ heatmap });
@@ -62,8 +71,8 @@ class Mining extends Container<MIP.Store.IMiningState> {
     const remainingPayloads: MIP.API.IMiningPayload[] = remainingDatasets.map(
       dataset => ({
         algorithm: {
-          code: "statisticsSummary",
-          name: "statisticsSummary",
+          code: 'statisticsSummary',
+          name: 'statisticsSummary',
           parameters: [],
           validation: false
         },
@@ -135,9 +144,9 @@ class Mining extends Container<MIP.Store.IMiningState> {
         body: JSON.stringify(payload),
         headers: {
           ...this.options.headers,
-          "Content-Type": "application/json;charset=UTF-8"
+          'Content-Type': 'application/json;charset=UTF-8'
         },
-        method: "POST",
+        method: 'POST',
         uri: `${this.baseUrl}/mining`
       });
 
