@@ -4,6 +4,18 @@ import { MIP } from '../../types';
 import { backendURL } from '../API';
 
 class Mining extends Container<MIP.Store.IMiningState> {
+
+  public static normalizeHeatmapData = (heatmap: any) => {
+    // FIXME: Immutable lib with deepCopy
+    const newHeatmap = JSON.parse(JSON.stringify(heatmap));
+    if (Array.isArray(heatmap.data)) {
+      newHeatmap.data = heatmap.data.map((d: any) => d.data);      
+    } else {
+      newHeatmap.data = [heatmap.data.data];
+    }
+
+    return newHeatmap;
+  };
   public state: MIP.Store.IMiningState;
 
   private cachedMinings: MIP.Store.IMiningResponseShape[] = [];
@@ -51,8 +63,7 @@ class Mining extends Container<MIP.Store.IMiningState> {
       }
     };
     const heatmap = await this.fetchOne({ payload });
-
-    return await this.setState({ heatmap });
+    return await this.setState({ heatmap: Mining.normalizeHeatmapData(heatmap) });
   };
 
   // fetch for each dataset, otherwise values are aggregated for all datasets
@@ -137,6 +148,7 @@ class Mining extends Container<MIP.Store.IMiningState> {
   }: {
     payload: MIP.API.IMiningPayload;
   }): Promise<MIP.Store.IMiningResponseShape> => {
+    // FIXME: Immutable lib
     const copyOfDataset = JSON.parse(JSON.stringify(payload.datasets));
 
     try {
