@@ -1,8 +1,9 @@
-import { LABELS } from "../../../constants";
-import { round } from "../../../utils";
-import * as React from "react";
+import * as React from 'react';
+import { LABELS } from '../../../constants';
+import { round } from '../../../utils';
 
-import "./JSON.css";
+import { isNumber } from 'util';
+import './JSON.css';
 
 export default ({ row }: { row: any }) => {
   const variables = Object.keys(row);
@@ -19,17 +20,20 @@ export default ({ row }: { row: any }) => {
   const computedBody = variables.map((v: any, j: number) => {
     const val = headersKeys.map(key => {
       const value = tables[j][key];
-      const cValue = !isNaN(value) ? round(value) : NaN;
-      let output: number | string = cValue;
-      if (key === "PR(>F)") {
-        output =
-          cValue < 0.001
-            ? `${cValue} (***)`
-            : cValue < 0.01
-            ? `${cValue} (**)`
-            : cValue < 0.05
-            ? `${cValue} (*)`
-            : `${cValue}`;
+      let output;
+      const starIt = (vvalue: number): string =>
+        vvalue < 0.001
+          ? `${vvalue} (***)`
+          : vvalue < 0.01
+          ? `${vvalue} (**)`
+          : vvalue < 0.05
+          ? `${vvalue} (*)`
+          : `${vvalue}`;
+
+      if ((key === 'PR(>F)' || key === 'p_values') && isNumber(value)) {
+        output = starIt(value);
+      } else {
+        output = !isNaN(value) ? round(value) : '';
       }
 
       return output;
@@ -39,7 +43,7 @@ export default ({ row }: { row: any }) => {
   });
 
   return (
-    <table className="greyGridTable">
+    <table className='greyGridTable'>
       <thead>
         <tr>
           <th>Variables</th>

@@ -5,12 +5,10 @@ import { mount } from 'enzyme';
 import APIAdapter from '../../../../API/APIAdapter';
 import { MIP } from '../../../../../types';
 
-
 const parseExperiment = (json: any): MIP.API.IExperimentResponse =>
   APIAdapter.parse(json);
 
 describe('Test linearRegression results', () => {
-
   it('Federated linearRegression algorithm with several datasets renders correctly', () => {
     const response = require('../../__mocks__/responses/fed-linearRegression-datasets.json');
     const experiment = parseExperiment(response);
