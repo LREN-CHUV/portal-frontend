@@ -1,0 +1,22 @@
+{
+  "jobId": "5d337bc5-1ec8-4fb9-babb-6e346600d245",
+  "node": "local",
+  "function": "python-correlation-heatmap",
+  "shape": "application/vnd.plotly.v1+json",
+  "timestamp": "Feb 19, 2019, 8:12:31 AM",
+  "data": {
+    "data": [
+      {
+        "type": "heatmap",
+        "x": ["lefthippocampus"],
+        "xaxis": "x1",
+        "y": ["lefthippocampus"],
+        "yaxis": "y1",
+        "z": [[1.0]],
+        "zmax": 1,
+        "zmin": -1
+      }
+    ],
+    "layout": { "title": "Correlation heatmap" }
+  }
+}

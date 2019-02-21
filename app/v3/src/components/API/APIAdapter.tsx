@@ -1,5 +1,5 @@
-import { MIP } from "../../types";
-import { MIME_TYPES, SCORES } from "../constants";
+import { MIP } from '../../types';
+import { MIME_TYPES, SCORES } from '../constants';
 
 class APIAdapter {
   public static parse = (experiment: any): MIP.API.IExperimentResponse => {
@@ -7,7 +7,7 @@ class APIAdapter {
     // apply specific parsing to some terms
     const algorithms = parse(experiment.algorithms);
     const created = (() => {
-      const d = Date.parse(experiment.created + " GMT");
+      const d = Date.parse(experiment.created + ' GMT');
       if (isNaN(d)) {
         return new Date(experiment.created);
       }
@@ -39,8 +39,8 @@ class APIAdapter {
     if (!modelDefinitionId) {
       experimentResponse = {
         ...experimentResponse,
-        error: "No model defined",
-        modelDefinitionId: "undefined"
+        error: 'No model defined',
+        modelDefinitionId: 'undefined'
       };
 
       return experimentResponse;
@@ -62,7 +62,7 @@ class APIAdapter {
       if (elapsed > 60 * 5) {
         experimentResponse = {
           ...experimentResponse,
-          error: "Timeout after 5 mn"
+          error: 'Timeout after 5 mn'
         };
       }
 
@@ -75,7 +75,7 @@ class APIAdapter {
     const nodes: MIP.API.INode[] = [];
 
     result.forEach((r: any, i: number) => {
-      const mime = r.type;
+      let mime = r.type;
       const algorithm =
         experimentResponse.algorithms.length - 1 === i
           ? experimentResponse.algorithms[i]
@@ -96,6 +96,12 @@ class APIAdapter {
           (Array.isArray(input.data) ? input.data : [input.data])) ||
         null;
       const results = normalizedResult(r);
+
+      // FIXME: on WOKEN see https://jira.chuv.ch/browse/HBPLD-256?filter=-6
+      if (method.algorithm === 'python-linear-regression') {
+        method.mime = MIME_TYPES.JSON;
+        mime = MIME_TYPES.JSON;
+      }
 
       switch (mime) {
         case MIME_TYPES.HIGHCHARTS:
@@ -126,8 +132,8 @@ class APIAdapter {
         case MIME_TYPES.HTML:
           const html = results.map((result1: any) =>
             result1.replace(
-              "\u0026lt;!DOCTYPE html\u0026gt;",
-              "<!DOCTYPE html>"
+              '\u0026lt;!DOCTYPE html\u0026gt;',
+              '<!DOCTYPE html>'
             )
           );
           method.data = html;
@@ -188,8 +194,8 @@ class APIAdapter {
         default:
           method = {
             ...method,
-            algorithm: "no data",
-            error: "no data",
+            algorithm: 'no data',
+            error: 'no data',
             mime
           };
       }
@@ -206,7 +212,7 @@ class APIAdapter {
       // } else {
       const node: MIP.API.INode = {
         methods: [method],
-        name: r.node || "Default"
+        name: r.node || 'Default'
       };
       // node.methods.push(method);
       //   nodes.push(node);
@@ -257,7 +263,7 @@ const pfa = (data: any): IPfa => {
   data.forEach((d: any) => {
     if (!d.cells) {
       // output.data.push(d);
-      output.error = "WARNING, not handled";
+      output.error = `WARNING, not handled ${JSON.stringify(d, null, 2)}`;
     } else {
       if (d.cells.validations) {
         // Convert to array to have consistent results
@@ -290,18 +296,18 @@ const pfa = (data: any): IPfa => {
             return;
           } else {
             const node = i.node;
-            if (i.code === "kfold") {
+            if (i.code === 'kfold') {
               const dta: any = i.data.average;
-              if (dta.type === "PolynomialClassificationScore") {
+              if (dta.type === 'PolynomialClassificationScore') {
                 output.crossValidation = buildValidation(dta, node);
               } else {
                 output.crossValidation = buildKFoldValidation(dta);
               }
             }
 
-            if (i.code === "remote-validation") {
+            if (i.code === 'remote-validation') {
               const dta: any = i.data;
-              if (dta.type === "RegressionScore") {
+              if (dta.type === 'RegressionScore') {
                 output.remoteValidation = buildKFoldValidation(dta);
               } else {
                 output.remoteValidation = buildValidation(dta, node);

@@ -1,0 +1,113 @@
+{
+  "uuid": "1838299f-f1c0-4640-b7b7-59d8cefff453",
+  "name": "lr",
+  "createdBy": {
+    "username": "phenixt",
+    "fullname": "Thierry Phenix",
+    "firstname": "Thierry",
+    "lastname": "Phenix",
+    "picture": "images/users/default_user.png",
+    "email": "thierry.phenix@chuv.ch",
+    "languages": [],
+    "roles": [],
+    "agreeNDA": true,
+    "appsVotes": []
+  },
+  "model": {
+    "slug": "tt-3",
+    "title": "tt (3)",
+    "valid": true,
+    "createdAt": "Feb 20, 2019 1:35:55 PM",
+    "query": {
+      "id": 1767,
+      "variables": [{ "code": "lefthippocampus" }],
+      "covariables": [{ "code": "montrealcognitiveassessment" }],
+      "grouping": [],
+      "trainingDatasets": [
+        { "code": "clm" },
+        { "code": "adni" },
+        { "code": "fbf" },
+        { "code": "chru_lille" }
+      ],
+      "testingDatasets": [],
+      "validationDatasets": [],
+      "filters": "{\"condition\":\"AND\",\"rules\":[{\"id\":\"subjectageyears\",\"field\":\"subjectageyears\",\"type\":\"integer\",\"input\":\"number\",\"operator\":\"greater\",\"value\":51}],\"valid\":true}"
+    },
+    "dataset": {
+      "code": "DS1540825503020",
+      "header": [],
+      "grouping": [],
+      "variable": []
+    },
+    "config": {
+      "id": 1757,
+      "yAxisVariables": [],
+      "title": { "text": "tt (3)" }
+    },
+    "createdBy": {
+      "username": "phenixt",
+      "fullname": "Thierry Phenix",
+      "firstname": "Thierry",
+      "lastname": "Phenix",
+      "picture": "images/users/default_user.png",
+      "email": "thierry.phenix@chuv.ch",
+      "languages": [],
+      "roles": [],
+      "agreeNDA": true,
+      "appsVotes": []
+    }
+  },
+  "created": "Feb 20, 2019 1:37:31 PM",
+  "finished": "Feb 20, 2019 1:37:46 PM",
+  "hasError": false,
+  "hasServerError": false,
+  "shared": false,
+  "resultsViewed": false,
+  "algorithms": [
+    {
+      "validation": false,
+      "code": "linearRegression",
+      "name": "linearRegression",
+      "parameters": []
+    }
+  ],
+  "validations": [],
+  "result": [
+    {
+      "timestamp": 1550669852,
+      "data": {
+        "intercept": {
+          "coef": 2.3003328619,
+          "std_err": 0.0279404459,
+          "t_values": 82.3298550165,
+          "p_values": 0.0
+        },
+        "montrealcognitiveassessment": {
+          "coef": 0.0280482633,
+          "std_err": 0.0012534307,
+          "t_values": 22.3771946408,
+          "p_values": 0.0
+        }
+      },
+      "algorithmSpec": {
+        "code": "linearRegression",
+        "parameters": [
+          {
+            "code": "_job_ids_",
+            "value": "51ee8ebc-0081-435a-b548-6227dd39cd89,5b45ea00-50c1-4a46-aa12-6d809e867bf5,0309171f-d984-442b-ae1d-b8b658eb3fb8"
+          }
+        ],
+        "step": {
+          "name": "reduce",
+          "execution": "reduce",
+          "input": { "fromStep": "map", "type": "PreviousResults" },
+          "operation": { "compute": "compute-global" }
+        }
+      },
+      "algorithm": "python-linear-regression",
+      "jobId": "2ca95a58-7731-44de-8a25-893162621618",
+      "node": "Federation QA",
+      "type": "application/pfa+json"
+    }
+  ]
+}
