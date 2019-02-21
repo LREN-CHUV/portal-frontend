@@ -45,4 +45,39 @@ describe('Test Mining API', () => {
     expect(error).toBeFalsy();
     expect(minings).toBeTruthy();
   });
+
+  it('get heatmap', async () => {
+    const query = model.query;
+    const payload = {
+      covariables: query.coVariables ? query.coVariables : [],
+      datasets: query.trainingDatasets, // load one dataset only
+      filters: query.filters,
+      grouping: query.groupings ? query.groupings : [],
+      variables: query.variables ? query.variables : []
+    };
+    await apiMining.heatmap({ payload });
+    let { heatmap, error } = apiMining.state;
+
+    const timer = new Promise(resolve => {
+      const timerId = setInterval(async () => {
+        const { heatmap, error } = apiMining.state;
+        const loading = !(error || heatmap);
+        if (!loading) {
+          clearInterval(timerId);
+          resolve();
+        }
+      }, 1000);
+    });
+
+    await timer;
+
+    expect(error).toBeFalsy();
+    expect(heatmap).toBeTruthy();
+
+    const data = heatmap && heatmap.data && heatmap.data.data;
+    const dataError = heatmap && heatmap.error;
+
+    expect(dataError).toBeFalsy();
+    expect(data).toBeTruthy();
+  });
 });
