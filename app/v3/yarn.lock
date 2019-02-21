@@ -1306,11 +1306,6 @@
     "@types/d3-interpolate" "*"
     "@types/d3-selection" "*"
 
-"@types/d3@^3":
-  version "3.5.41"
-  resolved "https://registry.yarnpkg.com/@types/d3/-/d3-3.5.41.tgz#57f08fc79b75f0fecb0b3547abc22e46e9d660e4"
-  integrity sha512-dInnr7nSPsofnLggOf70xvsInUjf3tRrE8XmxsioXALWQHkwEWi7RhTBCa9mYmiUDHMtuanSDN/JOW187ChIhw==
-
 "@types/d3@^5.7.0":
   version "5.7.1"
   resolved "https://registry.yarnpkg.com/@types/d3/-/d3-5.7.1.tgz#99e6b3a558816264a674947822600d3aba8b84b0"
@@ -1430,13 +1425,6 @@
   resolved "https://registry.yarnpkg.com/@types/numeral/-/numeral-0.0.25.tgz#b6f55062827a4787fe4ab151cf3412a468e65271"
   integrity sha512-ShHzHkYD+Ldw3eyttptCpUhF1/mkInWwasQkCNXZHOsJMJ/UMa8wXrxSrTJaVk0r4pLK/VnESVM0wFsfQzNEKQ==
 
-"@types/plotly.js@*":
-  version "1.43.1"
-  resolved "https://registry.yarnpkg.com/@types/plotly.js/-/plotly.js-1.43.1.tgz#c91e9d216b4ceb8adc7c39e1123b6e3720983d04"
-  integrity sha512-33irzgyjRq1EY4J82DGH8IEFvozlkYYfeqAJr8cS2ZYnJywlHrXcT3yThxO3CMrhgJdZfvXgZ1oZQB/PlpKX/A==
-  dependencies:
-    "@types/d3" "^3"
-
 "@types/prop-types@*":
   version "15.5.9"
   resolved "https://registry.yarnpkg.com/@types/prop-types/-/prop-types-15.5.9.tgz#f2d14df87b0739041bc53a7d75e3d77d726a3ec0"
@@ -1464,14 +1452,6 @@
   resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-16.8.2.tgz#9bd7d33f908b243ff0692846ef36c81d4941ad12"
   integrity sha512-MX7n1wq3G/De15RGAAqnmidzhr2Y9O/ClxPxyqaNg96pGyeXUYPSvujgzEVpLo9oIP4Wn1UETl+rxTN02KEpBw==
   dependencies:
-    "@types/react" "*"
-
-"@types/react-plotly.js@^2.2.2":
-  version "2.2.2"
-  resolved "https://registry.yarnpkg.com/@types/react-plotly.js/-/react-plotly.js-2.2.2.tgz#b9d98c6b6085f4ee8267b31d18b9c3a5cfabbc1e"
-  integrity sha512-SaOu2FoaCVg//F0tGlPSNNh4PUceuHRy8oR4t4akSOOz6PfXurNGHuY4OLJ5dEQEh9pWjUttRuPVXI5eg9a8Cg==
-  dependencies:
-    "@types/plotly.js" "*"
     "@types/react" "*"
 
 "@types/react-router-dom@^4.3.1":
@@ -8437,6 +8417,11 @@ lodash.camelcase@^4.3.0:
   resolved "https://registry.yarnpkg.com/lodash.camelcase/-/lodash.camelcase-4.3.0.tgz#b28aa6288a2b9fc651035c7711f65ab6190331a6"
   integrity sha1-soqmKIorn8ZRA1x3EfZathkDMaY=
 
+lodash.clonedeep@^4.5.0:
+  version "4.5.0"
+  resolved "https://registry.yarnpkg.com/lodash.clonedeep/-/lodash.clonedeep-4.5.0.tgz#e23f3f9c4f8fbdde872529c1071857a086e5ccef"
+  integrity sha1-4j8/nE+Pvd6HJSnBBxhXoIblzO8=
+
 lodash.escape@^4.0.1:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/lodash.escape/-/lodash.escape-4.0.1.tgz#c9044690c21e04294beaa517712fded1fa88de98"
@@ -11249,12 +11234,14 @@ react-overlays@^0.8.0:
     react-transition-group "^2.2.0"
     warning "^3.0.0"
 
-react-plotly.js@^2.2.0:
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/react-plotly.js/-/react-plotly.js-2.2.0.tgz#238a242f3c05c993c72e1435d0c9ae2f34d7e86a"
-  integrity sha512-+OWgUDZCMWJsZDhWupTvxvjZu/Q7Wbnaikq0PtdX2QQ4s/HuRj2uYydx3HfoDrW4Mc97aZsMnEVAqUxAEaf6FA==
+react-plotlyjs@^0.4.4:
+  version "0.4.4"
+  resolved "https://registry.yarnpkg.com/react-plotlyjs/-/react-plotlyjs-0.4.4.tgz#ae06f91618d74c6e5838ad5eff51653dea9c159d"
+  integrity sha512-K2aH0E/99wzxATmmwDu5ZyHU2vsQVbKhtDOihMGjQG8NE0yiLLhU8NBYbS+UrvoFVqKu0SOsMGFD95xM19KcmA==
   dependencies:
+    lodash.clonedeep "^4.5.0"
     prop-types "^15.5.10"
+    react "^15.6.1||^16.0.0"
 
 react-prop-types@^0.4.0:
   version "0.4.0"
@@ -11371,6 +11358,16 @@ react-transition-group@^2.0.0, react-transition-group@^2.2.0:
     loose-envify "^1.4.0"
     prop-types "^15.6.2"
     react-lifecycles-compat "^3.0.4"
+
+react@^15.6.1||^16.0.0:
+  version "16.8.3"
+  resolved "https://registry.yarnpkg.com/react/-/react-16.8.3.tgz#c6f988a2ce895375de216edcfaedd6b9a76451d9"
+  integrity sha512-3UoSIsEq8yTJuSu0luO1QQWYbgGEILm+eJl2QN/VLDi7hL+EN18M3q3oVZwmVzzBJ3DkM7RMdRwBmZZ+b4IzSA==
+  dependencies:
+    loose-envify "^1.1.0"
+    object-assign "^4.1.1"
+    prop-types "^15.6.2"
+    scheduler "^0.13.3"
 
 react@^16.8.2:
   version "16.8.2"
@@ -12098,6 +12095,14 @@ scheduler@^0.13.2:
   version "0.13.2"
   resolved "https://registry.yarnpkg.com/scheduler/-/scheduler-0.13.2.tgz#969eaee2764a51d2e97b20a60963b2546beff8fa"
   integrity sha512-qK5P8tHS7vdEMCW5IPyt8v9MJOHqTrOUgPXib7tqm9vh834ibBX5BNhwkplX/0iOzHW5sXyluehYfS9yrkz9+w==
+  dependencies:
+    loose-envify "^1.1.0"
+    object-assign "^4.1.1"
+
+scheduler@^0.13.3:
+  version "0.13.3"
+  resolved "https://registry.yarnpkg.com/scheduler/-/scheduler-0.13.3.tgz#bed3c5850f62ea9c716a4d781f9daeb9b2a58896"
+  integrity sha512-UxN5QRYWtpR1egNWzJcVLk8jlegxAugswQc984lD3kU7NuobsO37/sRfbpTdBjtnD5TBNFA2Q2oLV5+UmPSmEQ==
   dependencies:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"
