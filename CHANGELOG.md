@@ -2,7 +2,6 @@
 
 ## 2.15.4
 * Fixed filter query bug
-* Increased build heap memory size
 * Modularized plotly.js -> -1.20 Mo on build
 * Integration and e2e test for Heatmap API
 * Fixed Heatmap formating bugs for federation
