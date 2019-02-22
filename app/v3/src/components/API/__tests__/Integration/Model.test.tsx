@@ -2,7 +2,7 @@ import APIModel from "../../Model";
 import APICore from "../../Core";
 import config from "../../RequestHeaders";
 
-describe("Test Model API", () => {
+describe("Integration Test Model API", () => {
   const apiModel = new APIModel(config);
   let datasets, model;
 

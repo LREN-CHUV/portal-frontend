@@ -10,7 +10,7 @@ import Navigation from "../UI/Navigation";
 import * as React from "react";
 import { Route } from "react-router-dom";
 
-import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/css/bootstrap.css";
 import "./App.css";
 
 interface IProps {

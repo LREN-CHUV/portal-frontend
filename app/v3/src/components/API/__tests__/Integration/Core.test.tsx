@@ -1,7 +1,7 @@
 import APICore from "../../Core";
 import config from "../../RequestHeaders";
 
-describe("Test Core API", () => {
+describe("Integration Test Core API", () => {
   const apiCore = new APICore(config);
 
   it("get variables", async () => {

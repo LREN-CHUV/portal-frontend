@@ -55,7 +55,7 @@ describe('Test Heatmap component', () => {
 
     const wrapper = mount(<HeatMap {...props} />);
     expect(wrapper.find('.loader .hidden')).toHaveLength(1);
-    expect(wrapper.find('PlotlyComponent')).toHaveLength(1);
+    expect(wrapper.find('Plotly')).toHaveLength(1);
   });
 
   it('Federated heatmap', () => {
@@ -72,6 +72,6 @@ describe('Test Heatmap component', () => {
 
     const wrapper = mount(<HeatMap {...props} />);
     expect(wrapper.find('.loader .hidden')).toHaveLength(1);
-    expect(wrapper.find('PlotlyComponent')).toHaveLength(3);
+    expect(wrapper.find('Plotly')).toHaveLength(3);
   });
 });

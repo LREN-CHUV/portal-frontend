@@ -2,7 +2,7 @@ import APIMining from '../../Mining';
 import APIModel from '../../Model';
 import config from '../../RequestHeaders';
 
-describe('Test Mining API', () => {
+describe('Integration Test Mining API', () => {
   const apiMining = new APIMining(config);
   let model;
 
@@ -74,7 +74,7 @@ describe('Test Mining API', () => {
     expect(error).toBeFalsy();
     expect(heatmap).toBeTruthy();
 
-    const data = heatmap && heatmap.data && heatmap.data.data;
+    const data = heatmap && heatmap.data;
     const dataError = heatmap && heatmap.error;
 
     expect(dataError).toBeFalsy();
