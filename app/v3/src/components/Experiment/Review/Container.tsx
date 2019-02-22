@@ -1,17 +1,17 @@
-import { APICore, APIMining, APIModel } from "../../API";
-import { IAlert } from "../../UI/Alert";
-import Model from "../../UI/Model";
-import Validation from "../../UI/Validation";
-import { MIP } from "../../../types";
-import queryString from "query-string";
-import * as React from "react";
-import { Panel } from "react-bootstrap";
-import { RouteComponentProps, withRouter } from "react-router-dom";
-import Content from "./Content";
-import Filter from "./Filter";
-import ExperimentReviewHeader from "./Header";
+import queryString from 'query-string';
+import * as React from 'react';
+import { Panel } from 'react-bootstrap';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
+import { MIP } from '../../../types';
+import { APICore, APIMining, APIModel } from '../../API';
+import { IAlert } from '../../UI/Alert';
+import Model from '../../UI/Model';
+import Validation from '../../UI/Validation';
+import Content from './Content';
+import Filter from './Filter';
+import ExperimentReviewHeader from './Header';
 
-import "./Review.css";
+import './Review.css';
 interface IProps extends RouteComponentProps<any> {
   apiModel: APIModel;
   apiCore: APICore;
@@ -33,28 +33,28 @@ class Container extends React.Component<IProps, IState> {
     if (qs.execute) {
       const variables = [{ code: qs.variable as string }];
       const coVariables =
-        qs.covariable && (qs.covariable as string) !== ""
-          ? (qs.covariable as string).split(",").map(v => ({
+        qs.covariable && (qs.covariable as string) !== ''
+          ? (qs.covariable as string).split(',').map(v => ({
               code: v
             }))
           : undefined;
       const groupings =
-        qs.grouping && (qs.grouping as string) !== ""
-          ? (qs.grouping as string).split(",").map(v => ({
+        qs.grouping && (qs.grouping as string) !== ''
+          ? (qs.grouping as string).split(',').map(v => ({
               code: v
             }))
           : undefined;
       const trainingDatasets =
-        qs.trainingDatasets && (qs.trainingDatasets as string) !== ""
-          ? (qs.trainingDatasets as string).split(",").map(v => ({
+        qs.trainingDatasets && (qs.trainingDatasets as string) !== ''
+          ? (qs.trainingDatasets as string).split(',').map(v => ({
               code: v
             }))
           : undefined;
       const filterQuery =
-        (qs.filterQuery && decodeURI(qs.filterQuery as string)) || "";
+        (qs.filterQuery && decodeURI(qs.filterQuery as string)) || '';
       const filters =
-        qs.filter && (qs.filter as string) !== ""
-          ? (qs.filter as string).split(",").map(v => ({
+        qs.filter && (qs.filter as string) !== ''
+          ? (qs.filter as string).split(',').map(v => ({
               code: v
             }))
           : undefined;
@@ -106,7 +106,7 @@ class Container extends React.Component<IProps, IState> {
     const { query } = this.state;
     const variables = apiCore.state.variables;
 
-    // FIXME
+    // FIXME: move to Filter
     let fields: any[] = [];
     const buildFilter = (code: string) => {
       if (!variables) {
@@ -129,41 +129,41 @@ class Container extends React.Component<IProps, IState> {
         output.values = originalVar.enumerations.map((c: any) => ({
           [c.code]: c.label
         }));
-        output.input = "select";
-        output.operators = ["equal", "not_equal", "in", "not_in"];
+        output.input = 'select';
+        output.operators = ['equal', 'not_equal', 'in', 'not_in'];
       }
 
       const type = originalVar && originalVar.type;
-      if (type === "real") {
-        output.type = "double";
-        output.input = "number";
+      if (type === 'real') {
+        output.type = 'double';
+        output.input = 'number';
         output.operators = [
-          "equal",
-          "not_equal",
-          "less",
-          "greater",
-          "between",
-          "not_between"
+          'equal',
+          'not_equal',
+          'less',
+          'greater',
+          'between',
+          'not_between'
         ];
       }
 
-      if (type === "integer") {
-        output.type = "integer";
-        output.input = "number";
+      if (type === 'integer') {
+        output.type = 'integer';
+        output.input = 'number';
         output.operators = [
-          "equal",
-          "not_equal",
-          "less",
-          "greater",
-          "between",
-          "not_between"
+          'equal',
+          'not_equal',
+          'less',
+          'greater',
+          'between',
+          'not_between'
         ];
       }
 
       return output;
     };
 
-    const keys = ["variables", "coVariables", "groupings"];
+    const keys = ['variables', 'coVariables', 'groupings', 'filtersFromParams'];
     const allVariables: string[] = [];
     if (query) {
       keys.forEach((key: string) => {
@@ -177,18 +177,18 @@ class Container extends React.Component<IProps, IState> {
     }
 
     // backward compatibility
-    allVariables.push("subjectageyears");
-    allVariables.push("gender");
+    allVariables.push('subjectageyears');
+    allVariables.push('gender');
     const allUniqVariables = Array.from(new Set(allVariables));
     fields =
       (variables && [].concat.apply([], allUniqVariables.map(buildFilter))) ||
       [];
 
-    const filters = (query && query.filters && JSON.parse(query.filters)) || "";
+    const filters = (query && query.filters && JSON.parse(query.filters)) || '';
 
     return (
-      <div className="Experiment Review">
-        <div className="header">
+      <div className='Experiment Review'>
+        <div className='header'>
           <ExperimentReviewHeader
             handleGoBackToExplore={this.handleGoBackToExplore}
             handleSaveModel={this.handleSaveModel}
@@ -199,14 +199,14 @@ class Container extends React.Component<IProps, IState> {
             handleSelectModel={this.handleSelectModel}
           />
         </div>
-        <div className="content">
-          <div className="sidebar">
+        <div className='content'>
+          <div className='sidebar'>
             <Model
               model={apiModel.state.model}
               showDatasets={false}
               variables={apiCore.state.variables}
             />
-            <Panel className="model">
+            <Panel className='model'>
               <Panel.Body>
                 <Validation
                   isPredictiveMethod={false}
@@ -217,14 +217,13 @@ class Container extends React.Component<IProps, IState> {
               </Panel.Body>
             </Panel>
           </div>
-          <div className="results">
+          <div className='results'>
             <Content
               apiMining={apiMining}
               model={apiModel.state.model}
               selectedDatasets={query && query.trainingDatasets}
-              lookup={apiCore.lookup}
-            >
-              <Panel className="filters" defaultExpanded={false}>
+              lookup={apiCore.lookup}>
+              <Panel className='filters' defaultExpanded={false}>
                 <Panel.Title toggle={true}>
                   <h3>Filters</h3>
                 </Panel.Title>
@@ -251,7 +250,7 @@ class Container extends React.Component<IProps, IState> {
     const { apiModel, apiMining } = this.props;
     const model = apiModel.state.model;
     if (model) {
-      model.query.filters = (filters && JSON.stringify(filters)) || "";
+      model.query.filters = (filters && JSON.stringify(filters)) || '';
     }
     if (model && !model.isMock) {
       await apiModel.update({ model });
@@ -269,7 +268,7 @@ class Container extends React.Component<IProps, IState> {
     const { apiModel } = this.props;
     const model = apiModel.state.model;
     const slug = await apiModel.save({ model, title });
-    this.setState({ alert: { message: "Model saved" } });
+    this.setState({ alert: { message: 'Model saved' } });
 
     const { history } = this.props;
     history.push(`/v3/review/${slug}`);
@@ -293,16 +292,16 @@ class Container extends React.Component<IProps, IState> {
     if (query) {
       const variable = query.variables && query.variables.map(v => v.code)[0];
       const covariable =
-        (query.coVariables && query.coVariables.map(v => v.code).join(",")) ||
-        "";
+        (query.coVariables && query.coVariables.map(v => v.code).join(',')) ||
+        '';
       const grouping =
-        (query.groupings && query.groupings.map(v => v.code).join(",")) || "";
+        (query.groupings && query.groupings.map(v => v.code).join(',')) || '';
       const trainingDatasets =
         (query.trainingDatasets &&
-          query.trainingDatasets.map(v => v.code).join(",")) ||
-        "";
+          query.trainingDatasets.map(v => v.code).join(',')) ||
+        '';
 
-      const filterQuery = (query.filters && encodeURI(query.filters)) || "";
+      const filterQuery = (query.filters && encodeURI(query.filters)) || '';
 
       window.location.href = `/explore?configure=true&variable=${variable}&covariable=${covariable}&grouping=${grouping}&filterQuery=${filterQuery}&trainingDatasets=${trainingDatasets}`;
     } else {
@@ -322,7 +321,7 @@ class Container extends React.Component<IProps, IState> {
 
     const model = apiModel.state.model;
     if (!model) {
-      return this.setState({ alert: { message: "Fail to load model" } });
+      return this.setState({ alert: { message: 'Fail to load model' } });
     }
 
     const { query } = model;
@@ -362,9 +361,9 @@ class Container extends React.Component<IProps, IState> {
       }
     | undefined => {
     const { location } = props;
-    const slug = location.pathname.split("/").pop() || undefined;
+    const slug = location.pathname.split('/').pop() || undefined;
 
-    return { slug: slug !== "review" ? slug : undefined };
+    return { slug: slug !== 'review' ? slug : undefined };
   };
 }
 
