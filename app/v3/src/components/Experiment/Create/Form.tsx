@@ -1,6 +1,6 @@
-import { MIP } from "../../../types";
-import * as React from "react";
-import { Col, Form, FormControl, FormGroup, HelpBlock } from "react-bootstrap";
+import * as React from 'react';
+import { Col, Form, FormControl, FormGroup, HelpBlock } from 'react-bootstrap';
+import { MIP } from '../../../types';
 
 interface IProps {
   method?: any;
@@ -26,7 +26,9 @@ class FForm extends React.Component<IProps> {
             <h4>
               <strong>Your method</strong>
             </h4>
-            <p>Please, select a method on the right pane</p>
+            <p style={{ color: 'orange' }}>
+              Please, select the method to be performed in the 'Available Methods' panel
+            </p>
           </div>
         )}
         {parameters && parameters.length > 0 && <h4>Parameters</h4>}
@@ -35,19 +37,18 @@ class FForm extends React.Component<IProps> {
             {parameters &&
               parameters.length &&
               parameters.map((parameter: MIP.API.IMethodPayload) => {
-                const numberTypes = ["int", "real", "number", "numeric"];
+                const numberTypes = ['int', 'real', 'number', 'numeric'];
                 const type =
-                  numberTypes.indexOf(parameter.type) >= -1 ? "number" : "text";
+                  numberTypes.indexOf(parameter.type) >= -1 ? 'number' : 'text';
                 const { constraints } = parameter;
 
                 return (
                   <FormGroup
                     validationState={this.getValidationState(parameter)}
-                    key={parameter.code}
-                  >
+                    key={parameter.code}>
                     <Col sm={2}>{parameter.label}</Col>
                     <Col sm={4}>
-                      {parameter.type !== "enumeration" && (
+                      {parameter.type !== 'enumeration' && (
                         <FormControl
                           type={type}
                           defaultValue={
@@ -59,18 +60,17 @@ class FForm extends React.Component<IProps> {
                           }
                         />
                       )}
-                      {parameter.type === "enumeration" && (
+                      {parameter.type === 'enumeration' && (
                         <FormControl
-                          componentClass="select"
-                          placeholder="select"
+                          componentClass='select'
+                          placeholder='select'
                           defaultValue={
                             parameter.value || parameter.default_value
                           }
                           // tslint:disable-next-line jsx-no-lambda
                           onChange={event =>
                             this.handleChangeParameter(event, parameter.code)
-                          }
-                        >
+                          }>
                           {parameter.values &&
                             parameter.values.map((v: any) => (
                               <option key={v} value={v}>
@@ -83,14 +83,14 @@ class FForm extends React.Component<IProps> {
                       <HelpBlock>
                         {constraints &&
                           constraints.min >= 0 &&
-                          "min: " + constraints.min}
+                          'min: ' + constraints.min}
                         {constraints &&
                           constraints.min >= 0 &&
                           constraints.max >= 0 &&
-                          ", "}
+                          ', '}
                         {constraints &&
                           constraints.max >= 0 &&
-                          "max: " + constraints.max}
+                          'max: ' + constraints.max}
                       </HelpBlock>
                     </Col>
                     <Col sm={6}>{parameter.description}</Col>
@@ -115,11 +115,11 @@ class FForm extends React.Component<IProps> {
         (parameter && parameter.value < min) ||
         (parameter && parameter.value > max)
       ) {
-        return "error";
+        return 'error';
       }
     }
 
-    return "success";
+    return 'success';
   };
 
   private handleChangeParameter = (event: any, code: string) => {

@@ -1,8 +1,8 @@
-import Dropdown from "../../UI/Dropdown";
-import DropdownModel from "../../UI/DropdownModel";
-import { MIP } from "../../../types";
-import * as React from "react";
-import { Button, FormControl, Glyphicon, Panel } from "react-bootstrap";
+import * as React from 'react';
+import { Button, FormControl, Glyphicon, Panel } from 'react-bootstrap';
+import { MIP } from '../../../types';
+import Dropdown from '../../UI/Dropdown';
+import DropdownModel from '../../UI/DropdownModel';
 interface IProps {
   model?: MIP.API.IModelResponse;
   models?: MIP.API.IModelResponse[];
@@ -21,7 +21,7 @@ interface IState {
 
 export default class Header extends React.Component<IProps, IState> {
   public state = {
-    experimentName: ""
+    experimentName: ''
   };
 
   public render() {
@@ -40,7 +40,7 @@ export default class Header extends React.Component<IProps, IState> {
       <Panel>
         <Panel.Body>
           <h3>
-            Create Experiment on{" "}
+            Create Experiment on{' '}
             {models && (
               <DropdownModel
                 items={models}
@@ -49,45 +49,43 @@ export default class Header extends React.Component<IProps, IState> {
               />
             )}
           </h3>
-          <div className="actions">
-            <div className="item">
+          <div className='actions'>
+            <div className='item'>
               <Button
                 onClick={handleGoBackToReview}
-                bsStyle="info"
-                type="submit"
-              >
-                <Glyphicon glyph="chevron-left" /> Review
+                bsStyle='info'
+                type='submit'>
+                <Glyphicon glyph='chevron-left' /> Review
               </Button>
             </div>
-            <div className="item text">&nbsp;</div>
-            <div className="item">
+            <div className='item text'>&nbsp;</div>
+            <div className='item'>
               <FormControl
-                className="item experiment-name"
-                type="text"
-                placeholder={"Experiment name"}
+                className='item experiment-name'
+                type='text'
+                placeholder={'Experiment name'}
                 value={experimentName}
                 onChange={this.handleChangeExperimentName}
                 onKeyDown={this.handleKeyPress}
               />
             </div>
-            <div className="item">
+            <div className='item'>
               <Button
                 onClick={this.handleSaveAndRunExperiment}
                 title={
                   method === undefined
-                    ? "Please choose an experiment on the right"
-                    : experimentName === ""
-                    ? "Please enter a title for your experiment"
-                    : ""
+                    ? 'Please choose an experiment on the right'
+                    : experimentName === ''
+                    ? 'Please enter a title for your experiment'
+                    : ''
                 }
-                bsStyle="info"
-                type="submit"
-                disabled={method === undefined || experimentName === ""}
-              >
+                bsStyle='info'
+                type='submit'
+                disabled={method === undefined || experimentName === ''}>
                 Run Experiment
               </Button>
             </div>
-            <div className="item">
+            <div className='item'>
               <Dropdown
                 items={
                   model &&
@@ -96,7 +94,7 @@ export default class Header extends React.Component<IProps, IState> {
                     (e: any) => e.modelDefinitionId === model.slug
                   )
                 }
-                title="RELATED EXPERIMENTS"
+                title='RELATED EXPERIMENTS'
                 handleSelect={handleSelectExperiment}
                 handleCreateNewExperiment={null}
               />

@@ -1,6 +1,6 @@
-import { MIP } from "../../../types";
-import * as React from "react";
-import { Panel } from "react-bootstrap";
+import * as React from 'react';
+import { Panel } from 'react-bootstrap';
+import { MIP } from '../../../types';
 
 const Methods = ({
   experiment
