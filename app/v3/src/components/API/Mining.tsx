@@ -9,17 +9,15 @@ class Mining extends Container<MIP.Store.IMiningState> {
   ): MIP.Store.IMiningResponseShape[] => {
     if (Array.isArray(heatmap.data)) {
       return heatmap.data.map(d => ({
-        data: d.data,
-        dataset: heatmap.dataset,
-        error: heatmap.error
+        ...heatmap,
+        data: d.data
       }));
     } else {
-      const data = heatmap.data && heatmap.data.data
+      const data = heatmap.data && heatmap.data.data;
       return [
         {
-          data,
-          dataset: heatmap.dataset,
-          error: heatmap.error
+          ...heatmap,
+          data
         }
       ];
     }
@@ -56,7 +54,7 @@ class Mining extends Container<MIP.Store.IMiningState> {
       heatmaps: [
         {
           data: undefined,
-          dataset: [...payload.datasets].pop(),
+          dataset: undefined,
           error: undefined
         }
       ]
@@ -173,7 +171,11 @@ class Mining extends Container<MIP.Store.IMiningState> {
 
       const data = JSON.parse(response);
 
-      return { data: data && data.data, dataset: copyOfDataset.pop(), error: undefined };
+      return {
+        data: data && data.data,
+        dataset: copyOfDataset.pop(),
+        error: undefined,
+      };
     } catch (error) {
       return {
         data: undefined,

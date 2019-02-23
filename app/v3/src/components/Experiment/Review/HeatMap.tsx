@@ -58,7 +58,7 @@ class HeatMap extends React.Component<IProps, IState> {
           heatmaps.map((h: MIP.Store.IMiningResponseShape, i: number) => {
             return (
               <div className='heatmap' key={i}>
-                <h3>{h.dataset && h.dataset.code}</h3>
+                <h3>{heatmaps.length > 1 && h.dataset && h.dataset.code}</h3>
                 <PlotlyHeatmap
                   data={h.data}
                   layout={{ margin: { l: 0 } }}
