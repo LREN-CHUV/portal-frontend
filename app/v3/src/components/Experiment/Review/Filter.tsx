@@ -75,7 +75,7 @@ class Filter extends React.Component<IProps, IState> {
         <div id="query-builder" ref={this.createRef} />
         <div className={"save-filter"}>
           <Button
-            bsStyle={"primary"}
+            bsStyle={"info"}
             onClick={this.handleSave}
             disabled={!this.state.rulesChanged}
           >
