@@ -1,9 +1,10 @@
+import { access } from 'fs';
 import * as React from 'react';
 import { MIP } from '../../../types';
 import { APIMining } from '../../API';
-import Plotly from '../../Experiment/Result/formats/Plotly';
 import { Alert } from '../../UI/Alert';
 import Loader from '../../UI/Loader';
+import { PlotlyHeatmap } from '../Result/formats/';
 
 interface IProps {
   apiMining: APIMining;
@@ -42,20 +43,27 @@ class HeatMap extends React.Component<IProps, IState> {
 
   public render = () => {
     const { apiMining } = this.props;
-    const heatmap = apiMining.state.heatmap;
-    const data = heatmap && heatmap.data;
-    const error = heatmap && heatmap.error;
+    const heatmaps = apiMining.state.heatmaps;
+    const error = apiMining.state.error;
+    const loading =
+      error !== undefined &&
+      heatmaps !== undefined &&
+      heatmaps.map(h => h.data).includes(undefined);
 
     return (
-      <div style={{ padding: '16px' }}>
-        <Loader visible={!error && !data} />
+      <div style={{ padding: '8px' }}>
+        <Loader visible={loading} />
         {error && <Alert message={error} title={'Error'} />}
-        {!error &&
-          data && data.length > 0 &&
-          data.map((d: any, i: number) => {
+        {heatmaps &&
+          heatmaps.map((h: MIP.Store.IMiningResponseShape, i: number) => {
             return (
               <div className='heatmap' key={i}>
-                <Plotly data={d} layout={{ margin: { l: 0 } }} key={`${i}`} />
+                <h3>{h.dataset && h.dataset.code}</h3>
+                <PlotlyHeatmap
+                  data={h.data}
+                  layout={{ margin: { l: 0 } }}
+                  key={`${i}`}
+                />
               </div>
             );
           })}
@@ -72,7 +80,7 @@ class HeatMap extends React.Component<IProps, IState> {
       grouping: query.groupings ? query.groupings : [],
       variables: query.variables ? query.variables : []
     };
-    await apiMining.heatmap({ payload });
+    await apiMining.heatmaps({ payload });
     await this.setState({
       datasets: datasets.sort(),
       loading: false

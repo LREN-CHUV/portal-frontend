@@ -4,16 +4,25 @@ import { MIP } from '../../types';
 import { backendURL } from '../API';
 
 class Mining extends Container<MIP.Store.IMiningState> {
-  public static normalizeHeatmapData = (heatmap: any) => {
-    const newHeatmap = heatmap && { ...heatmap };
+  public static normalizeHeatmapData = (
+    heatmap: MIP.Store.IMiningResponseShape
+  ): MIP.Store.IMiningResponseShape[] => {
     if (Array.isArray(heatmap.data)) {
-      newHeatmap.data =
-        newHeatmap && newHeatmap.data && heatmap.data.map((d: any) => d.data);
+      return heatmap.data.map(d => ({
+        data: d.data,
+        dataset: heatmap.dataset,
+        error: heatmap.error
+      }));
     } else {
-      newHeatmap.data = newHeatmap && newHeatmap.data && [heatmap.data.data];
+      const data = heatmap.data && heatmap.data.data
+      return [
+        {
+          data,
+          dataset: heatmap.dataset,
+          error: heatmap.error
+        }
+      ];
     }
-
-    return newHeatmap;
   };
   public state: MIP.Store.IMiningState;
 
@@ -24,7 +33,7 @@ class Mining extends Container<MIP.Store.IMiningState> {
 
   constructor(config: any) {
     super();
-    this.state = { minings: undefined, heatmap: undefined };
+    this.state = { minings: undefined, heatmaps: undefined };
     this.options = config.options;
     this.baseUrl = backendURL;
   }
@@ -38,18 +47,19 @@ class Mining extends Container<MIP.Store.IMiningState> {
     }));
   };
 
-  public heatmap = async ({
+  public heatmaps = async ({
     payload
   }: {
     payload: MIP.API.IMiningPayload;
   }): Promise<any> => {
-    // TODO: return type should be MIP.Store.IMiningState
     await this.setState({
-      heatmap: {
-        data: undefined,
-        dataset: [...payload.datasets].pop(),
-        error: undefined
-      }
+      heatmaps: [
+        {
+          data: undefined,
+          dataset: [...payload.datasets].pop(),
+          error: undefined
+        }
+      ]
     });
     payload = {
       ...payload,
@@ -62,7 +72,7 @@ class Mining extends Container<MIP.Store.IMiningState> {
     };
     const heatmap = await this.fetchOne({ payload });
     return await this.setState({
-      heatmap: Mining.normalizeHeatmapData(heatmap)
+      heatmaps: Mining.normalizeHeatmapData(heatmap)
     });
   };
 
@@ -161,9 +171,9 @@ class Mining extends Container<MIP.Store.IMiningState> {
         uri: `${this.baseUrl}/mining`
       });
 
-      const data = JSON.parse(response).data;
+      const data = JSON.parse(response);
 
-      return { data, dataset: copyOfDataset.pop(), error: undefined };
+      return { data: data && data.data, dataset: copyOfDataset.pop(), error: undefined };
     } catch (error) {
       return {
         data: undefined,

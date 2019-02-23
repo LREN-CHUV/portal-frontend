@@ -1,8 +1,8 @@
-import { MIME_TYPES } from "../../constants";
-import { MIP } from "../../../types";
-import * as React from "react";
-import { Panel, Tab, Tabs } from "react-bootstrap";
-import { Highchart, JSON, PFA, Plotly } from "./formats";
+import * as React from 'react';
+import { Panel, Tab, Tabs } from 'react-bootstrap';
+import { MIP } from '../../../types';
+import { MIME_TYPES } from '../../constants';
+import { Highchart, JSON, PFA, PlotlyHeatmap } from './formats';
 
 export default ({
   experimentState
@@ -18,7 +18,7 @@ export default ({
   const loading = !nodes && !error;
 
   const methodsDisplay = (thenode: MIP.API.INode) => (
-    <Tabs defaultActiveKey={0} id="tabs-methods">
+    <Tabs defaultActiveKey={0} id='tabs-methods'>
       {thenode.methods &&
         thenode.methods.map((method: any, j: number) => (
           <Tab eventKey={j} title={method.algorithm} key={j}>
@@ -35,7 +35,7 @@ export default ({
 
             {method.mime === MIME_TYPES.PLOTLY &&
               method.data.map((d: { data: any; layout: any }, k: number) => (
-                <Plotly data={d.data} layout={d.layout} key={k} />
+                <PlotlyHeatmap data={d.data} layout={d.layout} key={k} />
               ))}
             {method.mime === MIME_TYPES.HIGHCHARTS &&
               method.data.map((d: { data: any }, k: number) => (
@@ -51,7 +51,7 @@ export default ({
   );
 
   const nodesDisplay = (thenodes: MIP.API.INode[]) => (
-    <Tabs defaultActiveKey={0} id="tabs-node">
+    <Tabs defaultActiveKey={0} id='tabs-node'>
       {thenodes &&
         thenodes.map((node: any, i: number) => (
           <Tab eventKey={i} title={node.name} key={i}>
@@ -68,7 +68,7 @@ export default ({
       </Panel.Title>
       <Panel.Body>
         {loading ? (
-          <div className="loading">
+          <div className='loading'>
             <h3>Your experiment is currently running...</h3>
             <p>
               Please check back in a few minutes. This page will automatically
@@ -77,7 +77,7 @@ export default ({
           </div>
         ) : null}
         {error ? (
-          <div className="error">
+          <div className='error'>
             <h3>An error has occured</h3>
             <p>{error}</p>
           </div>

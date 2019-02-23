@@ -55,13 +55,16 @@ describe('Integration Test Mining API', () => {
       grouping: query.groupings ? query.groupings : [],
       variables: query.variables ? query.variables : []
     };
-    await apiMining.heatmap({ payload });
-    let { heatmap, error } = apiMining.state;
+    await apiMining.heatmaps({ payload });
+    let { heatmaps, error } = apiMining.state;
 
     const timer = new Promise(resolve => {
       const timerId = setInterval(async () => {
-        const { heatmap, error } = apiMining.state;
-        const loading = !(error || heatmap);
+        const { heatmaps, error } = apiMining.state;
+        const loading =
+          error !== undefined &&
+          heatmaps !== undefined &&
+          heatmaps.map(h => h.data).includes(undefined);
         if (!loading) {
           clearInterval(timerId);
           resolve();
@@ -72,10 +75,10 @@ describe('Integration Test Mining API', () => {
     await timer;
 
     expect(error).toBeFalsy();
-    expect(heatmap).toBeTruthy();
+    expect(heatmaps).toBeTruthy();
 
-    const data = heatmap && heatmap.data;
-    const dataError = heatmap && heatmap.error;
+    const data = heatmaps.every(h => h.data !== undefined);
+    const dataError = heatmaps && [...heatmaps][0].error;
 
     expect(dataError).toBeFalsy();
     expect(data).toBeTruthy();
