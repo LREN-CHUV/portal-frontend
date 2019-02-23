@@ -46,7 +46,7 @@ describe('Test Heatmap component', () => {
 
     const wrapper = mount(<HeatMap {...props} />);
     expect(wrapper.find('.loader .hidden')).toHaveLength(1);
-    expect(wrapper.find('.heatmap h3').text()).toEqual('dataset.code');
+    expect(wrapper.find('.heatmap h3').text()).toEqual('');
     expect(wrapper.find('PlotlyComponent')).toHaveLength(1);
   });
 
