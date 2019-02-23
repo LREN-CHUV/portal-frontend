@@ -14,7 +14,7 @@ const removeKeys = (
 ) => {
   const newObj = { ...obj };
   keys.forEach(key => {
-    newObj[key] = undefined;
+    delete newObj[key];
   });
 
   return { ...newObj };
