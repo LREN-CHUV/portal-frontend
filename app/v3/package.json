@@ -11,7 +11,7 @@
     "highcharts": "^6.2.0",
     "highcharts-react-official": "^2.0.0",
     "jQuery-QueryBuilder": "^2.5.2",
-    "numeral": "^2.0.6",
+    "numbro": "^2.1.2",
     "plotly.js": "^1.44.3",
     "primeicons": "^1.0.0",
     "primereact": "3.0.0",
