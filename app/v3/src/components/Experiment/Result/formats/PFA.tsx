@@ -28,7 +28,8 @@ const buildChart = (
 ) => {
   return {
     chart: {
-      type: 'column'
+      type: 'column',
+      width: 600
     },
     series: [
       {
@@ -42,7 +43,11 @@ const buildChart = (
     xAxis: {
       categories: Object.keys(validation).map(v => SCORES[v] && SCORES[v].label)
     },
-    yAxis: { title: { text: 'Value' } }
+    yAxis: {
+      title: {
+        text: 'Value'
+      }
+    }
   };
 };
 
