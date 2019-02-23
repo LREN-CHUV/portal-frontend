@@ -1,7 +1,7 @@
-import DropdownModel from "../../UI/DropdownModel";
-import { MIP } from "../../../types";
-import * as React from "react";
-import { Button, Glyphicon, Panel } from "react-bootstrap";
+import * as React from 'react';
+import { Button, FormControl, Glyphicon, Panel } from 'react-bootstrap';
+import { MIP } from '../../../types';
+import DropdownModel from '../../UI/DropdownModel';
 
 interface IProps {
   handleGoBackToExplore: () => void;
@@ -13,16 +13,22 @@ interface IProps {
   isMock?: boolean;
 }
 export default class Header extends React.Component<IProps> {
+  public state: any;
   private input: any;
 
   constructor(props: IProps) {
     super(props);
-    this.input = React.createRef();
+    this.state = {
+      modelName: ''
+    };
   }
 
-  private handleSaveModel1 = () => {
-    const { handleSaveModel } = this.props;
-    handleSaveModel({ title: this.input.current.value });
+  public handleClose = () => {
+    this.setState({ show: false });
+  };
+
+  public handleShow = () => {
+    this.setState({ show: true });
   };
 
   public render() {
@@ -35,14 +41,16 @@ export default class Header extends React.Component<IProps> {
       handleSelectModel
     } = this.props;
 
+    const currentModelName = this.state.modelName;
+
     return (
       <Panel>
         <Panel.Body>
           <h3>
-            Interactive Analysis{" "}
+            Interactive Analysis{' '}
             <span>
-              on{" "}
-              {models && (
+              {modelName && `on `}
+              {modelName && models && (
                 <DropdownModel
                   items={models}
                   title={modelName}
@@ -51,63 +59,57 @@ export default class Header extends React.Component<IProps> {
               )}
             </span>
           </h3>
-          <div className="actions status">
-            <div className="item">
+          <div className='actions status'>
+            <div className='item'>
               <Button
-                // tslint:disable
                 onClick={handleGoBackToExplore}
-                bsStyle="info"
-                type="submit"
-                // tslint:enable
-              >
-                <Glyphicon glyph="chevron-left" /> Explore
+                bsStyle='info'
+                type='submit'>
+                <Glyphicon glyph='chevron-left' /> Explore
               </Button>
             </div>
-            <div className="item text">&nbsp;</div>
+            <div className='item text'>&nbsp;</div>
             {isMock && (
-              <div className="item">
-                <input
-                  type="text"
-                  ref={this.input}
-                  placeholder={"Your model name"}
-                  className={"form-control"}
+              <div className='item'>
+                <FormControl
+                  className='item experiment-name'
+                  type='text'
+                  placeholder={'Model name'}
+                  value={currentModelName}
+                  onChange={this.handleChangeModelName}
                   onKeyDown={this.handleKeyPress}
                 />
               </div>
             )}
             {isMock && (
-              <div className="item">
+              <div className='item'>
                 <Button
                   onClick={this.handleSaveModel1}
-                  bsStyle={"info"}
-                  type="submit"
-                  disabled={
-                    this.input.current && this.input.current.value === ""
-                  }
+                  bsStyle={'info'}
+                  type='submit'
+                  disabled={currentModelName === ''}
                   title={
-                    this.input.current && this.input.current.value === ""
-                      ? "Please enter a title for your model"
-                      : ""
-                  }
-                >
+                    currentModelName === ''
+                      ? 'Please enter a title for your model'
+                      : ''
+                  }>
                   Save model
                 </Button>
               </div>
             )}
-            <div className="item">
+            <div className='item'>
               <Button
                 onClick={handleRunAnalysis}
-                bsStyle="info"
-                type="submit"
+                bsStyle='info'
+                type='submit'
                 disabled={isMock}
                 title={
-                  this.input.current && this.input.current.value === ""
-                    ? "Please enter a title for your model"
-                    : ""
-                }
-              >
-                RUN MACHINE LEARNING EXPERIMENT{" "}
-                <Glyphicon glyph="chevron-right" />{" "}
+                  currentModelName === ''
+                    ? 'Please enter a title for your model'
+                    : ''
+                }>
+                RUN MACHINE LEARNING EXPERIMENT{' '}
+                <Glyphicon glyph='chevron-right' />{' '}
               </Button>
             </div>
           </div>
@@ -115,6 +117,21 @@ export default class Header extends React.Component<IProps> {
       </Panel>
     );
   }
+
+  private handleSaveModel1 = () => {
+    const { modelName } = this.state;
+    if (!modelName) {
+      return;
+    }
+    const { handleSaveModel } = this.props;
+    handleSaveModel({ title: modelName });
+  };
+
+  private handleChangeModelName = (event: any) => {
+    this.setState({
+      modelName: event.target.value
+    });
+  };
   private handleKeyPress = (event: any) => {
     const code = event.keyCode || event.charCode;
     if (code === 13) {

@@ -61,7 +61,14 @@ class HeatMap extends React.Component<IProps, IState> {
                 <h3>{heatmaps.length > 1 && h.dataset && h.dataset.code}</h3>
                 <PlotlyHeatmap
                   data={h.data}
-                  layout={{ margin: { l: 0 } }}
+                  layout={{
+                    autosize: true,
+                    height: 400,
+                    margin: {
+                      l: 0
+                    },
+                    width: 600
+                  }}
                   key={`${i}`}
                 />
               </div>

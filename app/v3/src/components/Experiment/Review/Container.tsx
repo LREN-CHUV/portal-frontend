@@ -239,7 +239,7 @@ class Container extends React.Component<IProps, IState> {
               lookup={apiCore.lookup}>
               <Panel className='filters' defaultExpanded={false}>
                 <Panel.Title toggle={true}>
-                  <h3>Filters</h3>
+                  <h3 className={'btn btn-info'}>Filters</h3>
                 </Panel.Title>
                 <Panel.Collapse>
                   <Panel.Body collapsible={true}>
