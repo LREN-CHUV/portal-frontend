@@ -1,8 +1,8 @@
-import { MIP } from "../../types";
-import * as React from "react";
-import { DropdownButton, MenuItem } from "react-bootstrap";
+import * as React from 'react';
+import { DropdownButton, MenuItem } from 'react-bootstrap';
+import { MIP } from '../../types';
 
-import "./Dropdown.css";
+import './Dropdown.css';
 
 interface IDropdown {
   items: MIP.API.IModelResponse[] | undefined;
@@ -12,16 +12,15 @@ interface IDropdown {
 }
 export default ({
   items,
-  title = "No Model",
+  title = 'New Model',
   handleSelect,
   noCaret = false
 }: IDropdown) => (
   <DropdownButton
     noCaret={noCaret}
-    bsSize="small"
-    id={"model-dropdown"}
-    title={title}
-  >
+    bsSize='small'
+    id={'model-dropdown'}
+    title={title}>
     {items &&
       handleSelect &&
       items.map((item, i: number) => {
@@ -30,8 +29,7 @@ export default ({
             eventKey={i}
             key={item.title}
             // tslint:disable-next-line jsx-no-lambda
-            onSelect={() => handleSelect(item)}
-          >
+            onSelect={() => handleSelect(item)}>
             <strong>{item.title}</strong>
           </MenuItem>
         );
