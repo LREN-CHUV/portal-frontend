@@ -34,7 +34,7 @@ const Boxplot = ({ miningState }: IProps) => {
               r.type !== "binominal" &&
               (r.group[0] === "all" || r.group[0] !== "all")
           )
-          .map((e: any) => ({ ...e, dataset: m.dataset.code }))) ||
+          .map((e: any) => ({ ...e, dataset: m.dataset && m.dataset.code }))) ||
         [])
     ],
     []

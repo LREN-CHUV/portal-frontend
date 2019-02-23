@@ -18,9 +18,9 @@ export declare namespace MIP.Store {
   }
 
   export interface IMiningResponseShape {
-    data: any | undefined;
-    error: string | undefined;
-    dataset: MIP.API.IVariableEntity;
+    data?: any;
+    error?: string;
+    dataset?: MIP.API.IVariableEntity;
   }
 
   export interface IMiningState extends IError {
