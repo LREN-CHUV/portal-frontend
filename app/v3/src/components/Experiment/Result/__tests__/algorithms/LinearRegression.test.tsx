@@ -1,6 +1,5 @@
 import Result from '../../Result';
 import * as React from 'react';
-import renderer from 'react-test-renderer';
 import { mount } from 'enzyme';
 import APIAdapter from '../../../../API/APIAdapter';
 import { MIP } from '../../../../../types';
