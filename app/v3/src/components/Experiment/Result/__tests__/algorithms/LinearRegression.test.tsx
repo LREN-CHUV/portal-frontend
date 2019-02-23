@@ -35,7 +35,7 @@ describe('Test linearRegression results', () => {
         .find('.greyGridTable tbody tr td')
         .at(4)
         .text()
-    ).toEqual('0 (***)');
+    ).toEqual('0.000 (***)');
     expect(wrapper.find('.error')).toHaveLength(0);
     expect(wrapper.find('.loading')).toHaveLength(0);
     expect(wrapper.find('div#tabs-methods')).toHaveLength(1);
@@ -67,7 +67,7 @@ describe('Test linearRegression results', () => {
         .find('.greyGridTable tbody tr td')
         .at(4)
         .text()
-    ).toEqual('0 (***)');
+    ).toEqual('0.000 (***)');
     expect(wrapper.find('.error')).toHaveLength(0);
     expect(wrapper.find('.loading')).toHaveLength(0);
     expect(wrapper.find('div#tabs-methods')).toHaveLength(1);

@@ -1,13 +1,13 @@
-import { round } from "../../utils";
-import { MIP } from "../../../types";
-import { Column } from "primereact/column";
-import { DataTable } from "primereact/datatable";
-import * as React from "react";
+import { Column } from 'primereact/column';
+import { DataTable } from 'primereact/datatable';
+import * as React from 'react';
+import { MIP } from '../../../types';
+import { round } from '../../utils';
 
-import "primeicons/primeicons.css";
-import "primereact/resources/primereact.min.css";
-import "primereact/resources/themes/nova-light/theme.css";
-import "./Table.css";
+import 'primeicons/primeicons.css';
+import 'primereact/resources/primereact.min.css';
+import 'primereact/resources/themes/nova-light/theme.css';
+import './Table.css';
 
 interface IProps {
   minings?: MIP.Store.IMiningResponseShape[];
@@ -44,9 +44,9 @@ const Table = ({ minings, selectedDatasets, query, lookup }: IProps) => {
   const columns = selectedDatasets
     ? [
         <Column
-          header="VARIABLES"
-          field="variable"
-          key={"variable"}
+          header='VARIABLES'
+          field='variable'
+          key={'variable'}
           body={variableTemplate}
         />,
         ...selectedDatasets.map((mining: MIP.API.IVariable) => (
@@ -63,7 +63,7 @@ const findVariableData = (code: string, data: any) => {
 
   if (theData) {
     const variableData = theData.find(
-      (r: any) => r.group && (r.group[0] === "all" && r.index === code)
+      (r: any) => r.group && (r.group[0] === 'all' && r.index === code)
     );
 
     return variableData;
@@ -102,7 +102,7 @@ const processContinuousData = (code: string, data: any) => {
     const max = round(variableData.max, 2);
     const std = round(variableData.std, 2);
 
-    return mean ? `${mean} (${min}-${max}) - std: ${std}` : "null";
+    return mean ? `${mean} (${min}-${max}) - std: ${std}` : '-';
   }
 
   return;
@@ -122,7 +122,7 @@ const computeMinings = ({
   const rows: ITableRow[] = [];
   variables.forEach(variable => {
     const isPolynominal =
-      variable.type === "polynominal" || variable.type === "binominal";
+      variable.type === 'polynominal' || variable.type === 'binominal';
     const row: ITableRow = {};
     let polynominalRows: ITableRow[] = [];
 
@@ -147,19 +147,19 @@ const computeMinings = ({
       if (mining) {
         const { error, data } = mining;
         if (!error && !data) {
-          row[code] = "loading...";
+          row[code] = 'loading...';
           if (isPolynominal) {
             polynominalRows = polynominalRows.map(r => ({
               ...r,
-              [code]: "loading..."
+              [code]: 'loading...'
             }));
           }
         } else if (error) {
-          row[code] = "error";
+          row[code] = 'error';
           if (isPolynominal) {
             polynominalRows = polynominalRows.map(r => ({
               ...r,
-              [code]: "error"
+              [code]: 'error'
             }));
           }
         } else if (data) {
@@ -189,8 +189,7 @@ const computeMinings = ({
 
 const variableTemplate = (rowData: any, column: any) => (
   <span
-    className={rowData.category ? "datatable category" : "datatable variable"}
-  >
+    className={rowData.category ? 'datatable category' : 'datatable variable'}>
     {rowData.category ? rowData.category.label : rowData.variable}
   </span>
 );

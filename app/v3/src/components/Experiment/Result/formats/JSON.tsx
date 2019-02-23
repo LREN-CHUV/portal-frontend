@@ -21,17 +21,17 @@ export default ({ row }: { row: any }) => {
     const val = headersKeys.map(key => {
       const value = tables[j][key];
       let output;
-      const starIt = (vvalue: number): string =>
+      const starIt = (vvalue: number, formatedValue: string): string =>
         vvalue < 0.001
-          ? `${vvalue} (***)`
+          ? `${formatedValue} (***)`
           : vvalue < 0.01
-          ? `${vvalue} (**)`
+          ? `${formatedValue} (**)`
           : vvalue < 0.05
-          ? `${vvalue} (*)`
-          : `${vvalue}`;
+          ? `${formatedValue} (*)`
+          : `${formatedValue}`;
 
       if ((key === 'PR(>F)' || key === 'p_values') && isNumber(value)) {
-        output = starIt(value);
+        output = starIt(value,  round(value));
       } else {
         output = !isNaN(value) ? round(value) : '';
       }
