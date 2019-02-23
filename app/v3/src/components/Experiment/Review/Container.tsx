@@ -52,7 +52,7 @@ class Container extends React.Component<IProps, IState> {
           : undefined;
       const filterQuery =
         (qs.filterQuery && decodeURI(qs.filterQuery as string)) || '';
-      const filters =
+      const filtersFromParams =
         qs.filter && (qs.filter as string) !== ''
           ? (qs.filter as string).split(',').map(v => ({
               code: v
@@ -62,7 +62,7 @@ class Container extends React.Component<IProps, IState> {
       const query: MIP.Internal.IQuery = {
         coVariables,
         filters: filterQuery,
-        filtersFromParams: filters,
+        filtersFromParams,
         groupings,
         trainingDatasets,
         variables
@@ -106,7 +106,7 @@ class Container extends React.Component<IProps, IState> {
     const { query } = this.state;
     const variables = apiCore.state.variables;
 
-    // FIXME: move to Filter
+    // FIXME: move to Filter, refactor in a pure way
     let fields: any[] = [];
     const buildFilter = (code: string) => {
       if (!variables) {
@@ -179,6 +179,20 @@ class Container extends React.Component<IProps, IState> {
     // backward compatibility
     allVariables.push('subjectageyears');
     allVariables.push('gender');
+
+    // add filter variables
+    const extractVariablesFromFilter = (filter: any) =>
+      filter.rules.map((r: any) => {
+        if (r.rules) {
+          extractVariablesFromFilter(r);
+        }
+        if (r.id) { allVariables.push(r.id); }
+      });
+
+    if (query && query.filters) {
+      extractVariablesFromFilter(JSON.parse(query.filters));
+    }
+
     const allUniqVariables = Array.from(new Set(allVariables));
     fields =
       (variables && [].concat.apply([], allUniqVariables.map(buildFilter))) ||
