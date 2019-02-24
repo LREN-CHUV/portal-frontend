@@ -101,3 +101,7 @@
   margin-bottom: 12px;
   width: 120px;
 }
+
+.panel-title h3 {
+  padding-left: 16px;
+}

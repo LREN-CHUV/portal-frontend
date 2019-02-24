@@ -1,10 +1,10 @@
-import { APICore, APIExperiment, APIModel } from "../../API";
-import Methods from "../../Experiment/Result/Methods";
-import Model from "../../UI/Model";
-import { MIP } from "../../../types";
-import * as React from "react";
-import { RouteComponentProps, withRouter } from "react-router-dom";
-import { ExperimentResult, ExperimentResultHeader } from "./";
+import * as React from 'react';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
+import { MIP } from '../../../types';
+import { APICore, APIExperiment, APIModel } from '../../API';
+import Methods from '../../Experiment/Result/Methods';
+import Model from '../../UI/Model';
+import { ExperimentResult, ExperimentResultHeader } from './';
 interface IProps extends RouteComponentProps<any> {
   apiExperiment: APIExperiment;
   apiModel: APIModel;
@@ -51,8 +51,8 @@ class Experiment extends React.Component<IProps> {
   public render() {
     const { apiExperiment, apiModel, apiCore } = this.props;
     return (
-      <div className="Experiment">
-        <div className="header">
+      <div className='Experiment'>
+        <div className='header'>
           <ExperimentResultHeader
             experiment={apiExperiment.state.experiment}
             experiments={apiExperiment.state.experiments}
@@ -61,18 +61,18 @@ class Experiment extends React.Component<IProps> {
             handleCreateNewExperiment={this.handleCreateNewExperiment}
           />
         </div>
-        <div className="content">
-          <div className="sidebar">
+        <div className='content'>
+          <div className='sidebar'>
             <Model
               model={apiModel.state.model}
               variables={apiCore.state.variables}
               showDatasets={true}
             />
           </div>
-          <div className="results">
+          <div className='results'>
             <ExperimentResult experimentState={apiExperiment.state} />
           </div>
-          <div className="sidebar2">
+          <div className='sidebar2'>
             <Methods experiment={apiExperiment.state.experiment} />
           </div>
         </div>
