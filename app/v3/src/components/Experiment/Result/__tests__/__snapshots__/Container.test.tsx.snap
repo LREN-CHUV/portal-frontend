@@ -119,10 +119,7 @@ exports[`Test Result components Result snapshot renders correctly 1`] = `
                   }
                 >
                   <p>
-                    You have no running experiments.
-                  </p>
-                  <p>
-                    You can start one by selecting a model and configuring an experiment on it.
+                    You have no running experiments on this model.
                   </p>
                 </div>
               </ul>
