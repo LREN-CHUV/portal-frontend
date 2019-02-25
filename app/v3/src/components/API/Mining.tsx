@@ -4,14 +4,27 @@ import { MIP } from '../../types';
 import { backendURL } from '../API';
 
 class Mining extends Container<MIP.Store.IMiningState> {
+  
+  /*
+  "data": [{ x: n }]   
+  "data": { "data": [{ x: n }] }   
+  "data": [{ "data": [{ x: n }] }] 
+  */
   public static normalizeHeatmapData = (
     heatmap: MIP.Store.IMiningResponseShape
   ): MIP.Store.IMiningResponseShape[] => {
     if (Array.isArray(heatmap.data)) {
-      return heatmap.data.map(d => ({
-        ...heatmap,
-        data: d.data
-      }));
+      const isDataNested = heatmap.data.map(d => d.data).includes(true);
+      if (isDataNested) {
+        return heatmap.data.map(d => ({
+          ...heatmap,
+          data: d.data
+        }));
+      }
+      else {
+        return [ heatmap ];
+      }
+
     } else {
       const data = heatmap.data && heatmap.data.data;
       return [
