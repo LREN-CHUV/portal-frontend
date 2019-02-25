@@ -49,11 +49,11 @@ export default class Header extends React.Component<IProps> {
           <h3>
             Interactive Analysis{' '}
             <span>
-              {modelName && `on `}
-              {modelName && models && (
+              {`on `}
+              {models && (
                 <DropdownModel
                   items={models}
-                  title={modelName}
+                  title={modelName !== '' ? modelName : undefined}
                   handleSelect={handleSelectModel}
                 />
               )}
