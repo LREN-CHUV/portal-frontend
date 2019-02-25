@@ -50,8 +50,10 @@ describe('Test Heatmap component', () => {
     expect(wrapper.find('PlotlyComponent')).toHaveLength(1);
   });
 
-  it('Federated heatmap', () => {
-    const data = require('../__mocks__/responses/fed-heatmap.json');
+  
+  
+  it('Federated heatmap 2', () => {
+    const data = require('../__mocks__/responses/fed-heatmap2.json');
     const heatmap = {
       data: data && data.data,
       dataset: { code: 'dataset.code' },
@@ -70,5 +72,6 @@ describe('Test Heatmap component', () => {
     expect(wrapper.find('.loader .hidden')).toHaveLength(1);
     expect(wrapper.find('.heatmap h3').at(1).text()).toEqual('dataset.code');
     expect(wrapper.find('PlotlyComponent')).toHaveLength(3);
+    console.log(wrapper.find('PlotlyComponent').debug())
   });
 });

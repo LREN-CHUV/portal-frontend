@@ -1,6 +1,6 @@
-import { MIP } from "../../types";
-import * as React from "react";
-import { Button } from "react-bootstrap";
+import * as React from 'react';
+import { Button } from 'react-bootstrap';
+import { MIP } from '../../types';
 
 const AvailableMethods = ({
   methods,
@@ -91,8 +91,8 @@ const AvailableMethods = ({
     availableAlgorithms &&
     availableAlgorithms.sort((a: MIP.API.IMethod, b: MIP.API.IMethod) => {
       try {
-        const typea = (a && a.type && a.type.length > 0 && a.type[0]) || "";
-        const typeb = (b && b.type && b.type.length > 0 && b.type[0]) || "";
+        const typea = (a && a.type && a.type.length > 0 && a.type[0]) || '';
+        const typeb = (b && b.type && b.type.length > 0 && b.type[0]) || '';
 
         return typea < typeb ? 1 : typea > typeb ? -1 : 0;
       } catch (e) {
@@ -100,25 +100,37 @@ const AvailableMethods = ({
       }
     });
 
+  const filteredAlgorithms =
+    sortedAlgorithms &&
+    sortedAlgorithms.filter(
+      a => a.code !== 'histograms' && a.code !== 'statisticsSummary'
+    );
+  const types = Array.from(
+    new Set(filteredAlgorithms.map(f => f.type).flat(1))
+  );
   return (
     <React.Fragment>
-      {sortedAlgorithms.map((algorithm: any) => (
-        <div className="method" key={algorithm.code}>
-          <Button
-            key={algorithm.code}
-            bsStyle="link"
-            title={`${algorithm.type} - ${algorithm.description}`}
-            // tslint:disable-next-line jsx-no-lambda
-            onClick={() => handleSelectMethod(algorithm)}
-            style={{
-              color: algorithm.enabled ? "#03a9f4" : "gray",
-              padding: 0,
-              textTransform: "none"
-            }}
-            disabled={!algorithm.enabled}
-          >
-            {algorithm.label}
-          </Button>
+      {types.map(type => (
+        <div className='method' key={type}>
+          <h4>{type}</h4>
+          {filteredAlgorithms.filter(a => a.type && a.type.includes(type)).map((algorithm: any) => (
+            <div className='method' key={algorithm.code}>
+              <Button
+                key={algorithm.code}
+                bsStyle='link'
+                title={`${algorithm.type} - ${algorithm.description}`}
+                // tslint:disable-next-line jsx-no-lambda
+                onClick={() => handleSelectMethod(algorithm)}
+                style={{
+                  color: algorithm.enabled ? '#03a9f4' : 'gray',
+                  padding: 0,
+                  textTransform: 'none'
+                }}
+                disabled={!algorithm.enabled}>
+                {algorithm.label}
+              </Button>
+            </div>
+          ))}
         </div>
       ))}
     </React.Fragment>
