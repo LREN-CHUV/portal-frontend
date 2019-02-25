@@ -1,6 +1,17 @@
 # Changelog
 
-## 2.15.4
+## 2.15.6 - 2019/02/25
+* Quick implementation of linear regression from Exareme
+
+## 2.15.5 - 2019/02/24
+* UI fixes
+* Fixed filter bug
+* Fixed heatmap visualisation
+* Libs; swaped numeral (buggy) for numbro
+* Formatted linearRegression
+
+
+## 2.15.4 - 2019/02/22
 * Fixed filter query bug
 * Modularized plotly.js -> -1.20 Mo on build
 * Integration and e2e test for Heatmap API
