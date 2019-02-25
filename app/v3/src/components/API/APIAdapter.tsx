@@ -121,7 +121,18 @@ class APIAdapter {
           break;
 
         case MIME_TYPES.JSONDATA:
-          method.data = jsonTest(results);
+          if (/WP_LINEAR/.test(method.algorithm)) {
+            const nresults =
+              results && results.length > 0 && results[0];
+            const data =
+              nresults &&
+              nresults.resources &&
+              nresults.resources.length > 0 &&
+              nresults.resources[0];
+            method.data = [jsonTest(data && data.data)];
+          } else {
+            method.data = jsonTest(results);
+          }
           break;
 
         case MIME_TYPES.VISJS: // EXAREME
