@@ -96,6 +96,7 @@ class Navigation extends React.Component<IProps> {
                 <Dropdown
                   items={apiExperiment.state.experiments}
                   title='BSD'
+                  type='models'
                   // tslint:disable-next-line jsx-no-lambda
                   handleSelect={async (
                     experiment: MIP.API.IExperimentResponse

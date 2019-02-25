@@ -8,6 +8,7 @@ import './Dropdown.css';
 interface IDropdown {
   items: MIP.API.IExperimentResponse[] | undefined;
   title: string;
+  type?: string;
   handleSelect: any;
   handleCreateNewExperiment: any;
   noCaret?: boolean;
@@ -15,6 +16,7 @@ interface IDropdown {
 export default ({
   items,
   title = 'No Model',
+  type = 'model',
   handleSelect,
   handleCreateNewExperiment,
   noCaret = false
@@ -75,7 +77,19 @@ export default ({
           );
         })) || (
       <div style={{ margin: '8px' }}>
-        <p>You have no running experiments on this model.</p>
+        {console.log(handleCreateNewExperiment)}
+        {type === 'models' && (
+          <span>
+            <p>You have no running experiments.</p>
+            <p>
+              You can start one by selecting a model and configuring an
+              experiment on it.
+            </p>
+          </span>
+        )}
+        {type === 'model' && (
+          <p>You have no running experiments on this model.</p>
+        )}
       </div>
     )}
   </DropdownButton>
