@@ -52,7 +52,7 @@ class Mining extends Container<MIP.Store.IMiningState> {
     this.requestedDatasets.clear();
     return this.setState((prevState: any) => ({
       error: undefined,
-      heatmap: undefined,
+      heatmaps: undefined,
       minings: undefined
     }));
   };

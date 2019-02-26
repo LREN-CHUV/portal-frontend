@@ -56,9 +56,9 @@ const Content = ({
                   selectedDatasets={selectedDatasets}
                 />
               </Tab>
-              <Tab eventKey={3} title="Heatmap">
+              {/* <Tab eventKey={3} title="Heatmap">
                 <HeatMap apiMining={apiMining} model={model} />
-              </Tab>
+              </Tab> */}
             </Tabs>
           </Body>
         </Panel>

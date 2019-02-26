@@ -77,7 +77,6 @@ export default ({
           );
         })) || (
       <div style={{ margin: '8px' }}>
-        {console.log(handleCreateNewExperiment)}
         {type === 'models' && (
           <span>
             <p>You have no running experiments.</p>
