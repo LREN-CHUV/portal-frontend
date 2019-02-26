@@ -4,11 +4,10 @@ import { MIP } from '../../types';
 import { backendURL } from '../API';
 
 class Mining extends Container<MIP.Store.IMiningState> {
-  
   /*
-  "data": [{ x: n }]   
-  "data": { "data": [{ x: n }] }   
-  "data": [{ "data": [{ x: n }] }] 
+    "data": [{ x: n }]   
+    "data": { "data": [{ x: n }] }   
+    "data": [{ "data": [{ x: n }] }] 
   */
   public static normalizeHeatmapData = (
     heatmap: MIP.Store.IMiningResponseShape
