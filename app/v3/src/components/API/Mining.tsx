@@ -93,6 +93,7 @@ class Mining extends Container<MIP.Store.IMiningState> {
     payload: MIP.API.IMiningPayload;
   }): Promise<any> => {
     // Filter remaining datasets
+    console.log(JSON.stringify(this.requestedDatasets, null, 4))
     const remainingDatasets = payload.datasets.filter(
       dataset =>
         Array.from(this.requestedDatasets)

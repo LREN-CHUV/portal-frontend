@@ -21,7 +21,7 @@ describe('Integration Test Mining API', () => {
     const query = model.query;
     const payload = {
       covariables: query.coVariables ? query.coVariables : [],
-      datasets: [query.trainingDatasets.pop()], // load one dataset only
+      datasets: [[...query.trainingDatasets].pop()], // load one dataset only
       filters: query.filters,
       grouping: query.groupings ? query.groupings : [],
       variables: query.variables ? query.variables : []
