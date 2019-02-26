@@ -1,5 +1,4 @@
-# Verified with http://hadolint.lukasmartinelli.ch/
-FROM node:8.9.1 as builder
+FROM node:latest as builder
 
 WORKDIR /frontend
 
