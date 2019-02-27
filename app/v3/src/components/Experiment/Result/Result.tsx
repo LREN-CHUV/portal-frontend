@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Panel, Tab, Tabs } from 'react-bootstrap';
 import { MIP } from '../../../types';
 import { MIME_TYPES } from '../../constants';
-import { Highchart, JSON, JSONData, PFA, PlotlyHeatmap } from './formats';
+import { Highchart, JSON, JSONData, PFA, PlotlyPCA } from './formats';
 
 export default ({
   experimentState
@@ -35,7 +35,7 @@ export default ({
 
             {method.mime === MIME_TYPES.PLOTLY &&
               method.data.map((d: { data: any; layout: any }, k: number) => (
-                <PlotlyHeatmap data={d.data} layout={d.layout} key={k} />
+                <PlotlyPCA data={d.data} layout={d.layout} key={k} />
               ))}
             {method.mime === MIME_TYPES.HIGHCHARTS &&
               method.data.map((d: { data: any }, k: number) => (
