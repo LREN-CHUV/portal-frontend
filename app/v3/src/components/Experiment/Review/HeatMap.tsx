@@ -48,7 +48,6 @@ class HeatMap extends React.Component<IProps, IState> {
       error !== undefined &&
       heatmaps !== undefined &&
       heatmaps.map(h => h.data).includes(undefined);
-    console.log({loading})
 
     return (
       <div style={{ padding: '8px' }}>
