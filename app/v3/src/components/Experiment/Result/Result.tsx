@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Panel, Tab, Tabs } from 'react-bootstrap';
 import { MIP } from '../../../types';
 import { MIME_TYPES } from '../../constants';
-import { Highchart, JSON, JSONData, PFA, PlotlyPCA } from './formats';
+import { Highchart, JSON, JSONData, PFA, PlotlyPCA, VISEvilJS } from './formats';
 
 export default ({
   experimentState
@@ -32,10 +32,13 @@ export default ({
               method.data.map((row: any, k: number) => (
                 <JSON key={k} row={row} />
               ))}
-
             {method.mime === MIME_TYPES.PLOTLY &&
               method.data.map((d: { data: any; layout: any }, k: number) => (
                 <PlotlyPCA data={d.data} layout={d.layout} key={k} />
+              ))}
+            {method.mime === MIME_TYPES.VISJS &&
+              method.data.map((d: any, k: number) => (
+                <VISEvilJS jsString={d} key={k} />
               ))}
             {method.mime === MIME_TYPES.HIGHCHARTS &&
               method.data.map((d: { data: any }, k: number) => (

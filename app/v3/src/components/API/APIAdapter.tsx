@@ -122,8 +122,7 @@ class APIAdapter {
 
         case MIME_TYPES.JSONDATA:
           if (/WP_LINEAR/.test(method.algorithm)) {
-            const nresults =
-              results && results.length > 0 && results[0];
+            const nresults = results && results.length > 0 && results[0];
             const data =
               nresults &&
               nresults.resources &&
@@ -135,10 +134,15 @@ class APIAdapter {
           }
           break;
 
-        case MIME_TYPES.VISJS: // EXAREME
-          const visFunction = results[0].data.result.slice(1, -1);
-          method.data = [`<script>var network; ${visFunction}</script>`];
-          break;
+        case MIME_TYPES.VISJS:
+          try {
+            const visFunction = `var network; ${results[0].result.slice(1, -1)}`;
+            method.data = [visFunction]; // FIXME: EXAREME evil eval code
+            break;
+          } catch (e) {
+            method.error = 'Failed to parse results';
+            break;
+          }
 
         case MIME_TYPES.HTML:
           const html = results.map((result1: any) =>

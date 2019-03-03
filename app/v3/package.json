@@ -25,7 +25,8 @@
     "request": "^2.88.0",
     "request-promise-native": "^1.0.5",
     "unstated": "^2.1.1",
-    "unstated-debug": "^0.3.2"
+    "unstated-debug": "^0.3.2",
+    "vis": "^4.21.0"
   },
   "scripts": {
     "watch": "react-scripts start",
@@ -52,6 +53,7 @@
     "@types/react-test-renderer": "^16.8.0",
     "@types/request": "^2.48.1",
     "@types/request-promise-native": "^1.0.15",
+    "@types/vis": "^4.21.11",
     "enzyme": "^3.8.0",
     "enzyme-adapter-react-16": "^1.9.1",
     "jest-canvas-mock": "^2.0.0-alpha.3",
