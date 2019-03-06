@@ -28,6 +28,10 @@ var appScripts = [
   "./" + appConfig.app + "/scripts/app/models/model.controller.js",
   "./" + appConfig.app + "/scripts/app/models/model.service.js",
   "./" + appConfig.app + "/scripts/app/models/debounce.service.js",
+
+  "./" + appConfig.app + "/scripts/app/helpdesk/helpdesk.module.js",
+  "./" + appConfig.app + "/scripts/app/helpdesk/helpdesk.directive.js",
+
   "./" +
     appConfig.app +
     "/scripts/app/models/variable_exploration/exploration.controller.js",

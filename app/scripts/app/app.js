@@ -48,6 +48,7 @@ angular
     "chuvApp.components.criteria",
     "chuvApp.components.config",
     //ui modules
+    "chuvApp.helpdesk",
     "chuvApp.header",
     "chuvApp.footer",
     "chuvApp.home",
