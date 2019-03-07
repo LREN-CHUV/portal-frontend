@@ -1,59 +1,27 @@
-<div id="helpdesk">
-  <p>
-    Do you need help with the MIP? <br />Please enquiry by mail at
-    <a href="mailto:support@humanbrainproject.eu"
-      >support@humanbrainproject.eu</a
-    >
-  </p>
-  <div id="feedback-form">
-    <div>
-      <form class="zammad-form">
-        <div class="form-group">
-          <label>Name</label
-          ><input
-            class="form-control"
-            name="name"
-            type="text"
-            placeholder="Your Name"
-            value=""
-          />
-        </div>
-        <div class="form-group">
-          <label>Email</label
-          ><input
-            class="form-control"
-            name="email"
-            type="email"
-            placeholder="Your Email"
-            value=""
-          />
-        </div>
-        <div class="form-group">
-          <label>Message</label
-          ><textarea
-            class="form-control"
-            name="body"
-            placeholder="Your Message..."
-            rows="7"
-          ></textarea>
-        </div>
-        <div class="form-group">
-          <label>Category</label
-          ><select class="form-control" name="hbp-category" required=""
-            ><option value="Front Line">Front Line (general inquiries)</option
-            ><option value="Operations">Operations Support</option
-            ><option value="Data Curation">Data Curation support</option
-            ><option value="Functional Data Analysis"
-              >Functional Data Analysis</option
-            ><option value="Medical Informatics">Medical Informatics</option
-            ><option value="Simulation and Data Analytics Workflows"
-              >Simulation and Data Analytics Workflows</option
-            ></select
+<div id="helpdesk" class="panel">
+  <uib-accordion>
+    <div uib-accordion-group is-open="false">
+      <uib-accordion-heading>
+        Need help?
+      </uib-accordion-heading>
+      <div class="panel-body">
+        <p>
+          <a href="https://hbpmedical.github.io/documentation/" target="_blank"
+            >Link to MIP Documentation</a
           >
-        </div>
-        <button type="submit" class="btn">Submit</button>
-      </form>
+        </p>
+        <hr />
+        <p>
+          Contact Form
+        </p>
+        <br />
+        <div id="feedback-form"></div>
+        <div ng-bind-html="helpdeskForm"></div>
+        <hr>
+        <a href="mailto:support@humanbrainproject.eu"
+          >support@humanbrainproject.eu</a
+        >
+      </div>
     </div>
-  </div>
-  <div ng-bind-html="helpdeskForm"></div>
+  </uib-accordion>
 </div>

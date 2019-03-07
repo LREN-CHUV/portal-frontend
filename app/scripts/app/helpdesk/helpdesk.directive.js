@@ -19,7 +19,6 @@ angular.module("chuvApp.helpdesk").directive("helpdesk", [
                 script.id = "zammad_form_script";
                 document.body.appendChild(script);
                 script.addEventListener("load", function() {
-
                     $(function () {
                         $('#feedback-form').ZammadForm({
                             messageTitle: 'Feedback Form',
@@ -27,8 +26,11 @@ angular.module("chuvApp.helpdesk").directive("helpdesk", [
                             messageThankYou: 'Thank you for your inquiry (#%s)! We will contact you as soon as possible.'
                         });
                     });
-                    var preselect = document.querySelector('[name="hbp-category"] option[value="Medical Informatics"]');
-                    preselect.selected = "selected";
+                    setTimeout(function() {
+                      var preselect = document.querySelector('[name="hbp-category"] option[value="Medical Informatics"]');
+                      preselect.selected = "selected";
+                    }, 200);
+
                 });
             });
             </script>
