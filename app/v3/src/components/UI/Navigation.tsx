@@ -1,22 +1,24 @@
-import * as React from 'react'
-import { NavLink, RouteComponentProps, withRouter } from 'react-router-dom'
-import default_user from '../../images/default_user.png'
-import { MIP } from '../../types'
-import { APIExperiment, APIModel } from '../API'
-import Dropdown from '../UI/Dropdown'
+import * as React from 'react';
+import { DropdownButton, MenuItem } from 'react-bootstrap';
+import { NavLink, RouteComponentProps, withRouter } from 'react-router-dom';
+import default_user from '../../images/default_user.png';
+import { MIP } from '../../types';
+import { APIExperiment, APIModel } from '../API';
+import Dropdown from '../UI/Dropdown';
+import Helpdesk from './Helpdesk';
 
-import './Navigation.css'
+import './Navigation.css';
 
 interface IProps extends RouteComponentProps<any> {
-  appConfig: any
-  apiExperiment: APIExperiment
-  apiModel: APIModel
+  appConfig: any;
+  apiExperiment: APIExperiment;
+  apiModel: APIModel;
 }
 
 class Navigation extends React.Component<IProps> {
   public render() {
-    const { apiExperiment, apiModel, appConfig } = this.props
-    const instanceName = appConfig.instanceName || 'MIP'
+    const { apiExperiment, apiModel, appConfig } = this.props;
+    const instanceName = appConfig.instanceName || 'MIP';
 
     const unreadCount =
       (apiExperiment &&
@@ -25,7 +27,7 @@ class Navigation extends React.Component<IProps> {
         apiExperiment.state.experiments.filter(
           e => !e.resultsViewed && !e.results && !e.error
         ).length) ||
-      undefined
+      undefined;
 
     return (
       <header id='topnav' className='navbar navbar-default navbar-fixed-top '>
@@ -101,14 +103,14 @@ class Navigation extends React.Component<IProps> {
                   handleSelect={async (
                     experiment: MIP.API.IExperimentResponse
                   ) => {
-                    const { modelDefinitionId, uuid } = experiment
+                    const { modelDefinitionId, uuid } = experiment;
                     this.props.history.push(
                       `/v3/experiment/${modelDefinitionId}/${uuid}`
-                    )
-                    await apiExperiment.markAsViewed({ uuid })
-                    await apiModel.one(modelDefinitionId)
+                    );
+                    await apiExperiment.markAsViewed({ uuid });
+                    await apiModel.one(modelDefinitionId);
 
-                    return await apiExperiment.one({ uuid })
+                    return await apiExperiment.one({ uuid });
                   }}
                   handleCreateNewExperiment={null}
                   noCaret={true}
@@ -147,16 +149,42 @@ class Navigation extends React.Component<IProps> {
                 </li>
               </ul>
             </li>
-            <li className='toolbar-trigger toolbar-icon-bg'>
-              <a
-                href='https://hbpmedical.github.io/documentation/HBP_SP8_UserGuide_latest.pdf'
-                target='_help'
-                title='Knowledge base'>
-                <span className='icon-bg' style={{ fontWeight: 900 }}>
-                  ?
-                </span>
-              </a>
+
+            <li className='toolbar-icon-bg hidden-xs help'>
+              <DropdownButton
+                noCaret={true}
+                bsStyle='default'
+                id={'experiment-dropdown'}
+                title={'?'}>
+                <MenuItem
+                  // tslint:disable-next-line jsx-no-lambda
+                  onSelect={() => {
+                    window.open('https://hbpmedical.github.io/documentation/');
+                  }}>
+                  <span className='glyphicon-book glyph' />
+                    {' '}MIP Documentation
+                </MenuItem>
+                <MenuItem // tslint:disable-next-line jsx-no-lambda
+                  onSelect={() => {
+                    window.open('https://www.youtube.com/watch?v=MNWExzouMJw');
+                  }}>
+                  <span className='glyphicon-film glyph' />
+                    {' '}MIP introduction (video)
+                
+                </MenuItem>
+                <MenuItem // tslint:disable-next-line jsx-no-lambda
+                  onSelect={() => {
+                    window.open('mailto:support@humanbrainproject.eu');
+                  }}>
+                  <span className='glyphicon-envelope glyph' />
+                    {' '}Email us at support@humanbrainproject.eu
+                </MenuItem>
+                <MenuItem style={{ width: '380px', padding: '1em' }}>
+                  <Helpdesk />
+                </MenuItem>
+              </DropdownButton>
             </li>
+
             <li className='toolbar-trigger toolbar-icon-bg'>
               <a ui-sref='hbpapps' title='App' href='/hbpapps'>
                 <span className='icon-bg'>
@@ -170,13 +198,13 @@ class Navigation extends React.Component<IProps> {
           </ul>
         </div>
       </header>
-    )
+    );
   }
 
   private jumpToAngular = (e: any, location: string) => {
-    e.preventDefault()
-    window.location.href = `${location}`
-  }
+    e.preventDefault();
+    window.location.href = `${location}`;
+  };
 }
 
-export default withRouter(Navigation)
+export default withRouter(Navigation);

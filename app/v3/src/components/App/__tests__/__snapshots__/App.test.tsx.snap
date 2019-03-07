@@ -204,21 +204,158 @@ exports[`Test App components App snapshot renders correctly 1`] = `
             className="toolbar-trigger toolbar-icon-bg"
           >
             <a
-              href="https://hbpmedical.github.io/documentation/HBP_SP8_UserGuide_latest.pdf"
-              target="_help"
-              title="Knowledge base"
+              className="uib-dropdown-toggle"
+              href="#"
             >
               <span
                 className="icon-bg"
                 style={
                   Object {
-                    "fontWeight": 900,
+                    "fontWeight": "bold",
                   }
                 }
               >
                 ?
               </span>
             </a>
+            <div
+              className="dropdown btn-group btn-group-default"
+            >
+              <button
+                aria-expanded={false}
+                aria-haspopup={true}
+                className="dropdown-toggle btn btn-default"
+                disabled={false}
+                id="experiment-dropdown"
+                onClick={[Function]}
+                onKeyDown={[Function]}
+                role="button"
+                type="button"
+              >
+                title
+              </button>
+              <ul
+                aria-labelledby="experiment-dropdown"
+                className="dropdown-menu"
+                role="menu"
+              >
+                <li
+                  className=""
+                  role="presentation"
+                >
+                  <a
+                    href="#"
+                    onClick={[Function]}
+                    onKeyDown={[Function]}
+                    role="menuitem"
+                    tabIndex="-1"
+                  >
+                    <i
+                      className="ti ti-help-alt"
+                    />
+                    <p>
+                      MIP Documentation
+                    </p>
+                  </a>
+                </li>
+                <li
+                  className=""
+                  role="presentation"
+                >
+                  <a
+                    href="#"
+                    onClick={[Function]}
+                    onKeyDown={[Function]}
+                    role="menuitem"
+                    tabIndex="-1"
+                  >
+                    <a
+                      href="https://www.youtube.com/watch?v=MNWExzouMJw"
+                      target="_blank"
+                    >
+                      <i
+                        className="ti ti-video-clapper"
+                      />
+                      <span>
+                        MIP introduction (video)
+                      </span>
+                    </a>
+                  </a>
+                </li>
+                <li
+                  className=""
+                  role="presentation"
+                >
+                  <a
+                    href="#"
+                    onClick={[Function]}
+                    onKeyDown={[Function]}
+                    role="menuitem"
+                    tabIndex="-1"
+                  >
+                    <a
+                      href="mailto:support@humanbrainproject.eu"
+                      target="_blank"
+                    >
+                      <i
+                        className="ti ti-email"
+                      />
+                      <span>
+                        Email us
+                      </span>
+                    </a>
+                  </a>
+                </li>
+                <li
+                  className=""
+                  role="presentation"
+                >
+                  <a
+                    href="#"
+                    onClick={[Function]}
+                    onKeyDown={[Function]}
+                    role="menuitem"
+                    tabIndex="-1"
+                  >
+                    ---------------------------
+                  </a>
+                </li>
+                <li
+                  className=""
+                  role="presentation"
+                  style={
+                    Object {
+                      "padding": "1em",
+                      "width": "380px",
+                    }
+                  }
+                >
+                  <a
+                    href="#"
+                    onClick={[Function]}
+                    onKeyDown={[Function]}
+                    role="menuitem"
+                    tabIndex="-1"
+                  >
+                    <div>
+                      <i
+                        className="ti ti-headphone-alt"
+                      />
+                      <span
+                        style={
+                          Object {
+                            "marginLeft": "16px",
+                          }
+                        }
+                      >
+                        Contact form
+                      </span>
+                    </div>
+                    <br />
+                  </a>
+                </li>
+              </ul>
+            </div>
           </li>
           <li
             className="toolbar-trigger toolbar-icon-bg"
@@ -455,21 +592,158 @@ exports[`Test App components AppContainer snapshot renders correctly 1`] = `
             className="toolbar-trigger toolbar-icon-bg"
           >
             <a
-              href="https://hbpmedical.github.io/documentation/HBP_SP8_UserGuide_latest.pdf"
-              target="_help"
-              title="Knowledge base"
+              className="uib-dropdown-toggle"
+              href="#"
             >
               <span
                 className="icon-bg"
                 style={
                   Object {
-                    "fontWeight": 900,
+                    "fontWeight": "bold",
                   }
                 }
               >
                 ?
               </span>
             </a>
+            <div
+              className="dropdown btn-group btn-group-default"
+            >
+              <button
+                aria-expanded={false}
+                aria-haspopup={true}
+                className="dropdown-toggle btn btn-default"
+                disabled={false}
+                id="experiment-dropdown"
+                onClick={[Function]}
+                onKeyDown={[Function]}
+                role="button"
+                type="button"
+              >
+                title
+              </button>
+              <ul
+                aria-labelledby="experiment-dropdown"
+                className="dropdown-menu"
+                role="menu"
+              >
+                <li
+                  className=""
+                  role="presentation"
+                >
+                  <a
+                    href="#"
+                    onClick={[Function]}
+                    onKeyDown={[Function]}
+                    role="menuitem"
+                    tabIndex="-1"
+                  >
+                    <i
+                      className="ti ti-help-alt"
+                    />
+                    <p>
+                      MIP Documentation
+                    </p>
+                  </a>
+                </li>
+                <li
+                  className=""
+                  role="presentation"
+                >
+                  <a
+                    href="#"
+                    onClick={[Function]}
+                    onKeyDown={[Function]}
+                    role="menuitem"
+                    tabIndex="-1"
+                  >
+                    <a
+                      href="https://www.youtube.com/watch?v=MNWExzouMJw"
+                      target="_blank"
+                    >
+                      <i
+                        className="ti ti-video-clapper"
+                      />
+                      <span>
+                        MIP introduction (video)
+                      </span>
+                    </a>
+                  </a>
+                </li>
+                <li
+                  className=""
+                  role="presentation"
+                >
+                  <a
+                    href="#"
+                    onClick={[Function]}
+                    onKeyDown={[Function]}
+                    role="menuitem"
+                    tabIndex="-1"
+                  >
+                    <a
+                      href="mailto:support@humanbrainproject.eu"
+                      target="_blank"
+                    >
+                      <i
+                        className="ti ti-email"
+                      />
+                      <span>
+                        Email us
+                      </span>
+                    </a>
+                  </a>
+                </li>
+                <li
+                  className=""
+                  role="presentation"
+                >
+                  <a
+                    href="#"
+                    onClick={[Function]}
+                    onKeyDown={[Function]}
+                    role="menuitem"
+                    tabIndex="-1"
+                  >
+                    ---------------------------
+                  </a>
+                </li>
+                <li
+                  className=""
+                  role="presentation"
+                  style={
+                    Object {
+                      "padding": "1em",
+                      "width": "380px",
+                    }
+                  }
+                >
+                  <a
+                    href="#"
+                    onClick={[Function]}
+                    onKeyDown={[Function]}
+                    role="menuitem"
+                    tabIndex="-1"
+                  >
+                    <div>
+                      <i
+                        className="ti ti-headphone-alt"
+                      />
+                      <span
+                        style={
+                          Object {
+                            "marginLeft": "16px",
+                          }
+                        }
+                      >
+                        Contact form
+                      </span>
+                    </div>
+                    <br />
+                  </a>
+                </li>
+              </ul>
+            </div>
           </li>
           <li
             className="toolbar-trigger toolbar-icon-bg"

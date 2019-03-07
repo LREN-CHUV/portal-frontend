@@ -21,6 +21,8 @@
   font-weight: normal;
   line-height: 1;
   margin-right: 4px;
+  height: 16px;
+  width: 16px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }

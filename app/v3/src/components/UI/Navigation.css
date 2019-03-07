@@ -1,4 +1,13 @@
+.zammad-form .form-group:nth-of-type(4) {
+  display: none !important;
+}
+.dropdown-menu li {
+  margin: 1em;
+}
 
+.dropdown-menu {
+  left: auto !important;
+}
 .bsd {
   top: 8px !important;
 }
@@ -1186,4 +1195,8 @@ i.ti {
   text-align: center;
   height: 40px;
   width: 40px;
+}
+
+#topnav .help {
+  margin-top: 8px;
 }
