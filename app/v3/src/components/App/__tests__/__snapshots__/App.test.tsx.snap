@@ -201,23 +201,8 @@ exports[`Test App components App snapshot renders correctly 1`] = `
             </ul>
           </li>
           <li
-            className="toolbar-trigger toolbar-icon-bg"
+            className="toolbar-icon-bg hidden-xs help"
           >
-            <a
-              className="uib-dropdown-toggle"
-              href="#"
-            >
-              <span
-                className="icon-bg"
-                style={
-                  Object {
-                    "fontWeight": "bold",
-                  }
-                }
-              >
-                ?
-              </span>
-            </a>
             <div
               className="dropdown btn-group btn-group-default"
             >
@@ -232,7 +217,7 @@ exports[`Test App components App snapshot renders correctly 1`] = `
                 role="button"
                 type="button"
               >
-                title
+                ?
               </button>
               <ul
                 aria-labelledby="experiment-dropdown"
@@ -250,12 +235,10 @@ exports[`Test App components App snapshot renders correctly 1`] = `
                     role="menuitem"
                     tabIndex="-1"
                   >
-                    <i
-                      className="ti ti-help-alt"
+                    <span
+                      className="glyphicon-book glyph"
                     />
-                    <p>
-                      MIP Documentation
-                    </p>
+                     MIP Documentation
                   </a>
                 </li>
                 <li
@@ -269,60 +252,35 @@ exports[`Test App components App snapshot renders correctly 1`] = `
                     role="menuitem"
                     tabIndex="-1"
                   >
-                    <a
-                      href="https://www.youtube.com/watch?v=MNWExzouMJw"
-                      target="_blank"
-                    >
-                      <i
-                        className="ti ti-video-clapper"
-                      />
-                      <span>
-                        MIP introduction (video)
-                      </span>
-                    </a>
+                    <span
+                      className="glyphicon-film glyph"
+                    />
+                     MIP introduction (video)
                   </a>
                 </li>
-                <li
-                  className=""
-                  role="presentation"
+                <div
+                  onKeyDown={[Function]}
+                  onSelect={[Function]}
+                  style={
+                    Object {
+                      "marginLeft": "28px",
+                    }
+                  }
                 >
+                  <span
+                    className="glyphicon-envelope glyph"
+                  />
+                   Email us at
+                   
                   <a
-                    href="#"
-                    onClick={[Function]}
-                    onKeyDown={[Function]}
-                    role="menuitem"
-                    tabIndex="-1"
+                    href="mailto://support@humanbrainproject.eu"
                   >
-                    <a
-                      href="mailto:support@humanbrainproject.eu"
-                      target="_blank"
-                    >
-                      <i
-                        className="ti ti-email"
-                      />
-                      <span>
-                        Email us
-                      </span>
-                    </a>
+                    support@humanbrainproject.eu
                   </a>
-                </li>
-                <li
-                  className=""
-                  role="presentation"
-                >
-                  <a
-                    href="#"
-                    onClick={[Function]}
-                    onKeyDown={[Function]}
-                    role="menuitem"
-                    tabIndex="-1"
-                  >
-                    ---------------------------
-                  </a>
-                </li>
-                <li
-                  className=""
-                  role="presentation"
+                </div>
+                <div
+                  onKeyDown={[Function]}
+                  onSelect={[Function]}
                   style={
                     Object {
                       "padding": "1em",
@@ -330,30 +288,12 @@ exports[`Test App components App snapshot renders correctly 1`] = `
                     }
                   }
                 >
-                  <a
-                    href="#"
-                    onClick={[Function]}
-                    onKeyDown={[Function]}
-                    role="menuitem"
-                    tabIndex="-1"
-                  >
-                    <div>
-                      <i
-                        className="ti ti-headphone-alt"
-                      />
-                      <span
-                        style={
-                          Object {
-                            "marginLeft": "16px",
-                          }
-                        }
-                      >
-                        Contact form
-                      </span>
-                    </div>
-                    <br />
-                  </a>
-                </li>
+                  <div>
+                    <div
+                      id="feedback-form"
+                    />
+                  </div>
+                </div>
               </ul>
             </div>
           </li>
@@ -589,23 +529,8 @@ exports[`Test App components AppContainer snapshot renders correctly 1`] = `
             </ul>
           </li>
           <li
-            className="toolbar-trigger toolbar-icon-bg"
+            className="toolbar-icon-bg hidden-xs help"
           >
-            <a
-              className="uib-dropdown-toggle"
-              href="#"
-            >
-              <span
-                className="icon-bg"
-                style={
-                  Object {
-                    "fontWeight": "bold",
-                  }
-                }
-              >
-                ?
-              </span>
-            </a>
             <div
               className="dropdown btn-group btn-group-default"
             >
@@ -620,7 +545,7 @@ exports[`Test App components AppContainer snapshot renders correctly 1`] = `
                 role="button"
                 type="button"
               >
-                title
+                ?
               </button>
               <ul
                 aria-labelledby="experiment-dropdown"
@@ -638,12 +563,10 @@ exports[`Test App components AppContainer snapshot renders correctly 1`] = `
                     role="menuitem"
                     tabIndex="-1"
                   >
-                    <i
-                      className="ti ti-help-alt"
+                    <span
+                      className="glyphicon-book glyph"
                     />
-                    <p>
-                      MIP Documentation
-                    </p>
+                     MIP Documentation
                   </a>
                 </li>
                 <li
@@ -657,60 +580,35 @@ exports[`Test App components AppContainer snapshot renders correctly 1`] = `
                     role="menuitem"
                     tabIndex="-1"
                   >
-                    <a
-                      href="https://www.youtube.com/watch?v=MNWExzouMJw"
-                      target="_blank"
-                    >
-                      <i
-                        className="ti ti-video-clapper"
-                      />
-                      <span>
-                        MIP introduction (video)
-                      </span>
-                    </a>
+                    <span
+                      className="glyphicon-film glyph"
+                    />
+                     MIP introduction (video)
                   </a>
                 </li>
-                <li
-                  className=""
-                  role="presentation"
+                <div
+                  onKeyDown={[Function]}
+                  onSelect={[Function]}
+                  style={
+                    Object {
+                      "marginLeft": "28px",
+                    }
+                  }
                 >
+                  <span
+                    className="glyphicon-envelope glyph"
+                  />
+                   Email us at
+                   
                   <a
-                    href="#"
-                    onClick={[Function]}
-                    onKeyDown={[Function]}
-                    role="menuitem"
-                    tabIndex="-1"
+                    href="mailto://support@humanbrainproject.eu"
                   >
-                    <a
-                      href="mailto:support@humanbrainproject.eu"
-                      target="_blank"
-                    >
-                      <i
-                        className="ti ti-email"
-                      />
-                      <span>
-                        Email us
-                      </span>
-                    </a>
+                    support@humanbrainproject.eu
                   </a>
-                </li>
-                <li
-                  className=""
-                  role="presentation"
-                >
-                  <a
-                    href="#"
-                    onClick={[Function]}
-                    onKeyDown={[Function]}
-                    role="menuitem"
-                    tabIndex="-1"
-                  >
-                    ---------------------------
-                  </a>
-                </li>
-                <li
-                  className=""
-                  role="presentation"
+                </div>
+                <div
+                  onKeyDown={[Function]}
+                  onSelect={[Function]}
                   style={
                     Object {
                       "padding": "1em",
@@ -718,30 +616,12 @@ exports[`Test App components AppContainer snapshot renders correctly 1`] = `
                     }
                   }
                 >
-                  <a
-                    href="#"
-                    onClick={[Function]}
-                    onKeyDown={[Function]}
-                    role="menuitem"
-                    tabIndex="-1"
-                  >
-                    <div>
-                      <i
-                        className="ti ti-headphone-alt"
-                      />
-                      <span
-                        style={
-                          Object {
-                            "marginLeft": "16px",
-                          }
-                        }
-                      >
-                        Contact form
-                      </span>
-                    </div>
-                    <br />
-                  </a>
-                </li>
+                  <div>
+                    <div
+                      id="feedback-form"
+                    />
+                  </div>
+                </div>
               </ul>
             </div>
           </li>
