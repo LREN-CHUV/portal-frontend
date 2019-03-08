@@ -2,6 +2,7 @@ import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
 import * as React from 'react';
 import { MIP } from '../../../types';
+import Loader from '../../UI/Loader';
 import { round } from '../../utils';
 
 import 'primeicons/primeicons.css';
@@ -55,7 +56,11 @@ const Table = ({ minings, selectedDatasets, query, lookup }: IProps) => {
       ]
     : [];
 
-  return <DataTable value={rows}>{columns}</DataTable>;
+  return rows && rows.length > 0 && (columns && columns.length > 0) ? (
+    <DataTable value={rows}>{columns}</DataTable>
+  ) : (
+    <Loader />
+  );
 };
 
 const findVariableData = (code: string, data: any) => {
