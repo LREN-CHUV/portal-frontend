@@ -161,27 +161,24 @@ class Navigation extends React.Component<IProps> {
                   onSelect={() => {
                     window.open('https://hbpmedical.github.io/documentation/');
                   }}>
-                  <span className='glyphicon-book glyph' />
-                    {' '}MIP Documentation
+                  <span className='glyphicon-book glyph' /> MIP Documentation
                 </MenuItem>
                 <MenuItem // tslint:disable-next-line jsx-no-lambda
                   onSelect={() => {
                     window.open('https://www.youtube.com/watch?v=MNWExzouMJw');
                   }}>
-                  <span className='glyphicon-film glyph' />
-                    {' '}MIP introduction (video)
-                
+                  <span className='glyphicon-film glyph' /> MIP introduction
+                  (video)
                 </MenuItem>
-                <MenuItem // tslint:disable-next-line jsx-no-lambda
-                  onSelect={() => {
-                    window.open('mailto:support@humanbrainproject.eu');
-                  }}>
-                  <span className='glyphicon-envelope glyph' />
-                    {' '}Email us at support@humanbrainproject.eu
-                </MenuItem>
-                <MenuItem style={{ width: '380px', padding: '1em' }}>
+                <div style={{ marginLeft: '28px' }}>
+                  <span className='glyphicon-envelope glyph' /> Email us at{' '}
+                  <a href='mailto://support@humanbrainproject.eu'>
+                    support@humanbrainproject.eu
+                  </a>
+                </div>
+                <div style={{ width: '380px', padding: '1em' }}>
                   <Helpdesk />
-                </MenuItem>
+                </div>
               </DropdownButton>
             </li>
 
