@@ -6810,10 +6810,10 @@ highcharts-react-official@^2.1.1:
   resolved "https://registry.yarnpkg.com/highcharts-react-official/-/highcharts-react-official-2.1.1.tgz#c3f323fc2db4eaf9aebee48660f97fc0e73b8b7f"
   integrity sha512-No02RtlBESjMt11M3hZxFG04si3dbYCCmt31GNLeg4IVPJlx2kjsMNMKRy0yDGA7PsCJPUO0S8imngkN0T9x0Q==
 
-highcharts@^6.2.0:
-  version "6.2.0"
-  resolved "https://registry.yarnpkg.com/highcharts/-/highcharts-6.2.0.tgz#2a6d04652eb43c66f462ca7e2d2808f1f2782b61"
-  integrity sha512-A4E89MA+kto8giic7zyLU6ZxfXnVeCUlKOyzFsah3+n4BROx4bgonl92KIBtwLud/mIWir8ahqhuhe2by9LakQ==
+highcharts@^7.0.3:
+  version "7.0.3"
+  resolved "https://registry.yarnpkg.com/highcharts/-/highcharts-7.0.3.tgz#0c8edb578bae28774b9f0d49cf1ae4887b126305"
+  integrity sha512-ubfHLDqKZkGLfDGWYPaa9txLwiJDSWphMZ15xdC0RKKKxZ2ZBc13+MjDfz5ARpYGQvCHmytGOGFUgRWEvkOhNA==
 
 history@^4.7.2:
   version "4.7.2"

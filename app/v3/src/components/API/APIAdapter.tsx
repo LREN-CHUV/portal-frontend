@@ -85,9 +85,14 @@ class APIAdapter {
         mime
       };
 
-      if (r.Error) {
-        // EXAREME
-        method.error = r.Error;
+      // EXAREME
+      if (r.data && r.data["Error"]) {
+        experimentResponse = {
+          ...experimentResponse,
+          error: r.data["Error"]
+        };
+
+        return experimentResponse;
       }
 
       // Convert to array to have consistent results
@@ -136,7 +141,10 @@ class APIAdapter {
 
         case MIME_TYPES.VISJS:
           try {
-            const visFunction = `var network; ${results[0].result.slice(1, -1)}`;
+            const visFunction = `var network; ${results[0].result.slice(
+              1,
+              -1
+            )}`;
             method.data = [visFunction]; // FIXME: EXAREME evil eval code
             break;
           } catch (e) {
