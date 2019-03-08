@@ -1,6 +1,6 @@
 {
   "name": "frontend",
-  "version": "2.15.7",
+  "version": "2.15.8",
   "dependencies": {
     "@uirouter/angularjs": "1.0.14",
     "angular": "1.6.8",
