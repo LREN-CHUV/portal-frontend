@@ -2,7 +2,14 @@ import * as React from 'react';
 import { Panel, Tab, Tabs } from 'react-bootstrap';
 import { MIP } from '../../../types';
 import { MIME_TYPES } from '../../constants';
-import { Highchart, JSON, JSONData, PFA, PlotlyPCA, VISEvilJS } from './formats';
+import {
+  Highchart,
+  JSON,
+  JSONData,
+  PFA,
+  PlotlyPCA,
+  VISEvilJS
+} from './formats';
 
 export default ({
   experimentState
@@ -23,7 +30,7 @@ export default ({
         thenode.methods.map((method: any, j: number) => (
           <Tab eventKey={j} title={method.algorithm} key={j}>
             {method.mime === MIME_TYPES.ERROR && (
-              <div>
+              <div className='error'>
                 <h3>An error has occured</h3>
                 <p>{method.error}</p>
               </div>

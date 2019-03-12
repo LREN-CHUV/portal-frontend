@@ -3,14 +3,14 @@ import Result from '../../../../Experiment/Result/Result';
 import { MIP } from '../../../../../types';
 import * as React from 'react';
 import {
-  datasets,
   createExperiment,
   createModel,
   waitForResult
 } from '../../../../utils/TestUtils';
 
 const modelSlug = `model-${Math.round(Math.random() * 10000)}`;
-const experimentCode = 'linearRegression';
+const experimentCode = 'WP_LINEAR_REGRESSION';
+const datasets = [{ code: 'adni' }];
 const model: any = (datasets: MIP.API.IVariableEntity[]) => ({
   query: {
     coVariables: [{ code: 'alzheimerbroadcategory' }],
@@ -28,7 +28,7 @@ const payload: MIP.API.IExperimentPayload = {
   algorithms: [
     {
       code: experimentCode,
-      name: experimentCode,
+      name: experimentCode, // FIXME: name is used to parse response which is bad !!!
       parameters: [],
       validation: false
     }
@@ -40,20 +40,14 @@ const payload: MIP.API.IExperimentPayload = {
 
 describe('Integration Test for experiment API', () => {
   beforeAll(async () => {
-    const dstate = await datasets();
-    expect(dstate.error).toBeFalsy();
-    expect(dstate.datasets).toBeTruthy();
+    const mstate = await createModel({
+      model: model(datasets),
+      modelSlug
+    });
+    expect(mstate.error).toBeFalsy();
+    expect(mstate.model).toBeTruthy();
 
-    if (dstate.datasets) {
-      const mstate = await createModel({
-        model: model(dstate.datasets),
-        modelSlug
-      });
-      expect(mstate.error).toBeFalsy();
-      expect(mstate.model).toBeTruthy();
-
-      return true;
-    }
+    return true;
   });
 
   it(`create ${experimentCode}`, async () => {
@@ -68,7 +62,7 @@ describe('Integration Test for experiment API', () => {
     if (!uuid) {
       throw new Error('uuid not defined');
     }
-    
+
     const experimentState = await waitForResult({ uuid });
     expect(experimentState.error).toBeFalsy();
     expect(experimentState.experiment).toBeTruthy();
@@ -78,7 +72,13 @@ describe('Integration Test for experiment API', () => {
     expect(wrapper.find('.error')).toHaveLength(0);
     expect(wrapper.find('.loading')).toHaveLength(0);
     expect(wrapper.find('div#tabs-methods')).toHaveLength(1);
-
+    expect(wrapper.find('.greyGridTable')).toHaveLength(1);
+    expect(
+      wrapper
+        .find('.greyGridTable tbody tr td')
+        .first()
+        .text()
+    ).toEqual('(Intercept)');
     expect(
       wrapper
         .find('.greyGridTable tbody tr td')

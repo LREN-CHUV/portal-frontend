@@ -103,7 +103,7 @@ export default ({ method, data }: { method: MIP.API.IMethod; data: any }) => {
     (data && (
       <Tabs defaultActiveKey={0} id='pfa-method' style={{ marginTop: '16px' }}>
         {data && data.error && (
-          <div>
+          <div className='error'>
             <h3>An error has occured</h3>
             <p>{data.error}</p>
           </div>

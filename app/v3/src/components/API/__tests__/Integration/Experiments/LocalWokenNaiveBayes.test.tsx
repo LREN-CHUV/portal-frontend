@@ -9,18 +9,22 @@ import {
   waitForResult
 } from '../../../../utils/TestUtils';
 
+
 const modelSlug = `model-${Math.round(Math.random() * 10000)}`;
-const experimentCode = 'linearRegression';
+const experimentCode = 'naiveBayes';
 const model: any = (datasets: MIP.API.IVariableEntity[]) => ({
   query: {
-    coVariables: [{ code: 'alzheimerbroadcategory' }],
-    groupings: [],
+    coVariables: [{ code: 'subjectageyears' }],
+    groupings: [{ code: 'alzheimerbroadcategory' }],
     testingDatasets: [],
     filters:
       '{"condition":"AND","rules":[{"id":"subjectageyears","field":"subjectageyears","type":"integer","input":"number","operator":"greater","value":"65"}],"valid":true}',
     trainingDatasets: datasets.map(d => ({ code: d.code })),
     validationDatasets: [],
-    variables: [{ code: 'lefthippocampus' }]
+    variables: [
+      { code: 'righthippocampus' },
+      { code: 'rightententorhinalarea' },
+    ],
   }
 });
 
@@ -79,11 +83,11 @@ describe('Integration Test for experiment API', () => {
     expect(wrapper.find('.loading')).toHaveLength(0);
     expect(wrapper.find('div#tabs-methods')).toHaveLength(1);
 
-    expect(
-      wrapper
-        .find('.greyGridTable tbody tr td')
-        .at(4)
-        .text()
-    ).toEqual('0.000 (***)');
+    // expect(
+    //   wrapper
+    //     .find('.greyGridTable tbody tr td')
+    //     .at(4)
+    //     .text()
+    // ).toEqual('0.000 (***)');
   });
 });
