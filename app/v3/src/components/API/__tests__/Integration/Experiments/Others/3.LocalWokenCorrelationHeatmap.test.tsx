@@ -1,29 +1,29 @@
 import { mount } from 'enzyme';
-import Result from '../../../../Experiment/Result/Result';
-import { MIP } from '../../../../../types';
+import Result from '../../../../../Experiment/Result/Result';
+import { MIP } from '../../../../../../types';
 import * as React from 'react';
 import {
   datasets,
   createExperiment,
   createModel,
   waitForResult
-} from '../../../../utils/TestUtils';
+} from '../../../../../utils/TestUtils';
+
+
+// config
 
 const modelSlug = `model-${Math.round(Math.random() * 10000)}`;
-const experimentCode = 'knn';
+const experimentCode = 'correlationHeatmap';
 const model: any = (datasets: MIP.API.IVariableEntity[]) => ({
   query: {
-    coVariables: [{ code: 'subjectageyears' }],
-    groupings: [{ code: 'alzheimerbroadcategory' }],
+    coVariables: [{ code: 'lefthippocampus' }, { code: 'righthippocampus' }],
+    groupings: [],
     testingDatasets: [],
     filters:
       '{"condition":"AND","rules":[{"id":"subjectageyears","field":"subjectageyears","type":"integer","input":"number","operator":"greater","value":"65"}],"valid":true}',
     trainingDatasets: datasets.map(d => ({ code: d.code })),
     validationDatasets: [],
-    variables: [
-      { code: 'righthippocampus' },
-      { code: 'rightententorhinalarea' }
-    ]
+    variables: [{ code: 'subjectageyears' }],
   }
 });
 
@@ -59,6 +59,8 @@ describe('Integration Test for experiment API', () => {
     }
   });
 
+  // Test
+
   it(`create ${experimentCode}`, async () => {
     const { error, experiment } = await createExperiment({
       experiment: payload
@@ -71,7 +73,7 @@ describe('Integration Test for experiment API', () => {
     if (!uuid) {
       throw new Error('uuid not defined');
     }
-
+    
     const experimentState = await waitForResult({ uuid });
     expect(experimentState.error).toBeFalsy();
     expect(experimentState.experiment).toBeTruthy();
@@ -81,13 +83,5 @@ describe('Integration Test for experiment API', () => {
     expect(wrapper.find('.error')).toHaveLength(0);
     expect(wrapper.find('.loading')).toHaveLength(0);
     expect(wrapper.find('div#tabs-methods')).toHaveLength(1);
-    expect(wrapper.find('.greyGridTable')).toHaveLength(1);
-    
-    // expect(
-    //   wrapper
-    //     .find('.greyGridTable tbody tr td')
-    //     .at(4)
-    //     .text()
-    // ).toEqual('0.000 (***)');
   });
 });

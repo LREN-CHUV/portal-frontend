@@ -108,6 +108,8 @@ const AvailableMethods = ({
   const types = Array.from(
     new Set(filteredAlgorithms.map(f => f.type).flat(1))
   );
+
+  // console.log(filteredAlgorithms.map((f, i) => `${i + 1}.${f.code}`).join('\n'))
   return (
     <React.Fragment>
       {types.map(type => (

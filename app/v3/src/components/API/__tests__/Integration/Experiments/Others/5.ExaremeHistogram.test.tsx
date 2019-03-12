@@ -1,30 +1,27 @@
 import { mount } from 'enzyme';
-import Result from '../../../../Experiment/Result/Result';
-import { MIP } from '../../../../../types';
+import Result from '../../../../../Experiment/Result/Result';
+import { MIP } from '../../../../../../types';
 import * as React from 'react';
 import {
-  datasets,
   createExperiment,
   createModel,
   waitForResult
-} from '../../../../utils/TestUtils';
+} from '../../../../../utils/TestUtils';
 
+// config
 
 const modelSlug = `model-${Math.round(Math.random() * 10000)}`;
-const experimentCode = 'naiveBayes';
+const experimentCode = 'WP_VARIABLES_HISTOGRAM';
+const datasets = [{ code: 'adni' }];
 const model: any = (datasets: MIP.API.IVariableEntity[]) => ({
   query: {
-    coVariables: [{ code: 'subjectageyears' }],
-    groupings: [{ code: 'alzheimerbroadcategory' }],
+    coVariables: [],
+    groupings: [],
     testingDatasets: [],
-    filters:
-      '{"condition":"AND","rules":[{"id":"subjectageyears","field":"subjectageyears","type":"integer","input":"number","operator":"greater","value":"65"}],"valid":true}',
+    filters: '',
     trainingDatasets: datasets.map(d => ({ code: d.code })),
     validationDatasets: [],
-    variables: [
-      { code: 'righthippocampus' },
-      { code: 'rightententorhinalarea' },
-    ],
+    variables: [{ code: 'lefthippocampus' }]
   }
 });
 
@@ -32,7 +29,7 @@ const payload: MIP.API.IExperimentPayload = {
   algorithms: [
     {
       code: experimentCode,
-      name: experimentCode,
+      name: experimentCode, // FIXME: name is used to parse response which is bad !!!
       parameters: [],
       validation: false
     }
@@ -42,25 +39,21 @@ const payload: MIP.API.IExperimentPayload = {
   validations: []
 };
 
+// Test
+
 describe('Integration Test for experiment API', () => {
   beforeAll(async () => {
-    const dstate = await datasets();
-    expect(dstate.error).toBeFalsy();
-    expect(dstate.datasets).toBeTruthy();
+    const mstate = await createModel({
+      model: model(datasets),
+      modelSlug
+    });
+    expect(mstate.error).toBeFalsy();
+    expect(mstate.model).toBeTruthy();
 
-    if (dstate.datasets) {
-      const mstate = await createModel({
-        model: model(dstate.datasets),
-        modelSlug
-      });
-      expect(mstate.error).toBeFalsy();
-      expect(mstate.model).toBeTruthy();
-
-      return true;
-    }
+    return true;
   });
 
-  it(`create ${experimentCode}`, async () => {
+  it.skip(`create ${experimentCode}`, async () => {
     const { error, experiment } = await createExperiment({
       experiment: payload
     });
@@ -72,7 +65,7 @@ describe('Integration Test for experiment API', () => {
     if (!uuid) {
       throw new Error('uuid not defined');
     }
-    
+
     const experimentState = await waitForResult({ uuid });
     expect(experimentState.error).toBeFalsy();
     expect(experimentState.experiment).toBeTruthy();
@@ -83,11 +76,5 @@ describe('Integration Test for experiment API', () => {
     expect(wrapper.find('.loading')).toHaveLength(0);
     expect(wrapper.find('div#tabs-methods')).toHaveLength(1);
 
-    // expect(
-    //   wrapper
-    //     .find('.greyGridTable tbody tr td')
-    //     .at(4)
-    //     .text()
-    // ).toEqual('0.000 (***)');
   });
 });
