@@ -4,6 +4,7 @@ import { MIP } from '../../../types';
 import { MIME_TYPES } from '../../constants';
 import {
   Highchart,
+  HTML,
   JSON,
   JSONData,
   PFA,
@@ -58,6 +59,10 @@ export default ({
             {method.mime === MIME_TYPES.JSONDATA &&
               method.data.map((row: any, k: number) => (
                 <JSONData key={k} row={row} />
+              ))}
+            {method.mime === MIME_TYPES.HTML &&
+              method.data.map((doc: any, k: number) => (
+                <HTML doc={doc} key={k} />
               ))}
           </Tab>
         ))}
