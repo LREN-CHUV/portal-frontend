@@ -1,7 +1,8 @@
-import { backendURL } from "../API";
-import { MIP } from "../../types";
-import request from "request-promise-native";
-import { Container } from "unstated";
+import request from 'request-promise-native';
+import { Container } from 'unstated';
+
+import { MIP } from '../../types';
+import { backendURL } from '../API';
 
 class Model extends Container<MIP.Store.IModelState> {
   public state: MIP.Store.IModelState = {};
@@ -19,7 +20,7 @@ class Model extends Container<MIP.Store.IModelState> {
     const newModel: MIP.Internal.IModelMock = {
       isMock: true,
       query,
-      title: ""
+      title: ''
     };
     return await this.setState({
       error: undefined,
@@ -55,9 +56,9 @@ class Model extends Container<MIP.Store.IModelState> {
         body: JSON.stringify(model),
         headers: {
           ...this.options.headers,
-          "Content-Type": "application/json;charset=UTF-8"
+          'Content-Type': 'application/json;charset=UTF-8'
         },
-        method: "PUT",
+        method: 'PUT',
         uri: `${this.baseUrl}/${slug}`
       });
       return await this.setState({
@@ -86,7 +87,7 @@ class Model extends Container<MIP.Store.IModelState> {
       },
       createdAt: 1540561037000,
       dataset: {
-        code: "DS1540825503020"
+        code: 'DS1540825503020'
       },
       query: model.query,
       title,
@@ -98,9 +99,9 @@ class Model extends Container<MIP.Store.IModelState> {
         body: JSON.stringify(modelTemplate),
         headers: {
           ...this.options.headers,
-          "Content-Type": "application/json;charset=UTF-8"
+          'Content-Type': 'application/json;charset=UTF-8'
         },
-        method: "POST",
+        method: 'POST',
         uri: `${this.baseUrl}`
       });
       const json = await JSON.parse(data);

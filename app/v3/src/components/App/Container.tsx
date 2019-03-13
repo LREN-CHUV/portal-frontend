@@ -1,13 +1,13 @@
-import { APICore, APIExperiment, APIMining, APIModel } from "../API"; // as interfaces
-import { webURL } from "../API";
-import config from "../API/RequestHeaders";
-import App from "../App/App";
-import * as React from "react";
-import { BrowserRouter as Router } from "react-router-dom";
-import request from "request-promise-native";
-import { Provider, Subscribe } from "unstated";
+import * as React from 'react';
+import { BrowserRouter as Router } from 'react-router-dom';
+import request from 'request-promise-native';
+import { Provider, Subscribe } from 'unstated';
+import UNSTATED from 'unstated-debug';
 
-import UNSTATED from "unstated-debug";
+import { APICore, APIExperiment, APIMining, APIModel, webURL } from '../API'; // as interfaces
+import config from '../API/RequestHeaders';
+import App from '../App/App';
+
 UNSTATED.logStateChanges = process.env.NODE_ENV === "development";
 
 interface IState {

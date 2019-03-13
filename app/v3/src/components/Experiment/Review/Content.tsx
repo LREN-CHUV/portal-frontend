@@ -1,12 +1,13 @@
-import { APIMining } from "../../API";
-import { Alert } from "../../UI/Alert";
-import { MIP } from "../../../types";
-import * as React from "react";
-import { Panel, Tab, Tabs } from "react-bootstrap";
-import { Body } from "react-bootstrap/lib/Modal";
-import Boxplot from "./Boxplot";
-import HeatMap from "./HeatMap";
-import Table from "./Table";
+import * as React from 'react';
+import { Panel, Tab, Tabs } from 'react-bootstrap';
+import { Body } from 'react-bootstrap/lib/Modal';
+
+import { MIP } from '../../../types';
+import { APIMining } from '../../API';
+import { Alert } from '../../UI/Alert';
+import Boxplot from './Boxplot';
+import HeatMap from './HeatMap';
+import Table from './Table';
 
 interface IProps {
   apiMining?: APIMining;

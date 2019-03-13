@@ -1,8 +1,9 @@
-import { backendURL } from "../API";
-import { MIP } from "../../types";
-import request from "request-promise-native";
-import { Container } from "unstated";
-import APIAdapter from "./APIAdapter";
+import request from 'request-promise-native';
+import { Container } from 'unstated';
+
+import { MIP } from '../../types';
+import { backendURL } from '../API';
+import APIAdapter from './APIAdapter';
 
 interface IUUID {
   uuid: string;
@@ -80,9 +81,9 @@ class Experiment extends Container<MIP.Store.IExperimentState> {
         body: JSON.stringify(experiment),
         headers: {
           ...this.options.headers,
-          "Content-Type": "application/json;charset=UTF-8"
+          'Content-Type': 'application/json;charset=UTF-8'
         },
-        method: "POST",
+        method: 'POST',
         uri: `${this.baseUrl}`
       });
       const json = await JSON.parse(data);
@@ -99,13 +100,13 @@ class Experiment extends Container<MIP.Store.IExperimentState> {
   };
 
   public markAsViewed = async ({ uuid }: IUUID) =>
-    this.markExperiment(uuid, "markAsViewed");
+    this.markExperiment(uuid, 'markAsViewed');
 
   public markAsShared = async ({ uuid }: IUUID) =>
-    this.markExperiment(uuid, "markAsShared");
+    this.markExperiment(uuid, 'markAsShared');
 
   public markAsUnshared = async ({ uuid }: IUUID) =>
-    this.markExperiment(uuid, "markAsUnshared");
+    this.markExperiment(uuid, 'markAsUnshared');
 
   private markExperiment = async (uuid: string, action: string) => {
     try {

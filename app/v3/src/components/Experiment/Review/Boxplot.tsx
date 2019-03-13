@@ -1,10 +1,11 @@
-import { Alert } from "../../UI/Alert";
-import Loader from "../../UI/Loader";
-import { MIP } from "../../../types";
-import Highcharts from "highcharts";
-import HighchartsReact from "highcharts-react-official";
-import addHighchartsMore from "highcharts/highcharts-more";
-import * as React from "react";
+import Highcharts from 'highcharts';
+import HighchartsReact from 'highcharts-react-official';
+import addHighchartsMore from 'highcharts/highcharts-more';
+import * as React from 'react';
+
+import { MIP } from '../../../types';
+import { Alert } from '../../UI/Alert';
+import Loader from '../../UI/Loader';
 
 addHighchartsMore(Highcharts);
 

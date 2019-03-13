@@ -1,8 +1,9 @@
-import { MIP } from "../../types";
-import * as React from "react";
-import { Panel } from "react-bootstrap";
+import './Model.css';
 
-import "./Model.css";
+import * as React from 'react';
+import { Panel } from 'react-bootstrap';
+
+import { MIP } from '../../types';
 
 interface IProps {
   model?: MIP.API.IModelResponse;

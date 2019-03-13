@@ -1,9 +1,10 @@
-import Dropdown from "../../UI/Dropdown";
-import { MIP } from "../../../types";
-import moment from "moment"; // FIXME: change lib, too heavy
-import * as React from "react";
-import { Button, Panel } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import moment from 'moment'; // FIXME: change lib, too heavy
+import * as React from 'react';
+import { Button, Panel } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
+
+import { MIP } from '../../../types';
+import Dropdown from '../../UI/Dropdown';
 
 interface IProps {
   experiment?: MIP.API.IExperimentResponse;

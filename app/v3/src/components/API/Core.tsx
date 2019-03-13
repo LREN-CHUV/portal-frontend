@@ -1,7 +1,8 @@
-import { backendURL } from "../API";
-import { MIP } from "../../types";
-import request from "request-promise-native";
-import { Container } from "unstated";
+import request from 'request-promise-native';
+import { Container } from 'unstated';
+
+import { MIP } from '../../types';
+import { backendURL } from '../API';
 
 class Core extends Container<MIP.Store.ICoreState> {
   public state: MIP.Store.ICoreState = {};

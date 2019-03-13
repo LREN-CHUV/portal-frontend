@@ -86,10 +86,10 @@ class APIAdapter {
       };
 
       // EXAREME
-      if (r.data && r.data["Error"]) {
+      if (r.data && r.data.Error) {
         experimentResponse = {
           ...experimentResponse,
-          error: r.data["Error"]
+          error: r.data.Error
         };
 
         return experimentResponse;

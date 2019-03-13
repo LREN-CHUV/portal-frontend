@@ -1,4 +1,7 @@
+// tslint:disable
+// FIXME: fix that eval
 import * as React from 'react';
+
 const vis = require('vis/dist/vis.min');
 
 interface IProps {

@@ -1,12 +1,10 @@
 import { mount } from 'enzyme';
 import * as React from 'react';
+
 import { MIP } from '../../../../../../types';
 import Result from '../../../../../Experiment/Result/Result';
 import {
-  createExperiment,
-  createModel,
-  datasets,
-  waitForResult
+    createExperiment, createModel, datasets, waitForResult
 } from '../../../../../utils/TestUtils';
 
 // config

@@ -1,17 +1,19 @@
-import { APICore, APIExperiment, APIModel } from "../../API";
-import Form from "../../Experiment/Create/Form";
-import ExperimentCreateHeader from "../../Experiment/Create/Header";
-import { Alert, IAlert } from "../../UI/Alert";
-import AvailableMethods from "../../UI/AvailableMethods";
-import Model from "../../UI/Model";
-import Validation from "../../UI/Validation";
-import { MIP } from "../../../types";
-import * as React from "react";
-import { Panel, Tab, Tabs } from "react-bootstrap";
-import { RouteComponentProps, withRouter } from "react-router-dom";
-import Help from "./Help";
+import '../Experiment.css';
 
-import "../Experiment.css";
+import * as React from 'react';
+import { Panel, Tab, Tabs } from 'react-bootstrap';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
+
+import { MIP } from '../../../types';
+import { APICore, APIExperiment, APIModel } from '../../API';
+import Form from '../../Experiment/Create/Form';
+import ExperimentCreateHeader from '../../Experiment/Create/Header';
+import { Alert, IAlert } from '../../UI/Alert';
+import AvailableMethods from '../../UI/AvailableMethods';
+import Model from '../../UI/Model';
+import Validation from '../../UI/Validation';
+import Help from './Help';
+
 interface IProps extends RouteComponentProps<any> {
   apiExperiment: APIExperiment;
   apiCore: APICore;
