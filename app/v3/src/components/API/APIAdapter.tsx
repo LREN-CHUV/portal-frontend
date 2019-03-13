@@ -286,9 +286,12 @@ const pfa = (data: any): IPfa => {
   data.forEach((d: any) => {
     if (!d.cells) {
       // output.data.push(d);
-      output.error = `WARNING, not handled ${JSON.stringify(d, null, 2)}`;
+      output.error = `PFA document doesn't contains cells`;
     } else {
-      if (d.cells.validations) {
+      if (!d.cells.validations) {
+        output.error = `PFA document doesn't contains a validation to display`;
+      }
+      else {
         // Convert to array to have consistent results
         const init = d.cells.validations.init.length
           ? d.cells.validations.init

@@ -14,7 +14,7 @@
 - 14.knn
 - 15.hedwig
 ? 16.hinmine
-17.tSNE
-18.ggparci
-19.kmeans
++ 17.tSNE
+- 18.ggparci
+- 19.kmeans
 20.heatmaply
