@@ -12,6 +12,7 @@ import {
 
 const modelSlug = `model-${Math.round(Math.random() * 10000)}`;
 const experimentCode = 'WP_VARIABLES_HISTOGRAM';
+const parameters = [{ "code": "nobuckets", "value": "4" }];
 const datasets = [{ code: 'adni' }];
 const model: any = (datasets: MIP.API.IVariableEntity[]) => ({
   query: {
@@ -30,7 +31,7 @@ const payload: MIP.API.IExperimentPayload = {
     {
       code: experimentCode,
       name: experimentCode, // FIXME: name is used to parse response which is bad !!!
-      parameters: [],
+      parameters,
       validation: false
     }
   ],
@@ -53,7 +54,7 @@ describe('Integration Test for experiment API', () => {
     return true;
   });
 
-  it.skip(`create ${experimentCode}`, async () => {
+  it(`create ${experimentCode}`, async () => {
     const { error, experiment } = await createExperiment({
       experiment: payload
     });
@@ -75,6 +76,5 @@ describe('Integration Test for experiment API', () => {
     expect(wrapper.find('.error')).toHaveLength(0);
     expect(wrapper.find('.loading')).toHaveLength(0);
     expect(wrapper.find('div#tabs-methods')).toHaveLength(1);
-
   });
 });
