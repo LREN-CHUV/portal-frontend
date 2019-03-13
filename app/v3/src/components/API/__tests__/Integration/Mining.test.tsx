@@ -1,20 +1,42 @@
 import APIMining from '../../Mining';
-import APIModel from '../../Model';
+import { MIP } from '../../../../types';
 import config from '../../RequestHeaders';
+import { datasets, createModel } from '../../../utils/TestUtils';
+
+const modelSlug = `model-${Math.round(Math.random() * 10000)}`;
+const buildModel: any = (datasets: MIP.API.IVariableEntity[]) => ({
+  query: {
+    coVariables: [{ code: 'alzheimerbroadcategory' }],
+    groupings: [],
+    testingDatasets: [],
+    filters:
+      '{"condition":"AND","rules":[{"id":"subjectageyears","field":"subjectageyears","type":"integer","input":"number","operator":"greater","value":"65"}],"valid":true}',
+    trainingDatasets: datasets.map(d => ({ code: d.code })),
+    validationDatasets: [],
+    variables: [{ code: 'lefthippocampus' }]
+  }
+});
 
 describe('Integration Test Mining API', () => {
   const apiMining = new APIMining(config);
-  let model;
+  let model: any;
 
   beforeAll(async () => {
-    const apiModel = new APIModel(config);
-    await apiModel.one('model');
-    model = apiModel.state.model;
-    const error = apiModel.state.error;
-    expect(error).toBeFalsy();
-    expect(model).toBeTruthy();
+    const dstate = await datasets();
+    expect(dstate.error).toBeFalsy();
+    expect(dstate.datasets).toBeTruthy();
 
-    return model;
+    if (dstate.datasets) {
+      model = buildModel(dstate.datasets);
+      const mstate = await createModel({
+        model,
+        modelSlug
+      });
+      expect(mstate.error).toBeFalsy();
+      expect(mstate.model).toBeTruthy();
+
+      return true;
+    }
   });
 
   it('create mining', async () => {
