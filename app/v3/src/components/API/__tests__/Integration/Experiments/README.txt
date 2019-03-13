@@ -10,7 +10,7 @@
 + 8.WP_LINEAR_REGRESSION
 + 9.K_MEANS
 + 10.sgdLinearModel
-- 11.naiveBayes
++ 11.naiveBayes
 + 12.sgdNeuralNetwork
 + 13.gradientBoosting
 - 14.knn

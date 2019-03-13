@@ -48,11 +48,7 @@ const model: any = (datasets: MIP.API.IVariableEntity[]) => ({
       code: d.code
     })),
     validationDatasets: [],
-    variables: [
-      {
-        code: 'righthippocampus'
-      }
-    ]
+    variables: [{ code: 'alzheimerbroadcategory' }]
   }
 });
 
