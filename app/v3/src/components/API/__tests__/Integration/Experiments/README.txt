@@ -4,13 +4,13 @@
 + 4.pca
 + 5.WP_VARIABLES_HISTOGRAM
 + 6.PIPELINE_ISOUP_REGRESSION_TREE_SERIALIZER
-7.PIPELINE_ISOUP_MODEL_TREE_SERIALIZER
++ 7.PIPELINE_ISOUP_MODEL_TREE_SERIALIZER
 + 8.WP_LINEAR_REGRESSION
-9.K_MEANS
++ 9.K_MEANS
 + 10.sgdLinearModel
 - 11.naiveBayes
-12.sgdNeuralNetwork
-13.gradientBoosting
++ 12.sgdNeuralNetwork
++ 13.gradientBoosting
 - 14.knn
 15.hedwig
 16.hinmine
