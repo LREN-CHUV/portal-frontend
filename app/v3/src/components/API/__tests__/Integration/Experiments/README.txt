@@ -12,8 +12,8 @@
 + 12.sgdNeuralNetwork
 + 13.gradientBoosting
 - 14.knn
-15.hedwig
-16.hinmine
+- 15.hedwig
+? 16.hinmine
 17.tSNE
 18.ggparci
 19.kmeans
