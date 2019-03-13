@@ -10,5 +10,12 @@ export default class VISJS extends React.PureComponent<IProps> {
     eval(`${this.props.jsString}`);
   }
 
-  public render = () => <div id='visualization' />;
+  public render = () => (
+    <div
+      id='visualization'
+      style={{
+        height: '500px'
+      }}
+    />
+  );
 }
