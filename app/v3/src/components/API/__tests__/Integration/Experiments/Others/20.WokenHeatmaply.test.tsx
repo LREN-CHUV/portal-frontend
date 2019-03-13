@@ -1,11 +1,11 @@
 import { mount } from 'enzyme';
-import Result from '../../../../../Experiment/Result/Result';
-import { MIP } from '../../../../../../types';
 import * as React from 'react';
+import { MIP } from '../../../../../../types';
+import Result from '../../../../../Experiment/Result/Result';
 import {
-  datasets,
   createExperiment,
   createModel,
+  datasets,
   waitForResult
 } from '../../../../../utils/TestUtils';
 
@@ -15,14 +15,21 @@ const modelSlug = `model-${Math.round(Math.random() * 10000)}`;
 const experimentCode = 'heatmaply';
 const model: any = (datasets: MIP.API.IVariableEntity[]) => ({
   query: {
-    coVariables: [{ code: 'lefthippocampus' }, { code: 'righthippocampus' }],
+    coVariables: [{
+      code: 'lefthippocampus'
+    }, {
+      code: 'righthippocampus'
+    }],
+    filters: '{"condition":"AND","rules":[{"id":"subjectageyears","field":"subjectageyears","type":"integer","input":"number","operator":"greater","value":"65"}],"valid":true}',
     groupings: [],
     testingDatasets: [],
-    filters:
-      '{"condition":"AND","rules":[{"id":"subjectageyears","field":"subjectageyears","type":"integer","input":"number","operator":"greater","value":"65"}],"valid":true}',
-    trainingDatasets: datasets.map(d => ({ code: d.code })),
+    trainingDatasets: datasets.map(d => ({
+      code: d.code
+    })),
     validationDatasets: [],
-    variables: [{ code: 'subjectageyears' }]
+    variables: [{
+      code: 'subjectageyears'
+    }]
   }
 });
 

@@ -12,17 +12,23 @@ import {
 
 const modelSlug = `model-${Math.round(Math.random() * 10000)}`;
 const experimentCode = 'WP_VARIABLES_HISTOGRAM';
-const parameters = [{ "code": "nobuckets", "value": "4" }];
+const parameters = [{ code: 'nobuckets', value: '4' }];
 const datasets = [{ code: 'adni' }];
 const model: any = (datasets: MIP.API.IVariableEntity[]) => ({
   query: {
     coVariables: [],
+    filters: '',
     groupings: [],
     testingDatasets: [],
-    filters: '',
-    trainingDatasets: datasets.map(d => ({ code: d.code })),
+    trainingDatasets: datasets.map(d => ({
+      code: d.code
+    })),
     validationDatasets: [],
-    variables: [{ code: 'lefthippocampus' }]
+    variables: [
+      {
+        code: 'lefthippocampus'
+      }
+    ]
   }
 });
 

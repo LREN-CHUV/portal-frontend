@@ -3,9 +3,9 @@ import Result from '../../../../../Experiment/Result/Result';
 import { MIP } from '../../../../../../types';
 import * as React from 'react';
 import {
-  datasets,
   createExperiment,
   createModel,
+  datasets,
   waitForResult
 } from '../../../../../utils/TestUtils';
 

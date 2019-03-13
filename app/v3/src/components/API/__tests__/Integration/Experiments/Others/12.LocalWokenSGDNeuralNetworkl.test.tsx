@@ -3,9 +3,9 @@ import Result from '../../../../../Experiment/Result/Result';
 import { MIP } from '../../../../../../types';
 import * as React from 'react';
 import {
-  datasets,
   createExperiment,
   createModel,
+  datasets,
   waitForResult
 } from '../../../../../utils/TestUtils';
 
@@ -16,20 +16,20 @@ const experimentCode = 'sgdNeuralNetwork';
 const parameters = [
   {
     code: 'hidden_layer_sizes',
-    value: '100',
+    value: '100'
   },
   {
     code: 'activation',
-    value: 'relu',
+    value: 'relu'
   },
   {
     code: 'alpha',
-    value: '0.0001',
+    value: '0.0001'
   },
   {
     code: 'learning_rate_init',
-    value: '0.001',
-  },
+    value: '0.001'
+  }
 ];
 const kfold = {
   code: 'kfold',

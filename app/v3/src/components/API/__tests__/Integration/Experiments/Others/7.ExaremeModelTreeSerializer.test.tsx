@@ -12,16 +12,29 @@ import {
 
 const modelSlug = `model-${Math.round(Math.random() * 10000)}`;
 const experimentCode = 'PIPELINE_ISOUP_MODEL_TREE_SERIALIZER';
-const datasets = [{ code: 'adni' }, {code: 'edsd'}];
+const datasets = [{ code: 'adni' }, { code: 'edsd' }];
 const model: any = (datasets: MIP.API.IVariableEntity[]) => ({
   query: {
-    coVariables: [{ code: 'apoe4' }, { code: 'av45' }],
+    coVariables: [
+      {
+        code: 'apoe4'
+      },
+      {
+        code: 'av45'
+      }
+    ],
+    filters: '',
     groupings: [],
     testingDatasets: [],
-    filters: '',
-    trainingDatasets: datasets.map(d => ({ code: d.code })),
+    trainingDatasets: datasets.map(d => ({
+      code: d.code
+    })),
     validationDatasets: [],
-    variables: [{ code: 'subjectageyears' }]
+    variables: [
+      {
+        code: 'subjectageyears'
+      }
+    ]
   }
 });
 

@@ -3,9 +3,9 @@ import Result from '../../../../../Experiment/Result/Result';
 import { MIP } from '../../../../../../types';
 import * as React from 'react';
 import {
-  datasets,
   createExperiment,
   createModel,
+  datasets,
   waitForResult
 } from '../../../../../utils/TestUtils';
 
@@ -14,15 +14,15 @@ import {
 const modelSlug = `model-${Math.round(Math.random() * 10000)}`;
 const experimentCode = 'hedwig';
 const parameters = [
-    {
-      code: 'beam',
-      value: '10',
-    },
-    {
-      code: 'support',
-      value: '0.1',
-    },
-  ];
+  {
+    code: 'beam',
+    value: '10'
+  },
+  {
+    code: 'support',
+    value: '0.1'
+  }
+];
 
 const model: any = (datasets: MIP.API.IVariableEntity[]) => ({
   query: {

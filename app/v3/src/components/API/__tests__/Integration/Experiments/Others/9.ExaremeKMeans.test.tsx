@@ -16,13 +16,23 @@ const parameters = [{ code: 'k', value: 4 }];
 const datasets = [{ code: 'adni' }, { code: 'edsd' }];
 const model: any = (datasets: MIP.API.IVariableEntity[]) => ({
   query: {
-    coVariables: [{ code: 'subjectageyears' }],
+    coVariables: [
+      {
+        code: 'subjectageyears'
+      }
+    ],
+    filters: '',
     groupings: [],
     testingDatasets: [],
-    filters: '',
-    trainingDatasets: datasets.map(d => ({ code: d.code })),
+    trainingDatasets: datasets.map(d => ({
+      code: d.code
+    })),
     validationDatasets: [],
-    variables: [{ code: 'apoe4' }]
+    variables: [
+      {
+        code: 'apoe4'
+      }
+    ]
   }
 });
 

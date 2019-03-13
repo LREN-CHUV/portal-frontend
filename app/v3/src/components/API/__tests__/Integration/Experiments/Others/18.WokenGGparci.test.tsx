@@ -3,12 +3,11 @@ import Result from '../../../../../Experiment/Result/Result';
 import { MIP } from '../../../../../../types';
 import * as React from 'react';
 import {
-  datasets,
   createExperiment,
   createModel,
+  datasets,
   waitForResult
 } from '../../../../../utils/TestUtils';
-
 
 // config
 
@@ -73,7 +72,7 @@ describe('Integration Test for experiment API', () => {
     if (!uuid) {
       throw new Error('uuid not defined');
     }
-    
+
     const experimentState = await waitForResult({ uuid });
     expect(experimentState.error).toBeFalsy();
     expect(experimentState.experiment).toBeTruthy();

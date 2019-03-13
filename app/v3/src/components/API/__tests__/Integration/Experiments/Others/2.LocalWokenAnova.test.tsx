@@ -3,9 +3,9 @@ import Result from '../../../../../Experiment/Result/Result';
 import { MIP } from '../../../../../../types';
 import * as React from 'react';
 import {
-  datasets,
   createExperiment,
   createModel,
+  datasets,
   waitForResult
 } from '../../../../../utils/TestUtils';
 
@@ -19,27 +19,61 @@ const parameters = [{ code: 'design', value: 'additive' }];
 const model: any = (datasets: MIP.API.IVariableEntity[]) => ({
   query: {
     coVariables: [
-      { code: 'lefthippocampus' },
-      { code: 'leftthalamusproper' },
-      { code: 'leftacgganteriorcingulategyrus' },
-      { code: 'leftententorhinalarea' },
-      { code: 'leftmcggmiddlecingulategyrus' },
-      { code: 'leftphgparahippocampalgyrus' },
-      { code: 'leftpcggposteriorcingulategyrus' },
-      { code: 'righthippocampus' },
-      { code: 'rightthalamusproper' },
-      { code: 'rightacgganteriorcingulategyrus' },
-      { code: 'rightententorhinalarea' },
-      { code: 'rightmcggmiddlecingulategyrus' },
-      { code: 'rightphgparahippocampalgyrus' },
-      { code: 'rightpcggposteriorcingulategyrus' }
+      {
+        code: 'lefthippocampus'
+      },
+      {
+        code: 'leftthalamusproper'
+      },
+      {
+        code: 'leftacgganteriorcingulategyrus'
+      },
+      {
+        code: 'leftententorhinalarea'
+      },
+      {
+        code: 'leftmcggmiddlecingulategyrus'
+      },
+      {
+        code: 'leftphgparahippocampalgyrus'
+      },
+      {
+        code: 'leftpcggposteriorcingulategyrus'
+      },
+      {
+        code: 'righthippocampus'
+      },
+      {
+        code: 'rightthalamusproper'
+      },
+      {
+        code: 'rightacgganteriorcingulategyrus'
+      },
+      {
+        code: 'rightententorhinalarea'
+      },
+      {
+        code: 'rightmcggmiddlecingulategyrus'
+      },
+      {
+        code: 'rightphgparahippocampalgyrus'
+      },
+      {
+        code: 'rightpcggposteriorcingulategyrus'
+      }
     ],
     filters: '',
     groupings: [],
     testingDatasets: [],
-    trainingDatasets: datasets.map(d => ({ code: d.code })),
+    trainingDatasets: datasets.map(d => ({
+      code: d.code
+    })),
     validationDatasets: [],
-    variables: [{ code: 'montrealcognitiveassessment' }]
+    variables: [
+      {
+        code: 'montrealcognitiveassessment'
+      }
+    ]
   }
 });
 

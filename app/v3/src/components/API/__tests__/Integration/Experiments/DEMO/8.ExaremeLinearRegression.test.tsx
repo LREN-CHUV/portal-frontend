@@ -17,14 +17,24 @@ const experimentCode = 'WP_LINEAR_REGRESSION';
 const datasets = [{ code: 'adni' }, { code: 'edsd' }];
 const model: any = (datasets: MIP.API.IVariableEntity[]) => ({
   query: {
-    coVariables: [{ code: 'alzheimerbroadcategory' }],
-    groupings: [],
-    testingDatasets: [],
+    coVariables: [
+      {
+        code: 'alzheimerbroadcategory'
+      }
+    ],
     filters:
       '{"condition":"AND","rules":[{"id":"subjectageyears","field":"subjectageyears","type":"integer","input":"number","operator":"greater","value":"65"}],"valid":true}',
-    trainingDatasets: datasets.map(d => ({ code: d.code })),
+    groupings: [],
+    testingDatasets: [],
+    trainingDatasets: datasets.map(d => ({
+      code: d.code
+    })),
     validationDatasets: [],
-    variables: [{ code: 'lefthippocampus' }]
+    variables: [
+      {
+        code: 'lefthippocampus'
+      }
+    ]
   }
 });
 

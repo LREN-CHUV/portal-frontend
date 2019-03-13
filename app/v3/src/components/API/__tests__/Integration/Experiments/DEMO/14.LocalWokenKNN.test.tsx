@@ -3,9 +3,9 @@ import Result from '../../../../../Experiment/Result/Result';
 import { MIP } from '../../../../../../types';
 import * as React from 'react';
 import {
-  datasets,
   createExperiment,
   createModel,
+  datasets,
   waitForResult
 } from '../../../../../utils/TestUtils';
 
@@ -18,15 +18,29 @@ const experimentCode = 'knn';
 const model: any = (datasets: MIP.API.IVariableEntity[]) => ({
   query: {
     coVariables: [
-      { code: 'subjectageyears' },
-      { code: 'rightententorhinalarea' }
+      {
+        code: 'subjectageyears'
+      },
+      {
+        code: 'rightententorhinalarea'
+      }
     ],
-    groupings: [{ code: 'alzheimerbroadcategory' }],
-    testingDatasets: [],
     filters: '',
-    trainingDatasets: datasets.map(d => ({ code: d.code })),
+    groupings: [
+      {
+        code: 'alzheimerbroadcategory'
+      }
+    ],
+    testingDatasets: [],
+    trainingDatasets: datasets.map(d => ({
+      code: d.code
+    })),
     validationDatasets: [],
-    variables: [{ code: 'righthippocampus' }]
+    variables: [
+      {
+        code: 'righthippocampus'
+      }
+    ]
   }
 });
 
@@ -87,12 +101,5 @@ describe('Integration Test for experiment API', () => {
     expect(wrapper.find('.loading')).toHaveLength(0);
     expect(wrapper.find('div#tabs-methods')).toHaveLength(1);
     expect(wrapper.find('.greyGridTable')).toHaveLength(1);
-
-    // expect(
-    //   wrapper
-    //     .find('.greyGridTable tbody tr td')
-    //     .at(4)
-    //     .text()
-    // ).toEqual('0.000 (***)');
   });
 });

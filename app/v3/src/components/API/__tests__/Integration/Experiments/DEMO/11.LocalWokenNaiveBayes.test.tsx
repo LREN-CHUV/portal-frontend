@@ -3,9 +3,9 @@ import Result from '../../../../../Experiment/Result/Result';
 import { MIP } from '../../../../../../types';
 import * as React from 'react';
 import {
-  datasets,
   createExperiment,
   createModel,
+  datasets,
   waitForResult
 } from '../../../../../utils/TestUtils';
 
@@ -34,15 +34,25 @@ const validations = [
 const model: any = (datasets: MIP.API.IVariableEntity[]) => ({
   query: {
     coVariables: [
-      { code: 'lefthippocampus' },
-      { code: 'rightententorhinalarea' }
+      {
+        code: 'lefthippocampus'
+      },
+      {
+        code: 'rightententorhinalarea'
+      }
     ],
+    filters: '',
     groupings: [],
     testingDatasets: [],
-    filters: '',
-    trainingDatasets: datasets.map(d => ({ code: d.code })),
+    trainingDatasets: datasets.map(d => ({
+      code: d.code
+    })),
     validationDatasets: [],
-    variables: [{ code: 'righthippocampus' }]
+    variables: [
+      {
+        code: 'righthippocampus'
+      }
+    ]
   }
 });
 

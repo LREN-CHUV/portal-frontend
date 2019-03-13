@@ -3,9 +3,9 @@ import Result from '../../../../../Experiment/Result/Result';
 import { MIP } from '../../../../../../types';
 import * as React from 'react';
 import {
-  datasets,
   createExperiment,
   createModel,
+  datasets,
   waitForResult
 } from '../../../../../utils/TestUtils';
 
@@ -17,14 +17,24 @@ const modelSlug = `model-${Math.round(Math.random() * 10000)}`;
 const experimentCode = 'linearRegression';
 const model: any = (datasets: MIP.API.IVariableEntity[]) => ({
   query: {
-    coVariables: [{ code: 'alzheimerbroadcategory' }],
-    groupings: [],
-    testingDatasets: [],
+    coVariables: [
+      {
+        code: 'alzheimerbroadcategory'
+      }
+    ],
     filters:
       '{"condition":"AND","rules":[{"id":"subjectageyears","field":"subjectageyears","type":"integer","input":"number","operator":"greater","value":"65"}],"valid":true}',
-    trainingDatasets: datasets.map(d => ({ code: d.code })),
+    groupings: [],
+    testingDatasets: [],
+    trainingDatasets: datasets.map(d => ({
+      code: d.code
+    })),
     validationDatasets: [],
-    variables: [{ code: 'lefthippocampus' }]
+    variables: [
+      {
+        code: 'lefthippocampus'
+      }
+    ]
   }
 });
 
@@ -74,7 +84,7 @@ describe('Integration Test for experiment API', () => {
     if (!uuid) {
       throw new Error('uuid not defined');
     }
-    
+
     const experimentState = await waitForResult({ uuid });
     expect(experimentState.error).toBeFalsy();
     expect(experimentState.experiment).toBeTruthy();
