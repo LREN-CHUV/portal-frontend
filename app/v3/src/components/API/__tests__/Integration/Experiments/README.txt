@@ -1,3 +1,5 @@
+2019.01.13 Algorithms tests
+
 + 1.linearRegression
 + 2.anova
 + 3.correlationHeatmap
@@ -17,4 +19,4 @@
 + 17.tSNE
 - 18.ggparci
 - 19.kmeans
-20.heatmaply
++ 20.heatmaply
