@@ -6,23 +6,31 @@ import {
   createExperiment,
   createModel,
   datasets,
-  waitForResult
+  waitForResult,
+  uid
 } from '../../../../../utils/TestUtils';
+
+// Review May 2018 experiment
 
 // config
 
-const modelSlug = `model-${Math.round(Math.random() * 10000)}`;
-const experimentCode = 'tSNE';
+const modelSlug = `model-${uid()}`;
+const experimentCode = 'anova';
+const parameters = [{ code: 'design', value: 'additive' }];
 const model: any = (datasets: MIP.API.IVariableEntity[]) => ({
   query: {
-    coVariables: [{ code: 'lefthippocampus' }],
-    groupings: [],
-    testingDatasets: [],
+    variables: [{ code: 'montrealcognitiveassessment' }],
+    coVariables: [],
+    groupings: [{ code: 'alzheimerbroadcategory' }, { code: 'gender' }],
+    trainingDatasets: datasets
+      .filter(d => d.code !== 'ppmi' && d.code !== 'edsd')
+      .map(d => ({
+        code: d.code
+      })),
     filters:
-      '{"condition":"AND","rules":[{"id":"subjectageyears","field":"subjectageyears","type":"integer","input":"number","operator":"greater","value":"65"}],"valid":true}',
-    trainingDatasets: datasets.map(d => ({ code: d.code })),
-    validationDatasets: [],
-    variables: [{ code: 'subjectageyears' }]
+      '{"condition":"AND","rules":[{"id":"alzheimerbroadcategory","field":"alzheimerbroadcategory","type":"string","input":"select","operator":"not_equal","value":"Other"}],"valid":true}',
+    testingDatasets: [],
+    validationDatasets: []
   }
 });
 
@@ -31,7 +39,7 @@ const payload: MIP.API.IExperimentPayload = {
     {
       code: experimentCode,
       name: experimentCode,
-      parameters: [],
+      parameters,
       validation: false
     }
   ],
@@ -81,5 +89,13 @@ describe('Integration Test for experiment API', () => {
     const wrapper = mount(<Result {...props} />);
     expect(wrapper.find('.error')).toHaveLength(0);
     expect(wrapper.find('.loading')).toHaveLength(0);
+    expect(wrapper.find('div#tabs-methods')).toHaveLength(1);
+    expect(wrapper.find('.greyGridTable')).toHaveLength(1);
+    // expect(
+    //   wrapper
+    //     .find('.greyGridTable tbody tr td')
+    //     .at(4)
+    //     .text()
+    // ).toEqual('0.000 (***)');
   });
 });

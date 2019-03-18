@@ -6,14 +6,15 @@ import {
   createExperiment,
   createModel,
   datasets,
-  waitForResult
+  waitForResult,
+  uid
 } from '../../../../../utils/TestUtils';
 
 // Review December 2018 experiment
 
 // config
 
-const modelSlug = `model-${Math.round(Math.random() * 10000)}`;
+const modelSlug = `model-${uid()}`;
 const experimentCode = 'knn';
 const model: any = (datasets: MIP.API.IVariableEntity[]) => ({
   query: {
@@ -26,15 +27,13 @@ const model: any = (datasets: MIP.API.IVariableEntity[]) => ({
       }
     ],
     filters: '',
-    groupings: [
-      {
-        code: 'alzheimerbroadcategory'
-      }
-    ],
+    groupings: [],
     testingDatasets: [],
-    trainingDatasets: datasets.map(d => ({
-      code: d.code
-    })),
+    trainingDatasets: datasets
+      .filter(d => d.code !== 'ppmi')
+      .map(d => ({
+        code: d.code
+      })),
     validationDatasets: [],
     variables: [
       {
@@ -43,6 +42,19 @@ const model: any = (datasets: MIP.API.IVariableEntity[]) => ({
     ]
   }
 });
+
+const validations = [
+  {
+    code: 'kfold',
+    name: 'validation',
+    parameters: [
+      {
+        code: 'k',
+        value: '3'
+      }
+    ]
+  }
+];
 
 const payload: MIP.API.IExperimentPayload = {
   algorithms: [
@@ -55,7 +67,7 @@ const payload: MIP.API.IExperimentPayload = {
   ],
   model: modelSlug,
   name: `${experimentCode}-${modelSlug}`,
-  validations: []
+  validations
 };
 
 // Test

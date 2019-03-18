@@ -17,24 +17,18 @@ const modelSlug = `model-${Math.round(Math.random() * 10000)}`;
 const experimentCode = 'linearRegression';
 const model: any = (datasets: MIP.API.IVariableEntity[]) => ({
   query: {
-    coVariables: [
-      {
-        code: 'alzheimerbroadcategory'
-      }
-    ],
+    coVariables: [],
     filters:
-      '{"condition":"AND","rules":[{"id":"subjectageyears","field":"subjectageyears","type":"integer","input":"number","operator":"greater","value":"65"}],"valid":true}',
-    groupings: [],
+      '{"condition":"AND","rules":[{"id":"subjectageyears","field":"subjectageyears","type":"integer","input":"number","operator":"greater","value":"65"},{"id":"alzheimerbroadcategory","field":"alzheimerbroadcategory","type":"string","input":"select","operator":"not_equal","value":"Other"}],"valid":true}',
+    groupings: [{ code: 'alzheimerbroadcategory' }],
     testingDatasets: [],
-    trainingDatasets: datasets.map(d => ({
-      code: d.code
-    })),
+    trainingDatasets: datasets
+      .filter(d => d.code !== 'ppmi')
+      .map(d => ({
+        code: d.code
+      })),
     validationDatasets: [],
-    variables: [
-      {
-        code: 'lefthippocampus'
-      }
-    ]
+    variables: [{ code: 'lefthippocampus' }]
   }
 });
 

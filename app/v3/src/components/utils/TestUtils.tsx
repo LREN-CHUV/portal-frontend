@@ -33,7 +33,11 @@ const createExperiment = async ({
   return apiExperiment.state;
 };
 
-const waitForResult = ({ uuid }: { uuid: string }) : Promise<MIP.Store.IExperimentState > =>
+const waitForResult = ({
+  uuid
+}: {
+  uuid: string;
+}): Promise<MIP.Store.IExperimentState> =>
   new Promise(resolve => {
     const timerId = setInterval(async () => {
       await apiExperiment.one({ uuid });
@@ -46,4 +50,19 @@ const waitForResult = ({ uuid }: { uuid: string }) : Promise<MIP.Store.IExperime
     }, 1000);
   });
 
-export { createExperiment, createModel, datasets, waitForResult };
+const uid = () =>
+  'xxxxxxxx'.replace(/[xy]/g, c => {
+    // tslint:disable
+    const r = (Math.random() * 16) | 0;
+    const v = c === 'x' ? r : (r & 0x3) | 0x8;
+    // tslint:enable
+    return v.toString(16);
+  });
+
+export {
+  createExperiment,
+  createModel,
+  datasets,
+  uid,
+  waitForResult
+};

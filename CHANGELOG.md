@@ -1,5 +1,15 @@
 # Changelog
 
+## 2.16.0 - 2019/03/13
+* Algorithm tests completed, testing 20 algorithms (Woken, Exareme) see ./app/v3/src/components/API/__tests__/Integration/Experiments/README.txt
+* Algorithm fixes
+* Updated yarn libraries (react, highcharts)
+* Various UI fixes (Dropdown, results)
+
+## 2.15.8 - 2019/03/08
+* Implemented Helpdesk forms (Angular, React)
+* New Term of Services page
+
 ## 2.15.6 - 2019/02/25
 * Quick implementation of linear regression from Exareme
 

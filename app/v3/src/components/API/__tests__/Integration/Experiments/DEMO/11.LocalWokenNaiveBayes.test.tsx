@@ -6,14 +6,15 @@ import {
   createExperiment,
   createModel,
   datasets,
-  waitForResult
+  waitForResult,
+  uid
 } from '../../../../../utils/TestUtils';
 
 // Review December 2018 experiment
 
 // config
 
-const modelSlug = `model-${Math.round(Math.random() * 10000)}`;
+const modelSlug = `model-${uid()}`;
 const experimentCode = 'naiveBayes';
 const parameters = [
   { code: 'alpha', value: '1' },
@@ -33,26 +34,21 @@ const validations = [
 ];
 const model: any = (datasets: MIP.API.IVariableEntity[]) => ({
   query: {
+    variables: [{ code: 'agegroup' }],
     coVariables: [
-      {
-        code: 'lefthippocampus'
-      },
-      {
-        code: 'rightententorhinalarea'
-      }
+      { code: 'rightententorhinalarea' },
+      { code: 'lefthippocampus' }
     ],
-    filters: '',
+    filters:
+      '{"condition":"AND","rules":[{"id":"agegroup","field":"agegroup","type":"string","input":"select","operator":"not_equal","value":"-50y"}],"valid":true}',
     groupings: [],
     testingDatasets: [],
-    trainingDatasets: datasets.map(d => ({
-      code: d.code
-    })),
-    validationDatasets: [],
-    variables: [
-      {
-        code: 'righthippocampus'
-      }
-    ]
+    trainingDatasets: datasets
+      .filter(d => d.code !== 'ppmi')
+      .map(d => ({
+        code: d.code
+      })),
+    validationDatasets: []
   }
 });
 
