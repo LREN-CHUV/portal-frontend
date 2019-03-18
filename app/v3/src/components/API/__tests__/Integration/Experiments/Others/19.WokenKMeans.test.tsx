@@ -6,13 +6,15 @@ import {
   createExperiment,
   createModel,
   datasets,
-  waitForResult
+  waitForResult,
+  uid
 } from '../../../../../utils/TestUtils';
 
 // config
 
-const modelSlug = `model-${Math.round(Math.random() * 10000)}`;
+const modelSlug = `model-${uid()}`;
 const experimentCode = 'kmeans';
+const parameters = [{ code: 'n_clusters', value: 3 }];
 const model: any = (datasets: MIP.API.IVariableEntity[]) => ({
   query: {
     coVariables: [{ code: 'lefthippocampus' }, { code: 'righthippocampus' }],
@@ -26,18 +28,31 @@ const model: any = (datasets: MIP.API.IVariableEntity[]) => ({
   }
 });
 
+const validations = [
+  {
+    code: 'kfold',
+    name: 'validation',
+    parameters: [
+      {
+        code: 'k',
+        value: '4'
+      }
+    ]
+  }
+];
+
 const payload: MIP.API.IExperimentPayload = {
   algorithms: [
     {
       code: experimentCode,
       name: experimentCode,
-      parameters: [],
+      parameters,
       validation: false
     }
   ],
   model: modelSlug,
   name: `${experimentCode}-${modelSlug}`,
-  validations: []
+  validations
 };
 
 describe('Integration Test for experiment API', () => {

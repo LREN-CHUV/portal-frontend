@@ -18,5 +18,5 @@
 + 16.hinmine
 + 17.tSNE
 - 18.ggparci
-- 19.kmeans
++ 19.kmeans
 + 20.heatmaply

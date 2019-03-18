@@ -60,7 +60,9 @@ class Container extends React.Component<IProps, IState> {
     const alert = this.state && this.state.alert;
     const method = this.state && this.state.method;
     const isPredictiveMethod =
-      (method && method.type && method.type[0] === "predictive_model") || false;
+      (method && method.type && method.type[0] === 'predictive_model') ||
+      (method && method.code === 'kmeans') ||
+      false;
 
     return (
       <div className="Experiment">
