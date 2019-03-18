@@ -18,6 +18,7 @@ interface IProps extends RouteComponentProps<any> {
   apiExperiment: APIExperiment;
   apiCore: APICore;
   apiModel: APIModel;
+  appConfig: any;
 }
 
 interface IState {
@@ -56,17 +57,18 @@ class Container extends React.Component<IProps, IState> {
   };
 
   public render() {
-    const { apiCore, apiModel, apiExperiment } = this.props;
+    const { apiCore, apiModel, apiExperiment, appConfig } = this.props;
     const alert = this.state && this.state.alert;
     const method = this.state && this.state.method;
     const isPredictiveMethod =
       (method && method.type && method.type[0] === 'predictive_model') ||
       (method && method.code === 'kmeans') ||
       false;
+    const isLocal = appConfig.mode === 'local' || true;
 
     return (
-      <div className="Experiment">
-        <div className="header">
+      <div className='Experiment'>
+        <div className='header'>
           <ExperimentCreateHeader
             model={apiModel.state.model}
             models={apiModel.state.models}
@@ -78,15 +80,15 @@ class Container extends React.Component<IProps, IState> {
             handleSaveAndRunExperiment={this.handleSaveAndRunExperiment}
           />
         </div>
-        <div className="content">
-          <div className="sidebar">
+        <div className='content'>
+          <div className='sidebar'>
             <Model
               model={apiModel.state.model}
               showDatasets={true}
               variables={apiCore.state.variables}
             />
           </div>
-          <div className="parameters">
+          <div className='parameters'>
             <Panel>
               <Panel.Title>
                 <h3>Your Experiment</h3>
@@ -101,19 +103,19 @@ class Container extends React.Component<IProps, IState> {
                 )}
                 <Tabs
                   defaultActiveKey={1}
-                  id="uncontrolled-create-experiment-tab"
-                >
-                  <Tab eventKey={1} title="Method">
+                  id='uncontrolled-create-experiment-tab'>
+                  <Tab eventKey={1} title='Method'>
                     <Form
                       method={this.state && this.state.method}
                       parameters={this.state && this.state.parameters}
                       handleChangeParameters={this.handleChangeParameters}
                     />
 
-                    <fieldset style={{ padding: "8px" }}>
+                    <fieldset style={{ padding: '8px' }}>
                       <Validation
                         kfold={this.state && this.state.kfold}
                         handleChangeKFold={this.handleChangeKFold}
+                        isLocal={isLocal}
                         isPredictiveMethod={isPredictiveMethod}
                         datasets={apiCore.state.datasets}
                         query={this.state && this.state.query}
@@ -121,14 +123,14 @@ class Container extends React.Component<IProps, IState> {
                       />
                     </fieldset>
                   </Tab>
-                  <Tab eventKey={2} title="About running experiments">
+                  <Tab eventKey={2} title='About running experiments'>
                     <Help />
                   </Tab>
                 </Tabs>
               </Panel.Body>
             </Panel>
           </div>
-          <div className="sidebar2">
+          <div className='sidebar2'>
             <Panel>
               <Panel.Title>
                 <h3>Available Methods</h3>
@@ -204,9 +206,9 @@ class Container extends React.Component<IProps, IState> {
     if (!this.state) {
       this.setState({
         alert: {
-          message: "An error occured, please try again later",
-          style: "error",
-          title: "Info"
+          message: 'An error occured, please try again later',
+          style: 'error',
+          title: 'Info'
         }
       });
       return;
@@ -217,9 +219,9 @@ class Container extends React.Component<IProps, IState> {
     if (!model) {
       this.setState({
         alert: {
-          message: "An error occured, please choose a model",
-          style: "error",
-          title: "Info"
+          message: 'An error occured, please choose a model',
+          style: 'error',
+          title: 'Info'
         }
       });
       return;
@@ -241,11 +243,11 @@ class Container extends React.Component<IProps, IState> {
       this.state.kfold > 0
         ? [
             {
-              code: "kfold",
-              name: "validation",
+              code: 'kfold',
+              name: 'validation',
               parameters: [
                 {
-                  code: "k",
+                  code: 'k',
                   value: this.state.kfold
                 }
               ]
@@ -253,12 +255,12 @@ class Container extends React.Component<IProps, IState> {
           ]
         : [];
     if (!model.slug) {
-      this.setState({ alert: { message: "Model was not saved" } });
+      this.setState({ alert: { message: 'Model was not saved' } });
       return;
     }
 
     if (!selectedMethod) {
-      this.setState({ alert: { message: "Select a method" } });
+      this.setState({ alert: { message: 'Select a method' } });
       return;
     }
 

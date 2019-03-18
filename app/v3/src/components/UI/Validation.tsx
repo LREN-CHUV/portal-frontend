@@ -20,7 +20,8 @@ const Validation = ({
   query,
   handleUpdateQuery,
   kfold,
-  handleChangeKFold
+  handleChangeKFold,
+  isLocal = true
 }: {
   isPredictiveMethod: boolean;
   datasets: any;
@@ -28,6 +29,7 @@ const Validation = ({
   handleUpdateQuery: any;
   kfold?: number;
   handleChangeKFold?: (kfold: number) => void;
+  isLocal?: boolean
 }) => (
   <div>
     <h5>
@@ -96,7 +98,7 @@ const Validation = ({
         </FormGroup>
       </Form>
     )}
-    {isPredictiveMethod && (
+    {isPredictiveMethod && !isLocal && (
       <div>
         <h5>
           <strong>Remote-validation</strong>
