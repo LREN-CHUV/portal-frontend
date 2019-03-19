@@ -2,23 +2,44 @@
 
 # MIP portal frontend
 
-## Libraries
+## Summary
+MIP Frontend is the web portal for the [Medical Informatics Platform for the Human Brain Project](https://hbpmedical.github.io/).
 
-* AngularJS v1.6.8
-* Bootstrap v3.3.7
+The portal is currently beeing migrated from Angular to React, and runs on both frameworks.
+
+* React 16.8.4
+* AngularJS 1.6.8
+* Bootstrap 3.3.7
 
 ## Frontend development
 
 This is a minimal setup to do frontend development in this project:
 
-### Backend
-1. Checkout the master branch of the [backend web-analytics-starter](https://github.com/LREN-CHUV/web-analytics-starter) project.
-2. Run the backend either on local or federated mode `./run.sh --no-frontend` or `./run-federation.sh --no-frontend` You will have the MIP backend running on your computer with no frontend.
+### Run the Backend
+* Checkout the master branch of the [backend web-analytics-starter](https://github.com/LREN-CHUV/web-analytics-demo) project.
+* If you are an HBP partner, you might want to use the `research_datasets` branch, which requires an authorization. You can ask for an access at support@humanbrainproject.eu . Once you're authorized, follow the [documentation](https://github.com/LREN-CHUV/web-analytics-demo/tree/research_datasets) about how to login to the private gitlab docker registry to get the datasets.
+* Create a new line in `/etc/hosts`, so the backend will be accessible through http://frontend/services
+  * `sudo sh -c 'echo 127.0.1.1	frontend >> /etc/hosts'`
+* Launch `./run.sh`. You will have the MIP backend running on your computer at http://frontend
 
-### Frontend
+### React
+* Install [nodejs](https://nodejs.org)
+* Install [yarn](https://yarnpkg.com/en/)
+* `cd /app/v3/`
+* create a `.env` file
+    * `sh -c 'echo REACT_APP_BACKEND_URL = \"http://frontend\" >> .env'`
+* `yarn watch`
+
+#### Tests
+* `yarn test`
+
+### Angular (deprecated)
+
+This part is no longuer updated. Will be migrated to the new React stack
+
 1. Checkout this repo "portal-frontend" on staging branch.
 2. There is two way to start the development frontend:
-3. Either by docker, `./run.sh` or `./run.sh --federation`
+3. Either by docker, `./run.sh`
 4. Or manually install gulp & yarn global
   * `npm install -g gulp` (might require `sudo`)
   * `npm install -g yarn` (might require `sudo`)  (Debian/Ubuntu users should use `sudo apt-get install yarn`)
@@ -38,7 +59,7 @@ Run: `./publish.sh`
 
 See [Docker Readme](docker/README.md) for details about how to run the MIP frontend packaged as a Docker image.
 
-See [Web Analytics starter](https://github.com/HBPMedical/web-analytics-starter) to deploy MIP Web portal and its analytics stack for development.
+See [Web Analytics starter](https://github.com/HBPMedical/web-analytics-demo) to deploy MIP Web portal and its analytics stack for development.
 
 See [MIP Microservices Infrastructure](https://github.com/HBPMedical/mip-microservices-infrastructure) for the production deployment of the MIP platform
 
