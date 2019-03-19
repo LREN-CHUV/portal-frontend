@@ -1,17 +1,16 @@
-import '../Experiment.css';
-
 import * as React from 'react';
 import { Panel, Tab, Tabs } from 'react-bootstrap';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
-
 import { MIP } from '../../../types';
 import { APICore, APIExperiment, APIModel } from '../../API';
+import { globalParameters } from '../../constants';
 import Form from '../../Experiment/Create/Form';
 import ExperimentCreateHeader from '../../Experiment/Create/Header';
 import { Alert, IAlert } from '../../UI/Alert';
 import AvailableMethods from '../../UI/AvailableMethods';
 import Model from '../../UI/Model';
 import Validation from '../../UI/Validation';
+import '../Experiment.css';
 import Help from './Help';
 
 interface IProps extends RouteComponentProps<any> {
@@ -164,12 +163,11 @@ class Container extends React.Component<IProps, IState> {
   };
 
   private handleSelectMethod = (method: MIP.API.IMethod): void => {
-    const parameters = method && method.parameters;
-    const kfold = this.isPredictiveMethod(method) ? 2 : 0;
+    const kfold = this.isPredictiveMethod(method) ? globalParameters.kfold.k : 0;
     this.setState({
       kfold,
       method,
-      parameters
+      parameters: method && method.parameters
     });
   };
 
