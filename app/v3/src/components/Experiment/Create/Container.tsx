@@ -60,10 +60,6 @@ class Container extends React.Component<IProps, IState> {
     const { apiCore, apiModel, apiExperiment, appConfig } = this.props;
     const alert = this.state && this.state.alert;
     const method = this.state && this.state.method;
-    const isPredictiveMethod =
-      (method && method.type && method.type[0] === 'predictive_model') ||
-      (method && method.code === 'kmeans') ||
-      false;
     const isLocal = appConfig.mode === 'local' || true;
 
     return (
@@ -116,7 +112,7 @@ class Container extends React.Component<IProps, IState> {
                         kfold={this.state && this.state.kfold}
                         handleChangeKFold={this.handleChangeKFold}
                         isLocal={isLocal}
-                        isPredictiveMethod={isPredictiveMethod}
+                        isPredictiveMethod={this.isPredictiveMethod(method)}
                         datasets={apiCore.state.datasets}
                         query={this.state && this.state.query}
                         handleUpdateQuery={this.handleUpdateQuery}
@@ -149,6 +145,13 @@ class Container extends React.Component<IProps, IState> {
       </div>
     );
   }
+
+  // FIXME: better algorithm parameterization
+  private isPredictiveMethod = (method: MIP.API.IMethod | undefined) =>
+    (method && method.type && method.type[0] === 'predictive_model') ||
+    (method && method.code === 'kmeans') ||
+    false;
+
   private handleSelectModel = async (
     model: MIP.API.IModelResponse
   ): Promise<any> => {
@@ -162,7 +165,9 @@ class Container extends React.Component<IProps, IState> {
 
   private handleSelectMethod = (method: MIP.API.IMethod): void => {
     const parameters = method && method.parameters;
+    const kfold = this.isPredictiveMethod(method) ? 2 : 0;
     this.setState({
+      kfold,
       method,
       parameters
     });

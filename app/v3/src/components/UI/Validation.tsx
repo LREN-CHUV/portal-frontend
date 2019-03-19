@@ -71,7 +71,6 @@ const Validation = ({
           <Col sm={2}>K-Fold:</Col>
           <Col sm={4}>
             <FormControl
-              defaultValue={"2"}
               type="number"
               value={kfold}
               // tslint:disable-next-line jsx-no-lambda

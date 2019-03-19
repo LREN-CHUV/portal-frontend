@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.16.1 - 2019/03/13
+* Removed validation for local mode
+* Tests fixes
+* Fixed kfold for kmeans
+
 ## 2.16.0 - 2019/03/13
 * Algorithm tests completed, testing 20 algorithms (Woken, Exareme) see ./app/v3/src/components/API/__tests__/Integration/Experiments/README.txt
 * Algorithm fixes
