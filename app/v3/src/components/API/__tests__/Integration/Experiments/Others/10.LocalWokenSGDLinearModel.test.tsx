@@ -45,11 +45,11 @@ const model: any = (datasets: MIP.API.IVariableEntity[]) => ({
     filters:
       '{"condition":"AND","rules":[{"id":"subjectageyears","field":"subjectageyears","type":"integer","input":"number","operator":"greater","value":"65"}],"valid":true}',
     trainingDatasets: datasets
-      .slice(0, datasets.length - 1)
-      .map(d => ({ code: d.code })),
-    validationDatasets: datasets
-      .slice(datasets.length - 1)
-      .map(d => ({ code: d.code })),
+      .filter(d => d.code !== 'ppmi' && d.code !== 'edsd')
+      .map(d => ({
+        code: d.code
+      })),
+    validationDatasets: [],
     variables: [{ code: 'subjectageyears' }]
   }
 });

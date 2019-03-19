@@ -112,6 +112,6 @@ describe('Integration Test for experiment API', () => {
     expect(wrapper.find('.error')).toHaveLength(0);
     expect(wrapper.find('.loading')).toHaveLength(0);
     expect(wrapper.find('div#tabs-methods')).toHaveLength(1);
-    expect(wrapper.find('.greyGridTable')).toHaveLength(1);
+    expect(wrapper.find('.pfa-table')).toHaveLength(1);
   });
 });

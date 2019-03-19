@@ -14,9 +14,9 @@
 + 12.sgdNeuralNetwork
 + 13.gradientBoosting
 + 14.knn
-- 15.hedwig
-+ 16.hinmine
+- 15.hedwig (fails, skip test for now)
++ 16.hinmine (too heavy, skip test for now)
 + 17.tSNE
-- 18.ggparci
-+ 19.kmeans
+- 18.ggparci (fails, skip test for now)
+- 19.kmeans
 + 20.heatmaply

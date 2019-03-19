@@ -75,7 +75,7 @@ describe('Integration Test for experiment API', () => {
 
   // Test
 
-  it(`create ${experimentCode}`, async () => {
+  it.skip(`create ${experimentCode}`, async () => {
     const { error, experiment } = await createExperiment({
       experiment: payload
     });

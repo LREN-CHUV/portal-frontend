@@ -103,7 +103,13 @@ const AvailableMethods = ({
   const filteredAlgorithms =
     sortedAlgorithms &&
     sortedAlgorithms.filter(
-      a => a.code !== 'histograms' && a.code !== 'statisticsSummary'
+      a =>
+        a.code !== 'histograms' &&
+        a.code !== 'statisticsSummary' &&
+        a.code !== 'hinmine' &&
+        a.code !== 'WP_LINEAR_REGRESSION'
+        &&
+        a.code !== 'ggparci'
     );
   const types = Array.from(
     new Set(filteredAlgorithms.map(f => f.type).flat(1))
@@ -115,24 +121,26 @@ const AvailableMethods = ({
       {types.map(type => (
         <div className='method' key={type}>
           <h4>{type}</h4>
-          {filteredAlgorithms.filter(a => a.type && a.type.includes(type)).map((algorithm: any) => (
-            <div className='method' key={algorithm.code}>
-              <Button
-                key={algorithm.code}
-                bsStyle='link'
-                title={`${algorithm.type} - ${algorithm.description}`}
-                // tslint:disable-next-line jsx-no-lambda
-                onClick={() => handleSelectMethod(algorithm)}
-                style={{
-                  color: algorithm.enabled ? '#03a9f4' : 'gray',
-                  padding: 0,
-                  textTransform: 'none'
-                }}
-                disabled={!algorithm.enabled}>
-                {algorithm.label}
-              </Button>
-            </div>
-          ))}
+          {filteredAlgorithms
+            .filter(a => a.type && a.type.includes(type))
+            .map((algorithm: any) => (
+              <div className='method' key={algorithm.code}>
+                <Button
+                  key={algorithm.code}
+                  bsStyle='link'
+                  title={`${algorithm.type} - ${algorithm.description}`}
+                  // tslint:disable-next-line jsx-no-lambda
+                  onClick={() => handleSelectMethod(algorithm)}
+                  style={{
+                    color: algorithm.enabled ? '#03a9f4' : 'gray',
+                    padding: 0,
+                    textTransform: 'none'
+                  }}
+                  disabled={!algorithm.enabled}>
+                  {algorithm.label}
+                </Button>
+              </div>
+            ))}
         </div>
       ))}
     </React.Fragment>

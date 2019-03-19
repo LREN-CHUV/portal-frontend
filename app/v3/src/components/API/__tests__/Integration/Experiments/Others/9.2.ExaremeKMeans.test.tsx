@@ -5,33 +5,35 @@ import * as React from 'react';
 import {
   createExperiment,
   createModel,
-  datasets,
-  waitForResult
+  waitForResult,
+  uid
 } from '../../../../../utils/TestUtils';
 
 // config
 
-const modelSlug = `model-${Math.round(Math.random() * 10000)}`;
-const experimentCode = 'ggparci';
+const modelSlug = `model-${uid()}`;
+const experimentCode = 'K_MEANS';
+const parameters = [{ code: 'k', value: 4 }];
+const datasets = [{ code: 'adni' }, { code: 'edsd' }];
 const model: any = (datasets: MIP.API.IVariableEntity[]) => ({
   query: {
-    coVariables: [{ code: 'lefthippocampus' }],
-    groupings: [],
-    testingDatasets: [],
-    filters:
-      '{"condition":"AND","rules":[{"id":"subjectageyears","field":"subjectageyears","type":"integer","input":"number","operator":"greater","value":"65"}],"valid":true}',
-    trainingDatasets: datasets.map(d => ({ code: d.code })),
-    validationDatasets: [],
-    variables: [{ code: 'alzheimerbroadcategory' }]
+    "variables": [{ "code": "apoe4" }],
+    "coVariables": [{ "code": "subjectageyears" }, { "code": "av45" }],
+    "grouping": [],
+    "trainingDatasets": datasets,
+    "testingDatasets": [],
+    "validationDatasets": [],
+    "filters": ""
   }
 });
+
 
 const payload: MIP.API.IExperimentPayload = {
   algorithms: [
     {
       code: experimentCode,
-      name: experimentCode,
-      parameters: [],
+      name: experimentCode, // FIXME: name is used to parse response which is bad !!!
+      parameters,
       validation: false
     }
   ],
@@ -40,27 +42,21 @@ const payload: MIP.API.IExperimentPayload = {
   validations: []
 };
 
+// Test
+
 describe('Integration Test for experiment API', () => {
   beforeAll(async () => {
-    const dstate = await datasets();
-    expect(dstate.error).toBeFalsy();
-    expect(dstate.datasets).toBeTruthy();
+    const mstate = await createModel({
+      model: model(datasets),
+      modelSlug
+    });
+    expect(mstate.error).toBeFalsy();
+    expect(mstate.model).toBeTruthy();
 
-    if (dstate.datasets) {
-      const mstate = await createModel({
-        model: model(dstate.datasets),
-        modelSlug
-      });
-      expect(mstate.error).toBeFalsy();
-      expect(mstate.model).toBeTruthy();
-
-      return true;
-    }
+    return true;
   });
 
-  // Test
-
-  it.skip(`create ${experimentCode}`, async () => {
+  it(`create ${experimentCode}`, async () => {
     const { error, experiment } = await createExperiment({
       experiment: payload
     });
@@ -81,5 +77,6 @@ describe('Integration Test for experiment API', () => {
     const wrapper = mount(<Result {...props} />);
     expect(wrapper.find('.error')).toHaveLength(0);
     expect(wrapper.find('.loading')).toHaveLength(0);
+    expect(wrapper.find('div#tabs-methods')).toHaveLength(1);
   });
 });
