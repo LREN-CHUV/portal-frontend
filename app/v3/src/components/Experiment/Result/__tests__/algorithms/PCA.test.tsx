@@ -34,7 +34,7 @@ describe('Test naiveBayes results', () => {
     };
     const wrapper = mount(<Result {...props} />);
 
-    expect(wrapper.find('.loader')).toHaveLength(0);
+    expect(wrapper.find('.error')).toHaveLength(0);
     expect(wrapper.find('.loader')).toHaveLength(0);
     expect(wrapper.find('PlotlyComponent')).toHaveLength(1);
   });

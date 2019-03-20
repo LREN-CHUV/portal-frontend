@@ -16,7 +16,7 @@ The portal is currently beeing migrated from Angular to React, and runs on both 
 This is a minimal setup to do frontend development in this project:
 
 ### Run the Backend
-* Checkout the master branch of the [backend web-analytics-starter](https://github.com/LREN-CHUV/web-analytics-demo) project.
+* Checkout the master branch of the [backend web-analytics-demo](https://github.com/LREN-CHUV/web-analytics-demo) project.
 * If you are an HBP partner, you might want to use the `research_datasets` branch, which requires an authorization. You can ask for an access at support@humanbrainproject.eu . Once you're authorized, follow the [documentation](https://github.com/LREN-CHUV/web-analytics-demo/tree/research_datasets) about how to login to the private gitlab docker registry to get the datasets.
 * Create a new line in `/etc/hosts`, so the backend will be accessible through http://frontend/services
   * `sudo sh -c 'echo 127.0.1.1	frontend >> /etc/hosts'`
@@ -28,6 +28,8 @@ This is a minimal setup to do frontend development in this project:
 * `cd /app/v3/`
 * create a `.env` file
     * `sh -c 'echo REACT_APP_BACKEND_URL = \"http://frontend\" >> .env'`
+* `yarn install`
+* You can generate models and experiment by running the tests
 * `yarn watch`
 
 #### Tests
