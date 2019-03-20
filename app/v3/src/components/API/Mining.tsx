@@ -43,7 +43,7 @@ class Mining extends Container<MIP.Store.IMiningState> {
 
   constructor(config: any) {
     super();
-    this.state = { minings: undefined, heatmaps: undefined };
+    this.state = { statisticSummaries: undefined, heatmaps: undefined };
     this.options = config.options;
     this.baseUrl = backendURL;
   }
@@ -53,7 +53,7 @@ class Mining extends Container<MIP.Store.IMiningState> {
     return this.setState((prevState: any) => ({
       error: undefined,
       heatmaps: undefined,
-      minings: undefined
+      statisticSummaries: undefined
     }));
   };
 
@@ -87,7 +87,7 @@ class Mining extends Container<MIP.Store.IMiningState> {
   };
 
   // fetch for each dataset, otherwise values are aggregated for all datasets
-  public allByDataset = async ({
+  public statiscSummariesByDataset = async ({
     payload
   }: {
     payload: MIP.API.IMiningPayload;
@@ -131,7 +131,7 @@ class Mining extends Container<MIP.Store.IMiningState> {
               m.dataset && m.dataset.code !== placeholderMining.dataset.code
           );
         return {
-          minings: prevState.minings
+          statisticSummaries: prevState.minings
             ? [...nextState, placeholderMining]
             : [placeholderMining]
         };
@@ -150,7 +150,7 @@ class Mining extends Container<MIP.Store.IMiningState> {
               m.dataset.code !== mining.dataset.code
           );
         return {
-          minings: prevState.minings ? [...nextState, mining] : [mining]
+          statisticSummaries: prevState.minings ? [...nextState, mining] : [mining]
         };
       });
     });

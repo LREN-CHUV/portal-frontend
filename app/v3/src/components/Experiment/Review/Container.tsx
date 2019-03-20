@@ -355,9 +355,9 @@ class Container extends React.Component<IProps, IState> {
         variables: query.variables ? query.variables : []
       };
 
-      await apiMining.allByDataset({ payload });
+      await apiMining.statiscSummariesByDataset({ payload });
       return this.setState({
-        mining: apiMining.state.minings
+        mining: apiMining.state.statisticSummaries
       });
     }
   };

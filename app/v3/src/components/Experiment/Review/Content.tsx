@@ -45,7 +45,7 @@ const Content = ({
             <Tabs defaultActiveKey={1} id="uncontrolled-review-model-tab">
               <Tab eventKey={1} title="Table">
                 <Table
-                  minings={apiMining.state.minings}
+                  minings={apiMining.state.statisticSummaries}
                   selectedDatasets={selectedDatasets}
                   query={model && model.query}
                   lookup={lookup}
