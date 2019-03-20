@@ -1,6 +1,11 @@
 # Changelog
 
-## 2.16.1 - 2019/03/13
+## 2.16.2 - 2019/03/20
+* Added test for exareme filters
+* Added footer to Experiment pages
+* default kfold value to 3
+
+## 2.16.1 - 2019/03/19
 * Removed validation for local mode
 * Tests fixes
 * Fixed kfold for kmeans

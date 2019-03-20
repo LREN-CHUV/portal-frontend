@@ -208,7 +208,7 @@ class APIAdapter {
                 break;
 
               default:
-                throw new Error(`"!!!!!!!! SHOULD TEST" ${subResult.type}`);
+                throw new Error(`"Format not handled" ${subResult.type}`);
                 break;
             }
           });

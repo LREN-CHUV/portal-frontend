@@ -70,7 +70,9 @@ const App = ({
         )}
       />
     </section>
-    <Footer appConfig={appConfig} />
+    <footer id='footer'>
+      <Footer appConfig={appConfig} />
+    </footer>
   </div>
 );
 
