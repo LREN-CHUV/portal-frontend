@@ -23,7 +23,7 @@ const model: any = (datasets: MIP.API.IVariableEntity[]) => ({
     "trainingDatasets": datasets,
     "testingDatasets": [],
     "validationDatasets": [],
-    "filters": ""
+    "filters": "{\"condition\":\"AND\",\"rules\":[{\"id\":\"subjectageyears\",\"field\":\"subjectageyears\",\"type\":\"integer\",\"input\":\"number\",\"operator\":\"greater\",\"value\":50}],\"valid\":true}"
   }
 });
 

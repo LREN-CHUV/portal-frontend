@@ -5,34 +5,28 @@ import * as React from 'react';
 import {
   createExperiment,
   createModel,
-  waitForResult
+  waitForResult,
+  uid
 } from '../../../../../utils/TestUtils';
 
 // config
 
-const modelSlug = `model-${Math.round(Math.random() * 10000)}`;
+const modelSlug = `model-${uid()}`;
 const experimentCode = 'K_MEANS';
 const parameters = [{ code: 'k', value: 4 }];
 const datasets = [{ code: 'adni' }, { code: 'edsd' }];
 const model: any = (datasets: MIP.API.IVariableEntity[]) => ({
   query: {
-    coVariables: [
-      {
-        code: 'subjectageyears'
-      }
-    ],
-    filters: '',
+    coVariables: [{ code: 'subjectageyears' }],
+    filters:
+      '{"condition":"AND","rules":[{"id":"subjectageyears","field":"subjectageyears","type":"integer","input":"number","operator":"greater","value":50}],"valid":true}',
     groupings: [],
     testingDatasets: [],
     trainingDatasets: datasets.map(d => ({
       code: d.code
     })),
     validationDatasets: [],
-    variables: [
-      {
-        code: 'apoe4'
-      }
-    ]
+    variables: [{ code: 'apoe4' }]
   }
 });
 
