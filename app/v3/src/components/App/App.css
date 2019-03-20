@@ -169,6 +169,30 @@ button::-moz-focus-inner {
   }
 }
 
+
+#footer {
+  background: #333;
+  font-size: 12px;
+  height: 32px;
+  line-height: 32px;
+  padding: 0;
+  margin-top: 20px;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+
+#footer,
+#footer a {
+  color: #7e7e7e;
+}
+
+#footer h6.copyright {
+  background: url(../../images/logo_chuv.png) left center no-repeat;
+  text-indent: 70px;
+  margin: 0;
+}
+
 .panel {
   background-color: #fff;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
