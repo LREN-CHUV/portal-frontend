@@ -8,7 +8,7 @@ import ExperimentResult from '../Experiment/Result/Container';
 import ExperimentReview from '../Experiment/Review/Container';
 import Explore from '../Explore/NativeBubble';
 import Navigation from '../UI/Navigation';
-
+import Footer from '../UI/Footer';
 import 'bootstrap/dist/css/bootstrap.css';
 import './App.css';
 
@@ -35,7 +35,7 @@ const App = ({
         appConfig={appConfig}
       />
     </header>
-    <section>
+    <section className='main-content'>
       <Route path='/v3/explore' render={() => <Explore apiCore={apiCore} />} />
       <Route
         path='/v3/review'
@@ -70,6 +70,9 @@ const App = ({
         )}
       />
     </section>
+    <footer id='footer'>
+      <Footer appConfig={appConfig} />
+    </footer>
   </div>
 );
 
