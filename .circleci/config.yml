@@ -2,19 +2,13 @@ version: 2
 jobs:
   build:
     docker:
-      - image: hbpmip/docker-compose-for-ci:17.06-1
+      - image: hbpmip/docker-compose-for-ci:latest
     steps:
       - setup_remote_docker:
           docker_layer_caching: true
-          version: 17.06.0-ce
       - checkout
-      - run: echo "A First hello"
       - run:
-          name: 'Install requirements'
-          command: |
-            docker --version
-      - run:
-          name: 'Build the project'
+          name: 'Build frontend'
           command: |
             docker build -t hbpmip/portal-frontend .
 
