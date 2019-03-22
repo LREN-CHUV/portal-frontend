@@ -2,7 +2,6 @@ version: 2
 jobs:
   build:
     docker:
-      - image: hbpmip/docker-compose-for-ci:latest
     steps:
       - setup_remote_docker:
           docker_layer_caching: true
@@ -12,9 +11,25 @@ jobs:
           command: |
             docker build -t hbpmip/portal-frontend .
 
-
+  test:
+    docker:
+    steps:
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - checkout
+      - run:
+          name: "Pull & install backend"
+          command: |
+            git clone https://github.com/HBPMedical/web-analytics-demo.git
+            cd web-analytics-demo
+            sh run.sh
+      - run:
+          name: "Build frontend"
+          command: |
+            docker build -t hbpmip/portal-frontend:test -f Dockerfile-test .
 workflows:
   version: 2
   build_and_test:
     jobs:
       - build
+      - test
