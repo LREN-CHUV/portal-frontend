@@ -24,7 +24,7 @@ jobs:
           command: |
             git clone https://github.com/HBPMedical/web-analytics-demo.git
             cd web-analytics-demo
-            sh run.sh
+            ./run.sh
       - run:
           name: "Build frontend"
           command: |

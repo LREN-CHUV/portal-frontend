@@ -12,7 +12,7 @@ RUN yarn install
 
 COPY . /frontend
 
-# RUN gulp build
+RUN gulp build
 
 WORKDIR /frontend/app/v3/
 RUN yarn install
