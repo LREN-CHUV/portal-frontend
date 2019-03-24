@@ -45,7 +45,7 @@ const Content = ({
             <Tabs defaultActiveKey={1} id="uncontrolled-review-model-tab">
               <Tab eventKey={1} title="Table">
                 <Table
-                  minings={apiMining.state.minings}
+                  minings={apiMining.state.summaryStatistics}
                   selectedDatasets={selectedDatasets}
                   query={model && model.query}
                   lookup={lookup}
@@ -57,9 +57,9 @@ const Content = ({
                   selectedDatasets={selectedDatasets}
                 />
               </Tab>
-              {/* <Tab eventKey={3} title="Heatmap">
-                <HeatMap apiMining={apiMining} model={model} />
-              </Tab> */}
+              <Tab eventKey={3} title="Heatmap">
+                <HeatMap heatmaps={apiMining.state.heatmaps} />
+              </Tab>
             </Tabs>
           </Body>
         </Panel>
