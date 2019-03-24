@@ -1,4 +1,5 @@
 import request from 'request-promise-native';
+import stringHash from 'string-hash';
 import { Container } from 'unstated';
 import { MIP } from '../../types';
 import { backendURL } from '../API';
@@ -19,11 +20,9 @@ class Mining extends Container<MIP.Store.IMiningState> {
           ...heatmap,
           data: d.data
         }));
+      } else {
+        return [heatmap];
       }
-      else {
-        return [ heatmap ];
-      }
-
     } else {
       const data = heatmap.data && heatmap.data.data;
       return [
@@ -36,24 +35,22 @@ class Mining extends Container<MIP.Store.IMiningState> {
   };
   public state: MIP.Store.IMiningState;
 
-  private cachedMinings: MIP.Store.IMiningResponseShape[] = [];
-  private requestedDatasets: Set<MIP.API.IVariable> = new Set();
+  private cachedSummaryStatistics: any = {};
   private options: request.Options;
   private baseUrl: string;
 
   constructor(config: any) {
     super();
-    this.state = { minings: undefined, heatmaps: undefined };
+    this.state = { summaryStatistics: undefined, heatmaps: undefined };
     this.options = config.options;
     this.baseUrl = backendURL;
   }
   public clear = () => {
-    this.cachedMinings = [];
-    this.requestedDatasets.clear();
+    this.cachedSummaryStatistics = {};
     return this.setState((prevState: any) => ({
       error: undefined,
       heatmaps: undefined,
-      minings: undefined
+      summaryStatistics: undefined
     }));
   };
 
@@ -87,80 +84,59 @@ class Mining extends Container<MIP.Store.IMiningState> {
   };
 
   // fetch for each dataset, otherwise values are aggregated for all datasets
-  public allByDataset = async ({
+  public summaryStatisticsByDataset = async ({
     payload
   }: {
     payload: MIP.API.IMiningPayload;
   }): Promise<any> => {
-    // Filter remaining datasets
-    const remainingDatasets = payload.datasets.filter(
-      dataset =>
-        Array.from(this.requestedDatasets)
-          .map(d => d.code)
-          .indexOf(dataset.code) === -1
-    );
-    const remainingPayloads: MIP.API.IMiningPayload[] = remainingDatasets.map(
-      dataset => ({
-        algorithm: {
-          code: 'statisticsSummary',
-          name: 'statisticsSummary',
-          parameters: [],
-          validation: false
-        },
-        ...payload,
-        datasets: [dataset]
-      })
-    );
+    const hashKey = stringHash(`${payload.variables}${payload.filters}`);
+    const queries = payload.datasets.map(dataset => {
+      const code = dataset.code;
 
-    this.requestedDatasets = this.addAll(
-      this.requestedDatasets,
-      remainingDatasets
-    );
+      const response =
+        this.cachedSummaryStatistics[code] &&
+        this.cachedSummaryStatistics[code].hashKey === hashKey;
 
-    remainingPayloads.map(async pl => {
-      const placeholderMining = {
-        data: undefined,
-        dataset: pl.datasets[0],
-        error: undefined
-      };
-      await this.setState((prevState: any) => {
-        const nextState =
-          prevState.minings &&
-          prevState.minings.filter(
-            (m: MIP.Store.IMiningResponseShape) =>
-              m.dataset && m.dataset.code !== placeholderMining.dataset.code
-          );
-        return {
-          minings: prevState.minings
-            ? [...nextState, placeholderMining]
-            : [placeholderMining]
+      if (!response) {
+        this.cachedSummaryStatistics[code] = {
+          data: undefined,
+          dataset,
+          error: undefined,
+          hashKey
         };
-      });
+      }
 
-      const mining = await this.fetchOne({ payload: pl });
-      this.cachedMinings.push(mining);
-
-      return await this.setState((prevState: any) => {
-        const nextState =
-          prevState.minings &&
-          prevState.minings.filter(
-            (m: MIP.Store.IMiningResponseShape) =>
-              m.dataset &&
-              mining.dataset &&
-              m.dataset.code !== mining.dataset.code
-          );
-        return {
-          minings: prevState.minings ? [...nextState, mining] : [mining]
-        };
-      });
+      return this.cachedSummaryStatistics[code];
     });
-  };
 
-  private addAll = (set: any, items: any) => {
-    for (const it of items) {
-      set.add(it);
-    }
-    return set;
+    this.setState({ summaryStatistics: queries });
+
+    queries
+      .filter(q => !q.data)
+      .forEach(async q => {
+        const pl = {
+          algorithm: {
+            code: 'statisticsSummary',
+            name: 'statisticsSummary',
+            parameters: [],
+            validation: false
+          },
+          ...payload,
+          datasets: [q.dataset]
+        };
+        const mining = await this.fetchOne({ payload: pl });
+        this.cachedSummaryStatistics[q.dataset.code] = {
+          data: mining.data,
+          dataset: q.dataset,
+          error: mining.error,
+          hashKey
+        };
+
+        const summaryStatistics = payload.datasets.map(
+          dataset => this.cachedSummaryStatistics[dataset.code]
+        );
+        this.setState({ summaryStatistics });
+      });
   };
 
   private fetchOne = async ({
@@ -186,7 +162,7 @@ class Mining extends Container<MIP.Store.IMiningState> {
       return {
         data: data && data.data,
         dataset: copyOfDataset.pop(),
-        error: undefined,
+        error: undefined
       };
     } catch (error) {
       return {
