@@ -15,7 +15,7 @@ interface IProps {
 }
 
 const Boxplot = ({ miningState }: IProps) => {
-  const minings = (miningState && miningState.minings) || [];
+  const minings = (miningState && miningState.summaryStatistics) || [];
   const loading = minings.map(m => !m.error && !m.data).every(m => m);
   const error = minings.map(m => m.error);
   const filtered = minings.reduce(

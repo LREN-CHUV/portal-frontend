@@ -48,12 +48,12 @@ describe('Integration Test Mining API', () => {
       grouping: query.groupings ? query.groupings : [],
       variables: query.variables ? query.variables : []
     };
-    await apiMining.allByDataset({ payload });
-    let { minings, error } = apiMining.state;
+    await apiMining.summaryStatisticsByDataset({ payload });
+    let { summaryStatistics: minings, error } = apiMining.state;
 
     const timer = new Promise(resolve => {
       const timerId = setInterval(async () => {
-        const { minings, error } = apiMining.state;
+        const { summaryStatistics: minings, error } = apiMining.state;
         const loading = !(error || minings);
         if (!loading) {
           clearInterval(timerId);
