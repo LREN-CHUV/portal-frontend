@@ -55,7 +55,7 @@ const payload: MIP.API.IExperimentPayload = {
   validations
 };
 
-xdescribe('Integration Test for experiment API', () => {
+describe('Integration Test for experiment API', () => {
   beforeAll(async () => {
     const dstate = await datasets();
     expect(dstate.error).toBeFalsy();
@@ -75,7 +75,7 @@ xdescribe('Integration Test for experiment API', () => {
 
   // Test
 
-  it(`create ${experimentCode}`, async () => {
+  it.skip(`create ${experimentCode}`, async () => {
     const { error, experiment } = await createExperiment({
       experiment: payload
     });
