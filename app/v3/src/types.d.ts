@@ -24,7 +24,7 @@ export declare namespace MIP.Store {
   }
 
   export interface IMiningState extends IError {
-    statisticSummaries?: MIP.Store.IMiningResponseShape[];
+    summaryStatistics?: MIP.Store.IMiningResponseShape[];
     heatmaps?: MIP.Store.IMiningResponseShape[];
   }
 

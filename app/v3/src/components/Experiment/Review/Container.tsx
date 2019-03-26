@@ -12,6 +12,7 @@ import Filter from './Filter';
 import ExperimentReviewHeader from './Header';
 
 import './Review.css';
+import { async } from 'q';
 interface IProps extends RouteComponentProps<any> {
   apiModel: APIModel;
   apiCore: APICore;
@@ -21,7 +22,7 @@ interface IState {
   alert?: IAlert;
   loadingSummary?: boolean;
   query?: MIP.API.IQuery;
-  mining?: any;
+  summaryStatistics?: any;
 }
 
 class Container extends React.Component<IProps, IState> {
@@ -71,7 +72,7 @@ class Container extends React.Component<IProps, IState> {
       const { apiModel } = this.props;
       await apiModel.setMock(query);
       await this.setState({ query });
-      this.createMining({ query });
+      this.setMinings({ query });
     } else {
       const params = this.urlParams(this.props);
       const slug = params && params.slug;
@@ -79,7 +80,7 @@ class Container extends React.Component<IProps, IState> {
         await this.loadModel({ slug });
         const query = this.state.query;
         if (query) {
-          this.createMining({ query });
+          this.setMinings({ query });
         }
       }
     }
@@ -96,7 +97,7 @@ class Container extends React.Component<IProps, IState> {
       const query = this.state.query;
       if (query) {
         this.props.apiMining.clear();
-        this.createMining({ query });
+        this.setMinings({ query });
       }
     }
   }
@@ -272,7 +273,7 @@ class Container extends React.Component<IProps, IState> {
     const query = this.state.query;
     if (query) {
       apiMining.clear();
-      this.createMining({ query });
+      this.setMinings({ query });
     }
 
     return Promise.resolve(true);
@@ -342,7 +343,7 @@ class Container extends React.Component<IProps, IState> {
     return this.setState({ query });
   };
 
-  private createMining = async ({ query }: { query: MIP.API.IQuery }) => {
+  private setMinings = async ({ query }: { query: MIP.API.IQuery }) => {
     const { apiMining } = this.props;
     const datasets = query.trainingDatasets;
 
@@ -355,16 +356,14 @@ class Container extends React.Component<IProps, IState> {
         variables: query.variables ? query.variables : []
       };
 
-      await apiMining.statiscSummariesByDataset({ payload });
-      return this.setState({
-        mining: apiMining.state.statisticSummaries
-      });
+      apiMining.summaryStatisticsByDataset({ payload });
+      apiMining.heatmaps({ payload });
     }
   };
 
   private handleUpdateDataset = (query: MIP.API.IQuery): void => {
     this.setState({ query });
-    this.createMining({ query });
+    this.setMinings({ query });
   };
 
   private urlParams = (

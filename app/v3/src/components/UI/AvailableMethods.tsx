@@ -105,11 +105,13 @@ const AvailableMethods = ({
     sortedAlgorithms.filter(
       a =>
         a.code !== 'histograms' &&
+        a.code !== 'WP_VARIABLES_HISTOGRAM' &&
         a.code !== 'statisticsSummary' &&
         a.code !== 'hinmine' &&
-        a.code !== 'WP_LINEAR_REGRESSION'
-        &&
-        a.code !== 'ggparci'
+        a.code !== 'knn' &&
+        a.code !== 'hedwig' &&
+        a.code !== 'ggparci' &&
+        a.code !== 'kmeans'
     );
   const types = Array.from(
     new Set(filteredAlgorithms.map(f => f.type).flat(1))
