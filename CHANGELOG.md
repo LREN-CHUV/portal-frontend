@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.16.3 - 2019/03/26
+* Fixed CircleCI build & test
+    * Exareme tests are disabled as datasets are not aligned ( can't save a model on the backend if the dataset doesn't exist)
+    * However tests pass  on web-anayltics-demo, branch research_datasets
+    * To be fixed in Exareme integration
+* Fixed Heatmap bug
+* Reworked mining cache
+
 ## 2.16.2 - 2019/03/20
 * Added test for exareme filters
 * Added footer to Experiment pages
