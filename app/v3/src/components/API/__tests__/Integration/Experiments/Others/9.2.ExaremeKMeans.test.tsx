@@ -23,7 +23,7 @@ const model: any = (datasets: MIP.API.IVariableEntity[]) => ({
     "trainingDatasets": datasets,
     "testingDatasets": [],
     "validationDatasets": [],
-    "filters": ""
+    "filters": "{\"condition\":\"AND\",\"rules\":[{\"id\":\"subjectageyears\",\"field\":\"subjectageyears\",\"type\":\"integer\",\"input\":\"number\",\"operator\":\"greater\",\"value\":50}],\"valid\":true}"
   }
 });
 
@@ -44,7 +44,7 @@ const payload: MIP.API.IExperimentPayload = {
 
 // Test
 
-describe('Integration Test for experiment API', () => {
+xdescribe('Integration Test for experiment API', () => {
   beforeAll(async () => {
     const mstate = await createModel({
       model: model(datasets),

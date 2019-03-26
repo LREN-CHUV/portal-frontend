@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Panel, Tab, Tabs } from 'react-bootstrap';
 import { MIP } from '../../../types';
+// import APIAdapter from '../../API/APIAdapter';
 import { MIME_TYPES } from '../../constants';
 import {
   Highchart,
@@ -17,6 +18,8 @@ export default ({
 }: {
   experimentState: MIP.Store.IExperimentState;
 }) => {
+  // const json = require('./__mocks__/responses/fed-woken-knn-2.json');
+  // const experiment = APIAdapter.parse(json);
   const experiment = experimentState && experimentState.experiment;
   const nodes = experiment && experiment.results;
   const error =

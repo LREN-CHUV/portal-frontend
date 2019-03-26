@@ -22,9 +22,9 @@ const model: any = (datasets: MIP.API.IVariableEntity[]) => ({
     testingDatasets: [],
     filters:
       '{"condition":"AND","rules":[{"id":"subjectageyears","field":"subjectageyears","type":"integer","input":"number","operator":"greater","value":"65"}],"valid":true}',
-    trainingDatasets: datasets.map(d => ({ code: d.code })),
+    trainingDatasets: datasets.filter(d => !(/nida|qqni/.test(d.code))),
     validationDatasets: [],
-    variables: [{ code: 'subjectageyears' }]
+    variables: [{ code: 'alzheimerbroadcategory' }]
   }
 });
 
@@ -55,7 +55,7 @@ const payload: MIP.API.IExperimentPayload = {
   validations
 };
 
-describe('Integration Test for experiment API', () => {
+xdescribe('Integration Test for experiment API', () => {
   beforeAll(async () => {
     const dstate = await datasets();
     expect(dstate.error).toBeFalsy();

@@ -1,0 +1,8 @@
+FROM node:latest as builder
+
+RUN curl -o- -L https://yarnpkg.com/install.sh | bash
+
+COPY . /frontend
+WORKDIR /frontend/app/v3/
+RUN yarn install
+RUN REACT_APP_BACKEND_URL="http://localhost" CI=true yarn test

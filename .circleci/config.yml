@@ -1,0 +1,55 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/buildpack-deps:xenial
+    steps:
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - checkout
+      - run:
+          name: 'Build frontend'
+          command: |
+            docker build -t hbpmip/portal-frontend .
+
+  test:
+    docker:
+      - image: circleci/node:latest
+    steps:
+      - setup_remote_docker:
+          version: 18.06.0-ce
+      - checkout
+      - run:
+          name: Setup Environment Variables
+          command: |
+            echo 'export HOST="CircleCI"' >> $BASH_ENV
+      - run:
+          name: 'Pull & install backend'
+          command: |
+            git clone https://github.com/HBPMedical/web-analytics-demo.git
+            cp .circleci/server/* web-analytics-demo/
+            cd web-analytics-demo
+            ./run.sh
+
+      - run:
+          name: 'Install yarn'
+          command: |
+            sudo npm install --global yarn
+      - run:
+          name: 'Build frontend'
+          command: |
+            cd app/v3
+            echo REACT_APP_BACKEND_URL=\"http://web-analytics-demo_portalbackend_1:8080\" | tee -a .env
+            docker build -t frontend:latest .
+      - run:
+          name: 'Test frontend'
+          command: |
+            docker run -e CI=true --network=web-analytics-demo_default frontend:latest yarn test
+
+
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - build
+      - test

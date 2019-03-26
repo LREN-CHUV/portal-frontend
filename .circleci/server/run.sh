@@ -1,6 +1,15 @@
 #!/usr/bin/env bash
 
-set -e
+#
+# Start the Web portal and the analytics engine (Woken)
+#
+# Option:
+#   --no-frontend: do not start the frontend
+#
+
+set -o pipefail  # trace ERR through pipes
+set -o errtrace  # trace ERR through 'time command' and other functions
+set -o errexit   ## set -e : exit the script if any statement returns a non-true return value
 
 get_script_dir () {
      SOURCE="${BASH_SOURCE[0]}"
@@ -16,30 +25,9 @@ get_script_dir () {
 
 cd "$(get_script_dir)"
 
-if pgrep -lf sshuttle > /dev/null ; then
-  echo "sshuttle detected. Please close this program as it messes with networking and prevents Docker links to work"
-  exit 1
-fi
+DOCKER_COMPOSE="docker-compose"
 
-if [ $NO_SUDO ]; then
-  DOCKER="docker"
-  DOCKER_COMPOSE="docker-compose"
-elif groups "$USER" | grep &>/dev/null '\bdocker\b'; then
-  DOCKER="docker"
-  DOCKER_COMPOSE="docker-compose"
-else
-  DOCKER="sudo docker"
-  DOCKER_COMPOSE="sudo docker-compose"
-fi
-
-for param in "$@"
-do
-  if [ "--no-frontend" == "$param" ]; then
-    no_frontend=0
-    echo "INFO: --no-frontend option detected !"
-    break;
-  fi
-done
+export HOST=$(hostname)
 
 echo "Remove old running containers (if any)..."
 $DOCKER_COMPOSE kill
@@ -88,13 +76,9 @@ for i in 1 2 3 4 5 ; do
   $DOCKER_COMPOSE run wait_chronos
 done
 
-if [ $no_frontend ] ; then
-  FRONTEND_URL=http://localhost:8000 \
-  $DOCKER_COMPOSE up -d portalbackend
-else
-  $DOCKER_COMPOSE up -d portalbackend
-  $DOCKER_COMPOSE run wait_portal_backend
-  $DOCKER_COMPOSE up -d frontend
-fi
+echo "The Algorithm Factory is now running on your system"
 
-echo "DONE"
+
+FRONTEND_URL=http://frontend \
+	  $DOCKER_COMPOSE up -d portalbackend
+$DOCKER_COMPOSE run wait_portal_backend
