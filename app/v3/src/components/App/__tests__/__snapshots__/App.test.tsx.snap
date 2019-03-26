@@ -324,7 +324,37 @@ exports[`Test App components App snapshot renders correctly 1`] = `
       </div>
     </header>
   </header>
-  <section />
+  <section
+    className="main-content"
+  />
+  <footer
+    id="footer"
+  >
+    <div
+      className="clearfix container-fluid"
+    >
+      <div
+        className="row"
+      >
+        <ul
+          className="list-unstyled list-inline col-md-6"
+        >
+          <li>
+            <h6
+              className="copyright"
+            >
+              © 2015-2019 Human Brain Project. All right reserved
+            </h6>
+          </li>
+        </ul>
+        <div
+          className="col-md-6 text-right"
+        >
+           | Mode: 
+        </div>
+      </div>
+    </div>
+  </footer>
 </div>
 `;
 
@@ -652,6 +682,36 @@ exports[`Test App components AppContainer snapshot renders correctly 1`] = `
       </div>
     </header>
   </header>
-  <section />
+  <section
+    className="main-content"
+  />
+  <footer
+    id="footer"
+  >
+    <div
+      className="clearfix container-fluid"
+    >
+      <div
+        className="row"
+      >
+        <ul
+          className="list-unstyled list-inline col-md-6"
+        >
+          <li>
+            <h6
+              className="copyright"
+            >
+              © 2015-2019 Human Brain Project. All right reserved
+            </h6>
+          </li>
+        </ul>
+        <div
+          className="col-md-6 text-right"
+        >
+           | Mode: 
+        </div>
+      </div>
+    </div>
+  </footer>
 </div>
 `;

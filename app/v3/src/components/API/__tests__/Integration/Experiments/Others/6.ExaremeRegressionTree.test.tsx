@@ -93,7 +93,7 @@ const payload: MIP.API.IExperimentPayload = {
 
 // Test
 
-describe('Integration Test for experiment API', () => {
+xdescribe('Integration Test for experiment API', () => {
   beforeAll(async () => {
     const mstate = await createModel({
       model: model(datasets),

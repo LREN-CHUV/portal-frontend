@@ -40,7 +40,7 @@ const model: any = (datasets: MIP.API.IVariableEntity[]) => ({
       { code: 'rightpcggposteriorcingulategyrus' }
     ],
     grouping: [],
-    trainingDatasets: [{ code: 'ppmi' }, { code: 'edsd' }, { code: 'adni' }],
+    trainingDatasets: datasets,
     validationDatasets: [],
     filters:
       '{"condition":"AND","rules":[{"id":"agegroup","field":"agegroup","type":"string","input":"select","operator":"not_equal","value":"-50y"}],"valid":true}'

@@ -18,5 +18,5 @@
 + 16.hinmine (too heavy, skip test for now)
 + 17.tSNE
 - 18.ggparci (fails, skip test for now)
-- 19.kmeans
+- 19.kmeans (fails, skip test for now)
 + 20.heatmaply
