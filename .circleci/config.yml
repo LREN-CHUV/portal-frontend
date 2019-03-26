@@ -14,10 +14,10 @@ jobs:
 
   test:
     docker:
-      - image: circleci/node:latest
+      - image: circleci/buildpack-deps:xenial
     steps:
       - setup_remote_docker:
-          version: 18.06.0-ce
+          docker_layer_caching: true
       - checkout
       - run:
           name: Setup Environment Variables
@@ -30,11 +30,6 @@ jobs:
             cp .circleci/server/* web-analytics-demo/
             cd web-analytics-demo
             ./run.sh
-
-      - run:
-          name: 'Install yarn'
-          command: |
-            sudo npm install --global yarn
       - run:
           name: 'Build frontend'
           command: |
@@ -45,7 +40,6 @@ jobs:
           name: 'Test frontend'
           command: |
             docker run -e CI=true --network=web-analytics-demo_default frontend:latest yarn test
-
 
 workflows:
   version: 2
