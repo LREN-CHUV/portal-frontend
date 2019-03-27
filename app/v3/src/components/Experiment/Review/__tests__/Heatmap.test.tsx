@@ -8,18 +8,17 @@ import { shallow } from 'enzyme';
 describe('Test Heatmap component', () => {
   const apiMining = new APIMining(config);
   const model = {
-      query: {
-        coVariables: [{ code: 'alzheimerbroadcategory' }],
-        groupings: [],
-        testingDatasets: [],
-        filters:
-          '{"condition":"AND","rules":[{"id":"subjectageyears","field":"subjectageyears","type":"integer","input":"number","operator":"greater","value":"65"}],"valid":true}',
-        trainingDatasets: { code: 'dataset.code' },
-        validationDatasets: [],
-        variables: [{ code: 'lefthippocampus' }]
-      }
-    };
-
+    query: {
+      coVariables: [{ code: 'alzheimerbroadcategory' }],
+      groupings: [],
+      testingDatasets: [],
+      filters:
+        '{"condition":"AND","rules":[{"id":"subjectageyears","field":"subjectageyears","type":"integer","input":"number","operator":"greater","value":"65"}],"valid":true}',
+      trainingDatasets: { code: 'dataset.code' },
+      validationDatasets: [],
+      variables: [{ code: 'lefthippocampus' }]
+    }
+  };
 
   it('Create dom renders correctly', () => {
     const props = { apiMining, model };
@@ -36,17 +35,28 @@ describe('Test Heatmap component', () => {
       error: undefined
     };
     const props = {
-      apiMining: {
-        state: {
-          heatmaps: APIMining.normalizeHeatmapData(heatmap)
-        }
-      },
-      model
+      heatmaps: APIMining.normalizeHeatmapData(heatmap)
     };
 
     const wrapper = mount(<HeatMap {...props} />);
     expect(wrapper.find('.loader .hidden')).toHaveLength(1);
     expect(wrapper.find('.heatmap h3').text()).toEqual('');
+    expect(wrapper.find('PlotlyComponent')).toHaveLength(1);
+  });
+
+  it('Federated heatmap 1', () => {
+    const data = require('../__mocks__/responses/fed-heatmap.json');
+    const heatmap = {
+      data: data && data.data,
+      dataset: { code: 'dataset.code' },
+      error: undefined
+    };
+    const props = {
+      heatmaps: APIMining.normalizeHeatmapData(heatmap)
+    };
+
+    const wrapper = mount(<HeatMap {...props} />);
+    expect(wrapper.find('.loader .hidden')).toHaveLength(1);
     expect(wrapper.find('PlotlyComponent')).toHaveLength(1);
   });
 
@@ -58,12 +68,7 @@ describe('Test Heatmap component', () => {
       error: undefined
     };
     const props = {
-      apiMining: {
-        state: {
-          heatmaps: APIMining.normalizeHeatmapData(heatmap)
-        }
-      },
-      model
+      heatmaps: APIMining.normalizeHeatmapData(heatmap)
     };
 
     const wrapper = mount(<HeatMap {...props} />);

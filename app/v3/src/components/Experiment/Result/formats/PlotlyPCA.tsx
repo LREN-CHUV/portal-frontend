@@ -8,6 +8,6 @@ Plotly.register([scatter, bar]);
 const PlotlyComponent = createPlotlyComponent(Plotly);
 
 export default ({ data }: { data: any; layout: any }) =>
-  data.map((d: any) => (
-    <PlotlyComponent data={d.data} layout={d.layout} />
+  data.map((d: any, i: number) => (
+    <PlotlyComponent data={d.data} layout={d.layout} key={i}/>
   ));
