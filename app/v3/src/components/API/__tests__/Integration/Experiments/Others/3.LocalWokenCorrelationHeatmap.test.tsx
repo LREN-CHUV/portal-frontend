@@ -27,9 +27,7 @@ const model: any = (datasets: MIP.API.IVariableEntity[]) => ({
       '{"condition":"AND","rules":[{"id":"subjectageyears","field":"subjectageyears","type":"integer","input":"number","operator":"greater","value":"65"}],"valid":true}',
     groupings: [],
     testingDatasets: [],
-    trainingDatasets: datasets.map(d => ({
-      code: d.code
-    })),
+    trainingDatasets: datasets,
     validationDatasets: [],
     variables: [
       {
