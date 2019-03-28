@@ -9,7 +9,7 @@ import { APICore, APIExperiment, APIMining, APIModel } from '../API';
 import ExperimentCreate from '../Experiment/Create/Container';
 import ExperimentResult from '../Experiment/Result/Container';
 import ExperimentReview from '../Experiment/Review/Container';
-import Explore from '../Explore/NativeBubble';
+import Explore from '../Explore/Container';
 import Footer from '../UI/Footer';
 import Navigation from '../UI/Navigation';
 
