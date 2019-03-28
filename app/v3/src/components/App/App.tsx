@@ -1,16 +1,17 @@
-// tslint:disable jsx-no-lambda
+import 'bootstrap/dist/css/bootstrap.css';
+import './App.css';
 
+// tslint:disable jsx-no-lambda
 import * as React from 'react';
 import { Route } from 'react-router-dom';
+
 import { APICore, APIExperiment, APIMining, APIModel } from '../API';
 import ExperimentCreate from '../Experiment/Create/Container';
 import ExperimentResult from '../Experiment/Result/Container';
 import ExperimentReview from '../Experiment/Review/Container';
 import Explore from '../Explore/NativeBubble';
-import Navigation from '../UI/Navigation';
 import Footer from '../UI/Footer';
-import 'bootstrap/dist/css/bootstrap.css';
-import './App.css';
+import Navigation from '../UI/Navigation';
 
 interface IProps {
   appConfig: any;
