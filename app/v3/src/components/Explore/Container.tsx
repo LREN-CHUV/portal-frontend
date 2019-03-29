@@ -6,17 +6,21 @@ interface IProps {
   apiCore: APICore;
 }
 
-const Container = ({ apiCore }: IProps) => {
-  const [hierarchy, setHierarchy] = useState(null);
+export default ({ apiCore }: IProps) => {
+  const [hierarchy, setHierarchy] = useState({});
+  const d3Hierarchy = (node: any) => ({
+    children: node.groups
+      ? node.groups.map(d3Hierarchy)
+      : node.variables.map((v:any) => ({ name: v.label })),
+    name: node.code
+  });
 
   useEffect(() => {
     (async () => {
       await apiCore.hierarchy();
-      setHierarchy(apiCore.state.hierarchy);
+      setHierarchy(d3Hierarchy(apiCore.state.hierarchy));
     })();
   }, []);
 
   return <CirclePack hierarchy={hierarchy} />;
 };
-
-export default Container;
