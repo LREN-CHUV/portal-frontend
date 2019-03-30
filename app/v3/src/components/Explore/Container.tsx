@@ -7,12 +7,12 @@ interface IProps {
 }
 
 export default ({ apiCore }: IProps) => {
-  const [hierarchy, setHierarchy] = useState({});
+  const [hierarchy, setHierarchy] = useState<any | undefined>(undefined);
   const d3Hierarchy = (node: any) => ({
     children: node.groups
       ? node.groups.map(d3Hierarchy)
       : node.variables.map((v:any) => ({ name: v.label })),
-    name: node.code
+    name: node.label
   });
 
   useEffect(() => {
