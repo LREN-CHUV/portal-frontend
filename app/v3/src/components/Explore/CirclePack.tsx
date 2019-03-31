@@ -1,6 +1,6 @@
 import * as d3 from 'd3';
 import React, { useEffect, useRef } from 'react';
-
+import './CirclePack.css';
 interface IProps {
   hierarchy: any;
 }
@@ -55,20 +55,26 @@ export default ({ hierarchy }: IProps) => {
             return (t: any) => zoomTo(i(t));
           });
 
+        const shouldDisplay = (dd: any, ffocus: any) =>
+          dd.parent === ffocus // || !dd.children;
+
         label
           .filter(function(dd: any) {
             const el = this as HTMLElement;
             return (
-              dd.parent === focus ||
+              shouldDisplay(dd, focus) ||
               (el && el.style && el.style.display === 'inline')
             );
           })
           .transition(transition as any)
-          .style('fill-opacity', (dd: any) => (dd.parent === focus ? 1 : 0))
+          .style('fill-opacity', (dd: any) =>
+            shouldDisplay(dd, focus) ? 1 : 0
+          )
           .on('start', function(dd: any) {
             const el = this as HTMLElement;
-            if (dd.parent === focus) {
+            if (shouldDisplay(dd, focus)) {
               el.style.display = 'inline';
+              shouldDisplay(dd, focus);
             }
           })
           .on('end', function(dd: any) {
@@ -87,10 +93,8 @@ export default ({ hierarchy }: IProps) => {
 
       const data = d3
         .hierarchy(hierarchy)
-        .sum(d => {
-          return d.name ? d.name.length : 1;
-        })
-        .sort((a, b) => (a < b ? -1 : 1));
+        .sum(d => (d.name ? d.name.length : 1))
+        .sort((a: any, b: any) => b.value - a.value);
 
       const root = bubbleLayout(data);
 
@@ -119,27 +123,27 @@ export default ({ hierarchy }: IProps) => {
         .selectAll('circle')
         .data(root.descendants())
         .join('circle')
+        .attr('class', 'node')
         .attr('fill', d => (d.children ? color(d.depth) : 'white'))
-        .attr('pointer-events', d => (!d.children ? 'none' : null))
-        .on('mouseover', function() {
-          d3.select(this).attr('stroke', '#000');
-        })
-        .on('mouseout', function() {
-          d3.select(this).attr('stroke', null);
-        })
         .on('click', d => focus !== d && (zoom(d), d3.event.stopPropagation()));
+
+      svg
+        .selectAll('circle')
+        .data(root.descendants())
+        .append('title')
+        .text(
+          (d: any) =>
+            `${d.data.name}\n${d.data.description ? d.data.description : ''}`
+        );
 
       const label = svg
         .append('g')
-        .style('font', '16px sans-serif')
-        .attr('pointer-events', 'none')
-        .attr('text-anchor', 'middle')
         .selectAll('text')
         .data(root.descendants())
         .join('text')
+        .attr('class', 'label')
         .style('fill-opacity', d => (d.parent === root ? 1 : 0))
         .style('display', d => (d.parent === root ? 'inline' : 'none'))
-        
         .text((d: any) => d.data.name);
 
       focus = root;
