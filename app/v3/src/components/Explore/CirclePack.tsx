@@ -1,13 +1,19 @@
+import './CirclePack.css';
+
 import * as d3 from 'd3';
 import React, { useEffect, useRef } from 'react';
-import './CirclePack.css';
+
+import { MIP } from '../../types';
+
 interface IProps {
-  hierarchy: any;
+  hierarchy: MIP.Internal.IVariableDatum;
+  handleSelectVariable: (node: d3.HierarchyNode<MIP.Internal.IVariableDatum>) => void;
 }
-export default ({ hierarchy }: IProps) => {
+
+export default ({ hierarchy, handleSelectVariable }: IProps) => {
   const gRef = useRef<SVGSVGElement>(null);
-  const diameter = 800;
-  const padding = 1.5;
+  const diameter: number = 800;
+  const padding: number = 1.5;
 
   useEffect(() => {
     if (hierarchy) {
@@ -15,13 +21,15 @@ export default ({ hierarchy }: IProps) => {
     }
   }, [hierarchy]);
 
-  const depth = (node: any): number =>
+  const depth = (node: d3.HierarchyNode<MIP.Internal.IVariableDatum>): number =>
     node.children ? 1 + (d3.max<number>(node.children.map(depth)) || 0) : 1;
 
   const d3Render = () => {
     const svgRef = gRef.current;
     let view: [number, number, number];
-    let focus: any;
+    let focus: d3.HierarchyCircularNode<MIP.Internal.IVariableDatum>;
+    let node: d3.Selection<Element | d3.EnterElement | Document | Window | SVGCircleElement | null, d3.HierarchyCircularNode<MIP.Internal.IVariableDatum>, SVGGElement, {}>
+    let label: d3.Selection<Element | d3.EnterElement | Document | Window | SVGCircleElement | null, d3.HierarchyCircularNode<MIP.Internal.IVariableDatum>, SVGGElement, {}>
 
     if (svgRef) {
       // interactive functions
@@ -40,7 +48,8 @@ export default ({ hierarchy }: IProps) => {
         node.attr('r', d => d.r * k);
       };
 
-      const zoom = (d: any) => {
+      const zoom = (d: d3.HierarchyCircularNode<MIP.Internal.IVariableDatum>) => {
+        handleSelectVariable(d);
         focus = d;
         const transition = d3
           .transition<d3.BaseType>()
@@ -52,14 +61,13 @@ export default ({ hierarchy }: IProps) => {
               focus.r * 2 + padding
             ]);
 
-            return (t: any) => zoomTo(i(t));
+            return (t: number) => zoomTo(i(t));
           });
 
-        const shouldDisplay = (dd: any, ffocus: any) =>
-          dd.parent === ffocus // || !dd.children;
+        const shouldDisplay = (dd: d3.HierarchyCircularNode<MIP.Internal.IVariableDatum>, ffocus: d3.HierarchyCircularNode<MIP.Internal.IVariableDatum>) : boolean => dd.parent === ffocus; // || !dd.children;
 
         label
-          .filter(function(dd: any) {
+          .filter(function(dd) {
             const el = this as HTMLElement;
             return (
               shouldDisplay(dd, focus) ||
@@ -67,17 +75,15 @@ export default ({ hierarchy }: IProps) => {
             );
           })
           .transition(transition as any)
-          .style('fill-opacity', (dd: any) =>
-            shouldDisplay(dd, focus) ? 1 : 0
-          )
-          .on('start', function(dd: any) {
+          .style('fill-opacity', dd => (shouldDisplay(dd, focus) ? 1 : 0))
+          .on('start', function(dd) {
             const el = this as HTMLElement;
             if (shouldDisplay(dd, focus)) {
               el.style.display = 'inline';
               shouldDisplay(dd, focus);
             }
           })
-          .on('end', function(dd: any) {
+          .on('end', function(dd) {
             if (dd.parent !== focus) {
               const el = this as HTMLElement;
               el.style.display = 'none';
@@ -87,13 +93,13 @@ export default ({ hierarchy }: IProps) => {
 
       // Layout
       const bubbleLayout = d3
-        .pack()
+        .pack<MIP.Internal.IVariableDatum>()
         .size([diameter, diameter])
         .padding(padding);
 
       const data = d3
         .hierarchy(hierarchy)
-        .sum(d => (d.name ? d.name.length : 1))
+        .sum(d => (d.label ? d.label.length : 1))
         .sort((a: any, b: any) => b.value - a.value);
 
       const root = bubbleLayout(data);
@@ -118,7 +124,7 @@ export default ({ hierarchy }: IProps) => {
         .style('cursor', 'pointer')
         .on('click', () => zoom(root));
 
-      const node = svg
+      node = svg
         .append('g')
         .selectAll('circle')
         .data(root.descendants())
@@ -132,11 +138,11 @@ export default ({ hierarchy }: IProps) => {
         .data(root.descendants())
         .append('title')
         .text(
-          (d: any) =>
-            `${d.data.name}\n${d.data.description ? d.data.description : ''}`
+          d =>
+            `${d.data.label}\n${d.data.description ? d.data.description : ''}`
         );
 
-      const label = svg
+      label = svg
         .append('g')
         .selectAll('text')
         .data(root.descendants())
@@ -144,7 +150,7 @@ export default ({ hierarchy }: IProps) => {
         .attr('class', 'label')
         .style('fill-opacity', d => (d.parent === root ? 1 : 0))
         .style('display', d => (d.parent === root ? 'inline' : 'none'))
-        .text((d: any) => d.data.name);
+        .text(d => d.data.label);
 
       focus = root;
       zoomTo([root.x, root.y, root.r * 2]);

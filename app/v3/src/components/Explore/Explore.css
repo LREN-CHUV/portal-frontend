@@ -1,0 +1,12 @@
+  /* layout content */
+
+  .Explore .content {
+    display: flex;
+    padding: 0 48px;
+  }
+
+  .Explore .content .column {
+    margin-right: 8px;
+    flex-basis: 100%;
+  flex: 1;
+  }
