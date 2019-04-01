@@ -6,9 +6,21 @@ import React, { useEffect, useRef } from 'react';
 import { MIP } from '../../types';
 
 interface IProps {
-  hierarchy: MIP.Internal.IVariableDatum;
-  handleSelectVariable: (node: d3.HierarchyNode<MIP.Internal.IVariableDatum>) => void;
+  hierarchy?: MIP.Internal.IVariableDatum;
+  handleSelectVariable: ({
+    node
+  }: {
+    node: d3.HierarchyNode<MIP.Internal.IVariableDatum>
+  }) => void;
 }
+
+interface INodeSelection
+  extends d3.Selection<
+    Element | d3.EnterElement | Document | Window | SVGCircleElement | null,
+    d3.HierarchyCircularNode<MIP.Internal.IVariableDatum>,
+    SVGGElement,
+    {}
+  > {}
 
 export default ({ hierarchy, handleSelectVariable }: IProps) => {
   const gRef = useRef<SVGSVGElement>(null);
@@ -28,10 +40,10 @@ export default ({ hierarchy, handleSelectVariable }: IProps) => {
     const svgRef = gRef.current;
     let view: [number, number, number];
     let focus: d3.HierarchyCircularNode<MIP.Internal.IVariableDatum>;
-    let node: d3.Selection<Element | d3.EnterElement | Document | Window | SVGCircleElement | null, d3.HierarchyCircularNode<MIP.Internal.IVariableDatum>, SVGGElement, {}>
-    let label: d3.Selection<Element | d3.EnterElement | Document | Window | SVGCircleElement | null, d3.HierarchyCircularNode<MIP.Internal.IVariableDatum>, SVGGElement, {}>
+    let node: INodeSelection;
+    let label: INodeSelection;
 
-    if (svgRef) {
+    if (svgRef && hierarchy) {
       // interactive functions
       const zoomTo = (v: [number, number, number]) => {
         const k = diameter / v[2];
@@ -48,9 +60,11 @@ export default ({ hierarchy, handleSelectVariable }: IProps) => {
         node.attr('r', d => d.r * k);
       };
 
-      const zoom = (d: d3.HierarchyCircularNode<MIP.Internal.IVariableDatum>) => {
-        handleSelectVariable(d);
-        focus = d;
+      const zoom = (
+        circleNode: d3.HierarchyCircularNode<MIP.Internal.IVariableDatum>
+      ) => {
+        handleSelectVariable({ node: circleNode });
+        focus = circleNode;
         const transition = d3
           .transition<d3.BaseType>()
           .duration(d3.event.altKey ? 7500 : 750)
@@ -64,7 +78,10 @@ export default ({ hierarchy, handleSelectVariable }: IProps) => {
             return (t: number) => zoomTo(i(t));
           });
 
-        const shouldDisplay = (dd: d3.HierarchyCircularNode<MIP.Internal.IVariableDatum>, ffocus: d3.HierarchyCircularNode<MIP.Internal.IVariableDatum>) : boolean => dd.parent === ffocus; // || !dd.children;
+        const shouldDisplay = (
+          dd: d3.HierarchyCircularNode<MIP.Internal.IVariableDatum>,
+          ffocus: d3.HierarchyCircularNode<MIP.Internal.IVariableDatum>
+        ): boolean => dd.parent === ffocus; // || !dd.children;
 
         label
           .filter(function(dd) {

@@ -37,7 +37,10 @@ const App = ({
       />
     </header>
     <section className='main-content'>
-      <Route path='/v3/explore' render={() => <Explore apiCore={apiCore} />} />
+      <Route
+        path='/v3/explore'
+        render={() => <Explore apiCore={apiCore} apiMining={apiMining} />}
+      />
       <Route
         path='/v3/review'
         render={() => (

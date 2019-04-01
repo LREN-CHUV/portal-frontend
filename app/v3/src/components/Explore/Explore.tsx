@@ -5,13 +5,15 @@ import { Panel } from 'react-bootstrap';
 
 import { MIP } from '../../types';
 import CirclePack from './CirclePack';
+import Statistics from './Statistics';
 
 interface IProps {
   hierarchy?: MIP.Internal.IVariableDatum;
+  histograms?: any;
   handleSelectVariable: (node: any) => void;
 }
 
-export default ({ hierarchy, handleSelectVariable }: IProps) => {
+export default ({ hierarchy, histograms, handleSelectVariable }: IProps) => {
   return (
     <div className='Explore'>
       <div className='header' />
@@ -27,12 +29,11 @@ export default ({ hierarchy, handleSelectVariable }: IProps) => {
               <h3>Variables</h3>
             </Panel.Title>
             <Panel.Body>
-              {hierarchy && (
-                <CirclePack
-                  hierarchy={hierarchy}
-                  handleSelectVariable={handleSelectVariable}
-                />
-              )}
+              <CirclePack
+                hierarchy={hierarchy}
+                handleSelectVariable={handleSelectVariable}
+              />
+              )
             </Panel.Body>
           </Panel>
         </div>
@@ -41,6 +42,9 @@ export default ({ hierarchy, handleSelectVariable }: IProps) => {
             <Panel.Title>
               <h3>Statistics Summary</h3>
             </Panel.Title>
+            <Panel.Body>
+              <Statistics histograms={histograms} />
+            </Panel.Body>
           </Panel>
           <Panel className='model'>
             <Panel.Title>

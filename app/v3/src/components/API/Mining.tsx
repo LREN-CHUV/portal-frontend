@@ -45,6 +45,7 @@ class Mining extends Container<MIP.Store.IMiningState> {
     this.options = config.options;
     this.baseUrl = backendURL;
   }
+
   public clear = () => {
     this.cachedSummaryStatistics = {};
     return this.setState((prevState: any) => ({
@@ -81,6 +82,38 @@ class Mining extends Container<MIP.Store.IMiningState> {
     return await this.setState({
       heatmaps: Mining.normalizeHeatmapData(heatmap)
     });
+  };
+
+  public histograms = async ({
+    payload
+  }: {
+    payload: {
+      datasets: MIP.API.IVariableEntity[];
+      variables: MIP.API.IVariableEntity[];
+    };
+  }): Promise<any> => {
+    await this.setState({
+      histograms: []
+    });
+    const nextPayload = {
+      ...payload,
+      algorithm: {
+        code: 'histograms',
+        name: 'Histograms',
+        parameters: [],
+        validation: false
+      },
+      covariables: [],
+      filters: '',
+      grouping: [
+        { code: 'dataset' },
+        { code: 'gender' },
+        { code: 'agegroup' },
+        { code: 'alzheimerbroadcategory' }
+      ]
+    };
+    const histogram = await this.fetchOne({ payload: nextPayload });
+    return await this.setState({ histograms: [histogram] });
   };
 
   // fetch for each dataset, otherwise values are aggregated for all datasets
