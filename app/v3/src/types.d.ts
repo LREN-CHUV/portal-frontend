@@ -183,6 +183,13 @@ export declare namespace MIP.API {
 }
 
 export declare namespace MIP.Internal {
+
+  export interface IVariableDatum {
+    code: string;
+    description?: string;
+    label: string;
+  }
+
   export interface IQuery extends MIP.API.IQuery {
     filtersFromParams?: any[];
   }
