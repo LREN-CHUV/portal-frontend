@@ -26,6 +26,7 @@ export declare namespace MIP.Store {
   export interface IMiningState extends IError {
     summaryStatistics?: MIP.Store.IMiningResponseShape[];
     heatmaps?: MIP.Store.IMiningResponseShape[];
+    histograms?: MIP.Store.IMiningResponseShape[];
   }
 
   export interface IModelState extends IError {
@@ -188,6 +189,7 @@ export declare namespace MIP.Internal {
     code: string;
     description?: string;
     label: string;
+    isVariable?: boolean
   }
 
   export interface IQuery extends MIP.API.IQuery {
