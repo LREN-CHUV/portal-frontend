@@ -1,12 +1,21 @@
-  /* layout content */
+/* layout content */
 
-  .Explore .content {
-    display: flex;
-    padding: 0 48px;
-  }
+.Explore .content {
+  display: flex;
+  padding: 0 48px;
+}
 
-  .Explore .content .column {
-    margin-right: 8px;
-    flex-basis: 100%;
+.Explore .content .column {
+  margin-right: 8px;
+  flex-basis: 100%;
   flex: 1;
-  }
+}
+
+.Explore .datasets .panel-title {
+  display: flex;
+  align-items: center
+}
+
+.Explore .datasets .panel-title h3 {
+  margin-right: 32px;
+}

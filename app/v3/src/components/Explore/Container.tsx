@@ -1,6 +1,6 @@
 import './Explore.css';
 
-import { HierarchyCircularNode } from 'd3';
+import * as d3 from 'd3';
 import React, { useEffect, useState } from 'react';
 
 import { MIP } from '../../types';
@@ -12,80 +12,81 @@ interface IProps {
   apiMining: APIMining;
 }
 
-const fetchHistograms = async ({
-  code,
-  apiMining
-}: {
-  code: string;
-  apiMining: APIMining;
-}) => {
-  const datasets = [
-    { code: 'ppmi' },
-    { code: 'adni' },
-    { code: 'edsd' },
-    { code: 'clm' }
-  ];
-  if (code) {
-    const payload: {
-      datasets: MIP.API.IVariableEntity[];
-      variables: MIP.API.IVariableEntity[];
-    } = {
-      datasets,
-      variables: [{ code }]
-    };
-
-    await apiMining.histograms({ payload });
-
-    return apiMining.state;
-  }
-};
-
-const d3Hierarchy = (node: any) => ({
-  children: [
-    ...((node.groups && node.groups.map(d3Hierarchy)) || []),
-    ...((node.variables &&
-      node.variables.map((v: any) => ({
-        code: v.code,
-        description: v.description,
-        isVariable: true,
-        label: v.label
-      }))) ||
-      [])
-  ],
-  code: node.code,
-  description: node.description,
-  label: node.label
-});
-
 export default ({ apiCore, apiMining }: IProps) => {
-  const [hierarchy, setHierarchy] = useState<
-    MIP.Internal.IVariableDatum | undefined
-  >(undefined);
-  const [histograms, setHistograms] = useState(undefined)  
-
+  const [selectedDatasets, setSelectedDatasets] = useState<
+    MIP.API.IVariableEntity[]
+  >([]);
   useEffect(() => {
-    (async () => {
-      await apiCore.hierarchy();
-      setHierarchy(d3Hierarchy(apiCore.state.hierarchy));
-    })();
-  }, []);
+    if (!apiCore.state.hierarchy) {
+      apiCore.hierarchy();
+    }
 
-  const handleSelectVariable = async ({
-    node
-  }: {
-    node: HierarchyCircularNode<MIP.Internal.IVariableDatum>;
-  }) => {
-    if (node.data.isVariable) {
-      const state = await fetchHistograms({ code: node.data.code, apiMining });
-      console.log(state);
+    if (!apiCore.state.datasets) {
+      apiCore.datasets();
+    } else {
+      setSelectedDatasets(apiCore.state.datasets);
+    }
+  }, [apiCore.state.datasets]);
+
+  const handleSelectVariable = async (
+    node: d3.HierarchyNode<MIP.Internal.IVariableDatum>
+  ) => {
+    if (node.data.isVariable && apiCore.state.datasets) {
+      const payload = {
+        datasets: selectedDatasets.map(d => ({ code: d.code })),
+        variables: [{ code: node.data.code }]
+      };
+
+      apiMining.histograms({ payload });
     }
   };
 
+  const handleSelectDataset = (dataset: MIP.API.IVariableEntity) => {
+    const nextSelection = selectedDatasets
+      .map(d => d.code)
+      .includes(dataset.code)
+      ? [...selectedDatasets.filter(d => d.code !== dataset.code)]
+      : [...selectedDatasets, dataset];
+
+    setSelectedDatasets(nextSelection);
+  };
+
+  const root = d3Hierarchy(apiCore.state.hierarchy);
+  const hierarchyNode = root
+    ? d3
+        .hierarchy(root)
+        .sum((d: any) => (d.label ? d.label.length : 1))
+        .sort((a: any, b: any) => b.value - a.value)
+    : undefined;
+
   return (
     <Explore
-      hierarchy={hierarchy}
-      histograms={histograms}
+      datasets={apiCore.state.datasets}
+      selectedDatasets={selectedDatasets}
+      hierarchyNode={hierarchyNode}
+      histograms={apiMining.state.histograms}
+      handleSelectDataset={handleSelectDataset}
       handleSelectVariable={handleSelectVariable}
     />
   );
 };
+
+const d3Hierarchy = (node: any): MIP.Internal.IVariableDatum | undefined =>
+  node
+    ? {
+        children: [
+          ...((node.groups && node.groups.map(d3Hierarchy)) || []),
+          ...((node.variables &&
+            node.variables.map((v: any) => ({
+              code: v.code,
+              description: v.description,
+              isVariable: true,
+              label: v.label
+            }))) ||
+            [])
+        ],
+        code: node.code,
+        description: node.description,
+        label: node.label
+      }
+    : undefined;

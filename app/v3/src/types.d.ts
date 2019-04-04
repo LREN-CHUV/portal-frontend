@@ -21,12 +21,13 @@ export declare namespace MIP.Store {
     data?: any;
     error?: string;
     dataset?: MIP.API.IVariableEntity;
+    loading?: boolean;
   }
 
   export interface IMiningState extends IError {
     summaryStatistics?: MIP.Store.IMiningResponseShape[];
     heatmaps?: MIP.Store.IMiningResponseShape[];
-    histograms?: MIP.Store.IMiningResponseShape[];
+    histograms?: MIP.Store.IMiningResponseShape;
   }
 
   export interface IModelState extends IError {
@@ -189,7 +190,8 @@ export declare namespace MIP.Internal {
     code: string;
     description?: string;
     label: string;
-    isVariable?: boolean
+    isVariable?: boolean;
+    children?: IVariableDatum[]
   }
 
   export interface IQuery extends MIP.API.IQuery {
