@@ -1,17 +1,15 @@
 import './CirclePack.css';
 
 import * as d3 from 'd3';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import { MIP } from '../../types';
 
 interface IProps {
-  hierarchy?: MIP.Internal.IVariableDatum;
-  handleSelectVariable: ({
-    node
-  }: {
+  hierarchyNode?: d3.HierarchyNode<MIP.Internal.IVariableDatum>;
+  handleSelectVariable: (
     node: d3.HierarchyNode<MIP.Internal.IVariableDatum>
-  }) => void;
+  ) => void;
 }
 
 interface INodeSelection
@@ -22,108 +20,123 @@ interface INodeSelection
     {}
   > {}
 
-export default ({ hierarchy, handleSelectVariable }: IProps) => {
+export default ({ hierarchyNode, handleSelectVariable }: IProps) => {
+  const [loaded, setLoaded] = useState(false);
+  const [root, setRoot] = useState<
+    d3.HierarchyCircularNode<MIP.Internal.IVariableDatum> | undefined
+  >(undefined);
   const gRef = useRef<SVGSVGElement>(null);
+  const dRef = useRef<HTMLDivElement>(null);
+  const svgRef = gRef.current;
+  const shortcutsRef = dRef.current;
+
   const diameter: number = 800;
   const padding: number = 1.5;
 
+  let view: [number, number, number];
+  let focus: d3.HierarchyCircularNode<MIP.Internal.IVariableDatum>;
+  let node: INodeSelection;
+  let label: INodeSelection;
+  const bubbleLayout = d3
+    .pack<MIP.Internal.IVariableDatum>()
+    .size([diameter, diameter])
+    .padding(padding);
+
   useEffect(() => {
-    if (hierarchy) {
+    if (hierarchyNode) {
+      setRoot(bubbleLayout(hierarchyNode));
+    }
+
+    if (root && !loaded) {
+      setLoaded(true);
       d3Render();
     }
-  }, [hierarchy]);
+  }, [hierarchyNode, root]);
 
-  const depth = (node: d3.HierarchyNode<MIP.Internal.IVariableDatum>): number =>
-    node.children ? 1 + (d3.max<number>(node.children.map(depth)) || 0) : 1;
+  const depth = (n: d3.HierarchyNode<MIP.Internal.IVariableDatum>): number =>
+    n.children ? 1 + (d3.max<number>(n.children.map(depth)) || 0) : 1;
+
+  // interactive functions
+  const zoomTo = (v: [number, number, number]) => {
+    const k = diameter / v[2];
+    view = v;
+
+    label.attr(
+      'transform',
+      d => `translate(${(d.x - v[0]) * k},${(d.y - v[1]) * k})`
+    );
+    node.attr(
+      'transform',
+      d => `translate(${(d.x - v[0]) * k},${(d.y - v[1]) * k})`
+    );
+    node.attr('r', d => d.r * k);
+  };
+
+  const zoom = (
+    circleNode:
+      | d3.HierarchyCircularNode<MIP.Internal.IVariableDatum>
+      | undefined
+  ) => {
+    if (!circleNode) {
+      return;
+    }
+
+    handleSelectVariable(circleNode);
+    focus = circleNode;
+    const transition = d3
+      .transition<d3.BaseType>()
+      .duration(d3.event.altKey ? 7500 : 750)
+      .tween('zoom', () => {
+        const i = d3.interpolateZoom(view, [
+          focus.x,
+          focus.y,
+          focus.r * 2 + padding
+        ]);
+
+        return (t: number) => zoomTo(i(t));
+      });
+
+    const shouldDisplay = (
+      dd: d3.HierarchyCircularNode<MIP.Internal.IVariableDatum>,
+      ffocus: d3.HierarchyCircularNode<MIP.Internal.IVariableDatum>
+    ): boolean => dd.parent === ffocus; // || !dd.children;
+
+    label
+      .filter(function(dd) {
+        const el = this as HTMLElement;
+        return (
+          shouldDisplay(dd, focus) ||
+          (el && el.style && el.style.display === 'inline')
+        );
+      })
+      .transition(transition as any)
+      .style('fill-opacity', dd => (shouldDisplay(dd, focus) ? 1 : 0))
+      .on('start', function(dd) {
+        const el = this as HTMLElement;
+        if (shouldDisplay(dd, focus)) {
+          el.style.display = 'inline';
+          shouldDisplay(dd, focus);
+        }
+      })
+      .on('end', function(dd) {
+        if (dd.parent !== focus) {
+          const el = this as HTMLElement;
+          el.style.display = 'none';
+        }
+      });
+  };
 
   const d3Render = () => {
-    const svgRef = gRef.current;
-    let view: [number, number, number];
-    let focus: d3.HierarchyCircularNode<MIP.Internal.IVariableDatum>;
-    let node: INodeSelection;
-    let label: INodeSelection;
+    if (!hierarchyNode) {
+      return;
+    }
 
-    if (svgRef && hierarchy) {
-      // interactive functions
-      const zoomTo = (v: [number, number, number]) => {
-        const k = diameter / v[2];
-        view = v;
-
-        label.attr(
-          'transform',
-          d => `translate(${(d.x - v[0]) * k},${(d.y - v[1]) * k})`
-        );
-        node.attr(
-          'transform',
-          d => `translate(${(d.x - v[0]) * k},${(d.y - v[1]) * k})`
-        );
-        node.attr('r', d => d.r * k);
-      };
-
-      const zoom = (
-        circleNode: d3.HierarchyCircularNode<MIP.Internal.IVariableDatum>
-      ) => {
-        handleSelectVariable({ node: circleNode });
-        focus = circleNode;
-        const transition = d3
-          .transition<d3.BaseType>()
-          .duration(d3.event.altKey ? 7500 : 750)
-          .tween('zoom', () => {
-            const i = d3.interpolateZoom(view, [
-              focus.x,
-              focus.y,
-              focus.r * 2 + padding
-            ]);
-
-            return (t: number) => zoomTo(i(t));
-          });
-
-        const shouldDisplay = (
-          dd: d3.HierarchyCircularNode<MIP.Internal.IVariableDatum>,
-          ffocus: d3.HierarchyCircularNode<MIP.Internal.IVariableDatum>
-        ): boolean => dd.parent === ffocus; // || !dd.children;
-
-        label
-          .filter(function(dd) {
-            const el = this as HTMLElement;
-            return (
-              shouldDisplay(dd, focus) ||
-              (el && el.style && el.style.display === 'inline')
-            );
-          })
-          .transition(transition as any)
-          .style('fill-opacity', dd => (shouldDisplay(dd, focus) ? 1 : 0))
-          .on('start', function(dd) {
-            const el = this as HTMLElement;
-            if (shouldDisplay(dd, focus)) {
-              el.style.display = 'inline';
-              shouldDisplay(dd, focus);
-            }
-          })
-          .on('end', function(dd) {
-            if (dd.parent !== focus) {
-              const el = this as HTMLElement;
-              el.style.display = 'none';
-            }
-          });
-      };
-
+    if (svgRef && root) {
       // Layout
-      const bubbleLayout = d3
-        .pack<MIP.Internal.IVariableDatum>()
-        .size([diameter, diameter])
-        .padding(padding);
-
-      const data = d3
-        .hierarchy(hierarchy)
-        .sum(d => (d.label ? d.label.length : 1))
-        .sort((a: any, b: any) => b.value - a.value);
-
-      const root = bubbleLayout(data);
-
+      // setRoot(bubbleLayout(hierarchyNode))
       const color = d3
         .scaleLinear<string, string>()
-        .domain([0, depth(data)])
+        .domain([0, depth(hierarchyNode)])
         .range(['hsl(190,80%,80%)', 'hsl(228,80%,40%)'])
         .interpolate(d3.interpolateHcl);
 
@@ -171,8 +184,25 @@ export default ({ hierarchy, handleSelectVariable }: IProps) => {
 
       focus = root;
       zoomTo([root.x, root.y, root.r * 2]);
+
+      d3.select(shortcutsRef)
+        .selectAll('.shortcut')
+        .data(root.descendants())
+        .join('a')
+        .style('fill-opacity', d => (d.parent === root ? 1 : 0))
+        .style('display', d => (d.parent === root ? 'inline' : 'none'))
+        .text(d => d.data.label)
+        .on('click', d => {
+          zoom(d);
+        });
     }
   };
 
-  return <svg ref={gRef} />;
+  return (
+    <div>
+      <h6>Shortcuts</h6>
+      <div ref={dRef} />
+      <svg ref={gRef} />
+    </div>
+  );
 };

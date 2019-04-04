@@ -4,6 +4,7 @@ import { Container } from 'unstated';
 import { MIP } from '../../types';
 import { backendURL } from '../API';
 
+//
 class Mining extends Container<MIP.Store.IMiningState> {
   /*
     "data": [{ x: n }]   
@@ -41,7 +42,11 @@ class Mining extends Container<MIP.Store.IMiningState> {
 
   constructor(config: any) {
     super();
-    this.state = { summaryStatistics: undefined, heatmaps: undefined };
+    this.state = {
+      heatmaps: undefined,
+      histograms: undefined,
+      summaryStatistics: undefined
+    };
     this.options = config.options;
     this.baseUrl = backendURL;
   }
@@ -93,8 +98,9 @@ class Mining extends Container<MIP.Store.IMiningState> {
     };
   }): Promise<any> => {
     await this.setState({
-      histograms: []
+      histograms: { loading: true, error: undefined, data: undefined }
     });
+
     const nextPayload = {
       ...payload,
       algorithm: {
@@ -112,8 +118,16 @@ class Mining extends Container<MIP.Store.IMiningState> {
         { code: 'alzheimerbroadcategory' }
       ]
     };
-    const histogram = await this.fetchOne({ payload: nextPayload });
-    return await this.setState({ histograms: [histogram] });
+    const response = await this.fetchOne({ payload: nextPayload });
+    if (response.error) {
+      return await this.setState({
+        histograms: { loading: false, error: response.error, data: undefined }
+      });
+    }
+
+    return await this.setState({
+      histograms: { loading: false, error: undefined, data: response.data }
+    });
   };
 
   // fetch for each dataset, otherwise values are aggregated for all datasets
