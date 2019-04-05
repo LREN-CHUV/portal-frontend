@@ -4,6 +4,7 @@ import { Tab, Tabs } from 'react-bootstrap';
 import { MIP } from '../../types';
 import Highchart from '../Experiment/Result/formats/Highchart';
 import Loading from '../UI/Loader';
+import { Button } from 'reactstrap';
 
 export default ({
   histograms
@@ -22,7 +23,7 @@ export default ({
       <Tabs defaultActiveKey={1} id='uncontrolled-histogram-tabs'>
         {histograms.data &&
           histograms.data.map((h: any, i: number) => (
-            <Tab eventKey={i} title={`${h.label}`} key={i}>
+            <Tab eventKey={i} title={`${h.label.replace('Histogram - ', '')}`} key={i}>
               <Highchart options={h} />
             </Tab>
           ))}
