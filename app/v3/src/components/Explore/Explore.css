@@ -21,7 +21,7 @@
 }
 
 .Explore .statistics {
-  height: 590px;
+  height: 529px;
 }
 
 .Explore .model-body {
@@ -32,4 +32,8 @@
 .Explore .model-body a {
   white-space: normal;
   width: 150px;
+}
+
+.statistics .nav > li > a {
+  padding: 8px 4px;
 }
