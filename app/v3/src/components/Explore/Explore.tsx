@@ -2,19 +2,28 @@ import './Explore.css';
 
 import { HierarchyNode } from 'd3';
 import React from 'react';
-import { Checkbox, Panel, Button } from 'react-bootstrap';
+import { Button, Checkbox, Panel } from 'react-bootstrap';
 
 import { MIP } from '../../types';
 import CirclePack from './CirclePack';
+import { IModel, IVariableNode, ModelType } from './Container';
 import Statistics from './Statistics';
 
 interface IProps {
   datasets?: MIP.API.IVariableEntity[];
   selectedDatasets: MIP.API.IVariableEntity[];
-  hierarchyNode?: HierarchyNode<MIP.Internal.IVariableDatum>;
+  hierarchyNode?: IVariableNode;
   histograms?: any;
+  model: IModel;
   handleSelectDataset: (e: any) => void;
-  handleSelectVariable: (node: any) => void;
+  handleSelectVariable: (
+    node: HierarchyNode<MIP.Internal.IVariableDatum>
+  ) => void;
+  handleChangeModel: (
+    type: ModelType,
+    node?: IVariableNode,
+    remove?: boolean
+  ) => void;
 }
 
 export default ({
@@ -22,8 +31,10 @@ export default ({
   selectedDatasets,
   hierarchyNode,
   histograms,
+  model,
   handleSelectVariable,
-  handleSelectDataset
+  handleSelectDataset,
+  handleChangeModel
 }: IProps) => {
   return (
     <div className='Explore'>
@@ -58,6 +69,7 @@ export default ({
               <CirclePack
                 hierarchyNode={hierarchyNode}
                 handleSelectVariable={handleSelectVariable}
+                model={model}
               />
             </Panel.Body>
           </Panel>
@@ -75,19 +87,89 @@ export default ({
             <Panel.Title>
               <h3>Model</h3>
             </Panel.Title>
-            <Panel.Body>
-              <div>
-                <Button>+ AS VARIABLE</Button>
-                <p>Variable</p>
+            <Panel.Body className='model-body'>
+              <div style={{ flexGrow: 1 }}>
+                <Button
+                  bsStyle={'info'}
+                  // tslint:disable-next-line jsx-no-lambda
+                  onClick={() => handleChangeModel(ModelType.VARIABLE)}>
+                  + AS VARIABLE
+                </Button>
+                {model.variable && (
+                  <p>
+                    <Button
+                      bsStyle={'link'}
+                      // tslint:disable-next-line jsx-no-lambda
+                      onClick={() =>
+                        handleChangeModel(
+                          ModelType.VARIABLE,
+                          model.variable,
+                          true
+                        )
+                      }>
+                      X
+                    </Button>
+                    <a
+                      // tslint:disable-next-line jsx-no-lambda
+                      onClick={() => {
+                        if (model.variable) {
+                          handleSelectVariable(model.variable);
+                        }
+                      }}>
+                      {model.variable.data.label}
+                    </a>
+                  </p>
+                )}
               </div>
-              <div>
-                <Button>+ AS COVARIABLE</Button>
-                <p>Nominal</p>
-                <p>Continuous</p>
+              <div style={{ flexGrow: 2 }}>
+                <Button
+                  bsStyle={'info'}
+                  // tslint:disable-next-line jsx-no-lambda
+                  onClick={() => handleChangeModel(ModelType.COVARIABLE)}>
+                  + AS COVARIABLE
+                </Button>
+                <div>
+                  <p>Nominal</p>
+                  {model.covariables &&
+                    model.covariables.map((c, i) => (
+                      <p key={`p-${i}`}>
+                        <Button
+                          bsStyle={'link'}
+                          key={`$btn-{i}`}
+                          // tslint:disable-next-line jsx-no-lambda
+                          onClick={() =>
+                            handleChangeModel(ModelType.COVARIABLE, c, true)
+                          }>
+                          X
+                        </Button>
+                        <a key={`$var-{i}`}
+                          // tslint:disable-next-line jsx-no-lambda
+                          onClick={() => {
+                            if (c) {
+                              handleSelectVariable(c);
+                            }
+                          }}>
+                          {c.data.label}
+                        </a>
+                      </p>
+                    ))}
+                  {/* <p>Continuous</p>
+                  {model.groupings.map(c => (
+                    <p>{c}</p>
+                  ))} */}
+                </div>
               </div>
-              <div>
-                <Button>+ AS FILTER</Button>
-                <p>Filters</p>
+              <div style={{ flexGrow: 1 }}>
+                <Button
+                  bsStyle={'info'}
+                  // tslint:disable-next-line jsx-no-lambda
+                  // onClick={() => handleChangeModel(ModelType.FILTER)}>
+                >
+                  + AS FILTER
+                </Button>
+                {/* {model.filters.map(c => (
+                  <p>{c}</p>
+                ))} */}
               </div>
             </Panel.Body>
           </Panel>
