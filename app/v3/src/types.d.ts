@@ -185,13 +185,19 @@ export declare namespace MIP.API {
 }
 
 export declare namespace MIP.Internal {
-
+  // export enum IVariableType {
+  //   Integer,
+  //   Real,
+  //   Binominal,
+  //   Polynominal
+  // }
   export interface IVariableDatum {
     code: string;
     description?: string;
     label: string;
     isVariable?: boolean;
-    children?: IVariableDatum[]
+    children?: IVariableDatum[];
+    type?: string // IVariableType; Whaaaaat ? makes webpack crash FIXME:
   }
 
   export interface IQuery extends MIP.API.IQuery {

@@ -11,3 +11,13 @@
   font: 1em sans-serif;
   pointer-events: none;
 }
+
+circle.node.variable {
+  fill: #3F6078;
+}
+circle.node.covariable {
+  fill: rgb(211, 46, 4);
+}
+circle.node.grouping {
+  fill: rgb(90, 231, 55);
+}
