@@ -13,9 +13,23 @@
 
 .Explore .datasets .panel-title {
   display: flex;
-  align-items: center
+  align-items: center;
 }
 
 .Explore .datasets .panel-title h3 {
   margin-right: 32px;
+}
+
+.Explore .statistics {
+  height: 590px;
+}
+
+.Explore .model-body {
+  display: flex;
+}
+
+.Explore .model-body .btn-info,
+.Explore .model-body a {
+  white-space: normal;
+  width: 150px;
 }

@@ -4,12 +4,14 @@ import * as d3 from 'd3';
 import React, { useEffect, useRef, useState } from 'react';
 
 import { MIP } from '../../types';
+import { IModel } from './Container';
 
 interface IProps {
   hierarchyNode?: d3.HierarchyNode<MIP.Internal.IVariableDatum>;
   handleSelectVariable: (
     node: d3.HierarchyNode<MIP.Internal.IVariableDatum>
   ) => void;
+  model: IModel;
 }
 
 interface INodeSelection
@@ -20,9 +22,12 @@ interface INodeSelection
     {}
   > {}
 
-export default ({ hierarchyNode, handleSelectVariable }: IProps) => {
+export default ({ hierarchyNode, handleSelectVariable, model }: IProps) => {
   const [loaded, setLoaded] = useState(false);
   const [root, setRoot] = useState<
+    d3.HierarchyCircularNode<MIP.Internal.IVariableDatum> | undefined
+  >(undefined);
+  const [selectedNode, setSelectedNode] = useState<
     d3.HierarchyCircularNode<MIP.Internal.IVariableDatum> | undefined
   >(undefined);
   const gRef = useRef<SVGSVGElement>(null);
@@ -43,13 +48,39 @@ export default ({ hierarchyNode, handleSelectVariable }: IProps) => {
     .padding(padding);
 
   useEffect(() => {
-    if (hierarchyNode) {
+    if (hierarchyNode && !root) {
       setRoot(bubbleLayout(hierarchyNode));
     }
 
     if (root && !loaded) {
       setLoaded(true);
       d3Render();
+    }
+
+    if (root) {
+      d3.select(svgRef)
+        .selectAll('circle')
+        .data(root.descendants())
+        .attr('class', d => {
+          if (
+            model.variable !== undefined &&
+            model.variable.data.code === d.data.code
+          ) {
+            return 'node variable';
+          } else if (
+            model.covariables !== undefined &&
+            model.covariables.map(c => c.data.code).includes(d.data.code)
+          ) {
+            return 'node covariable';
+          } else if (
+            model.covariables !== undefined &&
+            model.covariables.map(c => c.data.code).includes(d.data.code)
+          ) {
+            return 'node grouping';
+          }
+
+          return 'node';
+        });
     }
   }, [hierarchyNode, root]);
 
@@ -80,8 +111,8 @@ export default ({ hierarchyNode, handleSelectVariable }: IProps) => {
     if (!circleNode) {
       return;
     }
-
     handleSelectVariable(circleNode);
+
     focus = circleNode;
     const transition = d3
       .transition<d3.BaseType>()
