@@ -1,15 +1,17 @@
 #!/usr/bin/env bash
 
 #
-# Start the Web portal and the analytics engine (Woken)
+# Execute the integration test suite in a Continuous Integration environment
 #
 # Option:
-#   --no-frontend: do not start the frontend
+#   --all: execute the full suite of tests, including slow tests such as Chaos testing
 #
 
 set -o pipefail  # trace ERR through pipes
 set -o errtrace  # trace ERR through 'time command' and other functions
 set -o errexit   ## set -e : exit the script if any statement returns a non-true return value
+
+# This script is used for publish and continuous integration.
 
 get_script_dir () {
      SOURCE="${BASH_SOURCE[0]}"
@@ -25,9 +27,36 @@ get_script_dir () {
 
 cd "$(get_script_dir)"
 
-DOCKER_COMPOSE="docker-compose"
+for param in "$@"
+do
+  if [ "--all" == "$param" ]; then
+    test_args=""
+    echo "INFO: ---all option detected !"
+  fi
+done
 
-export HOST=$(hostname)
+if pgrep -lf sshuttle > /dev/null ; then
+  echo "sshuttle detected. Please close this program as it messes with networking and prevents Docker links to work"
+  exit 1
+fi
+
+if [[ $NO_SUDO || -n "$CIRCLECI" ]]; then
+  DOCKER_COMPOSE="docker-compose --project-name webanalyticsstarter -f docker-compose-ci.yml"
+elif groups "$USER" | grep &>/dev/null '\bdocker\b'; then
+  DOCKER_COMPOSE="docker-compose --project-name webanalyticsstarter -f docker-compose-ci.yml"
+else
+  DOCKER_COMPOSE="sudo docker-compose --project-name webanalyticsstarter -f docker-compose-ci.yml"
+fi
+
+function _cleanup() {
+  local error_code="$?"
+  echo "Stopping the containers..."
+  $DOCKER_COMPOSE stop | true
+  $DOCKER_COMPOSE down | true
+  $DOCKER_COMPOSE rm -f > /dev/null 2> /dev/null | true
+  exit $error_code
+}
+# trap _cleanup EXIT INT TERM
 
 echo "Remove old running containers (if any)..."
 $DOCKER_COMPOSE kill
@@ -78,7 +107,9 @@ done
 
 echo "The Algorithm Factory is now running on your system"
 
-
 FRONTEND_URL=http://frontend \
-	  $DOCKER_COMPOSE up -d portalbackend
+  $DOCKER_COMPOSE up -d portalbackend
 $DOCKER_COMPOSE run wait_portal_backend
+$DOCKER_COMPOSE up -d frontend
+
+echo "[OK] System startup success!"
