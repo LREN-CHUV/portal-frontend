@@ -56,7 +56,7 @@ function _cleanup() {
   $DOCKER_COMPOSE rm -f > /dev/null 2> /dev/null | true
   exit $error_code
 }
-# trap _cleanup EXIT INT TERM
+#trap _cleanup EXIT INT TERM
 
 echo "Remove old running containers (if any)..."
 $DOCKER_COMPOSE kill
@@ -113,3 +113,7 @@ $DOCKER_COMPOSE run wait_portal_backend
 $DOCKER_COMPOSE up -d frontend
 
 echo "[OK] System startup success!"
+
+echo
+# Cleanup
+#_cleanup
