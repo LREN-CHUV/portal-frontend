@@ -9,6 +9,7 @@ export default ({
   histograms
 }: {
   histograms: MIP.Store.IMiningResponseShape;
+
 }) => (
   <div>
     {histograms && histograms.loading && <Loading />}

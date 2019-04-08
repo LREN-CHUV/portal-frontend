@@ -7,7 +7,7 @@ import { Button, Checkbox, Panel } from 'react-bootstrap';
 import { MIP } from '../../types';
 import CirclePack from './CirclePack';
 import { IModel, IVariableNode, ModelType } from './Container';
-import Statistics from './Statistics';
+import Histograms from './Histograms';
 
 interface IProps {
   datasets?: MIP.API.IVariableEntity[];
@@ -80,7 +80,7 @@ export default ({
               <h3>Statistics Summary</h3>
             </Panel.Title>
             <Panel.Body>
-              <Statistics histograms={histograms} />
+              <Histograms histograms={histograms} />
             </Panel.Body>
           </Panel>
           <Panel className='model'>

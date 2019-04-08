@@ -64,6 +64,9 @@ export default ({ apiCore, apiMining }: IProps) => {
 
       apiMining.histograms({ payload });
     }
+
+
+    
   };
 
   const handleSelectDataset = (dataset: MIP.API.IVariableEntity) => {
