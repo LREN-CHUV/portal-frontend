@@ -1,7 +1,8 @@
 # Changelog
 
-## current - 2019/03/27
+## 2.16.5 - 2019/04/08
 
+- Highcharts to 6.1.0 (angular security fix)
 - Reworked Heatmap test
 
 ## 2.16.4 - 2019/03/26
