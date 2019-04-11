@@ -22,6 +22,8 @@ interface INodeSelection
     {}
   > {}
 
+type IView = [number, number, number];
+
 export default ({ hierarchyNode, handleSelectVariable, model }: IProps) => {
   const [loaded, setLoaded] = useState(false);
   const [root, setRoot] = useState<
@@ -42,6 +44,7 @@ export default ({ hierarchyNode, handleSelectVariable, model }: IProps) => {
   let focus: d3.HierarchyCircularNode<MIP.Internal.IVariableDatum>;
   let node: INodeSelection;
   let label: INodeSelection;
+  let color: d3.ScaleLinear<string, string>;
   const bubbleLayout = d3
     .pack<MIP.Internal.IVariableDatum>()
     .size([diameter, diameter])
@@ -57,38 +60,38 @@ export default ({ hierarchyNode, handleSelectVariable, model }: IProps) => {
       d3Render();
     }
 
-    if (root) {
-      d3.select(svgRef)
-        .selectAll('circle')
-        .data(root.descendants())
-        .attr('class', d => {
-          if (
-            model.variable !== undefined &&
-            model.variable.data.code === d.data.code
-          ) {
-            return 'node variable';
-          } else if (
-            model.covariables !== undefined &&
-            model.covariables.map(c => c.data.code).includes(d.data.code)
-          ) {
-            return 'node covariable';
-          } else if (
-            model.covariables !== undefined &&
-            model.covariables.map(c => c.data.code).includes(d.data.code)
-          ) {
-            return 'node grouping';
-          }
+    // if (root) {
+    //   d3.select(svgRef)
+    //     .selectAll('circle')
+    //     .data(root.descendants())
+    //     .attr('class', d => {
+    //       if (
+    //         model.variable !== undefined &&
+    //         model.variable.data.code === d.data.code
+    //       ) {
+    //         return 'node variable';
+    //       } else if (
+    //         model.covariables !== undefined &&
+    //         model.covariables.map(c => c.data.code).includes(d.data.code)
+    //       ) {
+    //         return 'node covariable';
+    //       } else if (
+    //         model.covariables !== undefined &&
+    //         model.covariables.map(c => c.data.code).includes(d.data.code)
+    //       ) {
+    //         return 'node grouping';
+    //       }
 
-          return 'node';
-        });
-    }
+    //       return 'node';
+    //     });
+    // }
   }, [hierarchyNode, root]);
 
   const depth = (n: d3.HierarchyNode<MIP.Internal.IVariableDatum>): number =>
     n.children ? 1 + (d3.max<number>(n.children.map(depth)) || 0) : 1;
 
   // interactive functions
-  const zoomTo = (v: [number, number, number]) => {
+  const zoomTo = (v: IView) => {
     const k = diameter / v[2];
     view = v;
 
@@ -114,15 +117,16 @@ export default ({ hierarchyNode, handleSelectVariable, model }: IProps) => {
     handleSelectVariable(circleNode);
 
     focus = circleNode;
+
+    // reduce zoom if it's a leaf node
+    const targetView: IView = circleNode.children
+      ? [focus.x, focus.y, focus.r * 2 + padding]
+      : [focus.x, focus.y, focus.r * 3 + padding];
     const transition = d3
       .transition<d3.BaseType>()
       .duration(d3.event.altKey ? 7500 : 750)
       .tween('zoom', () => {
-        const i = d3.interpolateZoom(view, [
-          focus.x,
-          focus.y,
-          focus.r * 2 + padding
-        ]);
+        const i = d3.interpolateZoom(view, targetView);
 
         return (t: number) => zoomTo(i(t));
       });
@@ -130,7 +134,19 @@ export default ({ hierarchyNode, handleSelectVariable, model }: IProps) => {
     const shouldDisplay = (
       dd: d3.HierarchyCircularNode<MIP.Internal.IVariableDatum>,
       ffocus: d3.HierarchyCircularNode<MIP.Internal.IVariableDatum>
-    ): boolean => dd.parent === ffocus; // || !dd.children;
+    ): boolean => dd.parent === ffocus || !ffocus.children; // || !dd.children;
+
+    // Revert all nodes fill color
+    node
+      .transition()
+      .duration(500)
+      .style('fill', d => (d.children ? color(d.depth) : 'white'));
+
+    node
+      .filter(d => d.data.code === circleNode.data.code)
+      .transition()
+      .duration(250)
+      .style('fill', '#8C9AA2');
 
     label
       .filter(function(dd) {
@@ -148,13 +164,13 @@ export default ({ hierarchyNode, handleSelectVariable, model }: IProps) => {
           el.style.display = 'inline';
           shouldDisplay(dd, focus);
         }
-      })
-      .on('end', function(dd) {
-        if (dd.parent !== focus) {
-          const el = this as HTMLElement;
-          el.style.display = 'none';
-        }
       });
+    // .on('end', function(dd) {
+    //   if (dd.parent !== focus) {
+    //     const el = this as HTMLElement;
+    //     el.style.display = 'none';
+    //   }
+    // });
   };
 
   const d3Render = () => {
@@ -165,7 +181,7 @@ export default ({ hierarchyNode, handleSelectVariable, model }: IProps) => {
     if (svgRef && root) {
       // Layout
       // setRoot(bubbleLayout(hierarchyNode))
-      const color = d3
+      color = d3
         .scaleLinear<string, string>()
         .domain([0, depth(hierarchyNode)])
         .range(['hsl(190,80%,80%)', 'hsl(228,80%,40%)'])
@@ -203,6 +219,7 @@ export default ({ hierarchyNode, handleSelectVariable, model }: IProps) => {
             `${d.data.label}\n${d.data.description ? d.data.description : ''}`
         );
 
+      const maxLength = 12;
       label = svg
         .append('g')
         .selectAll('text')
@@ -211,7 +228,17 @@ export default ({ hierarchyNode, handleSelectVariable, model }: IProps) => {
         .attr('class', 'label')
         .style('fill-opacity', d => (d.parent === root ? 1 : 0))
         .style('display', d => (d.parent === root ? 'inline' : 'none'))
-        .text(d => d.data.label);
+        .text(d =>
+          d.data.label.length > maxLength
+            ? d.data.label
+                .split(' ')
+                .reduce(
+                  (acc: string, p: string) =>
+                    acc.length < maxLength ? `${acc} ${p}` : `${acc}`,
+                  ''
+                ) + '...'
+            : d.data.label
+        );
 
       focus = root;
       zoomTo([root.x, root.y, root.r * 2]);
