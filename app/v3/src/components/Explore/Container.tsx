@@ -107,7 +107,6 @@ export default ({ apiCore, apiMining }: IProps) => {
       }
 
       if (selectedVariable) {
-        console.log(selectedVariable);
         const nextCovariables =
           model.covariables &&
           model.covariables.filter(
@@ -141,6 +140,7 @@ export default ({ apiCore, apiMining }: IProps) => {
     <Explore
       datasets={apiCore.state.datasets}
       selectedDatasets={selectedDatasets}
+      selectedVariable={selectedVariable}
       hierarchyNode={hierarchyNode}
       histograms={apiMining.state.histograms}
       model={model}
@@ -181,7 +181,7 @@ const d3Hierarchy = (node: any): MIP.Internal.IVariableDatum | undefined =>
               description: v.description,
               isVariable: true,
               label: v.label,
-              type: node.type
+              type: v.type
             }))) ||
             [])
         ],

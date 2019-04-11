@@ -60,31 +60,32 @@ export default ({ hierarchyNode, handleSelectVariable, model }: IProps) => {
       d3Render();
     }
 
-    // if (root) {
-    //   d3.select(svgRef)
-    //     .selectAll('circle')
-    //     .data(root.descendants())
-    //     .attr('class', d => {
-    //       if (
-    //         model.variable !== undefined &&
-    //         model.variable.data.code === d.data.code
-    //       ) {
-    //         return 'node variable';
-    //       } else if (
-    //         model.covariables !== undefined &&
-    //         model.covariables.map(c => c.data.code).includes(d.data.code)
-    //       ) {
-    //         return 'node covariable';
-    //       } else if (
-    //         model.covariables !== undefined &&
-    //         model.covariables.map(c => c.data.code).includes(d.data.code)
-    //       ) {
-    //         return 'node grouping';
-    //       }
+    if (root) {
+      console.log('useEffect')
+      d3.select(svgRef)
+        .selectAll('circle')
+        .data(root.descendants())
+        .attr('class', d => {
+          if (
+            model.variable !== undefined &&
+            model.variable.data.code === d.data.code
+          ) {
+            return 'node variable';
+          } else if (
+            model.covariables !== undefined &&
+            model.covariables.map(c => c.data.code).includes(d.data.code)
+          ) {
+            return 'node covariable';
+          } else if (
+            model.covariables !== undefined &&
+            model.covariables.map(c => c.data.code).includes(d.data.code)
+          ) {
+            return 'node grouping';
+          }
 
-    //       return 'node';
-    //     });
-    // }
+          return 'node';
+        });
+    }
   }, [hierarchyNode, root]);
 
   const depth = (n: d3.HierarchyNode<MIP.Internal.IVariableDatum>): number =>
@@ -137,13 +138,14 @@ export default ({ hierarchyNode, handleSelectVariable, model }: IProps) => {
     ): boolean => dd.parent === ffocus || !ffocus.children; // || !dd.children;
 
     // Revert all nodes fill color
+    console.log('zoom')
     node
       .transition()
       .duration(500)
       .style('fill', d => (d.children ? color(d.depth) : 'white'));
 
     node
-      .filter(d => d.data.code === circleNode.data.code)
+      .filter(d => d !== root && d.data.code === circleNode.data.code)
       .transition()
       .duration(250)
       .style('fill', '#8C9AA2');
@@ -165,12 +167,6 @@ export default ({ hierarchyNode, handleSelectVariable, model }: IProps) => {
           shouldDisplay(dd, focus);
         }
       });
-    // .on('end', function(dd) {
-    //   if (dd.parent !== focus) {
-    //     const el = this as HTMLElement;
-    //     el.style.display = 'none';
-    //   }
-    // });
   };
 
   const d3Render = () => {

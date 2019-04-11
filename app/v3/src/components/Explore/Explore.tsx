@@ -8,10 +8,12 @@ import { MIP } from '../../types';
 import CirclePack from './CirclePack';
 import { IModel, IVariableNode, ModelType } from './Container';
 import Histograms from './Histograms';
+import Summary from './Summary';
 
 interface IProps {
   datasets?: MIP.API.IVariableEntity[];
   selectedDatasets: MIP.API.IVariableEntity[];
+  selectedVariable: IVariableNode | undefined;
   hierarchyNode?: IVariableNode;
   histograms?: any;
   model: IModel;
@@ -30,6 +32,7 @@ export default ({
   datasets,
   selectedDatasets,
   hierarchyNode,
+  selectedVariable,
   histograms,
   model,
   handleSelectVariable,
@@ -80,6 +83,10 @@ export default ({
               <h3>Statistics Summary</h3>
             </Panel.Title>
             <Panel.Body>
+              <Summary
+                selectedVariable={selectedVariable}
+                handleSelectVariable={handleSelectVariable}
+              />
               <Histograms histograms={histograms} />
             </Panel.Body>
           </Panel>
@@ -88,7 +95,7 @@ export default ({
               <h3>Model</h3>
             </Panel.Title>
             <Panel.Body className='model-body'>
-              <div style={{ flexGrow: 1 }}>
+              <div className='model variable'>
                 <Button
                   bsStyle={'info'}
                   // tslint:disable-next-line jsx-no-lambda
@@ -109,6 +116,7 @@ export default ({
                       }>
                       X
                     </Button>
+
                     <a
                       // tslint:disable-next-line jsx-no-lambda
                       onClick={() => {
@@ -121,7 +129,7 @@ export default ({
                   </p>
                 )}
               </div>
-              <div style={{ flexGrow: 2 }}>
+              <div className='model covariable'>
                 <Button
                   bsStyle={'info'}
                   // tslint:disable-next-line jsx-no-lambda
@@ -142,7 +150,8 @@ export default ({
                           }>
                           X
                         </Button>
-                        <a key={`$var-{i}`}
+                        <a
+                          key={`$var-{i}`}
                           // tslint:disable-next-line jsx-no-lambda
                           onClick={() => {
                             if (c) {

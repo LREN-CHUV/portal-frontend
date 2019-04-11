@@ -18,13 +18,23 @@ circle.node.selected {
 }
 
 circle.node.variable {
-  fill: #3f6078;
+  fill: #3f6078 !important;
+}
+
+.model .variable {
+  background-color: #3f6078 !important;
+  flex-grow: 1
 }
 
 circle.node.covariable {
-  fill: rgb(211, 46, 4);
+  fill: rgb(211, 46, 4) !important;
+}
+
+.model .covariable {
+  background-color: rgb(211, 46, 4) !important;
+  flex-grow: 2
 }
 
 circle.node.grouping {
-  fill: rgb(90, 231, 55);
+  fill: rgb(90, 231, 55) !important;
 }
