@@ -32,7 +32,7 @@ export default ({ apiCore, apiMining }: IProps) => {
     MIP.API.IVariableEntity[]
   >([]);
   const [selectedVariable, setSelectedVariable] = useState<
-    IVariableNode | undefined
+  d3.HierarchyCircularNode<MIP.Internal.IVariableDatum> | undefined
   >();
   const [model, setModel] = useState<IModel>({
     covariables: undefined,
@@ -53,7 +53,7 @@ export default ({ apiCore, apiMining }: IProps) => {
     }
   }, [apiCore.state.datasets]);
 
-  const handleSelectVariable = async (node: IVariableNode) => {
+  const handleSelectVariable = async (node: d3.HierarchyCircularNode<MIP.Internal.IVariableDatum>) => {
     setSelectedVariable(node);
 
     if (node.data.isVariable && apiCore.state.datasets) {
@@ -64,9 +64,6 @@ export default ({ apiCore, apiMining }: IProps) => {
 
       apiMining.histograms({ payload });
     }
-
-
-    
   };
 
   const handleSelectDataset = (dataset: MIP.API.IVariableEntity) => {
@@ -132,16 +129,25 @@ export default ({ apiCore, apiMining }: IProps) => {
   const hierarchyNode = root
     ? d3
         .hierarchy(root)
-        .sum((d: any) => (d.label ? Math.round(Math.random() * 3) + d.label.length : 1))
+        .sum((d: any) =>
+          d.label ? Math.round(Math.random() * 3) + d.label.length : 1
+        )
         .sort((a: any, b: any) => b.value - a.value)
     : undefined;
+  const diameter: number = 800;
+  const padding: number = 1.5;
+  const bubbleLayout = d3
+    .pack<MIP.Internal.IVariableDatum>()
+    .size([diameter, diameter])
+    .padding(padding);
+  const layout = hierarchyNode && bubbleLayout(hierarchyNode)
 
   return (
     <Explore
       datasets={apiCore.state.datasets}
       selectedDatasets={selectedDatasets}
       selectedVariable={selectedVariable}
-      hierarchyNode={hierarchyNode}
+      layout={layout}
       histograms={apiMining.state.histograms}
       model={model}
       handleSelectDataset={handleSelectDataset}

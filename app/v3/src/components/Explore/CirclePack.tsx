@@ -4,14 +4,15 @@ import * as d3 from 'd3';
 import React, { useEffect, useRef, useState } from 'react';
 
 import { MIP } from '../../types';
-import { IModel } from './Container';
+import { IModel, IVariableNode } from './Container';
 
 interface IProps {
-  hierarchyNode?: d3.HierarchyNode<MIP.Internal.IVariableDatum>;
+  layout?: d3.HierarchyCircularNode<MIP.Internal.IVariableDatum>;
   handleSelectVariable: (
-    node: d3.HierarchyNode<MIP.Internal.IVariableDatum>
+    node: d3.HierarchyCircularNode<MIP.Internal.IVariableDatum>
   ) => void;
   model: IModel;
+  selectedVariable: d3.HierarchyCircularNode<MIP.Internal.IVariableDatum> | undefined;
 }
 
 interface INodeSelection
@@ -24,11 +25,16 @@ interface INodeSelection
 
 type IView = [number, number, number];
 
-export default ({ hierarchyNode, handleSelectVariable, model }: IProps) => {
+export default ({
+  layout,
+  handleSelectVariable,
+  model,
+  selectedVariable
+}: IProps) => {
   const [loaded, setLoaded] = useState(false);
-  const [root, setRoot] = useState<
-    d3.HierarchyCircularNode<MIP.Internal.IVariableDatum> | undefined
-  >(undefined);
+  // const [root, setRoot] = useState<
+  //   d3.HierarchyCircularNode<MIP.Internal.IVariableDatum> | undefined
+  // >(undefined);
   const [selectedNode, setSelectedNode] = useState<
     d3.HierarchyCircularNode<MIP.Internal.IVariableDatum> | undefined
   >(undefined);
@@ -39,56 +45,63 @@ export default ({ hierarchyNode, handleSelectVariable, model }: IProps) => {
 
   const diameter: number = 800;
   const padding: number = 1.5;
-
+  //
   let view: [number, number, number];
   let focus: d3.HierarchyCircularNode<MIP.Internal.IVariableDatum>;
   let node: INodeSelection;
   let label: INodeSelection;
   let color: d3.ScaleLinear<string, string>;
-  const bubbleLayout = d3
-    .pack<MIP.Internal.IVariableDatum>()
-    .size([diameter, diameter])
-    .padding(padding);
+  // const bubbleLayout = d3
+  //   .pack<MIP.Internal.IVariableDatum>()
+  //   .size([diameter, diameter])
+  //   .padding(padding);
 
   useEffect(() => {
-    if (hierarchyNode && !root) {
-      setRoot(bubbleLayout(hierarchyNode));
-    }
+    // if (hierarchyNode && !root) {
+    //   setRoot(bubbleLayout(hierarchyNode));
+    // }
 
-    if (root && !loaded) {
+    if (layout && !loaded) {
       setLoaded(true);
       d3Render();
     }
 
-    if (root) {
-      console.log('useEffect')
-      d3.select(svgRef)
-        .selectAll('circle')
-        .data(root.descendants())
-        .attr('class', d => {
-          if (
-            model.variable !== undefined &&
-            model.variable.data.code === d.data.code
-          ) {
-            return 'node variable';
-          } else if (
-            model.covariables !== undefined &&
-            model.covariables.map(c => c.data.code).includes(d.data.code)
-          ) {
-            return 'node covariable';
-          } else if (
-            model.covariables !== undefined &&
-            model.covariables.map(c => c.data.code).includes(d.data.code)
-          ) {
-            return 'node grouping';
-          }
-
-          return 'node';
-        });
+    if (selectedVariable) {
+      // console.log(d3.event)
+      // zoom(selectedVariable);
     }
-  }, [hierarchyNode, root]);
 
-  const depth = (n: d3.HierarchyNode<MIP.Internal.IVariableDatum>): number =>
+    // if (layout) {
+    //   console.log('useEffect');
+    //   d3.select(svgRef)
+    //     .selectAll('circle')
+    //     .data(layout.descendants())
+    //     .attr('class', d => {
+    //       if (
+    //         model.variable !== undefined &&
+    //         model.variable.data.code === d.data.code
+    //       ) {
+    //         return 'node variable';
+    //       } else if (
+    //         model.covariables !== undefined &&
+    //         model.covariables.map(c => c.data.code).includes(d.data.code)
+    //       ) {
+    //         return 'node covariable';
+    //       } else if (
+    //         model.covariables !== undefined &&
+    //         model.covariables.map(c => c.data.code).includes(d.data.code)
+    //       ) {
+    //         return 'node grouping';
+    //       }
+
+    //       return 'node';
+    //     });
+    // }
+  }, [layout]);
+
+  const depth = (
+    n: d3.HierarchyCircularNode<MIP.Internal.IVariableDatum>
+  ): number =>
     n.children ? 1 + (d3.max<number>(n.children.map(depth)) || 0) : 1;
 
   // interactive functions
@@ -117,6 +130,9 @@ export default ({ hierarchyNode, handleSelectVariable, model }: IProps) => {
     }
     handleSelectVariable(circleNode);
 
+    console.log(d3.event)
+    console.log(circleNode.x, circleNode.y, circleNode.r)
+
     focus = circleNode;
 
     // reduce zoom if it's a leaf node
@@ -125,7 +141,7 @@ export default ({ hierarchyNode, handleSelectVariable, model }: IProps) => {
       : [focus.x, focus.y, focus.r * 3 + padding];
     const transition = d3
       .transition<d3.BaseType>()
-      .duration(d3.event.altKey ? 7500 : 750)
+      // .duration(d3.event.altKey ? 7500 : 750)
       .tween('zoom', () => {
         const i = d3.interpolateZoom(view, targetView);
 
@@ -138,14 +154,14 @@ export default ({ hierarchyNode, handleSelectVariable, model }: IProps) => {
     ): boolean => dd.parent === ffocus || !ffocus.children; // || !dd.children;
 
     // Revert all nodes fill color
-    console.log('zoom')
+    // console.log('zoom');
     node
       .transition()
       .duration(500)
       .style('fill', d => (d.children ? color(d.depth) : 'white'));
 
     node
-      .filter(d => d !== root && d.data.code === circleNode.data.code)
+      .filter(d => d !== layout && d.data.code === circleNode.data.code)
       .transition()
       .duration(250)
       .style('fill', '#8C9AA2');
@@ -170,16 +186,19 @@ export default ({ hierarchyNode, handleSelectVariable, model }: IProps) => {
   };
 
   const d3Render = () => {
-    if (!hierarchyNode) {
+
+    console.log(layout)
+    if (!layout) {
       return;
     }
 
-    if (svgRef && root) {
+    if (svgRef && layout) {
       // Layout
       // setRoot(bubbleLayout(hierarchyNode))
+      console.log('d3Render')
       color = d3
         .scaleLinear<string, string>()
-        .domain([0, depth(hierarchyNode)])
+        .domain([0, depth(layout)])
         .range(['hsl(190,80%,80%)', 'hsl(228,80%,40%)'])
         .interpolate(d3.interpolateHcl);
 
@@ -195,12 +214,12 @@ export default ({ hierarchyNode, handleSelectVariable, model }: IProps) => {
         .style('width', 'calc(100% + 16px)')
         .style('height', 'auto')
         .style('cursor', 'pointer')
-        .on('click', () => zoom(root));
+        .on('click', () => zoom(layout));
 
       node = svg
         .append('g')
         .selectAll('circle')
-        .data(root.descendants())
+        .data(layout.descendants())
         .join('circle')
         .attr('class', 'node')
         .attr('fill', d => (d.children ? color(d.depth) : 'white'))
@@ -208,7 +227,7 @@ export default ({ hierarchyNode, handleSelectVariable, model }: IProps) => {
 
       svg
         .selectAll('circle')
-        .data(root.descendants())
+        .data(layout.descendants())
         .append('title')
         .text(
           d =>
@@ -219,11 +238,11 @@ export default ({ hierarchyNode, handleSelectVariable, model }: IProps) => {
       label = svg
         .append('g')
         .selectAll('text')
-        .data(root.descendants())
+        .data(layout.descendants())
         .join('text')
         .attr('class', 'label')
-        .style('fill-opacity', d => (d.parent === root ? 1 : 0))
-        .style('display', d => (d.parent === root ? 'inline' : 'none'))
+        .style('fill-opacity', d => (d.parent === layout ? 1 : 0))
+        .style('display', d => (d.parent === layout ? 'inline' : 'none'))
         .text(d =>
           d.data.label.length > maxLength
             ? d.data.label
@@ -236,15 +255,15 @@ export default ({ hierarchyNode, handleSelectVariable, model }: IProps) => {
             : d.data.label
         );
 
-      focus = root;
-      zoomTo([root.x, root.y, root.r * 2]);
+      focus = layout;
+      zoomTo([layout.x, layout.y, layout.r * 2]);
 
       d3.select(shortcutsRef)
         .selectAll('.shortcut')
-        .data(root.descendants())
+        .data(layout.descendants())
         .join('a')
-        .style('fill-opacity', d => (d.parent === root ? 1 : 0))
-        .style('display', d => (d.parent === root ? 'inline' : 'none'))
+        .style('fill-opacity', d => (d.parent === layout ? 1 : 0))
+        .style('display', d => (d.parent === layout ? 'inline' : 'none'))
         .text(d => d.data.label)
         .on('click', d => {
           zoom(d);

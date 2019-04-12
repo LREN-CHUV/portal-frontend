@@ -1,6 +1,6 @@
 import './Explore.css';
 
-import { HierarchyNode } from 'd3';
+import * as d3 from 'd3';
 import React from 'react';
 import { Button, Checkbox, Panel } from 'react-bootstrap';
 
@@ -8,18 +8,17 @@ import { MIP } from '../../types';
 import CirclePack from './CirclePack';
 import { IModel, IVariableNode, ModelType } from './Container';
 import Histograms from './Histograms';
-import Summary from './Summary';
 
 interface IProps {
   datasets?: MIP.API.IVariableEntity[];
   selectedDatasets: MIP.API.IVariableEntity[];
-  selectedVariable: IVariableNode | undefined;
-  hierarchyNode?: IVariableNode;
+  selectedVariable: d3.HierarchyCircularNode<MIP.Internal.IVariableDatum> | undefined;
+  layout?: d3.HierarchyCircularNode<MIP.Internal.IVariableDatum>;
   histograms?: any;
   model: IModel;
   handleSelectDataset: (e: any) => void;
   handleSelectVariable: (
-    node: HierarchyNode<MIP.Internal.IVariableDatum>
+    node: d3.HierarchyCircularNode<MIP.Internal.IVariableDatum>
   ) => void;
   handleChangeModel: (
     type: ModelType,
@@ -31,7 +30,7 @@ interface IProps {
 export default ({
   datasets,
   selectedDatasets,
-  hierarchyNode,
+  layout,
   selectedVariable,
   histograms,
   model,
@@ -70,8 +69,9 @@ export default ({
             </Panel.Title>
             <Panel.Body>
               <CirclePack
-                hierarchyNode={hierarchyNode}
+                layout={layout}
                 handleSelectVariable={handleSelectVariable}
+                selectedVariable={selectedVariable}
                 model={model}
               />
             </Panel.Body>
@@ -83,11 +83,11 @@ export default ({
               <h3>Statistics Summary</h3>
             </Panel.Title>
             <Panel.Body>
-              <Summary
+              <Histograms
+                histograms={histograms}
                 selectedVariable={selectedVariable}
                 handleSelectVariable={handleSelectVariable}
               />
-              <Histograms histograms={histograms} />
             </Panel.Body>
           </Panel>
           <Panel className='model'>
@@ -120,9 +120,9 @@ export default ({
                     <a
                       // tslint:disable-next-line jsx-no-lambda
                       onClick={() => {
-                        if (model.variable) {
-                          handleSelectVariable(model.variable);
-                        }
+                        // if (model.variable) {
+                        //   handleSelectVariable(model.variable);
+                        // }
                       }}>
                       {model.variable.data.label}
                     </a>
@@ -154,9 +154,9 @@ export default ({
                           key={`$var-{i}`}
                           // tslint:disable-next-line jsx-no-lambda
                           onClick={() => {
-                            if (c) {
-                              handleSelectVariable(c);
-                            }
+                            // if (c) {
+                            //   handleSelectVariable(c);
+                            // }
                           }}>
                           {c.data.label}
                         </a>
