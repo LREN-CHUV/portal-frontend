@@ -13,7 +13,7 @@ interface IProps {
   datasets?: MIP.API.IVariableEntity[];
   selectedDatasets: MIP.API.IVariableEntity[];
   selectedVariable: d3.HierarchyCircularNode<MIP.Internal.IVariableDatum> | undefined;
-  layout?: d3.HierarchyCircularNode<MIP.Internal.IVariableDatum>;
+  circlePack?: d3.HierarchyCircularNode<MIP.Internal.IVariableDatum>;
   histograms?: any;
   model: IModel;
   handleSelectDataset: (e: any) => void;
@@ -30,7 +30,7 @@ interface IProps {
 export default ({
   datasets,
   selectedDatasets,
-  layout,
+  circlePack: layout,
   selectedVariable,
   histograms,
   model,

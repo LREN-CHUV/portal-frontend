@@ -141,7 +141,7 @@ export default ({
       : [focus.x, focus.y, focus.r * 3 + padding];
     const transition = d3
       .transition<d3.BaseType>()
-      // .duration(d3.event.altKey ? 7500 : 750)
+      .duration(d3.event.altKey ? 7500 : 750)
       .tween('zoom', () => {
         const i = d3.interpolateZoom(view, targetView);
 
