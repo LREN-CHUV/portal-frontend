@@ -12,12 +12,12 @@ import Histograms from './Histograms';
 interface IProps {
   datasets?: MIP.API.IVariableEntity[];
   selectedDatasets: MIP.API.IVariableEntity[];
-  selectedVariable: d3.HierarchyCircularNode<MIP.Internal.IVariableDatum> | undefined;
+  selectedNode: d3.HierarchyCircularNode<MIP.Internal.IVariableDatum> | undefined;
   circlePack?: d3.HierarchyCircularNode<MIP.Internal.IVariableDatum>;
   histograms?: any;
   model: IModel;
   handleSelectDataset: (e: any) => void;
-  handleSelectVariable: (
+  handleSelectNode: (
     node: d3.HierarchyCircularNode<MIP.Internal.IVariableDatum>
   ) => void;
   handleChangeModel: (
@@ -31,10 +31,10 @@ export default ({
   datasets,
   selectedDatasets,
   circlePack: layout,
-  selectedVariable,
+  selectedNode,
   histograms,
   model,
-  handleSelectVariable,
+  handleSelectNode,
   handleSelectDataset,
   handleChangeModel
 }: IProps) => {
@@ -70,8 +70,8 @@ export default ({
             <Panel.Body>
               <CirclePack
                 layout={layout}
-                handleSelectVariable={handleSelectVariable}
-                selectedVariable={selectedVariable}
+                handleSelectNode={handleSelectNode}
+                selectedNode={selectedNode}
                 model={model}
               />
             </Panel.Body>
@@ -85,8 +85,8 @@ export default ({
             <Panel.Body>
               <Histograms
                 histograms={histograms}
-                selectedVariable={selectedVariable}
-                handleSelectVariable={handleSelectVariable}
+                selectedNode={selectedNode}
+                handleSelectedNode={handleSelectNode}
               />
             </Panel.Body>
           </Panel>

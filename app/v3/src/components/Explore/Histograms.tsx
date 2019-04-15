@@ -8,15 +8,15 @@ import Loading from '../UI/Loader';
 import { IVariableNode } from './Container';
 
 export default ({
-  handleSelectVariable,
+  handleSelectedNode: handleSelectVariable,
   histograms,
-  selectedVariable
+  selectedNode: selectedVariable
 }: {
-  handleSelectVariable: (
+  handleSelectedNode: (
     node: d3.HierarchyCircularNode<MIP.Internal.IVariableDatum>
   ) => void;
   histograms: MIP.Store.IMiningResponseShape;
-  selectedVariable: d3.HierarchyCircularNode<MIP.Internal.IVariableDatum> | undefined;
+  selectedNode: d3.HierarchyCircularNode<MIP.Internal.IVariableDatum> | undefined;
 }) => {
   const dRef = useRef<HTMLDivElement>(null);
   const shortcutsRef = dRef.current;

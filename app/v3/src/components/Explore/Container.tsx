@@ -30,7 +30,7 @@ export default ({ apiCore, apiMining }: IProps) => {
   const [selectedDatasets, setSelectedDatasets] = useState<
     MIP.API.IVariableEntity[]
   >([]);
-  const [selectedVariable, setSelectedVariable] = useState<
+  const [selectedNode, setSelectedNode] = useState<
     d3.HierarchyCircularNode<MIP.Internal.IVariableDatum> | undefined
   >();
   const [model, setModel] = useState<IModel>({
@@ -55,10 +55,10 @@ export default ({ apiCore, apiMining }: IProps) => {
     }
   }, [apiCore.state.datasets]);
 
-  const handleSelectVariable = async (
+  const handleSelectNode = async (
     node: d3.HierarchyCircularNode<MIP.Internal.IVariableDatum>
   ) => {
-    setSelectedVariable(node);
+    setSelectedNode(node);
 
     if (node.data.isVariable && apiCore.state.datasets) {
       const payload = {
@@ -88,8 +88,8 @@ export default ({ apiCore, apiMining }: IProps) => {
     if (type === ModelType.VARIABLE) {
       const nextModel = remove
         ? { ...model, variable: undefined }
-        : selectedVariable && selectedVariable.data.isVariable
-        ? { ...model, variable: selectedVariable }
+        : selectedNode && selectedNode.data.isVariable
+        ? { ...model, variable: selectedNode }
         : { ...model };
       setModel(nextModel);
     }
@@ -107,12 +107,12 @@ export default ({ apiCore, apiMining }: IProps) => {
         return;
       }
 
-      if (selectedVariable) {
+      if (selectedNode) {
         const nextCovariables =
           model.covariables &&
           model.covariables.filter(
             v =>
-              !selectedVariable
+              !selectedNode
                 .leaves()
                 .map(c => c.data.code)
                 .includes(v.data.code)
@@ -122,31 +122,30 @@ export default ({ apiCore, apiMining }: IProps) => {
           covariables:
             nextCovariables && nextCovariables.length > 0
               ? nextCovariables
-              : selectedVariable.leaves()
+              : selectedNode.leaves()
         };
         setModel(nextModel);
       }
     }
   };
 
+  const hierarchy = d3Hierarchy(apiCore.state.hierarchy);
   const bubbleLayout = d3
     .pack<MIP.Internal.IVariableDatum>()
     .size([diameter, diameter])
     .padding(padding);
-
-  const hierarchy = d3Hierarchy(apiCore.state.hierarchy);
   const circlePack = hierarchy && bubbleLayout(hierarchy);
 
   return (
     <Explore
       datasets={apiCore.state.datasets}
       selectedDatasets={selectedDatasets}
-      selectedVariable={selectedVariable}
+      selectedNode={selectedNode}
       circlePack={circlePack}
       histograms={apiMining.state.histograms}
       model={model}
       handleSelectDataset={handleSelectDataset}
-      handleSelectVariable={handleSelectVariable}
+      handleSelectNode={handleSelectNode}
       handleChangeModel={handleChangeModel}
     />
   );

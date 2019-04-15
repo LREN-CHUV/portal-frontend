@@ -8,11 +8,13 @@ import { IModel, IVariableNode } from './Container';
 
 interface IProps {
   layout?: d3.HierarchyCircularNode<MIP.Internal.IVariableDatum>;
-  handleSelectVariable: (
+  handleSelectNode: (
     node: d3.HierarchyCircularNode<MIP.Internal.IVariableDatum>
   ) => void;
   model: IModel;
-  selectedVariable: d3.HierarchyCircularNode<MIP.Internal.IVariableDatum> | undefined;
+  selectedNode:
+    | d3.HierarchyCircularNode<MIP.Internal.IVariableDatum>
+    | undefined;
 }
 
 interface INodeSelection
@@ -25,17 +27,12 @@ interface INodeSelection
 
 type IView = [number, number, number];
 
-export default ({
-  layout,
-  handleSelectVariable,
-  model,
-  selectedVariable
-}: IProps) => {
+export default ({ layout, handleSelectNode, model, selectedNode }: IProps) => {
   const [loaded, setLoaded] = useState(false);
   // const [root, setRoot] = useState<
   //   d3.HierarchyCircularNode<MIP.Internal.IVariableDatum> | undefined
   // >(undefined);
-  const [selectedNode, setSelectedNode] = useState<
+  const [selected, setSelected] = useState<
     d3.HierarchyCircularNode<MIP.Internal.IVariableDatum> | undefined
   >(undefined);
   const gRef = useRef<SVGSVGElement>(null);
@@ -51,53 +48,48 @@ export default ({
   let node: INodeSelection;
   let label: INodeSelection;
   let color: d3.ScaleLinear<string, string>;
-  // const bubbleLayout = d3
-  //   .pack<MIP.Internal.IVariableDatum>()
-  //   .size([diameter, diameter])
-  //   .padding(padding);
+  let zoom: any;
 
   useEffect(() => {
-    // if (hierarchyNode && !root) {
-    //   setRoot(bubbleLayout(hierarchyNode));
-    // }
-
     if (layout && !loaded) {
       setLoaded(true);
       d3Render();
     }
 
-    if (selectedVariable) {
+    if (selectedNode) {
+      console.log(selectedNode);
+      // const event = document.createEvent( 'Event');
+      // event.initEvent('click', true, true);
+      // d3.select(svgRef).dispatchEvent(event)
+      // const node = selectedNode.node();
+      // selectedNode.target().dispatchEvent(event);
+
+      // const { x, y } = selectedNode;
+      // const t = d3.zoomIdentity
+      //   .translate(x, y)
+      //   .scale(2);
+
+      // d3.select(svgRef)
+      //   .transition()
+      //   .duration(250)
+      //   .call(zoom, selectedNode);
+
+      // const targetView: IView = selectedNode.children
+      //   ? [focus.x, focus.y, focus.r * 2 + padding]
+      //   : [focus.x, focus.y, focus.r * 3 + padding];
+      // const transition = d3
+      //   .transition<d3.BaseType>()
+      //   .duration(d3.event.altKey ? 7500 : 750)
+      //   .tween('zoom', () => {
+      //     const i = d3.interpolateZoom(view, targetView);
+
+      //     return (t: number) => zoomTo(i(t));
+      //   });
+
       // console.log(d3.event)
       // zoom(selectedVariable);
     }
-
-    // if (layout) {
-    //   console.log('useEffect');
-    //   d3.select(svgRef)
-    //     .selectAll('circle')
-    //     .data(layout.descendants())
-    //     .attr('class', d => {
-    //       if (
-    //         model.variable !== undefined &&
-    //         model.variable.data.code === d.data.code
-    //       ) {
-    //         return 'node variable';
-    //       } else if (
-    //         model.covariables !== undefined &&
-    //         model.covariables.map(c => c.data.code).includes(d.data.code)
-    //       ) {
-    //         return 'node covariable';
-    //       } else if (
-    //         model.covariables !== undefined &&
-    //         model.covariables.map(c => c.data.code).includes(d.data.code)
-    //       ) {
-    //         return 'node grouping';
-    //       }
-
-    //       return 'node';
-    //     });
-    // }
-  }, [layout]);
+  }, [layout, selectedNode]);
 
   const depth = (
     n: d3.HierarchyCircularNode<MIP.Internal.IVariableDatum>
@@ -120,7 +112,7 @@ export default ({
     node.attr('r', d => d.r * k);
   };
 
-  const zoom = (
+  zoom = (
     circleNode:
       | d3.HierarchyCircularNode<MIP.Internal.IVariableDatum>
       | undefined
@@ -128,10 +120,9 @@ export default ({
     if (!circleNode) {
       return;
     }
-    handleSelectVariable(circleNode);
 
-    console.log(d3.event)
-    console.log(circleNode.x, circleNode.y, circleNode.r)
+    // console.log(d3.event)
+    // console.log(circleNode.x, circleNode.y, circleNode.r)
 
     focus = circleNode;
 
@@ -186,8 +177,7 @@ export default ({
   };
 
   const d3Render = () => {
-
-    console.log(layout)
+    console.log(layout);
     if (!layout) {
       return;
     }
@@ -195,7 +185,7 @@ export default ({
     if (svgRef && layout) {
       // Layout
       // setRoot(bubbleLayout(hierarchyNode))
-      console.log('d3Render')
+      console.log('d3Render');
       color = d3
         .scaleLinear<string, string>()
         .domain([0, depth(layout)])
@@ -223,7 +213,12 @@ export default ({
         .join('circle')
         .attr('class', 'node')
         .attr('fill', d => (d.children ? color(d.depth) : 'white'))
-        .on('click', d => focus !== d && (zoom(d), d3.event.stopPropagation()));
+        .on('click', d => {
+          handleSelectNode(d);
+          d3.event.stopPropagation();
+
+          return focus !== d && zoom(d);
+        });
 
       svg
         .selectAll('circle')
