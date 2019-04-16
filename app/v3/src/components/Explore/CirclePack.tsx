@@ -4,16 +4,12 @@ import * as d3 from 'd3';
 import React, { useEffect, useRef, useState } from 'react';
 
 import { HierarchyCircularNode, Model } from './Container';
-
+import { VariableDatum, HierarchyNode } from './d3Hierarchy';
 interface Props {
-  layout?: HierarchyCircularNode;
-  handleSelectNode: (
-    node: HierarchyCircularNode
-  ) => void;
+  hierarchy?: HierarchyNode;
+  handleSelectNode: (node: HierarchyCircularNode) => void;
   model: Model;
-  selectedNode:
-    | HierarchyCircularNode
-    | undefined;
+  selectedNode: HierarchyCircularNode | undefined;
 }
 
 interface NodeSelection
@@ -26,11 +22,10 @@ interface NodeSelection
 
 type IView = [number, number, number];
 
-export default ({ layout, handleSelectNode, model, selectedNode }: Props) => {
+export default ({ hierarchy, handleSelectNode, model, selectedNode }: Props) => {
   const [loaded, setLoaded] = useState(false);
-  const [selected, setSelected] = useState<
-    HierarchyCircularNode | undefined
-  >(undefined);
+  // const [selected, setSelected] = useState<HierarchyCircularNode | undefined>();
+  // const [layout, setLayout] = useState<HierarchyCircularNode>();
   const gRef = useRef<SVGSVGElement>(null);
   const dRef = useRef<HTMLDivElement>(null);
   const svgRef = gRef.current;
@@ -45,9 +40,16 @@ export default ({ layout, handleSelectNode, model, selectedNode }: Props) => {
   let label: NodeSelection;
   let color: d3.ScaleLinear<string, string>;
   let zoom: any;
+  let layout: HierarchyCircularNode;
 
   useEffect(() => {
-    if (layout && !loaded) {
+    if (hierarchy && !loaded) {
+      const bubbleLayout = d3
+        .pack<VariableDatum>()
+        .size([diameter, diameter])
+        .padding(padding);
+        layout = bubbleLayout(hierarchy);
+
       setLoaded(true);
       d3Render();
     }
@@ -110,11 +112,9 @@ export default ({ layout, handleSelectNode, model, selectedNode }: Props) => {
       // console.log(d3.event)
       // zoom(selectedVariable);
     }
-  }, [layout, selectedNode]);
+  }, [hierarchy, selectedNode]);
 
-  const depth = (
-    n: HierarchyCircularNode
-  ): number =>
+  const depth = (n: HierarchyCircularNode): number =>
     n.children ? 1 + (d3.max<number>(n.children.map(depth)) || 0) : 1;
 
   // interactive functions
@@ -122,22 +122,12 @@ export default ({ layout, handleSelectNode, model, selectedNode }: Props) => {
     const k = diameter / v[2];
     view = v;
 
-    label.attr(
-      'transform',
-      d => `translate(${(d.x - v[0]) * k},${(d.y - v[1]) * k})`
-    );
-    node.attr(
-      'transform',
-      d => `translate(${(d.x - v[0]) * k},${(d.y - v[1]) * k})`
-    );
+    label.attr('transform', d => `translate(${(d.x - v[0]) * k},${(d.y - v[1]) * k})`);
+    node.attr('transform', d => `translate(${(d.x - v[0]) * k},${(d.y - v[1]) * k})`);
     node.attr('r', d => d.r * k);
   };
 
-  zoom = (
-    circleNode:
-      | HierarchyCircularNode
-      | undefined
-  ) => {
+  zoom = (circleNode: HierarchyCircularNode | undefined) => {
     if (!circleNode) {
       return;
     }
@@ -216,10 +206,7 @@ export default ({ layout, handleSelectNode, model, selectedNode }: Props) => {
         .select(svgRef)
         .attr('width', diameter)
         .attr('height', diameter)
-        .attr(
-          'viewBox',
-          `-${diameter / 2} -${diameter / 2} ${diameter} ${diameter}`
-        )
+        .attr('viewBox', `-${diameter / 2} -${diameter / 2} ${diameter} ${diameter}`)
         .style('margin', '0 -8px')
         .style('width', 'calc(100% + 16px)')
         .style('height', 'auto')
@@ -244,10 +231,7 @@ export default ({ layout, handleSelectNode, model, selectedNode }: Props) => {
         .selectAll('circle')
         .data(layout.descendants())
         .append('title')
-        .text(
-          d =>
-            `${d.data.label}\n${d.data.description ? d.data.description : ''}`
-        );
+        .text(d => `${d.data.label}\n${d.data.description ? d.data.description : ''}`);
 
       const maxLength = 12;
       label = svg
@@ -262,11 +246,7 @@ export default ({ layout, handleSelectNode, model, selectedNode }: Props) => {
           d.data.label.length > maxLength
             ? d.data.label
                 .split(' ')
-                .reduce(
-                  (acc: string, p: string) =>
-                    acc.length < maxLength ? `${acc} ${p}` : `${acc}`,
-                  ''
-                ) + '...'
+                .reduce((acc: string, p: string) => (acc.length < maxLength ? `${acc} ${p}` : `${acc}`), '') + '...'
             : d.data.label
         );
 

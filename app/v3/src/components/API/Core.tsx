@@ -16,8 +16,17 @@ export interface VariableEntity extends Variable {
   group?: Variable[];
 }
 
-class Core extends Container<MIP.Store.ICoreState> {
-  public state: MIP.Store.ICoreState = {};
+export interface State {
+  error?: string;
+  loading?: boolean;
+  hierarchy?: any;
+  variables?: VariableEntity[];
+  datasets?: VariableEntity[];
+  methods?: MIP.API.IMethods;
+}
+
+class Core extends Container<State> {
+  public state: State = {};
 
   private options: request.Options;
   private backendURL: string;
@@ -30,8 +39,7 @@ class Core extends Container<MIP.Store.ICoreState> {
 
   public lookup = (code: string): VariableEntity => {
     const variables = this.state.variables;
-    const originalVar =
-      variables && variables.find(variable => variable.code === code);
+    const originalVar = variables && variables.find(variable => variable.code === code);
 
     return originalVar || { code, label: code };
   };

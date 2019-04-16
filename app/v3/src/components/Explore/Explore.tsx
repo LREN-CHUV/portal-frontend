@@ -13,7 +13,7 @@ interface Props {
   datasets?: VariableEntity[];
   selectedDatasets: VariableEntity[];
   selectedNode: HierarchyCircularNode | undefined;
-  circlePack?: HierarchyCircularNode;
+  hierarchy?: HierarchyNode;
   histograms?: any;
   model: Model;
   handleSelectDataset: (e: any) => void;
@@ -28,7 +28,7 @@ interface Props {
 export default ({
   datasets,
   selectedDatasets,
-  circlePack: layout,
+  hierarchy,
   selectedNode,
   histograms,
   model,
@@ -67,7 +67,7 @@ export default ({
             </Panel.Title>
             <Panel.Body>
               <CirclePack
-                layout={layout}
+                hierarchy={hierarchy}
                 handleSelectNode={handleSelectNode}
                 selectedNode={selectedNode}
                 model={model}

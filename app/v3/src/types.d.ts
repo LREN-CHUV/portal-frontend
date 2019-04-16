@@ -8,12 +8,6 @@ export declare namespace MIP {
 }
 
 export declare namespace MIP.Store {
-  export interface ICoreState extends IError {
-    hierarchy?: any;
-    variables?: VariableEntity[];
-    datasets?: VariableEntity[];
-    methods?: MIP.API.IMethods;
-  }
 
   export interface IExperimentState extends IError {
     experiment?: MIP.API.IExperimentResponse;
