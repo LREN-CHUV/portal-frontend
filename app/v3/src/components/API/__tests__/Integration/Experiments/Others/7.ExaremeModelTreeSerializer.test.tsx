@@ -1,19 +1,21 @@
 import { mount } from 'enzyme';
-import Result from '../../../../../Experiment/Result/Result';
-import { MIP } from '../../../../../../types';
 import * as React from 'react';
+
+import { MIP } from '../../../../../../types';
+import Result from '../../../../../Experiment/Result/Result';
 import {
   createExperiment,
   createModel,
   waitForResult
 } from '../../../../../utils/TestUtils';
+import { VariableEntity } from '../../../../Core';
 
 // config
 
 const modelSlug = `model-${Math.round(Math.random() * 10000)}`;
 const experimentCode = 'PIPELINE_ISOUP_MODEL_TREE_SERIALIZER';
 const datasets = [{ code: 'adni' }, { code: 'edsd' }];
-const model: any = (datasets: MIP.API.IVariableEntity[]) => ({
+const model: any = (datasets: VariableEntity[]) => ({
   query: {
     coVariables: [
       {

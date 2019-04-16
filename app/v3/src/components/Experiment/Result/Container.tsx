@@ -5,13 +5,13 @@ import { APICore, APIExperiment, APIModel } from '../../API';
 import Methods from '../../Experiment/Result/Methods';
 import Model from '../../UI/Model';
 import { ExperimentResult, ExperimentResultHeader } from './';
-interface IProps extends RouteComponentProps<any> {
+interface Props extends RouteComponentProps<any> {
   apiExperiment: APIExperiment;
   apiModel: APIModel;
   apiCore: APICore;
 }
 
-class Experiment extends React.Component<IProps> {
+class Experiment extends React.Component<Props> {
   private intervalId: any;
 
   public async componentDidMount() {
@@ -30,7 +30,7 @@ class Experiment extends React.Component<IProps> {
     return await apiModel.one(slug);
   }
 
-  public componentDidUpdate(prevProps: IProps) {
+  public componentDidUpdate(prevProps: Props) {
     const params = this.urlParams(this.props);
     if (!params) {
       return;
@@ -81,7 +81,7 @@ class Experiment extends React.Component<IProps> {
   }
 
   private urlParams = (
-    props: IProps
+    props: Props
   ):
     | {
         uuid: string;

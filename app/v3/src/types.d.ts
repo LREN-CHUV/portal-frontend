@@ -1,3 +1,6 @@
+import { Variable, VariableEntity } from './components/API/Core';
+import { MiningResponseShape } from './components/API/Mining';
+
 export declare namespace MIP {
   export interface IError {
     error?: string;
@@ -7,8 +10,8 @@ export declare namespace MIP {
 export declare namespace MIP.Store {
   export interface ICoreState extends IError {
     hierarchy?: any;
-    variables?: MIP.API.IVariableEntity[];
-    datasets?: MIP.API.IVariableEntity[];
+    variables?: VariableEntity[];
+    datasets?: VariableEntity[];
     methods?: MIP.API.IMethods;
   }
 
@@ -17,17 +20,10 @@ export declare namespace MIP.Store {
     experiments?: MIP.API.IExperimentResponse[];
   }
 
-  export interface IMiningResponseShape {
-    data?: any;
-    error?: string;
-    dataset?: MIP.API.IVariableEntity;
-    loading?: boolean;
-  }
-
   export interface IMiningState extends IError {
-    summaryStatistics?: MIP.Store.IMiningResponseShape[];
-    heatmaps?: MIP.Store.IMiningResponseShape[];
-    histograms?: MIP.Store.IMiningResponseShape;
+    summaryStatistics?: MiningResponseShape[];
+    heatmaps?: MiningResponseShape[];
+    histograms?: MiningResponseShape;
   }
 
   export interface IModelState extends IError {
@@ -70,10 +66,10 @@ export declare namespace MIP.API {
 
   export interface IMiningPayload {
     algorithm?: MIP.API.IMethod;
-    variables: IVariableEntity[];
-    grouping?: IVariableEntity[];
-    covariables?: IVariableEntity[];
-    datasets: IVariableEntity[];
+    variables: VariableEntity[];
+    grouping?: VariableEntity[];
+    covariables?: VariableEntity[];
+    datasets: VariableEntity[];
     filters: string;
   }
 
@@ -122,26 +118,13 @@ export declare namespace MIP.API {
 
   export interface IQuery {
     filters: string;
-    variables?: MIP.API.IVariableEntity[];
-    coVariables?: MIP.API.IVariableEntity[];
-    groupings?: MIP.API.IVariableEntity[];
-    trainingDatasets?: MIP.API.IVariableEntity[];
-    testingDatasets?: MIP.API.IVariableEntity[];
-    validationDatasets?: MIP.API.IVariableEntity[];
+    variables?: VariableEntity[];
+    coVariables?: VariableEntity[];
+    groupings?: VariableEntity[];
+    trainingDatasets?: VariableEntity[];
+    testingDatasets?: VariableEntity[];
+    validationDatasets?: VariableEntity[];
     [key: string]: any;
-  }
-
-  export interface IVariable {
-    code: string;
-    label?: string;
-  }
-
-  export interface IVariableEntity extends IVariable {
-    type?: string;
-    sqlType?: string;
-    description?: string;
-    enumerations?: IVariable[];
-    group?: IVariable[];
   }
 
   export interface IUser {

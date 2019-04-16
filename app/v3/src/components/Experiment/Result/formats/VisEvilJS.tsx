@@ -4,11 +4,11 @@ import * as React from 'react';
 
 const vis = require('vis/dist/vis.min');
 
-interface IProps {
+interface Props {
   jsString: any;
 }
 
-export default class VISJS extends React.PureComponent<IProps> {
+export default class VISJS extends React.PureComponent<Props> {
   public componentDidMount() {
     eval(`${this.props.jsString}`);
   }

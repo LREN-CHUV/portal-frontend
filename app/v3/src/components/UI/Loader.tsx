@@ -3,10 +3,10 @@ import { RingLoader } from "react-spinners";
 
 import "./Loader.css";
 
-interface IProps {
+interface Props {
   visible?: boolean;
 }
-class Loader extends React.Component<IProps> {
+class Loader extends React.Component<Props> {
   public render() {
     const { visible } = this.props || true;
     return (

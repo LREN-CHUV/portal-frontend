@@ -1,35 +1,38 @@
-import { Column } from 'primereact/column';
-import { DataTable } from 'primereact/datatable';
-import * as React from 'react';
-import { MIP } from '../../../types';
-import Loader from '../../UI/Loader';
-import { round } from '../../utils';
-
 import 'primeicons/primeicons.css';
 import 'primereact/resources/primereact.min.css';
 import 'primereact/resources/themes/nova-light/theme.css';
 import './Table.css';
 
-interface IProps {
-  minings?: MIP.Store.IMiningResponseShape[];
-  selectedDatasets?: MIP.API.IVariable[];
+import { Column } from 'primereact/column';
+import { DataTable } from 'primereact/datatable';
+import * as React from 'react';
+
+import { MIP } from '../../../types';
+import { Variable, VariableEntity } from '../../API/Core';
+import { MiningResponseShape } from '../../API/Mining';
+import Loader from '../../UI/Loader';
+import { round } from '../../utils';
+
+interface Props {
+  minings?: MiningResponseShape[];
+  selectedDatasets?: Variable[];
   query?: MIP.API.IQuery;
-  lookup: (code: string) => MIP.API.IVariableEntity;
+  lookup: (code: string) => VariableEntity;
 }
 
 interface IComputeMiningResult {
-  minings?: MIP.Store.IMiningResponseShape[];
-  selectedDatasets?: MIP.API.IVariableEntity[];
-  variables?: MIP.API.IVariableEntity[];
+  minings?: MiningResponseShape[];
+  selectedDatasets?: VariableEntity[];
+  variables?: VariableEntity[];
 }
 
 interface ITableRow {
   variable?: string;
-  category?: MIP.API.IVariable;
-  [key: string]: string | MIP.API.IVariable | undefined;
+  category?: Variable;
+  [key: string]: string | Variable | undefined;
 }
 
-const Table = ({ minings, selectedDatasets, query, lookup }: IProps) => {
+const Table = ({ minings, selectedDatasets, query, lookup }: Props) => {
   const rows = computeMinings({
     minings,
     selectedDatasets,
@@ -50,7 +53,7 @@ const Table = ({ minings, selectedDatasets, query, lookup }: IProps) => {
           key={'variable'}
           body={variableTemplate}
         />,
-        ...selectedDatasets.map((mining: MIP.API.IVariable) => (
+        ...selectedDatasets.map((mining: Variable) => (
           <Column header={mining.code} field={mining.code} key={mining.code} />
         ))
       ]

@@ -1,15 +1,15 @@
 import * as React from 'react';
-import { MIP } from '../../../types';
-import { APIMining } from '../../API';
+
+import { MiningResponseShape } from '../../API/Mining';
 import { Alert } from '../../UI/Alert';
 import Loader from '../../UI/Loader';
 import { PlotlyHeatmap } from '../Result/formats/';
 
-interface IProps {
+interface Props {
   heatmaps: any;
 }
 
-class HeatMap extends React.Component<IProps> {
+class HeatMap extends React.Component<Props> {
   public render = () => {
     const { heatmaps } = this.props;
     const loading =
@@ -23,7 +23,7 @@ class HeatMap extends React.Component<IProps> {
           <Alert message={heatmaps.error} title={'Error'} />
         )}
         {heatmaps &&
-          heatmaps.map((h: MIP.Store.IMiningResponseShape, i: number) => {
+          heatmaps.map((h: MiningResponseShape, i: number) => {
             return (
               <div className='heatmap' key={i}>
                 <h3>{heatmaps.length > 1 && h.dataset && h.dataset.code}</h3>

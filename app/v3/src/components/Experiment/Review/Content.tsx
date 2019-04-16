@@ -4,16 +4,17 @@ import { Body } from 'react-bootstrap/lib/Modal';
 
 import { MIP } from '../../../types';
 import { APIMining } from '../../API';
+import { VariableEntity } from '../../API/Core';
 import { Alert } from '../../UI/Alert';
 import Boxplot from './Boxplot';
 import HeatMap from './HeatMap';
 import Table from './Table';
 
-interface IProps {
+interface Props {
   apiMining?: APIMining;
   model?: MIP.API.IModelResponse;
-  selectedDatasets?: MIP.API.IVariableEntity[];
-  lookup: (code: string) => MIP.API.IVariableEntity;
+  selectedDatasets?: VariableEntity[];
+  lookup: (code: string) => VariableEntity;
   children: any;
 }
 
@@ -23,7 +24,7 @@ const Content = ({
   selectedDatasets,
   lookup,
   children
-}: IProps) =>
+}: Props) =>
   (apiMining && (
     <Panel>
       <Panel.Body>

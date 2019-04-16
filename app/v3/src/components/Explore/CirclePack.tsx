@@ -5,7 +5,7 @@ import React, { useEffect, useRef, useState } from 'react';
 
 import { HierarchyCircularNode, Model } from './Container';
 
-interface IProps {
+interface Props {
   layout?: HierarchyCircularNode;
   handleSelectNode: (
     node: HierarchyCircularNode
@@ -26,7 +26,7 @@ interface NodeSelection
 
 type IView = [number, number, number];
 
-export default ({ layout, handleSelectNode, model, selectedNode }: IProps) => {
+export default ({ layout, handleSelectNode, model, selectedNode }: Props) => {
   const [loaded, setLoaded] = useState(false);
   const [selected, setSelected] = useState<
     HierarchyCircularNode | undefined

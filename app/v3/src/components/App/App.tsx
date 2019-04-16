@@ -13,7 +13,7 @@ import Explore from '../Explore/Container';
 import Footer from '../UI/Footer';
 import Navigation from '../UI/Navigation';
 
-interface IProps {
+interface Props {
   appConfig: any;
   apiExperiment: APIExperiment;
   apiCore: APICore;
@@ -27,7 +27,7 @@ const App = ({
   apiCore,
   apiModel,
   apiMining
-}: IProps) => (
+}: Props) => (
   <div className='App'>
     <header>
       <Navigation

@@ -1,13 +1,10 @@
 import { mount } from 'enzyme';
-import Result from '../../../../../Experiment/Result/Result';
-import { MIP } from '../../../../../../types';
 import * as React from 'react';
-import {
-  createExperiment,
-  createModel,
-  waitForResult,
-  uid
-} from '../../../../../utils/TestUtils';
+
+import { MIP } from '../../../../../../types';
+import Result from '../../../../../Experiment/Result/Result';
+import { createExperiment, createModel, uid, waitForResult } from '../../../../../utils/TestUtils';
+import { VariableEntity } from '../../../../Core';
 
 // config
 
@@ -15,18 +12,18 @@ const modelSlug = `model-${uid()}`;
 const experimentCode = 'K_MEANS';
 const parameters = [{ code: 'k', value: 4 }];
 const datasets = [{ code: 'adni' }, { code: 'edsd' }];
-const model: any = (datasets: MIP.API.IVariableEntity[]) => ({
+const model: any = (datasets: VariableEntity[]) => ({
   query: {
-    "variables": [{ "code": "apoe4" }],
-    "coVariables": [{ "code": "subjectageyears" }, { "code": "av45" }],
-    "grouping": [],
-    "trainingDatasets": datasets,
-    "testingDatasets": [],
-    "validationDatasets": [],
-    "filters": "{\"condition\":\"AND\",\"rules\":[{\"id\":\"subjectageyears\",\"field\":\"subjectageyears\",\"type\":\"integer\",\"input\":\"number\",\"operator\":\"greater\",\"value\":50}],\"valid\":true}"
+    variables: [{ code: 'apoe4' }],
+    coVariables: [{ code: 'subjectageyears' }, { code: 'av45' }],
+    grouping: [],
+    trainingDatasets: datasets,
+    testingDatasets: [],
+    validationDatasets: [],
+    filters:
+      '{"condition":"AND","rules":[{"id":"subjectageyears","field":"subjectageyears","type":"integer","input":"number","operator":"greater","value":50}],"valid":true}'
   }
 });
-
 
 const payload: MIP.API.IExperimentPayload = {
   algorithms: [

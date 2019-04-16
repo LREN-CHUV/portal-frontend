@@ -1,14 +1,12 @@
 import { mount } from 'enzyme';
-import Result from '../../../../../Experiment/Result/Result';
-import { MIP } from '../../../../../../types';
 import * as React from 'react';
+
+import { MIP } from '../../../../../../types';
+import Result from '../../../../../Experiment/Result/Result';
 import {
-  createExperiment,
-  createModel,
-  datasets,
-  waitForResult,
-  uid
+    createExperiment, createModel, datasets, uid, waitForResult
 } from '../../../../../utils/TestUtils';
+import { VariableEntity } from '../../../../Core';
 
 // Review May 2018 experiment
 
@@ -17,7 +15,7 @@ import {
 const modelSlug = `model-${uid()}`;
 const experimentCode = 'anova';
 const parameters = [{ code: 'design', value: 'additive' }];
-const model: any = (datasets: MIP.API.IVariableEntity[]) => ({
+const model: any = (datasets: VariableEntity[]) => ({
   query: {
     variables: [{ code: 'montrealcognitiveassessment' }],
     coVariables: [],

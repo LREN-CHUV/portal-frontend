@@ -10,15 +10,12 @@ import App from '../App/App';
 
 // UNSTATED.logStateChanges = process.env.NODE_ENV === "development";
 
-interface IState {
-  version: string;
-  instanceName: string;
-  mode: string;
-  theme: string;
+interface State {
+  appConfig: any;
 }
 
-class AppContainer extends React.Component<any, IState> {
-  public state: IState = { version: 'beta', instanceName: 'CHUV-DEV', mode: 'local', theme: 'mip' };
+class AppContainer extends React.Component<any, State> {
+  public state: State = { appConfig: {} };
   private apiExperiment = new APIExperiment(config);
   private apiModel = new APIModel(config);
   private apiCore = new APICore(config);

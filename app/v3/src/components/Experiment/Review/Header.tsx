@@ -3,7 +3,7 @@ import { Button, FormControl, Glyphicon, Panel } from 'react-bootstrap';
 import { MIP } from '../../../types';
 import DropdownModel from '../../UI/DropdownModel';
 
-interface IProps {
+interface Props {
   handleGoBackToExplore: () => void;
   handleRunAnalysis: () => void;
   handleSaveModel: ({ title }: { title: string }) => void;
@@ -12,11 +12,11 @@ interface IProps {
   models?: MIP.API.IModelResponse[];
   isMock?: boolean;
 }
-export default class Header extends React.Component<IProps> {
+export default class Header extends React.Component<Props> {
   public state: any;
   private input: any;
 
-  constructor(props: IProps) {
+  constructor(props: Props) {
     super(props);
     this.state = {
       modelName: ''

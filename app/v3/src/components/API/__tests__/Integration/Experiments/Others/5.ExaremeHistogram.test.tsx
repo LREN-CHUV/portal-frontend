@@ -1,12 +1,10 @@
 import { mount } from 'enzyme';
-import Result from '../../../../../Experiment/Result/Result';
-import { MIP } from '../../../../../../types';
 import * as React from 'react';
-import {
-  createExperiment,
-  createModel,
-  waitForResult
-} from '../../../../../utils/TestUtils';
+
+import { MIP } from '../../../../../../types';
+import Result from '../../../../../Experiment/Result/Result';
+import { createExperiment, createModel, waitForResult } from '../../../../../utils/TestUtils';
+import { VariableEntity } from '../../../../Core';
 
 // config
 
@@ -14,7 +12,7 @@ const modelSlug = `model-${Math.round(Math.random() * 10000)}`;
 const experimentCode = 'WP_VARIABLES_HISTOGRAM';
 const parameters = [{ code: 'nobuckets', value: '4' }];
 const datasets = [{ code: 'adni' }];
-const model: any = (datasets: MIP.API.IVariableEntity[]) => ({
+const model: any = (datasets: VariableEntity[]) => ({
   query: {
     coVariables: [],
     filters: '',

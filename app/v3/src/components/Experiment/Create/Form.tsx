@@ -2,12 +2,12 @@ import * as React from 'react';
 import { Col, Form, FormControl, FormGroup, HelpBlock } from 'react-bootstrap';
 import { MIP } from '../../../types';
 
-interface IProps {
+interface Props {
   method?: any;
   parameters?: [MIP.API.IMethodPayload];
   handleChangeParameters: (parameters: any) => void;
 }
-class FForm extends React.Component<IProps> {
+class FForm extends React.Component<Props> {
   public render() {
     const { method, parameters } = this.props;
 

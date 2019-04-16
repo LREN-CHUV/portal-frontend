@@ -4,14 +4,15 @@ import * as React from 'react';
 import { Panel } from 'react-bootstrap';
 
 import { MIP } from '../../types';
+import { VariableEntity } from '../API/Core';
 
-interface IProps {
+interface Props {
   model?: MIP.API.IModelResponse;
   showDatasets?: boolean;
-  variables?: MIP.API.IVariableEntity[];
+  variables?: VariableEntity[];
 }
 
-class Model extends React.Component<IProps> {
+class Model extends React.Component<Props> {
   public render() {
     const { model, showDatasets, variables } = this.props;
     const query = model && model.query;

@@ -3,7 +3,7 @@ import { Button, FormControl, Glyphicon, Panel } from 'react-bootstrap';
 import { MIP } from '../../../types';
 import Dropdown from '../../UI/Dropdown';
 import DropdownModel from '../../UI/DropdownModel';
-interface IProps {
+interface Props {
   model?: MIP.API.IModelResponse;
   models?: MIP.API.IModelResponse[];
   experiments?: MIP.API.IExperimentResponse[];
@@ -15,11 +15,11 @@ interface IProps {
   ) => Promise<any>;
   handleSaveAndRunExperiment: (experimentName: string) => Promise<any>;
 }
-interface IState {
+interface State {
   experimentName: string;
 }
 
-export default class Header extends React.Component<IProps, IState> {
+export default class Header extends React.Component<Props, State> {
   public state = {
     experimentName: ''
   };

@@ -4,12 +4,10 @@ import { Container } from 'unstated';
 import { MIP } from '../../types';
 import { backendURL } from '../API';
 
-// TODO: Implement that all over 
 export interface Variable {
   code: string;
   label?: string;
 }
-// TODO: Implement that all over 
 export interface VariableEntity extends Variable {
   type?: string;
   sqlType?: string;

@@ -1,13 +1,12 @@
 import { mount } from 'enzyme';
-import Result from '../../../../../Experiment/Result/Result';
-import { MIP } from '../../../../../../types';
 import * as React from 'react';
+
+import { MIP } from '../../../../../../types';
+import Result from '../../../../../Experiment/Result/Result';
 import {
-  createExperiment,
-  createModel,
-  datasets,
-  waitForResult
+    createExperiment, createModel, datasets, waitForResult
 } from '../../../../../utils/TestUtils';
+import { VariableEntity } from '../../../../Core';
 
 // config
 
@@ -37,7 +36,7 @@ const kfold = {
     }
   ]
 };
-const model: any = (datasets: MIP.API.IVariableEntity[]) => ({
+const model: any = (datasets: VariableEntity[]) => ({
   query: {
     coVariables: [{ code: 'lefthippocampus' }],
     groupings: [],

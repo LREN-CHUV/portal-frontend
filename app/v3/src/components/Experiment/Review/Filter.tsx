@@ -3,19 +3,19 @@ import QueryBuilder from "jQuery-QueryBuilder";
 import * as React from "react";
 import { Button } from "react-bootstrap";
 
-interface IProps {
+interface Props {
   rules: any;
   filters: any;
   handleChangeFilter: any;
 }
 
-interface IState {
+interface State {
   loading: boolean;
   rulesChanged: boolean;
 }
 
-class Filter extends React.Component<IProps, IState> {
-  public state: IState = { rulesChanged: false, loading: false };
+class Filter extends React.Component<Props, State> {
+  public state: State = { rulesChanged: false, loading: false };
   protected queryBuilder = QueryBuilder; // prevents ts-lint to complain about ununused inport
   private ref: any;
 

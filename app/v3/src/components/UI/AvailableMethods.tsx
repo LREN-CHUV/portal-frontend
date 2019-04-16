@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { Button } from 'react-bootstrap';
+
 import { MIP } from '../../types';
+import { VariableEntity } from '../API/Core';
 
 const AvailableMethods = ({
   methods,
@@ -9,7 +11,7 @@ const AvailableMethods = ({
   model
 }: {
   methods: MIP.API.IMethods | undefined;
-  variables: MIP.API.IVariableEntity[] | undefined;
+  variables: VariableEntity[] | undefined;
   handleSelectMethod: (method: MIP.API.IMethod) => void;
   model: MIP.API.IModelResponse | undefined;
 }) => {

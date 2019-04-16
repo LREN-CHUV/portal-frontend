@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import { MIP } from '../../../types';
 import Dropdown from '../../UI/Dropdown';
 
-interface IProps {
+interface Props {
   experiment?: MIP.API.IExperimentResponse;
   experiments?: MIP.API.IExperimentResponse[];
   handleSelectExperiment: any;
@@ -20,7 +20,7 @@ export default ({
   handleSelectExperiment,
   handleShareExperiment,
   handleCreateNewExperiment
-}: IProps) => {
+}: Props) => {
   const name = experiment && experiment.name;
   const modelDefinitionId = experiment && experiment.modelDefinitionId;
   const shared = experiment && experiment.shared;

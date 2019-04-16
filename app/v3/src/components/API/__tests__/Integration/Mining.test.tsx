@@ -1,10 +1,11 @@
-import APIMining from '../../Mining';
 import { MIP } from '../../../../types';
+import { createModel, datasets } from '../../../utils/TestUtils';
+import { VariableEntity } from '../../Core';
+import APIMining from '../../Mining';
 import config from '../../RequestHeaders';
-import { datasets, createModel } from '../../../utils/TestUtils';
 
 const modelSlug = `model-${Math.round(Math.random() * 10000)}`;
-const buildModel: any = (datasets: MIP.API.IVariableEntity[]) => ({
+const buildModel: any = (datasets: VariableEntity[]) => ({
   query: {
     coVariables: [{ code: 'alzheimerbroadcategory' }],
     groupings: [],

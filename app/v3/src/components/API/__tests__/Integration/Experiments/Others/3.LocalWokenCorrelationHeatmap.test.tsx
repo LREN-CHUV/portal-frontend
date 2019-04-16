@@ -1,5 +1,7 @@
 import { mount } from 'enzyme';
 import Result from '../../../../../Experiment/Result/Result';
+import { VariableEntity } from '../../../../Core';
+
 import { MIP } from '../../../../../../types';
 import * as React from 'react';
 import {
@@ -13,7 +15,7 @@ import {
 
 const modelSlug = `model-${Math.round(Math.random() * 10000)}`;
 const experimentCode = 'correlationHeatmap';
-const model: any = (datasets: MIP.API.IVariableEntity[]) => ({
+const model: any = (datasets: VariableEntity[]) => ({
   query: {
     coVariables: [
       {

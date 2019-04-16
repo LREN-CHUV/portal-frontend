@@ -9,13 +9,13 @@ import Helpdesk from './Helpdesk';
 
 import './Navigation.css';
 
-interface IProps extends RouteComponentProps<any> {
+interface Props extends RouteComponentProps<any> {
   appConfig: any;
   apiExperiment: APIExperiment;
   apiModel: APIModel;
 }
 
-class Navigation extends React.Component<IProps> {
+class Navigation extends React.Component<Props> {
   public render() {
     const { apiExperiment, apiModel, appConfig } = this.props;
     const instanceName = appConfig.instanceName || 'MIP';

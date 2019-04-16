@@ -13,14 +13,14 @@ import Validation from '../../UI/Validation';
 import '../Experiment.css';
 import Help from './Help';
 
-interface IProps extends RouteComponentProps<any> {
+interface Props extends RouteComponentProps<any> {
   apiExperiment: APIExperiment;
   apiCore: APICore;
   apiModel: APIModel;
   appConfig: any;
 }
 
-interface IState {
+interface State {
   parameters?: [MIP.API.IMethodPayload];
   query?: MIP.API.IQuery;
   method?: MIP.API.IMethod;
@@ -28,8 +28,8 @@ interface IState {
   kfold: number;
 }
 
-class Container extends React.Component<IProps, IState> {
-  public state!: IState; // TODO: double check init https://mariusschulz.com/blog/typescript-2-7-strict-property-initialization
+class Container extends React.Component<Props, State> {
+  public state!: State; // TODO: double check init https://mariusschulz.com/blog/typescript-2-7-strict-property-initialization
 
   public async componentDidMount() {
     const {

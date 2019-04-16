@@ -1,9 +1,14 @@
+import './Review.css';
+
+import { async } from 'q';
 import queryString from 'query-string';
 import * as React from 'react';
 import { Panel } from 'react-bootstrap';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
+
 import { MIP } from '../../../types';
 import { APICore, APIMining, APIModel } from '../../API';
+import { VariableEntity } from '../../API/Core';
 import { IAlert } from '../../UI/Alert';
 import Model from '../../UI/Model';
 import Validation from '../../UI/Validation';
@@ -11,22 +16,20 @@ import Content from './Content';
 import Filter from './Filter';
 import ExperimentReviewHeader from './Header';
 
-import './Review.css';
-import { async } from 'q';
-interface IProps extends RouteComponentProps<any> {
+interface Props extends RouteComponentProps<any> {
   apiModel: APIModel;
   apiCore: APICore;
   apiMining: APIMining;
 }
-interface IState {
+interface State {
   alert?: IAlert;
   loadingSummary?: boolean;
   query?: MIP.API.IQuery;
   summaryStatistics?: any;
 }
 
-class Container extends React.Component<IProps, IState> {
-  public state: IState = {};
+class Container extends React.Component<Props, State> {
+  public state: State = {};
 
   public async componentDidMount() {
     const qs = queryString.parse(this.props.location.search);
@@ -86,7 +89,7 @@ class Container extends React.Component<IProps, IState> {
     }
   }
 
-  public async componentWillReceiveProps(nextProps: IProps, prevState: IState) {
+  public async componentWillReceiveProps(nextProps: Props, prevState: State) {
     const params = this.urlParams(nextProps);
     const slug = params && params.slug;
     const prevParams = this.urlParams(this.props);
@@ -115,7 +118,7 @@ class Container extends React.Component<IProps, IState> {
       }
 
       const originalVar = variables.find(
-        (variable: MIP.API.IVariableEntity) => variable.code === code
+        (variable: VariableEntity) => variable.code === code
       );
 
       const output: any = originalVar
@@ -187,7 +190,9 @@ class Container extends React.Component<IProps, IState> {
         if (r.rules) {
           extractVariablesFromFilter(r);
         }
-        if (r.id) { allVariables.push(r.id); }
+        if (r.id) {
+          allVariables.push(r.id);
+        }
       });
 
     if (query && query.filters) {
@@ -367,7 +372,7 @@ class Container extends React.Component<IProps, IState> {
   };
 
   private urlParams = (
-    props: IProps
+    props: Props
   ):
     | {
         slug: string | undefined;

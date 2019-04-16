@@ -1,14 +1,15 @@
 import request from 'request-promise-native';
 import stringHash from 'string-hash';
 import { Container } from 'unstated';
+
+import { VariableEntity } from './Core';
 import { MIP } from '../../types';
 import { backendURL } from '../API';
 
-// TODO: Implement that all over 
 export interface MiningResponseShape {
   data?: any;
   error?: string;
-  dataset?: MIP.API.IVariableEntity;
+  dataset?: VariableEntity;
   loading?: boolean;
 }
 
@@ -102,8 +103,8 @@ class Mining extends Container<MIP.Store.IMiningState> {
     payload
   }: {
     payload: {
-      datasets: MIP.API.IVariableEntity[];
-      variables: MIP.API.IVariableEntity[];
+      datasets: VariableEntity[];
+      variables: VariableEntity[];
     };
   }): Promise<any> => {
     await this.setState({

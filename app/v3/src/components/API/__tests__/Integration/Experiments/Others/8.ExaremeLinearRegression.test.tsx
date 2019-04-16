@@ -1,12 +1,10 @@
 import { mount } from 'enzyme';
-import Result from '../../../../../Experiment/Result/Result';
-import { MIP } from '../../../../../../types';
 import * as React from 'react';
-import {
-  createExperiment,
-  createModel,
-  waitForResult
-} from '../../../../../utils/TestUtils';
+
+import { MIP } from '../../../../../../types';
+import Result from '../../../../../Experiment/Result/Result';
+import { createExperiment, createModel, waitForResult } from '../../../../../utils/TestUtils';
+import { VariableEntity } from '../../../../Core';
 
 // Review December 2018 experiment
 
@@ -15,7 +13,7 @@ import {
 const modelSlug = `model-${Math.round(Math.random() * 10000)}`;
 const experimentCode = 'WP_LINEAR_REGRESSION';
 const datasets = [{ code: 'adni' }, { code: 'edsd' }];
-const model: any = (datasets: MIP.API.IVariableEntity[]) => ({
+const model: any = (datasets: VariableEntity[]) => ({
   query: {
     coVariables: [
       {
