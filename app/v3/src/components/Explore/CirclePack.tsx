@@ -3,24 +3,23 @@ import './CirclePack.css';
 import * as d3 from 'd3';
 import React, { useEffect, useRef, useState } from 'react';
 
-import { MIP } from '../../types';
-import { IModel, IVariableNode } from './Container';
+import { HierarchyCircularNode, Model } from './Container';
 
 interface IProps {
-  layout?: d3.HierarchyCircularNode<MIP.Internal.IVariableDatum>;
+  layout?: HierarchyCircularNode;
   handleSelectNode: (
-    node: d3.HierarchyCircularNode<MIP.Internal.IVariableDatum>
+    node: HierarchyCircularNode
   ) => void;
-  model: IModel;
+  model: Model;
   selectedNode:
-    | d3.HierarchyCircularNode<MIP.Internal.IVariableDatum>
+    | HierarchyCircularNode
     | undefined;
 }
 
-interface INodeSelection
+interface NodeSelection
   extends d3.Selection<
     Element | d3.EnterElement | Document | Window | SVGCircleElement | null,
-    d3.HierarchyCircularNode<MIP.Internal.IVariableDatum>,
+    HierarchyCircularNode,
     SVGGElement,
     {}
   > {}
@@ -29,11 +28,8 @@ type IView = [number, number, number];
 
 export default ({ layout, handleSelectNode, model, selectedNode }: IProps) => {
   const [loaded, setLoaded] = useState(false);
-  // const [root, setRoot] = useState<
-  //   d3.HierarchyCircularNode<MIP.Internal.IVariableDatum> | undefined
-  // >(undefined);
   const [selected, setSelected] = useState<
-    d3.HierarchyCircularNode<MIP.Internal.IVariableDatum> | undefined
+    HierarchyCircularNode | undefined
   >(undefined);
   const gRef = useRef<SVGSVGElement>(null);
   const dRef = useRef<HTMLDivElement>(null);
@@ -44,9 +40,9 @@ export default ({ layout, handleSelectNode, model, selectedNode }: IProps) => {
   const padding: number = 1.5;
   //
   let view: [number, number, number];
-  let focus: d3.HierarchyCircularNode<MIP.Internal.IVariableDatum>;
-  let node: INodeSelection;
-  let label: INodeSelection;
+  let focus: HierarchyCircularNode;
+  let node: NodeSelection;
+  let label: NodeSelection;
   let color: d3.ScaleLinear<string, string>;
   let zoom: any;
 
@@ -58,11 +54,36 @@ export default ({ layout, handleSelectNode, model, selectedNode }: IProps) => {
 
     if (selectedNode) {
       console.log(selectedNode);
-      // const event = document.createEvent( 'Event');
-      // event.initEvent('click', true, true);
-      // d3.select(svgRef).dispatchEvent(event)
+
+      // const targetView = [
+      //   selectedNode.x,
+      //   selectedNode.y,
+      //   selectedNode.r * 2 + padding
+      // ];
+
+      // const iview: IView = [selectedNode.x, selectedNode.y, selectedNode.r * 2]
+
+      // d3.transition<d3.BaseType>()
+      //   .duration(750)
+      //   // .call(zoomTo(iview))
+      //   .tween('zoom', () => {
+      //     const i = d3.interpolateZoom(view, iview);
+
+      //     return (t: number) => zoomTo(i(t));
+      //   });
+
+      // zoomTo([selectedNode.x, selectedNode.y, selectedNode.r * 2]);
+      const event = document.createEvent('Event');
+      event.initEvent('click', true, true);
+      const n = d3.select(svgRef).node();
+      if (n) {
+        n.dispatchEvent(event);
+      }
+
+      zoom(selectedNode);
+
       // const node = selectedNode.node();
-      // selectedNode.target().dispatchEvent(event);
+      // selectedNode.dispatchEvent(event);
 
       // const { x, y } = selectedNode;
       // const t = d3.zoomIdentity
@@ -92,7 +113,7 @@ export default ({ layout, handleSelectNode, model, selectedNode }: IProps) => {
   }, [layout, selectedNode]);
 
   const depth = (
-    n: d3.HierarchyCircularNode<MIP.Internal.IVariableDatum>
+    n: HierarchyCircularNode
   ): number =>
     n.children ? 1 + (d3.max<number>(n.children.map(depth)) || 0) : 1;
 
@@ -114,14 +135,14 @@ export default ({ layout, handleSelectNode, model, selectedNode }: IProps) => {
 
   zoom = (
     circleNode:
-      | d3.HierarchyCircularNode<MIP.Internal.IVariableDatum>
+      | HierarchyCircularNode
       | undefined
   ) => {
     if (!circleNode) {
       return;
     }
 
-    // console.log(d3.event)
+    console.log('zoom called', d3.event);
     // console.log(circleNode.x, circleNode.y, circleNode.r)
 
     focus = circleNode;
@@ -130,8 +151,7 @@ export default ({ layout, handleSelectNode, model, selectedNode }: IProps) => {
     const targetView: IView = circleNode.children
       ? [focus.x, focus.y, focus.r * 2 + padding]
       : [focus.x, focus.y, focus.r * 3 + padding];
-    const transition = d3
-      .transition<d3.BaseType>()
+    d3.transition<d3.BaseType>()
       .duration(d3.event.altKey ? 7500 : 750)
       .tween('zoom', () => {
         const i = d3.interpolateZoom(view, targetView);
@@ -139,41 +159,41 @@ export default ({ layout, handleSelectNode, model, selectedNode }: IProps) => {
         return (t: number) => zoomTo(i(t));
       });
 
-    const shouldDisplay = (
-      dd: d3.HierarchyCircularNode<MIP.Internal.IVariableDatum>,
-      ffocus: d3.HierarchyCircularNode<MIP.Internal.IVariableDatum>
-    ): boolean => dd.parent === ffocus || !ffocus.children; // || !dd.children;
+    // const shouldDisplay = (
+    //   dd: HierarchyCircularNode,
+    //   ffocus: HierarchyCircularNode
+    // ): boolean => dd.parent === ffocus || !ffocus.children; // || !dd.children;
 
     // Revert all nodes fill color
     // console.log('zoom');
     node
-      .transition()
-      .duration(500)
+      // .transition()
+      // .duration(250)
       .style('fill', d => (d.children ? color(d.depth) : 'white'));
 
     node
       .filter(d => d !== layout && d.data.code === circleNode.data.code)
-      .transition()
-      .duration(250)
+      // .transition()
+      // .duration(250)
       .style('fill', '#8C9AA2');
 
-    label
-      .filter(function(dd) {
-        const el = this as HTMLElement;
-        return (
-          shouldDisplay(dd, focus) ||
-          (el && el.style && el.style.display === 'inline')
-        );
-      })
-      .transition(transition as any)
-      .style('fill-opacity', dd => (shouldDisplay(dd, focus) ? 1 : 0))
-      .on('start', function(dd) {
-        const el = this as HTMLElement;
-        if (shouldDisplay(dd, focus)) {
-          el.style.display = 'inline';
-          shouldDisplay(dd, focus);
-        }
-      });
+    // label
+    //   .filter(function(dd) {
+    //     const el = this as HTMLElement;
+    //     return (
+    //       shouldDisplay(dd, focus) ||
+    //       (el && el.style && el.style.display === 'inline')
+    //     );
+    //   })
+    //   .transition(transition as any)
+    //   .style('fill-opacity', dd => (shouldDisplay(dd, focus) ? 1 : 0))
+    //   .on('start', function(dd) {
+    //     const el = this as HTMLElement;
+    //     if (shouldDisplay(dd, focus)) {
+    //       el.style.display = 'inline';
+    //       shouldDisplay(dd, focus);
+    //     }
+    //   });
   };
 
   const d3Render = () => {

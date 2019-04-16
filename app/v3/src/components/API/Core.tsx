@@ -4,6 +4,20 @@ import { Container } from 'unstated';
 import { MIP } from '../../types';
 import { backendURL } from '../API';
 
+// TODO: Implement that all over 
+export interface Variable {
+  code: string;
+  label?: string;
+}
+// TODO: Implement that all over 
+export interface VariableEntity extends Variable {
+  type?: string;
+  sqlType?: string;
+  description?: string;
+  enumerations?: Variable[];
+  group?: Variable[];
+}
+
 class Core extends Container<MIP.Store.ICoreState> {
   public state: MIP.Store.ICoreState = {};
 
@@ -16,7 +30,7 @@ class Core extends Container<MIP.Store.ICoreState> {
     this.backendURL = backendURL;
   }
 
-  public lookup = (code: string): MIP.API.IVariableEntity => {
+  public lookup = (code: string): VariableEntity => {
     const variables = this.state.variables;
     const originalVar =
       variables && variables.find(variable => variable.code === code);

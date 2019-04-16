@@ -1,23 +1,20 @@
-import * as d3 from 'd3';
-import React, { useEffect, useState } from 'react';
-import { MIP } from '../../types';
-import { APICore, APIMining } from '../API';
-import d3Hierarchy from './d3Hierarchy';
-import Explore from './Explore';
 import './Explore.css';
 
-interface IProps {
-  apiCore: APICore;
-  apiMining: APIMining;
-}
+import * as d3 from 'd3';
+import React, { useEffect, useState } from 'react';
 
-export type IVariableNode = d3.HierarchyNode<MIP.Internal.IVariableDatum>;
+import { APICore, APIMining } from '../API';
+import { VariableEntity } from '../API/Core';
+import { d3Hierarchy, HierarchyNode, VariableDatum } from './d3Hierarchy';
+import Explore from './Explore';
 
-export interface IModel {
-  covariables: IVariableNode[] | undefined;
-  filters: IVariableNode[] | undefined;
-  groupings: IVariableNode[] | undefined;
-  variable: IVariableNode | undefined;
+export type HierarchyCircularNode = d3.HierarchyCircularNode<VariableDatum>;
+
+export interface Model {
+  covariables: HierarchyNode[] | undefined;
+  filters: HierarchyNode[] | undefined;
+  groupings: HierarchyNode[] | undefined;
+  variable: HierarchyNode | undefined;
 }
 
 export enum ModelType {
@@ -25,15 +22,19 @@ export enum ModelType {
   FILTER,
   VARIABLE
 }
+interface Props {
+  apiCore: APICore;
+  apiMining: APIMining;
+}
 
-export default ({ apiCore, apiMining }: IProps) => {
-  const [selectedDatasets, setSelectedDatasets] = useState<
-    MIP.API.IVariableEntity[]
-  >([]);
+export default ({ apiCore, apiMining }: Props) => {
+  const [selectedDatasets, setSelectedDatasets] = useState<VariableEntity[]>(
+    []
+  );
   const [selectedNode, setSelectedNode] = useState<
-    d3.HierarchyCircularNode<MIP.Internal.IVariableDatum> | undefined
+  HierarchyCircularNode | undefined
   >();
-  const [model, setModel] = useState<IModel>({
+  const [model, setModel] = useState<Model>({
     covariables: undefined,
     filters: undefined,
     groupings: undefined,
@@ -56,7 +57,7 @@ export default ({ apiCore, apiMining }: IProps) => {
   }, [apiCore.state.datasets]);
 
   const handleSelectNode = async (
-    node: d3.HierarchyCircularNode<MIP.Internal.IVariableDatum>
+    node: HierarchyCircularNode
   ) => {
     setSelectedNode(node);
 
@@ -70,7 +71,7 @@ export default ({ apiCore, apiMining }: IProps) => {
     }
   };
 
-  const handleSelectDataset = (dataset: MIP.API.IVariableEntity) => {
+  const handleSelectDataset = (dataset: VariableEntity) => {
     const nextSelection = selectedDatasets
       .map(d => d.code)
       .includes(dataset.code)
@@ -82,7 +83,7 @@ export default ({ apiCore, apiMining }: IProps) => {
 
   const handleChangeModel = (
     type: ModelType,
-    node: IVariableNode | undefined = undefined,
+    node: HierarchyNode | undefined = undefined,
     remove: boolean = false
   ) => {
     if (type === ModelType.VARIABLE) {
@@ -100,7 +101,9 @@ export default ({ apiCore, apiMining }: IProps) => {
           ...model,
           covariables:
             (model.covariables &&
-              model.covariables.filter(c => c.data.code !== node.data.code)) ||
+              model.covariables.filter(
+                c => c && c.data.code !== node.data.code
+              )) ||
             undefined
         };
         setModel(nextModel);
@@ -131,10 +134,11 @@ export default ({ apiCore, apiMining }: IProps) => {
 
   const hierarchy = d3Hierarchy(apiCore.state.hierarchy);
   const bubbleLayout = d3
-    .pack<MIP.Internal.IVariableDatum>()
+    .pack<VariableDatum>()
     .size([diameter, diameter])
     .padding(padding);
-  const circlePack = hierarchy && bubbleLayout(hierarchy);
+  const circlePack: HierarchyCircularNode | undefined =
+    hierarchy && bubbleLayout(hierarchy);
 
   return (
     <Explore
@@ -150,22 +154,3 @@ export default ({ apiCore, apiMining }: IProps) => {
     />
   );
 };
-
-// const variableType = (type: string)  => {
-//   switch(type) {
-//     case 'integer':
-//     return MIP.Internal.IVariableType.Integer;
-
-//     case 'real':
-//     return MIP.Internal.IVariableType.Real;
-
-//     case 'binominal':
-//     return MIP.Internal.IVariableType.Binominal;
-
-//     case 'polynominal':
-//     return MIP.Internal.IVariableType.Polynominal;
-
-//     default:
-//     return undefined;
-//   }
-// }

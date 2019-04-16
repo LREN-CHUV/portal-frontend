@@ -1,28 +1,26 @@
 import './Explore.css';
 
-import * as d3 from 'd3';
 import React from 'react';
 import { Button, Checkbox, Panel } from 'react-bootstrap';
 
-import { MIP } from '../../types';
+import { VariableEntity } from '../API/Core';
 import CirclePack from './CirclePack';
-import { IModel, IVariableNode, ModelType } from './Container';
+import { HierarchyCircularNode, Model, ModelType } from './Container';
+import { HierarchyNode } from './d3Hierarchy';
 import Histograms from './Histograms';
 
-interface IProps {
-  datasets?: MIP.API.IVariableEntity[];
-  selectedDatasets: MIP.API.IVariableEntity[];
-  selectedNode: d3.HierarchyCircularNode<MIP.Internal.IVariableDatum> | undefined;
-  circlePack?: d3.HierarchyCircularNode<MIP.Internal.IVariableDatum>;
+interface Props {
+  datasets?: VariableEntity[];
+  selectedDatasets: VariableEntity[];
+  selectedNode: HierarchyCircularNode | undefined;
+  circlePack?: HierarchyCircularNode;
   histograms?: any;
-  model: IModel;
+  model: Model;
   handleSelectDataset: (e: any) => void;
-  handleSelectNode: (
-    node: d3.HierarchyCircularNode<MIP.Internal.IVariableDatum>
-  ) => void;
+  handleSelectNode: (node: HierarchyCircularNode) => void;
   handleChangeModel: (
     type: ModelType,
-    node?: IVariableNode,
+    node?: HierarchyNode,
     remove?: boolean
   ) => void;
 }
@@ -37,7 +35,7 @@ export default ({
   handleSelectNode,
   handleSelectDataset,
   handleChangeModel
-}: IProps) => {
+}: Props) => {
   return (
     <div className='Explore'>
       <div className='header' />

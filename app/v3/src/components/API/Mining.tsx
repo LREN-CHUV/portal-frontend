@@ -4,6 +4,14 @@ import { Container } from 'unstated';
 import { MIP } from '../../types';
 import { backendURL } from '../API';
 
+// TODO: Implement that all over 
+export interface MiningResponseShape {
+  data?: any;
+  error?: string;
+  dataset?: MIP.API.IVariableEntity;
+  loading?: boolean;
+}
+
 //
 class Mining extends Container<MIP.Store.IMiningState> {
   /*
@@ -12,8 +20,8 @@ class Mining extends Container<MIP.Store.IMiningState> {
     "data": [{ "data": [{ x: n }] }] 
   */
   public static normalizeHeatmapData = (
-    heatmap: MIP.Store.IMiningResponseShape
-  ): MIP.Store.IMiningResponseShape[] => {
+    heatmap: MiningResponseShape
+  ): MiningResponseShape[] => {
     if (Array.isArray(heatmap.data)) {
       const isDataNested = heatmap.data.map(d => d.data).includes(true);
       if (isDataNested) {
@@ -191,7 +199,7 @@ class Mining extends Container<MIP.Store.IMiningState> {
     payload
   }: {
     payload: MIP.API.IMiningPayload;
-  }): Promise<MIP.Store.IMiningResponseShape> => {
+  }): Promise<MiningResponseShape> => {
     const copyOfDataset = payload.datasets && [...payload.datasets];
 
     try {

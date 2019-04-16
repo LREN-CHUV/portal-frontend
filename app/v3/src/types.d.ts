@@ -191,15 +191,6 @@ export declare namespace MIP.Internal {
   //   Binominal,
   //   Polynominal
   // }
-  export interface IVariableDatum {
-    code: string;
-    description?: string;
-    label: string;
-    isVariable?: boolean;
-    children?: IVariableDatum[];
-    type?: string // IVariableType; Whaaaaat ? makes webpack crash FIXME:
-  }
-
   export interface IQuery extends MIP.API.IQuery {
     filtersFromParams?: any[];
   }

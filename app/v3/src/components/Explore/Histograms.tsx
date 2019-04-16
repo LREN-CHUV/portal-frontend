@@ -2,10 +2,10 @@ import * as d3 from 'd3';
 import React, { useRef } from 'react';
 import { Tab, Tabs } from 'react-bootstrap';
 
-import { MIP } from '../../types';
+import { MiningResponseShape } from '../API/Mining';
 import Highchart from '../Experiment/Result/formats/Highchart';
 import Loading from '../UI/Loader';
-import { IVariableNode } from './Container';
+import { HierarchyCircularNode } from './Container';
 
 export default ({
   handleSelectedNode: handleSelectVariable,
@@ -13,18 +13,18 @@ export default ({
   selectedNode: selectedVariable
 }: {
   handleSelectedNode: (
-    node: d3.HierarchyCircularNode<MIP.Internal.IVariableDatum>
+    node: HierarchyCircularNode
   ) => void;
-  histograms: MIP.Store.IMiningResponseShape;
-  selectedNode: d3.HierarchyCircularNode<MIP.Internal.IVariableDatum> | undefined;
+  histograms: MiningResponseShape;
+  selectedNode: HierarchyCircularNode | undefined;
 }) => {
   const dRef = useRef<HTMLDivElement>(null);
   const shortcutsRef = dRef.current;
 
   const breadcrumb = (
-    variable: d3.HierarchyCircularNode<MIP.Internal.IVariableDatum>,
-    paths: Array<d3.HierarchyCircularNode<MIP.Internal.IVariableDatum>> = []
-  ): Array<d3.HierarchyCircularNode<MIP.Internal.IVariableDatum>> =>
+    variable: HierarchyCircularNode,
+    paths: HierarchyCircularNode[] = []
+  ): HierarchyCircularNode[] =>
     variable && variable.parent
       ? breadcrumb(variable.parent, [...paths, variable])
       : paths;

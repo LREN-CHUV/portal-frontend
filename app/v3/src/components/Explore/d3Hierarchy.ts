@@ -1,7 +1,17 @@
 import * as d3 from 'd3';
-import { MIP } from '../../types';
 
-const hierarchyTransform = (node: any): MIP.Internal.IVariableDatum | undefined =>
+export interface VariableDatum {
+  code: string;
+  description?: string;
+  label: string;
+  isVariable?: boolean;
+  children?: VariableDatum[];
+  type?: string;
+}
+
+export type HierarchyNode = d3.HierarchyNode<VariableDatum>
+
+const hierarchyTransform = (node: any): VariableDatum | undefined =>
   node
     ? {
         children: [
@@ -23,7 +33,7 @@ const hierarchyTransform = (node: any): MIP.Internal.IVariableDatum | undefined 
       }
     : undefined;
 
-export default (hierarchy: any) => {
+export const d3Hierarchy = (hierarchy: any): HierarchyNode | undefined => {
   const root = hierarchyTransform(hierarchy);
   const hierarchyNode = root
     ? d3
