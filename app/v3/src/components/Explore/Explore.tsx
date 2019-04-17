@@ -16,13 +16,9 @@ interface Props {
   hierarchy?: HierarchyNode;
   histograms?: any;
   model: Model;
-  handleSelectDataset: (e: any) => void;
+  handleSelectDataset: (e: VariableEntity) => void;
   handleSelectNode: (node: HierarchyCircularNode) => void;
-  handleChangeModel: (
-    type: ModelType,
-    node?: HierarchyNode,
-    remove?: boolean
-  ) => void;
+  handleChangeModel: (type: ModelType, node?: HierarchyNode, remove?: boolean) => void;
 }
 
 export default ({
@@ -53,9 +49,7 @@ export default ({
                     onChange={() => {
                       handleSelectDataset(dataset);
                     }}
-                    checked={selectedDatasets
-                      .map(s => s.code)
-                      .includes(dataset.code)}>
+                    checked={selectedDatasets.map(s => s.code).includes(dataset.code)}>
                     {dataset.label}
                   </Checkbox>
                 ))}
@@ -66,12 +60,14 @@ export default ({
               <h3>Variables</h3>
             </Panel.Title>
             <Panel.Body>
-              <CirclePack
-                hierarchy={hierarchy}
-                handleSelectNode={handleSelectNode}
-                selectedNode={selectedNode}
-                model={model}
-              />
+              {hierarchy && (
+                <CirclePack
+                  hierarchy={hierarchy}
+                  handleSelectNode={handleSelectNode}
+                  selectedNode={selectedNode}
+                  model={model}
+                />
+              )}
             </Panel.Body>
           </Panel>
         </div>
@@ -81,11 +77,7 @@ export default ({
               <h3>Statistics Summary</h3>
             </Panel.Title>
             <Panel.Body>
-              <Histograms
-                histograms={histograms}
-                selectedNode={selectedNode}
-                handleSelectedNode={handleSelectNode}
-              />
+              <Histograms histograms={histograms} selectedNode={selectedNode} handleSelectedNode={handleSelectNode} />
             </Panel.Body>
           </Panel>
           <Panel className='model'>
@@ -105,13 +97,7 @@ export default ({
                     <Button
                       bsStyle={'link'}
                       // tslint:disable-next-line jsx-no-lambda
-                      onClick={() =>
-                        handleChangeModel(
-                          ModelType.VARIABLE,
-                          model.variable,
-                          true
-                        )
-                      }>
+                      onClick={() => handleChangeModel(ModelType.VARIABLE, model.variable, true)}>
                       X
                     </Button>
 
@@ -143,9 +129,7 @@ export default ({
                           bsStyle={'link'}
                           key={`$btn-{i}`}
                           // tslint:disable-next-line jsx-no-lambda
-                          onClick={() =>
-                            handleChangeModel(ModelType.COVARIABLE, c, true)
-                          }>
+                          onClick={() => handleChangeModel(ModelType.COVARIABLE, c, true)}>
                           X
                         </Button>
                         <a

@@ -39,9 +39,6 @@ export default ({ apiCore, apiMining }: Props) => {
     variable: undefined
   });
 
-  const diameter = 800;
-  const padding = 1.5;
-
   useEffect(() => {
     const hierarchy = apiCore.state.hierarchy;
     if (hierarchy) {
