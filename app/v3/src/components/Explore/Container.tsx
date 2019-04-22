@@ -40,17 +40,19 @@ export default ({ apiCore, apiMining }: Props) => {
   });
 
   useEffect(() => {
-    const hierarchy = apiCore.state.hierarchy;
-    if (hierarchy) {
-      setHierarchy(d3Hierarchy(hierarchy));
-    }
-
     const datasets = apiCore.state.datasets;
     if (datasets) {
       setDatasets(datasets);
       setSelectedDatasets(datasets);
     }
-  }, [apiCore.state.datasets, apiCore.state.hierarchy]);
+  }, [apiCore.state.datasets]);
+
+  useEffect(() => {
+    const hierarchy = apiCore.state.hierarchy;
+    if (hierarchy) {
+      setHierarchy(d3Hierarchy(hierarchy));
+    }
+  }, [apiCore.state.hierarchy])
 
   const handleSelectNode = async (node: HierarchyCircularNode) => {
     setSelectedNode(node);

@@ -176,7 +176,7 @@ export default (props: Props) => {
   return (
     <div>
       <h6>Shortcuts</h6>
-      <Shortcuts hierarchy={hierarchy} />
+      <Shortcuts hierarchy={hierarchy} zoom={zoom}/>
       <svg ref={svgRef} />
     </div>
   );

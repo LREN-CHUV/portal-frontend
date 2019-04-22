@@ -9,6 +9,7 @@ import { renderLifeCycle } from './renderLifeCycle';
 
 interface Props {
   hierarchy: HierarchyNode;
+  zoom: Function;
   // handleSelectNode: (node: HierarchyCircularNode) => void;
   // model: Model;
   // selectedNode: HierarchyCircularNode | undefined;
@@ -17,7 +18,7 @@ interface Props {
 export default (props: Props) => {
   const divRef = useRef(null);
 
-  const { hierarchy } = props;
+  const { hierarchy, zoom } = props;
 
   renderLifeCycle({
     firstRender: () => {
@@ -27,10 +28,10 @@ export default (props: Props) => {
         .join('a')
         .style('fill-opacity', d => (d.parent === hierarchy ? 1 : 0))
         .style('display', d => (d.parent === hierarchy ? 'inline' : 'none'))
-        .text(d => d.data.label);
-      // .on('click', d => {
-      //   zoom(d);
-      // });
+        .text(d => d.data.label)
+        .on('click', d => {
+          zoom(d);
+        });
     },
     // updateRender: () => {
     // },
