@@ -1,37 +1,44 @@
-import './Explore.css';
-
 import React from 'react';
 import { Button, Checkbox, Panel } from 'react-bootstrap';
-
 import { VariableEntity } from '../API/Core';
-import CirclePack from './CirclePack';
 import { HierarchyCircularNode, Model, ModelType } from './Container';
 import { HierarchyNode } from './d3Hierarchy';
+import './Explore.css';
 import Histograms from './Histograms';
+import Shortcuts from './Shortcuts';
 
-interface Props {
+export interface ExploreProps {
+  children?: any;
   datasets?: VariableEntity[];
   selectedDatasets: VariableEntity[];
   selectedNode: HierarchyCircularNode | undefined;
-  hierarchy?: HierarchyNode;
+  hierarchy: HierarchyNode;
   histograms?: any;
   model: Model;
   handleSelectDataset: (e: VariableEntity) => void;
   handleSelectNode: (node: HierarchyCircularNode) => void;
-  handleChangeModel: (type: ModelType, node?: HierarchyNode, remove?: boolean) => void;
+  handleChangeModel: (
+    type: ModelType,
+    node?: HierarchyNode,
+    remove?: boolean
+  ) => void;
+  zoom: Function;
 }
 
-export default ({
-  datasets,
-  selectedDatasets,
-  hierarchy,
-  selectedNode,
-  histograms,
-  model,
-  handleSelectNode,
-  handleSelectDataset,
-  handleChangeModel
-}: Props) => {
+export default (props: ExploreProps) => {
+  const {
+    children,
+    hierarchy,
+    datasets,
+    selectedDatasets,
+    selectedNode,
+    histograms,
+    model,
+    handleSelectNode,
+    handleSelectDataset,
+    handleChangeModel,
+    zoom
+  } = props;
   return (
     <div className='Explore'>
       <div className='header' />
@@ -49,7 +56,9 @@ export default ({
                     onChange={() => {
                       handleSelectDataset(dataset);
                     }}
-                    checked={selectedDatasets.map(s => s.code).includes(dataset.code)}>
+                    checked={selectedDatasets
+                      .map(s => s.code)
+                      .includes(dataset.code)}>
                     {dataset.label}
                   </Checkbox>
                 ))}
@@ -60,14 +69,9 @@ export default ({
               <h3>Variables</h3>
             </Panel.Title>
             <Panel.Body>
-              {hierarchy && (
-                <CirclePack
-                  hierarchy={hierarchy}
-                  handleSelectNode={handleSelectNode}
-                  selectedNode={selectedNode}
-                  model={model}
-                />
-              )}
+              <h6>Shortcuts</h6>
+              <Shortcuts hierarchy={hierarchy} zoom={zoom}  />
+              {children}
             </Panel.Body>
           </Panel>
         </div>
@@ -77,7 +81,12 @@ export default ({
               <h3>Statistics Summary</h3>
             </Panel.Title>
             <Panel.Body>
-              <Histograms histograms={histograms} selectedNode={selectedNode} handleSelectedNode={handleSelectNode} />
+              <Histograms
+                histograms={histograms}
+                selectedNode={selectedNode}
+                handleSelectedNode={handleSelectNode}
+                zoom={zoom}
+              />
             </Panel.Body>
           </Panel>
           <Panel className='model'>
@@ -97,7 +106,13 @@ export default ({
                     <Button
                       bsStyle={'link'}
                       // tslint:disable-next-line jsx-no-lambda
-                      onClick={() => handleChangeModel(ModelType.VARIABLE, model.variable, true)}>
+                      onClick={() =>
+                        handleChangeModel(
+                          ModelType.VARIABLE,
+                          model.variable,
+                          true
+                        )
+                      }>
                       X
                     </Button>
 
@@ -129,7 +144,9 @@ export default ({
                           bsStyle={'link'}
                           key={`$btn-{i}`}
                           // tslint:disable-next-line jsx-no-lambda
-                          onClick={() => handleChangeModel(ModelType.COVARIABLE, c, true)}>
+                          onClick={() =>
+                            handleChangeModel(ModelType.COVARIABLE, c, true)
+                          }>
                           X
                         </Button>
                         <a

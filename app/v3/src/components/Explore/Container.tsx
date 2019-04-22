@@ -1,12 +1,10 @@
-import './Explore.css';
-
 import * as d3 from 'd3';
 import React, { useEffect, useState } from 'react';
-
 import { APICore, APIMining } from '../API';
 import { VariableEntity } from '../API/Core';
 import { d3Hierarchy, HierarchyNode, VariableDatum } from './d3Hierarchy';
-import Explore from './Explore';
+import CirclePack from './D3PackLayer';
+import './Explore.css';
 
 export type HierarchyCircularNode = d3.HierarchyCircularNode<VariableDatum>;
 
@@ -29,9 +27,13 @@ interface Props {
 
 export default ({ apiCore, apiMining }: Props) => {
   const [datasets, setDatasets] = useState<VariableEntity[]>();
-  const [selectedDatasets, setSelectedDatasets] = useState<VariableEntity[]>([]);
+  const [selectedDatasets, setSelectedDatasets] = useState<VariableEntity[]>(
+    []
+  );
   const [hierarchy, setHierarchy] = useState<HierarchyNode>();
-  const [selectedNode, setSelectedNode] = useState<HierarchyCircularNode | undefined>();
+  const [selectedNode, setSelectedNode] = useState<
+    HierarchyCircularNode | undefined
+  >();
   const [model, setModel] = useState<Model>({
     covariables: undefined,
     filters: undefined,
@@ -40,19 +42,19 @@ export default ({ apiCore, apiMining }: Props) => {
   });
 
   useEffect(() => {
-    const datasets = apiCore.state.datasets;
-    if (datasets) {
-      setDatasets(datasets);
-      setSelectedDatasets(datasets);
+    const d = apiCore.state.datasets;
+    if (d) {
+      setDatasets(d);
+      setSelectedDatasets(d);
     }
   }, [apiCore.state.datasets]);
 
   useEffect(() => {
-    const hierarchy = apiCore.state.hierarchy;
-    if (hierarchy) {
-      setHierarchy(d3Hierarchy(hierarchy));
+    const h = apiCore.state.hierarchy;
+    if (h) {
+      setHierarchy(d3Hierarchy(h));
     }
-  }, [apiCore.state.hierarchy])
+  }, [apiCore.state.hierarchy]);
 
   const handleSelectNode = async (node: HierarchyCircularNode) => {
     setSelectedNode(node);
@@ -68,13 +70,19 @@ export default ({ apiCore, apiMining }: Props) => {
   };
 
   const handleSelectDataset = (dataset: VariableEntity) => {
-    const nextSelection = selectedDatasets.map(d => d.code).includes(dataset.code)
+    const nextSelection = selectedDatasets
+      .map(d => d.code)
+      .includes(dataset.code)
       ? [...selectedDatasets.filter(d => d.code !== dataset.code)]
       : [...selectedDatasets, dataset];
     setSelectedDatasets(nextSelection);
   };
 
-  const handleChangeModel = (type: ModelType, node: HierarchyNode | undefined = undefined, remove: boolean = false) => {
+  const handleChangeModel = (
+    type: ModelType,
+    node: HierarchyNode | undefined = undefined,
+    remove: boolean = false
+  ) => {
     if (type === ModelType.VARIABLE) {
       const nextModel = remove
         ? { ...model, variable: undefined }
@@ -89,7 +97,11 @@ export default ({ apiCore, apiMining }: Props) => {
         const nextModel = {
           ...model,
           covariables:
-            (model.covariables && model.covariables.filter(c => c && c.data.code !== node.data.code)) || undefined
+            (model.covariables &&
+              model.covariables.filter(
+                c => c && c.data.code !== node.data.code
+              )) ||
+            undefined
         };
         setModel(nextModel);
         return;
@@ -107,25 +119,26 @@ export default ({ apiCore, apiMining }: Props) => {
           );
         const nextModel = {
           ...model,
-          covariables: nextCovariables && nextCovariables.length > 0 ? nextCovariables : selectedNode.leaves()
+          covariables:
+            nextCovariables && nextCovariables.length > 0
+              ? nextCovariables
+              : selectedNode.leaves()
         };
         setModel(nextModel);
       }
     }
   };
 
+  const props = {
+    datasets,
+    handleChangeModel,
+    handleSelectDataset,
+    handleSelectNode,
+    histograms: apiMining.state.histograms,
+    model,
+    selectedDatasets,
+    selectedNode
+  };
 
-  return (
-    <Explore
-      datasets={datasets}
-      selectedDatasets={selectedDatasets}
-      selectedNode={selectedNode}
-      hierarchy={hierarchy}
-      histograms={apiMining.state.histograms}
-      model={model}
-      handleSelectDataset={handleSelectDataset}
-      handleSelectNode={handleSelectNode}
-      handleChangeModel={handleChangeModel}
-    />
-  );
+  return hierarchy ? <CirclePack hierarchy={hierarchy} {...props} /> : null;
 };

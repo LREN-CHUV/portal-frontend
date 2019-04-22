@@ -1,10 +1,7 @@
-import './CirclePack.css';
-
 import * as d3 from 'd3';
 import React, { useRef } from 'react';
-
-import { HierarchyCircularNode, Model } from './Container';
-import { HierarchyNode, VariableDatum } from './d3Hierarchy';
+import './CirclePack.css';
+import { HierarchyNode } from './d3Hierarchy';
 import { renderLifeCycle } from './renderLifeCycle';
 
 interface Props {
@@ -30,12 +27,12 @@ export default (props: Props) => {
         .style('display', d => (d.parent === hierarchy ? 'inline' : 'none'))
         .text(d => d.data.label)
         .on('click', d => {
+          // handleSelectNode(d)
+
+          d3.event.stopPropagation()
           zoom(d);
         });
-    },
-    // updateRender: () => {
-    // },
-    lastRender: () => console.log('im out', hierarchy)
+    }
   });
 
   return <div ref={divRef} />;
