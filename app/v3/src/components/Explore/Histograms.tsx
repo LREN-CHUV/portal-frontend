@@ -23,7 +23,7 @@ const breadcrumb = (
     : paths;
 
 export default (props: Props) => {
-  console.log('Histograms');
+  // console.log('Histograms');
   const divRef = useRef(null);
   const { handleSelectedNode, histograms, selectedNode, zoom } = props;
 
@@ -47,8 +47,6 @@ export default (props: Props) => {
     },
     updateRender: () => {
       if (selectedNode) {
-        console.log('update');
-
         const path = d3
           .select(divRef.current)
           .selectAll('a')

@@ -12,7 +12,7 @@ export interface ExploreProps {
   datasets?: VariableEntity[];
   selectedDatasets: VariableEntity[];
   selectedNode: HierarchyCircularNode | undefined;
-  hierarchy: HierarchyNode;
+  layout: HierarchyCircularNode;
   histograms?: any;
   model: Model;
   handleSelectDataset: (e: VariableEntity) => void;
@@ -28,7 +28,7 @@ export interface ExploreProps {
 export default (props: ExploreProps) => {
   const {
     children,
-    hierarchy,
+    layout: hierarchy,
     datasets,
     selectedDatasets,
     selectedNode,
@@ -70,7 +70,7 @@ export default (props: ExploreProps) => {
             </Panel.Title>
             <Panel.Body>
               <h6>Shortcuts</h6>
-              <Shortcuts hierarchy={hierarchy} zoom={zoom}  />
+              <Shortcuts hierarchy={hierarchy} zoom={zoom} handleSelectNode={handleSelectNode} />
               {children}
             </Panel.Body>
           </Panel>

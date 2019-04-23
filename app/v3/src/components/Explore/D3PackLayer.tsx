@@ -3,28 +3,18 @@ import React, { useRef } from 'react';
 import './CirclePack.css';
 import { HierarchyCircularNode } from './Container';
 import { HierarchyNode, VariableDatum } from './d3Hierarchy';
-import Explore, { ExploreProps } from './Explore';
+import Explore from './Explore';
 import { renderLifeCycle } from './renderLifeCycle';
 
 const diameter: number = 800;
 const padding: number = 1.5;
 
-type NodeSelection = d3.Selection<
-  Element | d3.EnterElement | Document | Window | SVGCircleElement | null,
-  HierarchyCircularNode,
-  SVGGElement,
-  {}
->;
-
 type IView = [number, number, number];
-
-interface Props extends ExploreProps {
-  hierarchy: HierarchyNode;
-}
 
 const depth = (n: HierarchyNode): number =>
   n.children ? 1 + (d3.max<number>(n.children.map(depth)) || 0) : 1;
 
+// TODO: Props
 export default ({ hierarchy, ...props }: any) => {
   const svgRef = useRef(null);
   const view = useRef<IView>([diameter / 2, diameter / 2, diameter]);
@@ -70,9 +60,12 @@ export default ({ hierarchy, ...props }: any) => {
     focus.current = circleNode;
 
     // reduce zoom if it's a leaf node
-    const targetView: IView = circleNode.children
-      ? [circleNode.x, circleNode.y, circleNode.r * 2 + padding]
-      : [circleNode.x, circleNode.y, circleNode.r * 3 + padding];
+    const zoomFactor = circleNode.children ? 2 : 3;
+    const targetView: IView = [
+      circleNode.x,
+      circleNode.y,
+      circleNode.r * zoomFactor + padding
+    ];
     const transition = d3
       .transition<d3.BaseType>()
       .duration(d3.event.altKey ? 7500 : 750)
@@ -189,7 +182,7 @@ export default ({ hierarchy, ...props }: any) => {
 
   return (
     <div>
-      <Explore hierarchy={hierarchy} zoom={zoom} {...props}>
+      <Explore layout={layout} zoom={zoom} {...props}>
         <svg ref={svgRef} />
       </Explore>
     </div>

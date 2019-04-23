@@ -1,21 +1,21 @@
 import * as d3 from 'd3';
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import './CirclePack.css';
-import { HierarchyNode } from './d3Hierarchy';
+import { HierarchyCircularNode } from './Container';
 import { renderLifeCycle } from './renderLifeCycle';
 
 interface Props {
-  hierarchy: HierarchyNode;
+  hierarchy: HierarchyCircularNode;
   zoom: Function;
-  // handleSelectNode: (node: HierarchyCircularNode) => void;
+  handleSelectNode: (node: HierarchyCircularNode) => void;
   // model: Model;
   // selectedNode: HierarchyCircularNode | undefined;
 }
 
 export default (props: Props) => {
   const divRef = useRef(null);
-
-  const { hierarchy, zoom } = props;
+  const resultRef = useRef(null);
+  const { hierarchy, zoom, handleSelectNode } = props;
 
   renderLifeCycle({
     firstRender: () => {
@@ -27,13 +27,48 @@ export default (props: Props) => {
         .style('display', d => (d.parent === hierarchy ? 'inline' : 'none'))
         .text(d => d.data.label)
         .on('click', d => {
-          // handleSelectNode(d)
+          handleSelectNode(d);
 
-          d3.event.stopPropagation()
+          d3.event.stopPropagation();
           zoom(d);
         });
     }
   });
 
-  return <div ref={divRef} />;
+  const handleChangeInput = (e: any) => {
+    const path = d3.select(resultRef.current).selectAll('a');
+    if (!e.target.value) {
+      path.remove();
+      return;
+    }
+    const results: HierarchyCircularNode[] = [];
+    hierarchy.each(node => {
+      const regexp = new RegExp(e.target.value, 'ig');
+      if (regexp.test(node.data.label)) {
+        results.push(node);
+      }
+    });
+
+    path.remove();
+    d3.select(resultRef.current)
+      .selectAll('a')
+      .data(results)
+      .enter()
+      .append('a')
+      .text(d => d.data.label)
+      .on('click', d => {
+        handleSelectNode(d);
+
+        d3.event.stopPropagation();
+        zoom(d);
+      });
+  };
+
+  return (
+    <>
+      <input placeholder='Search' onChange={handleChangeInput} />
+      <div className="d3-link" ref={resultRef} />
+      <div className="d3-link" ref={divRef} />
+    </>
+  );
 };

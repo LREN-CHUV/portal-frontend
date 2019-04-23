@@ -37,3 +37,7 @@
 .statistics .nav > li > a {
   padding: 8px 4px;
 }
+
+.Explore  .d3-link a:after {
+  content: ' - '
+}
