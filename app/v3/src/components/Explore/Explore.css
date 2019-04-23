@@ -38,6 +38,18 @@
   padding: 8px 4px;
 }
 
-.Explore  .d3-link a:after {
-  content: ' - '
+.Explore .d3-link a:after {
+  content: ' - ';
+}
+
+.Explore .d3-link a:last-child:after {
+  content: '';
+}
+
+.Explore .d3-link-hirarchical a:after {
+  content: ' > ';
+}
+
+.Explore .d3-link-hirarchical a:last-child:after {
+  content: '';
 }

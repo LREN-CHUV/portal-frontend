@@ -39,7 +39,7 @@ export default (props: Props) => {
           .text(d => d.data.label)
           .on('click', d => {
             handleSelectedNode(d);
-    
+
             d3.event.stopPropagation();
             zoom(d);
           });
@@ -47,13 +47,13 @@ export default (props: Props) => {
     },
     updateRender: () => {
       if (selectedNode) {
-        const path = d3
-          .select(divRef.current)
+        d3.select(divRef.current)
           .selectAll('a')
-          .data(breadcrumb(selectedNode).reverse());
+          .remove()
 
-        path.exit().remove(); // remove unneeded circles
-        path
+        d3.select(divRef.current)
+          .selectAll('a')
+          .data(breadcrumb(selectedNode).reverse())
           .enter()
           .append('a')
           .text(d => d.data.label)
@@ -71,10 +71,11 @@ export default (props: Props) => {
   return (
     <div>
       {selectedNode && (
-        <div>
-          <div ref={divRef} />
+        <>
+          
           <p>
-            <b>Name</b>: {selectedNode.data.label}
+            <b>Path</b>: 
+            <div className="d3-link-hirarchical" ref={divRef} />
           </p>
           <p>
             <b>Type</b>: {selectedNode.data.type}
@@ -82,7 +83,7 @@ export default (props: Props) => {
           <p>
             <b>Description</b>: {selectedNode.data.description}
           </p>
-        </div>
+        </>
       )}
       {histograms && histograms.loading && <Loading />}
       {histograms && histograms.error && (
