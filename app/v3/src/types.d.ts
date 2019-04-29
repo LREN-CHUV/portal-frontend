@@ -21,11 +21,13 @@ export declare namespace MIP.Store {
     data?: any;
     error?: string;
     dataset?: MIP.API.IVariableEntity;
+    loading?: boolean;
   }
 
   export interface IMiningState extends IError {
     summaryStatistics?: MIP.Store.IMiningResponseShape[];
     heatmaps?: MIP.Store.IMiningResponseShape[];
+    histograms?: MIP.Store.IMiningResponseShape;
   }
 
   export interface IModelState extends IError {
@@ -183,6 +185,21 @@ export declare namespace MIP.API {
 }
 
 export declare namespace MIP.Internal {
+  // export enum IVariableType {
+  //   Integer,
+  //   Real,
+  //   Binominal,
+  //   Polynominal
+  // }
+  export interface IVariableDatum {
+    code: string;
+    description?: string;
+    label: string;
+    isVariable?: boolean;
+    children?: IVariableDatum[];
+    type?: string // IVariableType; Whaaaaat ? makes webpack crash FIXME:
+  }
+
   export interface IQuery extends MIP.API.IQuery {
     filtersFromParams?: any[];
   }

@@ -4,6 +4,7 @@ import { Container } from 'unstated';
 import { MIP } from '../../types';
 import { backendURL } from '../API';
 
+//
 class Mining extends Container<MIP.Store.IMiningState> {
   /*
     "data": [{ x: n }]   
@@ -41,10 +42,15 @@ class Mining extends Container<MIP.Store.IMiningState> {
 
   constructor(config: any) {
     super();
-    this.state = { summaryStatistics: undefined, heatmaps: undefined };
+    this.state = {
+      heatmaps: undefined,
+      histograms: undefined,
+      summaryStatistics: undefined
+    };
     this.options = config.options;
     this.baseUrl = backendURL;
   }
+
   public clear = () => {
     this.cachedSummaryStatistics = {};
     return this.setState((prevState: any) => ({
@@ -80,6 +86,47 @@ class Mining extends Container<MIP.Store.IMiningState> {
     const heatmap = await this.fetchOne({ payload });
     return await this.setState({
       heatmaps: Mining.normalizeHeatmapData(heatmap)
+    });
+  };
+
+  public histograms = async ({
+    payload
+  }: {
+    payload: {
+      datasets: MIP.API.IVariableEntity[];
+      variables: MIP.API.IVariableEntity[];
+    };
+  }): Promise<any> => {
+    await this.setState({
+      histograms: { loading: true, error: undefined, data: undefined }
+    });
+
+    const nextPayload = {
+      ...payload,
+      algorithm: {
+        code: 'histograms',
+        name: 'Histograms',
+        parameters: [],
+        validation: false
+      },
+      covariables: [],
+      filters: '',
+      grouping: [
+        { code: 'dataset' },
+        { code: 'gender' },
+        { code: 'agegroup' },
+        { code: 'alzheimerbroadcategory' }
+      ]
+    };
+    const response = await this.fetchOne({ payload: nextPayload });
+    if (response.error) {
+      return await this.setState({
+        histograms: { loading: false, error: response.error, data: undefined }
+      });
+    }
+
+    return await this.setState({
+      histograms: { loading: false, error: undefined, data: response.data }
     });
   };
 
