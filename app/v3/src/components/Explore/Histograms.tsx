@@ -20,7 +20,7 @@ const breadcrumb = (
 ): HierarchyCircularNode[] =>
   variable && variable.parent
     ? breadcrumb(variable.parent, [...paths, variable])
-    : paths;
+    : [...paths, variable];
 
 export default (props: Props) => {
   // console.log('Histograms');
@@ -39,7 +39,6 @@ export default (props: Props) => {
           .text(d => d.data.label)
           .on('click', d => {
             handleSelectedNode(d);
-
             d3.event.stopPropagation();
             zoom(d);
           });
@@ -60,7 +59,6 @@ export default (props: Props) => {
           .on('click', d => {
             console.log(d3.event);
             handleSelectedNode(d);
-
             d3.event.stopPropagation();
             zoom(d);
           });
@@ -78,10 +76,10 @@ export default (props: Props) => {
             <div className="d3-link-hirarchical" ref={divRef} />
           </p>
           <p>
-            <b>Type</b>: {selectedNode.data.type}
+            <b>Type</b>: {selectedNode.data.type || 'group'}
           </p>
           <p>
-            <b>Description</b>: {selectedNode.data.description}
+            <b>Description</b>: {selectedNode.data.description || '-'}
           </p>
         </>
       )}
