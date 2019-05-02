@@ -1,11 +1,14 @@
 #!/usr/bin/env bash
 set -eo pipefail
 
+echo REACT_APP_TOKEN="$TOKEN" | tee -a .env
+echo REACT_APP_JSESSIONID="$JSESSIONID" | tee -a .env
+
 case $1 in
-  start)
+  watch)
     # The '| cat' is to trick Node that this is an non-TTY terminal
     # then react-scripts won't clear the console.
-    yarn start | cat
+    yarn watch | cat
     ;;
   build)
     yarn build

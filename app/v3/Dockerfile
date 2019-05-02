@@ -1,4 +1,4 @@
-FROM node:latest
+FROM node:current
 
 ADD yarn.lock /yarn.lock
 ADD package.json /package.json
@@ -9,11 +9,7 @@ RUN yarn
 
 WORKDIR /app
 ADD . /app
-RUN /bin/bash -c 'echo REACT_APP_BACKEND_URL=\"http://portalbackend:8080\" | tee -a .env'
+RUN /bin/bash -c 'echo REACT_APP_BACKEND_URL="http://localhost:8080/services" | tee .env'
 
-
-EXPOSE 3000
-EXPOSE 35729
-
-ENTRYPOINT ["/bin/bash", "/app/run.sh"]
+ENTRYPOINT ["/bin/bash", "./run.sh"]
 CMD ["test"]
