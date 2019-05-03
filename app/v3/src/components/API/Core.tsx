@@ -7,10 +7,12 @@ import { backendURL } from '../API';
 class Core extends Container<MIP.Store.ICoreState> {
   public state: MIP.Store.ICoreState = {};
 
+  private options: request.Options;
   private backendURL: string;
 
   constructor(config: any) {
     super();
+    this.options = config.options;
     this.backendURL = backendURL;
   }
 
@@ -24,7 +26,7 @@ class Core extends Container<MIP.Store.ICoreState> {
 
   public variables = async () => {
     try {
-      const data = await request.get(`${this.backendURL}/variables`);
+      const data = await request.get(`${this.backendURL}/variables`, this.options);
       const json = await JSON.parse(data);
       if (json.error) {
         return await this.setState({
@@ -45,7 +47,7 @@ class Core extends Container<MIP.Store.ICoreState> {
 
   public hierarchy = async () => {
     try {
-      const data = await request.get(`${this.backendURL}/variables/hierarchy`);
+      const data = await request.get(`${this.backendURL}/variables/hierarchy`, this.options);
       const json = await JSON.parse(data);
       if (json.error) {
         return await this.setState({
@@ -66,7 +68,7 @@ class Core extends Container<MIP.Store.ICoreState> {
 
   public datasets = async () => {
     try {
-      const data = await request.get(`${this.backendURL}/datasets`);
+      const data = await request.get(`${this.backendURL}/datasets`, this.options);
       const json = await JSON.parse(data);
       if (json.error) {
         return await this.setState({
@@ -87,7 +89,7 @@ class Core extends Container<MIP.Store.ICoreState> {
 
   public methods = async () => {
     try {
-      const data = await request.get(`${this.backendURL}/methods`);
+      const data = await request.get(`${this.backendURL}/methods`, this.options);
       const json = await JSON.parse(data);
       if (json.error) {
         return await this.setState({
