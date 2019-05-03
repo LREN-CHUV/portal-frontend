@@ -3,6 +3,7 @@
 ## 3.0.1 - 03.05.2019
 
 - Test suite can now run as a standalone docker to test any live installation, see [/app/v3/README.md](./app/v3/README.md)
+- Fixed footer
 
 ## 3.0.0 - 30.04.2019
 
