@@ -26,11 +26,13 @@ This is a minimal setup to do frontend development in this project:
 
 ### React
 
+More info about React Infrastructure can be found [in the /app/v3/README.md file](./app/v3/README.md)
+
 - Install [nodejs](https://nodejs.org)
 - Install [yarn](https://yarnpkg.com/en/)
 - `cd /app/v3/`
 - create a `.env` file
-  - `sh -c 'echo REACT_APP_BACKEND_URL = \"http://frontend\" >> .env'`
+  - `echo REACT_APP_BACKEND_URL = \"http://frontend\" | tee .env`
 - `yarn install`
 - `yarn watch`
 - Browse to [http://localhost:3000/v3/review](http://localhost:3000/v3/review)

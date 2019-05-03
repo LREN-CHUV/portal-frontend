@@ -46,7 +46,6 @@ const waitForResult = ({
       await apiExperiment.one({ uuid });
       const { experiment, error } = apiExperiment.state;
       const loading = experiment ? !(error || experiment.results) : true;
-      console.log({ loading })
 
       if (!loading) {
         clearInterval(timerId);
