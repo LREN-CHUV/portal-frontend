@@ -11,11 +11,14 @@ import App from '../App/App';
 // UNSTATED.logStateChanges = process.env.NODE_ENV === "development";
 
 interface IState {
-  appConfig: any;
+  version: string;
+  instanceName: string;
+  mode: string;
+  theme: string;
 }
 
 class AppContainer extends React.Component<any, IState> {
-  public state: IState = { appConfig: {} };
+  public state: IState = { version: 'beta', instanceName: 'CHUV-DEV', mode: 'local', theme: 'mip' };
   private apiExperiment = new APIExperiment(config);
   private apiModel = new APIModel(config);
   private apiCore = new APICore(config);
@@ -30,9 +33,9 @@ class AppContainer extends React.Component<any, IState> {
     const json = await request.get(`${webURL}/scripts/app/config.json`);
     try {
       const appConfig = JSON.parse(json);
-      this.setState({ appConfig });
+      this.setState({ ...appConfig });
     } catch (e) {
-      // console.log(e)
+      console.log('Couldn\'t read config')
     }
 
     return await Promise.all([
@@ -51,24 +54,12 @@ class AppContainer extends React.Component<any, IState> {
   public render() {
     return (
       <Router>
-        <Provider
-          inject={[
-            this.apiExperiment,
-            this.apiCore,
-            this.apiModel,
-            this.apiMining
-          ]}
-        >
+        <Provider inject={[this.apiExperiment, this.apiCore, this.apiModel, this.apiMining]}>
           <Subscribe to={[APIExperiment, APICore, APIModel, APIMining]}>
-            {(
-              apiExperiment: APIExperiment,
-              apiCore: APICore,
-              apiModel: APIModel,
-              apiMining: APIMining
-            ) => {
+            {(apiExperiment: APIExperiment, apiCore: APICore, apiModel: APIModel, apiMining: APIMining) => {
               return (
                 <App
-                  appConfig={this.state.appConfig}
+                  appConfig={this.state}
                   apiExperiment={apiExperiment}
                   apiCore={apiCore}
                   apiModel={apiModel}
