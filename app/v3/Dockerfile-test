@@ -9,6 +9,7 @@ RUN yarn
 
 WORKDIR /app
 ADD . /app
+ADD tests/run.sh /app/run.sh
 
 ENTRYPOINT ["/bin/bash", "./run.sh"]
 CMD ["test"]
