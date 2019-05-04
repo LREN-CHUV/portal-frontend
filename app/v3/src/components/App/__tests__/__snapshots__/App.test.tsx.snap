@@ -350,7 +350,8 @@ exports[`Test App components App snapshot renders correctly 1`] = `
         <div
           className="col-md-6 text-right"
         >
-           | Mode: 
+          
+          Mode: 
         </div>
       </div>
     </div>
@@ -419,7 +420,7 @@ exports[`Test App components AppContainer snapshot renders correctly 1`] = `
           className="app-instance-name"
         >
           <h2>
-            MIP
+            CHUV-DEV
           </h2>
         </div>
         <ul
@@ -708,7 +709,10 @@ exports[`Test App components AppContainer snapshot renders correctly 1`] = `
         <div
           className="col-md-6 text-right"
         >
-           | Mode: 
+          beta
+           | 
+          Mode: 
+          local
         </div>
       </div>
     </div>
