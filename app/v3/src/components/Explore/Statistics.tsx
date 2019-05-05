@@ -4,7 +4,6 @@ import { Tab, Tabs } from 'react-bootstrap';
 import { MIP } from '../../types';
 import Highchart from '../Experiment/Result/formats/Highchart';
 import Loading from '../UI/Loader';
-import { Button } from 'reactstrap';
 
 export default ({
   histograms

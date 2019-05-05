@@ -56,6 +56,7 @@ class Mining extends Container<MIP.Store.IMiningState> {
     return this.setState((prevState: any) => ({
       error: undefined,
       heatmaps: undefined,
+      histograms: undefined,
       summaryStatistics: undefined
     }));
   };

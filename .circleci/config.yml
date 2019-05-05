@@ -29,17 +29,17 @@ jobs:
             git clone https://github.com/HBPMedical/web-analytics-demo.git
             cp .circleci/server/* web-analytics-demo/
             cd web-analytics-demo
-            ./run.sh
+            ./ci.sh
       - run:
           name: 'Build frontend'
           command: |
             cd app/v3
-            echo REACT_APP_BACKEND_URL=\"http://web-analytics-demo_portalbackend_1:8080\" | tee -a .env
+            echo REACT_APP_BACKEND_URL=\"http://portalbackend:8080\" | tee -a .env
             docker build -t frontend:latest .
       - run:
           name: 'Test frontend'
           command: |
-            docker run -e CI=true --network=web-analytics-demo_default frontend:latest yarn test
+            docker run -e CI=true --network=webanalyticsstarter_default frontend:latest yarn test
 
 workflows:
   version: 2

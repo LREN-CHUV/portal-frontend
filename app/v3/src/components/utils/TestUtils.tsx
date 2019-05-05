@@ -8,6 +8,8 @@ const apiModel = new APIModel(config);
 const apiExperiment = new APIExperiment(config);
 const apiCore = new APICore(config);
 
+const TIMEOUT_DURATION = 60 * 2;
+
 const datasets = async () => {
   await apiCore.datasets();
   return apiCore.state;
@@ -39,14 +41,24 @@ const waitForResult = ({
   uuid: string;
 }): Promise<MIP.Store.IExperimentState> =>
   new Promise(resolve => {
+    let elapsed = 0
     const timerId = setInterval(async () => {
       await apiExperiment.one({ uuid });
       const { experiment, error } = apiExperiment.state;
       const loading = experiment ? !(error || experiment.results) : true;
+
       if (!loading) {
         clearInterval(timerId);
         resolve(apiExperiment.state);
       }
+
+      if (elapsed > TIMEOUT_DURATION ) { // timeout
+        clearInterval(timerId);
+        apiExperiment.state.error = `Timeout after ${TIMEOUT_DURATION} s`
+        resolve(apiExperiment.state);
+      }
+
+      elapsed = elapsed + 1;
     }, 1000);
   });
 

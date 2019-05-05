@@ -1,7 +1,17 @@
 # Changelog
 
-## current - 2019/03/27
+## 3.0.1 - 03.05.2019
 
+- Test suite can now run as a standalone docker to test any live installation, see [/app/v3/README.md](./app/v3/README.md)
+- Fixed footer
+
+## 3.0.0 - 30.04.2019
+
+- Tag release, no changes
+
+## 2.16.5 - 2019/04/08
+
+- Highcharts to 6.1.0 (angular security fix)
 - Reworked Heatmap test
 
 ## 2.16.4 - 2019/03/26
