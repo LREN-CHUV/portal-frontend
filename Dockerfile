@@ -5,8 +5,6 @@ WORKDIR /frontend
 RUN npm install -g gulp
 RUN npm link gulp
 
-RUN curl -o- -L https://yarnpkg.com/install.sh | bash
-
 COPY package.json /frontend
 RUN yarn install
 
