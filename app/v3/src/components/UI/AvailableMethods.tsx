@@ -111,7 +111,8 @@ const AvailableMethods = ({
         a.code !== 'knn' &&
         a.code !== 'hedwig' &&
         a.code !== 'ggparci' &&
-        a.code !== 'kmeans'
+        a.code !== 'kmeans' &&
+        a.code !== 'heatmaply'
     );
   const types = Array.from(
     new Set(filteredAlgorithms.map(f => f.type).flat(1))
