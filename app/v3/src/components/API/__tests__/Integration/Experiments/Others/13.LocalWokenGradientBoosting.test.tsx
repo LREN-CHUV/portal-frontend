@@ -1,49 +1,71 @@
 import { mount } from 'enzyme';
-import Result from '../../../../../Experiment/Result/Result';
-import { MIP } from '../../../../../../types';
 import * as React from 'react';
+
+import { MIP } from '../../../../../../types';
+import Result from '../../../../../Experiment/Result/Result';
 import {
-  createExperiment,
-  createModel,
-  datasets,
-  waitForResult
+    createExperiment, createModel, datasets, waitForResult
 } from '../../../../../utils/TestUtils';
+import { VariableEntity } from '../../../../Core';
 
 // config
 
 const modelSlug = `model-${Math.round(Math.random() * 10000)}`;
-const experimentCode = 'tSNE';
-const model: any = (datasets: MIP.API.IVariableEntity[]) => ({
+const experimentCode = 'gradientBoosting';
+const parameters = [
+  {
+    code: 'learning_rate',
+    value: '0.1'
+  },
+  {
+    code: 'n_estimators',
+    value: '100'
+  },
+  {
+    code: 'max_depth',
+    value: '3'
+  },
+  {
+    code: 'min_samples_split',
+    value: '2'
+  },
+  {
+    code: 'min_samples_leaf',
+    value: '1'
+  },
+  {
+    code: 'min_weight_fraction_leaf',
+    value: '0'
+  },
+  {
+    code: 'min_impurity_decrease',
+    value: '0'
+  }
+];
+const kfold = {
+  code: 'kfold',
+  name: 'validation',
+  parameters: [
+    {
+      code: 'k',
+      value: '2'
+    }
+  ]
+};
+const model: any = (datasets: VariableEntity[]) => ({
   query: {
-    // coVariables: [{ code: 'lefthippocampus' }],
+    coVariables: [{ code: 'lefthippocampus' }],
     groupings: [],
     testingDatasets: [],
-    // filters:
-    //   '{"condition":"AND","rules":[{"id":"subjectageyears","field":"subjectageyears","type":"integer","input":"number","operator":"greater","value":"65"}],"valid":true}',
-    // // trainingDatasets: datasets.map(d => ({ code: d.code })),
-    // validationDatasets: [],
-    variables: [{ code: 'gender' }],
-    coVariables: [
-      { code: 'righthippocampus' },
-      { code: 'rightententorhinalarea' },
-      { code: 'lefthippocampus' },
-      { code: 'leftthalamusproper' },
-      { code: 'leftacgganteriorcingulategyrus' },
-      { code: 'leftententorhinalarea' },
-      { code: 'leftmcggmiddlecingulategyrus' },
-      { code: 'leftphgparahippocampalgyrus' },
-      { code: 'leftpcggposteriorcingulategyrus' },
-      { code: 'rightthalamusproper' },
-      { code: 'rightacgganteriorcingulategyrus' },
-      { code: 'rightmcggmiddlecingulategyrus' },
-      { code: 'rightphgparahippocampalgyrus' },
-      { code: 'rightpcggposteriorcingulategyrus' }
-    ],
-    grouping: [],
-    trainingDatasets: datasets,
-    validationDatasets: [],
     filters:
-      '{"condition":"AND","rules":[{"id":"agegroup","field":"agegroup","type":"string","input":"select","operator":"not_equal","value":"-50y"}],"valid":true}'
+      '{"condition":"AND","rules":[{"id":"subjectageyears","field":"subjectageyears","type":"integer","input":"number","operator":"greater","value":"65"}],"valid":true}',
+    trainingDatasets: datasets
+      .slice(0, datasets.length - 1)
+      .map(d => ({ code: d.code })),
+    validationDatasets: datasets
+      .slice(datasets.length - 1)
+      .map(d => ({ code: d.code })),
+    variables: [{ code: 'alzheimerbroadcategory' }]
   }
 });
 
@@ -52,13 +74,13 @@ const payload: MIP.API.IExperimentPayload = {
     {
       code: experimentCode,
       name: experimentCode,
-      parameters: [],
+      parameters,
       validation: false
     }
   ],
   model: modelSlug,
   name: `${experimentCode}-${modelSlug}`,
-  validations: []
+  validations: [kfold]
 };
 
 describe('Integration Test for experiment API', () => {
@@ -102,5 +124,7 @@ describe('Integration Test for experiment API', () => {
     const wrapper = mount(<Result {...props} />);
     expect(wrapper.find('.error')).toHaveLength(0);
     expect(wrapper.find('.loading')).toHaveLength(0);
+    expect(wrapper.find('div#tabs-methods')).toHaveLength(1);
+    expect(wrapper.find('.pfa-table')).toHaveLength(1);
   });
 });

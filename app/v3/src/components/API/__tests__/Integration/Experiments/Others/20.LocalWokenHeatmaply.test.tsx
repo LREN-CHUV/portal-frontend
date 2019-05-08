@@ -1,43 +1,40 @@
 import { mount } from 'enzyme';
-import Result from '../../../../../Experiment/Result/Result';
-import { MIP } from '../../../../../../types';
 import * as React from 'react';
+
+import { MIP } from '../../../../../../types';
+import Result from '../../../../../Experiment/Result/Result';
 import {
-  createExperiment,
-  createModel,
-  datasets,
-  waitForResult
+    createExperiment, createModel, datasets, waitForResult
 } from '../../../../../utils/TestUtils';
+import { VariableEntity } from '../../../../Core';
 
 // config
 
 const modelSlug = `model-${Math.round(Math.random() * 10000)}`;
-const experimentCode = 'hinmine';
-const parameters = [
-  {
-    code: 'normalize',
-    value: 'true'
-  },
-  {
-    code: '0.85',
-    value: '0.85'
-  }
-];
-
-const model: any = (datasets: MIP.API.IVariableEntity[]) => ({
+const experimentCode = 'heatmaply';
+const model: any = (datasets: VariableEntity[]) => ({
   query: {
-    coVariables: [{ code: 'lefthippocampus' }],
-    groupings: [],
-    testingDatasets: [],
+    coVariables: [
+      {
+        code: 'lefthippocampus'
+      },
+      {
+        code: 'righthippocampus'
+      }
+    ],
     filters:
       '{"condition":"AND","rules":[{"id":"subjectageyears","field":"subjectageyears","type":"integer","input":"number","operator":"greater","value":"65"}],"valid":true}',
-    trainingDatasets: datasets
-      .slice(0, datasets.length - 1)
-      .map(d => ({ code: d.code })),
-    validationDatasets: datasets
-      .slice(datasets.length - 1)
-      .map(d => ({ code: d.code })),
-    variables: [{ code: 'alzheimerbroadcategory' }]
+    groupings: [],
+    testingDatasets: [],
+    trainingDatasets: datasets.map(d => ({
+      code: d.code
+    })),
+    validationDatasets: [],
+    variables: [
+      {
+        code: 'subjectageyears'
+      }
+    ]
   }
 });
 
@@ -46,7 +43,7 @@ const payload: MIP.API.IExperimentPayload = {
     {
       code: experimentCode,
       name: experimentCode,
-      parameters,
+      parameters: [],
       validation: false
     }
   ],
@@ -96,7 +93,6 @@ describe('Integration Test for experiment API', () => {
     const wrapper = mount(<Result {...props} />);
     expect(wrapper.find('.error')).toHaveLength(0);
     expect(wrapper.find('.loading')).toHaveLength(0);
-    expect(wrapper.find('div#tabs-methods')).toHaveLength(1);
-    expect(wrapper.find('.pfa-table')).toHaveLength(1);
+    expect(wrapper.find('.html-iframe')).toHaveLength(1);
   });
 });
