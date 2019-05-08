@@ -103,7 +103,7 @@ class APIAdapter {
       const results = normalizedResult(r);
 
       // FIXME: on WOKEN see https://jira.chuv.ch/browse/HBPLD-256?filter=-6
-      if (method.algorithm === 'python-linear-regression') {
+      if (method.algorithm === 'python-linear-regression' && mime !== 'text/plain+error' ) {
         method.mime = MIME_TYPES.JSON;
         mime = MIME_TYPES.JSON;
       }
