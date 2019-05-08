@@ -1,6 +1,12 @@
 # Changelog
 
-## 3.0.1 - 03.05.2019
+## 3.0.2 - 08.05.2019
+
+- Fixed Mime type bug due to Mime type bug on on Woken see https://jira.chuv.ch/browse/HBPLD-256?filter=-6
+- Fixed config.mode for federation
+- Removed Heatmaply (Too heavy ~7 mo)
+
+## 3.0.1 - 08.05.2019
 
 - Test suite can now run as a standalone docker to test any live installation, see [/app/v3/README.md](./app/v3/README.md)
 - Fixed footer
