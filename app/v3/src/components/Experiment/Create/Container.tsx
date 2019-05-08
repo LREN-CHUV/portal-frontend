@@ -59,7 +59,7 @@ class Container extends React.Component<IProps, IState> {
     const { apiCore, apiModel, apiExperiment, appConfig } = this.props;
     const alert = this.state && this.state.alert;
     const method = this.state && this.state.method;
-    const isLocal = appConfig.mode === 'local' || true;
+    const isLocal = appConfig && appConfig.mode === 'local' || false;
 
     return (
       <div className='Experiment'>
