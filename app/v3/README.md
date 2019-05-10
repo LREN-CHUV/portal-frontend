@@ -11,6 +11,7 @@ See [../../README.md](../../README.md)
 ## Tests
 
 You can use the mip-fontend test suite against any live installation, either locally
+
 ```
 echo REACT_APP_BACKEND_URL = "https://qa.mip.chuv.ch" | tee .env &&
 echo REACT_APP_TOKEN = "xxx" | tee -a .env &&
@@ -19,7 +20,7 @@ echo REACT_APP_AUTHORIZATION = "xxx" | tee -a .env
 yarn test
 ```
 
-or as a standalone docker  
+or as a standalone docker
 
 ```
 docker build . -f Dockerfile-test -t hbpmip/portal-frontend-tests
@@ -33,3 +34,12 @@ docker run -it \
 -e AUTHORIZATION="Basic c2dhMXJldmlld2VyczpIQlBzZ2Ex" \
 --rm hbpmip/portal-frontend-tests:latest
 ```
+
+Samples:
+
+```
+hbpmip/portal-frontend-tests test woken
+hbpmip/portal-frontend-tests test exareme
+```
+
+Tests run with Jest, see [the jest cli doc](https://jestjs.io/docs/en/cli) for more details

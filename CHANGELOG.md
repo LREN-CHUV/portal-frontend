@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.0.3 - 10.05.2019
+
+- Enabled KNN
+- Filter tests by plateform in CI, do `yarn test woken` or `yarn test exareme`
+
 ## 3.0.2 - 08.05.2019
 
 - Fixed Mime type bug due to Mime type bug on on Woken see https://jira.chuv.ch/browse/HBPLD-256?filter=-6
