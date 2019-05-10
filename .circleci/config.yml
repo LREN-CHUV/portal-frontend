@@ -39,7 +39,7 @@ jobs:
       - run:
           name: 'Test frontend'
           command: |
-            docker run -e CI=true --network=webanalyticsstarter_default frontend:latest yarn test
+            docker run -e CI=true --network=webanalyticsstarter_default frontend:latest yarn test woken
 
 workflows:
   version: 2
