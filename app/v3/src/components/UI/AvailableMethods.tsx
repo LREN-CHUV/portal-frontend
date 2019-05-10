@@ -110,7 +110,6 @@ const AvailableMethods = ({
         a.code !== 'WP_VARIABLES_HISTOGRAM' &&
         a.code !== 'statisticsSummary' &&
         a.code !== 'hinmine' &&
-        a.code !== 'knn' &&
         a.code !== 'hedwig' &&
         a.code !== 'ggparci' &&
         a.code !== 'kmeans' &&
