@@ -35,9 +35,11 @@ docker run -it \
 --rm hbpmip/portal-frontend-tests:latest
 ```
 
-Samples:
+Samples tests queries
 
 ```
+hbpmip/portal-frontend-tests test local
+hbpmip/portal-frontend-tests test federated
 hbpmip/portal-frontend-tests test woken
 hbpmip/portal-frontend-tests test exareme
 ```
