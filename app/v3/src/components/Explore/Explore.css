@@ -46,10 +46,10 @@
   content: '';
 }
 
-.Explore .d3-link-hirarchical a:after {
+.Explore .d3-link-hierarchy a:after {
   content: ' > ';
 }
 
-.Explore .d3-link-hirarchical a:last-child:after {
+.Explore .d3-link-hierarchy a:last-child:after {
   content: '';
 }

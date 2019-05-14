@@ -61,11 +61,8 @@ export default ({ apiCore, apiMining }: Props) => {
 
       apiMining.histograms({ payload });
     }
-  }, [selectedNode, selectedDatasets])
+  }, [selectedNode, selectedDatasets]);
 
-  const handleSelectNode = async (node: HierarchyCircularNode) => {
-    setSelectedNode(node);
-  };
 
   const handleSelectDataset = (dataset: VariableEntity) => {
     const nextSelection = selectedDatasets.map(d => d.code).includes(dataset.code)
@@ -118,7 +115,7 @@ export default ({ apiCore, apiMining }: Props) => {
     datasets,
     handleChangeModel,
     handleSelectDataset,
-    handleSelectNode,
+    handleSelectNode: setSelectedNode,
     histograms: apiMining.state.histograms,
     model,
     selectedDatasets,
