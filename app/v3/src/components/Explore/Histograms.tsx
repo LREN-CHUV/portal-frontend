@@ -14,13 +14,8 @@ interface Props {
   zoom: Function;
 }
 
-const breadcrumb = (
-  variable: HierarchyCircularNode,
-  paths: HierarchyCircularNode[] = []
-): HierarchyCircularNode[] =>
-  variable && variable.parent
-    ? breadcrumb(variable.parent, [...paths, variable])
-    : [...paths, variable];
+const breadcrumb = (variable: HierarchyCircularNode, paths: HierarchyCircularNode[] = []): HierarchyCircularNode[] =>
+  variable && variable.parent ? breadcrumb(variable.parent, [...paths, variable]) : [...paths, variable];
 
 export default (props: Props) => {
   // console.log('Histograms');
@@ -48,7 +43,7 @@ export default (props: Props) => {
       if (selectedNode) {
         d3.select(divRef.current)
           .selectAll('a')
-          .remove()
+          .remove();
 
         d3.select(divRef.current)
           .selectAll('a')
@@ -70,11 +65,10 @@ export default (props: Props) => {
     <div>
       {selectedNode && (
         <>
-          
-          <p>
-            <b>Path</b>: 
-            <div className="d3-link-hirarchical" ref={divRef} />
-          </p>
+          <div>
+            <b>Path</b>:
+            <div className='d3-link-hierarchy' ref={divRef} />
+          </div>
           <p>
             <b>Type</b>: {selectedNode.data.type || 'group'}
           </p>
@@ -94,10 +88,7 @@ export default (props: Props) => {
         <Tabs defaultActiveKey={0} id='uncontrolled-histogram-tabs'>
           {histograms.data &&
             histograms.data.map((h: any, i: number) => (
-              <Tab
-                eventKey={i}
-                title={`${h.label.replace('Histogram - ', '')}`}
-                key={i}>
+              <Tab eventKey={i} title={`${h.label.replace('Histogram - ', '')}`} key={i}>
                 <Highchart options={h} />
               </Tab>
             ))}
