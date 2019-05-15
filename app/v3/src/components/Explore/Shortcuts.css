@@ -19,7 +19,7 @@
 }
 
 .shortcuts .d3-link-results a.selected {
-  background-color: blueviolet;
+  text-decoration: underline; 
 }
 
 .shortcuts .d3-link-results a {
