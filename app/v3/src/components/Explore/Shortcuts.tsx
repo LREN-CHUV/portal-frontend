@@ -39,23 +39,34 @@ export default (props: Props) => {
     const path = d3.select(resultRef.current).selectAll('a');
     if (!searchResult) {
       path.remove();
-      return;
+      return;WaveShaperNode
     }
 
     path.remove();
-    d3.select(resultRef.current)
+    const d3results = d3.select(resultRef.current)
       .selectAll('a')
       .data(searchResult)
       .join('a')
       .text(d => d.data.label)
+      .attr('class', (d, i) => (i === keyDownIndex ? 'selected' : ''))
       .on('click', d => {
         handleSelectNode(d);
         zoom(d);
         d3.event.stopPropagation();
       });
 
-
-  }, [searchResult]);
+      if (keyDownIndex === 1) {
+        d3results.dispatch('click')
+      }
+    // .on('keydown', (d, i) => {
+    //   console.log('keydown')
+    //   if (i === keyDownIndex) {
+    //     handleSelectNode(d);
+    //     zoom(d);
+    //     d3.event.stopPropagation();
+    //   }
+    // });
+  }, [searchResult, keyDownIndex]);
 
   // renderLifeCycle({
   //   firstRender: () => {
