@@ -1,9 +1,8 @@
 import * as d3 from 'd3';
-import React, { useRef, useState } from 'react';
-import { Button } from 'react-bootstrap';
-
+import React, { useRef } from 'react';
 import { HierarchyCircularNode, Model, ModelType } from './Container';
 import { renderLifeCycle } from './renderLifeCycle';
+
 
 export interface ModelProps {
   children?: any;
