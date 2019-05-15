@@ -36,7 +36,7 @@ export default (props: Props) => {
     return function cleanup() {
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, []);
+  }, [searchResult]);
 
   useEffect(() => {
     if (!searchResult) {
@@ -116,7 +116,10 @@ export default (props: Props) => {
         ref={searchRef}
         className={'form-control'}
       />
-      <div className={`d3-link-results ${visibleResults ? 'visible' : 'hidden'} `} ref={resultRef} />
+      <div
+        className={`d3-link-results ${visibleResults ? 'visible' : 'hidden'} `}
+        ref={resultRef}
+      />
     </div>
   );
 };
