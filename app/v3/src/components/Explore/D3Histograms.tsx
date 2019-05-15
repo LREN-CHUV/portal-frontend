@@ -1,5 +1,5 @@
 import * as d3 from 'd3';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import { Tab, Tabs } from 'react-bootstrap';
 import { MiningResponseShape } from '../API/Mining';
 import Highchart from '../Experiment/Result/formats/Highchart';
