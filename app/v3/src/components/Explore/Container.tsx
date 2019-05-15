@@ -9,10 +9,10 @@ import './Explore.css';
 export type HierarchyCircularNode = d3.HierarchyCircularNode<VariableDatum>;
 
 export interface Model {
-  covariables: HierarchyNode[] | undefined;
-  filters: HierarchyNode[] | undefined;
-  groupings: HierarchyNode[] | undefined;
-  variable: HierarchyNode | undefined;
+  covariables: HierarchyCircularNode[] | undefined;
+  filters: HierarchyCircularNode[] | undefined;
+  groupings: HierarchyCircularNode[] | undefined;
+  variable: HierarchyCircularNode | undefined;
 }
 
 export enum ModelType {
@@ -62,7 +62,6 @@ export default ({ apiCore, apiMining }: Props) => {
       apiMining.histograms({ payload });
     }
   }, [selectedNode, selectedDatasets]);
-
 
   const handleSelectDataset = (dataset: VariableEntity) => {
     const nextSelection = selectedDatasets.map(d => d.code).includes(dataset.code)

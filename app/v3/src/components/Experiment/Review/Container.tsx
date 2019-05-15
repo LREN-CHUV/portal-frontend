@@ -306,27 +306,29 @@ class Container extends React.Component<Props, State> {
   };
 
   private handleGoBackToExplore = () => {
-    const { apiModel } = this.props;
-    const model = apiModel.state.model;
-    const query = model && model.query;
-    if (query) {
-      const variable = query.variables && query.variables.map(v => v.code)[0];
-      const covariable =
-        (query.coVariables && query.coVariables.map(v => v.code).join(',')) ||
-        '';
-      const grouping =
-        (query.groupings && query.groupings.map(v => v.code).join(',')) || '';
-      const trainingDatasets =
-        (query.trainingDatasets &&
-          query.trainingDatasets.map(v => v.code).join(',')) ||
-        '';
+    const { history } = this.props;
+    history.push(`/v3/explore`);
+    // const { apiModel } = this.props;
+    // const model = apiModel.state.model;
+    // const query = model && model.query;
+    // if (query) {
+    //   const variable = query.variables && query.variables.map(v => v.code)[0];
+    //   const covariable =
+    //     (query.coVariables && query.coVariables.map(v => v.code).join(',')) ||
+    //     '';
+    //   const grouping =
+    //     (query.groupings && query.groupings.map(v => v.code).join(',')) || '';
+    //   const trainingDatasets =
+    //     (query.trainingDatasets &&
+    //       query.trainingDatasets.map(v => v.code).join(',')) ||
+    //     '';
 
-      const filterQuery = (query.filters && encodeURI(query.filters)) || '';
+    //   const filterQuery = (query.filters && encodeURI(query.filters)) || '';
 
-      window.location.href = `/explore?configure=true&variable=${variable}&covariable=${covariable}&grouping=${grouping}&filterQuery=${filterQuery}&trainingDatasets=${trainingDatasets}`;
-    } else {
-      window.location.href = `/explore`;
-    }
+    //   window.location.href = `/explore?configure=true&variable=${variable}&covariable=${covariable}&grouping=${grouping}&filterQuery=${filterQuery}&trainingDatasets=${trainingDatasets}`;
+    // } else {
+    //   window.location.href = `/explore`;
+    // }
   };
 
   private handleSelectModel = (model: MIP.API.IModelResponse) => {

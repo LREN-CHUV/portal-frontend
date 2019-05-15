@@ -22,7 +22,6 @@ circle.node.variable {
 }
 
 .model .variable {
-  background-color: #3f6078 !important;
   flex-grow: 1
 }
 
@@ -31,10 +30,22 @@ circle.node.covariable {
 }
 
 .model .covariable {
-  background-color: rgb(211, 46, 4) !important;
   flex-grow: 2
 }
 
 circle.node.grouping {
   fill: rgb(90, 231, 55) !important;
+}
+
+div.tooltip {
+  position: absolute;
+  text-align: center;
+  width: 60px;
+  height: 28px;
+  padding: 2px;
+  font: 12px sans-serif;
+  background: lightsteelblue;
+  border: 0px;
+  border-radius: 8px;
+  pointer-events: none;
 }
