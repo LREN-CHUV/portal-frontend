@@ -1,7 +1,7 @@
 import './Shortcuts.css';
 
 import * as d3 from 'd3';
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import { HierarchyCircularNode } from './Container';
 import { renderLifeCycle } from './renderLifeCycle';
@@ -20,15 +20,17 @@ export default (props: Props) => {
   const [visibleResults, setVisibleResults] = useState(false);
   const [searchResult, setSearchResult] = useState<HierarchyCircularNode[]>();
   const [keyDownIndex, setKeyDownIndex] = useState(0);
+  const [enterZoom, setZoomEnter] = useState(false);
   const { hierarchy, zoom, handleSelectNode } = props;
 
+  // console.log('Shortcuts', searchResult)
   useEffect(() => {
     document.addEventListener('keydown', handleKeyDown);
 
     return function cleanup() {
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, []);
+  }, [searchResult]);
 
   useEffect(() => {
     console.log(keyDownIndex);
@@ -39,11 +41,12 @@ export default (props: Props) => {
     const path = d3.select(resultRef.current).selectAll('a');
     if (!searchResult) {
       path.remove();
-      return;WaveShaperNode
+      return;
     }
 
     path.remove();
-    const d3results = d3.select(resultRef.current)
+    const d3results = d3
+      .select(resultRef.current)
       .selectAll('a')
       .data(searchResult)
       .join('a')
@@ -55,18 +58,13 @@ export default (props: Props) => {
         d3.event.stopPropagation();
       });
 
-      if (keyDownIndex === 1) {
-        d3results.dispatch('click')
-      }
-    // .on('keydown', (d, i) => {
-    //   console.log('keydown')
-    //   if (i === keyDownIndex) {
-    //     handleSelectNode(d);
-    //     zoom(d);
-    //     d3.event.stopPropagation();
-    //   }
-    // });
-  }, [searchResult, keyDownIndex]);
+    if (enterZoom) {
+      setZoomEnter(false);
+      setVisibleResults(false);
+      const d3index = d3results.filter((d, i) => i === keyDownIndex);
+      d3index.dispatch('click');
+    }
+  }, [searchResult, keyDownIndex, enterZoom]);
 
   // renderLifeCycle({
   //   firstRender: () => {
@@ -109,10 +107,14 @@ export default (props: Props) => {
   };
 
   const handleKeyDown = (event: KeyboardEvent) => {
-    if (event.key === 'ArrowDown') {
-      setKeyDownIndex(keyDownIndex + 1);
+    if (event.key === 'ArrowDown' && searchResult) {
+      setKeyDownIndex(index =>
+        index >= searchResult.length - 1 ? searchResult.length - 1 : index + 1
+      );
     } else if (event.key === 'ArrowUp') {
-      setKeyDownIndex(keyDownIndex <= 0 ? 0 : keyDownIndex - 1);
+      setKeyDownIndex(index => (index <= 0 ? 0 : index - 1));
+    } else if (event.key === 'Enter') {
+      setZoomEnter(true);
     }
   };
 
@@ -125,7 +127,10 @@ export default (props: Props) => {
         onBlur={handleBlur}
         onChange={handleChangeInput}
       />
-      <div className={`d3-link-results ${visibleResults ? 'visible' : 'hidden'} `} ref={resultRef} />
+      <div
+        className={`d3-link-results ${visibleResults ? 'visible' : 'hidden'} `}
+        ref={resultRef}
+      />
     </div>
   );
 };
