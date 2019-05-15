@@ -1,29 +1,23 @@
-import './Shortcuts.css';
-
 import * as d3 from 'd3';
 import React, { useEffect, useRef, useState } from 'react';
-
 import { HierarchyCircularNode } from './Container';
-import { renderLifeCycle } from './renderLifeCycle';
+import './Shortcuts.css';
 
 interface Props {
   hierarchy: HierarchyCircularNode;
   zoom: Function;
   handleSelectNode: (node: HierarchyCircularNode) => void;
-  // model: Model;
-  // selectedNode: HierarchyCircularNode | undefined;
 }
 
 export default (props: Props) => {
-  const divRef = useRef(null);
   const resultRef = useRef(null);
+  const searchRef = useRef<HTMLInputElement>(document.createElement('input'));
   const [visibleResults, setVisibleResults] = useState(false);
   const [searchResult, setSearchResult] = useState<HierarchyCircularNode[]>();
   const [keyDownIndex, setKeyDownIndex] = useState(0);
   const [enterZoom, setZoomEnter] = useState(false);
   const { hierarchy, zoom, handleSelectNode } = props;
 
-  // console.log('Shortcuts', searchResult)
   useEffect(() => {
     document.addEventListener('keydown', handleKeyDown);
 
@@ -33,19 +27,15 @@ export default (props: Props) => {
   }, [searchResult]);
 
   useEffect(() => {
-    console.log(keyDownIndex);
-  }, [keyDownIndex]);
-
-  useEffect(() => {
     setVisibleResults(searchResult ? true : false);
-    const path = d3.select(resultRef.current).selectAll('a');
+    const d3results = d3.select(resultRef.current).selectAll('a');
     if (!searchResult) {
-      path.remove();
+      d3results.remove();
       return;
     }
 
-    path.remove();
-    const d3results = d3
+    d3results.remove();
+    const d3results2 = d3
       .select(resultRef.current)
       .selectAll('a')
       .data(searchResult)
@@ -60,29 +50,14 @@ export default (props: Props) => {
 
     if (enterZoom) {
       setZoomEnter(false);
-      setVisibleResults(false);
-      const d3index = d3results.filter((d, i) => i === keyDownIndex);
+      if (searchRef && searchRef.current) {
+        searchRef.current.blur();
+      }
+      setKeyDownIndex(0);
+      const d3index = d3results2.filter((d, i) => i === keyDownIndex);
       d3index.dispatch('click');
     }
   }, [searchResult, keyDownIndex, enterZoom]);
-
-  // renderLifeCycle({
-  //   firstRender: () => {
-  //     d3.select(divRef.current)
-  //       .selectAll('.shortcut')
-  //       .data(hierarchy.descendants())
-  //       .join('a')
-  //       .style('fill-opacity', d => (d.parent === hierarchy ? 1 : 0))
-  //       .style('display', d => (d.parent === hierarchy ? 'inline' : 'none'))
-  //       .text(d => d.data.label)
-  //       .on('click', d => {
-  //         handleSelectNode(d);
-
-  //         d3.event.stopPropagation();
-  //         zoom(d);
-  //       });
-  //   }
-  // });
 
   const handleChangeInput = (e: React.SyntheticEvent<HTMLInputElement>) => {
     const value = e.currentTarget.value;
@@ -115,17 +90,19 @@ export default (props: Props) => {
       setKeyDownIndex(index => (index <= 0 ? 0 : index - 1));
     } else if (event.key === 'Enter') {
       setZoomEnter(true);
+    } else if (event.key === 'Escape') {
+      setVisibleResults(false);
     }
   };
 
   return (
     <div className='shortcuts'>
-      {/* <div className='d3-link' ref={divRef} /> */}
       <input
         placeholder='Search'
         onFocus={() => setVisibleResults(searchResult ? true : false)}
         onBlur={handleBlur}
         onChange={handleChangeInput}
+        ref={searchRef}
       />
       <div
         className={`d3-link-results ${visibleResults ? 'visible' : 'hidden'} `}
