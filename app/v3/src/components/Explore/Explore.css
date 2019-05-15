@@ -1,3 +1,36 @@
+/* layout header */
+
+.Explore .header {
+  padding: 0 48px 8px 48px;
+}
+
+.Explore .header .panel {
+  margin-bottom: 0px !important;
+}
+
+.Explore .header h3 {
+  padding: 0 !important;
+  height: 34px;
+}
+
+.Explore .header .actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.Explore .header .status {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.Explore .header .actions .item {
+  margin-left: 4px;
+}
+
+.Explore .header .actions .text {
+  flex: 1 auto;
+}
+
 /* layout content */
 
 .Explore .content {
@@ -7,49 +40,58 @@
 
 .Explore .content .column {
   margin-right: 8px;
-  flex-basis: 100%;
   flex: 1;
 }
+.Explore .content .sidebar2 {
+  overflow: hidden;
+  width: 240px;
+  flex: 0 0 auto;
+}
 
-.Explore .datasets .panel-title {
+.Explore .content .sidebar2 {
+  margin-right: 8px;
+}
+
+.Explore .content .variable-box {
+  display: flex;
+  flex-flow: space-between;
+  align-items: center;
+}
+
+.Explore .content .variable-box .child {
+  flex: 1
+}
+
+.Explore .content .datasets .panel-title {
   display: flex;
   align-items: center;
 }
 
-.Explore .datasets .panel-title h3 {
+.Explore .content .datasets .panel-title h3 {
   margin-right: 32px;
 }
 
-.Explore .statistics {
+.Explore .content .statistics {
   height: 529px;
 }
 
-.Explore .model-body {
-  display: flex;
+.Explore .content .model-body p  {
+  margin: 0
 }
 
-.Explore .model-body .btn-info,
-.Explore .model-body a {
-  white-space: normal;
-  width: 150px;
+.Explore  .content .model-body p span {
+  margin-right: 8px
 }
 
-.statistics .nav > li > a {
+
+.Explore .content .statistics .nav > li > a {
   padding: 8px 4px;
 }
 
-.Explore .d3-link a:after {
-  content: ' - ';
-}
-
-.Explore .d3-link a:last-child:after {
-  content: '';
-}
-
-.Explore .d3-link-hierarchy a:after {
+.Explore .content .d3-link-hierarchy a:after {
   content: ' > ';
 }
 
-.Explore .d3-link-hierarchy a:last-child:after {
+.Explore .content .d3-link-hierarchy a:last-child:after {
   content: '';
 }

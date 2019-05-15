@@ -1,12 +1,15 @@
+import './Explore.css';
+
 import React from 'react';
 import { Button, Checkbox, Panel } from 'react-bootstrap';
+
 import { VariableEntity } from '../API/Core';
 import { HierarchyCircularNode, Model, ModelType } from './Container';
 import { HierarchyNode } from './d3Hierarchy';
-import './Explore.css';
 import Histograms from './Histograms';
+import ModelView from './Model';
 import Shortcuts from './Shortcuts';
-
+import Header from './Header';
 export interface ExploreProps {
   children?: any;
   datasets?: VariableEntity[];
@@ -17,11 +20,7 @@ export interface ExploreProps {
   model: Model;
   handleSelectDataset: (e: VariableEntity) => void;
   handleSelectNode: (node: HierarchyCircularNode) => void;
-  handleChangeModel: (
-    type: ModelType,
-    node?: HierarchyNode,
-    remove?: boolean
-  ) => void;
+  handleChangeModel: (type: ModelType, node?: HierarchyNode, remove?: boolean) => void;
   zoom: Function;
 }
 
@@ -41,8 +40,46 @@ export default (props: ExploreProps) => {
   } = props;
   return (
     <div className='Explore'>
-      <div className='header' />
+      <div className='header'>{/* <Header /> */}</div>
       <div className='content'>
+        <div className='column'>
+          <Panel className='circle-pack'>
+            <Panel.Title>
+              <div className='variable-box'>
+                <h3 className='child'>Variables</h3>
+                <Shortcuts hierarchy={hierarchy} zoom={zoom} handleSelectNode={handleSelectNode} />
+              </div>
+            </Panel.Title>
+            <Panel.Body>
+              <div>
+                ADD AS { ' '}
+                <Button
+                  bsStyle={'info'}
+                  disabled={!selectedNode || (selectedNode && !selectedNode.data.isVariable)}
+                  // tslint:disable-next-line jsx-no-lambda
+                  onClick={() => handleChangeModel(ModelType.VARIABLE)}>
+                  + AS VARIABLE
+                </Button>
+                <Button
+                  bsStyle={'info'}
+                  disabled={!selectedNode}
+                  // tslint:disable-next-line jsx-no-lambda
+                  onClick={() => handleChangeModel(ModelType.COVARIABLE)}>
+                  + AS COVARIABLE
+                </Button>
+                <Button
+                  bsStyle={'info'}
+                  disabled={!selectedNode}
+                  // tslint:disable-next-line jsx-no-lambda
+                  onClick={() => handleChangeModel(ModelType.FILTER)}>
+                  + AS FILTER
+                </Button>
+              </div>
+
+              {children}
+            </Panel.Body>
+          </Panel>
+        </div>
         <div className='column'>
           <Panel className='datasets'>
             <Panel.Title>
@@ -56,26 +93,12 @@ export default (props: ExploreProps) => {
                     onChange={() => {
                       handleSelectDataset(dataset);
                     }}
-                    checked={selectedDatasets
-                      .map(s => s.code)
-                      .includes(dataset.code)}>
+                    checked={selectedDatasets.map(s => s.code).includes(dataset.code)}>
                     {dataset.label}
                   </Checkbox>
                 ))}
             </Panel.Title>
           </Panel>
-          <Panel className='circle-pack'>
-            <Panel.Title>
-              <h3>Variables</h3>
-            </Panel.Title>
-            <Panel.Body>
-              <h6>Shortcuts</h6>
-              <Shortcuts hierarchy={hierarchy} zoom={zoom} handleSelectNode={handleSelectNode} />
-              {children}
-            </Panel.Body>
-          </Panel>
-        </div>
-        <div className='column'>
           <Panel className='statistics'>
             <Panel.Title>
               <h3>Statistics Summary</h3>
@@ -89,96 +112,19 @@ export default (props: ExploreProps) => {
               />
             </Panel.Body>
           </Panel>
+        </div>
+        <div className='sidebar2'>
           <Panel className='model'>
             <Panel.Title>
               <h3>Model</h3>
             </Panel.Title>
             <Panel.Body className='model-body'>
-              <div className='model variable'>
-                <Button
-                  bsStyle={'info'}
-                  // tslint:disable-next-line jsx-no-lambda
-                  onClick={() => handleChangeModel(ModelType.VARIABLE)}>
-                  + AS VARIABLE
-                </Button>
-                {model.variable && (
-                  <p>
-                    <Button
-                      bsStyle={'link'}
-                      // tslint:disable-next-line jsx-no-lambda
-                      onClick={() =>
-                        handleChangeModel(
-                          ModelType.VARIABLE,
-                          model.variable,
-                          true
-                        )
-                      }>
-                      X
-                    </Button>
-
-                    <a
-                      // tslint:disable-next-line jsx-no-lambda
-                      onClick={() => {
-                        // if (model.variable) {
-                        //   handleSelectVariable(model.variable);
-                        // }
-                      }}>
-                      {model.variable.data.label}
-                    </a>
-                  </p>
-                )}
-              </div>
-              <div className='model covariable'>
-                <Button
-                  bsStyle={'info'}
-                  // tslint:disable-next-line jsx-no-lambda
-                  onClick={() => handleChangeModel(ModelType.COVARIABLE)}>
-                  + AS COVARIABLE
-                </Button>
-                <div>
-                  <p>Nominal</p>
-                  {model.covariables &&
-                    model.covariables.map((c, i) => (
-                      <p key={`p-${i}`}>
-                        <Button
-                          bsStyle={'link'}
-                          key={`$btn-{i}`}
-                          // tslint:disable-next-line jsx-no-lambda
-                          onClick={() =>
-                            handleChangeModel(ModelType.COVARIABLE, c, true)
-                          }>
-                          X
-                        </Button>
-                        <a
-                          key={`$var-{i}`}
-                          // tslint:disable-next-line jsx-no-lambda
-                          onClick={() => {
-                            // if (c) {
-                            //   handleSelectVariable(c);
-                            // }
-                          }}>
-                          {c.data.label}
-                        </a>
-                      </p>
-                    ))}
-                  {/* <p>Continuous</p>
-                  {model.groupings.map(c => (
-                    <p>{c}</p>
-                  ))} */}
-                </div>
-              </div>
-              <div style={{ flexGrow: 1 }}>
-                <Button
-                  bsStyle={'info'}
-                  // tslint:disable-next-line jsx-no-lambda
-                  // onClick={() => handleChangeModel(ModelType.FILTER)}>
-                >
-                  + AS FILTER
-                </Button>
-                {/* {model.filters.map(c => (
-                  <p>{c}</p>
-                ))} */}
-              </div>
+              <ModelView
+                model={model}
+                handleChangeModel={handleChangeModel}
+                handleSelectNode={handleSelectNode}
+                zoom={zoom}
+              />
             </Panel.Body>
           </Panel>
         </div>
