@@ -48,7 +48,8 @@ export default ({ apiCore, apiMining }: Props) => {
   useEffect(() => {
     const h = apiCore.state.hierarchy;
     if (h) {
-      setHierarchy(d3Hierarchy(h));
+      const node = d3Hierarchy(h);
+      setHierarchy(node);
     }
   }, [apiCore.state.hierarchy]);
 

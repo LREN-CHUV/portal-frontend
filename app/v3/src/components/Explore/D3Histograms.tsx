@@ -14,31 +14,20 @@ interface Props {
   zoom: Function;
 }
 
-const breadcrumb = (variable: HierarchyCircularNode, paths: HierarchyCircularNode[] = []): HierarchyCircularNode[] =>
-  variable && variable.parent ? breadcrumb(variable.parent, [...paths, variable]) : [...paths, variable];
+const breadcrumb = (
+  variable: HierarchyCircularNode,
+  paths: HierarchyCircularNode[] = []
+): HierarchyCircularNode[] =>
+  variable && variable.parent
+    ? breadcrumb(variable.parent, [...paths, variable])
+    : [...paths, variable];
 
 export default (props: Props) => {
-  // console.log('Histograms');
   const divRef = useRef(null);
+  const childrenRef = useRef(null);
   const { handleSelectedNode, histograms, selectedNode, zoom } = props;
 
   renderLifeCycle({
-    firstRender: () => {
-      if (selectedNode) {
-        d3.select(divRef.current)
-          .selectAll('.shortcut')
-          .data(breadcrumb(selectedNode).reverse())
-          .join('a')
-          // .style('fill-opacity', d => (d.parent === root ? 1 : 0))
-          // .style('display', d => (d.parent === root ? 'inline' : 'none'))
-          .text(d => d.data.label)
-          .on('click', d => {
-            handleSelectedNode(d);
-            d3.event.stopPropagation();
-            zoom(d);
-          });
-      }
-    },
     updateRender: () => {
       if (selectedNode) {
         d3.select(divRef.current)
@@ -52,7 +41,25 @@ export default (props: Props) => {
           .append('a')
           .text(d => d.data.label)
           .on('click', d => {
-            console.log(d3.event);
+            handleSelectedNode(d);
+            d3.event.stopPropagation();
+            zoom(d);
+          });
+
+        d3.select(childrenRef.current)
+          .selectAll('a')
+          .remove();
+
+        d3.select(childrenRef.current)
+          .selectAll('a')
+          .data(
+            selectedNode
+              .descendants()
+              .filter(d => d.parent === selectedNode && !d.data.isVariable)
+          )
+          .join('a')
+          .text(d => d.data.label)
+          .on('click', d => {
             handleSelectedNode(d);
             d3.event.stopPropagation();
             zoom(d);
@@ -61,14 +68,52 @@ export default (props: Props) => {
     }
   });
 
+  const overview = (node: HierarchyCircularNode): any => {
+    const children = node
+      .descendants()
+      .filter(d => d.parent === selectedNode);
+
+    return {
+      chart: {
+        type: 'column'
+      },
+      legend: {
+        enabled: false
+      },
+      series: [
+        {
+          data: children.map(c => c.descendants().length),
+          dataLabels: {
+            enabled: true
+          }
+        }
+      ],
+      title: {
+        text: 'Variables contained in subgroups'
+      },
+      tooltip: {
+        enabled: false
+      },
+      xAxis: {
+        categories: children.map(d => d.data.label)
+      },
+      yAxis: {
+        allowDecimals: false
+      }
+    };
+  };
+
   return (
     <div>
       {selectedNode && (
         <>
-          <div>
-            <b>Path</b>:
-            <div className='d3-link-hierarchy' ref={divRef} />
-          </div>
+          <p>
+            <b>Path</b>: <span className='d3-link-hierarchy' ref={divRef} />
+          </p>
+          <p>
+            <b>Subgroubs:</b>{' '}
+            <span className='d3-link-children' ref={childrenRef} />
+          </p>
           <p>
             <b>Type</b>: {selectedNode.data.type || 'group'}
           </p>
@@ -76,6 +121,10 @@ export default (props: Props) => {
             <b>Description</b>: {selectedNode.data.description || '-'}
           </p>
         </>
+      )}
+
+      {selectedNode && !selectedNode.data.isVariable && (
+        <Highchart options={overview(selectedNode)} />
       )}
       {histograms && histograms.loading && <Loading />}
       {histograms && histograms.error && (
@@ -88,7 +137,10 @@ export default (props: Props) => {
         <Tabs defaultActiveKey={0} id='uncontrolled-histogram-tabs'>
           {histograms.data &&
             histograms.data.map((h: any, i: number) => (
-              <Tab eventKey={i} title={`${h.label.replace('Histogram - ', '')}`} key={i}>
+              <Tab
+                eventKey={i}
+                title={`${h.label.replace('Histogram - ', '')}`}
+                key={i}>
                 <Highchart options={h} />
               </Tab>
             ))}
