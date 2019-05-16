@@ -21,6 +21,7 @@
 .Explore .header .status {
   display: flex;
   justify-content: flex-start;
+  align-items: center;
 }
 
 .Explore .header .actions .item {
@@ -52,6 +53,28 @@
   margin-right: 8px;
 }
 
+.Explore .content .panel-body {
+  padding: 0 15px;
+}
+
+.Explore .content .buttons {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin: 0 0 8px 0;
+  background: lightgray;
+}
+
+.Explore .content .buttons .child-title {
+  flex: 2;
+  margin-left: 4px
+}
+
+.Explore .content .buttons .child {
+  flex: 1;
+  margin-right: 4px
+}
+
 .Explore .content .variable-box {
   display: flex;
   flex-flow: space-between;
@@ -59,7 +82,7 @@
 }
 
 .Explore .content .variable-box .child {
-  flex: 1
+  flex: 1;
 }
 
 .Explore .content .datasets .panel-title {
@@ -75,14 +98,13 @@
   height: 529px;
 }
 
-.Explore .content .model-body p  {
-  margin: 0
+.Explore .content .model-body p {
+  margin: 0;
 }
 
-.Explore  .content .model-body p span {
-  margin-right: 8px
+.Explore .content .model-body p span {
+  margin-right: 8px;
 }
-
 
 .Explore .content .statistics .nav > li > a {
   padding: 8px 4px;
@@ -93,5 +115,13 @@
 }
 
 .Explore .content .d3-link-hierarchy a:last-child:after {
+  content: '';
+}
+
+.Explore .content .d3-link-children a:after {
+  content: ' | ';
+}
+
+.Explore .content .d3-link-children a:last-child:after {
   content: '';
 }

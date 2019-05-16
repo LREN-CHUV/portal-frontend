@@ -57,9 +57,12 @@ export default (props: ExploreProps) => {
               </div>
             </Panel.Title>
             <Panel.Body>
-              <div>
-                ADD AS{' '}
+              <div className='buttons'>
+                <div className='child-title'>
+                  <h5>ADD TO MODEL</h5>
+                </div>
                 <Button
+                  className='child'
                   bsStyle={'info'}
                   bsSize={'small'}
                   disabled={
@@ -71,6 +74,7 @@ export default (props: ExploreProps) => {
                   + AS VARIABLE
                 </Button>
                 <Button
+                  className='child'
                   bsStyle={'info'}
                   bsSize={'small'}
                   disabled={!selectedNode}
@@ -79,6 +83,7 @@ export default (props: ExploreProps) => {
                   + AS COVARIABLE
                 </Button>
                 <Button
+                  className='child'
                   bsStyle={'info'}
                   bsSize={'small'}
                   disabled={!selectedNode}
