@@ -53,7 +53,6 @@ export default (props: Props) => {
       if (searchRef && searchRef.current) {
         searchRef.current.blur();
       }
-      setKeyDownIndex(0);
       const d3index = d3results2.filter((d, i) => i === keyDownIndex);
       d3index.dispatch('click');
     }
