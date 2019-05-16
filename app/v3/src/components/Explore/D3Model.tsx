@@ -19,11 +19,6 @@ export default (props: ModelProps) => {
 
   const makeTree = (variables: HierarchyCircularNode[], type: ModelType) => {
     const ref = type === ModelType.COVARIABLE ? covariableRef.current : variableRef.current;
-
-    d3.select(ref)
-      .selectAll('p')
-      .remove();
-
     const block = d3
       .select(ref)
       .selectAll('p')
@@ -53,6 +48,14 @@ export default (props: ModelProps) => {
 
   renderLifeCycle({
     updateRender: () => {
+      d3.select(variableRef.current)
+      .selectAll('p')
+      .remove();
+
+      d3.select(covariableRef.current)
+      .selectAll('p')
+      .remove();
+
       if (model && model.variable) {
         makeTree(model.variable.descendants(), ModelType.VARIABLE)
       }
