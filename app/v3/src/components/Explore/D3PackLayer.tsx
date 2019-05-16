@@ -176,6 +176,7 @@ export default ({ hierarchy, ...props }: any) => {
             : d.data.label
         );
 
+      props.handleSelectNode(layout)
       zoomTo([layout.x, layout.y, layout.r * 2]);
     }
   });
