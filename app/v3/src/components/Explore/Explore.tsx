@@ -21,7 +21,6 @@ export interface ExploreProps {
   handleChangeModel: (
     type: ModelType,
     node?: HierarchyNode,
-    remove?: boolean
   ) => void;
   zoom: Function;
 }
@@ -70,7 +69,7 @@ export default (props: ExploreProps) => {
                     (selectedNode && !selectedNode.data.isVariable)
                   }
                   // tslint:disable-next-line jsx-no-lambda
-                  onClick={() => handleChangeModel(ModelType.VARIABLE)}>
+                  onClick={() => handleChangeModel(ModelType.VARIABLE, selectedNode)}>
                   + AS VARIABLE
                 </Button>
                 <Button
