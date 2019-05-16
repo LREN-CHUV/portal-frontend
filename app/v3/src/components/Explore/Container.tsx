@@ -27,9 +27,13 @@ interface Props {
 
 export default ({ apiCore, apiMining }: Props) => {
   const [datasets, setDatasets] = useState<VariableEntity[]>();
-  const [selectedDatasets, setSelectedDatasets] = useState<VariableEntity[]>([]);
+  const [selectedDatasets, setSelectedDatasets] = useState<VariableEntity[]>(
+    []
+  );
   const [hierarchy, setHierarchy] = useState<HierarchyNode>();
-  const [selectedNode, setSelectedNode] = useState<HierarchyCircularNode | undefined>();
+  const [selectedNode, setSelectedNode] = useState<
+    HierarchyCircularNode | undefined
+  >();
   const [model, setModel] = useState<Model>({
     covariables: undefined,
     filters: undefined,
@@ -65,19 +69,23 @@ export default ({ apiCore, apiMining }: Props) => {
   }, [selectedNode, selectedDatasets]);
 
   const handleSelectDataset = (dataset: VariableEntity) => {
-    const nextSelection = selectedDatasets.map(d => d.code).includes(dataset.code)
+    const nextSelection = selectedDatasets
+      .map(d => d.code)
+      .includes(dataset.code)
       ? [...selectedDatasets.filter(d => d.code !== dataset.code)]
       : [...selectedDatasets, dataset];
     setSelectedDatasets(nextSelection);
   };
 
-  const handleChangeModel = (type: ModelType, node: HierarchyNode | undefined = undefined, remove: boolean = false) => {
+  const handleChangeModel = (
+    type: ModelType,
+    node: HierarchyCircularNode,
+    remove: boolean = false
+  ) => {
     if (type === ModelType.VARIABLE) {
-      const nextModel = remove
-        ? { ...model, variable: undefined }
-        : selectedNode && selectedNode.data.isVariable
-        ? { ...model, variable: selectedNode }
-        : { ...model };
+      const nextModel = model.variable === node ?
+        { ...model, variable: undefined } :
+        { ...model, variable: node }
       setModel(nextModel);
     }
 
@@ -86,7 +94,11 @@ export default ({ apiCore, apiMining }: Props) => {
         const nextModel = {
           ...model,
           covariables:
-            (model.covariables && model.covariables.filter(c => c && c.data.code !== node.data.code)) || undefined
+            (model.covariables &&
+              model.covariables.filter(
+                c => c && c.data.code !== node.data.code
+              )) ||
+            undefined
         };
         setModel(nextModel);
         return;
@@ -104,7 +116,10 @@ export default ({ apiCore, apiMining }: Props) => {
           );
         const nextModel = {
           ...model,
-          covariables: nextCovariables && nextCovariables.length > 0 ? nextCovariables : selectedNode.leaves()
+          covariables:
+            nextCovariables && nextCovariables.length > 0
+              ? nextCovariables
+              : selectedNode.leaves()
         };
         setModel(nextModel);
       }
