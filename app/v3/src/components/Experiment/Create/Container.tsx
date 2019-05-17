@@ -3,6 +3,7 @@ import { Panel, Tab, Tabs } from 'react-bootstrap';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { MIP } from '../../../types';
 import { APICore, APIExperiment, APIModel } from '../../API';
+import { ModelResponse, Query } from '../../API/Model';
 import { globalParameters } from '../../constants';
 import Form from '../../Experiment/Create/Form';
 import ExperimentCreateHeader from '../../Experiment/Create/Header';
@@ -12,7 +13,6 @@ import Model from '../../UI/Model';
 import Validation from '../../UI/Validation';
 import '../Experiment.css';
 import Help from './Help';
-import { ModelResponse, Query } from '../../API/Model';
 
 
 interface Props extends RouteComponentProps<any> {

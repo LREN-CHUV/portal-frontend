@@ -79,7 +79,7 @@ const Boxplot = ({ miningState }: Props) => {
 
   return (
     <div>
-      <Loader visible={loading} />
+      <Loader />
       {error &&
         error.map((e, i) => <Alert message={e} title={'Error'} key={`${i}`} />)}
       {highchartsOptions.map((options: any, k: number) => (

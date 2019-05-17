@@ -122,10 +122,11 @@ export default ({ layout, ...props }: Props) => {
           'viewBox',
           `-${diameter / 2} -${diameter / 2} ${diameter} ${diameter}`
         )
-        .style('margin', '0 -8px')
-        .style('width', 'calc(100% + 16px)')
+        .style('margin', '0')
+        .style('width', 'calc(100%)')
         .style('height', 'auto')
         .style('cursor', 'pointer')
+        .style('border-radius', '4px')
         .on('click', () => zoom(layout));
 
       svg
