@@ -34,7 +34,7 @@ export default (props: ExploreProps) => {
     selectedDatasets,
     selectedNode,
     histograms,
-    model,
+    model: d3Model,
     handleSelectNode,
     handleSelectDataset,
     handleChangeModel,
@@ -50,19 +50,18 @@ export default (props: ExploreProps) => {
           <Panel className='model'>
             <Panel.Title>
               <h3>Model</h3>
-              <span>
-                {`on `}
+              <div>
                 {apiModel.state.models && (
                   <DropdownModel
                     items={apiModel.state.models}
                     handleSelect={handleSelectModel}
                   />
                 )}
-              </span>
+              </div>
             </Panel.Title>
             <Panel.Body className='model-body'>
               <ModelView
-                model={model}
+                model={d3Model}
                 handleChangeModel={handleChangeModel}
                 handleSelectNode={handleSelectNode}
                 zoom={zoom}
@@ -85,7 +84,7 @@ export default (props: ExploreProps) => {
             <Panel.Body>
               <div className='buttons'>
                 <div className='child-title'>
-                  <h5>ADD TO MODEL</h5>
+                  <h5>Add to model</h5>
                 </div>
                 <Button
                   className='child'
@@ -99,7 +98,7 @@ export default (props: ExploreProps) => {
                   onClick={() =>
                     handleChangeModel(ModelType.VARIABLE, selectedNode)
                   }>
-                  {model.variable === selectedNode ? '-' : '+'} AS VARIABLE
+                  {d3Model.variable === selectedNode ? '-' : '+'} AS VARIABLE
                 </Button>
                 <Button
                   className='child'
@@ -110,9 +109,9 @@ export default (props: ExploreProps) => {
                   onClick={() =>
                     handleChangeModel(ModelType.COVARIABLE, selectedNode)
                   }>
-                  {model.covariables &&
+                  {d3Model.covariables &&
                   selectedNode &&
-                  model.covariables.filter(c =>
+                  d3Model.covariables.filter(c =>
                     selectedNode.leaves().includes(c)
                   ).length === selectedNode.leaves().length
                     ? '-'
@@ -128,9 +127,9 @@ export default (props: ExploreProps) => {
                   onClick={() =>
                     handleChangeModel(ModelType.FILTER, selectedNode)
                   }>
-                  {model.filters &&
+                  {d3Model.filters &&
                   selectedNode &&
-                  model.filters.filter(c => selectedNode.leaves().includes(c))
+                  d3Model.filters.filter(c => selectedNode.leaves().includes(c))
                     .length === selectedNode.leaves().length
                     ? '-'
                     : '+'}{' '}

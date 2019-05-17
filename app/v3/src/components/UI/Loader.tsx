@@ -17,7 +17,7 @@ class Loader extends React.Component<Props> {
           color={"#0c6c94"}
           loading={visible}
         />
-        <p className={visible ? "" : "hidden"}>loading data...</p>
+        <p>loading...</p>
       </div>
     );
   }
