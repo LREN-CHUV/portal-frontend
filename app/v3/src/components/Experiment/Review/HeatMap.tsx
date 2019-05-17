@@ -3,7 +3,7 @@ import * as React from 'react';
 import { MiningResponseShape } from '../../API/Mining';
 import { Alert } from '../../UI/Alert';
 import Loader from '../../UI/Loader';
-import { PlotlyHeatmap } from '../Result/formats/';
+import { PlotlyHeatmap } from '../../UI/Visualization';
 
 interface Props {
   heatmaps: any;
