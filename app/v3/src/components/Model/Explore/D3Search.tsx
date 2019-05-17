@@ -102,6 +102,7 @@ export default (props: Props) => {
         onBlur={handleBlur}
         onChange={handleChangeInput}
         ref={searchRef}
+        className={'form-control'}
       />
       <div
         className={`d3-link-results ${visibleResults ? 'visible' : 'hidden'} `}

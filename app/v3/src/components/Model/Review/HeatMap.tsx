@@ -17,7 +17,7 @@ class HeatMap extends React.Component<Props> {
       heatmaps.reduce((acc: boolean, h: any) => acc && h.data === undefined, true);
 
     return (
-      <div style={{ padding: '8px' }}>
+      <div>
         <Loader visible={loading} />
         {heatmaps && heatmaps.error && (
           <Alert message={heatmaps.error} title={'Error'} />

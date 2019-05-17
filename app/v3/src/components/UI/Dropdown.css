@@ -1,8 +1,5 @@
 .dropdown-menu {
-  min-width: 256px !important;
-  padding: 12px 0 !important;
   overflow-y: scroll;
-  height: 640px;
 }
 
 .dropdown-menu li {

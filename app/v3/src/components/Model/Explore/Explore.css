@@ -53,6 +53,22 @@
   margin-right: 8px;
 }
 
+/* end layout */
+
+.Explore .sidebar .model .panel-title {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.Explore .sidebar .model .panel-title h3 {
+  margin-right: 16px;
+}
+
+.Explore .sidebar .model .panel-title button {
+  margin-top: 12px;
+}
+
 .Explore .content .panel-body {
   padding: 0 15px 16px 15px;
 }
@@ -62,22 +78,24 @@
   align-items: center;
   justify-content: flex-start;
   margin: 0 0 8px 0;
-  background: lightgray;
+  padding: 2px;
+  background: rgb(236, 236, 236);
+  border-radius: 4px;
 }
 
 .Explore .content .buttons .child-title {
   flex: 2;
-  margin-left: 8px
+  margin-left: 8px;
 }
 
 .Explore .content .buttons .child {
   flex: 1;
-  margin-right: 4px
+  margin-right: 4px;
 }
 
 .Explore .content .variable-box {
   display: flex;
-  flex-flow: space-between;
+  justify-content: space-between;
   align-items: center;
 }
 
@@ -85,17 +103,24 @@
   flex: 1;
 }
 
-.Explore .content .datasets .panel-title {
-  display: flex;
-  align-items: center;
+.Explore .content .variable-box .shortcuts {
+  margin-top: 8px;
 }
 
-.Explore .content .datasets .panel-title h3 {
-  margin-right: 32px;
+.Explore .content .variable-box .shortcuts input {
+  margin-right: 8px;
+  margin-left: -15px
 }
 
 .Explore .content .statistics {
   height: 529px;
+}
+
+.Explore .content .statistics .histograms {
+  margin-top: 8px;
+  padding: 8px 8px 0 8px;
+  border: 1px solid lightblue;
+  border-radius: 4px;
 }
 
 .Explore .content .model-body p {
@@ -112,22 +137,24 @@
 
 .Explore .content .statistics .overview p {
   padding: 0;
-  margin: 0
+  margin: 0;
 }
 
 .Explore .content .datasets .panel-title {
   display: flex;
   justify-content: flex-end;
   align-items: center;
+  margin-bottom: 8px
 }
 
 .Explore .content .datasets .panel-title h3 {
-  flex: 2
+  flex: 2;
 }
 
 .Explore .content .datasets .panel-title .checkbox-inline {
   flex: 0 1;
-  margin-right: 16px
+  margin-top: 12px;
+  margin-right: 16px;
 }
 
 .Explore .content .d3-link-hierarchy a:after {
