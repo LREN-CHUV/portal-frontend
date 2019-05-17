@@ -1,17 +1,19 @@
 import * as d3 from 'd3';
 import React, { useEffect, useState } from 'react';
-import { APICore, APIMining } from '../../API';
+import { MIP } from '../../../types';
+import { APICore, APIMining, APIModel } from '../../API';
 import { VariableEntity } from '../../API/Core';
 import { d3Hierarchy, HierarchyNode, VariableDatum } from './d3Hierarchy';
 import CirclePack from './D3PackLayer';
 import './Explore.css';
+const diameter: number = 800;
+const padding: number = 1.5;
 
 export type HierarchyCircularNode = d3.HierarchyCircularNode<VariableDatum>;
 
-export interface Model {
+export interface D3Model {
   covariables: HierarchyCircularNode[] | undefined;
   filters: HierarchyCircularNode[] | undefined;
-  groupings: HierarchyCircularNode[] | undefined;
   variable: HierarchyCircularNode | undefined;
 }
 
@@ -23,23 +25,93 @@ export enum ModelType {
 interface Props {
   apiCore: APICore;
   apiMining: APIMining;
+  apiModel: APIModel;
 }
 
-export default ({ apiCore, apiMining }: Props) => {
+export default ({ apiCore, apiMining, apiModel }: Props) => {
   const [datasets, setDatasets] = useState<VariableEntity[]>();
   const [selectedDatasets, setSelectedDatasets] = useState<VariableEntity[]>(
     []
   );
-  const [hierarchy, setHierarchy] = useState<HierarchyNode>();
+  const [d3Layout, setD3Layout] = useState<HierarchyCircularNode>();
   const [selectedNode, setSelectedNode] = useState<
     HierarchyCircularNode | undefined
   >();
-  const [model, setModel] = useState<Model>({
+  const [d3Model, setD3Model] = useState<D3Model>({
     covariables: undefined,
     filters: undefined,
-    groupings: undefined,
     variable: undefined
   });
+  const [model, setModel] = useState<MIP.API.IModelResponse>();
+
+  useEffect(() => {
+    const qs = document.location.pathname;
+    const slug = qs.split('/').pop();
+    if (slug) {
+      const m =
+        apiModel.state &&
+        apiModel.state.models &&
+        apiModel.state.models.find(m => m.slug === slug);
+      if (m && d3Layout) {
+        modelToD3Model(m, d3Layout);
+      }
+    }
+  }, [apiModel.state.models, d3Layout, model]);
+
+  useEffect(() => {
+    if (model && d3Layout) {
+        modelToD3Model(model, d3Layout);
+      }
+  }, [d3Layout, model]);
+
+  const modelToD3Model = (
+    model: MIP.API.IModelResponse,
+    d3Layout: HierarchyCircularNode
+  ) => {
+    const query = model && model.query;
+    if (query && d3Layout) {
+      const nextModel = {
+        covariables:
+          query.coVariables &&
+          d3Layout
+            .descendants()
+            .filter(l =>
+              query.coVariables!.map(c => c.code).includes(l.data.code)
+            ),
+        filters: undefined,
+        groupings: undefined,
+        variable:
+          query.variables &&
+          d3Layout
+            .descendants()
+            .find(l => l.data.code === query.variables![0].code)
+      };
+      setD3Model(nextModel);
+    }
+  };
+  // useEffect(() => {
+  //   const modelapi = apiModel.state.model;
+  //   const query = modelapi && modelapi.query;
+  //   if (query && d3Layout) {
+  //     const nextModel = {
+  //       covariables:
+  //         query.coVariables &&
+  //         d3Layout
+  //           .descendants()
+  //           .filter(l =>
+  //             query.coVariables!.map(c => c.code).includes(l.data.code)
+  //           ),
+  //       filters: undefined,
+  //       groupings: undefined,
+  //       variable:
+  //         query.variables &&
+  //         d3Layout
+  //           .descendants()
+  //           .find(l => l.data.code === query.variables![0].code)
+  //     };
+  //     setModel(nextModel);
+  //   }
+  // }, [apiModel.state.model, d3Layout]);
 
   useEffect(() => {
     const d = apiCore.state.datasets;
@@ -50,10 +122,16 @@ export default ({ apiCore, apiMining }: Props) => {
   }, [apiCore.state.datasets]);
 
   useEffect(() => {
-    const h = apiCore.state.hierarchy;
-    if (h) {
-      const node = d3Hierarchy(h);
-      setHierarchy(node);
+    const hierarchy = apiCore.state.hierarchy;
+    if (hierarchy) {
+      const node = d3Hierarchy(hierarchy);
+      const bubbleLayout = d3
+        .pack<VariableDatum>()
+        .size([diameter, diameter])
+        .padding(padding);
+
+      const d3layout = node && bubbleLayout(node);
+      setD3Layout(d3layout);
     }
   }, [apiCore.state.hierarchy]);
 
@@ -77,70 +155,76 @@ export default ({ apiCore, apiMining }: Props) => {
     setSelectedDatasets(nextSelection);
   };
 
-  const handleChangeModel = (type: ModelType, node: HierarchyCircularNode) => {
+  const handleD3ChangeModel = (
+    type: ModelType,
+    node: HierarchyCircularNode
+  ) => {
     if (type === ModelType.VARIABLE) {
       const nextModel =
-        model.variable === node
-          ? { ...model, variable: undefined }
+        d3Model.variable === node
+          ? { ...d3Model, variable: undefined }
           : {
-              ...model,
+              ...d3Model,
               covariables:
-                model.covariables && model.covariables.filter(c => c !== node),
+                d3Model.covariables &&
+                d3Model.covariables.filter(c => c !== node),
               variable: node
             };
 
-      setModel(nextModel);
+      setD3Model(nextModel);
     }
 
     if (type === ModelType.COVARIABLE) {
-      const nextModel = model.covariables
+      const nextModel = d3Model.covariables
         ? {
-            ...model,
+            ...d3Model,
             covariables: [
-              ...model.covariables.filter(c => !node.leaves().includes(c)),
-              ...node.leaves().filter(c => !model.covariables!.includes(c))
+              ...d3Model.covariables.filter(c => !node.leaves().includes(c)),
+              ...node.leaves().filter(c => !d3Model.covariables!.includes(c))
             ],
             variable:
-              model.variable && node.leaves().includes(model.variable)
+              d3Model.variable && node.leaves().includes(d3Model.variable)
                 ? undefined
-                : model.variable
+                : d3Model.variable
           }
         : {
-            ...model,
+            ...d3Model,
             covariables: node.leaves(),
             variable:
-              model.variable && node.leaves().includes(model.variable)
+              d3Model.variable && node.leaves().includes(d3Model.variable)
                 ? undefined
-                : model.variable
+                : d3Model.variable
           };
 
-      setModel(nextModel);
+      setD3Model(nextModel);
     }
 
     if (type === ModelType.FILTER) {
-      const nextModel = model.filters
+      const nextModel = d3Model.filters
         ? {
-            ...model,
+            ...d3Model,
             filters: [
-              ...model.filters.filter(c => !node.leaves().includes(c)),
-              ...node.leaves().filter(c => !model.filters!.includes(c))
+              ...d3Model.filters.filter(c => !node.leaves().includes(c)),
+              ...node.leaves().filter(c => !d3Model.filters!.includes(c))
             ]
           }
-        : { ...model, filters: node.leaves() };
-      setModel(nextModel);
+        : { ...d3Model, filters: node.leaves() };
+      setD3Model(nextModel);
     }
   };
 
   const props = {
+    apiModel,
     datasets,
-    handleChangeModel,
+    handleChangeModel: handleD3ChangeModel,
     handleSelectDataset,
+    handleSelectModel: setModel,
     handleSelectNode: setSelectedNode,
     histograms: apiMining.state.histograms,
-    model,
+    model: d3Model,
     selectedDatasets,
     selectedNode
   };
 
-  return hierarchy ? <CirclePack hierarchy={hierarchy} {...props} /> : null;
+  return d3Layout ? <CirclePack layout={d3Layout} {...props} /> : null;
 };
