@@ -40,7 +40,7 @@ export default (props: Props) => {
       .selectAll('a')
       .data(searchResult)
       .join('a')
-      .text(d => d.data.label)
+      .text(d => `${d.data.label} (${d.data.type || 'group'})`)
       .attr('class', (d, i) => (i === keyDownIndex ? 'selected' : ''))
       .on('click', d => {
         handleSelectNode(d);
@@ -68,7 +68,7 @@ export default (props: Props) => {
     const results: HierarchyCircularNode[] = [];
     hierarchy.each(node => {
       const regexp = new RegExp(value, 'ig');
-      if (regexp.test(node.data.label)) {
+      if (regexp.test(`${node.data.label} ${node.data.type}`)) {
         results.push(node);
       }
     });

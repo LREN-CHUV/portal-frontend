@@ -23,10 +23,10 @@ export interface Props {
   selectedNode: HierarchyCircularNode | undefined;
   layout: HierarchyCircularNode;
   histograms?: any;
-  model: D3Model;
+  d3Model: D3Model;
   handleSelectDataset: (e: VariableEntity) => void;
   handleSelectNode: (node: HierarchyCircularNode) => void;
-  handleChangeModel: Function; //(type: ModelType, node?: HierarchyCircularNode) => void;
+  handleD3ChangeModel: Function; //(type: ModelType, node?: HierarchyCircularNode) => void;
   handleSelectModel: Function;
 }
 
@@ -177,7 +177,7 @@ export default ({ layout, ...props }: Props) => {
       zoomTo([layout.x, layout.y, layout.r * 2]);
     },
     updateRender: () => {
-      const model: D3Model = props.model;
+      const model = props.d3Model;
       const svg = d3.select(svgRef.current);
       const circle = svg.selectAll('circle');
       circle
