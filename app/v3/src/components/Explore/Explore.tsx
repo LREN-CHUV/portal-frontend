@@ -18,10 +18,7 @@ export interface ExploreProps {
   model: Model;
   handleSelectDataset: (e: VariableEntity) => void;
   handleSelectNode: (node: HierarchyCircularNode) => void;
-  handleChangeModel: (
-    type: ModelType,
-    node?: HierarchyNode,
-  ) => void;
+  handleChangeModel: (type: ModelType, node?: HierarchyNode) => void;
   zoom: Function;
 }
 
@@ -39,6 +36,7 @@ export default (props: ExploreProps) => {
     handleChangeModel,
     zoom
   } = props;
+
   return (
     <div className='Explore'>
       <div className='header'>{/* <Header /> */}</div>
@@ -62,15 +60,17 @@ export default (props: ExploreProps) => {
                 </div>
                 <Button
                   className='child'
-                  bsStyle={'info'}
+                  bsStyle={'success'}
                   bsSize={'small'}
                   disabled={
                     !selectedNode ||
                     (selectedNode && !selectedNode.data.isVariable)
                   }
                   // tslint:disable-next-line jsx-no-lambda
-                  onClick={() => handleChangeModel(ModelType.VARIABLE, selectedNode)}>
-                  + AS VARIABLE
+                  onClick={() =>
+                    handleChangeModel(ModelType.VARIABLE, selectedNode)
+                  }>
+                  {model.variable === selectedNode ? '-' : '+'} AS VARIABLE
                 </Button>
                 <Button
                   className='child'
@@ -78,17 +78,34 @@ export default (props: ExploreProps) => {
                   bsSize={'small'}
                   disabled={!selectedNode}
                   // tslint:disable-next-line jsx-no-lambda
-                  onClick={() => handleChangeModel(ModelType.COVARIABLE)}>
-                  + AS COVARIABLE
+                  onClick={() =>
+                    handleChangeModel(ModelType.COVARIABLE, selectedNode)
+                  }>
+                  {model.covariables &&
+                  selectedNode &&
+                  model.covariables.filter(c =>
+                    selectedNode.leaves().includes(c)
+                  ).length === selectedNode.leaves().length
+                    ? '-'
+                    : '+'}{' '}
+                  AS COVARIABLE
                 </Button>
                 <Button
                   className='child'
-                  bsStyle={'info'}
+                  bsStyle={'primary'}
                   bsSize={'small'}
                   disabled={!selectedNode}
                   // tslint:disable-next-line jsx-no-lambda
-                  onClick={() => handleChangeModel(ModelType.FILTER)}>
-                  + AS FILTER
+                  onClick={() =>
+                    handleChangeModel(ModelType.FILTER, selectedNode)
+                  }>
+                  {model.filters &&
+                  selectedNode &&
+                  model.filters.filter(c =>
+                    selectedNode.leaves().includes(c)
+                  ).length === selectedNode.leaves().length
+                    ? '-'
+                    : '+'}{' '} AS FILTER
                 </Button>
               </div>
               {children}

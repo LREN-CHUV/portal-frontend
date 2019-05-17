@@ -106,7 +106,7 @@ export default (props: Props) => {
   return (
     <div>
       {selectedNode && (
-        <>
+        <div className={'overview'}>
           <p>
             <b>Path</b>: <span className='d3-link-hierarchy' ref={divRef} />
           </p>
@@ -120,7 +120,7 @@ export default (props: Props) => {
           <p>
             <b>Description</b>: {selectedNode.data.description || '-'}
           </p>
-        </>
+        </div>
       )}
 
       {selectedNode && !selectedNode.data.isVariable && (
