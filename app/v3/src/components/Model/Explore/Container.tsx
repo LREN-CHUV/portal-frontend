@@ -191,15 +191,20 @@ export default ({ apiCore, apiMining, apiModel }: Props) => {
     }
   };
 
+  const handleGoToAnalysis = () => {
+    document.location.href = (`/v3/review`);
+  }
+
   const props = {
     apiModel,
+    d3Model,
     datasets,
     handleD3ChangeModel,
+    handleGoToAnalysis,
     handleSelectDataset,
     handleSelectModel: setModel,
     handleSelectNode: setSelectedNode,
     histograms: apiMining.state.histograms,
-    d3Model,
     selectedDatasets,
     selectedNode
   };

@@ -28,6 +28,7 @@ export interface Props {
   handleSelectNode: (node: HierarchyCircularNode) => void;
   handleD3ChangeModel: Function; //(type: ModelType, node?: HierarchyCircularNode) => void;
   handleSelectModel: Function;
+  handleGoToAnalysis: Function;
 }
 
 export default ({ layout, ...props }: Props) => {
