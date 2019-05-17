@@ -1,31 +1,35 @@
 import React from 'react';
 import { Button, Checkbox, Panel } from 'react-bootstrap';
+import { APIModel } from '../../API';
 import { VariableEntity } from '../../API/Core';
-import { HierarchyCircularNode, Model, ModelType } from './Container';
-import { HierarchyNode } from './d3Hierarchy';
+import DropdownModel from '../../UI/DropdownModel';
+import { D3Model, HierarchyCircularNode, ModelType } from './Container';
 import Histograms from './D3Histograms';
 import ModelView from './D3Model';
 import Search from './D3Search';
 import './Explore.css';
 
 export interface ExploreProps {
+  apiModel: APIModel;
   children?: any;
   datasets?: VariableEntity[];
   selectedDatasets: VariableEntity[];
   selectedNode: HierarchyCircularNode | undefined;
   layout: HierarchyCircularNode;
   histograms?: any;
-  model: Model;
+  model: D3Model;
   handleSelectDataset: (e: VariableEntity) => void;
   handleSelectNode: (node: HierarchyCircularNode) => void;
-  handleChangeModel: (type: ModelType, node?: HierarchyNode) => void;
+  handleChangeModel: Function;
+  handleSelectModel: Function;
   zoom: Function;
 }
 
 export default (props: ExploreProps) => {
   const {
+    apiModel,
     children,
-    layout: hierarchy,
+    layout,
     datasets,
     selectedDatasets,
     selectedNode,
@@ -34,6 +38,7 @@ export default (props: ExploreProps) => {
     handleSelectNode,
     handleSelectDataset,
     handleChangeModel,
+    handleSelectModel,
     zoom
   } = props;
 
@@ -41,13 +46,37 @@ export default (props: ExploreProps) => {
     <div className='Explore'>
       <div className='header'>{/* <Header /> */}</div>
       <div className='content'>
+        <div className='sidebar'>
+          <Panel className='model'>
+            <Panel.Title>
+              <h3>Model</h3>
+              <span>
+                {`on `}
+                {apiModel.state.models && (
+                  <DropdownModel
+                    items={apiModel.state.models}
+                    handleSelect={handleSelectModel}
+                  />
+                )}
+              </span>
+            </Panel.Title>
+            <Panel.Body className='model-body'>
+              <ModelView
+                model={model}
+                handleChangeModel={handleChangeModel}
+                handleSelectNode={handleSelectNode}
+                zoom={zoom}
+              />
+            </Panel.Body>
+          </Panel>
+        </div>
         <div className='column'>
           <Panel className='circle-pack'>
             <Panel.Title>
               <div className='variable-box'>
                 <h3 className='child'>Variables</h3>
                 <Search
-                  hierarchy={hierarchy}
+                  hierarchy={layout}
                   zoom={zoom}
                   handleSelectNode={handleSelectNode}
                 />
@@ -74,7 +103,7 @@ export default (props: ExploreProps) => {
                 </Button>
                 <Button
                   className='child'
-                  bsStyle={'info'}
+                  bsStyle={'warning'}
                   bsSize={'small'}
                   disabled={!selectedNode}
                   // tslint:disable-next-line jsx-no-lambda
@@ -101,11 +130,11 @@ export default (props: ExploreProps) => {
                   }>
                   {model.filters &&
                   selectedNode &&
-                  model.filters.filter(c =>
-                    selectedNode.leaves().includes(c)
-                  ).length === selectedNode.leaves().length
+                  model.filters.filter(c => selectedNode.leaves().includes(c))
+                    .length === selectedNode.leaves().length
                     ? '-'
-                    : '+'}{' '} AS FILTER
+                    : '+'}{' '}
+                  AS FILTER
                 </Button>
               </div>
               {children}
@@ -142,21 +171,6 @@ export default (props: ExploreProps) => {
                 histograms={histograms}
                 selectedNode={selectedNode}
                 handleSelectedNode={handleSelectNode}
-                zoom={zoom}
-              />
-            </Panel.Body>
-          </Panel>
-        </div>
-        <div className='sidebar2'>
-          <Panel className='model'>
-            <Panel.Title>
-              <h3>Model</h3>
-            </Panel.Title>
-            <Panel.Body className='model-body'>
-              <ModelView
-                model={model}
-                handleChangeModel={handleChangeModel}
-                handleSelectNode={handleSelectNode}
                 zoom={zoom}
               />
             </Panel.Body>

@@ -1,13 +1,13 @@
 import * as d3 from 'd3';
 import React, { useRef } from 'react';
-import { HierarchyCircularNode, Model, ModelType } from './Container';
+import { HierarchyCircularNode, D3Model, ModelType } from './Container';
 import { renderLifeCycle } from './renderLifeCycle';
 
 export interface ModelProps {
   children?: any;
   handleChangeModel: Function;
   handleSelectNode: Function;
-  model: Model;
+  model: D3Model;
   zoom: Function;
 }
 

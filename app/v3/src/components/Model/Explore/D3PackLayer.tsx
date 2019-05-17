@@ -1,37 +1,45 @@
 import * as d3 from 'd3';
 import React, { useRef } from 'react';
+import { VariableEntity } from '../../API/Core';
 import './CirclePack.css';
-import { HierarchyCircularNode, Model } from './Container';
+import { HierarchyCircularNode, D3Model, ModelType } from './Container';
 import { HierarchyNode, VariableDatum } from './d3Hierarchy';
 import Explore from './Explore';
 import { renderLifeCycle } from './renderLifeCycle';
+import { APIModel } from '../../API';
 
 const diameter: number = 800;
 const padding: number = 1.5;
 
 type IView = [number, number, number];
 
-const depth = (n: HierarchyNode): number =>
+const depth = (n: HierarchyCircularNode): number =>
   n.children ? 1 + (d3.max<number>(n.children.map(depth)) || 0) : 1;
 
-// TODO: Props
-export default ({ hierarchy, ...props }: any) => {
+export interface Props {
+  apiModel: APIModel;
+  datasets?: VariableEntity[];
+  selectedDatasets: VariableEntity[];
+  selectedNode: HierarchyCircularNode | undefined;
+  layout: HierarchyCircularNode;
+  histograms?: any;
+  model: D3Model;
+  handleSelectDataset: (e: VariableEntity) => void;
+  handleSelectNode: (node: HierarchyCircularNode) => void;
+  handleChangeModel: Function; //(type: ModelType, node?: HierarchyCircularNode) => void;
+  handleSelectModel: Function;
+}
+
+export default ({ layout, ...props }: Props) => {
   const svgRef = useRef(null);
   const view = useRef<IView>([diameter / 2, diameter / 2, diameter]);
+  const focus = useRef(layout);
 
   const color = d3
     .scaleLinear<string, string>()
-    .domain([0, depth(hierarchy)])
+    .domain([0, depth(layout)])
     .range(['hsl(190,80%,80%)', 'hsl(228,80%,40%)'])
     .interpolate(d3.interpolateHcl);
-
-  const bubbleLayout = d3
-    .pack<VariableDatum>()
-    .size([diameter, diameter])
-    .padding(padding);
-
-  const layout = bubbleLayout(hierarchy);
-  const focus = useRef(layout);
 
   const zoomTo = (v: IView) => {
     const k = diameter / v[2];
@@ -168,12 +176,17 @@ export default ({ hierarchy, ...props }: any) => {
       zoomTo([layout.x, layout.y, layout.r * 2]);
     },
     updateRender: () => {
-      const model: Model = props.model;
+      const model: D3Model = props.model;
       const svg = d3.select(svgRef.current);
       const circle = svg.selectAll('circle');
       circle
         .filter(
-          (d: any) => ![model.variable, ...(model.covariables || []), ...(model.filters || [])].includes(d)
+          (d: any) =>
+            ![
+              model.variable,
+              ...(model.covariables || []),
+              ...(model.filters || [])
+            ].includes(d)
         )
         .style('fill', (d: any) => (d.children ? color(d.depth) : 'white'));
 
@@ -188,16 +201,19 @@ export default ({ hierarchy, ...props }: any) => {
       if (model.covariables && model.covariables.length > 0) {
         circle
           .filter(
-            (d: any) => model.covariables !== undefined && model.covariables.includes(d)
+            (d: any) =>
+              model.covariables !== undefined && model.covariables.includes(d)
           )
           .transition()
           .duration(250)
-          .style('fill', '#00bcd4');
+          .style('fill', '#f0ad4e');
       }
 
       if (model.filters && model.filters.length > 0) {
         circle
-          .filter((d: any) => model.filters !== undefined && model.filters.includes(d))
+          .filter(
+            (d: any) => model.filters !== undefined && model.filters.includes(d)
+          )
           .transition()
           .duration(250)
           .style('fill', '#337ab7');
