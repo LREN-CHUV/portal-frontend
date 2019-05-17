@@ -1,22 +1,22 @@
 import 'primeicons/primeicons.css';
-import 'primereact/resources/primereact.min.css';
-import 'primereact/resources/themes/nova-light/theme.css';
-import './Table.css';
-
 import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
+import 'primereact/resources/primereact.min.css';
+import 'primereact/resources/themes/nova-light/theme.css';
 import * as React from 'react';
-
-import { MIP } from '../../../types';
 import { Variable, VariableEntity } from '../../API/Core';
 import { MiningResponseShape } from '../../API/Mining';
+import { Query } from '../../API/Model';
 import Loader from '../../UI/Loader';
 import { round } from '../../utils';
+import './Table.css';
+
+
 
 interface Props {
   minings?: MiningResponseShape[];
   selectedDatasets?: Variable[];
-  query?: MIP.API.IQuery;
+  query?: Query;
   lookup: (code: string) => VariableEntity;
 }
 

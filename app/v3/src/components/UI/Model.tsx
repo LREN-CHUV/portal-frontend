@@ -1,13 +1,13 @@
-import './Model.css';
-
 import * as React from 'react';
 import { Panel } from 'react-bootstrap';
-
-import { MIP } from '../../types';
 import { VariableEntity } from '../API/Core';
+import { ModelResponse } from '../API/Model';
+import './Model.css';
+
+
 
 interface Props {
-  model?: MIP.API.IModelResponse;
+  model?: ModelResponse;
   showDatasets?: boolean;
   variables?: VariableEntity[];
 }
