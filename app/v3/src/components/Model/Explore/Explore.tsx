@@ -23,6 +23,7 @@ export interface ExploreProps {
   handleSelectNode: (node: HierarchyCircularNode) => void;
   handleD3ChangeModel: Function;
   handleSelectModel: Function;
+  handleGoToAnalysis: Function;
   zoom: Function;
 }
 
@@ -40,6 +41,7 @@ export default (props: ExploreProps) => {
     handleSelectDataset,
     handleD3ChangeModel,
     handleSelectModel,
+    handleGoToAnalysis,
     zoom
   } = props;
 
@@ -164,7 +166,7 @@ export default (props: ExploreProps) => {
         </div>
         <div className='column'>
           <div className='header'>
-            <Header />
+            <Header handleGoToAnalysis={handleGoToAnalysis}/>
           </div>
 
           <Panel className='statistics'>
