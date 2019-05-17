@@ -1,12 +1,11 @@
 import * as d3 from 'd3';
 import React, { useRef } from 'react';
+import { APIModel } from '../../API';
 import { VariableEntity } from '../../API/Core';
 import './CirclePack.css';
-import { HierarchyCircularNode, D3Model, ModelType } from './Container';
-import { HierarchyNode, VariableDatum } from './d3Hierarchy';
+import { D3Model, HierarchyCircularNode } from './Container';
 import Explore from './Explore';
-import { renderLifeCycle } from './renderLifeCycle';
-import { APIModel } from '../../API';
+import renderLifeCycle from './renderLifeCycle';
 
 const diameter: number = 800;
 const padding: number = 1.5;
