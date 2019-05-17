@@ -3,7 +3,8 @@ import React, { useEffect, useState } from 'react';
 import { MIP } from '../../../types';
 import { APICore, APIMining, APIModel } from '../../API';
 import { VariableEntity } from '../../API/Core';
-import { d3Hierarchy, HierarchyNode, VariableDatum } from './d3Hierarchy';
+import { ModelResponse } from '../../API/Model';
+import { d3Hierarchy, VariableDatum } from './d3Hierarchy';
 import CirclePack from './D3PackLayer';
 import './Explore.css';
 const diameter: number = 800;
@@ -42,7 +43,7 @@ export default ({ apiCore, apiMining, apiModel }: Props) => {
     filters: undefined,
     variable: undefined
   });
-  const [model, setModel] = useState<MIP.API.IModelResponse>();
+  const [model, setModel] = useState<ModelResponse>();
 
   useEffect(() => {
     const qs = document.location.pathname;
@@ -60,12 +61,12 @@ export default ({ apiCore, apiMining, apiModel }: Props) => {
 
   useEffect(() => {
     if (model && d3Layout) {
-        modelToD3Model(model, d3Layout);
-      }
+      modelToD3Model(model, d3Layout);
+    }
   }, [d3Layout, model]);
 
   const modelToD3Model = (
-    model: MIP.API.IModelResponse,
+    model: ModelResponse,
     d3Layout: HierarchyCircularNode
   ) => {
     const query = model && model.query;

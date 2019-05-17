@@ -1,18 +1,18 @@
 import * as React from 'react';
 import { Panel, Tab, Tabs } from 'react-bootstrap';
 import { Body } from 'react-bootstrap/lib/Modal';
-
-import { MIP } from '../../../types';
 import { APIMining } from '../../API';
 import { VariableEntity } from '../../API/Core';
+import { ModelResponse } from '../../API/Model';
 import { Alert } from '../../UI/Alert';
 import Boxplot from './Boxplot';
 import HeatMap from './HeatMap';
 import Table from './Table';
 
+
 interface Props {
   apiMining?: APIMining;
-  model?: MIP.API.IModelResponse;
+  model?: ModelResponse;
   selectedDatasets?: VariableEntity[];
   lookup: (code: string) => VariableEntity;
   children: any;

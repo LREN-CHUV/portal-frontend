@@ -1,20 +1,20 @@
-import './Review.css';
-
-import { async } from 'q';
 import queryString from 'query-string';
 import * as React from 'react';
 import { Panel } from 'react-bootstrap';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
-
 import { MIP } from '../../../types';
 import { APICore, APIMining, APIModel } from '../../API';
 import { VariableEntity } from '../../API/Core';
+import { ModelResponse, Query } from '../../API/Model';
 import { IAlert } from '../../UI/Alert';
 import Model from '../../UI/Model';
 import Validation from '../../UI/Validation';
 import Content from './Content';
 import Filter from './Filter';
 import ExperimentReviewHeader from './Header';
+import './Review.css';
+
+
 
 interface Props extends RouteComponentProps<any> {
   apiModel: APIModel;
@@ -24,7 +24,7 @@ interface Props extends RouteComponentProps<any> {
 interface State {
   alert?: IAlert;
   loadingSummary?: boolean;
-  query?: MIP.API.IQuery;
+  query?: Query;
   summaryStatistics?: any;
 }
 
@@ -63,7 +63,7 @@ class Container extends React.Component<Props, State> {
             }))
           : undefined;
 
-      const query: MIP.Internal.IQuery = {
+      const query: Query = {
         coVariables,
         filters: filterQuery,
         filtersFromParams,
@@ -334,7 +334,7 @@ class Container extends React.Component<Props, State> {
     // }
   };
 
-  private handleSelectModel = (model: MIP.API.IModelResponse) => {
+  private handleSelectModel = (model: ModelResponse) => {
     const { slug } = model;
     const { history } = this.props;
     history.push(`/v3/review/${slug}`);
@@ -353,7 +353,7 @@ class Container extends React.Component<Props, State> {
     return this.setState({ query });
   };
 
-  private setMinings = async ({ query }: { query: MIP.API.IQuery }) => {
+  private setMinings = async ({ query }: { query: Query }) => {
     const { apiMining } = this.props;
     const datasets = query.trainingDatasets;
 
@@ -371,7 +371,7 @@ class Container extends React.Component<Props, State> {
     }
   };
 
-  private handleUpdateDataset = (query: MIP.API.IQuery): void => {
+  private handleUpdateDataset = (query: Query): void => {
     this.setState({ query });
     this.setMinings({ query });
   };

@@ -12,6 +12,8 @@ import Model from '../../UI/Model';
 import Validation from '../../UI/Validation';
 import '../Experiment.css';
 import Help from './Help';
+import { ModelResponse, Query } from '../../API/Model';
+
 
 interface Props extends RouteComponentProps<any> {
   apiExperiment: APIExperiment;
@@ -22,7 +24,7 @@ interface Props extends RouteComponentProps<any> {
 
 interface State {
   parameters?: [MIP.API.IMethodPayload];
-  query?: MIP.API.IQuery;
+  query?: Query;
   method?: MIP.API.IMethod;
   alert: IAlert;
   kfold: number;
@@ -153,7 +155,7 @@ class Container extends React.Component<Props, State> {
     false;
 
   private handleSelectModel = async (
-    model: MIP.API.IModelResponse
+    model: ModelResponse
   ): Promise<any> => {
     const { slug } = model;
     const { apiModel, history } = this.props;
@@ -172,7 +174,7 @@ class Container extends React.Component<Props, State> {
     });
   };
 
-  private handleUpdateQuery = (query: MIP.API.IQuery): void => {
+  private handleUpdateQuery = (query: Query): void => {
     this.setState({ query });
   };
 
