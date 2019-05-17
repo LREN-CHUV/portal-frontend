@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Checkbox, Panel } from 'react-bootstrap';
-import { VariableEntity } from '../API/Core';
+import { VariableEntity } from '../../API/Core';
 import { HierarchyCircularNode, Model, ModelType } from './Container';
 import { HierarchyNode } from './d3Hierarchy';
 import Histograms from './D3Histograms';

@@ -1,9 +1,9 @@
 import * as d3 from 'd3';
 import React, { useRef } from 'react';
 import { Tab, Tabs } from 'react-bootstrap';
-import { MiningResponseShape } from '../API/Mining';
-import Highchart from '../UI/Visualization/Highchart';
-import Loading from '../UI/Loader';
+import { MiningResponseShape } from '../../API/Mining';
+import Highchart from '../../UI/Visualization/Highchart';
+import Loading from '../../UI/Loader';
 import { HierarchyCircularNode } from './Container';
 import { renderLifeCycle } from './renderLifeCycle';
 
