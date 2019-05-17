@@ -17,6 +17,8 @@ import AvailableMethods from '../../UI/AvailableMethods';
 import Model from '../../UI/Model';
 import Validation from '../../UI/Validation';
 import Help from './Help';
+import { ModelResponse, Query } from '../../API/Model';
+
 
 interface Props extends RouteComponentProps<any> {
   apiExperiment: APIExperiment;

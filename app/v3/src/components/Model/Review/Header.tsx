@@ -1,15 +1,15 @@
 import * as React from 'react';
 import { Button, FormControl, Glyphicon, Panel } from 'react-bootstrap';
-import { MIP } from '../../../types';
+import { ModelResponse } from '../../API/Model';
 import DropdownModel from '../../UI/DropdownModel';
 
 interface Props {
   handleGoBackToExplore: () => void;
   handleRunAnalysis: () => void;
   handleSaveModel: ({ title }: { title: string }) => void;
-  handleSelectModel: (model: MIP.API.IModelResponse) => void;
+  handleSelectModel: (model: ModelResponse) => void;
   modelName?: string;
-  models?: MIP.API.IModelResponse[];
+  models?: ModelResponse[];
   isMock?: boolean;
 }
 export default class Header extends React.Component<Props> {

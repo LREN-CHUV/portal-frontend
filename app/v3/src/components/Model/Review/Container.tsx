@@ -16,6 +16,9 @@ import { editPath } from '../Explore/Container';
 import Content from './Content';
 import Filter from './Filter';
 import ExperimentReviewHeader from './Header';
+import './Review.css';
+
+
 
 interface Params {
   slug: string;
