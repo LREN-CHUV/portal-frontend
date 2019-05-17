@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { LABELS } from '../../../constants';
-import { round } from '../../../utils';
+import { LABELS } from '../../constants';
+import { round } from '../../utils';
 
 import { isNumber } from 'util';
 import './JSON.css';
