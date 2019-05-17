@@ -8,8 +8,8 @@ import { Route } from 'react-router-dom';
 import { APICore, APIExperiment, APIMining, APIModel } from '../API';
 import ExperimentCreate from '../Experiment/Create/Container';
 import ExperimentResult from '../Experiment/Result/Container';
-import ExperimentReview from '../Experiment/Review/Container';
-import Explore from '../Explore/Container';
+import ExperimentReview from '../Model/Review/Container';
+import Explore from '../Model/Explore/Container';
 import Footer from '../UI/Footer';
 import Navigation from '../UI/Navigation';
 
