@@ -1,7 +1,7 @@
 import * as d3 from 'd3';
 import React, { useRef } from 'react';
 import './CirclePack.css';
-import { HierarchyCircularNode } from './Container';
+import { HierarchyCircularNode, Model } from './Container';
 import { HierarchyNode, VariableDatum } from './d3Hierarchy';
 import Explore from './Explore';
 import { renderLifeCycle } from './renderLifeCycle';
@@ -81,21 +81,9 @@ export default ({ hierarchy, ...props }: any) => {
     ): boolean => dd.parent === ffocus || !ffocus.children; // || !dd.children;
 
     const svg = d3.select(svgRef.current);
-    const node = svg.selectAll('circle');
-    const label = svg.selectAll('text');
+    const text = svg.selectAll('text');
 
-    node
-      .transition()
-      .duration(250)
-      .style('fill', (d: any) => (d.children ? color(d.depth) : 'white'));
-
-    node
-      .filter((d: any) => d !== layout && d.data.code === circleNode.data.code)
-      .transition()
-      .duration(250)
-      .style('fill', '#8C9AA2');
-
-    label
+    text
       .filter(function(dd: any) {
         const el = this as HTMLElement;
         return (
@@ -176,8 +164,44 @@ export default ({ hierarchy, ...props }: any) => {
             : d.data.label
         );
 
-      props.handleSelectNode(layout)
+      props.handleSelectNode(layout);
       zoomTo([layout.x, layout.y, layout.r * 2]);
+    },
+    updateRender: () => {
+      const model: Model = props.model;
+      const svg = d3.select(svgRef.current);
+      const circle = svg.selectAll('circle');
+      circle
+        .filter(
+          (d: any) => ![model.variable, ...(model.covariables || []), ...(model.filters || [])].includes(d)
+        )
+        .style('fill', (d: any) => (d.children ? color(d.depth) : 'white'));
+
+      if (model.variable) {
+        circle
+          .filter((d: any) => model.variable === d)
+          .transition()
+          .duration(250)
+          .style('fill', '#5cb85c');
+      }
+
+      if (model.covariables && model.covariables.length > 0) {
+        circle
+          .filter(
+            (d: any) => model.covariables !== undefined && model.covariables.includes(d)
+          )
+          .transition()
+          .duration(250)
+          .style('fill', '#00bcd4');
+      }
+
+      if (model.filters && model.filters.length > 0) {
+        circle
+          .filter((d: any) => model.filters !== undefined && model.filters.includes(d))
+          .transition()
+          .duration(250)
+          .style('fill', '#337ab7');
+      }
     }
   });
 
