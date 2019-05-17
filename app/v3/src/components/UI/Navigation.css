@@ -1200,3 +1200,7 @@ i.ti {
 #topnav .help {
   margin-top: 8px;
 }
+
+#topnav .toolbar a.active span.icon-bg {
+  background-color: white !important;
+}

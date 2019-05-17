@@ -71,15 +71,14 @@ class Navigation extends React.Component<Props> {
 
           <ul className='nav navbar-nav toolbar pull-right'>
             <li className='toolbar-icon-bg hidden-xs'>
-              <a
+              <NavLink
                 title='Epidemiological Exploration '
-                href='/explore'
-                // tslint:disable-next-line jsx-no-lambda
-                onClick={e => this.jumpToAngular(e, '/explore')}>
+                to='/v3/explore'
+                activeClassName='active'>
                 <span className='icon-bg'>
                   <i>EE</i>
                 </span>
-              </a>
+              </NavLink>
             </li>
 
             <li className='toolbar-icon-bg hidden-xs'>
