@@ -1,7 +1,7 @@
 import * as d3 from 'd3';
 import React, { useEffect, useState } from 'react';
-import { APICore, APIMining } from '../API';
-import { VariableEntity } from '../API/Core';
+import { APICore, APIMining } from '../../API';
+import { VariableEntity } from '../../API/Core';
 import { d3Hierarchy, HierarchyNode, VariableDatum } from './d3Hierarchy';
 import CirclePack from './D3PackLayer';
 import './Explore.css';
