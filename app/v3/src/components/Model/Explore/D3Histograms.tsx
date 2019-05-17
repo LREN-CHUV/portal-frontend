@@ -2,10 +2,10 @@ import * as d3 from 'd3';
 import React, { useRef } from 'react';
 import { Tab, Tabs } from 'react-bootstrap';
 import { MiningResponseShape } from '../../API/Mining';
-import Loading from '../../UI/Loader';
 import Highchart from '../../UI/Visualization/Highchart';
+import Loading from '../../UI/Loader';
 import { HierarchyCircularNode } from './Container';
-import renderLifeCycle from './renderLifeCycle';
+import { renderLifeCycle } from './renderLifeCycle';
 
 interface Props {
   handleSelectedNode: (node: HierarchyCircularNode) => void;
@@ -71,9 +71,9 @@ export default (props: Props) => {
   const overview = (node: HierarchyCircularNode): any => {
     let children = node
       .descendants()
-      .filter(d => d.parent === selectedNode && !d.data.isVariable);
+      .filter(d => d.parent === selectedNode && !d.data.isVariable)
 
-    children = children.length ? children : [node];
+    children = children.length ? children : [node]
     return {
       chart: {
         type: 'column'
@@ -124,34 +124,29 @@ export default (props: Props) => {
         </div>
       )}
 
-      <div className={'histograms'}>
-        {selectedNode && selectedNode.children && (
-          <Highchart options={overview(selectedNode)} />
-        )}
-        {histograms && histograms.loading && <Loading />}
-        {histograms && histograms.error && (
-          <div className='error'>
-            <h3>An error has occured</h3>
-            <p>{histograms.error}</p>
-          </div>
-        )}
-        {selectedNode &&
-          !selectedNode.children &&
-          histograms &&
-          histograms.data && (
-            <Tabs defaultActiveKey={0} id='uncontrolled-histogram-tabs'>
-              {histograms.data &&
-                histograms.data.map((h: any, i: number) => (
-                  <Tab
-                    eventKey={i}
-                    title={`${h.label.replace('Histogram - ', '')}`}
-                    key={i}>
-                    <Highchart options={h} />
-                  </Tab>
-                ))}
-            </Tabs>
-          )}
-      </div>
+      {selectedNode && selectedNode.children && (
+        <Highchart options={overview(selectedNode)} />
+      )}
+      {histograms && histograms.loading && <Loading />}
+      {histograms && histograms.error && (
+        <div className='error'>
+          <h3>An error has occured</h3>
+          <p>{histograms.error}</p>
+        </div>
+      )}
+      {histograms && histograms.data && (
+        <Tabs defaultActiveKey={0} id='uncontrolled-histogram-tabs'>
+          {histograms.data &&
+            histograms.data.map((h: any, i: number) => (
+              <Tab
+                eventKey={i}
+                title={`${h.label.replace('Histogram - ', '')}`}
+                key={i}>
+                <Highchart options={h} />
+              </Tab>
+            ))}
+        </Tabs>
+      )}
     </div>
   );
 };

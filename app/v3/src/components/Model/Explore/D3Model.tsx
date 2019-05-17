@@ -1,26 +1,29 @@
 import * as d3 from 'd3';
 import React, { useRef } from 'react';
-import { D3Model, HierarchyCircularNode, ModelType } from './Container';
-import renderLifeCycle from './renderLifeCycle';
+import { HierarchyCircularNode, Model, ModelType } from './Container';
+import { renderLifeCycle } from './renderLifeCycle';
 
 export interface ModelProps {
   children?: any;
-  handleUpdateD3Model: Function;
+  handleChangeModel: Function;
   handleSelectNode: Function;
-  d3Model: D3Model;
+  model: Model;
   zoom: Function;
 }
 
 export default (props: ModelProps) => {
   const variableRef = useRef(null);
   const covariableRef = useRef(null);
-  const { d3Model: model, handleUpdateD3Model, handleSelectNode, zoom } = props;
+  const filterRef = useRef(null);
+  const { model, handleChangeModel, handleSelectNode, zoom } = props;
 
   const makeTree = (variables: HierarchyCircularNode[], type: ModelType) => {
     const ref =
       type === ModelType.COVARIABLE
         ? covariableRef.current
-        : variableRef.current
+        : type === ModelType.VARIABLE
+        ? variableRef.current
+        : filterRef.current;
 
     const block = d3
       .select(ref)
@@ -34,13 +37,13 @@ export default (props: ModelProps) => {
       .append('a')
       .text('x')
       .on('click', d => {
-        handleUpdateD3Model(type, d, true);
+        handleChangeModel(type, d, true);
         d3.event.stopPropagation();
       });
 
     block
       .append('a')
-      .text(d => `${d.data.label} (${d.data.type})`)
+      .text(d => d.data.label)
       .on('click', d => {
         handleSelectNode(d);
 
@@ -58,7 +61,11 @@ export default (props: ModelProps) => {
       d3.select(covariableRef.current)
         .selectAll('p')
         .remove();
-     
+
+      d3.select(filterRef.current)
+        .selectAll('p')
+        .remove();
+
       if (model && model.variable) {
         makeTree(model.variable.descendants(), ModelType.VARIABLE);
       }
@@ -67,6 +74,9 @@ export default (props: ModelProps) => {
         makeTree(model.covariables, ModelType.COVARIABLE);
       }
 
+      if (model && model.filters) {
+        makeTree(model.filters, ModelType.FILTER);
+      }
     }
   });
 
@@ -76,6 +86,8 @@ export default (props: ModelProps) => {
       <div ref={variableRef} />
       <h5>Covariables</h5>
       <div ref={covariableRef} />
+      <h5>Filters</h5>
+      <div ref={filterRef} />
     </>
   );
 };
