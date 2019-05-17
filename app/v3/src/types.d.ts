@@ -19,11 +19,6 @@ export declare namespace MIP.Store {
     heatmaps?: MiningResponseShape[];
     histograms?: MiningResponseShape;
   }
-
-  export interface IModelState extends IError {
-    model?: MIP.API.IModelResponse | MIP.Internal.IModelMock;
-    models?: MIP.API.IModelResponse[];
-  }
 }
 
 export declare namespace MIP.API {
@@ -67,18 +62,6 @@ export declare namespace MIP.API {
     filters: string;
   }
 
-  export interface IModelResponse extends IError {
-    slug?: string;
-    title: string;
-    valid?: boolean;
-    createdAt?: number;
-    query: MIP.API.IQuery;
-    dataset?: any; // FIXME: not used in api
-    config?: any; // FIXME: not used in api
-    createdBy?: IUser;
-    isMock?: boolean;
-  }
-
   export interface IMethod {
     code: string;
     name: string;
@@ -110,27 +93,6 @@ export declare namespace MIP.API {
     rankedCrossValidations?: IValidationScore[];
   }
 
-  export interface IQuery {
-    filters: string;
-    variables?: VariableEntity[];
-    coVariables?: VariableEntity[];
-    groupings?: VariableEntity[];
-    trainingDatasets?: VariableEntity[];
-    testingDatasets?: VariableEntity[];
-    validationDatasets?: VariableEntity[];
-    [key: string]: any;
-  }
-
-  export interface IUser {
-    agreeNDA?: boolean;
-    fullname: string;
-    languages?: string[];
-    picture?: string;
-    roles?: string[];
-    username: string;
-    votedApps?: string[];
-  }
-
   export interface IConfusionMatrix {
     labels: string[];
     values: number[][];
@@ -159,21 +121,4 @@ export declare namespace MIP.API {
   }
 
   export interface IPolynomialClassificationScore extends IValidationScore {}
-}
-
-export declare namespace MIP.Internal {
-  // export enum IVariableType {
-  //   Integer,
-  //   Real,
-  //   Binominal,
-  //   Polynominal
-  // }
-  export interface IQuery extends MIP.API.IQuery {
-    filtersFromParams?: any[];
-  }
-
-  export interface IModelMock extends MIP.API.IModelResponse {
-    query: MIP.Internal.IQuery;
-    isMock: boolean;
-  }
 }

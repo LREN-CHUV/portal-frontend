@@ -3,13 +3,15 @@ import { Button, FormControl, Glyphicon, Panel } from 'react-bootstrap';
 import { MIP } from '../../../types';
 import Dropdown from '../../UI/Dropdown';
 import DropdownModel from '../../UI/DropdownModel';
+import { ModelResponse } from '../../API/Model';
+
 interface Props {
-  model?: MIP.API.IModelResponse;
-  models?: MIP.API.IModelResponse[];
+  model?: ModelResponse;
+  models?: ModelResponse[];
   experiments?: MIP.API.IExperimentResponse[];
   method?: MIP.API.IMethod;
   handleGoBackToReview: () => void;
-  handleSelectModel: (model: MIP.API.IModelResponse) => Promise<any>;
+  handleSelectModel: (model: ModelResponse) => Promise<any>;
   handleSelectExperiment: (
     experiment: MIP.API.IExperimentResponse
   ) => Promise<any>;

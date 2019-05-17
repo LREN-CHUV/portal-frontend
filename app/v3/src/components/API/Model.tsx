@@ -1,11 +1,58 @@
 import request from 'request-promise-native';
 import { Container } from 'unstated';
 
-import { MIP } from '../../types';
 import { backendURL } from '../API';
+import { VariableEntity } from './Core';
 
-class Model extends Container<MIP.Store.IModelState> {
-  public state: MIP.Store.IModelState = {};
+export interface ModelState {
+  error?: string;
+  model?: ModelResponse | ModelMock;
+  models?: ModelResponse[];
+}
+export interface ModelResponse {
+  error?: string;
+  slug?: string;
+  title: string;
+  valid?: boolean;
+  createdAt?: number;
+  query: Query;
+  dataset?: any; // FIXME: not used in api
+  config?: any; // FIXME: not used in api
+  createdBy?: IUser;
+  isMock?: boolean;
+}
+
+export interface IUser {
+  agreeNDA?: boolean;
+  fullname: string;
+  languages?: string[];
+  picture?: string;
+  roles?: string[];
+  username: string;
+  votedApps?: string[];
+}
+export interface Query {
+  filters: string;
+  variables?: VariableEntity[];
+  coVariables?: VariableEntity[];
+  groupings?: VariableEntity[];
+  trainingDatasets?: VariableEntity[];
+  testingDatasets?: VariableEntity[];
+  validationDatasets?: VariableEntity[];
+  [key: string]: any;
+}
+
+export interface MockQuery extends Query {
+  filtersFromParams?: any[];
+}
+
+export interface ModelMock extends ModelResponse {
+  query: MockQuery;
+  isMock: boolean;
+}
+
+class Model extends Container<ModelState> {
+  public state: ModelState = {};
 
   private options: request.Options;
   private baseUrl: string;
@@ -16,8 +63,8 @@ class Model extends Container<MIP.Store.IModelState> {
     this.baseUrl = `${backendURL}/models`;
   }
 
-  public setMock = async (query: MIP.Internal.IQuery) => {
-    const newModel: MIP.Internal.IModelMock = {
+  public setMock = async (query: MockQuery) => {
+    const newModel: ModelMock = {
       isMock: true,
       query,
       title: ''
@@ -31,7 +78,7 @@ class Model extends Container<MIP.Store.IModelState> {
   public one = async (slug: string) => {
     try {
       const data = await request.get(`${this.baseUrl}/${slug}`, this.options);
-      const json: MIP.API.IModelResponse = await JSON.parse(data);
+      const json: ModelResponse = await JSON.parse(data);
       if (json.error) {
         return await this.setState({
           error: json.error
@@ -121,7 +168,7 @@ class Model extends Container<MIP.Store.IModelState> {
   public all = async () => {
     try {
       const data = await request.get(`${this.baseUrl}`, this.options);
-      const json: MIP.API.IModelResponse[] = await JSON.parse(data);
+      const json: ModelResponse[] = await JSON.parse(data);
 
       return await this.setState({
         error: undefined,
