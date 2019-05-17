@@ -77,52 +77,57 @@ export default ({ apiCore, apiMining }: Props) => {
     setSelectedDatasets(nextSelection);
   };
 
-  const handleChangeModel = (
-    type: ModelType,
-    node: HierarchyCircularNode,
-    remove: boolean = false
-  ) => {
+  const handleChangeModel = (type: ModelType, node: HierarchyCircularNode) => {
     if (type === ModelType.VARIABLE) {
-      const nextModel = model.variable === node ?
-        { ...model, variable: undefined } :
-        { ...model, variable: node }
+      const nextModel =
+        model.variable === node
+          ? { ...model, variable: undefined }
+          : {
+              ...model,
+              covariables:
+                model.covariables && model.covariables.filter(c => c !== node),
+              variable: node
+            };
+
       setModel(nextModel);
     }
 
     if (type === ModelType.COVARIABLE) {
-      if (remove && node) {
-        const nextModel = {
-          ...model,
-          covariables:
-            (model.covariables &&
-              model.covariables.filter(
-                c => c && c.data.code !== node.data.code
-              )) ||
-            undefined
-        };
-        setModel(nextModel);
-        return;
-      }
+      const nextModel = model.covariables
+        ? {
+            ...model,
+            covariables: [
+              ...model.covariables.filter(c => !node.leaves().includes(c)),
+              ...node.leaves().filter(c => !model.covariables!.includes(c))
+            ],
+            variable:
+              model.variable && node.leaves().includes(model.variable)
+                ? undefined
+                : model.variable
+          }
+        : {
+            ...model,
+            covariables: node.leaves(),
+            variable:
+              model.variable && node.leaves().includes(model.variable)
+                ? undefined
+                : model.variable
+          };
 
-      if (selectedNode) {
-        const nextCovariables =
-          model.covariables &&
-          model.covariables.filter(
-            v =>
-              !selectedNode
-                .leaves()
-                .map(c => c.data.code)
-                .includes(v.data.code)
-          );
-        const nextModel = {
-          ...model,
-          covariables:
-            nextCovariables && nextCovariables.length > 0
-              ? nextCovariables
-              : selectedNode.leaves()
-        };
-        setModel(nextModel);
-      }
+      setModel(nextModel);
+    }
+
+    if (type === ModelType.FILTER) {
+      const nextModel = model.filters
+        ? {
+            ...model,
+            filters: [
+              ...model.filters.filter(c => !node.leaves().includes(c)),
+              ...node.leaves().filter(c => !model.filters!.includes(c))
+            ]
+          }
+        : { ...model, filters: node.leaves() };
+      setModel(nextModel);
     }
   };
 
