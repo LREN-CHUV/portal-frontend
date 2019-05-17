@@ -66,15 +66,15 @@ export default ({ apiCore, apiMining, apiModel }: Props) => {
   }, [d3Layout, model]);
 
   const modelToD3Model = (
-    model: ModelResponse,
-    d3Layout: HierarchyCircularNode
+    aModel: ModelResponse,
+    aD3Layout: HierarchyCircularNode
   ) => {
-    const query = model && model.query;
-    if (query && d3Layout) {
+    const query = aModel && aModel.query;
+    if (query && aD3Layout) {
       const nextModel = {
         covariables:
           query.coVariables &&
-          d3Layout
+          aD3Layout
             .descendants()
             .filter(l =>
               query.coVariables!.map(c => c.code).includes(l.data.code)
@@ -83,36 +83,13 @@ export default ({ apiCore, apiMining, apiModel }: Props) => {
         groupings: undefined,
         variable:
           query.variables &&
-          d3Layout
+          aD3Layout
             .descendants()
             .find(l => l.data.code === query.variables![0].code)
       };
       setD3Model(nextModel);
     }
   };
-  // useEffect(() => {
-  //   const modelapi = apiModel.state.model;
-  //   const query = modelapi && modelapi.query;
-  //   if (query && d3Layout) {
-  //     const nextModel = {
-  //       covariables:
-  //         query.coVariables &&
-  //         d3Layout
-  //           .descendants()
-  //           .filter(l =>
-  //             query.coVariables!.map(c => c.code).includes(l.data.code)
-  //           ),
-  //       filters: undefined,
-  //       groupings: undefined,
-  //       variable:
-  //         query.variables &&
-  //         d3Layout
-  //           .descendants()
-  //           .find(l => l.data.code === query.variables![0].code)
-  //     };
-  //     setModel(nextModel);
-  //   }
-  // }, [apiModel.state.model, d3Layout]);
 
   useEffect(() => {
     const d = apiCore.state.datasets;
@@ -217,12 +194,12 @@ export default ({ apiCore, apiMining, apiModel }: Props) => {
   const props = {
     apiModel,
     datasets,
-    handleChangeModel: handleD3ChangeModel,
+    handleD3ChangeModel,
     handleSelectDataset,
     handleSelectModel: setModel,
     handleSelectNode: setSelectedNode,
     histograms: apiMining.state.histograms,
-    model: d3Model,
+    d3Model,
     selectedDatasets,
     selectedNode
   };
