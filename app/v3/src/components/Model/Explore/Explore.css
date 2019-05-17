@@ -1,36 +1,18 @@
 /* layout header */
 
 .Explore .header {
-  padding: 0 48px 8px 48px;
+  /* padding: 0 48px 0px 48px; */
 }
 
-.Explore .header .panel {
+.Explore .header .panel-body {
+  display: flex;
+  padding-top: 15px !important;
+  justify-content: flex-end;
+  align-items: center;
   margin-bottom: 0px !important;
 }
 
-.Explore .header h3 {
-  padding: 0 !important;
-  height: 34px;
-}
 
-.Explore .header .actions {
-  display: flex;
-  justify-content: flex-end;
-}
-
-.Explore .header .status {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-}
-
-.Explore .header .actions .item {
-  margin-left: 4px;
-}
-
-.Explore .header .actions .text {
-  flex: 1 auto;
-}
 
 /* layout content */
 
@@ -62,11 +44,11 @@
 }
 
 .Explore .sidebar .model .panel-title h3 {
-  margin-right: 16px;
+  flex: 2;
 }
 
 .Explore .sidebar .model .panel-title button {
-  margin-top: 12px;
+  margin: 12px 15px 0 0;
 }
 
 .Explore .content .panel-body {
@@ -141,20 +123,20 @@
 }
 
 .Explore .content .datasets .panel-title {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  margin-bottom: 8px
+  margin-bottom: 15px
 }
 
-.Explore .content .datasets .panel-title h3 {
-  flex: 2;
-}
 
 .Explore .content .datasets .panel-title .checkbox-inline {
-  flex: 0 1;
-  margin-top: 12px;
-  margin-right: 16px;
+  display: block !important;
+}
+
+.Explore .content .datasets .panel-title .checkbox-inline:last-child {
+  margin-right: 15px;
+}
+
+.Explore .content .ia {
+  margin-right: 15px;
 }
 
 .Explore .content .d3-link-hierarchy a:after {

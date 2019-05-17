@@ -8,6 +8,7 @@ import Histograms from './D3Histograms';
 import ModelView from './D3Model';
 import Search from './D3Search';
 import './Explore.css';
+import Header from './Header';
 
 export interface ExploreProps {
   apiModel: APIModel;
@@ -17,10 +18,10 @@ export interface ExploreProps {
   selectedNode: HierarchyCircularNode | undefined;
   layout: HierarchyCircularNode;
   histograms?: any;
-  model: D3Model;
+  d3Model: D3Model;
   handleSelectDataset: (e: VariableEntity) => void;
   handleSelectNode: (node: HierarchyCircularNode) => void;
-  handleChangeModel: Function;
+  handleD3ChangeModel: Function;
   handleSelectModel: Function;
   zoom: Function;
 }
@@ -34,19 +35,40 @@ export default (props: ExploreProps) => {
     selectedDatasets,
     selectedNode,
     histograms,
-    model: d3Model,
+    d3Model,
     handleSelectNode,
     handleSelectDataset,
-    handleChangeModel,
+    handleD3ChangeModel,
     handleSelectModel,
     zoom
   } = props;
 
   return (
     <div className='Explore'>
-      <div className='header'>{/* <Header /> */}</div>
       <div className='content'>
         <div className='sidebar'>
+          <Panel className='datasets'>
+            <Panel.Title>
+              <h3>Datasets</h3>
+            </Panel.Title>
+            <Panel.Body>
+              {datasets &&
+                datasets.map((dataset: any) => (
+                  <Checkbox
+                    key={dataset.code}
+                    inline={true}
+                    // tslint:disable-next-line jsx-no-lambda
+                    onChange={() => {
+                      handleSelectDataset(dataset);
+                    }}
+                    checked={selectedDatasets
+                      .map(s => s.code)
+                      .includes(dataset.code)}>
+                    {dataset.label}
+                  </Checkbox>
+                ))}
+            </Panel.Body>
+          </Panel>
           <Panel className='model'>
             <Panel.Title>
               <h3>Model</h3>
@@ -62,7 +84,7 @@ export default (props: ExploreProps) => {
             <Panel.Body className='model-body'>
               <ModelView
                 model={d3Model}
-                handleChangeModel={handleChangeModel}
+                handleD3ChangeModel={handleD3ChangeModel}
                 handleSelectNode={handleSelectNode}
                 zoom={zoom}
               />
@@ -96,7 +118,7 @@ export default (props: ExploreProps) => {
                   }
                   // tslint:disable-next-line jsx-no-lambda
                   onClick={() =>
-                    handleChangeModel(ModelType.VARIABLE, selectedNode)
+                    handleD3ChangeModel(ModelType.VARIABLE, selectedNode)
                   }>
                   {d3Model.variable === selectedNode ? '-' : '+'} AS VARIABLE
                 </Button>
@@ -107,7 +129,7 @@ export default (props: ExploreProps) => {
                   disabled={!selectedNode}
                   // tslint:disable-next-line jsx-no-lambda
                   onClick={() =>
-                    handleChangeModel(ModelType.COVARIABLE, selectedNode)
+                    handleD3ChangeModel(ModelType.COVARIABLE, selectedNode)
                   }>
                   {d3Model.covariables &&
                   selectedNode &&
@@ -125,7 +147,7 @@ export default (props: ExploreProps) => {
                   disabled={!selectedNode}
                   // tslint:disable-next-line jsx-no-lambda
                   onClick={() =>
-                    handleChangeModel(ModelType.FILTER, selectedNode)
+                    handleD3ChangeModel(ModelType.FILTER, selectedNode)
                   }>
                   {d3Model.filters &&
                   selectedNode &&
@@ -141,26 +163,10 @@ export default (props: ExploreProps) => {
           </Panel>
         </div>
         <div className='column'>
-          <Panel className='datasets'>
-            <Panel.Title>
-              <h3>Datasets</h3>
-              {datasets &&
-                datasets.map((dataset: any) => (
-                  <Checkbox
-                    key={dataset.code}
-                    inline={true}
-                    // tslint:disable-next-line jsx-no-lambda
-                    onChange={() => {
-                      handleSelectDataset(dataset);
-                    }}
-                    checked={selectedDatasets
-                      .map(s => s.code)
-                      .includes(dataset.code)}>
-                    {dataset.label}
-                  </Checkbox>
-                ))}
-            </Panel.Title>
-          </Panel>
+          <div className='header'>
+            <Header />
+          </div>
+
           <Panel className='statistics'>
             <Panel.Title>
               <h3>Statistics Summary</h3>
