@@ -8,11 +8,12 @@ interface RenderLifecycleArgs {
   lastRender?: Function;
 }
 
-export const renderLifeCycle = ({
+export default ({
   firstRender,
   updateRender,
   lastRender
 }: RenderLifecycleArgs) => {
+
   const isFirstRender = useRef(true);
 
   useLayoutEffect(() => {

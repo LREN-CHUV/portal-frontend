@@ -5,7 +5,7 @@ import { MiningResponseShape } from '../../API/Mining';
 import Loading from '../../UI/Loader';
 import Highchart from '../../UI/Visualization/Highchart';
 import { HierarchyCircularNode } from './Container';
-import { renderLifeCycle } from './renderLifeCycle';
+import renderLifeCycle from './renderLifeCycle';
 
 interface Props {
   handleSelectedNode: (node: HierarchyCircularNode) => void;

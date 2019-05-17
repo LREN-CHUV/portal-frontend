@@ -1,7 +1,7 @@
 import * as d3 from 'd3';
 import React, { useRef } from 'react';
 import { D3Model, HierarchyCircularNode, ModelType } from './Container';
-import { renderLifeCycle } from './renderLifeCycle';
+import renderLifeCycle from './renderLifeCycle';
 
 export interface ModelProps {
   children?: any;
