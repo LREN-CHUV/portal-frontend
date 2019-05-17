@@ -11,7 +11,7 @@ import {
   PFA,
   PlotlyPCA,
   VISEvilJS
-} from './formats';
+} from '../../UI/Visualization';
 
 export default ({
   experimentState

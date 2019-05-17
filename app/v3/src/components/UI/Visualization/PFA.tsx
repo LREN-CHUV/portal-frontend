@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { Tab, Tabs } from 'react-bootstrap';
-import { MIP } from '../../../../types';
-import { SCORES } from '../../../constants';
-import { round } from '../../../utils';
-import { Highchart } from './';
+import { MIP } from '../../../types';
+import { SCORES } from '../../constants';
+import { round } from '../../utils';
+import { Highchart } from '.';
 
 import './JSON.css';
 import './PFA.css';
