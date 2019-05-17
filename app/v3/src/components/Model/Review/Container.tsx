@@ -306,8 +306,11 @@ class Container extends React.Component<Props, State> {
   };
 
   private handleGoBackToExplore = () => {
-    const { history } = this.props;
-    history.push(`/v3/explore`);
+    const { history, apiModel } = this.props;
+    const model = apiModel.state.model;
+    if (model && model.slug) {
+      history.push(`/v3/explore/${model.slug}`);
+    }
     // const { apiModel } = this.props;
     // const model = apiModel.state.model;
     // const query = model && model.query;
