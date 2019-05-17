@@ -69,10 +69,11 @@ export default (props: Props) => {
   });
 
   const overview = (node: HierarchyCircularNode): any => {
-    const children = node
+    let children = node
       .descendants()
-      .filter(d => d.parent === selectedNode);
+      .filter(d => d.parent === selectedNode && !d.data.isVariable)
 
+    children = children.length ? children : [node]
     return {
       chart: {
         type: 'column'
@@ -89,7 +90,7 @@ export default (props: Props) => {
         }
       ],
       title: {
-        text: 'Variables contained in subgroups'
+        text: `Variables contained in ${node.data.label}`
       },
       tooltip: {
         enabled: false
@@ -111,7 +112,7 @@ export default (props: Props) => {
             <b>Path</b>: <span className='d3-link-hierarchy' ref={divRef} />
           </p>
           <p>
-            <b>Subgroubs:</b>{' '}
+            <b>Children:</b>{' '}
             <span className='d3-link-children' ref={childrenRef} />
           </p>
           <p>
@@ -123,7 +124,7 @@ export default (props: Props) => {
         </div>
       )}
 
-      {selectedNode && !selectedNode.data.isVariable && (
+      {selectedNode && selectedNode.children && (
         <Highchart options={overview(selectedNode)} />
       )}
       {histograms && histograms.loading && <Loading />}
