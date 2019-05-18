@@ -1,16 +1,24 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { DropdownButton, MenuItem } from 'react-bootstrap';
 import { ModelResponse } from '../API/Model';
 import './Dropdown.css';
 
 interface Dropdown {
   items: ModelResponse[] | undefined;
-  title?: string;
-  handleSelect: any;
-  noCaret?: boolean;
+  selectedSlug?: string;
+  handleSelect: (model: ModelResponse) => void;
 }
-export default ({ items, handleSelect, noCaret = false }: Dropdown) => {
-  const [title, setTitle] = useState('New model');
+export default ({ items, handleSelect, selectedSlug }: Dropdown) => {
+  const [title, setTitle] = useState('Untitled');
+
+  useEffect(() => {
+    if (selectedSlug) {
+      const f = items && items.find(i => i.slug === selectedSlug);
+      if (f) {
+        setTitle(f.title);
+      }
+    }
+  }, [selectedSlug]);
 
   return (
     <DropdownButton

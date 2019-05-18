@@ -2,6 +2,7 @@ import * as d3 from 'd3';
 import React, { useRef } from 'react';
 import { APIModel } from '../../API';
 import { VariableEntity } from '../../API/Core';
+import { ModelResponse } from '../../API/Model';
 import './CirclePack.css';
 import { D3Model, HierarchyCircularNode } from './Container';
 import Explore from './Explore';
@@ -25,8 +26,8 @@ export interface Props {
   d3Model: D3Model;
   handleSelectDataset: (e: VariableEntity) => void;
   handleSelectNode: (node: HierarchyCircularNode) => void;
-  handleD3ChangeModel: Function; //(type: ModelType, node?: HierarchyCircularNode) => void;
-  handleSelectModel: Function;
+  handleD3ChangeModel: Function; // (type: ModelType, node?: HierarchyCircularNode) => void;
+  handleSelectModel: (model: ModelResponse) => void;
   handleGoToAnalysis: Function;
 }
 

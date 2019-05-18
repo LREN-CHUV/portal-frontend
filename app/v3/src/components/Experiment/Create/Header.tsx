@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { Button, FormControl, Glyphicon, Panel } from 'react-bootstrap';
 import { MIP } from '../../../types';
+import { ModelResponse } from '../../API/Model';
 import Dropdown from '../../UI/Dropdown';
 import DropdownModel from '../../UI/DropdownModel';
-import { ModelResponse } from '../../API/Model';
 
 interface Props {
   model?: ModelResponse;
@@ -46,7 +46,7 @@ export default class Header extends React.Component<Props, State> {
             {models && (
               <DropdownModel
                 items={models}
-                title={model && model.title}
+                selectedSlug={model && model.slug}
                 handleSelect={handleSelectModel}
               />
             )}
