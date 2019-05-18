@@ -258,11 +258,13 @@ class Container extends React.Component<Props, State> {
   };
 
   private handleGoBackToExplore = () => {
-    const { history, apiModel } = this.props;
-    const model = apiModel.state.model;
-    if (model && model.slug) {
-      history.push(`/v3/explore/${model.slug}`);
+    const { history } = this.props;
+    const slug = this.props.match.params.slug;
+    if (!slug) {
+      history.push(`/v3/explore`);
+      return;
     }
+    history.push(`/v3/explore/${slug}`);
   };
 
   private handleSelectModel = (model: ModelResponse) => {
