@@ -2,6 +2,7 @@ import React from 'react';
 import { Button, Checkbox, Panel } from 'react-bootstrap';
 import { APIModel } from '../../API';
 import { VariableEntity } from '../../API/Core';
+import { ModelResponse } from '../../API/Model';
 import DropdownModel from '../../UI/DropdownModel';
 import { D3Model, HierarchyCircularNode, ModelType } from './Container';
 import Histograms from './D3Histograms';
@@ -22,7 +23,7 @@ export interface ExploreProps {
   handleSelectDataset: (e: VariableEntity) => void;
   handleSelectNode: (node: HierarchyCircularNode) => void;
   handleD3ChangeModel: Function;
-  handleSelectModel: Function;
+  handleSelectModel: (model: ModelResponse) => void;
   handleGoToAnalysis: Function;
   zoom: Function;
 }
@@ -166,7 +167,7 @@ export default (props: ExploreProps) => {
         </div>
         <div className='column'>
           <div className='header'>
-            <Header handleGoToAnalysis={handleGoToAnalysis}/>
+            <Header handleGoToAnalysis={handleGoToAnalysis} />
           </div>
 
           <Panel className='statistics'>
