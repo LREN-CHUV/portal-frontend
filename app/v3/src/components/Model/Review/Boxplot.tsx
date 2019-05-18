@@ -18,8 +18,8 @@ interface Props {
 
 const Boxplot = ({ miningState }: Props) => {
   const minings = (miningState && miningState.summaryStatistics) || [];
-  const loading = minings.map(m => !m.error && !m.data).every(m => m);
-  const error = minings.map(m => m.error);
+  const loading = minings.map(m => m && !m.error && !m.data).every(m => m);
+  const error = minings.map(m => m && m.error);
   const filtered = minings.reduce(
     (acc: MiningResponseShape[], m: MiningResponseShape) => [
       ...acc,
@@ -79,7 +79,7 @@ const Boxplot = ({ miningState }: Props) => {
 
   return (
     <div>
-      <Loader />
+      {loading && <Loader />}
       {error &&
         error.map((e, i) => <Alert message={e} title={'Error'} key={`${i}`} />)}
       {highchartsOptions.map((options: any, k: number) => (

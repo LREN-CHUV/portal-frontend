@@ -76,6 +76,10 @@ class Model extends Container<ModelState> {
   };
 
   public one = async (slug: string) => {
+    this.setState({
+      error: undefined,
+      model: undefined
+    });
     try {
       const data = await request.get(`${this.baseUrl}/${slug}`, this.options);
       const json: ModelResponse = await JSON.parse(data);
