@@ -23,7 +23,7 @@ const Boxplot = ({ miningState }: Props) => {
   const filtered = minings.reduce(
     (acc: MiningResponseShape[], m: MiningResponseShape) => [
       ...acc,
-      ...((m.data &&
+      ...((m && m.data &&
         m.data.data &&
         m.data.data
           .filter(

@@ -22,8 +22,8 @@ export interface ExploreProps {
   d3Model: D3Model;
   handleSelectDataset: (e: VariableEntity) => void;
   handleSelectNode: (node: HierarchyCircularNode) => void;
-  handleD3ChangeModel: Function;
-  handleSelectModel: (model: ModelResponse) => void;
+  handleUpdateD3Model: Function;
+  handleSelectModel: (model?: ModelResponse) => void;
   handleGoToAnalysis: Function;
   zoom: Function;
 }
@@ -40,7 +40,7 @@ export default (props: ExploreProps) => {
     d3Model,
     handleSelectNode,
     handleSelectDataset,
-    handleD3ChangeModel,
+    handleUpdateD3Model,
     handleSelectModel,
     handleGoToAnalysis,
     zoom
@@ -76,19 +76,20 @@ export default (props: ExploreProps) => {
             <Panel.Title>
               <h3>Model</h3>
               <div>
-                {apiModel.state.models && (
-                  <DropdownModel
-                    items={apiModel.state.models}
-                    selectedSlug={apiModel.state.model && apiModel.state.model.slug}
-                    handleSelect={handleSelectModel}
-                  />
-                )}
+                <DropdownModel
+                  items={apiModel.state.models}
+                  selectedSlug={
+                    apiModel.state.model && apiModel.state.model.slug
+                  }
+                  showClear={true}
+                  handleSelect={handleSelectModel}
+                />
               </div>
             </Panel.Title>
             <Panel.Body className='model-body'>
               <ModelView
-                model={d3Model}
-                handleD3ChangeModel={handleD3ChangeModel}
+                d3Model={d3Model}
+                handleUpdateD3Model={handleUpdateD3Model}
                 handleSelectNode={handleSelectNode}
                 zoom={zoom}
               />
@@ -122,7 +123,7 @@ export default (props: ExploreProps) => {
                   }
                   // tslint:disable-next-line jsx-no-lambda
                   onClick={() =>
-                    handleD3ChangeModel(ModelType.VARIABLE, selectedNode)
+                    handleUpdateD3Model(ModelType.VARIABLE, selectedNode)
                   }>
                   {d3Model.variable === selectedNode ? '-' : '+'} AS VARIABLE
                 </Button>
@@ -133,7 +134,7 @@ export default (props: ExploreProps) => {
                   disabled={!selectedNode}
                   // tslint:disable-next-line jsx-no-lambda
                   onClick={() =>
-                    handleD3ChangeModel(ModelType.COVARIABLE, selectedNode)
+                    handleUpdateD3Model(ModelType.COVARIABLE, selectedNode)
                   }>
                   {d3Model.covariables &&
                   selectedNode &&
@@ -151,7 +152,7 @@ export default (props: ExploreProps) => {
                   disabled={!selectedNode}
                   // tslint:disable-next-line jsx-no-lambda
                   onClick={() =>
-                    handleD3ChangeModel(ModelType.FILTER, selectedNode)
+                    handleUpdateD3Model(ModelType.FILTER, selectedNode)
                   }>
                   {d3Model.filters &&
                   selectedNode &&

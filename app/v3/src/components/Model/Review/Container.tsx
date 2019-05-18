@@ -14,7 +14,9 @@ import Filter from './Filter';
 import ExperimentReviewHeader from './Header';
 import './Review.css';
 
-interface Params { slug: string }
+interface Params {
+  slug: string;
+}
 interface Props extends RouteComponentProps<Params> {
   apiModel: APIModel;
   apiCore: APICore;
@@ -31,21 +33,31 @@ class Container extends React.Component<Props, State> {
   public state: State = {};
 
   public async componentDidMount() {
-      const slug = this.props.match.params.slug;
-      console.log(slug)
-      if (slug) {
-        await this.loadModel({ slug });
-        const query = this.state.query;
-        if (query) {
-          this.setMinings({ query });
-        }
+    const slug = this.props.match.params.slug;
+    if (!slug) {
+      return;
+    }
+
+    if (slug !== 'untitled') {
+      await this.loadModel({ slug });
+      const query = this.state.query;
+      if (query) {
+        this.setMinings({ query });
+      }
+    } else {
+      const { apiModel } = this.props;
+      const draft = apiModel.state.draft;
+      if (draft) {
+        const query = draft.query;
+        this.setState({ query });
+        this.setMinings({ query });
+      }
     }
   }
 
   public async componentWillReceiveProps(nextProps: Props, prevState: State) {
     const slug = nextProps.match.params.slug;
     const prevSlug = this.props.match.params.slug;
-    console.log(prevSlug, slug)
     if (slug && prevSlug !== slug) {
       await this.loadModel({ slug });
       const query = this.state.query;
@@ -58,6 +70,70 @@ class Container extends React.Component<Props, State> {
 
   public render() {
     const { apiCore, apiModel, apiMining } = this.props;
+    const [query, fields, filters] = this.makeFilters({ apiCore });
+    const model = apiModel.state.model || apiModel.state.draft;
+    return (
+      <div className='Experiment Review'>
+        <div className='header'>
+          <ExperimentReviewHeader
+            handleGoBackToExplore={this.handleGoBackToExplore}
+            handleSaveModel={this.handleSaveModel}
+            handleRunAnalysis={this.handleRunAnalysis}
+            model={model}
+            models={apiModel.state.models}
+            selectedSlug={this.props.match.params.slug}
+            handleSelectModel={this.handleSelectModel}
+          />
+        </div>
+        <div className='content'>
+          <div className='sidebar'>
+            <Model
+              model={model}
+              selectedSlug={this.props.match.params.slug}
+              showDatasets={false}
+              variables={apiCore.state.variables}
+            />
+            <Panel className='model'>
+              <Panel.Body>
+                <Validation
+                  isPredictiveMethod={false}
+                  datasets={apiCore.state.datasets}
+                  query={query}
+                  handleUpdateQuery={this.handleUpdateDataset}
+                />
+              </Panel.Body>
+            </Panel>
+          </div>
+          <div className='results'>
+            <Content
+              apiMining={apiMining}
+              model={model}
+              selectedDatasets={query && query.trainingDatasets}
+              lookup={apiCore.lookup}>
+              <Panel className='filters' defaultExpanded={false}>
+                <Panel.Title toggle={true}>
+                  <h3 className={'btn btn-info'}>Filters</h3>
+                </Panel.Title>
+                <Panel.Collapse>
+                  <Panel.Body collapsible={true}>
+                    {fields && fields.length > 0 && (
+                      <Filter
+                        rules={filters}
+                        filters={fields}
+                        handleChangeFilter={this.handleUpdateFilter}
+                      />
+                    )}
+                  </Panel.Body>
+                </Panel.Collapse>
+              </Panel>
+            </Content>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  private makeFilters = ({ apiCore }: { apiCore: APICore }) => {
     const { query } = this.state;
     const variables = apiCore.state.variables;
 
@@ -157,66 +233,8 @@ class Container extends React.Component<Props, State> {
 
     const filters = (query && query.filters && JSON.parse(query.filters)) || '';
 
-    return (
-      <div className='Experiment Review'>
-        <div className='header'>
-          <ExperimentReviewHeader
-            handleGoBackToExplore={this.handleGoBackToExplore}
-            handleSaveModel={this.handleSaveModel}
-            handleRunAnalysis={this.handleRunAnalysis}
-            model={apiModel.state.model}
-            models={apiModel.state.models}
-            selectedSlug={this.props.match.params.slug}
-            handleSelectModel={this.handleSelectModel}
-          />
-        </div>
-        <div className='content'>
-          <div className='sidebar'>
-            <Model
-              model={apiModel.state.model}
-              selectedSlug={this.props.match.params.slug}
-              showDatasets={false}
-              variables={apiCore.state.variables}
-            />
-            <Panel className='model'>
-              <Panel.Body>
-                <Validation
-                  isPredictiveMethod={false}
-                  datasets={apiCore.state.datasets}
-                  query={query}
-                  handleUpdateQuery={this.handleUpdateDataset}
-                />
-              </Panel.Body>
-            </Panel>
-          </div>
-          <div className='results'>
-            <Content
-              apiMining={apiMining}
-              model={apiModel.state.model}
-              selectedDatasets={query && query.trainingDatasets}
-              lookup={apiCore.lookup}>
-              <Panel className='filters' defaultExpanded={false}>
-                <Panel.Title toggle={true}>
-                  <h3 className={'btn btn-info'}>Filters</h3>
-                </Panel.Title>
-                <Panel.Collapse>
-                  <Panel.Body collapsible={true}>
-                    {fields && fields.length > 0 && (
-                      <Filter
-                        rules={filters}
-                        filters={fields}
-                        handleChangeFilter={this.handleUpdateFilter}
-                      />
-                    )}
-                  </Panel.Body>
-                </Panel.Collapse>
-              </Panel>
-            </Content>
-          </div>
-        </div>
-      </div>
-    );
-  }
+    return [query, filters, fields];
+  };
 
   private handleUpdateFilter = async (filters: string): Promise<boolean> => {
     const { apiModel, apiMining } = this.props;
@@ -224,7 +242,7 @@ class Container extends React.Component<Props, State> {
     if (model) {
       model.query.filters = (filters && JSON.stringify(filters)) || '';
     }
-    if (model && !model.isMock) {
+    if (model) {
       await apiModel.update({ model });
     }
     const query = this.state.query;
@@ -250,7 +268,6 @@ class Container extends React.Component<Props, State> {
     // const { apiModel } = this.props;
     // const model = apiModel.state.model;
     // await apiModel.update({ model });
-
     // const params = this.urlParams(this.props);
     // const slug = params && params.slug;
     // const { history } = this.props;
@@ -259,18 +276,23 @@ class Container extends React.Component<Props, State> {
 
   private handleGoBackToExplore = () => {
     const { history } = this.props;
-    const slug = this.props.match.params.slug;
-    if (!slug) {
+    const { apiModel } = this.props;
+    const model = apiModel.state.model;
+    if (model && model.slug) {
+      history.push(`/v3/explore/${model.slug}`);
+    } else if (apiModel.state.draft) {
+      history.push(`/v3/explore/edit`);
+    } else {
       history.push(`/v3/explore`);
-      return;
     }
-    history.push(`/v3/explore/${slug}`);
   };
 
-  private handleSelectModel = (model: ModelResponse) => {
-    const { slug } = model;
-    const { history } = this.props;
-    history.push(`/v3/review/${slug}`);
+  private handleSelectModel = (model?: ModelResponse) => {
+    if (model) {
+      const { slug } = model;
+      const { history } = this.props;
+      history.push(`/v3/review/${slug}`);
+    }
   };
 
   private loadModel = async ({ slug }: { slug: string }) => {
