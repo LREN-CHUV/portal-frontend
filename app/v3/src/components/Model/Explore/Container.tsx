@@ -1,7 +1,6 @@
 import * as d3 from 'd3';
 import React, { useEffect, useState } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
-import { MIP } from '../../../types';
 import { APICore, APIMining, APIModel } from '../../API';
 import { VariableEntity } from '../../API/Core';
 import { ModelResponse } from '../../API/Model';
@@ -197,7 +196,13 @@ export default ({ apiCore, apiMining, apiModel, ...props }: Props) => {
   };
 
   const handleGoToAnalysis = () => {
-    props.history.push(`/v3/review`);
+    const { history } = props;
+    const slug = props.match.params.slug;
+    if (!slug) {
+      history.push(`/v3/review`);
+      return;
+    }
+    history.push(`/v3/review/${slug}`);
   };
 
   const nextProps = {
@@ -211,7 +216,7 @@ export default ({ apiCore, apiMining, apiModel, ...props }: Props) => {
     handleSelectNode: setSelectedNode,
     histograms: apiMining.state.histograms,
     selectedDatasets,
-    selectedNode
+    selectedNode,
   };
 
   return d3Layout ? <CirclePack layout={d3Layout} {...nextProps} /> : null;

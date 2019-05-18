@@ -272,6 +272,7 @@ class Container extends React.Component<Props, State> {
     } else {
       history.push(`/v3/explore`);
     }
+    history.push(`/v3/explore/${slug}`);
   };
 
   private handleSelectModel = (model?: ModelResponse) => {
