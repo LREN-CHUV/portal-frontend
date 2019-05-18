@@ -6,7 +6,8 @@ import { VariableEntity } from './Core';
 
 export interface ModelState {
   error?: string;
-  model?: ModelResponse | ModelMock;
+  model?: ModelResponse;
+  draft?: ModelResponse;
   models?: ModelResponse[];
 }
 export interface ModelResponse {
@@ -19,7 +20,7 @@ export interface ModelResponse {
   dataset?: any; // FIXME: not used in api
   config?: any; // FIXME: not used in api
   createdBy?: IUser;
-  isMock?: boolean;
+  parentSlug?: string;
 }
 
 export interface IUser {
@@ -33,6 +34,7 @@ export interface IUser {
 }
 export interface Query {
   filters: string;
+  filterVariables?: VariableEntity[];
   variables?: VariableEntity[];
   coVariables?: VariableEntity[];
   groupings?: VariableEntity[];
@@ -40,15 +42,6 @@ export interface Query {
   testingDatasets?: VariableEntity[];
   validationDatasets?: VariableEntity[];
   [key: string]: any;
-}
-
-export interface MockQuery extends Query {
-  filtersFromParams?: any[];
-}
-
-export interface ModelMock extends ModelResponse {
-  query: MockQuery;
-  isMock: boolean;
 }
 
 class Model extends Container<ModelState> {
@@ -63,15 +56,10 @@ class Model extends Container<ModelState> {
     this.baseUrl = `${backendURL}/models`;
   }
 
-  public setMock = async (query: MockQuery) => {
-    const newModel: ModelMock = {
-      isMock: true,
-      query,
-      title: ''
-    };
+  public setDraft = async (draft: ModelResponse) => {
     return await this.setState({
-      error: undefined,
-      model: newModel
+      draft,
+      error: undefined
     });
   };
 
