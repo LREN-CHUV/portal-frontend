@@ -496,9 +496,10 @@ caption {
 .btn-group > .btn:first-child {
   margin-left: 0;
 }
-.btn-group .dropdown-toggle:active {
+/* .btn-group .dropdown-toggle:active {
   outline: 0;
-}
+} */
+
 #topnav .logo-area:after,
 #topnav .logo-area:before,
 #topnav .userinfo li a:after,
@@ -668,9 +669,9 @@ table > tbody > tr:last-child > td:last-child {
 .nav-tabs > li > a:hover {
   border-color: #e0e0e0;
 }
-.btn.dropdown-toggle {
+/* .btn.dropdown-toggle {
   min-width: 20px;
-}
+} */
 .btn-group {
   padding: 0;
 }

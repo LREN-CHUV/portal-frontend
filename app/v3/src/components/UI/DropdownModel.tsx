@@ -9,8 +9,7 @@ interface Dropdown {
   handleSelect: (model: ModelResponse) => void;
 }
 export default ({ items, handleSelect, selectedSlug }: Dropdown) => {
-  const [title, setTitle] = useState('Untitled');
-
+  const [title, setTitle] = useState(selectedSlug || 'undefined');
   useEffect(() => {
     if (selectedSlug) {
       const f = items && items.find(i => i.slug === selectedSlug);
@@ -18,11 +17,10 @@ export default ({ items, handleSelect, selectedSlug }: Dropdown) => {
         setTitle(f.title);
       }
     }
-  }, [selectedSlug]);
+  }, [selectedSlug, items]);
 
   return (
     <DropdownButton
-      noCaret={false}
       bsSize='small'
       id={'model-dropdown'}
       title={title}>
