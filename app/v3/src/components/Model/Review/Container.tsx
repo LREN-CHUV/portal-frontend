@@ -1,7 +1,7 @@
 import queryString from 'query-string';
 import * as React from 'react';
 import { Panel } from 'react-bootstrap';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
+import { RouteComponentProps } from 'react-router-dom';
 import { MIP } from '../../../types';
 import { APICore, APIMining, APIModel } from '../../API';
 import { VariableEntity } from '../../API/Core';
@@ -14,9 +14,8 @@ import Filter from './Filter';
 import ExperimentReviewHeader from './Header';
 import './Review.css';
 
-
-
-interface Props extends RouteComponentProps<any> {
+interface Params { slug: string }
+interface Props extends RouteComponentProps<Params> {
   apiModel: APIModel;
   apiCore: APICore;
   apiMining: APIMining;
@@ -32,69 +31,21 @@ class Container extends React.Component<Props, State> {
   public state: State = {};
 
   public async componentDidMount() {
-    const qs = queryString.parse(this.props.location.search);
-
-    if (qs.execute) {
-      const variables = [{ code: qs.variable as string }];
-      const coVariables =
-        qs.covariable && (qs.covariable as string) !== ''
-          ? (qs.covariable as string).split(',').map(v => ({
-              code: v
-            }))
-          : undefined;
-      const groupings =
-        qs.grouping && (qs.grouping as string) !== ''
-          ? (qs.grouping as string).split(',').map(v => ({
-              code: v
-            }))
-          : undefined;
-      const trainingDatasets =
-        qs.trainingDatasets && (qs.trainingDatasets as string) !== ''
-          ? (qs.trainingDatasets as string).split(',').map(v => ({
-              code: v
-            }))
-          : undefined;
-      const filterQuery =
-        (qs.filterQuery && decodeURI(qs.filterQuery as string)) || '';
-      const filtersFromParams =
-        qs.filter && (qs.filter as string) !== ''
-          ? (qs.filter as string).split(',').map(v => ({
-              code: v
-            }))
-          : undefined;
-
-      const query: Query = {
-        coVariables,
-        filters: filterQuery,
-        filtersFromParams,
-        groupings,
-        trainingDatasets,
-        variables
-      };
-
-      const { apiModel } = this.props;
-      await apiModel.setMock(query);
-      await this.setState({ query });
-      this.setMinings({ query });
-    } else {
-      const params = this.urlParams(this.props);
-      const slug = params && params.slug;
+      const slug = this.props.match.params.slug;
+      console.log(slug)
       if (slug) {
         await this.loadModel({ slug });
         const query = this.state.query;
         if (query) {
           this.setMinings({ query });
         }
-      }
     }
   }
 
   public async componentWillReceiveProps(nextProps: Props, prevState: State) {
-    const params = this.urlParams(nextProps);
-    const slug = params && params.slug;
-    const prevParams = this.urlParams(this.props);
-    const prevSlug = prevParams && prevParams.slug;
-
+    const slug = nextProps.match.params.slug;
+    const prevSlug = this.props.match.params.slug;
+    console.log(prevSlug, slug)
     if (slug && prevSlug !== slug) {
       await this.loadModel({ slug });
       const query = this.state.query;
@@ -213,9 +164,8 @@ class Container extends React.Component<Props, State> {
             handleGoBackToExplore={this.handleGoBackToExplore}
             handleSaveModel={this.handleSaveModel}
             handleRunAnalysis={this.handleRunAnalysis}
-            modelName={apiModel.state.model && apiModel.state.model.title}
+            model={apiModel.state.model}
             models={apiModel.state.models}
-            isMock={apiModel.state.model && apiModel.state.model.isMock}
             handleSelectModel={this.handleSelectModel}
           />
         </div>
@@ -295,14 +245,14 @@ class Container extends React.Component<Props, State> {
   };
 
   private handleRunAnalysis = async () => {
-    const { apiModel } = this.props;
-    const model = apiModel.state.model;
-    await apiModel.update({ model });
+    // const { apiModel } = this.props;
+    // const model = apiModel.state.model;
+    // await apiModel.update({ model });
 
-    const params = this.urlParams(this.props);
-    const slug = params && params.slug;
-    const { history } = this.props;
-    history.push(`/v3/experiment/${slug}`);
+    // const params = this.urlParams(this.props);
+    // const slug = params && params.slug;
+    // const { history } = this.props;
+    // history.push(`/v3/experiment/${slug}`);
   };
 
   private handleGoBackToExplore = () => {
@@ -311,27 +261,6 @@ class Container extends React.Component<Props, State> {
     if (model && model.slug) {
       history.push(`/v3/explore/${model.slug}`);
     }
-    // const { apiModel } = this.props;
-    // const model = apiModel.state.model;
-    // const query = model && model.query;
-    // if (query) {
-    //   const variable = query.variables && query.variables.map(v => v.code)[0];
-    //   const covariable =
-    //     (query.coVariables && query.coVariables.map(v => v.code).join(',')) ||
-    //     '';
-    //   const grouping =
-    //     (query.groupings && query.groupings.map(v => v.code).join(',')) || '';
-    //   const trainingDatasets =
-    //     (query.trainingDatasets &&
-    //       query.trainingDatasets.map(v => v.code).join(',')) ||
-    //     '';
-
-    //   const filterQuery = (query.filters && encodeURI(query.filters)) || '';
-
-    //   window.location.href = `/explore?configure=true&variable=${variable}&covariable=${covariable}&grouping=${grouping}&filterQuery=${filterQuery}&trainingDatasets=${trainingDatasets}`;
-    // } else {
-    //   window.location.href = `/explore`;
-    // }
   };
 
   private handleSelectModel = (model: ModelResponse) => {
@@ -375,19 +304,6 @@ class Container extends React.Component<Props, State> {
     this.setState({ query });
     this.setMinings({ query });
   };
-
-  private urlParams = (
-    props: Props
-  ):
-    | {
-        slug: string | undefined;
-      }
-    | undefined => {
-    const { location } = props;
-    const slug = location.pathname.split('/').pop() || undefined;
-
-    return { slug: slug !== 'review' ? slug : undefined };
-  };
 }
 
-export default withRouter(Container);
+export default Container;

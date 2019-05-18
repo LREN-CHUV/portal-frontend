@@ -8,9 +8,8 @@ interface Props {
   handleRunAnalysis: () => void;
   handleSaveModel: ({ title }: { title: string }) => void;
   handleSelectModel: (model: ModelResponse) => void;
-  modelName?: string;
+  model?: ModelResponse;
   models?: ModelResponse[];
-  isMock?: boolean;
 }
 export default class Header extends React.Component<Props> {
   public state: any;
@@ -34,15 +33,15 @@ export default class Header extends React.Component<Props> {
   public render() {
     const {
       models,
-      modelName,
-      isMock,
+      model,
       handleGoBackToExplore,
       handleRunAnalysis,
       handleSelectModel
     } = this.props;
 
     const currentModelName = this.state.modelName;
-
+    const isMock = model && model.isMock;
+    
     return (
       <Panel>
         <Panel.Body>
@@ -53,7 +52,7 @@ export default class Header extends React.Component<Props> {
               {models && (
                 <DropdownModel
                   items={models}
-                  title={modelName !== '' ? modelName : undefined}
+                  selectedSlug={model && model.slug}
                   handleSelect={handleSelectModel}
                 />
               )}

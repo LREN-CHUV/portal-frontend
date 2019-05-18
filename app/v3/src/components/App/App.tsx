@@ -37,21 +37,23 @@ const App = ({
     <section className='main-content'>
       <Route
         path={['/v3/explore/:slug', '/v3/explore']}
-        render={() => (
+        render={(props) => (
           <Explore
             apiCore={apiCore}
             apiMining={apiMining}
             apiModel={apiModel}
+            {...props}
           />
         )}
       />
       <Route
-        path='/v3/review'
-        render={() => (
+        path={['/v3/review/:slug', '/v3/review']}
+        render={(props) => (
           <ExperimentReview
             apiMining={apiMining}
             apiModel={apiModel}
             apiCore={apiCore}
+            {...props}
           />
         )}
       />
