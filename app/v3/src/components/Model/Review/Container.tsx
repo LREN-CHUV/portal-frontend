@@ -166,6 +166,7 @@ class Container extends React.Component<Props, State> {
             handleRunAnalysis={this.handleRunAnalysis}
             model={apiModel.state.model}
             models={apiModel.state.models}
+            selectedSlug={this.props.match.params.slug}
             handleSelectModel={this.handleSelectModel}
           />
         </div>
@@ -173,6 +174,7 @@ class Container extends React.Component<Props, State> {
           <div className='sidebar'>
             <Model
               model={apiModel.state.model}
+              selectedSlug={this.props.match.params.slug}
               showDatasets={false}
               variables={apiCore.state.variables}
             />

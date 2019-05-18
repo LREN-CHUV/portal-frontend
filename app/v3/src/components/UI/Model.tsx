@@ -4,27 +4,29 @@ import { VariableEntity } from '../API/Core';
 import { ModelResponse } from '../API/Model';
 import './Model.css';
 
-
+import Loading from './Loader'
 
 interface Props {
   model?: ModelResponse;
+  selectedSlug?: string
   showDatasets?: boolean;
   variables?: VariableEntity[];
 }
 
 class Model extends React.Component<Props> {
   public render() {
-    const { model, showDatasets, variables } = this.props;
+    const { model, selectedSlug, showDatasets, variables } = this.props;
     const query = model && model.query;
 
     return (
       <Panel className="model">
         <Panel.Title>
           <h3>
-            Model <strong>{model && model.title}</strong>
+            Model <strong>{model && model.title ||  selectedSlug}</strong>
           </h3>
         </Panel.Title>
         <Panel.Body>
+          {!model && <Loading />}
           {query && variables && (
             <React.Fragment>
               {query.variables && <h5>Variables</h5>}
