@@ -3,13 +3,19 @@ import React, { useEffect, useState } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import { APICore, APIMining, APIModel } from '../../API';
 import { VariableEntity } from '../../API/Core';
-import { ModelResponse } from '../../API/Model';
+import { ModelResponse, Query } from '../../API/Model';
 import { d3Hierarchy, VariableDatum } from './d3Hierarchy';
 import CirclePack from './D3PackLayer';
 import './Explore.css';
 
 const diameter: number = 800;
 const padding: number = 1.5;
+
+const initialD3Model = {
+  covariables: undefined,
+  filters: undefined,
+  variable: undefined
+};
 
 export type HierarchyCircularNode = d3.HierarchyCircularNode<VariableDatum>;
 
@@ -24,9 +30,9 @@ export enum ModelType {
   FILTER,
   VARIABLE
 }
-
-interface Params { slug: string };
-
+interface Params {
+  slug: string;
+}
 interface Props extends RouteComponentProps<Params> {
   apiCore: APICore;
   apiMining: APIMining;
@@ -42,58 +48,38 @@ export default ({ apiCore, apiMining, apiModel, ...props }: Props) => {
   const [selectedNode, setSelectedNode] = useState<
     HierarchyCircularNode | undefined
   >();
-  const [d3Model, setD3Model] = useState<D3Model>({
-    covariables: undefined,
-    filters: undefined,
-    variable: undefined
-  });
-  const [model, setModel] = useState<ModelResponse>();
+  const [d3Model, setD3Model] = useState<D3Model>(initialD3Model);
+  const [model, setModel] = useState<ModelResponse | undefined>();
 
   useEffect(() => {
-    const qs = document.location.pathname;
-    const slug = qs.split('/').pop();
-    if (slug) {
-      const m =
-        apiModel.state &&
-        apiModel.state.models &&
-        apiModel.state.models.find(m => m.slug === slug);
-      if (m && d3Layout) {
-        modelToD3Model(m, d3Layout);
+    const slug = props.match.params.slug;
+    console.log(slug)
+    if (!slug) {
+      setModel(undefined);
+      setD3Model(initialD3Model);
+
+      return;
+    }
+
+    if (slug !== 'edit') {
+      apiModel.one(slug);
+    } else {
+      const draft = apiModel.state.draft;
+      console.log(draft, d3Layout)
+      if (draft && d3Layout) {
+        setModel(draft);
+        setD3Model(convertModelToD3Model(draft, d3Layout));
       }
     }
-  }, [apiModel.state.models, d3Layout, model]);
+  }, [props.match.params.slug]);
 
   useEffect(() => {
-    if (model && d3Layout) {
-      modelToD3Model(model, d3Layout);
+    const next = apiModel.state.model;
+    if (next && d3Layout) {
+      setModel(next);
+      setD3Model(convertModelToD3Model(next, d3Layout));
     }
-  }, [d3Layout, model]);
-
-  const modelToD3Model = (
-    aModel: ModelResponse,
-    aD3Layout: HierarchyCircularNode
-  ) => {
-    const query = aModel && aModel.query;
-    if (query && aD3Layout) {
-      const nextModel = {
-        covariables:
-          query.coVariables &&
-          aD3Layout
-            .descendants()
-            .filter(l =>
-              query.coVariables!.map(c => c.code).includes(l.data.code)
-            ),
-        filters: undefined,
-        groupings: undefined,
-        variable:
-          query.variables &&
-          aD3Layout
-            .descendants()
-            .find(l => l.data.code === query.variables![0].code)
-      };
-      setD3Model(nextModel);
-    }
-  };
+  }, [apiModel.state.model]);
 
   useEffect(() => {
     const d = apiCore.state.datasets;
@@ -137,7 +123,7 @@ export default ({ apiCore, apiMining, apiModel, ...props }: Props) => {
     setSelectedDatasets(nextSelection);
   };
 
-  const handleD3ChangeModel = (
+  const handleUpdateD3Model = (
     type: ModelType,
     node: HierarchyCircularNode
   ) => {
@@ -195,28 +181,95 @@ export default ({ apiCore, apiMining, apiModel, ...props }: Props) => {
     }
   };
 
-  const handleGoToAnalysis = () => {
-    const { history } = props;
-    const slug = props.match.params.slug;
-    if (!slug) {
-      history.push(`/v3/review`);
-      return;
+  const convertModelToD3Model = (
+    aModel: ModelResponse,
+    aD3Layout: HierarchyCircularNode
+  ): D3Model => {
+    const query = aModel && aModel.query;
+    const nextModel = {
+      covariables:
+        query.coVariables &&
+        aD3Layout
+          .descendants()
+          .filter(l =>
+            query.coVariables!.map(c => c.code).includes(l.data.code)
+          ),
+      filters: undefined,
+      groupings: undefined,
+      variable:
+        query.variables &&
+        aD3Layout
+          .descendants()
+          .find(l => l.data.code === query.variables![0].code)
+    };
+    return nextModel;
+  };
+
+  const convertD3ModelToModel = (
+    aD3Model: D3Model,
+    aModel?: ModelResponse
+  ): ModelResponse => {
+    const query: Query = {
+      coVariables:
+        aD3Model.covariables && aD3Model.covariables.map(v => v.data),
+      // filterVariables: aD3Model.filters && aD3Model.filters.map(v => v.data),
+      filters: '',
+      groupings: undefined,
+      trainingDatasets: selectedDatasets,
+      variables: aD3Model.variable && [aD3Model.variable.data]
+    };
+
+    if (aModel) {
+      aModel.parentSlug = aModel.slug;
+      aModel.query = query;
+
+      return aModel;
+    } else {
+      const draft: ModelResponse = {
+        query,
+        title: 'untitled'
+      };
+
+      return draft;
     }
-    history.push(`/v3/review/${slug}`);
+  };
+
+  const handleSelectModel = (newModel?: ModelResponse) => {
+    const { history } = props;
+    if (newModel && newModel.slug) {
+      history.push(`/v3/explore/${newModel.slug}`);
+    } else {
+      history.push(`/v3/explore`);
+    }
+  };
+
+  const handleGoToAnalysis = async () => {
+    const { history } = props;
+
+    const slug = props.match.params.slug;
+    const nextModel = convertD3ModelToModel(d3Model, model);
+
+    if (slug) {
+      await apiModel.update({ model: nextModel });
+      history.push(`/v3/review/${slug}`);
+    } else {
+      await apiModel.setDraft(nextModel);
+      history.push(`/v3/review/edit`);
+    }
   };
 
   const nextProps = {
     apiModel,
     d3Model,
     datasets,
-    handleD3ChangeModel,
     handleGoToAnalysis,
     handleSelectDataset,
-    handleSelectModel: setModel,
+    handleSelectModel,
     handleSelectNode: setSelectedNode,
+    handleUpdateD3Model,
     histograms: apiMining.state.histograms,
     selectedDatasets,
-    selectedNode,
+    selectedNode
   };
 
   return d3Layout ? <CirclePack layout={d3Layout} {...nextProps} /> : null;

@@ -224,7 +224,8 @@ button::-moz-focus-inner {
   border-color: #ddd;
 }
 
-.dropdown-toggle::after {
+.header .dropdown-toggle::after,
+.content .dropdown-toggle::after {
   display: inline-block;
   margin-left: .255em;
   vertical-align: .255em;

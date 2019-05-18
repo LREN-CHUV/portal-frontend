@@ -11,7 +11,7 @@ interface Props {
   experiments?: MIP.API.IExperimentResponse[];
   method?: MIP.API.IMethod;
   handleGoBackToReview: () => void;
-  handleSelectModel: (model: ModelResponse) => Promise<any>;
+  handleSelectModel: (model?: ModelResponse) => Promise<any>;
   handleSelectExperiment: (
     experiment: MIP.API.IExperimentResponse
   ) => Promise<any>;

@@ -14,7 +14,6 @@ import Validation from '../../UI/Validation';
 import '../Experiment.css';
 import Help from './Help';
 
-
 interface Props extends RouteComponentProps<any> {
   apiExperiment: APIExperiment;
   apiCore: APICore;
@@ -61,7 +60,7 @@ class Container extends React.Component<Props, State> {
     const { apiCore, apiModel, apiExperiment, appConfig } = this.props;
     const alert = this.state && this.state.alert;
     const method = this.state && this.state.method;
-    const isLocal = appConfig && appConfig.mode === 'local' || false;
+    const isLocal = (appConfig && appConfig.mode === 'local') || false;
 
     return (
       <div className='Experiment'>
@@ -154,19 +153,21 @@ class Container extends React.Component<Props, State> {
     (method && method.code === 'kmeans') ||
     false;
 
-  private handleSelectModel = async (
-    model: ModelResponse
-  ): Promise<any> => {
-    const { slug } = model;
-    const { apiModel, history } = this.props;
-    history.push(`/v3/experiment/${slug}`);
-    if (slug) {
-      return await apiModel.one(slug);
+  private handleSelectModel = async (model?: ModelResponse): Promise<any> => {
+    if (model) {
+      const { slug } = model;
+      const { apiModel, history } = this.props;
+      history.push(`/v3/experiment/${slug}`);
+      if (slug) {
+        return await apiModel.one(slug);
+      }
     }
   };
 
   private handleSelectMethod = (method: MIP.API.IMethod): void => {
-    const kfold = this.isPredictiveMethod(method) ? globalParameters.kfold.k : 0;
+    const kfold = this.isPredictiveMethod(method)
+      ? globalParameters.kfold.k
+      : 0;
     this.setState({
       kfold,
       method,

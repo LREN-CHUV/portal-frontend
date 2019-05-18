@@ -6,9 +6,15 @@ import './Dropdown.css';
 interface Dropdown {
   items: ModelResponse[] | undefined;
   selectedSlug?: string;
-  handleSelect: (model: ModelResponse) => void;
+  showClear?: boolean;
+  handleSelect: (model?: ModelResponse) => void;
 }
-export default ({ items, handleSelect, selectedSlug }: Dropdown) => {
+export default ({
+  items,
+  handleSelect,
+  showClear = false,
+  selectedSlug
+}: Dropdown) => {
   const [title, setTitle] = useState(selectedSlug || 'undefined');
   useEffect(() => {
     if (selectedSlug) {
@@ -20,10 +26,20 @@ export default ({ items, handleSelect, selectedSlug }: Dropdown) => {
   }, [selectedSlug, items]);
 
   return (
-    <DropdownButton
-      bsSize='small'
-      id={'model-dropdown'}
-      title={title}>
+    <DropdownButton bsSize='small' id={'model-dropdown'} title={title}>
+      {showClear && (
+        <MenuItem
+          eventKey={'cancel'}
+          key={'cancel'}
+          // tslint:disable-next-line jsx-no-lambda
+          onSelect={() => {
+            setTitle('undefined');
+            handleSelect();
+          }}>
+          <strong>Clear</strong>
+        </MenuItem>
+      )}
+      {showClear && <MenuItem>------------</MenuItem>}
       {items &&
         handleSelect &&
         items.map((item, i: number) => {
