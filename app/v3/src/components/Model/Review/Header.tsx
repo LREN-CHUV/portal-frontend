@@ -9,6 +9,7 @@ interface Props {
   handleSaveModel: ({ title }: { title: string }) => void;
   handleSelectModel: (model: ModelResponse) => void;
   model?: ModelResponse;
+  selectedSlug?: string;
   models?: ModelResponse[];
 }
 export default class Header extends React.Component<Props> {
@@ -34,6 +35,7 @@ export default class Header extends React.Component<Props> {
     const {
       models,
       model,
+      selectedSlug,
       handleGoBackToExplore,
       handleRunAnalysis,
       handleSelectModel
@@ -41,7 +43,7 @@ export default class Header extends React.Component<Props> {
 
     const currentModelName = this.state.modelName;
     const isMock = model && model.isMock;
-    
+
     return (
       <Panel>
         <Panel.Body>
@@ -49,13 +51,11 @@ export default class Header extends React.Component<Props> {
             Interactive Analysis{' '}
             <span>
               {`on `}
-              {models && (
-                <DropdownModel
-                  items={models}
-                  selectedSlug={model && model.slug}
-                  handleSelect={handleSelectModel}
-                />
-              )}
+              <DropdownModel
+                items={models}
+                selectedSlug={selectedSlug}
+                handleSelect={handleSelectModel}
+              />
             </span>
           </h3>
           <div className='actions status'>
