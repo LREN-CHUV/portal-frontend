@@ -1,5 +1,6 @@
 import * as d3 from 'd3';
 import React, { useEffect, useState } from 'react';
+import { RouteComponentProps } from 'react-router-dom';
 import { MIP } from '../../../types';
 import { APICore, APIMining, APIModel } from '../../API';
 import { VariableEntity } from '../../API/Core';
@@ -7,6 +8,7 @@ import { ModelResponse } from '../../API/Model';
 import { d3Hierarchy, VariableDatum } from './d3Hierarchy';
 import CirclePack from './D3PackLayer';
 import './Explore.css';
+
 const diameter: number = 800;
 const padding: number = 1.5;
 
@@ -23,13 +25,16 @@ export enum ModelType {
   FILTER,
   VARIABLE
 }
-interface Props {
+
+interface Params { slug: string };
+
+interface Props extends RouteComponentProps<Params> {
   apiCore: APICore;
   apiMining: APIMining;
   apiModel: APIModel;
 }
 
-export default ({ apiCore, apiMining, apiModel }: Props) => {
+export default ({ apiCore, apiMining, apiModel, ...props }: Props) => {
   const [datasets, setDatasets] = useState<VariableEntity[]>();
   const [selectedDatasets, setSelectedDatasets] = useState<VariableEntity[]>(
     []
@@ -192,10 +197,10 @@ export default ({ apiCore, apiMining, apiModel }: Props) => {
   };
 
   const handleGoToAnalysis = () => {
-    document.location.href = (`/v3/review`);
-  }
+    props.history.push(`/v3/review`);
+  };
 
-  const props = {
+  const nextProps = {
     apiModel,
     d3Model,
     datasets,
@@ -209,5 +214,5 @@ export default ({ apiCore, apiMining, apiModel }: Props) => {
     selectedNode
   };
 
-  return d3Layout ? <CirclePack layout={d3Layout} {...props} /> : null;
+  return d3Layout ? <CirclePack layout={d3Layout} {...nextProps} /> : null;
 };
