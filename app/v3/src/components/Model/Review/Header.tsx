@@ -7,7 +7,7 @@ interface Props {
   handleGoBackToExplore: () => void;
   handleRunAnalysis: () => void;
   handleSaveModel: ({ title }: { title: string }) => void;
-  handleSelectModel: (model: ModelResponse) => void;
+  handleSelectModel: (model?: ModelResponse) => void;
   model?: ModelResponse;
   selectedSlug?: string;
   models?: ModelResponse[];
@@ -42,7 +42,7 @@ export default class Header extends React.Component<Props> {
     } = this.props;
 
     const currentModelName = this.state.modelName;
-    const isMock = model && model.isMock;
+    const isMock = false;
 
     return (
       <Panel>

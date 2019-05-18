@@ -5,9 +5,9 @@ import renderLifeCycle from './renderLifeCycle';
 
 export interface ModelProps {
   children?: any;
-  handleD3ChangeModel: Function;
+  handleUpdateD3Model: Function;
   handleSelectNode: Function;
-  model: D3Model;
+  d3Model: D3Model;
   zoom: Function;
 }
 
@@ -15,7 +15,7 @@ export default (props: ModelProps) => {
   const variableRef = useRef(null);
   const covariableRef = useRef(null);
   const filterRef = useRef(null);
-  const { model, handleD3ChangeModel, handleSelectNode, zoom } = props;
+  const { d3Model: model, handleUpdateD3Model, handleSelectNode, zoom } = props;
 
   const makeTree = (variables: HierarchyCircularNode[], type: ModelType) => {
     const ref =
@@ -37,7 +37,7 @@ export default (props: ModelProps) => {
       .append('a')
       .text('x')
       .on('click', d => {
-        handleD3ChangeModel(type, d, true);
+        handleUpdateD3Model(type, d, true);
         d3.event.stopPropagation();
       });
 

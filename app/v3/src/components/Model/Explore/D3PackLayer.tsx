@@ -26,8 +26,8 @@ export interface Props {
   d3Model: D3Model;
   handleSelectDataset: (e: VariableEntity) => void;
   handleSelectNode: (node: HierarchyCircularNode) => void;
-  handleD3ChangeModel: Function; // (type: ModelType, node?: HierarchyCircularNode) => void;
-  handleSelectModel: (model: ModelResponse) => void;
+  handleUpdateD3Model: Function; // (type: ModelType, node?: HierarchyCircularNode) => void;
+  handleSelectModel: (model?: ModelResponse) => void;
   handleGoToAnalysis: Function;
 }
 

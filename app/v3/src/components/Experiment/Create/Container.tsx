@@ -18,7 +18,6 @@ import Model from '../../UI/Model';
 import Validation from '../../UI/Validation';
 import Help from './Help';
 
-
 interface Props extends RouteComponentProps<any> {
   apiExperiment: APIExperiment;
   apiCore: APICore;

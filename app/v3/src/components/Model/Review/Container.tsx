@@ -39,7 +39,6 @@ class Container extends React.Component<Props, State> {
 
   public async componentDidMount() {
     const slug = this.props.match.params.slug;
-
     if (!slug) {
       return;
     }
@@ -76,6 +75,70 @@ class Container extends React.Component<Props, State> {
 
   public render() {
     const { apiCore, apiModel, apiMining } = this.props;
+    const [query, fields, filters] = this.makeFilters({ apiCore });
+    const model = apiModel.state.model || apiModel.state.draft;
+    return (
+      <div className='Experiment Review'>
+        <div className='header'>
+          <ExperimentReviewHeader
+            handleGoBackToExplore={this.handleGoBackToExplore}
+            handleSaveModel={this.handleSaveModel}
+            handleRunAnalysis={this.handleRunAnalysis}
+            model={model}
+            models={apiModel.state.models}
+            selectedSlug={this.props.match.params.slug}
+            handleSelectModel={this.handleSelectModel}
+          />
+        </div>
+        <div className='content'>
+          <div className='sidebar'>
+            <Model
+              model={model}
+              selectedSlug={this.props.match.params.slug}
+              showDatasets={false}
+              variables={apiCore.state.variables}
+            />
+            <Panel className='model'>
+              <Panel.Body>
+                <Validation
+                  isPredictiveMethod={false}
+                  datasets={apiCore.state.datasets}
+                  query={query}
+                  handleUpdateQuery={this.handleUpdateDataset}
+                />
+              </Panel.Body>
+            </Panel>
+          </div>
+          <div className='results'>
+            <Content
+              apiMining={apiMining}
+              model={model}
+              selectedDatasets={query && query.trainingDatasets}
+              lookup={apiCore.lookup}>
+              <Panel className='filters' defaultExpanded={false}>
+                <Panel.Title toggle={true}>
+                  <h3 className={'btn btn-info'}>Filters</h3>
+                </Panel.Title>
+                <Panel.Collapse>
+                  <Panel.Body collapsible={true}>
+                    {fields && fields.length > 0 && (
+                      <Filter
+                        rules={filters}
+                        filters={fields}
+                        handleChangeFilter={this.handleUpdateFilter}
+                      />
+                    )}
+                  </Panel.Body>
+                </Panel.Collapse>
+              </Panel>
+            </Content>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  private makeFilters = ({ apiCore }: { apiCore: APICore }) => {
     const { query } = this.state;
     const { fields, filters } = this.makeFilters({ apiCore });
     const model = apiModel.state.model || apiModel.state.draft;
@@ -272,7 +335,6 @@ class Container extends React.Component<Props, State> {
     } else {
       history.push(`/v3/explore`);
     }
-    history.push(`/v3/explore/${slug}`);
   };
 
   private handleSelectModel = (model?: ModelResponse) => {
