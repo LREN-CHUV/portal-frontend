@@ -4,7 +4,6 @@ import '../Model.css';
 import * as React from 'react';
 import { Panel } from 'react-bootstrap';
 import { RouteComponentProps } from 'react-router-dom';
-
 import { APICore, APIMining, APIModel } from '../../API';
 import { VariableEntity } from '../../API/Core';
 import { MiningPayload } from '../../API/Mining';
