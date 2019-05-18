@@ -79,6 +79,7 @@ export default (props: ExploreProps) => {
                 {apiModel.state.models && (
                   <DropdownModel
                     items={apiModel.state.models}
+                    selectedSlug={apiModel.state.model && apiModel.state.model.slug}
                     handleSelect={handleSelectModel}
                   />
                 )}
