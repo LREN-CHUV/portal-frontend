@@ -76,7 +76,8 @@ class Container extends React.Component<Props, State> {
 
   public render() {
     const { apiCore, apiModel, apiMining } = this.props;
-    const { query, fields, filters } = this.makeFilters({ apiCore });
+    const { query } = this.state;
+    const { fields, filters } = this.makeFilters({ apiCore });
     const model = apiModel.state.model || apiModel.state.draft;
     return (
       <div className='Experiment Review'>
