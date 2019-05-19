@@ -179,6 +179,7 @@ export default ({ layout, ...props }: Props) => {
     },
     updateRender: () => {
       const model = props.d3Model;
+      console.log('updateRender', model.variable && model.variable.data.code)
       const svg = d3.select(svgRef.current);
       const circle = svg.selectAll('circle');
       circle

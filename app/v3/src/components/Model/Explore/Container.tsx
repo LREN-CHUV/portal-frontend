@@ -39,7 +39,7 @@ interface Props extends RouteComponentProps<Params> {
   apiModel: APIModel;
 }
 
-export const editPath = 'edit'
+export const editPath = 'edit';
 
 export default ({ apiCore, apiMining, apiModel, ...props }: Props) => {
   const [datasets, setDatasets] = useState<VariableEntity[]>();
@@ -188,6 +188,22 @@ export default ({ apiCore, apiMining, apiModel, ...props }: Props) => {
     aD3Layout: HierarchyCircularNode
   ): D3Model => {
     const query = aModel && aModel.query;
+
+    const filterVariables: string[] = [];
+    const extractVariablesFromFilter = (filter: any) =>
+      filter.rules.forEach((r: any) => {
+        if (r.rules) {
+          extractVariablesFromFilter(r);
+        }
+        if (r.id) {
+          filterVariables.push(r.id);
+        }
+      });
+
+    if (query && query.filters) {
+      extractVariablesFromFilter(JSON.parse(query.filters));
+    }
+
     const nextModel = {
       covariables:
         query.coVariables &&
@@ -196,7 +212,11 @@ export default ({ apiCore, apiMining, apiModel, ...props }: Props) => {
           .filter(l =>
             query.coVariables!.map(c => c.code).includes(l.data.code)
           ),
-      filters: undefined,
+      filters:
+        filterVariables &&
+        aD3Layout
+          .descendants()
+          .filter(l => filterVariables.includes(l.data.code)),
       groupings: undefined,
       variable:
         query.variables &&
@@ -214,8 +234,7 @@ export default ({ apiCore, apiMining, apiModel, ...props }: Props) => {
     const query: Query = {
       coVariables:
         aD3Model.covariables && aD3Model.covariables.map(v => v.data),
-      // filterVariables: aD3Model.filters && aD3Model.filters.map(v => v.data),
-      filters: '',
+      filters: aModel ? aModel.query.filters : '',
       groupings: undefined,
       trainingDatasets: selectedDatasets,
       variables: aD3Model.variable && [aD3Model.variable.data]
