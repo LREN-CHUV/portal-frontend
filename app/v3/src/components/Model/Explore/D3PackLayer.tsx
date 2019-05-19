@@ -1,5 +1,5 @@
 import * as d3 from 'd3';
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { APIModel } from '../../API';
 import { VariableEntity } from '../../API/Core';
 import { ModelResponse } from '../../API/Model';
@@ -27,7 +27,7 @@ export interface Props {
   handleSelectDataset: (e: VariableEntity) => void;
   handleSelectNode: (node: HierarchyCircularNode) => void;
   handleUpdateD3Model: Function; // (type: ModelType, node?: HierarchyCircularNode) => void;
-  handleSelectModel: (model?: ModelResponse) => void;
+  handleSelectModel: (d3Model?: ModelResponse) => void;
   handleGoToAnalysis: Function;
 }
 
@@ -35,6 +35,7 @@ export default ({ layout, ...props }: Props) => {
   const svgRef = useRef(null);
   const view = useRef<IView>([diameter / 2, diameter / 2, diameter]);
   const focus = useRef(layout);
+  const { d3Model } = props;
 
   const color = d3
     .scaleLinear<string, string>()
@@ -113,6 +114,51 @@ export default ({ layout, ...props }: Props) => {
       });
   };
 
+  useEffect(() => {
+    const svg = d3.select(svgRef.current);
+    const circle = svg.selectAll('circle');
+    circle
+      .filter(
+        (d: any) =>
+          ![
+            d3Model.variable,
+            ...(d3Model.covariables || []),
+            ...(d3Model.filters || [])
+          ].includes(d)
+      )
+      .style('fill', (d: any) => (d.children ? color(d.depth) : 'white'));
+
+    if (d3Model.variable) {
+      circle
+        .filter((d: any) => d3Model.variable === d)
+        .transition()
+        .duration(250)
+        .style('fill', '#5cb85c');
+    }
+
+    if (d3Model.covariables && d3Model.covariables.length > 0) {
+      circle
+        .filter(
+          (d: any) =>
+            d3Model.covariables !== undefined && d3Model.covariables.includes(d)
+        )
+        .transition()
+        .duration(250)
+        .style('fill', '#f0ad4e');
+    }
+
+    if (d3Model.filters && d3Model.filters.length > 0) {
+      circle
+        .filter(
+          (d: any) =>
+            d3Model.filters !== undefined && d3Model.filters.includes(d)
+        )
+        .transition()
+        .duration(250)
+        .style('fill', '#337ab7');
+    }
+  }, [d3Model]);
+
   renderLifeCycle({
     firstRender: () => {
       const svg = d3
@@ -176,59 +222,12 @@ export default ({ layout, ...props }: Props) => {
 
       props.handleSelectNode(layout);
       zoomTo([layout.x, layout.y, layout.r * 2]);
-    },
-    updateRender: () => {
-      const model = props.d3Model;
-      console.log('updateRender', model.variable && model.variable.data.code)
-      const svg = d3.select(svgRef.current);
-      const circle = svg.selectAll('circle');
-      circle
-        .filter(
-          (d: any) =>
-            ![
-              model.variable,
-              ...(model.covariables || []),
-              ...(model.filters || [])
-            ].includes(d)
-        )
-        .style('fill', (d: any) => (d.children ? color(d.depth) : 'white'));
-
-      if (model.variable) {
-        circle
-          .filter((d: any) => model.variable === d)
-          .transition()
-          .duration(250)
-          .style('fill', '#5cb85c');
-      }
-
-      if (model.covariables && model.covariables.length > 0) {
-        circle
-          .filter(
-            (d: any) =>
-              model.covariables !== undefined && model.covariables.includes(d)
-          )
-          .transition()
-          .duration(250)
-          .style('fill', '#f0ad4e');
-      }
-
-      if (model.filters && model.filters.length > 0) {
-        circle
-          .filter(
-            (d: any) => model.filters !== undefined && model.filters.includes(d)
-          )
-          .transition()
-          .duration(250)
-          .style('fill', '#337ab7');
-      }
     }
   });
 
   return (
-    <div>
-      <Explore layout={layout} zoom={zoom} {...props}>
-        <svg ref={svgRef} />
-      </Explore>
-    </div>
+    <Explore layout={layout} zoom={zoom} {...props}>
+      <svg ref={svgRef} />
+    </Explore>
   );
 };
