@@ -19,6 +19,7 @@ export default (props: Props) => {
   const { hierarchy, zoom, handleSelectNode } = props;
 
   useEffect(() => {
+    // tslint:disable
     document.addEventListener('keydown', handleKeyDown);
 
     return function cleanup() {

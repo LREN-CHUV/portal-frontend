@@ -39,6 +39,7 @@ class Container extends React.Component<Props, State> {
 
   public async componentDidMount() {
     const slug = this.props.match.params.slug;
+
     if (!slug) {
       return;
     }
@@ -75,7 +76,7 @@ class Container extends React.Component<Props, State> {
 
   public render() {
     const { apiCore, apiModel, apiMining } = this.props;
-    const [query, fields, filters] = this.makeFilters({ apiCore });
+    const { query, fields, filters } = this.makeFilters({ apiCore });
     const model = apiModel.state.model || apiModel.state.draft;
     return (
       <div className='Experiment Review'>
