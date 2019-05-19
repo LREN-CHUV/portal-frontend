@@ -66,7 +66,7 @@ class Model extends Container<ModelState> {
 
   public one = async (slug: string) => {
     this.setState({
-      draft:undefined,
+      draft: undefined,
       error: undefined,
       model: undefined
     });
@@ -151,6 +151,7 @@ class Model extends Container<ModelState> {
         model: json
       });
 
+      this.all(); // refetch all models
       return json.slug;
     } catch (error) {
       return await this.setState({
