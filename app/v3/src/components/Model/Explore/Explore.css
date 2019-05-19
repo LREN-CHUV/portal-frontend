@@ -21,10 +21,16 @@
   padding: 0 48px;
 }
 
-.Explore .content .column {
+.Explore .content .column1 {
+  margin-right: 8px;
+  flex: 1.2;
+}
+
+.Explore .content .column2 {
   margin-right: 8px;
   flex: 1;
 }
+
 .Explore .content .sidebar {
   overflow: hidden;
   width: 240px;
