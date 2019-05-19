@@ -20,7 +20,6 @@ export interface ModelResponse {
   dataset?: any; // FIXME: not used in api
   config?: any; // FIXME: not used in api
   createdBy?: IUser;
-  parentSlug?: string;
 }
 
 export interface IUser {
