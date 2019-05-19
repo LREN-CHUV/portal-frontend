@@ -4,6 +4,7 @@ import { RouteComponentProps } from 'react-router-dom';
 import { APICore, APIMining, APIModel } from '../../API';
 import { VariableEntity } from '../../API/Core';
 import { ModelResponse, Query } from '../../API/Model';
+import { Alert, IAlert } from '../../UI/Alert';
 import { d3Hierarchy, VariableDatum } from './d3Hierarchy';
 import CirclePack from './D3PackLayer';
 import './Explore.css';
@@ -52,6 +53,7 @@ export default ({ apiCore, apiMining, apiModel, ...props }: Props) => {
   >();
   const [d3Model, setD3Model] = useState<D3Model>(initialD3Model);
   const [model, setModel] = useState<ModelResponse | undefined>();
+  const [alert, setAlert] = useState<string | null>(null);
 
   useEffect(() => {
     const slug = props.match.params.slug;
@@ -239,15 +241,15 @@ export default ({ apiCore, apiMining, apiModel, ...props }: Props) => {
   ): ModelResponse => {
     const query: Query = {
       coVariables:
-        aD3Model.covariables && aD3Model.covariables.map(v => v.data),
+        aD3Model.covariables &&
+        aD3Model.covariables.map(v => ({ code: v.data.code })),
       filters: aModel ? aModel.query.filters : '',
       groupings: undefined,
       trainingDatasets: selectedDatasets,
-      variables: aD3Model.variable && [aD3Model.variable.data]
+      variables: aD3Model.variable && [{ code: aD3Model.variable.data.code }]
     };
 
     if (aModel) {
-      aModel.parentSlug = aModel.slug;
       aModel.query = query;
 
       return aModel;
@@ -278,6 +280,13 @@ export default ({ apiCore, apiMining, apiModel, ...props }: Props) => {
 
     if (slug) {
       await apiModel.update({ model: nextModel });
+      if (apiModel.state.error) {
+        setAlert(apiModel.state.error)
+        setTimeout(()=>{
+          setAlert(null)
+        }, 3 * 1000)
+        return
+      }
       history.push(`/v3/review/${slug}`);
     } else {
       await apiModel.setDraft(nextModel);
@@ -298,7 +307,12 @@ export default ({ apiCore, apiMining, apiModel, ...props }: Props) => {
     selectedNode
   };
 
-  return d3Layout ? (
-    <CirclePack layout={d3Layout} d3Model={d3Model} {...nextProps} />
-  ) : null;
+  return (
+    <>
+      {alert && <Alert message={alert} />}
+      {d3Layout && (
+        <CirclePack layout={d3Layout} d3Model={d3Model} {...nextProps} />
+      )}
+    </>
+  );
 };
