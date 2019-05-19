@@ -94,7 +94,7 @@ class Container extends React.Component<Props, State> {
                   <Alert
                     message={alert.message}
                     title={alert.title}
-                    style={alert.style}
+                    styled={alert.styled}
                   />
                 )}
                 <Tabs

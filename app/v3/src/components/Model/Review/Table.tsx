@@ -148,7 +148,7 @@ const computeMinings = ({
       row.variable = variable.label;
     }
 
-    selectedDatasets.map(dataset => {
+    selectedDatasets.forEach(dataset => {
       // Process data
       const code = dataset.code;
       const mining = minings.find((m: any) => m.dataset.code === code);

@@ -59,12 +59,14 @@ class Model extends Container<ModelState> {
   public setDraft = async (draft: ModelResponse) => {
     return await this.setState({
       draft,
-      error: undefined
+      error: undefined,
+      model: undefined
     });
   };
 
   public one = async (slug: string) => {
     this.setState({
+      draft:undefined,
       error: undefined,
       model: undefined
     });

@@ -3,13 +3,13 @@ import { Alert as BSAlert } from "react-bootstrap";
 
 export interface IAlert {
   message?: string;
-  style?: string;
+  styled?: string;
   title?: string;
 }
 
-export const Alert = ({ message, style, title }: IAlert) =>
+export const Alert = ({ message, styled, title }: IAlert) =>
   (message && (
-    <BSAlert bsStyle={style || "danger"}>
+    <BSAlert bsStyle={styled || "danger"}>
       <h4>{title || "Error"}</h4>
       <p>{message}</p>
     </BSAlert>
