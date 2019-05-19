@@ -66,6 +66,9 @@ export default ({ apiCore, apiMining, apiModel, ...props }: Props) => {
         if (draft && d3Layout) {
           setModel(draft);
           setD3Model(convertModelToD3Model(draft, d3Layout));
+          if (draft.query.trainingDatasets) {
+            setSelectedDatasets(draft.query.trainingDatasets);
+          }
         }
         break;
 
@@ -80,6 +83,9 @@ export default ({ apiCore, apiMining, apiModel, ...props }: Props) => {
     if (next && d3Layout) {
       setModel(next);
       setD3Model(convertModelToD3Model(next, d3Layout));
+      if (next.query.trainingDatasets) {
+        setSelectedDatasets(next.query.trainingDatasets);
+      }
     }
   }, [apiModel.state.model, d3Layout]);
 
@@ -281,7 +287,6 @@ export default ({ apiCore, apiMining, apiModel, ...props }: Props) => {
 
   const nextProps = {
     apiModel,
-    d3Model,
     datasets,
     handleGoToAnalysis,
     handleSelectDataset,
@@ -293,5 +298,7 @@ export default ({ apiCore, apiMining, apiModel, ...props }: Props) => {
     selectedNode
   };
 
-  return d3Layout ? <CirclePack layout={d3Layout} {...nextProps} /> : null;
+  return d3Layout ? (
+    <CirclePack layout={d3Layout} d3Model={d3Model} {...nextProps} />
+  ) : null;
 };
