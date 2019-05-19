@@ -32,7 +32,7 @@ const Content = ({
           <Alert
             message={apiMining.state && apiMining.state.error}
             title={"Error"}
-            style={"info"}
+            styled={"info"}
           />
         )}
         {children}

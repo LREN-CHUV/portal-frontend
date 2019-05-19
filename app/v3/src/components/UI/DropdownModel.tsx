@@ -36,10 +36,9 @@ export default ({
             setTitle('undefined');
             handleSelect();
           }}>
-          <strong>Clear</strong>
+          <strong>NEW MODEL</strong>
         </MenuItem>
       )}
-      {showClear && <MenuItem>------------</MenuItem>}
       {items &&
         handleSelect &&
         items.map((item, i: number) => {

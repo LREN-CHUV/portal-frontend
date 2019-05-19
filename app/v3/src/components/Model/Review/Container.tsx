@@ -1,4 +1,3 @@
-import queryString from 'query-string';
 import * as React from 'react';
 import { Panel } from 'react-bootstrap';
 import { RouteComponentProps } from 'react-router-dom';
@@ -9,11 +8,11 @@ import { ModelResponse, Query } from '../../API/Model';
 import { IAlert } from '../../UI/Alert';
 import Model from '../../UI/Model';
 import Validation from '../../UI/Validation';
+import { editPath } from '../Explore/Container';
 import Content from './Content';
 import Filter from './Filter';
 import ExperimentReviewHeader from './Header';
 import './Review.css';
-
 interface Params {
   slug: string;
 }
@@ -34,11 +33,12 @@ class Container extends React.Component<Props, State> {
 
   public async componentDidMount() {
     const slug = this.props.match.params.slug;
+
     if (!slug) {
       return;
     }
 
-    if (slug !== 'untitled') {
+    if (slug !== editPath) {
       await this.loadModel({ slug });
       const query = this.state.query;
       if (query) {
@@ -70,7 +70,7 @@ class Container extends React.Component<Props, State> {
 
   public render() {
     const { apiCore, apiModel, apiMining } = this.props;
-    const [query, fields, filters] = this.makeFilters({ apiCore });
+    const { query, fields, filters } = this.makeFilters({ apiCore });
     const model = apiModel.state.model || apiModel.state.draft;
     return (
       <div className='Experiment Review'>
@@ -213,7 +213,7 @@ class Container extends React.Component<Props, State> {
 
     // add filter variables
     const extractVariablesFromFilter = (filter: any) =>
-      filter.rules.map((r: any) => {
+      filter.rules.forEach((r: any) => {
         if (r.rules) {
           extractVariablesFromFilter(r);
         }
@@ -233,7 +233,7 @@ class Container extends React.Component<Props, State> {
 
     const filters = (query && query.filters && JSON.parse(query.filters)) || '';
 
-    return [query, filters, fields];
+    return { query, filters, fields };
   };
 
   private handleUpdateFilter = async (filters: string): Promise<boolean> => {
@@ -256,7 +256,7 @@ class Container extends React.Component<Props, State> {
 
   private handleSaveModel = async ({ title }: { title: string }) => {
     const { apiModel } = this.props;
-    const model = apiModel.state.model;
+    const model = apiModel.state.draft;
     const slug = await apiModel.save({ model, title });
     this.setState({ alert: { message: 'Model saved' } });
 
@@ -265,13 +265,12 @@ class Container extends React.Component<Props, State> {
   };
 
   private handleRunAnalysis = async () => {
-    // const { apiModel } = this.props;
-    // const model = apiModel.state.model;
-    // await apiModel.update({ model });
-    // const params = this.urlParams(this.props);
-    // const slug = params && params.slug;
-    // const { history } = this.props;
-    // history.push(`/v3/experiment/${slug}`);
+    const { apiModel } = this.props;
+    const model = apiModel.state.model;
+    await apiModel.update({ model });
+    const slug = this.props.match.params.slug;
+    const { history } = this.props;
+    history.push(`/v3/experiment/${slug}`);
   };
 
   private handleGoBackToExplore = () => {
@@ -281,7 +280,7 @@ class Container extends React.Component<Props, State> {
     if (model && model.slug) {
       history.push(`/v3/explore/${model.slug}`);
     } else if (apiModel.state.draft) {
-      history.push(`/v3/explore/edit`);
+      history.push(`/v3/explore/${editPath}`);
     } else {
       history.push(`/v3/explore`);
     }

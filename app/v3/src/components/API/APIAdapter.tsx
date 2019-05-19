@@ -209,7 +209,6 @@ class APIAdapter {
 
               default:
                 throw new Error(`"Format not handled" ${subResult.type}`);
-                break;
             }
           });
           break;

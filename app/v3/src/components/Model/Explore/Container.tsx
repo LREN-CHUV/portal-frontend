@@ -39,6 +39,8 @@ interface Props extends RouteComponentProps<Params> {
   apiModel: APIModel;
 }
 
+export const editPath = 'edit'
+
 export default ({ apiCore, apiMining, apiModel, ...props }: Props) => {
   const [datasets, setDatasets] = useState<VariableEntity[]>();
   const [selectedDatasets, setSelectedDatasets] = useState<VariableEntity[]>(
@@ -53,25 +55,25 @@ export default ({ apiCore, apiMining, apiModel, ...props }: Props) => {
 
   useEffect(() => {
     const slug = props.match.params.slug;
-    console.log(slug)
-    if (!slug) {
-      setModel(undefined);
-      setD3Model(initialD3Model);
+    switch (slug) {
+      case undefined:
+        setModel(undefined);
+        setD3Model(initialD3Model);
+        break;
 
-      return;
-    }
+      case editPath:
+        const draft = apiModel.state.draft;
+        if (draft && d3Layout) {
+          setModel(draft);
+          setD3Model(convertModelToD3Model(draft, d3Layout));
+        }
+        break;
 
-    if (slug !== 'edit') {
-      apiModel.one(slug);
-    } else {
-      const draft = apiModel.state.draft;
-      console.log(draft, d3Layout)
-      if (draft && d3Layout) {
-        setModel(draft);
-        setD3Model(convertModelToD3Model(draft, d3Layout));
-      }
+      default:
+        apiModel.one(slug);
+        break;
     }
-  }, [props.match.params.slug]);
+  }, [props.match.params.slug, d3Layout, apiModel]);
 
   useEffect(() => {
     const next = apiModel.state.model;
@@ -79,7 +81,7 @@ export default ({ apiCore, apiMining, apiModel, ...props }: Props) => {
       setModel(next);
       setD3Model(convertModelToD3Model(next, d3Layout));
     }
-  }, [apiModel.state.model]);
+  }, [apiModel.state.model, d3Layout]);
 
   useEffect(() => {
     const d = apiCore.state.datasets;
@@ -112,7 +114,7 @@ export default ({ apiCore, apiMining, apiModel, ...props }: Props) => {
 
       apiMining.histograms({ payload });
     }
-  }, [selectedNode, selectedDatasets]);
+  }, [selectedNode, selectedDatasets, apiMining]);
 
   const handleSelectDataset = (dataset: VariableEntity) => {
     const nextSelection = selectedDatasets
@@ -254,7 +256,7 @@ export default ({ apiCore, apiMining, apiModel, ...props }: Props) => {
       history.push(`/v3/review/${slug}`);
     } else {
       await apiModel.setDraft(nextModel);
-      history.push(`/v3/review/edit`);
+      history.push(`/v3/review/${editPath}`);
     }
   };
 

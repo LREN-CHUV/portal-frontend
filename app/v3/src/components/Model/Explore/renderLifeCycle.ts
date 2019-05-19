@@ -31,5 +31,5 @@ export default ({
     return () => {
       lastRender && lastRender();
     };
-  }, []);
+  }, [firstRender, lastRender]);
 };
