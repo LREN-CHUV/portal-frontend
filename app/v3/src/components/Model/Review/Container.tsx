@@ -70,7 +70,8 @@ class Container extends React.Component<Props, State> {
 
   public render() {
     const { apiCore, apiModel, apiMining } = this.props;
-    const { query, fields, filters } = this.makeFilters({ apiCore });
+    const { query } = this.state;
+    const { fields, filters } = this.makeFilters({ apiCore });
     const model = apiModel.state.model || apiModel.state.draft;
     return (
       <div className='Experiment Review'>
@@ -239,11 +240,13 @@ class Container extends React.Component<Props, State> {
   private handleUpdateFilter = async (filters: string): Promise<boolean> => {
     const { apiModel, apiMining } = this.props;
     const model = apiModel.state.model;
+    const draft = apiModel.state.draft;
     if (model) {
       model.query.filters = (filters && JSON.stringify(filters)) || '';
-    }
-    if (model) {
       await apiModel.update({ model });
+    } else if (draft) {
+      draft.query.filters = (filters && JSON.stringify(filters)) || '';
+      apiModel.setDraft(draft)
     }
     const query = this.state.query;
     if (query) {
