@@ -22,7 +22,7 @@ class Model extends React.Component<Props> {
       <Panel className="model">
         <Panel.Title>
           <h3>
-            Model <strong>{model && model.title ||  selectedSlug}</strong>
+            Model <strong>{(model && model.title) ||  selectedSlug}</strong>
           </h3>
         </Panel.Title>
         <Panel.Body>
@@ -88,23 +88,18 @@ class Model extends React.Component<Props> {
     switch (operator) {
       case "greater":
         return ">";
-        break;
 
       case "less":
         return "<";
-        break;
 
       case "equal":
         return "=";
-        break;
 
       case "not equal":
         return "!=";
-        break;
 
       default:
         return operator;
-        break;
     }
   };
 

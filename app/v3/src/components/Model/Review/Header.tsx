@@ -42,7 +42,7 @@ export default class Header extends React.Component<Props> {
     } = this.props;
 
     const currentModelName = this.state.modelName;
-    const isMock = false;
+    const isMock = model && !model.slug;
 
     return (
       <Panel>
@@ -107,7 +107,7 @@ export default class Header extends React.Component<Props> {
                     ? 'Please enter a title for your model'
                     : ''
                 }>
-                RUN MACHINE LEARNING EXPERIMENT{' '}
+                RUN ML EXPERIMENT{' '}
                 <Glyphicon glyph='chevron-right' />{' '}
               </Button>
             </div>

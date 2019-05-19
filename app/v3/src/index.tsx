@@ -1,5 +1,5 @@
-import bugsnag from "@bugsnag/js";
-import bugsnagReact from "@bugsnag/plugin-react";
+// import bugsnag from "@bugsnag/js";
+// import bugsnagReact from "@bugsnag/plugin-react";
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { default as AppContainer } from "./components/App/Container";

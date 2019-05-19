@@ -89,6 +89,7 @@ const Validation = ({
             numbers are 5 or 10. More information:{" "}
             <a
               target="_blank"
+              rel="noopener noreferrer"
               href="https://en.wikipedia.org/wiki/Cross-validation_(statistics)"
             >
               https://en.wikipedia.org/wiki/Cross-validation_(statistics)

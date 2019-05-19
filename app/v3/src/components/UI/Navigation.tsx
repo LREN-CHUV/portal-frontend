@@ -121,8 +121,7 @@ class Navigation extends React.Component<Props> {
             </li>
 
             <li className='uib-dropdown toolbar-icon-bg'>
-              <a
-                href='#'
+              <a href='/profile'
                 className='uib-dropdown-toggle username'
                 data-position='right'>
                 <img
@@ -138,10 +137,9 @@ class Navigation extends React.Component<Props> {
                     <span>Profile</span>
                   </a>
                 </li>
-
                 <li className='divider' />
                 <li>
-                  <a href='' id='logout-link' ng-click='logout()'>
+                  <a href='/login/logout' id='logout-link' ng-click='logout()'>
                     <i className='ti ti-shift-right' />
                     <span>Sign out</span>
                   </a>
