@@ -20,7 +20,7 @@ export default ({
     if (!isFirstRender.current) {
       updateRender && updateRender();
     }
-  });
+  }, [firstRender, updateRender]);
 
   useLayoutEffect(() => {
     if (isFirstRender.current) {
