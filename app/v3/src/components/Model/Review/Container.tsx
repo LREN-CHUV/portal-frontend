@@ -246,7 +246,7 @@ class Container extends React.Component<Props, State> {
       await apiModel.update({ model });
     } else if (draft) {
       draft.query.filters = (filters && JSON.stringify(filters)) || '';
-      apiModel.setDraft(draft)
+      apiModel.setDraft(draft);
     }
     const query = this.state.query;
     if (query) {

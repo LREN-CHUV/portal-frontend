@@ -105,3 +105,8 @@
 .panel-title h3 {
   padding-left: 16px;
 }
+
+.alert {
+  position: absolute;
+  z-index: 10;
+}
