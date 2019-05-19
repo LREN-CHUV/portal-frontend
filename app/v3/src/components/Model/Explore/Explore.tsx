@@ -96,7 +96,7 @@ export default (props: ExploreProps) => {
             </Panel.Body>
           </Panel>
         </div>
-        <div className='column'>
+        <div className='column1'>
           <Panel className='circle-pack'>
             <Panel.Title>
               <div className='variable-box'>
@@ -167,7 +167,7 @@ export default (props: ExploreProps) => {
             </Panel.Body>
           </Panel>
         </div>
-        <div className='column'>
+        <div className='column2'>
           <div className='header'>
             <Header handleGoToAnalysis={handleGoToAnalysis} />
           </div>
