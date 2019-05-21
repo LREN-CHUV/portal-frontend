@@ -225,6 +225,72 @@ class Core extends Container<State> {
       return { error, data: undefined };
     }
   };
+
+  public exaremeAlgorithms = async () => {
+    console.log('exaremeAlgorithms');
+    try {
+      const data = await request.get(`${this.backendURL}/methods/exareme`, this.options);
+      const json = await JSON.parse(data);
+      if (json.error) {
+        return await this.setState({
+          error: json.error
+        });
+      }
+
+      const exaremeAlgorithms = json
+        .filter((a: any) => a.name === 'PEARSON_CORRELATION')
+        .map((a: any) => {
+          const variableConstraintParams = a.parameters.find((p: any) => p.name === 'X');
+          const variableTypes =
+            variableConstraintParams &&
+            variableConstraintParams.columnValuesSQLType.split(',').map((c: any) => c.trim());
+          const variableColumnValuesIsCategorical =
+            (variableConstraintParams && Boolean(variableConstraintParams.columnValuesIsCategorical)) || false;
+          const variableConstraint = {
+            binominal: variableColumnValuesIsCategorical,
+            integer: variableTypes && variableTypes.includes('integer') ? true : false,
+            polynominal: variableColumnValuesIsCategorical,
+            real: variableTypes && variableTypes.includes('real') ? true : false
+          };
+
+          const covariableConstraintParams = a.parameters.find((p: any) => p.name === 'Y');
+          const covariableTypes =
+            covariableConstraintParams &&
+            covariableConstraintParams.columnValuesSQLType.split(',').map((c: any) => c.trim());
+          const covariableColumnValuesIsCategorical =
+            (covariableConstraintParams && Boolean(covariableConstraintParams.columnValuesIsCategorical)) || false;
+          const covariableConstraint = {
+            binominal: covariableColumnValuesIsCategorical,
+            integer: variableTypes && variableTypes.includes('integer') ? true : false,
+            polynominal: covariableColumnValuesIsCategorical,
+            real: variableTypes && variableTypes.includes('real') ? true : false
+          };
+
+          return {
+            code: a.name,
+            constraints: {
+              covariables: covariableConstraint,
+              variable: variableConstraint
+            },
+            description: a.desc,
+            enabled: true,
+            label: a.name,
+            source: 'exareme',
+            type: ['exareme'],
+            validation: true
+          };
+        });
+
+      return await this.setState({
+        error: undefined,
+        exaremeAlgorithms
+      });
+    } catch (error) {
+      return await this.setState({
+        error: error.message
+      });
+    }
+  };
 }
 
 export default Core;
