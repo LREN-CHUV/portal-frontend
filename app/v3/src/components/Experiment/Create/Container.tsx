@@ -134,6 +134,7 @@ class Container extends React.Component<Props, State> {
               <Panel.Body>
                 <AvailableMethods
                   methods={apiCore.state.methods}
+                  exaremeAlgorithms={apiCore.state.exaremeAlgorithms}
                   variables={apiCore.state.variables}
                   handleSelectMethod={this.handleSelectMethod}
                   model={apiModel.state.model}

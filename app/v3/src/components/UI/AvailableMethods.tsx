@@ -4,39 +4,37 @@ import { MIP } from '../../types';
 import { VariableEntity } from '../API/Core';
 import { ModelResponse } from '../API/Model';
 
-
 const AvailableMethods = ({
   methods,
+  exaremeAlgorithms,
   variables,
   handleSelectMethod,
   model
 }: {
   methods: MIP.API.IMethods | undefined;
+  exaremeAlgorithms: any[];
   variables: VariableEntity[] | undefined;
   handleSelectMethod: (method: MIP.API.IMethod) => void;
   model: ModelResponse | undefined;
 }) => {
   const query = model && model.query;
-  const modelVariable =
-    query && query.variables && query.variables.map(v => v.code)[0];
-  const modelCovariables =
-    (query && query.coVariables && query.coVariables.map(v => v.code)) || [];
-  const modelGroupings =
-    (query && query.groupings && query.groupings.map(v => v.code)) || [];
+  const modelVariable = query && query.variables && query.variables.map(v => v.code)[0];
+  const modelCovariables = (query && query.coVariables && query.coVariables.map(v => v.code)) || [];
+  const modelGroupings = (query && query.groupings && query.groupings.map(v => v.code)) || [];
+
+  const mergedAlgorithms = [...(methods && methods.algorithms || []) , ...(exaremeAlgorithms || [])];
 
   const availableAlgorithms =
     (variables &&
       query &&
       modelVariable &&
-      methods &&
-      methods.algorithms.map(algorithm => {
+      mergedAlgorithms &&
+      mergedAlgorithms.map(algorithm => {
         let isEnabled = false;
         const disabled = { ...algorithm, enabled: false };
         const enabled = { ...algorithm, enabled: true };
 
-        const apiVariable = variables.find(
-          (v: any) => v.code === modelVariable
-        );
+        const apiVariable = variables.find((v: any) => v.code === modelVariable);
         const algoConstraints: any = algorithm.constraints;
         const algoConstraintVariable = algoConstraints.variable;
         const apiVariableType = apiVariable && apiVariable.type;
@@ -48,41 +46,25 @@ const AvailableMethods = ({
         }
 
         const algoConstraintCovariable = algoConstraints.covariables;
-        if (
-          modelCovariables.length < algoConstraintCovariable &&
-          algoConstraintCovariable.min_count
-        ) {
+        if (modelCovariables.length < algoConstraintCovariable && algoConstraintCovariable.min_count) {
           isEnabled = false;
         }
 
-        if (
-          modelCovariables.length < algoConstraintCovariable &&
-          algoConstraintCovariable.max_count
-        ) {
+        if (modelCovariables.length < algoConstraintCovariable && algoConstraintCovariable.max_count) {
           isEnabled = false;
         }
 
         const algoConstraintGrouping = algoConstraints.groupings;
-        if (
-          modelGroupings.length < algoConstraintGrouping &&
-          algoConstraintGrouping.min_count
-        ) {
+        if (modelGroupings.length < algoConstraintGrouping && algoConstraintGrouping.min_count) {
           isEnabled = false;
         }
 
-        if (
-          modelGroupings.length < algoConstraintGrouping &&
-          algoConstraintGrouping.max_count
-        ) {
+        if (modelGroupings.length < algoConstraintGrouping && algoConstraintGrouping.max_count) {
           isEnabled = false;
         }
 
         const mixed = algoConstraints.mixed;
-        if (
-          modelGroupings.length > 0 &&
-          modelCovariables.length > 0 &&
-          !mixed
-        ) {
+        if (modelGroupings.length > 0 && modelCovariables.length > 0 && !mixed) {
           isEnabled = false;
         }
 
@@ -91,8 +73,8 @@ const AvailableMethods = ({
     [];
 
   const sortedAlgorithms =
-    availableAlgorithms &&
-    availableAlgorithms.sort((a: MIP.API.IMethod, b: MIP.API.IMethod) => {
+  availableAlgorithms &&
+  availableAlgorithms.sort((a: MIP.API.IMethod, b: MIP.API.IMethod) => {
       try {
         const typea = (a && a.type && a.type.length > 0 && a.type[0]) || '';
         const typeb = (b && b.type && b.type.length > 0 && b.type[0]) || '';
@@ -116,9 +98,8 @@ const AvailableMethods = ({
         a.code !== 'kmeans' &&
         a.code !== 'heatmaply'
     );
-  const types = Array.from(
-    new Set(filteredAlgorithms.map(f => f.type).flat(1))
-  );
+
+  const types = Array.from(new Set(filteredAlgorithms.map(f => f.type).flat(1)));
 
   // console.log(filteredAlgorithms.map((f, i) => `${i + 1}.${f.code}`).join('\n'))
   return (
