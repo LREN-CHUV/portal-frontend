@@ -1,4 +1,3 @@
-import { MIP } from '../../types';
 import { MIME_TYPES, SCORES } from '../constants';
 import {
   ExperimentResponse,

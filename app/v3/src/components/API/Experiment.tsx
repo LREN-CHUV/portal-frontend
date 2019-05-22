@@ -1,7 +1,6 @@
 import request from 'request-promise-native';
 import { Container } from 'unstated';
 
-import { MIP } from '../../types';
 import { backendURL } from '../API';
 import { Method } from '../API/Core';
 import { Query } from '../API/Model';

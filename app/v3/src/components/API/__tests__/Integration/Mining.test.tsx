@@ -1,4 +1,3 @@
-import { MIP } from '../../../../types';
 import { createModel, datasets } from '../../../utils/TestUtils';
 import { VariableEntity } from '../../Core';
 import APIMining from '../../Mining';

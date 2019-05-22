@@ -2,7 +2,6 @@ import Result from '../../Result';
 import * as React from 'react';
 import { mount } from 'enzyme';
 import APIAdapter from '../../../../API/APIAdapter';
-import { MIP } from '../../../../../types';
 
 const parseExperiment = (json: any): MIP.API.IExperimentResponse =>
   APIAdapter.parse(json);
