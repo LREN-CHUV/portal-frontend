@@ -2,7 +2,6 @@ import { mount } from 'enzyme';
 import Result from '../../../../../Experiment/Result/Result';
 import { VariableEntity } from '../../../../Core';
 
-import { MIP } from '../../../../../../types';
 import * as React from 'react';
 import {
   createExperiment,
