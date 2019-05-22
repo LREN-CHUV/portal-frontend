@@ -1,10 +1,12 @@
 import * as React from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
-import { MIP } from '../../../types';
+
 import { APICore, APIExperiment, APIModel } from '../../API';
+import { ExperimentResponse } from '../../API/Experiment';
 import Methods from '../../Experiment/Result/Methods';
 import Model from '../../UI/Model';
 import { ExperimentResult, ExperimentResultHeader } from './';
+
 interface Props extends RouteComponentProps<any> {
   apiExperiment: APIExperiment;
   apiModel: APIModel;
@@ -63,11 +65,7 @@ class Experiment extends React.Component<Props> {
         </div>
         <div className='content'>
           <div className='sidebar'>
-            <Model
-              model={apiModel.state.model}
-              variables={apiCore.state.variables}
-              showDatasets={true}
-            />
+            <Model model={apiModel.state.model} variables={apiCore.state.variables} showDatasets={true} />
           </div>
           <div className='results'>
             <ExperimentResult experimentState={apiExperiment.state} />
@@ -95,9 +93,7 @@ class Experiment extends React.Component<Props> {
     return match.params;
   };
 
-  private handleSelectExperiment = async (
-    experiment: MIP.API.IExperimentResponse
-  ) => {
+  private handleSelectExperiment = async (experiment: ExperimentResponse) => {
     const { modelDefinitionId, uuid } = experiment;
     const { history, apiExperiment } = this.props;
     history.push(`/v3/experiment/${modelDefinitionId}/${uuid}`);
@@ -116,9 +112,7 @@ class Experiment extends React.Component<Props> {
     }
 
     const { uuid } = params;
-    return shared
-      ? await apiExperiment.markAsUnshared({ uuid })
-      : await apiExperiment.markAsShared({ uuid });
+    return shared ? await apiExperiment.markAsUnshared({ uuid }) : await apiExperiment.markAsShared({ uuid });
   };
 
   private handleCreateNewExperiment = () => {

@@ -1,17 +1,18 @@
-import * as React from 'react';
-import { Tab, Tabs } from 'react-bootstrap';
-import { MIP } from '../../../types';
-import { SCORES } from '../../constants';
-import { round } from '../../utils';
-import { Highchart } from '.';
-
 import './JSON.css';
 import './PFA.css';
 
-const removeKeys = (
-  obj: any,
-  keys: string[] = ['confusionMatrix', 'type', 'node']
-) => {
+import * as React from 'react';
+import { Tab, Tabs } from 'react-bootstrap';
+
+import { Method } from '../../API/Core';
+import {
+    ConfusionMatrix, KfoldValidationScore, PolynomialClassificationScore, ValidationScore
+} from '../../API/Experiment';
+import { SCORES } from '../../constants';
+import { round } from '../../utils';
+import { Highchart } from './';
+
+const removeKeys = (obj: any, keys: string[] = ['confusionMatrix', 'type', 'node']) => {
   const newObj = { ...obj };
   keys.forEach(key => {
     delete newObj[key];
@@ -20,12 +21,7 @@ const removeKeys = (
   return { ...newObj };
 };
 
-const buildChart = (
-  validation:
-    | MIP.API.IKfoldValidationScore
-    | MIP.API.IValidationScore
-    | MIP.API.IPolynomialClassificationScore
-) => {
+const buildChart = (validation: KfoldValidationScore | ValidationScore | PolynomialClassificationScore) => {
   return {
     chart: {
       type: 'column',
@@ -51,25 +47,19 @@ const buildChart = (
   };
 };
 
-const buildTableValue = (
-  validation:
-    | MIP.API.IKfoldValidationScore
-    | MIP.API.IValidationScore
-    | MIP.API.IPolynomialClassificationScore
-) =>
+const buildTableValue = (validation: KfoldValidationScore | ValidationScore | PolynomialClassificationScore) =>
   (validation && (
     <ul className='pfa-table'>
       {Object.keys(validation).map((key, k) => (
         <li key={k}>
-          <strong>{SCORES[key] && SCORES[key].label}</strong>:{' '}
-          {round(validation[key])}
+          <strong>{SCORES[key] && SCORES[key].label}</strong>: {round(validation[key])}
         </li>
       ))}
     </ul>
   )) ||
   null;
 
-const buildConfusionMatrix = (matrix: MIP.API.IConfusionMatrix) =>
+const buildConfusionMatrix = (matrix: ConfusionMatrix) =>
   matrix &&
   ((
     <table className='greyGridTable'>
@@ -98,7 +88,7 @@ const buildConfusionMatrix = (matrix: MIP.API.IConfusionMatrix) =>
   ) ||
     null);
 
-export default ({ method, data }: { method: MIP.API.IMethod; data: any }) => {
+export default ({ method, data }: { method: Method; data: any }) => {
   return (
     (data && (
       <Tabs defaultActiveKey={0} id='pfa-method' style={{ marginTop: '16px' }}>
@@ -118,9 +108,7 @@ export default ({ method, data }: { method: MIP.API.IMethod; data: any }) => {
         )}
         {data.remoteValidation && (
           <Tab eventKey={1} title={'Remote Validation'}>
-            <Highchart
-              options={buildChart(removeKeys(data.remoteValidation))}
-            />
+            <Highchart options={buildChart(removeKeys(data.remoteValidation))} />
             {buildTableValue(removeKeys(data.remoteValidation))}
             {buildConfusionMatrix(data.remoteValidation.confusionMatrix)}
           </Tab>

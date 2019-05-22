@@ -1,8 +1,12 @@
+import '../Experiment.css';
+
 import * as React from 'react';
 import { Panel, Tab, Tabs } from 'react-bootstrap';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
-import { MIP } from '../../../types';
+
 import { APICore, APIExperiment, APIModel } from '../../API';
+import { Method, MethodPayload } from '../../API/Core';
+import { ExperimentPayload, ExperimentResponse } from '../../API/Experiment';
 import { ModelResponse, Query } from '../../API/Model';
 import { globalParameters } from '../../constants';
 import Form from '../../Experiment/Create/Form';
@@ -11,7 +15,6 @@ import { Alert, IAlert } from '../../UI/Alert';
 import AvailableMethods from '../../UI/AvailableMethods';
 import Model from '../../UI/Model';
 import Validation from '../../UI/Validation';
-import '../Experiment.css';
 import Help from './Help';
 
 interface Props extends RouteComponentProps<any> {
@@ -22,9 +25,9 @@ interface Props extends RouteComponentProps<any> {
 }
 
 interface State {
-  parameters?: [MIP.API.IMethodPayload];
+  parameters?: [MethodPayload];
   query?: Query;
-  method?: MIP.API.IMethod;
+  method?: Method;
   alert: IAlert;
   kfold: number;
 }
@@ -78,11 +81,7 @@ class Container extends React.Component<Props, State> {
         </div>
         <div className='content'>
           <div className='sidebar'>
-            <Model
-              model={apiModel.state.model}
-              showDatasets={true}
-              variables={apiCore.state.variables}
-            />
+            <Model model={apiModel.state.model} showDatasets={true} variables={apiCore.state.variables} />
           </div>
           <div className='parameters'>
             <Panel>
@@ -90,16 +89,8 @@ class Container extends React.Component<Props, State> {
                 <h3>Your Experiment</h3>
               </Panel.Title>
               <Panel.Body>
-                {alert && (
-                  <Alert
-                    message={alert.message}
-                    title={alert.title}
-                    styled={alert.styled}
-                  />
-                )}
-                <Tabs
-                  defaultActiveKey={1}
-                  id='uncontrolled-create-experiment-tab'>
+                {alert && <Alert message={alert.message} title={alert.title} styled={alert.styled} />}
+                <Tabs defaultActiveKey={1} id='uncontrolled-create-experiment-tab'>
                   <Tab eventKey={1} title='Method'>
                     <Form
                       method={this.state && this.state.method}
@@ -149,10 +140,8 @@ class Container extends React.Component<Props, State> {
   }
 
   // FIXME: better algorithm parameterization
-  private isPredictiveMethod = (method: MIP.API.IMethod | undefined) =>
-    (method && method.type && method.type[0] === 'predictive_model') ||
-    (method && method.code === 'kmeans') ||
-    false;
+  private isPredictiveMethod = (method: Method | undefined) =>
+    (method && method.type && method.type[0] === 'predictive_model') || (method && method.code === 'kmeans') || false;
 
   private handleSelectModel = async (model?: ModelResponse): Promise<any> => {
     if (model) {
@@ -165,10 +154,8 @@ class Container extends React.Component<Props, State> {
     }
   };
 
-  private handleSelectMethod = (method: MIP.API.IMethod): void => {
-    const kfold = this.isPredictiveMethod(method)
-      ? globalParameters.kfold.k
-      : 0;
+  private handleSelectMethod = (method: Method): void => {
+    const kfold = this.isPredictiveMethod(method) ? globalParameters.kfold.k : 0;
     this.setState({
       kfold,
       method,
@@ -184,13 +171,11 @@ class Container extends React.Component<Props, State> {
     this.setState({ kfold });
   };
 
-  private handleChangeParameters = (parameters: [MIP.API.IMethodPayload]) => {
+  private handleChangeParameters = (parameters: [MethodPayload]) => {
     this.setState({ parameters });
   };
 
-  private handleSelectExperiment = async (
-    experiment: MIP.API.IExperimentResponse
-  ): Promise<any> => {
+  private handleSelectExperiment = async (experiment: ExperimentResponse): Promise<any> => {
     const { modelDefinitionId, uuid } = experiment;
     const { apiExperiment, history } = this.props;
     history.push(`/v3/experiment/${modelDefinitionId}/${uuid}`);
@@ -206,9 +191,7 @@ class Container extends React.Component<Props, State> {
     }
   };
 
-  private handleSaveAndRunExperiment = async (
-    experimentName: string
-  ): Promise<any> => {
+  private handleSaveAndRunExperiment = async (experimentName: string): Promise<any> => {
     const { apiModel, apiExperiment, history } = this.props;
 
     if (!this.state) {
@@ -240,12 +223,7 @@ class Container extends React.Component<Props, State> {
     await apiModel.update({ model });
 
     const validation =
-      model &&
-      model.query &&
-      model.query.validationDatasets &&
-      model.query.validationDatasets.length
-        ? true
-        : false;
+      model && model.query && model.query.validationDatasets && model.query.validationDatasets.length ? true : false;
 
     const validations =
       this.state.kfold > 0
@@ -272,7 +250,7 @@ class Container extends React.Component<Props, State> {
       return;
     }
 
-    const experiment: MIP.API.IExperimentPayload = {
+    const experiment: ExperimentPayload = {
       algorithms: [
         {
           code: selectedMethod.code,
@@ -288,6 +266,7 @@ class Container extends React.Component<Props, State> {
       ],
       model: model.slug,
       name: experimentName,
+      source: selectedMethod.source,
       validations
     };
 

@@ -1,12 +1,9 @@
 import * as React from 'react';
 import { Panel } from 'react-bootstrap';
-import { MIP } from '../../../types';
 
-const Methods = ({
-  experiment
-}: {
-  experiment?: MIP.API.IExperimentResponse;
-}) => {
+import { ExperimentResponse } from '../../API/Experiment';
+
+const Methods = ({ experiment }: { experiment?: ExperimentResponse }) => {
   const algorithms = experiment && experiment.algorithms;
   const validations = experiment && experiment.validations;
 
@@ -22,9 +19,7 @@ const Methods = ({
               <p>
                 <strong>{algorithm.name}</strong>
               </p>
-              {algorithm.parameters && algorithm.parameters.length > 0 && (
-                <h3>Parameters</h3>
-              )}
+              {algorithm.parameters && algorithm.parameters.length > 0 && <h3>Parameters</h3>}
               {algorithm.parameters &&
                 algorithm.parameters.length > 0 &&
                 algorithm.parameters.map((m: any, i: number) => (
