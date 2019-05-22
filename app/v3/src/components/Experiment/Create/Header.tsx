@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { Button, FormControl, Glyphicon, Panel } from 'react-bootstrap';
-import { MIP } from '../../../types';
+
+import { Method } from '../../API/Core';
+import { ExperimentResponse } from '../../API/Experiment';
 import { ModelResponse } from '../../API/Model';
 import Dropdown from '../../UI/Dropdown';
 import DropdownModel from '../../UI/DropdownModel';
@@ -8,12 +10,12 @@ import DropdownModel from '../../UI/DropdownModel';
 interface Props {
   model?: ModelResponse;
   models?: ModelResponse[];
-  experiments?: MIP.API.IExperimentResponse[];
-  method?: MIP.API.IMethod;
+  experiments?: ExperimentResponse[];
+  method?: Method;
   handleGoBackToReview: () => void;
   handleSelectModel: (model?: ModelResponse) => Promise<any>;
   handleSelectExperiment: (
-    experiment: MIP.API.IExperimentResponse
+    experiment: ExperimentResponse
   ) => Promise<any>;
   handleSaveAndRunExperiment: (experimentName: string) => Promise<any>;
 }

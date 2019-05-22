@@ -1,7 +1,6 @@
 import request from 'request-promise-native';
 import { Container } from 'unstated';
 
-import { MIP } from '../../types';
 import { backendURL } from '../API';
 
 export interface Variable {
@@ -16,13 +15,38 @@ export interface VariableEntity extends Variable {
   group?: Variable[];
 }
 
+export interface Method {
+  code: string;
+  name: string;
+  parameters?: [MethodPayload] | any;
+  validation: boolean;
+  constraints?: any;
+  type?: string[];
+  source?: string;
+}
+
+export interface MethodPayload {
+  code: string;
+  constraints: any;
+  default_value: any;
+  value: any;
+  values?: any;
+  description: string;
+  label: string;
+  type: string;
+}
+
+export interface Methods {
+  algorithms: Method[];
+}
+
 export interface State {
   error?: string;
   loading?: boolean;
   hierarchy?: any;
   variables?: VariableEntity[];
   datasets?: VariableEntity[];
-  methods?: MIP.API.IMethods;
+  methods?: Methods;
   exaremeAlgorithms?: any;
 }
 

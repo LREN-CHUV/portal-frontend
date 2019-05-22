@@ -1,8 +1,15 @@
 import { MIP } from '../../types';
 import { MIME_TYPES, SCORES } from '../constants';
+import {
+  ExperimentResponse,
+  KfoldValidationScore,
+  Node,
+  PolynomialClassificationScore,
+  ValidationScore
+} from './Experiment';
 
 class APIAdapter {
-  public static parse = (experiment: any): MIP.API.IExperimentResponse => {
+  public static parse = (experiment: any): ExperimentResponse => {
     // Formats are differents in the API for experiment, experimentList and runExperiment,
     // apply specific parsing to some terms
     const algorithms = parse(experiment.algorithms);
@@ -16,7 +23,7 @@ class APIAdapter {
     })();
     const modelDefinitionId = experiment.model ? experiment.model.slug : null;
 
-    let experimentResponse: MIP.API.IExperimentResponse = {
+    let experimentResponse: ExperimentResponse = {
       algorithms,
       created,
       modelDefinition: experiment.model ? experiment.model.query : undefined,
@@ -56,8 +63,7 @@ class APIAdapter {
     }
 
     if (!experiment.result) {
-      const elapsed: number =
-        (new Date().getTime() - experimentResponse.created.getTime()) / 1000;
+      const elapsed: number = (new Date().getTime() - experimentResponse.created.getTime()) / 1000;
 
       if (elapsed > 60 * 5) {
         experimentResponse = {
@@ -72,7 +78,7 @@ class APIAdapter {
     // Results
     const resultParsed = parse(experiment.result);
     const result = Array.isArray(resultParsed) ? resultParsed : [resultParsed];
-    const nodes: MIP.API.INode[] = [];
+    const nodes: Node[] = [];
 
     result.forEach((r: any, i: number) => {
       let mime = r.type;
@@ -97,13 +103,11 @@ class APIAdapter {
 
       // Convert to array to have consistent results
       const normalizedResult = (input: any) =>
-        (input.data &&
-          (Array.isArray(input.data) ? input.data : [input.data])) ||
-        null;
+        (input.data && (Array.isArray(input.data) ? input.data : [input.data])) || null;
       const results = normalizedResult(r);
 
       // FIXME: on WOKEN see https://jira.chuv.ch/browse/HBPLD-256?filter=-6
-      if (method.algorithm === 'python-linear-regression' && mime !== 'text/plain+error' ) {
+      if (method.algorithm === 'python-linear-regression' && mime !== 'text/plain+error') {
         method.mime = MIME_TYPES.JSON;
         mime = MIME_TYPES.JSON;
       }
@@ -128,11 +132,7 @@ class APIAdapter {
         case MIME_TYPES.JSONDATA:
           if (/WP_LINEAR/.test(method.algorithm)) {
             const nresults = results && results.length > 0 && results[0];
-            const data =
-              nresults &&
-              nresults.resources &&
-              nresults.resources.length > 0 &&
-              nresults.resources[0];
+            const data = nresults && nresults.resources && nresults.resources.length > 0 && nresults.resources[0];
             method.data = [jsonTest(data && data.data)];
           } else {
             method.data = jsonTest(results);
@@ -141,10 +141,7 @@ class APIAdapter {
 
         case MIME_TYPES.VISJS:
           try {
-            const visFunction = `var network; ${results[0].result.slice(
-              1,
-              -1
-            )}`;
+            const visFunction = `var network; ${results[0].result.slice(1, -1)}`;
             method.data = [visFunction]; // FIXME: EXAREME evil eval code
             break;
           } catch (e) {
@@ -154,10 +151,7 @@ class APIAdapter {
 
         case MIME_TYPES.HTML:
           const html = results.map((result1: any) =>
-            result1.replace(
-              '\u0026lt;!DOCTYPE html\u0026gt;',
-              '<!DOCTYPE html>'
-            )
+            result1.replace('\u0026lt;!DOCTYPE html\u0026gt;', '<!DOCTYPE html>')
           );
           method.data = html;
           break;
@@ -232,7 +226,7 @@ class APIAdapter {
       //     node.methods.push(method);
       //   }
       // } else {
-      const node: MIP.API.INode = {
+      const node: Node = {
         methods: [method],
         name: r.node || 'Default'
       };
@@ -242,9 +236,7 @@ class APIAdapter {
       nodes.push(node);
     });
     // console.log({nodes})
-    experimentResponse.results = nodes.sort(
-      (a: MIP.API.INode, b: MIP.API.INode) => a.name.localeCompare(b.name)
-    );
+    experimentResponse.results = nodes.sort((a: Node, b: Node) => a.name.localeCompare(b.name));
 
     return experimentResponse;
   };
@@ -266,16 +258,9 @@ const plotly = (data: any) => {
 };
 
 interface IPfa {
-  crossValidation?:
-    | MIP.API.IKfoldValidationScore
-    | MIP.API.IValidationScore
-    | MIP.API.IPolynomialClassificationScore;
+  crossValidation?: KfoldValidationScore | ValidationScore | PolynomialClassificationScore;
   data?: any;
-  remoteValidation?:
-    | MIP.API.INode
-    | MIP.API.IKfoldValidationScore
-    | MIP.API.IValidationScore
-    | MIP.API.IPolynomialClassificationScore;
+  remoteValidation?: Node | KfoldValidationScore | ValidationScore | PolynomialClassificationScore;
   error?: any;
 }
 
@@ -289,12 +274,9 @@ const pfa = (data: any): IPfa => {
     } else {
       if (!d.cells.validations) {
         output.error = `PFA document doesn't contains a validation to display`;
-      }
-      else {
+      } else {
         // Convert to array to have consistent results
-        const init = d.cells.validations.init.length
-          ? d.cells.validations.init
-          : [d.cells.validations.init];
+        const init = d.cells.validations.init.length ? d.cells.validations.init : [d.cells.validations.init];
 
         const buildKFoldValidation = (dta: any) => ({
           explainedVariance: parseFloat(dta[SCORES.explainedVariance.code]),

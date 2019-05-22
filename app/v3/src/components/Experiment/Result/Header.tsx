@@ -3,12 +3,12 @@ import * as React from 'react';
 import { Button, Panel } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
-import { MIP } from '../../../types';
+import { ExperimentResponse } from '../../API/Experiment';
 import Dropdown from '../../UI/Dropdown';
 
 interface Props {
-  experiment?: MIP.API.IExperimentResponse;
-  experiments?: MIP.API.IExperimentResponse[];
+  experiment?: ExperimentResponse;
+  experiments?: ExperimentResponse[];
   handleSelectExperiment: any;
   handleShareExperiment: any;
   handleCreateNewExperiment: any;

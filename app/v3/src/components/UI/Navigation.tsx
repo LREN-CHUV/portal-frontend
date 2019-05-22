@@ -1,13 +1,14 @@
+import './Navigation.css';
+
 import * as React from 'react';
 import { DropdownButton, MenuItem } from 'react-bootstrap';
 import { NavLink, RouteComponentProps, withRouter } from 'react-router-dom';
+
 import default_user from '../../images/default_user.png';
-import { MIP } from '../../types';
 import { APIExperiment, APIModel } from '../API';
+import { ExperimentResponse } from '../API/Experiment';
 import Dropdown from '../UI/Dropdown';
 import Helpdesk from './Helpdesk';
-
-import './Navigation.css';
 
 interface Props extends RouteComponentProps<any> {
   appConfig: any;
@@ -100,7 +101,7 @@ class Navigation extends React.Component<Props> {
                   type='models'
                   // tslint:disable-next-line jsx-no-lambda
                   handleSelect={async (
-                    experiment: MIP.API.IExperimentResponse
+                    experiment: ExperimentResponse
                   ) => {
                     const { modelDefinitionId, uuid } = experiment;
                     this.props.history.push(
