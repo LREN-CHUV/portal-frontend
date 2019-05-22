@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Button } from 'react-bootstrap';
-import { MIP } from '../../types';
-import { VariableEntity } from '../API/Core';
+
+import { Method, Methods, VariableEntity } from '../API/Core';
 import { ModelResponse } from '../API/Model';
 
 const AvailableMethods = ({
@@ -11,10 +11,10 @@ const AvailableMethods = ({
   handleSelectMethod,
   model
 }: {
-  methods: MIP.API.IMethods | undefined;
+  methods: Methods | undefined;
   exaremeAlgorithms: any[];
   variables: VariableEntity[] | undefined;
-  handleSelectMethod: (method: MIP.API.IMethod) => void;
+  handleSelectMethod: (method: Method) => void;
   model: ModelResponse | undefined;
 }) => {
   const query = model && model.query;
@@ -74,7 +74,7 @@ const AvailableMethods = ({
 
   const sortedAlgorithms =
   availableAlgorithms &&
-  availableAlgorithms.sort((a: MIP.API.IMethod, b: MIP.API.IMethod) => {
+  availableAlgorithms.sort((a: Method, b: Method) => {
       try {
         const typea = (a && a.type && a.type.length > 0 && a.type[0]) || '';
         const typeb = (b && b.type && b.type.length > 0 && b.type[0]) || '';

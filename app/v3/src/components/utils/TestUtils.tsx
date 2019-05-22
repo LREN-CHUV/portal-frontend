@@ -1,6 +1,5 @@
-import { MIP } from '../../types';
 import APICore from '../API/Core';
-import APIExperiment from '../API/Experiment';
+import APIExperiment, { ExperimentPayload, State } from '../API/Experiment';
 import APIModel from '../API/Model';
 import config from '../API/RequestHeaders';
 
@@ -15,33 +14,19 @@ const datasets = async () => {
   return apiCore.state;
 };
 
-const createModel = async ({
-  modelSlug,
-  model
-}: {
-  modelSlug: string;
-  model: any;
-}) => {
+const createModel = async ({ modelSlug, model }: { modelSlug: string; model: any }) => {
   await apiModel.save({ model, title: modelSlug });
   return apiModel.state;
 };
 
-const createExperiment = async ({
-  experiment
-}: {
-  experiment: MIP.API.IExperimentPayload;
-}) => {
+const createExperiment = async ({ experiment }: { experiment: ExperimentPayload }) => {
   await apiExperiment.create({ experiment });
   return apiExperiment.state;
 };
 
-const waitForResult = ({
-  uuid
-}: {
-  uuid: string;
-}): Promise<MIP.Store.IExperimentState> =>
+const waitForResult = ({ uuid }: { uuid: string }): Promise<State> =>
   new Promise(resolve => {
-    let elapsed = 0
+    let elapsed = 0;
     const timerId = setInterval(async () => {
       await apiExperiment.one({ uuid });
       const { experiment, error } = apiExperiment.state;
@@ -52,9 +37,10 @@ const waitForResult = ({
         resolve(apiExperiment.state);
       }
 
-      if (elapsed > TIMEOUT_DURATION ) { // timeout
+      if (elapsed > TIMEOUT_DURATION) {
+        // timeout
         clearInterval(timerId);
-        apiExperiment.state.error = `Timeout after ${TIMEOUT_DURATION} s`
+        apiExperiment.state.error = `Timeout after ${TIMEOUT_DURATION} s`;
         resolve(apiExperiment.state);
       }
 
@@ -71,10 +57,4 @@ const uid = () =>
     return v.toString(16);
   });
 
-export {
-  createExperiment,
-  createModel,
-  datasets,
-  uid,
-  waitForResult
-};
+export { createExperiment, createModel, datasets, uid, waitForResult };
