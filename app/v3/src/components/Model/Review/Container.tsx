@@ -1,9 +1,12 @@
+import './Review.css';
+
 import * as React from 'react';
 import { Panel } from 'react-bootstrap';
 import { RouteComponentProps } from 'react-router-dom';
-import { MIP } from '../../../types';
+
 import { APICore, APIMining, APIModel } from '../../API';
 import { VariableEntity } from '../../API/Core';
+import { MiningPayload } from '../../API/Mining';
 import { ModelResponse, Query } from '../../API/Model';
 import { IAlert } from '../../UI/Alert';
 import Model from '../../UI/Model';
@@ -12,7 +15,7 @@ import { editPath } from '../Explore/Container';
 import Content from './Content';
 import Filter from './Filter';
 import ExperimentReviewHeader from './Header';
-import './Review.css';
+
 interface Params {
   slug: string;
 }
@@ -317,7 +320,7 @@ class Container extends React.Component<Props, State> {
     const datasets = query.trainingDatasets;
 
     if (datasets && query) {
-      const payload: MIP.API.IMiningPayload = {
+      const payload: MiningPayload = {
         covariables: query.coVariables ? query.coVariables : [],
         datasets,
         filters: query.filters,

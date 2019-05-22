@@ -1,10 +1,11 @@
-import Result from '../../Result';
-import * as React from 'react';
 import { mount } from 'enzyme';
-import APIAdapter from '../../../../API/APIAdapter';
-import { MIP } from '../../../../../types';
+import * as React from 'react';
 
-const parseExperiment = (json: any): MIP.API.IExperimentResponse =>
+import APIAdapter from '../../../../API/APIAdapter';
+import { ExperimentResponse } from '../../../../API/Experiment';
+import Result from '../../Result';
+
+const parseExperiment = (json: any): ExperimentResponse =>
   APIAdapter.parse(json);
 
 describe('Test Tree Serializer results', () => {

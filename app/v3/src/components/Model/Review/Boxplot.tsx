@@ -3,16 +3,15 @@ import HighchartsReact from 'highcharts-react-official';
 import addHighchartsMore from 'highcharts/highcharts-more';
 import * as React from 'react';
 
-import { MIP } from '../../../types';
 import { VariableEntity } from '../../API/Core';
-import { MiningResponseShape } from '../../API/Mining';
+import { MiningResponseShape, MiningState } from '../../API/Mining';
 import { Alert } from '../../UI/Alert';
 import Loader from '../../UI/Loader';
 
 addHighchartsMore(Highcharts);
 
 interface Props {
-  miningState?: MIP.Store.IMiningState;
+  miningState?: MiningState;
   selectedDatasets?: VariableEntity[];
 }
 
@@ -23,7 +22,8 @@ const Boxplot = ({ miningState }: Props) => {
   const filtered = minings.reduce(
     (acc: MiningResponseShape[], m: MiningResponseShape) => [
       ...acc,
-      ...((m && m.data &&
+      ...((m &&
+        m.data &&
         m.data.data &&
         m.data.data
           .filter(
@@ -40,21 +40,12 @@ const Boxplot = ({ miningState }: Props) => {
     []
   );
 
-  const uniqueVariables =
-    filtered && Array.from(new Set(filtered.map((f: any) => f.index)));
+  const uniqueVariables = filtered && Array.from(new Set(filtered.map((f: any) => f.index)));
 
   const highchartsOptions: any[] = uniqueVariables.map((v: any) => {
     const uniqueMinings = filtered.filter((f: any) => f.index === v);
-    const data = uniqueMinings.map((u: any) => [
-      u.min,
-      u['25%'],
-      u['50%'],
-      u['75%'],
-      u.max
-    ]);
-    const categories = uniqueMinings.map(
-      (u: any, i: number) => `${u.dataset}-${u.group.join('-')}`
-    );
+    const data = uniqueMinings.map((u: any) => [u.min, u['25%'], u['50%'], u['75%'], u.max]);
+    const categories = uniqueMinings.map((u: any, i: number) => `${u.dataset}-${u.group.join('-')}`);
     const name = Array.from(new Set(uniqueMinings.map((f: any) => f.label)))[0];
     return {
       chart: {
@@ -80,8 +71,7 @@ const Boxplot = ({ miningState }: Props) => {
   return (
     <div>
       {loading && <Loader />}
-      {error &&
-        error.map((e, i) => <Alert message={e} title={'Error'} key={`${i}`} />)}
+      {error && error.map((e, i) => <Alert message={e} title={'Error'} key={`${i}`} />)}
       {highchartsOptions.map((options: any, k: number) => (
         <HighchartsReact highcharts={Highcharts} options={options} key={k} />
       ))}

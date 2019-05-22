@@ -2,9 +2,8 @@ import request from 'request-promise-native';
 import stringHash from 'string-hash';
 import { Container } from 'unstated';
 
-import { VariableEntity } from './Core';
-import { MIP } from '../../types';
 import { backendURL } from '../API';
+import { Method, VariableEntity } from './Core';
 
 export interface MiningResponseShape {
   data?: any;
@@ -13,16 +12,39 @@ export interface MiningResponseShape {
   loading?: boolean;
 }
 
+export interface IMiningResponse {
+  jobId: string;
+  node: string;
+  function: string;
+  shape: string;
+  timestamp: string;
+  data: any;
+}
+
+export interface MiningPayload {
+  algorithm?: Method;
+  variables: VariableEntity[];
+  grouping?: VariableEntity[];
+  covariables?: VariableEntity[];
+  datasets: VariableEntity[];
+  filters: string;
+}
+
+export interface MiningState {
+  error?: string;
+  summaryStatistics?: MiningResponseShape[];
+  heatmaps?: MiningResponseShape[];
+  histograms?: MiningResponseShape;
+}
+
 //
-class Mining extends Container<MIP.Store.IMiningState> {
+class Mining extends Container<MiningState> {
   /*
     "data": [{ x: n }]   
     "data": { "data": [{ x: n }] }   
     "data": [{ "data": [{ x: n }] }] 
   */
-  public static normalizeHeatmapData = (
-    heatmap: MiningResponseShape
-  ): MiningResponseShape[] => {
+  public static normalizeHeatmapData = (heatmap: MiningResponseShape): MiningResponseShape[] => {
     if (Array.isArray(heatmap.data)) {
       const isDataNested = heatmap.data.map(d => d.data).includes(true);
       if (isDataNested) {
@@ -43,7 +65,7 @@ class Mining extends Container<MIP.Store.IMiningState> {
       ];
     }
   };
-  public state: MIP.Store.IMiningState;
+  public state: MiningState;
 
   private cachedSummaryStatistics: any = {};
   private options: request.Options;
@@ -70,11 +92,7 @@ class Mining extends Container<MIP.Store.IMiningState> {
     }));
   };
 
-  public heatmaps = async ({
-    payload
-  }: {
-    payload: MIP.API.IMiningPayload;
-  }): Promise<any> => {
+  public heatmaps = async ({ payload }: { payload: MiningPayload }): Promise<any> => {
     await this.setState({
       heatmaps: [
         {
@@ -121,12 +139,7 @@ class Mining extends Container<MIP.Store.IMiningState> {
       },
       covariables: [],
       filters: '',
-      grouping: [
-        { code: 'dataset' },
-        { code: 'gender' },
-        { code: 'agegroup' },
-        { code: 'alzheimerbroadcategory' }
-      ]
+      grouping: [{ code: 'dataset' }, { code: 'gender' }, { code: 'agegroup' }, { code: 'alzheimerbroadcategory' }]
     };
     const response = await this.fetchOne({ payload: nextPayload });
     if (response.error) {
@@ -141,18 +154,12 @@ class Mining extends Container<MIP.Store.IMiningState> {
   };
 
   // fetch for each dataset, otherwise values are aggregated for all datasets
-  public summaryStatisticsByDataset = async ({
-    payload
-  }: {
-    payload: MIP.API.IMiningPayload;
-  }): Promise<any> => {
+  public summaryStatisticsByDataset = async ({ payload }: { payload: MiningPayload }): Promise<any> => {
     const hashKey = stringHash(`${payload.variables}${payload.filters}`);
     const queries = payload.datasets.map(dataset => {
       const code = dataset.code;
 
-      const response =
-        this.cachedSummaryStatistics[code] &&
-        this.cachedSummaryStatistics[code].hashKey === hashKey;
+      const response = this.cachedSummaryStatistics[code] && this.cachedSummaryStatistics[code].hashKey === hashKey;
 
       if (!response) {
         this.cachedSummaryStatistics[code] = {
@@ -189,18 +196,12 @@ class Mining extends Container<MIP.Store.IMiningState> {
           hashKey
         };
 
-        const summaryStatistics = payload.datasets.map(
-          dataset => this.cachedSummaryStatistics[dataset.code]
-        );
+        const summaryStatistics = payload.datasets.map(dataset => this.cachedSummaryStatistics[dataset.code]);
         this.setState({ summaryStatistics });
       });
   };
 
-  private fetchOne = async ({
-    payload
-  }: {
-    payload: MIP.API.IMiningPayload;
-  }): Promise<MiningResponseShape> => {
+  private fetchOne = async ({ payload }: { payload: MiningPayload }): Promise<MiningResponseShape> => {
     const copyOfDataset = payload.datasets && [...payload.datasets];
 
     try {

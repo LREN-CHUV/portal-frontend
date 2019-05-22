@@ -1,7 +1,6 @@
 import { mount } from 'enzyme';
 import * as React from 'react';
 
-import { MIP } from '../../../../../../types';
 import Result from '../../../../../Experiment/Result/Result';
 import { createExperiment, createModel, uid, waitForResult } from '../../../../../utils/TestUtils';
 import { VariableEntity } from '../../../../Core';
