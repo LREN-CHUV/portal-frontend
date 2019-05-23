@@ -244,7 +244,7 @@ export default ({ apiCore, apiMining, apiModel, ...props }: Props) => {
         aD3Model.covariables &&
         aD3Model.covariables.map(v => ({ code: v.data.code })),
       filters: aModel ? aModel.query.filters : '',
-      groupings: undefined,
+      groupings: [],
       trainingDatasets: selectedDatasets,
       variables: aD3Model.variable && [{ code: aD3Model.variable.data.code }]
     };
