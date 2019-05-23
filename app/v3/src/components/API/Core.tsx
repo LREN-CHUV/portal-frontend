@@ -227,7 +227,6 @@ class Core extends Container<State> {
   };
 
   public exaremeAlgorithms = async () => {
-    console.log('exaremeAlgorithms');
     try {
       const data = await request.get(`${this.backendURL}/methods/exareme`, this.options);
       const json = await JSON.parse(data);
@@ -237,49 +236,61 @@ class Core extends Container<State> {
         });
       }
 
-      const exaremeAlgorithms = json
-        .filter((a: any) => a.name === 'PEARSON_CORRELATION')
-        .map((a: any) => {
-          const variableConstraintParams = a.parameters.find((p: any) => p.name === 'X');
-          const variableTypes =
-            variableConstraintParams &&
-            variableConstraintParams.columnValuesSQLType.split(',').map((c: any) => c.trim());
-          const variableColumnValuesIsCategorical =
-            (variableConstraintParams && Boolean(variableConstraintParams.columnValuesIsCategorical)) || false;
-          const variableConstraint = {
-            binominal: variableColumnValuesIsCategorical,
-            integer: variableTypes && variableTypes.includes('integer') ? true : false,
-            polynominal: variableColumnValuesIsCategorical,
-            real: variableTypes && variableTypes.includes('real') ? true : false
-          };
+      const buildConstraints = (algo: any, params: string[]) => {
+        const variable = algo.parameters.find((p: any) => params.includes(p.name));
+        const variableTypes = variable && variable.columnValuesSQLType.split(',').map((c: any) => c.trim());
+        const variableColumnValuesIsCategorical = (variable && variable.columnValuesIsCategorical === 'true') || false;
+        const variableConstraint = {
+          binominal: variableColumnValuesIsCategorical,
+          integer: variableTypes && variableTypes.includes('integer') ? true : false,
+          polynominal: variableColumnValuesIsCategorical,
+          real: variableTypes && variableTypes.includes('real') ? true : false
+        };
 
-          const covariableConstraintParams = a.parameters.find((p: any) => p.name === 'Y');
-          const covariableTypes =
-            covariableConstraintParams &&
-            covariableConstraintParams.columnValuesSQLType.split(',').map((c: any) => c.trim());
-          const covariableColumnValuesIsCategorical =
-            (covariableConstraintParams && Boolean(covariableConstraintParams.columnValuesIsCategorical)) || false;
-          const covariableConstraint = {
-            binominal: covariableColumnValuesIsCategorical,
-            integer: variableTypes && variableTypes.includes('integer') ? true : false,
-            polynominal: covariableColumnValuesIsCategorical,
-            real: variableTypes && variableTypes.includes('real') ? true : false
-          };
+        return variableConstraint;
+      };
 
-          return {
-            code: a.name,
-            constraints: {
-              covariables: covariableConstraint,
-              variable: variableConstraint
-            },
-            description: a.desc,
-            enabled: true,
-            label: a.name,
-            source: 'exareme',
-            type: ['exareme'],
-            validation: true
-          };
-        });
+      const dependents = ['Y', 'column2', 'y', 'target_attributes'];
+      const independents = ['X', 'column1', 'x', 'descriptive_attributes'];
+
+      const buildParameters = (algo: any) => {
+        const parameters = algo.parameters.filter(
+          (p: any) => ![...dependents, ...independents, 'dataset', 'filter', 'outputformat', 'type'].includes(p.name)
+        );
+
+        const params =
+          (parameters &&
+            parameters.map((parameter: any) => ({
+              code: parameter.name,
+              constraints: {
+                min: parameter.valueNotBlank ? 1 : 0
+              },
+              default_value: parameter.value,
+              description: parameter.desc,
+              label: parameter.name,
+              type: parameter.valueType
+            }))) ||
+          [];
+
+        return params;
+      };
+
+      const exaremeAlgorithms = json.map((algorithm: any) => {
+        return {
+          code: algorithm.name,
+          constraints: {
+            covariables: buildConstraints(algorithm, independents),
+            variable: buildConstraints(algorithm, dependents)
+          },
+          parameters: buildParameters(algorithm),
+          description: algorithm.desc,
+          enabled: true,
+          label: algorithm.name,
+          source: 'exareme',
+          type: ['exareme'],
+          validation: true
+        };
+      });
 
       return await this.setState({
         error: undefined,
