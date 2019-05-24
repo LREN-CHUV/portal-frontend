@@ -1,40 +1,36 @@
 /* layout header */
 
 .Experiment .header {
-  padding: 0 48px 8px 48px;
+  padding: 0 48px 0px 48px;
 }
 
-.Experiment .header .panel {
+.Experiment .header .panel-body {
+  display: flex;
+  padding-top: 15px !important;
+  justify-content: flex-start;
+  align-items: center;
   margin-bottom: 0px !important;
 }
 
-.Experiment .header h3 {
-  padding: 0 !important;
-  height: 34px;
+.Experiment .header .panel-body .item {
+  margin-right: 8px;
 }
 
-.Experiment .header .actions {
-  display: flex;
-  justify-content: flex-end;
+.Experiment .header .panel-body .text {
+  flex: 2
 }
 
-.Experiment .header .status {
-  display: flex;
-  justify-content: flex-start;
+.Experiment .header .panel-body .item:last-child {
+  margin-right: 0;
 }
 
-.Experiment .header .actions .item {
-  margin-left: 4px;
+.Experiment .header .panel-body h3 {
+  flex: 2;
+  margin: 0 0 0 16px;
 }
 
-.Experiment .header .actions .text {
-  flex: 1 auto;
-}
-
-/* design header */
-
-.Experiment .header .experiment-name {
-  width: 200px;
+.Experiment.Result .header .panel-body h3 {
+  margin: 0 !important;
 }
 
 /* layout content */
@@ -96,12 +92,6 @@
   margin-bottom: 16px;
 }
 
-.Experiment .filters .panel-title h3 {
-  margin-left: 16px;
-  margin-bottom: 12px;
-  width: 120px;
-}
-
 .panel-title h3 {
   padding-left: 16px;
 }
@@ -109,4 +99,18 @@
 .alert {
   position: absolute;
   z-index: 10;
+}
+
+.Experiment .sidebar .model .panel-title {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.Experiment .sidebar .model .panel-title h3 {
+  flex: 2;
+}
+
+.Experiment .sidebar .model .panel-title button {
+  margin: 12px 15px 0 0;
 }

@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { Panel, Tab, Tabs } from 'react-bootstrap';
-import { Body } from 'react-bootstrap/lib/Modal';
 import { APIMining } from '../../API';
 import { VariableEntity } from '../../API/Core';
 import { ModelResponse } from '../../API/Model';
@@ -37,12 +36,7 @@ const Content = ({
         )}
         {children}
         <Panel>
-          <Panel.Title className="model-analysis-title">
-            <h3>
-              Model Analysis {/*apiMining.state.loadingMinings && <Loader /> */}
-            </h3>
-          </Panel.Title>
-          <Body>
+          <Panel.Body>
             <Tabs defaultActiveKey={1} id="uncontrolled-review-model-tab">
               <Tab eventKey={1} title="Table">
                 <Table
@@ -62,7 +56,7 @@ const Content = ({
                 <HeatMap heatmaps={apiMining.state.heatmaps} />
               </Tab>
             </Tabs>
-          </Body>
+          </Panel.Body>
         </Panel>
       </Panel.Body>
     </Panel>

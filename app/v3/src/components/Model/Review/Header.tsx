@@ -1,20 +1,15 @@
 import * as React from 'react';
 import { Button, FormControl, Glyphicon, Panel } from 'react-bootstrap';
 import { ModelResponse } from '../../API/Model';
-import DropdownModel from '../../UI/DropdownModel';
 
 interface Props {
   handleGoBackToExplore: () => void;
   handleRunAnalysis: () => void;
   handleSaveModel: ({ title }: { title: string }) => void;
-  handleSelectModel: (model?: ModelResponse) => void;
   model?: ModelResponse;
-  selectedSlug?: string;
-  models?: ModelResponse[];
 }
 export default class Header extends React.Component<Props> {
   public state: any;
-  private input: any;
 
   constructor(props: Props) {
     super(props);
@@ -32,14 +27,7 @@ export default class Header extends React.Component<Props> {
   };
 
   public render() {
-    const {
-      models,
-      model,
-      selectedSlug,
-      handleGoBackToExplore,
-      handleRunAnalysis,
-      handleSelectModel
-    } = this.props;
+    const { model, handleGoBackToExplore, handleRunAnalysis } = this.props;
 
     const currentModelName = this.state.modelName;
     const isMock = model && !model.slug;
@@ -47,70 +35,44 @@ export default class Header extends React.Component<Props> {
     return (
       <Panel>
         <Panel.Body>
-          <h3>
-            Interactive Analysis{' '}
-            <span>
-              {`on `}
-              <DropdownModel
-                items={models}
-                selectedSlug={selectedSlug}
-                handleSelect={handleSelectModel}
+          <Button onClick={handleGoBackToExplore} bsStyle='info' type='submit'>
+            <Glyphicon glyph='chevron-left' /> Explore
+          </Button>
+          <h3>Interactive Analysis</h3>
+          <div className='item'>&nbsp;</div>
+          {isMock && (
+            <div className='item'>
+              <FormControl
+                className='item experiment-name'
+                type='text'
+                placeholder={'Model name'}
+                value={currentModelName}
+                onChange={this.handleChangeModelName}
+                onKeyDown={this.handleKeyPress}
               />
-            </span>
-          </h3>
-          <div className='actions status'>
-            <div className='item'>
-              <Button
-                onClick={handleGoBackToExplore}
-                bsStyle='info'
-                type='submit'>
-                <Glyphicon glyph='chevron-left' /> Explore
-              </Button>
             </div>
-            <div className='item text'>&nbsp;</div>
-            {isMock && (
-              <div className='item'>
-                <FormControl
-                  className='item experiment-name'
-                  type='text'
-                  placeholder={'Model name'}
-                  value={currentModelName}
-                  onChange={this.handleChangeModelName}
-                  onKeyDown={this.handleKeyPress}
-                />
-              </div>
-            )}
-            {isMock && (
-              <div className='item'>
-                <Button
-                  onClick={this.handleSaveModel1}
-                  bsStyle={'info'}
-                  type='submit'
-                  disabled={currentModelName === ''}
-                  title={
-                    currentModelName === ''
-                      ? 'Please enter a title for your model'
-                      : ''
-                  }>
-                  Save model
-                </Button>
-              </div>
-            )}
+          )}
+          {isMock && (
             <div className='item'>
               <Button
-                onClick={handleRunAnalysis}
-                bsStyle='info'
+                onClick={this.handleSaveModel1}
+                bsStyle={'info'}
                 type='submit'
-                disabled={isMock}
-                title={
-                  currentModelName === ''
-                    ? 'Please enter a title for your model'
-                    : ''
-                }>
-                RUN ML EXPERIMENT{' '}
-                <Glyphicon glyph='chevron-right' />{' '}
+                disabled={currentModelName === ''}
+                title={currentModelName === '' ? 'Please enter a title for your model' : ''}>
+                Save model
               </Button>
             </div>
+          )}
+          <div className='item'>
+            <Button
+              onClick={handleRunAnalysis}
+              bsStyle='info'
+              type='submit'
+              disabled={isMock}
+              title={currentModelName === '' ? 'Please enter a title for your model' : ''}>
+              RUN ML EXPERIMENT <Glyphicon glyph='chevron-right' />{' '}
+            </Button>
           </div>
         </Panel.Body>
       </Panel>

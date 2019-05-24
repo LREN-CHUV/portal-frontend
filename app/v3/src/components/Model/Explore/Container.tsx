@@ -203,7 +203,10 @@ export default ({ apiCore, apiMining, apiModel, ...props }: Props) => {
       ],
       filters: filterVariables && aD3Layout.descendants().filter(l => filterVariables.includes(l.data.code)),
       groupings: undefined,
-      variable: query.variables && aD3Layout.descendants().find(l => l.data.code === query.variables![0].code)
+      variable:
+        query.variables !== undefined &&
+        query.variables.length > 0 &&
+        aD3Layout.descendants().find(l => l.data.code === query.variables![0].code) || undefined
     };
 
     return nextModel;
