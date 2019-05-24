@@ -1,3 +1,5 @@
+import '../Experiment.css';
+
 import * as React from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 
@@ -53,7 +55,7 @@ class Experiment extends React.Component<Props> {
   public render() {
     const { apiExperiment, apiModel, apiCore } = this.props;
     return (
-      <div className='Experiment'>
+      <div className='Experiment Result'>
         <div className='header'>
           <ExperimentResultHeader
             experiment={apiExperiment.state.experiment}

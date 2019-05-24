@@ -14,11 +14,11 @@ class HeatMap extends React.Component<Props> {
     const { heatmaps } = this.props;
     const loading =
       heatmaps &&
-      heatmaps.reduce((acc: boolean, h: any) => acc && h.data === undefined, true);
+      heatmaps.some((h: any) => h && h.data === undefined);
 
     return (
       <div>
-        <Loader visible={loading} />
+        {loading && <Loader />}
         {heatmaps && heatmaps.error && (
           <Alert message={heatmaps.error} title={'Error'} />
         )}
