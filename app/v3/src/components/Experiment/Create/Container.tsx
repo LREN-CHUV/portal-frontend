@@ -70,18 +70,23 @@ class Container extends React.Component<Props, State> {
         <div className='header'>
           <ExperimentCreateHeader
             model={apiModel.state.model}
-            models={apiModel.state.models}
             experiments={apiExperiment.state.experiments}
             method={this.state && this.state.method}
             handleGoBackToReview={this.handleGoBackToReview}
-            handleSelectModel={this.handleSelectModel}
             handleSelectExperiment={this.handleSelectExperiment}
             handleSaveAndRunExperiment={this.handleSaveAndRunExperiment}
           />
         </div>
         <div className='content'>
           <div className='sidebar'>
-            <Model model={apiModel.state.model} showDatasets={true} variables={apiCore.state.variables} />
+            <Model 
+            model={apiModel.state.model} 
+            showDatasets={true} 
+            variables={apiCore.state.variables} 
+            selectedSlug={this.props.match.params.slug}
+            items={apiModel.state.models}
+              handleSelectModel={this.handleSelectModel}
+            />
           </div>
           <div className='parameters'>
             <Panel>
