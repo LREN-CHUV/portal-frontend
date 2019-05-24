@@ -46,3 +46,7 @@
 #experiment-dropdown .caret:before {
   display: none !important;
 }
+
+.dropdown-menu {
+  min-width: 200px;
+}
