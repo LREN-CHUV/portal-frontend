@@ -2,6 +2,10 @@
   overflow-y: scroll;
 }
 
+.dropdown ul {
+  margin-top: 4px !important;
+}
+
 .dropdown-menu li {
   overflow-wrap: break-word !important;
   word-wrap: break-word !important;
