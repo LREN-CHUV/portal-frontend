@@ -14,16 +14,13 @@ export interface ModelProps {
 export default (props: ModelProps) => {
   const variableRef = useRef(null);
   const covariableRef = useRef(null);
-  const filterRef = useRef(null);
   const { d3Model: model, handleUpdateD3Model, handleSelectNode, zoom } = props;
 
   const makeTree = (variables: HierarchyCircularNode[], type: ModelType) => {
     const ref =
       type === ModelType.COVARIABLE
         ? covariableRef.current
-        : type === ModelType.VARIABLE
-        ? variableRef.current
-        : filterRef.current;
+        : variableRef.current
 
     const block = d3
       .select(ref)
@@ -61,11 +58,7 @@ export default (props: ModelProps) => {
       d3.select(covariableRef.current)
         .selectAll('p')
         .remove();
-
-      d3.select(filterRef.current)
-        .selectAll('p')
-        .remove();
-
+     
       if (model && model.variable) {
         makeTree(model.variable.descendants(), ModelType.VARIABLE);
       }
@@ -74,9 +67,6 @@ export default (props: ModelProps) => {
         makeTree(model.covariables, ModelType.COVARIABLE);
       }
 
-      if (model && model.filters) {
-        makeTree(model.filters, ModelType.FILTER);
-      }
     }
   });
 
@@ -86,8 +76,6 @@ export default (props: ModelProps) => {
       <div ref={variableRef} />
       <h5>Covariables</h5>
       <div ref={covariableRef} />
-      <h5>Filters</h5>
-      <div ref={filterRef} />
     </>
   );
 };
