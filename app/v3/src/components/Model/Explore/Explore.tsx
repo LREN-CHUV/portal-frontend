@@ -145,23 +145,6 @@ export default (props: ExploreProps) => {
                     : '+'}{' '}
                   AS COVARIABLE
                 </Button>
-                <Button
-                  className='child'
-                  bsStyle={'primary'}
-                  bsSize={'small'}
-                  disabled={!selectedNode}
-                  // tslint:disable-next-line jsx-no-lambda
-                  onClick={() =>
-                    handleUpdateD3Model(ModelType.FILTER, selectedNode)
-                  }>
-                  {d3Model.filters &&
-                  selectedNode &&
-                  d3Model.filters.filter(c => selectedNode.leaves().includes(c))
-                    .length === selectedNode.leaves().length
-                    ? '-'
-                    : '+'}{' '}
-                  AS FILTER
-                </Button>
               </div>
               {children}
             </Panel.Body>
