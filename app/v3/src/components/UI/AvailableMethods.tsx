@@ -22,7 +22,7 @@ const AvailableMethods = ({
   const modelCovariables = (query && query.coVariables && query.coVariables.map(v => v.code)) || [];
   const modelGroupings = (query && query.groupings && query.groupings.map(v => v.code)) || [];
 
-  const mergedAlgorithms = [...(methods && methods.algorithms || []) , ...(exaremeAlgorithms || [])];
+  const mergedAlgorithms = [...((methods && methods.algorithms) || []) , ...(exaremeAlgorithms || [])];
 
   const availableAlgorithms =
     (variables &&

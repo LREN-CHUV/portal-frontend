@@ -91,7 +91,7 @@ class APIAdapter {
       };
 
       // EXAREME
-      if (r.error || r.data && r.data.Error) {
+      if (r.error || (r.data && r.data.Error)) {
         experimentResponse = {
           ...experimentResponse,
           error: r.error || r.data.Error

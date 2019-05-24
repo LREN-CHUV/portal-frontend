@@ -18,14 +18,39 @@ export default (props: Props) => {
   const [enterZoom, setZoomEnter] = useState(false);
   const { hierarchy, zoom, handleSelectNode } = props;
 
+  const handleKeyDown = (event: KeyboardEvent) => {
+    if (event.key === 'ArrowDown') {
+      setKeyDownIndex(index => index + 1);
+    } else if (event.key === 'ArrowUp') {
+      setKeyDownIndex(index => index - 1);
+    } else if (event.key === 'Enter') {
+      setZoomEnter(true);
+    } else if (event.key === 'Escape') {
+      setVisibleResults(false);
+    }
+  };
+
   useEffect(() => {
-    // tslint:disable
     document.addEventListener('keydown', handleKeyDown);
 
     return function cleanup() {
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [searchResult]);
+  }, []);
+
+  useEffect(() => {
+    if (!searchResult) {
+      return;
+    }
+    if (keyDownIndex >= searchResult.length) {
+      setKeyDownIndex(searchResult.length -1 );
+    }
+
+    if (keyDownIndex <= 0) {
+      setKeyDownIndex(0);
+    }
+
+  }, [searchResult, keyDownIndex]);
 
   useEffect(() => {
     setVisibleResults(searchResult ? true : false);
@@ -57,7 +82,7 @@ export default (props: Props) => {
       const d3index = d3results2.filter((d, i) => i === keyDownIndex);
       d3index.dispatch('click');
     }
-  }, [searchResult, keyDownIndex, enterZoom]);
+  }, [searchResult, keyDownIndex, enterZoom, handleSelectNode, zoom]);
 
   const handleChangeInput = (e: React.SyntheticEvent<HTMLInputElement>) => {
     const value = e.currentTarget.value;
@@ -81,20 +106,6 @@ export default (props: Props) => {
     setTimeout(() => setVisibleResults(false), 250);
   };
 
-  const handleKeyDown = (event: KeyboardEvent) => {
-    if (event.key === 'ArrowDown' && searchResult) {
-      setKeyDownIndex(index =>
-        index >= searchResult.length - 1 ? searchResult.length - 1 : index + 1
-      );
-    } else if (event.key === 'ArrowUp') {
-      setKeyDownIndex(index => (index <= 0 ? 0 : index - 1));
-    } else if (event.key === 'Enter') {
-      setZoomEnter(true);
-    } else if (event.key === 'Escape') {
-      setVisibleResults(false);
-    }
-  };
-
   return (
     <div className='shortcuts'>
       <input
@@ -105,10 +116,7 @@ export default (props: Props) => {
         ref={searchRef}
         className={'form-control'}
       />
-      <div
-        className={`d3-link-results ${visibleResults ? 'visible' : 'hidden'} `}
-        ref={resultRef}
-      />
+      <div className={`d3-link-results ${visibleResults ? 'visible' : 'hidden'} `} ref={resultRef} />
     </div>
   );
 };

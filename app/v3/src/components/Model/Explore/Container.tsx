@@ -4,7 +4,7 @@ import { RouteComponentProps } from 'react-router-dom';
 import { APICore, APIMining, APIModel } from '../../API';
 import { VariableEntity } from '../../API/Core';
 import { ModelResponse, Query } from '../../API/Model';
-import { Alert, IAlert } from '../../UI/Alert';
+import { Alert } from '../../UI/Alert';
 import { d3Hierarchy, VariableDatum } from './d3Hierarchy';
 import CirclePack from './D3PackLayer';
 import './Explore.css';
@@ -204,9 +204,10 @@ export default ({ apiCore, apiMining, apiModel, ...props }: Props) => {
       filters: filterVariables && aD3Layout.descendants().filter(l => filterVariables.includes(l.data.code)),
       groupings: undefined,
       variable:
-        query.variables !== undefined &&
-        query.variables.length > 0 &&
-        aD3Layout.descendants().find(l => l.data.code === query.variables![0].code) || undefined
+        (query.variables !== undefined &&
+          query.variables.length > 0 &&
+          aD3Layout.descendants().find(l => l.data.code === query.variables![0].code)) ||
+        undefined
     };
 
     return nextModel;
