@@ -155,7 +155,7 @@ class Mining extends Container<MiningState> {
 
   // fetch for each dataset, otherwise values are aggregated for all datasets
   public summaryStatisticsByDataset = async ({ payload }: { payload: MiningPayload }): Promise<any> => {
-    const hashKey = stringHash(`${payload.variables}${payload.filters}`);
+    const hashKey = stringHash(`${payload.variables}${payload.covariables}${payload.grouping}${payload.filters}`);
     const queries = payload.datasets.map(dataset => {
       const code = dataset.code;
 
