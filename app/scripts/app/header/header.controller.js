@@ -67,8 +67,11 @@ angular.module("chuvApp.header").controller("HeaderController", [
     });
 
     $scope.go_to_review = function() {
-      console.log("switch_to_v3");
       window.location.href = "/v3/review";
+    };
+
+    $scope.go_to_explore = function() {
+      window.location.href = "/v3/explore";
     };
   }
 ]);

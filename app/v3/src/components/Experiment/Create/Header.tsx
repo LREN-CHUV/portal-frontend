@@ -58,7 +58,7 @@ export default class Header extends React.Component<Props, State> {
               onClick={this.handleSaveAndRunExperiment}
               title={
                 method === undefined
-                  ? 'Please choose an experiment on the right'
+                  ? 'Please choose a method on the right'
                   : experimentName === ''
                   ? 'Please enter a title for your experiment'
                   : ''
