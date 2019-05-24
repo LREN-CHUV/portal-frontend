@@ -5,7 +5,6 @@ import { Method } from '../../API/Core';
 import { ExperimentResponse } from '../../API/Experiment';
 import { ModelResponse } from '../../API/Model';
 import Dropdown from '../../UI/Dropdown';
-import DropdownModel from '../../UI/DropdownModel';
 
 interface Props {
   model?: ModelResponse;
