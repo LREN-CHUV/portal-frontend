@@ -13,8 +13,7 @@ const padding: number = 1.5;
 
 type IView = [number, number, number];
 
-const depth = (n: HierarchyCircularNode): number =>
-  n.children ? 1 + (d3.max<number>(n.children.map(depth)) || 0) : 1;
+const depth = (n: HierarchyCircularNode): number => (n.children ? 1 + (d3.max<number>(n.children.map(depth)) || 0) : 1);
 
 export interface Props {
   apiModel: APIModel;
@@ -51,14 +50,8 @@ export default ({ layout, ...props }: Props) => {
     const node = svg.selectAll('circle');
     const label = svg.selectAll('text');
 
-    label.attr(
-      'transform',
-      (d: any) => `translate(${(d.x - v[0]) * k},${(d.y - v[1]) * k})`
-    );
-    node.attr(
-      'transform',
-      (d: any) => `translate(${(d.x - v[0]) * k},${(d.y - v[1]) * k})`
-    );
+    label.attr('transform', (d: any) => `translate(${(d.x - v[0]) * k},${(d.y - v[1]) * k})`);
+    node.attr('transform', (d: any) => `translate(${(d.x - v[0]) * k},${(d.y - v[1]) * k})`);
     node.attr('r', (d: any) => d.r * k);
   };
 
@@ -71,11 +64,7 @@ export default ({ layout, ...props }: Props) => {
 
     // reduce zoom if it's a leaf node
     const zoomFactor = circleNode.children ? 2 : 3;
-    const targetView: IView = [
-      circleNode.x,
-      circleNode.y,
-      circleNode.r * zoomFactor + padding
-    ];
+    const targetView: IView = [circleNode.x, circleNode.y, circleNode.r * zoomFactor + padding];
     const transition = d3
       .transition<d3.BaseType>()
       .duration(d3.event.altKey ? 7500 : 750)
@@ -85,10 +74,8 @@ export default ({ layout, ...props }: Props) => {
         return (t: number) => zoomTo(i(t));
       });
 
-    const shouldDisplay = (
-      dd: HierarchyCircularNode,
-      ffocus: HierarchyCircularNode
-    ): boolean => dd.parent === ffocus || !ffocus.children; // || !dd.children;
+    const shouldDisplay = (dd: HierarchyCircularNode, ffocus: HierarchyCircularNode): boolean =>
+      dd.parent === ffocus || !ffocus.children; // || !dd.children;
 
     const svg = d3.select(svgRef.current);
     const text = svg.selectAll('text');
@@ -96,15 +83,10 @@ export default ({ layout, ...props }: Props) => {
     text
       .filter(function(dd: any) {
         const el = this as HTMLElement;
-        return (
-          shouldDisplay(dd, focus.current) ||
-          (el && el.style && el.style.display === 'inline')
-        );
+        return shouldDisplay(dd, focus.current) || (el && el.style && el.style.display === 'inline');
       })
       .transition(transition as any)
-      .style('fill-opacity', (dd: any) =>
-        shouldDisplay(dd, focus.current) ? 1 : 0
-      )
+      .style('fill-opacity', (dd: any) => (shouldDisplay(dd, focus.current) ? 1 : 0))
       .on('start', function(dd: any) {
         const el = this as HTMLElement;
         if (shouldDisplay(dd, focus.current)) {
@@ -118,16 +100,15 @@ export default ({ layout, ...props }: Props) => {
     const svg = d3.select(svgRef.current);
     const circle = svg.selectAll('circle');
     circle
-      .filter(
-        (d: any) =>
-          ![
-            d3Model.variable,
-            ...(d3Model.covariables || []),
-            ...(d3Model.filters || [])
-          ].includes(d)
-      )
+      .filter((d: any) => ![d3Model.variable, ...(d3Model.covariables || []), ...(d3Model.filters || [])].includes(d))
       .style('fill', (d: any) => (d.children ? color(d.depth) : 'white'));
-
+    if (d3Model.filters && d3Model.filters.length > 0) {
+      circle
+        .filter((d: any) => d3Model.filters !== undefined && d3Model.filters.includes(d))
+        .transition()
+        .duration(250)
+        .style('fill', '#337ab7');
+    }
     if (d3Model.variable) {
       circle
         .filter((d: any) => d3Model.variable === d)
@@ -138,26 +119,12 @@ export default ({ layout, ...props }: Props) => {
 
     if (d3Model.covariables && d3Model.covariables.length > 0) {
       circle
-        .filter(
-          (d: any) =>
-            d3Model.covariables !== undefined && d3Model.covariables.includes(d)
-        )
+        .filter((d: any) => d3Model.covariables !== undefined && d3Model.covariables.includes(d))
         .transition()
         .duration(250)
         .style('fill', '#f0ad4e');
     }
-
-    if (d3Model.filters && d3Model.filters.length > 0) {
-      circle
-        .filter(
-          (d: any) =>
-            d3Model.filters !== undefined && d3Model.filters.includes(d)
-        )
-        .transition()
-        .duration(250)
-        .style('fill', '#337ab7');
-    }
-  }, [d3Model]);
+  }, [d3Model, color]);
 
   renderLifeCycle({
     firstRender: () => {
@@ -165,10 +132,7 @@ export default ({ layout, ...props }: Props) => {
         .select(svgRef.current)
         .attr('width', diameter)
         .attr('height', diameter)
-        .attr(
-          'viewBox',
-          `-${diameter / 2} -${diameter / 2} ${diameter} ${diameter}`
-        )
+        .attr('viewBox', `-${diameter / 2} -${diameter / 2} ${diameter} ${diameter}`)
         .style('margin', '0')
         .style('width', 'calc(100%)')
         .style('height', 'auto')
@@ -194,10 +158,7 @@ export default ({ layout, ...props }: Props) => {
         .selectAll('circle')
         .data(layout.descendants())
         .append('title')
-        .text(
-          d =>
-            `${d.data.label}\n${d.data.description ? d.data.description : ''}`
-        );
+        .text(d => `${d.data.label}\n${d.data.description ? d.data.description : ''}`);
 
       const maxLength = 12;
       svg
@@ -212,11 +173,7 @@ export default ({ layout, ...props }: Props) => {
           d.data.label.length > maxLength
             ? d.data.label
                 .split(' ')
-                .reduce(
-                  (acc: string, p: string) =>
-                    acc.length < maxLength ? `${acc} ${p}` : `${acc}`,
-                  ''
-                ) + '...'
+                .reduce((acc: string, p: string) => (acc.length < maxLength ? `${acc} ${p}` : `${acc}`), '') + '...'
             : d.data.label
         );
 
