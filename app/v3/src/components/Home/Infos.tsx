@@ -9,7 +9,7 @@ const Infos = styled.div`
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  padding-bottom: 8px;
+  padding-bottom: 16px;
 `;
 
 const Panel = styled.div`
