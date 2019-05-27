@@ -9,6 +9,7 @@ body {
   background: url(../../images/body-bg.jpg) top center no-repeat fixed #f5f5f5;
   background-size: 100% auto;
   overflow-y: scroll !important;
+  font-family: 'Open Sans' !important;
 }
 
 @font-face {
