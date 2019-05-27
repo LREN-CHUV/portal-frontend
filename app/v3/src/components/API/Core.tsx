@@ -75,6 +75,12 @@ interface PrivateAlgorithm {
   data: any | undefined;
 }
 
+export interface Stats {
+  articles: number;
+  users: number;
+  variables: number;
+}
+
 export interface State {
   error?: string;
   loading?: boolean;
