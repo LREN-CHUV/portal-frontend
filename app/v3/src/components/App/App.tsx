@@ -27,7 +27,7 @@ const App = ({ appConfig, apiExperiment, apiCore, apiModel, apiMining }: Props) 
       <Navigation apiExperiment={apiExperiment} apiModel={apiModel} appConfig={appConfig} />
     </header>
     <section className='main-content'>
-      <Route path='/v3/home' render={() => <Home />} />
+      <Route path='/v3/home' render={(props) => <Home apiCore={apiCore} {...props} />} />
       <Route
         path={['/v3/explore/:slug', '/v3/explore']}
         render={props => <Explore apiCore={apiCore} apiMining={apiMining} apiModel={apiModel} {...props} />}
