@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { Col, Form, FormControl, FormGroup, HelpBlock } from 'react-bootstrap';
 
-import { MethodPayload } from '../../API/Core';
+import { AlgorithmPayload } from '../../API/Core';
 
 interface Props {
   method?: any;
-  parameters?: [MethodPayload];
+  parameters?: [AlgorithmPayload];
   handleChangeParameters: (parameters: any) => void;
 }
 class FForm extends React.Component<Props> {
@@ -37,7 +37,7 @@ class FForm extends React.Component<Props> {
           <Form horizontal={true}>
             {parameters &&
               parameters.length &&
-              parameters.map((parameter: MethodPayload) => {
+              parameters.map((parameter: AlgorithmPayload) => {
                 const numberTypes = ['int', 'real', 'number', 'numeric'];
                 const type =
                   numberTypes.indexOf(parameter.type) >= -1 ? 'number' : 'text';
@@ -110,7 +110,7 @@ class FForm extends React.Component<Props> {
     if (constraints && parameters) {
       const { min, max } = constraints;
       const parameter = parameters.find(
-        (p: MethodPayload) => p.code === code
+        (p: AlgorithmPayload) => p.code === code
       );
       if (
         (parameter && parameter.value < min) ||

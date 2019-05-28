@@ -15,17 +15,17 @@ export interface VariableEntity extends Variable {
   group?: Variable[];
 }
 
-export interface Method {
+export interface Algorithm {
   code: string;
   name: string;
-  parameters?: [MethodPayload] | any;
+  parameters?: [AlgorithmPayload] | any;
   validation: boolean;
   constraints?: any;
   type?: string[];
   source?: string;
 }
 
-export interface MethodPayload {
+export interface AlgorithmPayload {
   code: string;
   constraints: any;
   default_value: any;
@@ -36,8 +36,9 @@ export interface MethodPayload {
   type: string;
 }
 
-export interface Methods {
-  algorithms: Method[];
+interface PrivateAlgorithm {
+  error: string | undefined;
+  data: any | undefined;
 }
 
 export interface State {
@@ -46,8 +47,7 @@ export interface State {
   hierarchy?: any;
   variables?: VariableEntity[];
   datasets?: VariableEntity[];
-  methods?: Methods;
-  exaremeAlgorithms?: any;
+  algorithms?: Algorithm[];
 }
 
 class Core extends Container<State> {
@@ -142,7 +142,26 @@ class Core extends Container<State> {
     }
   };
 
-  public methods = async () => {
+  public algorithms = async () =>
+    Promise.all([this.wokenAlgorithms(), this.exaremeAlgorithms2()]).then(
+      ([wokenAlgorithms, exaremeAlgorithms]: [
+        PrivateAlgorithm,
+        PrivateAlgorithm
+      ]) => {
+        const mergedAlgorithms: any = [
+          ...((wokenAlgorithms.data && wokenAlgorithms.data.algorithms) || []),
+          ...((exaremeAlgorithms && exaremeAlgorithms.data) || [])
+        ];
+
+        return this.setState(state => ({
+          ...state,
+          algorithms: mergedAlgorithms,
+          error: undefined
+        }));
+      }
+    );
+
+  private wokenAlgorithms: any = async () => {
     try {
       const data = await request.get(
         `${this.backendURL}/methods`,
@@ -151,10 +170,7 @@ class Core extends Container<State> {
       const json = await JSON.parse(data);
 
       if (json.error) {
-        return await this.setState(state => ({
-          ...state,
-          error: json.error
-        }));
+        return { error: json.error, data: undefined };
       }
 
       const nextJson = {
@@ -164,20 +180,13 @@ class Core extends Container<State> {
         )
       };
 
-      return await this.setState(state => ({
-        ...state,
-        error: undefined,
-        methods: nextJson
-      }));
+      return { error: undefined, data: nextJson };
     } catch (error) {
-      return await this.setState(state => ({
-        ...state,
-        error: error.message
-      }));
+      return { error, data: undefined };
     }
   };
 
-  public exaremeAlgorithms = async () => {
+  private exaremeAlgorithms2: any = async () => {
     try {
       const data = await request.get(
         `${this.backendURL}/methods/exareme`,
@@ -186,10 +195,7 @@ class Core extends Container<State> {
       const json = await JSON.parse(data);
 
       if (json.error) {
-        return await this.setState(state => ({
-          error: json.error,
-          ...state
-        }));
+        return { error: json.error, data: undefined };
       }
 
       const nextJson = json.filter(
@@ -198,16 +204,9 @@ class Core extends Container<State> {
 
       const exaremeAlgorithms = parse(nextJson);
 
-      return await this.setState(state => ({
-        error: undefined,
-        exaremeAlgorithms,
-        ...state
-      }));
+      return { error: undefined, data: exaremeAlgorithms };
     } catch (error) {
-      return await this.setState(state => ({
-        error: error.message,
-        ...state
-      }));
+      return { error, data: undefined };
     }
   };
 }

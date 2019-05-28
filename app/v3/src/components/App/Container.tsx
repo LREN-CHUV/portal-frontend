@@ -40,8 +40,7 @@ class AppContainer extends React.Component<any, State> {
       this.apiCore.variables(),
       this.apiCore.datasets(),
       this.apiCore.hierarchy(),
-      this.apiCore.methods(),
-      this.apiCore.exaremeAlgorithms(),
+      this.apiCore.algorithms(),
       this.apiModel.all()
     ]);
   }

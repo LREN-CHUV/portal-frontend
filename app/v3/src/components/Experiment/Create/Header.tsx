@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Button, FormControl, Glyphicon, Panel } from 'react-bootstrap';
 
-import { Method } from '../../API/Core';
+import { Algorithm } from '../../API/Core';
 import { ExperimentResponse } from '../../API/Experiment';
 import { ModelResponse } from '../../API/Model';
 import Dropdown from '../../UI/Dropdown';
@@ -9,7 +9,7 @@ import Dropdown from '../../UI/Dropdown';
 interface Props {
   model?: ModelResponse;
   experiments?: ExperimentResponse[];
-  method?: Method;
+  method?: Algorithm;
   handleGoBackToReview: () => void;
   handleSelectExperiment: (experiment: ExperimentResponse) => Promise<any>;
   handleSaveAndRunExperiment: (experimentName: string) => Promise<any>;
