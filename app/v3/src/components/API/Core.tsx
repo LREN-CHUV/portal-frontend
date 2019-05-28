@@ -1,8 +1,8 @@
 import request from 'request-promise-native';
 import { Container } from 'unstated';
-
 import { backendURL } from '../API';
-
+import { excludedMethods } from '../constants';
+import { parse } from './ExaremeAPIAdapter';
 export interface Variable {
   code: string;
   label?: string;
@@ -64,14 +64,18 @@ class Core extends Container<State> {
 
   public lookup = (code: string): VariableEntity => {
     const variables = this.state.variables;
-    const originalVar = variables && variables.find(variable => variable.code === code);
+    const originalVar =
+      variables && variables.find(variable => variable.code === code);
 
     return originalVar || { code, label: code };
   };
 
   public variables = async () => {
     try {
-      const data = await request.get(`${this.backendURL}/variables`, this.options);
+      const data = await request.get(
+        `${this.backendURL}/variables`,
+        this.options
+      );
       const json = await JSON.parse(data);
       if (json.error) {
         return await this.setState({
@@ -92,7 +96,10 @@ class Core extends Container<State> {
 
   public hierarchy = async () => {
     try {
-      const data = await request.get(`${this.backendURL}/variables/hierarchy`, this.options);
+      const data = await request.get(
+        `${this.backendURL}/variables/hierarchy`,
+        this.options
+      );
       const json = await JSON.parse(data);
       if (json.error) {
         return await this.setState({
@@ -113,7 +120,10 @@ class Core extends Container<State> {
 
   public datasets = async () => {
     try {
-      const data = await request.get(`${this.backendURL}/datasets`, this.options);
+      const data = await request.get(
+        `${this.backendURL}/datasets`,
+        this.options
+      );
       const json = await JSON.parse(data);
       if (json.error) {
         return await this.setState({
@@ -134,99 +144,70 @@ class Core extends Container<State> {
 
   public methods = async () => {
     try {
-      const data = await request.get(`${this.backendURL}/methods`, this.options);
+      const data = await request.get(
+        `${this.backendURL}/methods`,
+        this.options
+      );
       const json = await JSON.parse(data);
+
       if (json.error) {
-        return await this.setState({
+        return await this.setState(state => ({
+          ...state,
           error: json.error
-        });
+        }));
       }
 
-      return await this.setState({
+      const nextJson = {
+        ...json,
+        algorithms: json.algorithms.filter(
+          (a: any) => !excludedMethods.includes(a.code)
+        )
+      };
+
+      return await this.setState(state => ({
+        ...state,
         error: undefined,
-        methods: json
-      });
+        methods: nextJson
+      }));
     } catch (error) {
-      return await this.setState({
+      return await this.setState(state => ({
+        ...state,
         error: error.message
-      });
+      }));
     }
   };
 
   public exaremeAlgorithms = async () => {
     try {
-      const data = await request.get(`${this.backendURL}/methods/exareme`, this.options);
+      const data = await request.get(
+        `${this.backendURL}/methods/exareme`,
+        this.options
+      );
       const json = await JSON.parse(data);
+
       if (json.error) {
-        return await this.setState({
-          error: json.error
-        });
+        return await this.setState(state => ({
+          error: json.error,
+          ...state
+        }));
       }
 
-      const buildConstraints = (algo: any, params: string[]) => {
-        const variable = algo.parameters.find((p: any) => params.includes(p.name));
-        const variableTypes = variable && variable.columnValuesSQLType.split(',').map((c: any) => c.trim());
-        const variableColumnValuesIsCategorical = (variable && variable.columnValuesIsCategorical === 'true') || false;
-        const variableConstraint = {
-          binominal: variableColumnValuesIsCategorical,
-          integer: variableTypes && variableTypes.includes('integer') ? true : false,
-          polynominal: variableColumnValuesIsCategorical,
-          real: variableTypes && variableTypes.includes('real') ? true : false
-        };
+      const nextJson = json.filter(
+        (a: any) => !excludedMethods.includes(a.code)
+      );
 
-        return variableConstraint;
-      };
+      const exaremeAlgorithms = parse(nextJson);
 
-      const dependents = ['Y', 'column2', 'y', 'target_attributes'];
-      const independents = ['X', 'column1', 'x', 'descriptive_attributes'];
-
-      const buildParameters = (algo: any) => {
-        const parameters = algo.parameters.filter(
-          (p: any) => ![...dependents, ...independents, 'dataset', 'filter', 'outputformat', 'type'].includes(p.name)
-        );
-
-        const params =
-          (parameters &&
-            parameters.map((parameter: any) => ({
-              code: parameter.name,
-              constraints: {
-                min: parameter.valueNotBlank ? 1 : 0
-              },
-              default_value: parameter.value,
-              description: parameter.desc,
-              label: parameter.name,
-              type: parameter.valueType
-            }))) ||
-          [];
-
-        return params;
-      };
-
-      const exaremeAlgorithms = json.map((algorithm: any) => {
-        return {
-          code: algorithm.name,
-          constraints: {
-            covariables: buildConstraints(algorithm, independents),
-            variable: buildConstraints(algorithm, dependents)
-          },
-          parameters: buildParameters(algorithm),
-          description: algorithm.desc,
-          enabled: true,
-          label: algorithm.name,
-          source: 'exareme',
-          type: ['exareme'],
-          validation: true
-        };
-      });
-
-      return await this.setState({
+      return await this.setState(state => ({
         error: undefined,
-        exaremeAlgorithms
-      });
+        exaremeAlgorithms,
+        ...state
+      }));
     } catch (error) {
-      return await this.setState({
-        error: error.message
-      });
+      return await this.setState(state => ({
+        error: error.message,
+        ...state
+      }));
     }
   };
 }
