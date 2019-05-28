@@ -1,20 +1,18 @@
 import * as React from 'react';
 import { Button } from 'react-bootstrap';
 
-import { Method, Methods, VariableEntity } from '../API/Core';
+import { Algorithm, VariableEntity } from '../API/Core';
 import { ModelResponse } from '../API/Model';
 
 const AvailableMethods = ({
-  methods,
-  exaremeAlgorithms,
+  algorithms,
   variables,
   handleSelectMethod,
   model
 }: {
-  methods: Methods | undefined;
-  exaremeAlgorithms: any[];
+  algorithms: Algorithm[] | undefined;
   variables: VariableEntity[] | undefined;
-  handleSelectMethod: (method: Method) => void;
+  handleSelectMethod: (method: Algorithm) => void;
   model: ModelResponse | undefined;
 }) => {
   const query = model && model.query;
@@ -25,16 +23,9 @@ const AvailableMethods = ({
   const modelGroupings =
     (query && query.groupings && query.groupings.map(v => v.code)) || [];
 
-  const mergedAlgorithms = [
-    ...((methods && methods.algorithms) || []),
-    ...(exaremeAlgorithms || [])
-  ];
-
   const availableAlgorithms =
-    mergedAlgorithms.map(algorithm => {
+  algorithms && algorithms.map((algorithm: any) => {
       let isEnabled = false;
-      const disabled = { ...algorithm, enabled: false };
-      const enabled = { ...algorithm, enabled: true };
 
       const apiVariable =
         variables && variables.find((v: any) => v.code === modelVariable);
@@ -83,12 +74,14 @@ const AvailableMethods = ({
         isEnabled = false;
       }
 
-      return isEnabled ? enabled : disabled;
+      return isEnabled
+        ? { ...algorithm, enabled: true }
+        : { ...algorithm, enabled: false };
     }) || [];
 
   const sortedAlgorithms =
     availableAlgorithms &&
-    availableAlgorithms.sort((a: Method, b: Method) => {
+    availableAlgorithms.sort((a: Algorithm, b: Algorithm) => {
       try {
         const typea = (a && a.type && a.type.length > 0 && a.type[0]) || '';
         const typeb = (b && b.type && b.type.length > 0 && b.type[0]) || '';

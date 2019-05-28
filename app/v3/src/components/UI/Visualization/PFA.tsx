@@ -4,7 +4,7 @@ import './PFA.css';
 import * as React from 'react';
 import { Tab, Tabs } from 'react-bootstrap';
 
-import { Method } from '../../API/Core';
+import { Algorithm } from '../../API/Core';
 import {
     ConfusionMatrix, KfoldValidationScore, PolynomialClassificationScore, ValidationScore
 } from '../../API/Experiment';
@@ -88,7 +88,7 @@ const buildConfusionMatrix = (matrix: ConfusionMatrix) =>
   ) ||
     null);
 
-export default ({ method, data }: { method: Method; data: any }) => {
+export default ({ method, data }: { method: Algorithm; data: any }) => {
   return (
     (data && (
       <Tabs defaultActiveKey={0} id='pfa-method' style={{ marginTop: '16px' }}>

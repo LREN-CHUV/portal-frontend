@@ -5,7 +5,7 @@ import { Panel, Tab, Tabs } from 'react-bootstrap';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 
 import { APICore, APIExperiment, APIModel } from '../../API';
-import { Method, MethodPayload } from '../../API/Core';
+import { Algorithm, AlgorithmPayload } from '../../API/Core';
 import { ExperimentPayload, ExperimentResponse } from '../../API/Experiment';
 import { ModelResponse, Query } from '../../API/Model';
 import { globalParameters } from '../../constants';
@@ -25,9 +25,9 @@ interface Props extends RouteComponentProps<any> {
 }
 
 interface State {
-  parameters?: [MethodPayload];
+  parameters?: [AlgorithmPayload];
   query?: Query;
-  method?: Method;
+  method?: Algorithm;
   alert: IAlert;
   kfold: number;
 }
@@ -129,8 +129,7 @@ class Container extends React.Component<Props, State> {
               </Panel.Title>
               <Panel.Body>
                 <AvailableMethods
-                  methods={apiCore.state.methods}
-                  exaremeAlgorithms={apiCore.state.exaremeAlgorithms}
+                  algorithms={apiCore.state.algorithms}
                   variables={apiCore.state.variables}
                   handleSelectMethod={this.handleSelectMethod}
                   model={apiModel.state.model}
@@ -144,7 +143,7 @@ class Container extends React.Component<Props, State> {
   }
 
   // FIXME: better algorithm parameterization
-  private isPredictiveMethod = (method: Method | undefined) =>
+  private isPredictiveMethod = (method: Algorithm | undefined) =>
     (method && method.type && method.type[0] === 'predictive_model') || (method && method.code === 'kmeans') || false;
 
   private handleSelectModel = async (model?: ModelResponse): Promise<any> => {
@@ -158,7 +157,7 @@ class Container extends React.Component<Props, State> {
     }
   };
 
-  private handleSelectMethod = (method: Method): void => {
+  private handleSelectMethod = (method: Algorithm): void => {
     const kfold = this.isPredictiveMethod(method) ? globalParameters.kfold.k : 0;
     this.setState({
       kfold,
@@ -175,7 +174,7 @@ class Container extends React.Component<Props, State> {
     this.setState({ kfold });
   };
 
-  private handleChangeParameters = (parameters: [MethodPayload]) => {
+  private handleChangeParameters = (parameters: [AlgorithmPayload]) => {
     this.setState({ parameters });
   };
 

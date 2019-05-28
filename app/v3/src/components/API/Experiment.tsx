@@ -2,12 +2,12 @@ import request from 'request-promise-native';
 import { Container } from 'unstated';
 
 import { backendURL } from '../API';
-import { Method } from '../API/Core';
+import { Algorithm } from '../API/Core';
 import { Query } from '../API/Model';
 import APIAdapter from './APIAdapter';
 
 export interface ExperimentPayload {
-  algorithms: [Method];
+  algorithms: [Algorithm];
   model: string;
   name: string;
   validations: any;
@@ -23,7 +23,7 @@ export interface ExperimentResponse {
   modelDefinitionId: string;
   results?: Node[];
   user?: User;
-  algorithms: Method[];
+  algorithms: Algorithm[];
   modelDefinition?: Query;
   validations?: any;
   shared: boolean;
@@ -36,7 +36,7 @@ export interface User {
 
 export interface Node {
   name: string;
-  methods: Method[];
+  methods: Algorithm[];
   // Validation of all predictive methods, ranked by descending order of performance
   rankedCrossValidations?: ValidationScore[];
 }
