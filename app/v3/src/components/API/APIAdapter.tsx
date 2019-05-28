@@ -11,6 +11,7 @@ class APIAdapter {
   public static parse = (experiment: any): ExperimentResponse => {
     // Formats are differents in the API for experiment, experimentList and runExperiment,
     // apply specific parsing to some terms
+
     const algorithms = parse(experiment.algorithms);
     const created = (() => {
       const d = Date.parse(experiment.created + ' GMT');
@@ -33,6 +34,14 @@ class APIAdapter {
       uuid: experiment.uuid,
       validations: experiment.validations
     };
+
+    // if (
+    //   experiment.uuid !== '8c542fbe-0fab-4432-9475-02889f5925d2'
+    // ) {
+    //   return experimentResponse;
+    // }
+
+    // console.log(experimentResponse);
 
     experimentResponse.user = experiment.createdBy
       ? {
@@ -74,6 +83,27 @@ class APIAdapter {
       return experimentResponse;
     }
 
+    // FIXME: Temporary Exareme result handling
+    // console.log(experiment.result)
+    // if (!experiment.result[0].algorithm || experiment.result[0].error) {
+    //   // console.log("exareme")
+    //   experiment.result = [{
+    //     algorithm: experiment.algorithms[0].code,
+    //     data: experiment.result[0].result[0],
+    //     type: "application/json"
+    //   }]
+    // }
+
+        // FIXME: HANDLE EXAREME ERROR
+      // if (r.error || (r.data && r.data.Error)) {
+      //   experimentResponse = {
+      //     ...experimentResponse,
+      //     error: r.error || r.data.Error
+      //   };
+
+      //   return experimentResponse;
+      // }
+
     // Results
     const resultParsed = parse(experiment.result);
     const result = Array.isArray(resultParsed) ? resultParsed : [resultParsed];
@@ -89,16 +119,6 @@ class APIAdapter {
         algorithm: r.algorithm || algorithm,
         mime
       };
-
-      // EXAREME
-      if (r.error || (r.data && r.data.Error)) {
-        experimentResponse = {
-          ...experimentResponse,
-          error: r.error || r.data.Error
-        };
-
-        return experimentResponse;
-      }
 
       // Convert to array to have consistent results
       const normalizedResult = (input: any) =>
