@@ -3,7 +3,7 @@ import stringHash from 'string-hash';
 import { Container } from 'unstated';
 
 import { backendURL } from '../API';
-import { Method, VariableEntity } from './Core';
+import { Algorithm, VariableEntity } from './Core';
 
 export interface MiningResponseShape {
   data?: any;
@@ -22,7 +22,7 @@ export interface IMiningResponse {
 }
 
 export interface MiningPayload {
-  algorithm?: Method;
+  algorithm?: Algorithm;
   variables: VariableEntity[];
   grouping?: VariableEntity[];
   covariables?: VariableEntity[];
