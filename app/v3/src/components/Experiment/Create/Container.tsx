@@ -79,12 +79,12 @@ class Container extends React.Component<Props, State> {
         </div>
         <div className='content'>
           <div className='sidebar'>
-            <Model 
-            model={apiModel.state.model} 
-            showDatasets={true} 
-            variables={apiCore.state.variables} 
-            selectedSlug={this.props.match.params.slug}
-            items={apiModel.state.models}
+            <Model
+              model={apiModel.state.model}
+              showDatasets={true}
+              variables={apiCore.state.variables}
+              selectedSlug={this.props.match.params.slug}
+              items={apiModel.state.models}
               handleSelectModel={this.handleSelectModel}
             />
           </div>
@@ -254,17 +254,84 @@ class Container extends React.Component<Props, State> {
       return;
     }
 
+    // FIXME: Exareme: temporary send model as x,y etc
+    const params = [];
+    if (selectedMethod.source === 'exareme') {
+      let variableString;
+      let covariablesArray: string[] = [];
+
+      if (model.query.variables) {
+        variableString = model.query.variables.map(v => v.code).toString();
+      }
+
+      if (model.query.coVariables) {
+        covariablesArray = model.query.coVariables.map(v => v.code);
+      }
+
+      if (model.query.groupings) {
+        covariablesArray = [...covariablesArray, ...model.query.groupings.map(v => v.code)];
+      }
+
+      let xCode = 'x';
+      let yCode = 'y';
+
+      switch (selectedMethod.code) {
+        case 'VARIABLES_HISTOGRAM':
+          xCode = 'column1';
+          yCode = 'column2';
+          break;
+          break;
+
+        case 'PIPELINE_ISOUP_REGRESSION_TREE_SERIALIZER':
+        case 'PIPELINE_ISOUP_MODEL_TREE_SERIALIZER':
+          xCode = 'target_attributes';
+          yCode = 'descriptive_attributes';
+          break;
+
+        default:
+          break;
+      }
+
+      params.push({
+        code: yCode,
+        value: covariablesArray.toString()
+      });
+
+      params.push({
+        code: xCode,
+        value: variableString
+      });
+
+      const datasets = model.query.trainingDatasets;
+      if (datasets) {
+        const nextDatasets = datasets.map(v => v.code);
+        params.push({
+          code: 'dataset',
+          value: nextDatasets.toString()
+        });
+      }
+    }
+
+    const newParams = parameters
+      ? parameters.map((p: any) => ({
+          ...p,
+          value: p.value || p.default_value
+        }))
+      : [];
+
+    const nextParams = params
+      ? params.map((p: any) => ({
+          ...p,
+          value: p.value || p.default_value
+        }))
+      : newParams;
+
     const experiment: ExperimentPayload = {
       algorithms: [
         {
           code: selectedMethod.code,
           name: selectedMethod.code,
-          parameters: parameters
-            ? parameters.map((p: any) => ({
-                ...p,
-                value: p.value || p.default_value
-              }))
-            : [],
+          parameters: [...nextParams, ...newParams],
           validation
         }
       ],
