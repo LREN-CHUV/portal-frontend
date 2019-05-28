@@ -226,7 +226,7 @@ class Core extends Container<State> {
     }
   };
 
-  public exaremeAlgorithms = async () => {
+  private exaremeAlgorithms2: any = async () => {
     try {
       const data = await request.get(
         `${this.backendURL}/methods/exareme`,
@@ -235,10 +235,7 @@ class Core extends Container<State> {
       const json = await JSON.parse(data);
 
       if (json.error) {
-        return await this.setState(state => ({
-          error: json.error,
-          ...state
-        }));
+        return { error: json.error, data: undefined };
       }
 
       const nextJson = json.filter(
@@ -247,16 +244,9 @@ class Core extends Container<State> {
 
       const exaremeAlgorithms = parse(nextJson);
 
-      return await this.setState(state => ({
-        error: undefined,
-        exaremeAlgorithms,
-        ...state
-      }));
+      return { error: undefined, data: exaremeAlgorithms };
     } catch (error) {
-      return await this.setState(state => ({
-        error: error.message,
-        ...state
-      }));
+      return { error, data: undefined };
     }
   };
 }
