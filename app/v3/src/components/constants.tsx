@@ -1,3 +1,14 @@
+export const excludedMethods = [
+  'histograms',
+  'WP_VARIABLES_HISTOGRAM',
+  'statisticsSummary',
+  'hinmine',
+  'hedwig',
+  'ggparci',
+  'kmeans',
+  'heatmaply'
+];
+
 // Mime types
 export enum MIME_TYPES {
   ERROR = 'text/plain+error',
