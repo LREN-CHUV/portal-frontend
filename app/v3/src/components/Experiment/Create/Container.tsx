@@ -132,6 +132,7 @@ class Container extends React.Component<Props, State> {
               </Panel.Title>
               <Panel.Body>
                 <AvailableMethods
+                  isLocal={isLocal}
                   methods={apiCore.state.methods}
                   variables={apiCore.state.variables}
                   handleSelectMethod={this.handleSelectMethod}

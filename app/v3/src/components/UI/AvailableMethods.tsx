@@ -4,12 +4,21 @@ import { Button } from 'react-bootstrap';
 import { MIP } from '../../types';
 import { VariableEntity } from '../API/Core';
 
+const excludedLocalAlgorithms = [
+  'K_MEANS',
+  'WP_LINEAR_REGRESSION',
+  'PIPELINE_ISOUP_REGRESSION_TREE_SERIALIZER',
+  'PIPELINE_ISOUP_MODEL_TREE_SERIALIZER'
+];
+
 const AvailableMethods = ({
+  isLocal,
   methods,
   variables,
   handleSelectMethod,
   model
 }: {
+  isLocal: boolean;
   methods: MIP.API.IMethods | undefined;
   variables: VariableEntity[] | undefined;
   handleSelectMethod: (method: MIP.API.IMethod) => void;
@@ -77,11 +86,7 @@ const AvailableMethods = ({
         }
 
         const mixed = algoConstraints.mixed;
-        if (
-          modelGroupings.length > 0 &&
-          modelCovariables.length > 0 &&
-          !mixed
-        ) {
+        if (isLocal && excludedLocalAlgorithms.includes(algorithm.code)) {
           isEnabled = false;
         }
 
@@ -89,9 +94,18 @@ const AvailableMethods = ({
       })) ||
     [];
 
+  const dontFakeMethodName = availableAlgorithms.map((f: any) =>
+    f.label === 'Bayesian Linear Regression'
+      ? {
+          ...f,
+          label: 'Standard Linear Regression'
+        }
+      : f
+  );
+
   const sortedAlgorithms =
-    availableAlgorithms &&
-    availableAlgorithms.sort((a: MIP.API.IMethod, b: MIP.API.IMethod) => {
+    dontFakeMethodName &&
+    dontFakeMethodName.sort((a: MIP.API.IMethod, b: MIP.API.IMethod) => {
       try {
         const typea = (a && a.type && a.type.length > 0 && a.type[0]) || '';
         const typeb = (b && b.type && b.type.length > 0 && b.type[0]) || '';
