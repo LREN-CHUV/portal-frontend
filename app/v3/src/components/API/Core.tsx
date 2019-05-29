@@ -18,14 +18,30 @@ export interface VariableEntity extends Variable {
 export interface Algorithm {
   code: string;
   name: string;
-  parameters?: [AlgorithmPayload] | any;
+  parameters?: AlgorithmParameter[] | any;
   validation: boolean;
-  constraints?: any;
+  constraints?: AlgorithmConstraint;
   type?: string[];
   source?: string;
 }
 
-export interface AlgorithmPayload {
+export interface AlgorithmConstraintDetail {
+  binominal?: boolean;
+  integer?: boolean;
+  polynominal?: boolean;
+  real?: boolean;
+  min_count?: number;
+  max_count?: number;
+}
+
+export interface AlgorithmConstraint {
+  variable: AlgorithmConstraintDetail;
+  covariable: AlgorithmConstraintDetail;
+  groupings: AlgorithmConstraintDetail;
+  mixed: boolean;
+}
+
+export interface AlgorithmParameter {
   code: string;
   constraints: any;
   default_value: any;
@@ -199,7 +215,7 @@ class Core extends Container<State> {
       }
 
       const nextJson = json.filter(
-        (a: any) => !excludedMethods.includes(a.code)
+        (a: any) => !excludedMethods.includes(a.name)
       );
 
       const exaremeAlgorithms = parse(nextJson);
