@@ -74,11 +74,7 @@ const AvailableMethods = ({
         }
 
         const mixed = algoConstraints.mixed;
-        if (
-          modelGroupings.length > 0 &&
-          modelCovariables.length > 0 &&
-          !mixed
-        ) {
+        if (modelGroupings.length > 0 && modelCovariables.length > 0 && !mixed) {
           isEnabled = false;
         }
         
