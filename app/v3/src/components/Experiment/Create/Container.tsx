@@ -5,7 +5,8 @@ import { Panel, Tab, Tabs } from 'react-bootstrap';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 
 import { APICore, APIExperiment, APIModel } from '../../API';
-import { Algorithm, AlgorithmPayload } from '../../API/Core';
+import { Algorithm, AlgorithmParameter } from '../../API/Core';
+import { buildExaremeAlgorithmRequest } from '../../API/ExaremeAPIAdapter';
 import { ExperimentPayload, ExperimentResponse } from '../../API/Experiment';
 import { ModelResponse, Query } from '../../API/Model';
 import { globalParameters } from '../../constants';
@@ -25,7 +26,7 @@ interface Props extends RouteComponentProps<any> {
 }
 
 interface State {
-  parameters?: [AlgorithmPayload];
+  parameters?: [AlgorithmParameter];
   query?: Query;
   method?: Algorithm;
   alert: IAlert;
@@ -174,7 +175,7 @@ class Container extends React.Component<Props, State> {
     this.setState({ kfold });
   };
 
-  private handleChangeParameters = (parameters: [AlgorithmPayload]) => {
+  private handleChangeParameters = (parameters: [AlgorithmParameter]) => {
     this.setState({ parameters });
   };
 
@@ -253,84 +254,24 @@ class Container extends React.Component<Props, State> {
       return;
     }
 
-    // FIXME: Exareme: temporary send model as x,y etc
-    const params = [];
-    if (selectedMethod.source === 'exareme') {
-      let variableString;
-      let covariablesArray: string[] = [];
-
-      if (model.query.variables) {
-        variableString = model.query.variables.map(v => v.code).toString();
-      }
-
-      if (model.query.coVariables) {
-        covariablesArray = model.query.coVariables.map(v => v.code);
-      }
-
-      if (model.query.groupings) {
-        covariablesArray = [...covariablesArray, ...model.query.groupings.map(v => v.code)];
-      }
-
-      let xCode = 'x';
-      let yCode = 'y';
-
-      switch (selectedMethod.code) {
-        case 'VARIABLES_HISTOGRAM':
-          xCode = 'column1';
-          yCode = 'column2';
-          break;
-          break;
-
-        case 'PIPELINE_ISOUP_REGRESSION_TREE_SERIALIZER':
-        case 'PIPELINE_ISOUP_MODEL_TREE_SERIALIZER':
-          xCode = 'target_attributes';
-          yCode = 'descriptive_attributes';
-          break;
-
-        default:
-          break;
-      }
-
-      params.push({
-        code: yCode,
-        value: covariablesArray.toString()
-      });
-
-      params.push({
-        code: xCode,
-        value: variableString
-      });
-
-      const datasets = model.query.trainingDatasets;
-      if (datasets) {
-        const nextDatasets = datasets.map(v => v.code);
-        params.push({
-          code: 'dataset',
-          value: nextDatasets.toString()
-        });
-      }
-    }
-
-    const newParams = parameters
+    const params = parameters
       ? parameters.map((p: any) => ({
           ...p,
           value: p.value || p.default_value
         }))
       : [];
 
-    const nextParams = params
-      ? params.map((p: any) => ({
-          ...p,
-          value: p.value || p.default_value
-        }))
-      : newParams;
+    const requestParameters =
+      selectedMethod.source === 'exareme' ? 
+      buildExaremeAlgorithmRequest(model, selectedMethod, params) : 
+      params;
 
     const experiment: ExperimentPayload = {
       algorithms: [
         {
           code: selectedMethod.code,
           name: selectedMethod.code,
-          parameters: [...nextParams, ...newParams],
+          parameters: requestParameters,
           validation
         }
       ],
