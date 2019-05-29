@@ -25,6 +25,12 @@ export interface Algorithm {
   source?: string;
 }
 
+export interface AlgorithmResult {
+  algorithm: string;
+  mime: string;
+  data: any[];
+}
+
 export interface AlgorithmConstraintDetail {
   binominal?: boolean;
   integer?: boolean;
