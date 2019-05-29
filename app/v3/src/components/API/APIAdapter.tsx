@@ -1,4 +1,5 @@
 import { MIME_TYPES, SCORES } from '../constants';
+import { buildExaremeExperimentResponse } from './ExaremeAPIAdapter';
 import {
   ExperimentResponse,
   KfoldValidationScore,
@@ -7,9 +8,16 @@ import {
   ValidationScore
 } from './Experiment';
 
+interface IPfa {
+  crossValidation?: KfoldValidationScore | ValidationScore | PolynomialClassificationScore;
+  data?: any;
+  remoteValidation?: Node | KfoldValidationScore | ValidationScore | PolynomialClassificationScore;
+  error?: any;
+}
+
 class APIAdapter {
   public static parse = (experiment: any): ExperimentResponse => {
-    // Formats are differents in the API for experiment, experimentList and runExperiment,
+    // FIXME: Formats are differents in the API for experiment, experimentList and runExperiment,
     // apply specific parsing to some terms
 
     const algorithms = parse(experiment.algorithms);
@@ -34,14 +42,6 @@ class APIAdapter {
       uuid: experiment.uuid,
       validations: experiment.validations
     };
-
-    // if (
-    //   experiment.uuid !== '8c542fbe-0fab-4432-9475-02889f5925d2'
-    // ) {
-    //   return experimentResponse;
-    // }
-
-    // console.log(experimentResponse);
 
     experimentResponse.user = experiment.createdBy
       ? {
@@ -83,185 +83,181 @@ class APIAdapter {
       return experimentResponse;
     }
 
-    // FIXME: Temporary Exareme result handling
-    // console.log(experiment.result)
-    // if (!experiment.result[0].algorithm || experiment.result[0].error) {
-    //   // console.log("exareme")
-    //   experiment.result = [{
-    //     algorithm: experiment.algorithms[0].code,
-    //     data: experiment.result[0].result[0],
-    //     type: "application/json"
-    //   }]
-    // }
-
-        // FIXME: HANDLE EXAREME ERROR
-      // if (r.error || (r.data && r.data.Error)) {
-      //   experimentResponse = {
-      //     ...experimentResponse,
-      //     error: r.error || r.data.Error
-      //   };
-
-      //   return experimentResponse;
-      // }
-
-    // Results
-    const resultParsed = parse(experiment.result);
-    const result = Array.isArray(resultParsed) ? resultParsed : [resultParsed];
-    const nodes: Node[] = [];
-
-    result.forEach((r: any, i: number) => {
-      let mime = r.type;
-      const algorithm =
-        experimentResponse.algorithms.length - 1 === i
-          ? experimentResponse.algorithms[i]
-          : experimentResponse.algorithms[0];
-      let method: any = {
-        algorithm: r.algorithm || algorithm,
-        mime
-      };
-
-      // Convert to array to have consistent results
-      const normalizedResult = (input: any) =>
-        (input.data && (Array.isArray(input.data) ? input.data : [input.data])) || null;
-      const results = normalizedResult(r);
-
-      // FIXME: on WOKEN see https://jira.chuv.ch/browse/HBPLD-256?filter=-6
-      if (method.algorithm === 'python-linear-regression' && mime !== 'text/plain+error') {
-        method.mime = MIME_TYPES.JSON;
-        mime = MIME_TYPES.JSON;
+    try {
+      const resultParsed = parse(experiment.result);
+      const isExareme = resultParsed.some((r: any) => r.error || r.result);
+      if (isExareme) {
+        console.log('EXAREME', resultParsed);
+        return buildExaremeExperimentResponse(resultParsed, experimentResponse);
       }
-
-      switch (mime) {
-        case MIME_TYPES.HIGHCHARTS:
-          method.data = highcharts(results);
-          break;
-
-        case MIME_TYPES.PLOTLY:
-          method.data = plotly(results);
-          break;
-
-        case MIME_TYPES.PFA:
-          method.data = [pfa(results)];
-          break;
-
-        case MIME_TYPES.JSON:
-          method.data = jsonTest(results);
-          break;
-
-        case MIME_TYPES.JSONDATA:
-          if (/WP_LINEAR/.test(method.algorithm)) {
-            const nresults = results && results.length > 0 && results[0];
-            const data = nresults && nresults.resources && nresults.resources.length > 0 && nresults.resources[0];
-            method.data = [jsonTest(data && data.data)];
-          } else {
-            method.data = jsonTest(results);
-          }
-          break;
-
-        case MIME_TYPES.VISJS:
-          try {
-            const visFunction = `var network; ${results[0].result.slice(1, -1)}`;
-            method.data = [visFunction]; // FIXME: EXAREME evil eval code
-            break;
-          } catch (e) {
-            method.error = 'Failed to parse results';
-            break;
-          }
-
-        case MIME_TYPES.HTML:
-          const html = results.map((result1: any) =>
-            result1.replace('\u0026lt;!DOCTYPE html\u0026gt;', '<!DOCTYPE html>')
-          );
-          method.data = html;
-          break;
-
-        case MIME_TYPES.ERROR:
-          method.error = errorTest(results, r.error);
-          break;
-
-        case MIME_TYPES.MIP_PFA:
-        case MIME_TYPES.MIP_COMPOUND:
-          results.forEach((aResult: any) => {
-            let subResult = aResult;
-
-            // Lift the data one level up if needed
-            if (!subResult.type && aResult.data) {
-              subResult = normalizedResult(aResult);
-            }
-            method.mime = subResult.type;
-            method.algorithm = subResult.algorithm;
-
-            switch (subResult.type) {
-              case MIME_TYPES.HIGHCHARTS:
-                method.data = highcharts(normalizedResult(subResult));
-                break;
-
-              case MIME_TYPES.JSON:
-                method.data = jsonTest(normalizedResult(subResult));
-                break;
-
-              case MIME_TYPES.ERROR:
-                method.error = errorTest(subResult, null);
-                break;
-
-              case MIME_TYPES.PLOTLY:
-                method.data = plotly(normalizedResult(subResult));
-                break;
-
-              case MIME_TYPES.PFA:
-                method.data = [pfa(normalizedResult(subResult))];
-                break;
-
-              case MIME_TYPES.TEXT:
-                method.data = subResult;
-                break;
-
-              case MIME_TYPES.JSONDATA:
-                method.data = jsonTest(normalizedResult(subResult));
-                break;
-
-              default:
-                throw new Error(`"Format not handled" ${subResult.type}`);
-            }
-          });
-          break;
-
-        default:
-          method = {
-            ...method,
-            algorithm: 'no data',
-            error: 'no data',
-            mime
-          };
-      }
-
-      // In case we have 2 methods on 2 same nodes
-      // merge nodes
-      // if (nodes.length) {
-      //   const node: INode | undefined =
-      //     nodes && nodes.find((n: any) => n.name === r.node);
-      //   if (node) {
-      //     console.log(`node.name ${node.name}`)
-      //     node.methods.push(method);
-      //   }
-      // } else {
-      const node: Node = {
-        methods: [method],
-        name: r.node || 'Default'
+      console.log('WOKEN', resultParsed);
+      return parseWokenResults(resultParsed, experimentResponse);
+    } catch (e) {
+      return {
+        ...experimentResponse,
+        error: e
       };
-      // node.methods.push(method);
-      //   nodes.push(node);
-      // }
-      nodes.push(node);
-    });
-    // console.log({nodes})
-    experimentResponse.results = nodes.sort((a: Node, b: Node) => a.name.localeCompare(b.name));
-
-    return experimentResponse;
+    }
   };
 }
 
 export default APIAdapter;
+
+// FIXME: Results formats are inconsistant
+const parseWokenResults = (resultParsed: any, experimentResponse: ExperimentResponse) => {
+  const result = Array.isArray(resultParsed) ? resultParsed : [resultParsed];
+  const nodes: Node[] = [];
+
+  result.forEach((r: any, i: number) => {
+    let mime = r.type;
+    const algorithm =
+      experimentResponse.algorithms.length - 1 === i
+        ? experimentResponse.algorithms[i]
+        : experimentResponse.algorithms[0];
+    let method: any = {
+      algorithm: r.algorithm || algorithm,
+      mime
+    };
+
+    // Convert to array to have consistent results
+    const normalizedResult = (input: any) =>
+      (input.data && (Array.isArray(input.data) ? input.data : [input.data])) || null;
+    const results = normalizedResult(r);
+
+    // FIXME: on WOKEN see https://jira.chuv.ch/browse/HBPLD-256?filter=-6
+    if (method.algorithm === 'python-linear-regression' && mime !== 'text/plain+error') {
+      method.mime = MIME_TYPES.JSON;
+      mime = MIME_TYPES.JSON;
+    }
+
+    switch (mime) {
+      case MIME_TYPES.HIGHCHARTS:
+        method.data = highcharts(results);
+        break;
+
+      case MIME_TYPES.PLOTLY:
+        method.data = plotly(results);
+        break;
+
+      case MIME_TYPES.PFA:
+        method.data = [pfa(results)];
+        break;
+
+      case MIME_TYPES.JSON:
+        method.data = jsonTest(results);
+        break;
+
+      case MIME_TYPES.JSONDATA:
+        if (/WP_LINEAR/.test(method.algorithm)) {
+          const nresults = results && results.length > 0 && results[0];
+          const data = nresults && nresults.resources && nresults.resources.length > 0 && nresults.resources[0];
+          method.data = [jsonTest(data && data.data)];
+        } else {
+          method.data = jsonTest(results);
+        }
+        break;
+
+      case MIME_TYPES.VISJS:
+        try {
+          const visFunction = `var network; ${results[0].result.slice(1, -1)}`;
+          method.data = [visFunction]; // FIXME: EXAREME evil eval code
+          break;
+        } catch (e) {
+          method.error = 'Failed to parse results';
+          break;
+        }
+
+      case MIME_TYPES.HTML:
+        const html = results.map((result1: any) =>
+          result1.replace('\u0026lt;!DOCTYPE html\u0026gt;', '<!DOCTYPE html>')
+        );
+        method.data = html;
+        break;
+
+      case MIME_TYPES.ERROR:
+        method.error = errorTest(results, r.error);
+        break;
+
+      case MIME_TYPES.MIP_PFA:
+      case MIME_TYPES.MIP_COMPOUND:
+        results.forEach((aResult: any) => {
+          let subResult = aResult;
+
+          // Lift the data one level up if needed
+          if (!subResult.type && aResult.data) {
+            subResult = normalizedResult(aResult);
+          }
+          method.mime = subResult.type;
+          method.algorithm = subResult.algorithm;
+
+          switch (subResult.type) {
+            case MIME_TYPES.HIGHCHARTS:
+              method.data = highcharts(normalizedResult(subResult));
+              break;
+
+            case MIME_TYPES.JSON:
+              method.data = jsonTest(normalizedResult(subResult));
+              break;
+
+            case MIME_TYPES.ERROR:
+              method.error = errorTest(subResult, null);
+              break;
+
+            case MIME_TYPES.PLOTLY:
+              method.data = plotly(normalizedResult(subResult));
+              break;
+
+            case MIME_TYPES.PFA:
+              method.data = [pfa(normalizedResult(subResult))];
+              break;
+
+            case MIME_TYPES.TEXT:
+              method.data = subResult;
+              break;
+
+            case MIME_TYPES.JSONDATA:
+              method.data = jsonTest(normalizedResult(subResult));
+              break;
+
+            default:
+              throw new Error(`"Format not handled" ${subResult.type}`);
+          }
+        });
+        break;
+
+      default:
+        method = {
+          ...method,
+          algorithm: 'no data',
+          error: 'no data',
+          mime
+        };
+    }
+
+    // In case we have 2 methods on 2 same nodes
+    // merge nodes
+    // if (nodes.length) {
+    //   const node: INode | undefined =
+    //     nodes && nodes.find((n: any) => n.name === r.node);
+    //   if (node) {
+    //     console.log(`node.name ${node.name}`)
+    //     node.methods.push(method);
+    //   }
+    // } else {
+    const node: Node = {
+      methods: [method],
+      name: r.node || 'Default'
+    };
+    // node.methods.push(method);
+    //   nodes.push(node);
+    // }
+    nodes.push(node);
+  });
+  // console.log({nodes})
+  experimentResponse.results = nodes.sort((a: Node, b: Node) => a.name.localeCompare(b.name));
+
+  return experimentResponse;
+};
 
 const highcharts = (data: any) => {
   return data;
@@ -275,13 +271,6 @@ const plotly = (data: any) => {
     }
   ];
 };
-
-interface IPfa {
-  crossValidation?: KfoldValidationScore | ValidationScore | PolynomialClassificationScore;
-  data?: any;
-  remoteValidation?: Node | KfoldValidationScore | ValidationScore | PolynomialClassificationScore;
-  error?: any;
-}
 
 const pfa = (data: any): IPfa => {
   const output: IPfa = {};
