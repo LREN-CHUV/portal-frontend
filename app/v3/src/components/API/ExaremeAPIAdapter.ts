@@ -149,11 +149,10 @@ const buildExaremeAlgorithmRequest = (
   return [...nextParams, ...newParams];
 };
 
-const buildExaremeExperimentResponse = (experiment: ExperimentResponse) => {
-  console.log(experiment);
-
+// FIXME: Results formats are inconsistant
+const buildExaremeExperimentResponse = (resultParsed: any, experimentResponse: ExperimentResponse) => {
   // Strip Model parameters
-  experiment.algorithms = experiment.algorithms.map(a => {
+  experimentResponse.algorithms = experimentResponse.algorithms.map(a => {
     const parameters: AlgorithmParameter[] = a.parameters || [];
 
     return {
@@ -162,7 +161,28 @@ const buildExaremeExperimentResponse = (experiment: ExperimentResponse) => {
     };
   });
 
-  return experiment;
+     // FIXME: Temporary Exareme result handling
+    // console.log(experiment.result)
+    // if (!experiment.result[0].algorithm || experiment.result[0].error) {
+    //   // console.log("exareme")
+    //   experiment.result = [{
+    //     algorithm: experiment.algorithms[0].code,
+    //     data: experiment.result[0].result[0],
+    //     type: "application/json"
+    //   }]
+    // }
+
+    // FIXME: HANDLE EXAREME ERROR
+    // if (r.error || (r.data && r.data.Error)) {
+    //   experimentResponse = {
+    //     ...experimentResponse,
+    //     error: r.error || r.data.Error
+    //   };
+
+    //   return experimentResponse;
+    // }
+
+  return experimentResponse;
 };
 
 export { parse, buildExaremeAlgorithmRequest, buildExaremeExperimentResponse };
