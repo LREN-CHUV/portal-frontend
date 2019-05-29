@@ -93,7 +93,9 @@ class APIAdapter {
 
     try {
       const resultParsed = parse(experiment.result);
-      const isExareme = resultParsed.some((r: any) => r.error || r.result);
+      const isExareme = resultParsed.some(
+        (r: any) => r.error || r.result || r.resources
+      );
       if (isExareme) {
         const nextResults1 = buildExaremeExperimentResponse(
           resultParsed,

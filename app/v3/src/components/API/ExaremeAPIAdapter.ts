@@ -195,7 +195,7 @@ const buildExaremeExperimentResponse = (
         {
           algorithm: experimentResponse.algorithms[0].name,
           mime: 'application/raw+json',
-          data: resultParsed[0].result
+          data: resultParsed[0].result || resultParsed[0].resources
         }
       ],
       name: 'local'
