@@ -43,14 +43,6 @@ class APIAdapter {
       validations: experiment.validations
     };
 
-    // if (
-    //   experiment.uuid !== '8c542fbe-0fab-4432-9475-02889f5925d2'
-    // ) {
-    //   return experimentResponse;
-    // }
-
-    // console.log(experimentResponse);
-
     experimentResponse.user = experiment.createdBy
       ? {
           fullname: experiment.createdBy.fullname,
