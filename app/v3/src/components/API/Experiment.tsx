@@ -2,7 +2,7 @@ import request from 'request-promise-native';
 import { Container } from 'unstated';
 
 import { backendURL } from '../API';
-import { Algorithm } from '../API/Core';
+import { Algorithm, AlgorithmResult } from '../API/Core';
 import { Query } from '../API/Model';
 import APIAdapter from './APIAdapter';
 
@@ -36,7 +36,7 @@ export interface User {
 
 export interface Node {
   name: string;
-  methods: Algorithm[];
+  methods: AlgorithmResult[];
   // Validation of all predictive methods, ranked by descending order of performance
   rankedCrossValidations?: ValidationScore[];
 }
@@ -142,7 +142,8 @@ class Experiment extends Container<State> {
 
   public create = async ({ experiment }: { experiment: ExperimentPayload }) => {
     const source = experiment.source;
-    const url = source === 'exareme' ? `${this.baseUrl}/exareme` : `${this.baseUrl}`;
+    const url =
+      source === 'exareme' ? `${this.baseUrl}/exareme` : `${this.baseUrl}`;
 
     try {
       const data = await request({
@@ -167,15 +168,21 @@ class Experiment extends Container<State> {
     }
   };
 
-  public markAsViewed = async ({ uuid }: IUUID) => this.markExperiment(uuid, 'markAsViewed');
+  public markAsViewed = async ({ uuid }: IUUID) =>
+    this.markExperiment(uuid, 'markAsViewed');
 
-  public markAsShared = async ({ uuid }: IUUID) => this.markExperiment(uuid, 'markAsShared');
+  public markAsShared = async ({ uuid }: IUUID) =>
+    this.markExperiment(uuid, 'markAsShared');
 
-  public markAsUnshared = async ({ uuid }: IUUID) => this.markExperiment(uuid, 'markAsUnshared');
+  public markAsUnshared = async ({ uuid }: IUUID) =>
+    this.markExperiment(uuid, 'markAsUnshared');
 
   private markExperiment = async (uuid: string, action: string) => {
     try {
-      const data = await request.get(`${this.baseUrl}/${uuid}/${action}`, this.options);
+      const data = await request.get(
+        `${this.baseUrl}/${uuid}/${action}`,
+        this.options
+      );
       const json = await JSON.parse(data);
       if (json.error) {
         return await this.setState({

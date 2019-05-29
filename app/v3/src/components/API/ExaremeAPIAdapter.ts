@@ -1,11 +1,19 @@
-import { Algorithm, AlgorithmConstraint, AlgorithmConstraintDetail, AlgorithmParameter } from './Core';
+import {
+  Algorithm,
+  AlgorithmConstraint,
+  AlgorithmConstraintDetail,
+  AlgorithmParameter
+} from './Core';
 import { ModelResponse } from './Model';
 import { ExperimentResponse } from './Experiment';
 
 const buildConstraints = (algo: any, params: string[]) => {
   const variable = algo.parameters.find((p: any) => params.includes(p.name));
-  const variableTypes = variable && variable.columnValuesSQLType.split(',').map((c: any) => c.trim());
-  const variableColumnValuesIsCategorical = (variable && variable.columnValuesIsCategorical === 'true') || false;
+  const variableTypes =
+    variable &&
+    variable.columnValuesSQLType.split(',').map((c: any) => c.trim());
+  const variableColumnValuesIsCategorical =
+    (variable && variable.columnValuesIsCategorical === 'true') || false;
   const variableConstraint: AlgorithmConstraintDetail = {
     binominal: variableColumnValuesIsCategorical,
     integer: variableTypes && variableTypes.includes('integer') ? true : false,
@@ -31,7 +39,15 @@ const independents = ['X', 'column1', 'x', 'descriptive_attributes'];
 
 const buildParameters = (algo: any) => {
   const parameters = algo.parameters.filter(
-    (p: any) => ![...dependents, ...independents, 'dataset', 'filter', 'outputformat', 'type'].includes(p.name)
+    (p: any) =>
+      ![
+        ...dependents,
+        ...independents,
+        'dataset',
+        'filter',
+        'outputformat',
+        'type'
+      ].includes(p.name)
   );
 
   const params =
@@ -89,7 +105,10 @@ const buildExaremeAlgorithmRequest = (
   }
 
   if (model.query.groupings) {
-    covariablesArray = [...covariablesArray, ...model.query.groupings.map(v => v.code)];
+    covariablesArray = [
+      ...covariablesArray,
+      ...model.query.groupings.map(v => v.code)
+    ];
   }
 
   let xCode = 'x';
@@ -150,37 +169,38 @@ const buildExaremeAlgorithmRequest = (
 };
 
 // FIXME: Results formats are inconsistant
-const buildExaremeExperimentResponse = (resultParsed: any, experimentResponse: ExperimentResponse) => {
+const buildExaremeExperimentResponse = (
+  resultParsed: any,
+  experimentResponse: ExperimentResponse
+) => {
   // Strip Model parameters
   experimentResponse.algorithms = experimentResponse.algorithms.map(a => {
     const parameters: AlgorithmParameter[] = a.parameters || [];
 
     return {
       ...a,
-      parameters: parameters.filter(p => ![...dependents, ...independents, 'dataset', 'filter'].includes(p.code))
+      parameters: parameters.filter(
+        p =>
+          ![...dependents, ...independents, 'dataset', 'filter'].includes(
+            p.code
+          )
+      )
     };
   });
 
-     // FIXME: Temporary Exareme result handling
-    // console.log(experiment.result)
-    // if (!experiment.result[0].algorithm || experiment.result[0].error) {
-    //   // console.log("exareme")
-    //   experiment.result = [{
-    //     algorithm: experiment.algorithms[0].code,
-    //     data: experiment.result[0].result[0],
-    //     type: "application/json"
-    //   }]
-    // }
-
-    // FIXME: HANDLE EXAREME ERROR
-    // if (r.error || (r.data && r.data.Error)) {
-    //   experimentResponse = {
-    //     ...experimentResponse,
-    //     error: r.error || r.data.Error
-    //   };
-
-    //   return experimentResponse;
-    // }
+  console.log(experimentResponse);
+  experimentResponse.results = [
+    {
+      methods: [
+        {
+          algorithm: experimentResponse.algorithms[0].name,
+          mime: 'application/raw+json',
+          data: resultParsed[0].result
+        }
+      ],
+      name: 'local'
+    }
+  ];
 
   return experimentResponse;
 };

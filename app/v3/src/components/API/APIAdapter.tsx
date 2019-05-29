@@ -9,9 +9,16 @@ import {
 } from './Experiment';
 
 interface IPfa {
-  crossValidation?: KfoldValidationScore | ValidationScore | PolynomialClassificationScore;
+  crossValidation?:
+    | KfoldValidationScore
+    | ValidationScore
+    | PolynomialClassificationScore;
   data?: any;
-  remoteValidation?: Node | KfoldValidationScore | ValidationScore | PolynomialClassificationScore;
+  remoteValidation?:
+    | Node
+    | KfoldValidationScore
+    | ValidationScore
+    | PolynomialClassificationScore;
   error?: any;
 }
 
@@ -71,7 +78,8 @@ class APIAdapter {
     }
 
     if (!experiment.result) {
-      const elapsed: number = (new Date().getTime() - experimentResponse.created.getTime()) / 1000;
+      const elapsed: number =
+        (new Date().getTime() - experimentResponse.created.getTime()) / 1000;
 
       if (elapsed > 60 * 5) {
         experimentResponse = {
@@ -87,11 +95,16 @@ class APIAdapter {
       const resultParsed = parse(experiment.result);
       const isExareme = resultParsed.some((r: any) => r.error || r.result);
       if (isExareme) {
-        console.log('EXAREME', resultParsed);
-        return buildExaremeExperimentResponse(resultParsed, experimentResponse);
+        const nextResults1 = buildExaremeExperimentResponse(
+          resultParsed,
+          experimentResponse
+        );
+
+        return nextResults1;
       }
-      console.log('WOKEN', resultParsed);
-      return parseWokenResults(resultParsed, experimentResponse);
+      const nextResults2 = parseWokenResults(resultParsed, experimentResponse);
+
+      return nextResults2;
     } catch (e) {
       return {
         ...experimentResponse,
@@ -104,7 +117,10 @@ class APIAdapter {
 export default APIAdapter;
 
 // FIXME: Results formats are inconsistant
-const parseWokenResults = (resultParsed: any, experimentResponse: ExperimentResponse) => {
+const parseWokenResults = (
+  resultParsed: any,
+  experimentResponse: ExperimentResponse
+) => {
   const result = Array.isArray(resultParsed) ? resultParsed : [resultParsed];
   const nodes: Node[] = [];
 
@@ -121,11 +137,15 @@ const parseWokenResults = (resultParsed: any, experimentResponse: ExperimentResp
 
     // Convert to array to have consistent results
     const normalizedResult = (input: any) =>
-      (input.data && (Array.isArray(input.data) ? input.data : [input.data])) || null;
+      (input.data && (Array.isArray(input.data) ? input.data : [input.data])) ||
+      null;
     const results = normalizedResult(r);
 
     // FIXME: on WOKEN see https://jira.chuv.ch/browse/HBPLD-256?filter=-6
-    if (method.algorithm === 'python-linear-regression' && mime !== 'text/plain+error') {
+    if (
+      method.algorithm === 'python-linear-regression' &&
+      mime !== 'text/plain+error'
+    ) {
       method.mime = MIME_TYPES.JSON;
       mime = MIME_TYPES.JSON;
     }
@@ -150,7 +170,11 @@ const parseWokenResults = (resultParsed: any, experimentResponse: ExperimentResp
       case MIME_TYPES.JSONDATA:
         if (/WP_LINEAR/.test(method.algorithm)) {
           const nresults = results && results.length > 0 && results[0];
-          const data = nresults && nresults.resources && nresults.resources.length > 0 && nresults.resources[0];
+          const data =
+            nresults &&
+            nresults.resources &&
+            nresults.resources.length > 0 &&
+            nresults.resources[0];
           method.data = [jsonTest(data && data.data)];
         } else {
           method.data = jsonTest(results);
@@ -254,7 +278,9 @@ const parseWokenResults = (resultParsed: any, experimentResponse: ExperimentResp
     nodes.push(node);
   });
   // console.log({nodes})
-  experimentResponse.results = nodes.sort((a: Node, b: Node) => a.name.localeCompare(b.name));
+  experimentResponse.results = nodes.sort((a: Node, b: Node) =>
+    a.name.localeCompare(b.name)
+  );
 
   return experimentResponse;
 };
@@ -284,7 +310,9 @@ const pfa = (data: any): IPfa => {
         output.error = `PFA document doesn't contains a validation to display`;
       } else {
         // Convert to array to have consistent results
-        const init = d.cells.validations.init.length ? d.cells.validations.init : [d.cells.validations.init];
+        const init = d.cells.validations.init.length
+          ? d.cells.validations.init
+          : [d.cells.validations.init];
 
         const buildKFoldValidation = (dta: any) => ({
           explainedVariance: parseFloat(dta[SCORES.explainedVariance.code]),

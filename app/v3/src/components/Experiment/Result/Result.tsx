@@ -3,14 +3,24 @@ import { Panel, Tab, Tabs } from 'react-bootstrap';
 
 import { Node, State } from '../../API/Experiment';
 import { MIME_TYPES } from '../../constants';
-import { Highchart, HTML, JSON, JSONData, PFA, PlotlyPCA, VISEvilJS } from '../../UI/Visualization';
+import {
+  Highchart,
+  HTML,
+  JSON as JSONDoc,
+  JSONData,
+  PFA,
+  PlotlyPCA,
+  VISEvilJS
+} from '../../UI/Visualization';
 
 export default ({ experimentState }: { experimentState: State }) => {
   // const json = require('./__mocks__/responses/fed-woken-knn-2.json');
   // const experiment = APIAdapter.parse(json);
   const experiment = experimentState && experimentState.experiment;
   const nodes = experiment && experiment.results;
-  const error = (experimentState && experimentState.error) || (experiment && experiment.error);
+  const error =
+    (experimentState && experimentState.error) ||
+    (experiment && experiment.error);
 
   const loading = !nodes && !error;
 
@@ -25,20 +35,42 @@ export default ({ experimentState }: { experimentState: State }) => {
                 <p>{method.error}</p>
               </div>
             )}
-            {method.mime === MIME_TYPES.JSON && method.data.map((row: any, k: number) => <JSON key={k} row={row} />)}
+            {method.mime === MIME_TYPES.JSON &&
+              method.data.map((row: any, k: number) => (
+                <JSONDoc key={k} row={row} />
+              ))}
             {method.mime === MIME_TYPES.PLOTLY &&
               method.data.map((d: { data: any; layout: any }, k: number) => (
                 <PlotlyPCA data={d.data} layout={d.layout} key={k} />
               ))}
             {method.mime === MIME_TYPES.VISJS &&
-              method.data.map((d: any, k: number) => <VISEvilJS jsString={d} key={k} />)}
+              method.data.map((d: any, k: number) => (
+                <VISEvilJS jsString={d} key={k} />
+              ))}
             {method.mime === MIME_TYPES.HIGHCHARTS &&
-              method.data.map((d: { data: any }, k: number) => <Highchart options={d} key={k} />)}
+              method.data.map((d: { data: any }, k: number) => (
+                <Highchart options={d} key={k} />
+              ))}
             {method.mime === MIME_TYPES.PFA &&
-              method.data.map((data: any, k: number) => <PFA key={k} method={method} data={data} />)}
+              method.data.map((data: any, k: number) => (
+                <PFA key={k} method={method} data={data} />
+              ))}
             {method.mime === MIME_TYPES.JSONDATA &&
-              method.data.map((row: any, k: number) => <JSONData key={k} row={row} />)}
-            {method.mime === MIME_TYPES.HTML && method.data.map((doc: any, k: number) => <HTML doc={doc} key={k} />)}
+              method.data.map((row: any, k: number) => (
+                <JSONData key={k} row={row} />
+              ))}
+            {method.mime === MIME_TYPES.HTML &&
+              method.data.map((doc: any, k: number) => (
+                <HTML doc={doc} key={k} />
+              ))}
+            {method.mime === MIME_TYPES.HTML &&
+              method.data.map((doc: any, k: number) => (
+                <HTML doc={doc} key={k} />
+              ))}
+            {method.mime === MIME_TYPES.JSONRAW &&
+              method.data.map((doc: object, k: number) => (
+                <pre key={k}>{JSON.stringify(doc, null, 4)}</pre>
+              ))}
           </Tab>
         ))}
     </Tabs>
@@ -65,8 +97,8 @@ export default ({ experimentState }: { experimentState: State }) => {
           <div className='loading'>
             <h3>Your experiment is currently running...</h3>
             <p>
-              Please check back in a few minutes. This page will automatically refresh once your experiment has finished
-              executing.
+              Please check back in a few minutes. This page will automatically
+              refresh once your experiment has finished executing.
             </p>
           </div>
         ) : null}

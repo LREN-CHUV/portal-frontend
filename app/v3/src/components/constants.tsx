@@ -25,7 +25,8 @@ export enum MIME_TYPES {
   VISJS = 'application/vnd.visjs+javascript',
   JSONDATA = 'application/vnd.dataresource+json',
   HTML = 'text/html',
-  TEXT = 'text/plain'
+  TEXT = 'text/plain',
+  JSONRAW = 'application/raw+json'
 }
 
 interface ILabel {

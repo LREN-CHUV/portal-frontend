@@ -95,8 +95,16 @@ class Container extends React.Component<Props, State> {
                 <h3>Your Experiment</h3>
               </Panel.Title>
               <Panel.Body>
-                {alert && <Alert message={alert.message} title={alert.title} styled={alert.styled} />}
-                <Tabs defaultActiveKey={1} id='uncontrolled-create-experiment-tab'>
+                {alert && (
+                  <Alert
+                    message={alert.message}
+                    title={alert.title}
+                    styled={alert.styled}
+                  />
+                )}
+                <Tabs
+                  defaultActiveKey={1}
+                  id='uncontrolled-create-experiment-tab'>
                   <Tab eventKey={1} title='Method'>
                     <Form
                       method={this.state && this.state.method}
@@ -131,8 +139,7 @@ class Container extends React.Component<Props, State> {
               <Panel.Body>
                 <AvailableMethods
                   isLocal={isLocal}
-                  methods={apiCore.state.methods}
-                  exaremeAlgorithms={apiCore.state.exaremeAlgorithms}
+                  algorithms={apiCore.state.algorithms}
                   variables={apiCore.state.variables}
                   handleSelectMethod={this.handleSelectMethod}
                   model={apiModel.state.model}
@@ -147,7 +154,9 @@ class Container extends React.Component<Props, State> {
 
   // FIXME: better algorithm parameterization
   private isPredictiveMethod = (method: Algorithm | undefined) =>
-    (method && method.type && method.type[0] === 'predictive_model') || (method && method.code === 'kmeans') || false;
+    (method && method.type && method.type[0] === 'predictive_model') ||
+    (method && method.code === 'kmeans') ||
+    false;
 
   private handleSelectModel = async (model?: ModelResponse): Promise<any> => {
     if (model) {
@@ -161,7 +170,9 @@ class Container extends React.Component<Props, State> {
   };
 
   private handleSelectMethod = (method: Algorithm): void => {
-    const kfold = this.isPredictiveMethod(method) ? globalParameters.kfold.k : 0;
+    const kfold = this.isPredictiveMethod(method)
+      ? globalParameters.kfold.k
+      : 0;
     this.setState({
       kfold,
       method,
@@ -181,7 +192,9 @@ class Container extends React.Component<Props, State> {
     this.setState({ parameters });
   };
 
-  private handleSelectExperiment = async (experiment: ExperimentResponse): Promise<any> => {
+  private handleSelectExperiment = async (
+    experiment: ExperimentResponse
+  ): Promise<any> => {
     const { modelDefinitionId, uuid } = experiment;
     const { apiExperiment, history } = this.props;
     history.push(`/v3/experiment/${modelDefinitionId}/${uuid}`);
@@ -197,7 +210,9 @@ class Container extends React.Component<Props, State> {
     }
   };
 
-  private handleSaveAndRunExperiment = async (experimentName: string): Promise<any> => {
+  private handleSaveAndRunExperiment = async (
+    experimentName: string
+  ): Promise<any> => {
     const { apiModel, apiExperiment, history } = this.props;
 
     if (!this.state) {
@@ -229,7 +244,12 @@ class Container extends React.Component<Props, State> {
     await apiModel.update({ model });
 
     const validation =
-      model && model.query && model.query.validationDatasets && model.query.validationDatasets.length ? true : false;
+      model &&
+      model.query &&
+      model.query.validationDatasets &&
+      model.query.validationDatasets.length
+        ? true
+        : false;
 
     const validations =
       this.state.kfold > 0
@@ -264,9 +284,9 @@ class Container extends React.Component<Props, State> {
       : [];
 
     const requestParameters =
-      selectedMethod.source === 'exareme' ? 
-      buildExaremeAlgorithmRequest(model, selectedMethod, params) : 
-      params;
+      selectedMethod.source === 'exareme'
+        ? buildExaremeAlgorithmRequest(model, selectedMethod, params)
+        : params;
 
     const experiment: ExperimentPayload = {
       algorithms: [

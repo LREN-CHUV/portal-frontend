@@ -4,7 +4,6 @@ import { Button } from 'react-bootstrap';
 import { Algorithm, VariableEntity } from '../API/Core';
 import { ModelResponse } from '../API/Model';
 
-
 const excludedLocalAlgorithms = [
   'K_MEANS',
   'WP_LINEAR_REGRESSION',
@@ -14,15 +13,13 @@ const excludedLocalAlgorithms = [
 
 const AvailableMethods = ({
   isLocal,
-  methods,
-  exaremeAlgorithms,
+  algorithms,
   variables,
   handleSelectMethod,
   model
 }: {
   isLocal: boolean;
-  methods: MIP.API.IMethods | undefined;
-  exaremeAlgorithms: any[];
+  algorithms: Algorithm[] | undefined;
   variables: VariableEntity[] | undefined;
   handleSelectMethod: (method: Algorithm) => void;
   model: ModelResponse | undefined;
@@ -36,64 +33,70 @@ const AvailableMethods = ({
     (query && query.groupings && query.groupings.map(v => v.code)) || [];
 
   const availableAlgorithms =
-  algorithms && algorithms.map((algorithm: any) => {
-      let isEnabled = false;
+    (algorithms &&
+      algorithms.map((algorithm: any) => {
+        let isEnabled = false;
 
-      const apiVariable =
-        variables && variables.find((v: any) => v.code === modelVariable);
-      const algoConstraints: any = algorithm.constraints;
-      const algoConstraintVariable = algoConstraints.variable;
-      const apiVariableType = apiVariable && apiVariable.type;
+        const apiVariable =
+          variables && variables.find((v: any) => v.code === modelVariable);
+        const algoConstraints: any = algorithm.constraints;
+        const algoConstraintVariable = algoConstraints.variable;
+        const apiVariableType = apiVariable && apiVariable.type;
 
-      if (apiVariableType) {
-        if (algoConstraintVariable[apiVariableType]) {
-          isEnabled = true;
+        if (apiVariableType) {
+          if (algoConstraintVariable[apiVariableType]) {
+            isEnabled = true;
+          }
         }
-      }
 
-      const algoConstraintCovariable = algoConstraints.covariables;
-      if (
-        modelCovariables.length < algoConstraintCovariable &&
-        algoConstraintCovariable.min_count
-      ) {
-        isEnabled = false;
-      }
-
-      if (
-        modelCovariables.length < algoConstraintCovariable &&
-        algoConstraintCovariable.max_count
-      ) {
-        isEnabled = false;
-      }
-
-      const algoConstraintGrouping = algoConstraints.groupings;
-      if (
-        modelGroupings.length < algoConstraintGrouping &&
-        algoConstraintGrouping.min_count
-      ) {
-        isEnabled = false;
-      }
-
-      if (
-        modelGroupings.length < algoConstraintGrouping &&
-        algoConstraintGrouping.max_count
-      ) {
-        isEnabled = false;
-      }
-
-        const mixed = algoConstraints.mixed;
-        if (modelGroupings.length > 0 && modelCovariables.length > 0 && !mixed) {
+        const algoConstraintCovariable = algoConstraints.covariables;
+        if (
+          modelCovariables.length < algoConstraintCovariable &&
+          algoConstraintCovariable.min_count
+        ) {
           isEnabled = false;
         }
-        
+
+        if (
+          modelCovariables.length < algoConstraintCovariable &&
+          algoConstraintCovariable.max_count
+        ) {
+          isEnabled = false;
+        }
+
+        const algoConstraintGrouping = algoConstraints.groupings;
+        if (
+          modelGroupings.length < algoConstraintGrouping &&
+          algoConstraintGrouping.min_count
+        ) {
+          isEnabled = false;
+        }
+
+        if (
+          modelGroupings.length < algoConstraintGrouping &&
+          algoConstraintGrouping.max_count
+        ) {
+          isEnabled = false;
+        }
+
+        const mixed = algoConstraints.mixed;
+        if (
+          modelGroupings.length > 0 &&
+          modelCovariables.length > 0 &&
+          !mixed
+        ) {
+          isEnabled = false;
+        }
+
         if (isLocal && excludedLocalAlgorithms.includes(algorithm.code)) {
           isEnabled = false;
         }
 
-      return isEnabled
-        ? { ...algorithm, enabled: true }
-        : { ...algorithm, enabled: false };
-    }) || [];
+        return isEnabled
+          ? { ...algorithm, enabled: true }
+          : { ...algorithm, enabled: false };
+      })) ||
+    [];
 
   const dontFakeMethodName = availableAlgorithms.map((f: any) =>
     f.label === 'Bayesian Linear Regression'
@@ -106,7 +109,7 @@ const AvailableMethods = ({
 
   const sortedAlgorithms =
     dontFakeMethodName &&
-    dontFakeMethodName.sort((a: MIP.API.IMethod, b: MIP.API.IMethod) => {
+    dontFakeMethodName.sort((a: Algorithm, b: Algorithm) => {
       try {
         const typea = (a && a.type && a.type.length > 0 && a.type[0]) || '';
         const typeb = (b && b.type && b.type.length > 0 && b.type[0]) || '';
