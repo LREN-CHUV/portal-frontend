@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { Col, Form, FormControl, FormGroup, HelpBlock } from 'react-bootstrap';
 
-import { AlgorithmPayload } from '../../API/Core';
+import { AlgorithmParameter } from '../../API/Core';
 
 interface Props {
   method?: any;
-  parameters?: [AlgorithmPayload];
+  parameters?: [AlgorithmParameter];
   handleChangeParameters: (parameters: any) => void;
 }
 class FForm extends React.Component<Props> {
@@ -20,6 +20,7 @@ class FForm extends React.Component<Props> {
               <strong>{method.label}</strong>
             </h4>
             <p>{method.description}</p>
+            {/* <pre>{JSON.stringify(method.constraints, null, 4)}</pre> */}
           </div>
         )}
         {!method && (
@@ -37,7 +38,7 @@ class FForm extends React.Component<Props> {
           <Form horizontal={true}>
             {parameters &&
               parameters.length &&
-              parameters.map((parameter: AlgorithmPayload) => {
+              parameters.map((parameter: AlgorithmParameter) => {
                 const numberTypes = ['int', 'real', 'number', 'numeric'];
                 const type =
                   numberTypes.indexOf(parameter.type) >= -1 ? 'number' : 'text';
@@ -47,8 +48,8 @@ class FForm extends React.Component<Props> {
                   <FormGroup
                     validationState={this.getValidationState(parameter)}
                     key={parameter.code}>
-                    <Col sm={2}>{parameter.label}</Col>
-                    <Col sm={4}>
+                    <Col sm={3}>{parameter.label}</Col>
+                    <Col sm={3}>
                       {parameter.type !== 'enumeration' && (
                         <FormControl
                           type={type}
@@ -110,7 +111,7 @@ class FForm extends React.Component<Props> {
     if (constraints && parameters) {
       const { min, max } = constraints;
       const parameter = parameters.find(
-        (p: AlgorithmPayload) => p.code === code
+        (p: AlgorithmParameter) => p.code === code
       );
       if (
         (parameter && parameter.value < min) ||

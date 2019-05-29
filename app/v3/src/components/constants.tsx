@@ -1,6 +1,10 @@
 export const excludedMethods = [
+  'VARIABLES_HISTOGRAM',
+  'LIST_DATASET',
+  'LIST_VARIABLES',
+  //'PIPELINE_ISOUP_MODEL_TREE_SERIALIZER',
+  //'PIPELINE_ISOUP_REGRESSION_TREE_SERIALIZER',
   'histograms',
-  'WP_VARIABLES_HISTOGRAM',
   'statisticsSummary',
   'hinmine',
   'hedwig',
