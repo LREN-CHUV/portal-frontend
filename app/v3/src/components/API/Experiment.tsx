@@ -3,6 +3,7 @@ import { Container } from 'unstated';
 
 import { backendURL } from '../API';
 import { Algorithm } from '../API/Core';
+import { buildExaremeExperimentResponse } from '../API/ExaremeAPIAdapter';
 import { Query } from '../API/Model';
 import APIAdapter from './APIAdapter';
 
@@ -110,7 +111,7 @@ class Experiment extends Container<State> {
 
       return await this.setState({
         error: undefined,
-        experiment
+        experiment: nextExperiment
       });
     } catch (error) {
       return await this.setState({
@@ -131,7 +132,7 @@ class Experiment extends Container<State> {
 
       return await this.setState({
         error: undefined,
-        experiments: json.map((j: ExperimentResponse) => APIAdapter.parse(j))
+        experiments: json.map((j: ExperimentResponse) => buildExaremeExperimentResponse(APIAdapter.parse(j)))
       });
     } catch (error) {
       return await this.setState({
