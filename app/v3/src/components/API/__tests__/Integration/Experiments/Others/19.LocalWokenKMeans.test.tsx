@@ -38,7 +38,7 @@ const validations = [
   }
 ];
 
-const payload: MIP.API.IExperimentPayload = {
+const payload: ExperimentPayload = {
   algorithms: [
     {
       code: experimentCode,
