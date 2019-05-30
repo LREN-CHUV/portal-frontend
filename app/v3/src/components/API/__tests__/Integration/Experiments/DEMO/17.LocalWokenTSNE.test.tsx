@@ -45,7 +45,7 @@ const model: any = (datasets: VariableEntity[]) => ({
   }
 });
 
-const payload: MIP.API.IExperimentPayload = {
+const payload: ExperimentPayload = {
   algorithms: [
     {
       code: experimentCode,

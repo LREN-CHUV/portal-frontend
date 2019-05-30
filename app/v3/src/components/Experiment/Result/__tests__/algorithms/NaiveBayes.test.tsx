@@ -4,7 +4,7 @@ import { mount } from 'enzyme';
 import APIAdapter from '../../../../API/APIAdapter';
 import { MIP } from '../../../../../types';
 
-const parseExperiment = (json: any): MIP.API.IExperimentResponse =>
+const parseExperiment = (json: any): ExperimentResponse =>
   APIAdapter.parse(json);
 
 describe('Test naiveBayes results', () => {

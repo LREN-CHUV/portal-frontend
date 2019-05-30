@@ -3,7 +3,7 @@ import * as React from 'react';
 import { mount } from 'enzyme';
 import APIAdapter from '../../../../API/APIAdapter';
 
-const parseExperiment = (json: any): MIP.API.IExperimentResponse =>
+const parseExperiment = (json: any): ExperimentResponse =>
   APIAdapter.parse(json);
 
 describe('Test linearRegression results', () => {
