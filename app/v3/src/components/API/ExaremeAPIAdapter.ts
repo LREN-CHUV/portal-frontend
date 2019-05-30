@@ -1,11 +1,6 @@
-import {
-  Algorithm,
-  AlgorithmConstraint,
-  AlgorithmConstraintParameter,
-  AlgorithmParameter
-} from './Core';
-import { ModelResponse } from './Model';
+import { Algorithm, AlgorithmConstraintParameter, AlgorithmParameter } from './Core';
 import { ExperimentResponse } from './Experiment';
+import { ModelResponse } from './Model';
 
 const independents = ['X', 'column1', 'x', 'descriptive_attributes'];
 const dependents = ['Y', 'column2', 'y', 'target_attributes'];
@@ -168,12 +163,9 @@ const buildExaremeAlgorithmRequest = (
   return [...nextParams, ...newParams];
 };
 
-// FIXME: Results formats are inconsistant
-const buildExaremeExperimentResponse = (
-  resultParsed: any,
+const stripModelParameters = (
   experimentResponse: ExperimentResponse
-) => {
-  // Strip Model parameters
+): ExperimentResponse => {
   experimentResponse.algorithms = experimentResponse.algorithms.map(a => {
     const parameters: AlgorithmParameter[] = a.parameters || [];
 
@@ -188,7 +180,16 @@ const buildExaremeExperimentResponse = (
     };
   });
 
-  experimentResponse.results = [
+  return experimentResponse;
+};
+
+// FIXME: Results formats are inconsistant
+const buildExaremeExperimentResponse = (
+  resultParsed: any,
+  experimentResponse: ExperimentResponse
+) => {
+  const nextExperimentResponse = stripModelParameters(experimentResponse);
+  nextExperimentResponse.results = [
     {
       algorithms: resultParsed.map((result: any) => ({
         name: experimentResponse.algorithms[0].name,
@@ -199,9 +200,10 @@ const buildExaremeExperimentResponse = (
       name: 'local'
     }
   ];
-  console.log(experimentResponse);
+  // console.log(experimentResponse);
 
-  return experimentResponse;
+  return nextExperimentResponse;
 };
 
-export { parse, buildExaremeAlgorithmRequest, buildExaremeExperimentResponse };
+export { parse, buildExaremeAlgorithmRequest, buildExaremeExperimentResponse, stripModelParameters };
+

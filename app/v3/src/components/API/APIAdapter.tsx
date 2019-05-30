@@ -1,12 +1,6 @@
 import { MIME_TYPES, SCORES } from '../constants';
-import { buildExaremeExperimentResponse } from './ExaremeAPIAdapter';
-import {
-  ExperimentResponse,
-  KfoldValidationScore,
-  Node,
-  PolynomialClassificationScore,
-  ValidationScore
-} from './Experiment';
+import { buildExaremeExperimentResponse, stripModelParameters } from './ExaremeAPIAdapter';
+import { ExperimentResponse, KfoldValidationScore, Node, PolynomialClassificationScore, ValidationScore } from './Experiment';
 
 interface IPfa {
   crossValidation?:
@@ -26,7 +20,6 @@ class APIAdapter {
   public static parse = (experiment: any): ExperimentResponse => {
     // FIXME: Formats are differents in the API for experiment, experimentList and runExperiment,
     // apply specific parsing to some terms
-
     const algorithms = parse(experiment.algorithms);
     const created = (() => {
       const d = Date.parse(experiment.created + ' GMT');
@@ -74,7 +67,7 @@ class APIAdapter {
         error: `${experiment.result}`
       };
 
-      return experimentResponse;
+      return stripModelParameters(experimentResponse);
     }
 
     if (!experiment.result) {
@@ -88,7 +81,7 @@ class APIAdapter {
         };
       }
 
-      return experimentResponse;
+      return stripModelParameters(experimentResponse);
     }
 
     try {
