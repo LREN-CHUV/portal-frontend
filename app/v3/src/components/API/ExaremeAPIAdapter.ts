@@ -1,11 +1,14 @@
 import {
   Algorithm,
   AlgorithmConstraint,
-  AlgorithmConstraintDetail,
+  AlgorithmConstraintParameter,
   AlgorithmParameter
 } from './Core';
 import { ModelResponse } from './Model';
 import { ExperimentResponse } from './Experiment';
+
+const independents = ['X', 'column1', 'x', 'descriptive_attributes'];
+const dependents = ['Y', 'column2', 'y', 'target_attributes'];
 
 const buildConstraints = (algo: any, params: string[]) => {
   const variable = algo.parameters.find((p: any) => params.includes(p.name));
@@ -14,7 +17,7 @@ const buildConstraints = (algo: any, params: string[]) => {
     variable.columnValuesSQLType.split(',').map((c: any) => c.trim());
   const variableColumnValuesIsCategorical =
     (variable && variable.columnValuesIsCategorical === 'true') || false;
-  const variableConstraint: AlgorithmConstraintDetail = {
+  const variableConstraint: AlgorithmConstraintParameter = {
     binominal: variableColumnValuesIsCategorical,
     integer: variableTypes && variableTypes.includes('integer') ? true : false,
     polynominal: variableColumnValuesIsCategorical,
@@ -33,9 +36,6 @@ const buildConstraints = (algo: any, params: string[]) => {
 
   return variableConstraint;
 };
-
-const dependents = ['Y', 'column2', 'y', 'target_attributes'];
-const independents = ['X', 'column1', 'x', 'descriptive_attributes'];
 
 const buildParameters = (algo: any) => {
   const parameters = algo.parameters.filter(
@@ -67,7 +67,7 @@ const buildParameters = (algo: any) => {
   return params;
 };
 
-const exaremeAlgorithms = (json: any): Algorithm[] =>
+const exaremeAlgorithmList = (json: any): Algorithm[] =>
   json.map((algorithm: any) => {
     return {
       code: algorithm.name,
@@ -85,7 +85,7 @@ const exaremeAlgorithms = (json: any): Algorithm[] =>
     };
   });
 
-const parse = (json: any) => exaremeAlgorithms(json);
+const parse = (json: any) => exaremeAlgorithmList(json);
 
 const buildExaremeAlgorithmRequest = (
   model: ModelResponse,
@@ -188,19 +188,18 @@ const buildExaremeExperimentResponse = (
     };
   });
 
-  console.log(experimentResponse);
   experimentResponse.results = [
     {
-      methods: [
-        {
-          algorithm: experimentResponse.algorithms[0].name,
-          mime: 'application/raw+json',
-          data: resultParsed[0].result || resultParsed[0].resources
-        }
-      ],
+      algorithms: resultParsed.map((result: any) => ({
+        name: experimentResponse.algorithms[0].name,
+        mime: result.error ? 'text/plain+error' : 'application/raw+json',
+        data: result.result || result.resources,
+        error: result.error
+      })),
       name: 'local'
     }
   ];
+  console.log(experimentResponse);
 
   return experimentResponse;
 };
