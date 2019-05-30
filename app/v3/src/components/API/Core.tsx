@@ -26,12 +26,14 @@ export interface Algorithm {
 }
 
 export interface AlgorithmResult {
-  algorithm: string;
+  name: string;
   mime: string;
   data: any[];
+  error?: string;
 }
 
-export interface AlgorithmConstraintDetail {
+// FIXME should be private
+export interface AlgorithmConstraintParameter {
   binominal?: boolean;
   integer?: boolean;
   polynominal?: boolean;
@@ -41,9 +43,9 @@ export interface AlgorithmConstraintDetail {
 }
 
 export interface AlgorithmConstraint {
-  variable: AlgorithmConstraintDetail;
-  covariable: AlgorithmConstraintDetail;
-  groupings: AlgorithmConstraintDetail;
+  variable: AlgorithmConstraintParameter;
+  covariable: AlgorithmConstraintParameter;
+  groupings: AlgorithmConstraintParameter;
   mixed: boolean;
 }
 

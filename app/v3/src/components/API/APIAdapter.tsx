@@ -271,7 +271,7 @@ const parseWokenResults = (
     //   }
     // } else {
     const node: Node = {
-      methods: [method],
+      algorithms: [method],
       name: r.node || 'Default'
     };
     // node.methods.push(method);

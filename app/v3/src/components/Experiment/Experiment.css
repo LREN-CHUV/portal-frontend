@@ -1,7 +1,15 @@
 /* layout header */
 
+
+.Experiment.Result {
+  display:flex;
+  flex-direction: column;
+}
+
+
 .Experiment .header {
-  padding: 0 48px 0px 48px;
+  flex-basis: 100%;
+  padding: 0 48px;
 }
 
 .Experiment .header .panel-body {
@@ -36,6 +44,7 @@
 /* layout content */
 
 .Experiment .content {
+  flex-basis: 100%;
   display: flex;
   padding: 0 48px;
 }

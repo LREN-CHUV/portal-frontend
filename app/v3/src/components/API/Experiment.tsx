@@ -36,7 +36,7 @@ export interface User {
 
 export interface Node {
   name: string;
-  methods: AlgorithmResult[];
+  algorithms: AlgorithmResult[];
   // Validation of all predictive methods, ranked by descending order of performance
   rankedCrossValidations?: ValidationScore[];
 }

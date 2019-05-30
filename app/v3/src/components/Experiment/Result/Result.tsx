@@ -24,51 +24,51 @@ export default ({ experimentState }: { experimentState: State }) => {
 
   const loading = !nodes && !error;
 
-  const methodsDisplay = (thenode: Node) => (
+  const renderAlgorithm = (thenode: Node) => (
     <Tabs defaultActiveKey={0} id='tabs-methods'>
-      {thenode.methods &&
-        thenode.methods.map((method: any, j: number) => (
-          <Tab eventKey={j} title={method.algorithm} key={j}>
-            {method.mime === MIME_TYPES.ERROR && (
+      {thenode.algorithms &&
+        thenode.algorithms.map((algorithm: any, j: number) => (
+          <Tab eventKey={j} title={algorithm.algorithm} key={j}>
+            {algorithm.mime === MIME_TYPES.ERROR && (
               <div className='error'>
                 <h3>An error has occured</h3>
-                <p>{method.error}</p>
+                <p>{algorithm.error}</p>
               </div>
             )}
-            {method.mime === MIME_TYPES.JSON &&
-              method.data.map((row: any, k: number) => (
+            {algorithm.mime === MIME_TYPES.JSON &&
+              algorithm.data.map((row: any, k: number) => (
                 <JSONDoc key={k} row={row} />
               ))}
-            {method.mime === MIME_TYPES.PLOTLY &&
-              method.data.map((d: { data: any; layout: any }, k: number) => (
+            {algorithm.mime === MIME_TYPES.PLOTLY &&
+              algorithm.data.map((d: { data: any; layout: any }, k: number) => (
                 <PlotlyPCA data={d.data} layout={d.layout} key={k} />
               ))}
-            {method.mime === MIME_TYPES.VISJS &&
-              method.data.map((d: any, k: number) => (
+            {algorithm.mime === MIME_TYPES.VISJS &&
+              algorithm.data.map((d: any, k: number) => (
                 <VISEvilJS jsString={d} key={k} />
               ))}
-            {method.mime === MIME_TYPES.HIGHCHARTS &&
-              method.data.map((d: { data: any }, k: number) => (
+            {algorithm.mime === MIME_TYPES.HIGHCHARTS &&
+              algorithm.data.map((d: { data: any }, k: number) => (
                 <Highchart options={d} key={k} />
               ))}
-            {method.mime === MIME_TYPES.PFA &&
-              method.data.map((data: any, k: number) => (
-                <PFA key={k} method={method} data={data} />
+            {algorithm.mime === MIME_TYPES.PFA &&
+              algorithm.data.map((data: any, k: number) => (
+                <PFA key={k} method={algorithm} data={data} />
               ))}
-            {method.mime === MIME_TYPES.JSONDATA &&
-              method.data.map((row: any, k: number) => (
+            {algorithm.mime === MIME_TYPES.JSONDATA &&
+              algorithm.data.map((row: any, k: number) => (
                 <JSONData key={k} row={row} />
               ))}
-            {method.mime === MIME_TYPES.HTML &&
-              method.data.map((doc: any, k: number) => (
+            {algorithm.mime === MIME_TYPES.HTML &&
+              algorithm.data.map((doc: any, k: number) => (
                 <HTML doc={doc} key={k} />
               ))}
-            {method.mime === MIME_TYPES.HTML &&
-              method.data.map((doc: any, k: number) => (
+            {algorithm.mime === MIME_TYPES.HTML &&
+              algorithm.data.map((doc: any, k: number) => (
                 <HTML doc={doc} key={k} />
               ))}
-            {method.mime === MIME_TYPES.JSONRAW &&
-              method.data.map((doc: object, k: number) => (
+            {algorithm.mime === MIME_TYPES.JSONRAW &&
+              algorithm.data.map((doc: object, k: number) => (
                 <pre key={k}>{JSON.stringify(doc, null, 4)}</pre>
               ))}
           </Tab>
@@ -76,12 +76,12 @@ export default ({ experimentState }: { experimentState: State }) => {
     </Tabs>
   );
 
-  const nodesDisplay = (thenodes: Node[]) => (
+  const renderNodes = (thenodes: Node[]) => (
     <Tabs defaultActiveKey={0} id='tabs-node'>
       {thenodes &&
         thenodes.map((node: any, i: number) => (
           <Tab eventKey={i} title={node.name} key={i}>
-            {methodsDisplay(node)}
+            {renderAlgorithm(node)}
           </Tab>
         ))}
     </Tabs>
@@ -108,8 +108,8 @@ export default ({ experimentState }: { experimentState: State }) => {
             <p>{error}</p>
           </div>
         ) : null}
-        {nodes && nodes.length > 1 && nodesDisplay(nodes)}
-        {nodes && nodes.length === 1 && methodsDisplay(nodes[0])}
+        {nodes && nodes.length > 1 && renderNodes(nodes)}
+        {nodes && nodes.length === 1 && renderAlgorithm(nodes[0])}
       </Panel.Body>
     </Panel>
   );
