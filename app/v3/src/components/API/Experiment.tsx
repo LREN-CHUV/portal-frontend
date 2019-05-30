@@ -1,10 +1,10 @@
 import request from 'request-promise-native';
 import { Container } from 'unstated';
-
 import { backendURL } from '../API';
 import { Algorithm, AlgorithmResult } from '../API/Core';
 import { Query } from '../API/Model';
 import APIAdapter from './APIAdapter';
+
 
 export interface ExperimentPayload {
   algorithms: [Algorithm];
@@ -157,6 +157,7 @@ class Experiment extends Container<State> {
       });
       const json = await JSON.parse(data);
       const result = APIAdapter.parse(json);
+
       return await this.setState({
         error: undefined,
         experiment: result
