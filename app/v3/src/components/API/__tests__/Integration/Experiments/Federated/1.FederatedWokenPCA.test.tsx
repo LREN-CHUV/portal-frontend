@@ -2,7 +2,7 @@ import { mount } from 'enzyme';
 import * as React from 'react';
 
 import { MIP } from '../../../../../../types';
-import Result from '../../../../../Experiment/Result/Result';
+import Result from '../../../../../Result/Result';
 import {
     createExperiment, createModel, datasets, waitForResult
 } from '../../../../../utils/TestUtils';
