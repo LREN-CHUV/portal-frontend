@@ -1,5 +1,5 @@
 import { mount } from 'enzyme';
-import Result from '../../../../../Experiment/Result/Result';
+import Result from '../../../../../Result/Result';
 import { VariableEntity } from '../../../../Core';
 
 import * as React from 'react';
