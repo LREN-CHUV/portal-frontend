@@ -1,5 +1,5 @@
 export const excludedMethods = [
-  'VARIABLES_HISTOGRAM',
+  //  'HISTOGRAMS',
   'LIST_DATASET',
   'LIST_VARIABLES',
   //'PIPELINE_ISOUP_MODEL_TREE_SERIALIZER',

@@ -1,11 +1,9 @@
 /* layout header */
 
-
 .Experiment.Result {
-  display:flex;
+  display: flex;
   flex-direction: column;
 }
-
 
 .Experiment .header {
   flex-basis: 100%;
@@ -25,7 +23,7 @@
 }
 
 .Experiment .header .panel-body .text {
-  flex: 2
+  flex: 2;
 }
 
 .Experiment .header .panel-body .item:last-child {

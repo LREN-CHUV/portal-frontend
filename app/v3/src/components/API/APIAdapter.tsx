@@ -1,6 +1,15 @@
 import { MIME_TYPES, SCORES } from '../constants';
-import { buildExaremeExperimentResponse, stripModelParameters } from './ExaremeAPIAdapter';
-import { ExperimentResponse, KfoldValidationScore, Node, PolynomialClassificationScore, ValidationScore } from './Experiment';
+import {
+  buildExaremeExperimentResponse,
+  stripModelParameters
+} from './ExaremeAPIAdapter';
+import {
+  ExperimentResponse,
+  KfoldValidationScore,
+  Node,
+  PolynomialClassificationScore,
+  ValidationScore
+} from './Experiment';
 
 interface IPfa {
   crossValidation?:
@@ -87,7 +96,7 @@ class APIAdapter {
     try {
       const resultParsed = parse(experiment.result);
       const isExareme = resultParsed.some(
-        (r: any) => r.error || r.result || r.resources
+        (r: any) => r.error || r.result || r.resources || r.chart
       );
       if (isExareme) {
         const nextResults1 = buildExaremeExperimentResponse(
