@@ -1,12 +1,23 @@
-import { Algorithm, AlgorithmConstraintParameter, AlgorithmParameter } from './Core';
+import {
+  Algorithm,
+  AlgorithmConstraintParameter,
+  AlgorithmParameter
+} from './Core';
 import { ExperimentResponse } from './Experiment';
 import { ModelResponse } from './Model';
+import { MIME_TYPES } from '../constants';
 
 const independents = ['X', 'column1', 'x', 'descriptive_attributes'];
 const dependents = ['Y', 'column2', 'y', 'target_attributes'];
 
+const hiddenParameters = [
+  'iterations_condition_query_provided',
+  'outputformat'
+];
+
 const buildConstraints = (algo: any, params: string[]) => {
   const variable = algo.parameters.find((p: any) => params.includes(p.name));
+  if (!variable) return;
   const variableTypes =
     variable &&
     variable.columnValuesSQLType.split(',').map((c: any) => c.trim());
@@ -24,7 +35,7 @@ const buildConstraints = (algo: any, params: string[]) => {
     variableConstraint.min_count = minCount;
   }
 
-  const maxCount = variable.valueMultiple ? 10 : 0;
+  const maxCount = variable.valueMultiple ? 20 : 0;
   if (maxCount > 0) {
     variableConstraint.max_count = maxCount;
   }
@@ -35,28 +46,36 @@ const buildConstraints = (algo: any, params: string[]) => {
 const buildParameters = (algo: any) => {
   const parameters = algo.parameters.filter(
     (p: any) =>
-      ![
-        ...dependents,
-        ...independents,
-        'dataset',
-        'filter',
-        'outputformat',
-        'type'
-      ].includes(p.name)
+      ![...dependents, ...independents, 'dataset', 'filter'].includes(p.name)
   );
 
   const params =
     (parameters &&
-      parameters.map((parameter: any) => ({
-        code: parameter.name,
-        constraints: {
-          min: parameter.valueNotBlank ? 1 : 0
-        },
-        default_value: parameter.value,
-        description: parameter.desc,
-        label: parameter.name,
-        type: parameter.valueType
-      }))) ||
+      parameters.map((parameter: any) => {
+        const param: AlgorithmParameter = {
+          code: parameter.name,
+          constraints: {},
+          default_value: parameter.value,
+          description: parameter.desc,
+          label: parameter.name,
+          type: parameter.valueType,
+          value: parameter.value,
+          visible: hiddenParameters.includes(parameter.name) ? false : true
+        };
+
+        if (parameter.valueNotBlank) {
+          param.constraints =
+            parameter.valueType === 'string'
+              ? {
+                  required: true
+                }
+              : {
+                  min: 1
+                };
+        }
+
+        return param;
+      })) ||
     [];
 
   return params;
@@ -110,12 +129,6 @@ const buildExaremeAlgorithmRequest = (
   let yCode = 'y';
 
   switch (selectedMethod.code) {
-    case 'VARIABLES_HISTOGRAM':
-      xCode = 'column1';
-      yCode = 'column2';
-      break;
-      break;
-
     case 'PIPELINE_ISOUP_REGRESSION_TREE_SERIALIZER':
     case 'PIPELINE_ISOUP_MODEL_TREE_SERIALIZER':
       xCode = 'target_attributes';
@@ -183,27 +196,74 @@ const stripModelParameters = (
   return experimentResponse;
 };
 
+const buildMimeType = (key: string, result: any) => {
+  // console.log(result);
+
+  if (result.error) {
+    return {
+      mime: MIME_TYPES.ERROR,
+      error: result.error
+    };
+  }
+
+  switch (key) {
+    case 'HISTOGRAMS':
+      return {
+        mime: MIME_TYPES.HIGHCHARTS,
+        data: [result]
+      };
+
+    case 'PEARSON_CORRELATION':
+      return {
+        mime: result.type,
+        data: [result.data]
+      };
+
+    default:
+      return {
+        mime: MIME_TYPES.JSONRAW,
+        data: result.result || result.resources
+      };
+  }
+};
+
 // FIXME: Results formats are inconsistant
 const buildExaremeExperimentResponse = (
   resultParsed: any,
   experimentResponse: ExperimentResponse
 ) => {
   const nextExperimentResponse = stripModelParameters(experimentResponse);
+  const name =
+    nextExperimentResponse.algorithms.length > 0
+      ? nextExperimentResponse.algorithms[0].code
+      : '';
   nextExperimentResponse.results = [
     {
-      algorithms: resultParsed.map((result: any) => ({
-        name: experimentResponse.algorithms[0].name,
-        mime: result.error ? 'text/plain+error' : 'application/raw+json',
-        data: result.result || result.resources,
-        error: result.error
-      })),
+      algorithms: resultParsed.map((result: any) => {
+        if (result.result) {
+          return {
+            name: result.name,
+            ...result.result
+              .filter((r: any) => r.type === MIME_TYPES.HIGHCHARTS)
+              .map((r: any) => buildMimeType(name, r))[0]
+          };
+        }
+        return {
+          name: result.name,
+          ...buildMimeType(name, result)
+        };
+      }),
       name: 'local'
     }
   ];
-  // console.log(experimentResponse);
+  // console.log(experimentResponse.results);
 
   return nextExperimentResponse;
 };
 
-export { parse, buildExaremeAlgorithmRequest, buildExaremeExperimentResponse, stripModelParameters };
-
+export {
+  parse,
+  buildExaremeAlgorithmRequest,
+  buildExaremeExperimentResponse,
+  stripModelParameters
+};

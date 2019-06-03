@@ -58,6 +58,7 @@ export interface AlgorithmParameter {
   description: string;
   label: string;
   type: string;
+  visible: boolean;
 }
 
 interface PrivateAlgorithm {
@@ -167,7 +168,7 @@ class Core extends Container<State> {
   };
 
   public algorithms = async () =>
-    Promise.all([this.wokenAlgorithms(), this.exaremeAlgorithms2()]).then(
+    Promise.all([this.wokenAlgorithms(), this.exaremeAlgorithms()]).then(
       ([wokenAlgorithms, exaremeAlgorithms]: [
         PrivateAlgorithm,
         PrivateAlgorithm
@@ -210,7 +211,7 @@ class Core extends Container<State> {
     }
   };
 
-  private exaremeAlgorithms2: any = async () => {
+  private exaremeAlgorithms: any = async () => {
     try {
       const data = await request.get(
         `${this.backendURL}/methods/exareme`,

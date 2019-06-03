@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { Col, Form, FormControl, FormGroup, HelpBlock } from 'react-bootstrap';
-
 import { AlgorithmParameter } from '../API/Core';
 
 interface Props {
@@ -29,7 +28,8 @@ class FForm extends React.Component<Props> {
               <strong>Your method</strong>
             </h4>
             <p style={{ color: 'orange' }}>
-              Please, select the method to be performed in the 'Available Methods' panel
+              Please, select the method to be performed in the 'Available
+              Methods' panel
             </p>
           </div>
         )}
@@ -39,17 +39,28 @@ class FForm extends React.Component<Props> {
             {parameters &&
               parameters.length &&
               parameters.map((parameter: AlgorithmParameter) => {
-                const numberTypes = ['int', 'real', 'number', 'numeric'];
-                const type =
-                  numberTypes.indexOf(parameter.type) >= -1 ? 'number' : 'text';
+                const numberTypes = [
+                  'int',
+                  'integer',
+                  'real',
+                  'number',
+                  'numeric'
+                ];
+                const type = numberTypes.includes(parameter.type)
+                  ? 'number'
+                  : 'text';
                 const { constraints } = parameter;
 
                 return (
                   <FormGroup
                     validationState={this.getValidationState(parameter)}
-                    key={parameter.code}>
-                    <Col sm={3}>{parameter.label}</Col>
-                    <Col sm={3}>
+                    key={parameter.code}
+                    style={{
+                      display: parameter.visible ? 'default' : 'inline'
+                    }}>
+                    <Col sm={12}>{parameter.description}</Col>
+                    <Col sm={6}>{parameter.label}</Col>
+                    <Col sm={6}>
                       {parameter.type !== 'enumeration' && (
                         <FormControl
                           type={type}
@@ -83,6 +94,7 @@ class FForm extends React.Component<Props> {
                       )}
                       <FormControl.Feedback />
                       <HelpBlock>
+                        {constraints && constraints.required && 'required '}
                         {constraints &&
                           constraints.min >= 0 &&
                           'min: ' + constraints.min}
@@ -95,7 +107,6 @@ class FForm extends React.Component<Props> {
                           'max: ' + constraints.max}
                       </HelpBlock>
                     </Col>
-                    <Col sm={6}>{parameter.description}</Col>
                   </FormGroup>
                 );
               })}
@@ -117,6 +128,11 @@ class FForm extends React.Component<Props> {
         (parameter && parameter.value < min) ||
         (parameter && parameter.value > max)
       ) {
+        return 'error';
+      }
+
+      const required = constraints.required;
+      if (required && !(parameter && parameter.value)) {
         return 'error';
       }
     }
