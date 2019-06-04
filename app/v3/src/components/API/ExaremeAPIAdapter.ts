@@ -63,13 +63,18 @@ const buildParameters = (algo: any) => {
 
         if (parameter.valueNotBlank) {
           param.constraints =
-            parameter.valueType === 'string'
+            parameter.valueType === 'string' || parameter.type === 'other'
               ? {
                   required: true
                 }
               : {
                   min: 1
                 };
+        }
+
+        if (parameter.type === 'other' && parameter.value === 'dummycoding') {
+          param.type = 'enumeration';
+          param.values = ['dummycoding', 'sumscoding', 'simplecoding'];
         }
 
         return param;
@@ -220,6 +225,12 @@ const buildMimeType = (key: string, result: any) => {
       };
 
     case 'ANOVA':
+      return {
+        mime: MIME_TYPES.JSONDATA,
+        data: [result.resources[0].data]
+      };
+
+    case 'LINEAR_REGRESSION':
       return {
         mime: MIME_TYPES.JSONDATA,
         data: [result.resources[0].data]

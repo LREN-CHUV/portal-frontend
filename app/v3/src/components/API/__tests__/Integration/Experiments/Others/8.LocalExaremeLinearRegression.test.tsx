@@ -2,21 +2,33 @@ import { mount } from 'enzyme';
 import * as React from 'react';
 
 import Result from '../../../../../Result/Result';
-import { createExperiment, createModel, waitForResult } from '../../../../../utils/TestUtils';
+import {
+  createExperiment,
+  createModel,
+  waitForResult
+} from '../../../../../utils/TestUtils';
 import { VariableEntity } from '../../../../Core';
+import { buildExaremeAlgorithmRequest } from '../../../../ExaremeAPIAdapter';
 
 // Review December 2018 experiment
 
 // config
 
 const modelSlug = `model-${Math.round(Math.random() * 10000)}`;
-const experimentCode = 'WP_LINEAR_REGRESSION';
+const experimentCode = 'LINEAR_REGRESSION';
+const parameters = [
+  {
+    code: 'referencevalues',
+    value: '[{"name":"alzheimerbroadcategory","val":"Other"}]'
+  },
+  { code: 'encodingparameter', value: 'dummycoding' }
+];
 const datasets = [{ code: 'adni' }, { code: 'edsd' }];
 const model: any = (datasets: VariableEntity[]) => ({
   query: {
     coVariables: [
       {
-        code: 'alzheimerbroadcategory'
+        code: 'leftpcuprecuneus'
       }
     ],
     filters:
@@ -35,20 +47,6 @@ const model: any = (datasets: VariableEntity[]) => ({
   }
 });
 
-const payload: ExperimentPayload = {
-  algorithms: [
-    {
-      code: experimentCode,
-      name: experimentCode, // FIXME: name is used to parse response which is bad !!!
-      parameters: [],
-      validation: false
-    }
-  ],
-  model: modelSlug,
-  name: `${experimentCode}-${modelSlug}`,
-  validations: []
-};
-
 // Test
 
 describe('Integration Test for experiment API', () => {
@@ -64,6 +62,29 @@ describe('Integration Test for experiment API', () => {
   });
 
   it(`create ${experimentCode}`, async () => {
+    const requestParameters = buildExaremeAlgorithmRequest(
+      model(datasets),
+      {
+        code: experimentCode
+      },
+      parameters
+    );
+
+    const payload: ExperimentPayload = {
+      algorithms: [
+        {
+          code: experimentCode,
+          name: experimentCode, // FIXME: name is used to parse response which is bad !!!
+          parameters: requestParameters,
+          validation: false
+        }
+      ],
+      model: modelSlug,
+      name: `${experimentCode}-${modelSlug}`,
+      validations: [],
+      source: 'exareme'
+    };
+
     const { error, experiment } = await createExperiment({
       experiment: payload
     });
@@ -91,12 +112,12 @@ describe('Integration Test for experiment API', () => {
         .find('.greyGridTable tbody tr td')
         .first()
         .text()
-    ).toEqual('(Intercept)');
+    ).toEqual('Model Coefficients');
     expect(
       wrapper
         .find('.greyGridTable tbody tr td')
         .at(4)
         .text()
-    ).toEqual('0.000 (***)');
+    ).toEqual('20.198');
   });
 });
