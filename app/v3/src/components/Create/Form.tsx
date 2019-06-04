@@ -56,7 +56,10 @@ class FForm extends React.Component<Props> {
                     validationState={this.getValidationState(parameter)}
                     key={parameter.code}
                     style={{
-                      display: parameter.visible ? 'default' : 'inline'
+                      visibility:
+                        parameter.visible === undefined || parameter.visible
+                          ? 'visible'
+                          : 'hidden'
                     }}>
                     <Col sm={12}>{parameter.description}</Col>
                     <Col sm={6}>{parameter.label}</Col>
