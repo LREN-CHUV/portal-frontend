@@ -5,7 +5,6 @@ import { Algorithm, AlgorithmResult } from '../API/Core';
 import { Query } from '../API/Model';
 import APIAdapter from './APIAdapter';
 
-
 export interface ExperimentPayload {
   algorithms: [Algorithm];
   model: string;

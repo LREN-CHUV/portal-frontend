@@ -10,12 +10,12 @@ import { buildExaremeAlgorithmRequest } from '../API/ExaremeAPIAdapter';
 import { ExperimentPayload, ExperimentResponse } from '../API/Experiment';
 import { ModelResponse, Query } from '../API/Model';
 import { globalParameters } from '../constants';
-import Form from './Form';
-import ExperimentCreateHeader from './Header';
 import { Alert, IAlert } from '../UI/Alert';
 import AvailableMethods from '../UI/AvailableMethods';
 import Model from '../UI/Model';
 import Validation from '../UI/Validation';
+import Form from './Form';
+import ExperimentCreateHeader from './Header';
 import Help from './Help';
 
 interface Props extends RouteComponentProps<any> {
