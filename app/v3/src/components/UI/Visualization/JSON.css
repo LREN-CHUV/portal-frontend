@@ -1,6 +1,8 @@
 table.greyGridTable {
   margin-top: 16px;
   margin-bottom: 16px;
+  table-layout: fixed;
+  white-space: nowrap;
   width: 100%;
   text-align: center;
   border-collapse: collapse;
@@ -14,6 +16,8 @@ table.greyGridTable td,
 table.greyGridTable th {
   border: 1px solid #e3e3e3;
   padding: 1px 4px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 table.greyGridTable tr:nth-child(even) {
@@ -23,7 +27,6 @@ table.greyGridTable tr:nth-child(even) {
 table.greyGridTable td:first-child {
   font-weight: bold;
   text-align: left;
-  width: 250px;
 }
 
 table.greyGridTable thead th {
@@ -32,4 +35,5 @@ table.greyGridTable thead th {
 }
 table.greyGridTable thead th:first-child {
   border-left: 1px solid #eee;
+  width: 132px !important;
 }
