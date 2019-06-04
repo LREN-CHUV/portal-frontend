@@ -1,15 +1,19 @@
 import { mount } from 'enzyme';
 import * as React from 'react';
-
+import { buildExaremeAlgorithmRequest } from '../../../../ExaremeAPIAdapter';
 import Result from '../../../../../Result/Result';
-import { createExperiment, createModel, waitForResult } from '../../../../../utils/TestUtils';
+import {
+  createExperiment,
+  createModel,
+  waitForResult
+} from '../../../../../utils/TestUtils';
 import { VariableEntity } from '../../../../Core';
 
 // config
 
 const modelSlug = `model-${Math.round(Math.random() * 10000)}`;
-const experimentCode = 'WP_VARIABLES_HISTOGRAM';
-const parameters = [{ code: 'nobuckets', value: '4' }];
+const experimentCode = 'HISTOGRAMS';
+const parameters = [{ code: 'bins', value: '40' }];
 const datasets = [{ code: 'adni' }];
 const model: any = (datasets: VariableEntity[]) => ({
   query: {
@@ -29,20 +33,6 @@ const model: any = (datasets: VariableEntity[]) => ({
   }
 });
 
-const payload: ExperimentPayload = {
-  algorithms: [
-    {
-      code: experimentCode,
-      name: experimentCode, // FIXME: name is used to parse response which is bad !!!
-      parameters,
-      validation: false
-    }
-  ],
-  model: modelSlug,
-  name: `${experimentCode}-${modelSlug}`,
-  validations: []
-};
-
 // Test
 
 describe('Integration Test for experiment API', () => {
@@ -58,6 +48,27 @@ describe('Integration Test for experiment API', () => {
   });
 
   it(`create ${experimentCode}`, async () => {
+    const requestParameters = buildExaremeAlgorithmRequest(
+      model(datasets),
+      { code: experimentCode },
+      parameters
+    );
+
+    const payload: ExperimentPayload = {
+      algorithms: [
+        {
+          code: experimentCode,
+          name: experimentCode, // FIXME: name is used to parse response which is bad !!!
+          parameters: requestParameters,
+          validation: false
+        }
+      ],
+      model: modelSlug,
+      name: `${experimentCode}-${modelSlug}`,
+      validations: [],
+      source: 'exareme'
+    };
+
     const { error, experiment } = await createExperiment({
       experiment: payload
     });
