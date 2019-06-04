@@ -24,7 +24,6 @@ const breadcrumb = (
 
 export default (props: Props) => {
   const divRef = useRef(null);
-  const childrenRef = useRef(null);
   const { handleSelectedNode, histograms, selectedNode, zoom } = props;
 
   renderLifeCycle({
@@ -39,25 +38,6 @@ export default (props: Props) => {
           .data(breadcrumb(selectedNode).reverse())
           .enter()
           .append('a')
-          .text(d => d.data.label)
-          .on('click', d => {
-            handleSelectedNode(d);
-            d3.event.stopPropagation();
-            zoom(d);
-          });
-
-        d3.select(childrenRef.current)
-          .selectAll('a')
-          .remove();
-
-        d3.select(childrenRef.current)
-          .selectAll('a')
-          .data(
-            selectedNode
-              .descendants()
-              .filter(d => d.parent === selectedNode && !d.data.isVariable)
-          )
-          .join('a')
           .text(d => d.data.label)
           .on('click', d => {
             handleSelectedNode(d);
@@ -83,7 +63,7 @@ export default (props: Props) => {
       },
       series: [
         {
-          data: children.map(c => c.descendants().length),
+          data: children.map(c => c.descendants().length - 1),
           dataLabels: {
             enabled: true
           }
@@ -110,10 +90,6 @@ export default (props: Props) => {
         <div className={'overview'}>
           <p>
             <b>Path</b>: <span className='d3-link-hierarchy' ref={divRef} />
-          </p>
-          <p>
-            <b>Children:</b>{' '}
-            <span className='d3-link-children' ref={childrenRef} />
           </p>
           <p>
             <b>Type</b>: {selectedNode.data.type || 'group'}
