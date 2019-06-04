@@ -15,14 +15,22 @@ const hiddenParameters = [
   'outputformat'
 ];
 
-const buildConstraints = (algo: any, params: string[]) => {
+const buildConstraints = (
+  algo: any,
+  params: string[],
+  allowCategorical: boolean = true
+) => {
   const variable = algo.parameters.find((p: any) => params.includes(p.name));
+
   if (!variable) return;
+  const variableColumnValuesIsCategorical =
+    (variable && variable.columnValuesIsCategorical === 'true') || false;
+
+  if (variableColumnValuesIsCategorical && !allowCategorical) return;
   const variableTypes =
     variable &&
     variable.columnValuesSQLType.split(',').map((c: any) => c.trim());
-  const variableColumnValuesIsCategorical =
-    (variable && variable.columnValuesIsCategorical === 'true') || false;
+
   const variableConstraint: AlgorithmConstraintParameter = {
     binominal: variableColumnValuesIsCategorical,
     integer: variableTypes && variableTypes.includes('integer') ? true : false,
@@ -89,8 +97,9 @@ const exaremeAlgorithmList = (json: any): Algorithm[] =>
     return {
       code: algorithm.name,
       constraints: {
-        covariables: buildConstraints(algorithm, dependents),
-        variable: buildConstraints(algorithm, independents)
+        covariables: buildConstraints(algorithm, dependents, false),
+        variable: buildConstraints(algorithm, independents),
+        groupings: buildConstraints(algorithm, dependents)
       },
       description: algorithm.desc,
       enabled: true,
