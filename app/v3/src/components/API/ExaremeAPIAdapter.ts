@@ -234,12 +234,8 @@ const buildMimeType = (key: string, result: any) => {
       };
 
     case 'ANOVA':
-      return {
-        mime: MIME_TYPES.JSONDATA,
-        data: [result.resources[0].data]
-      };
-
     case 'LINEAR_REGRESSION':
+    case 'ID3':
       return {
         mime: MIME_TYPES.JSONDATA,
         data: [result.resources[0].data]
