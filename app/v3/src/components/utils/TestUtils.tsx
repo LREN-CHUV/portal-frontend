@@ -14,12 +14,22 @@ const datasets = async () => {
   return apiCore.state;
 };
 
-const createModel = async ({ modelSlug, model }: { modelSlug: string; model: any }) => {
+const createModel = async ({
+  modelSlug,
+  model
+}: {
+  modelSlug: string;
+  model: any;
+}) => {
   await apiModel.save({ model, title: modelSlug });
   return apiModel.state;
 };
 
-const createExperiment = async ({ experiment }: { experiment: ExperimentPayload }) => {
+const createExperiment = async ({
+  experiment
+}: {
+  experiment: ExperimentPayload;
+}) => {
   await apiExperiment.create({ experiment });
   return apiExperiment.state;
 };
