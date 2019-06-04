@@ -4,11 +4,11 @@ import { Button } from 'react-bootstrap';
 import { Algorithm, VariableEntity } from '../API/Core';
 import { ModelResponse } from '../API/Model';
 
-const excludedLocalAlgorithms = [
-  'K_MEANS',
-  'WP_LINEAR_REGRESSION',
-  'PIPELINE_ISOUP_REGRESSION_TREE_SERIALIZER',
-  'PIPELINE_ISOUP_MODEL_TREE_SERIALIZER'
+const excludedLocalAlgorithms: string[] = [
+  // 'K_MEANS',
+  // 'WP_LINEAR_REGRESSION',
+  // 'PIPELINE_ISOUP_REGRESSION_TREE_SERIALIZER',
+  // 'PIPELINE_ISOUP_MODEL_TREE_SERIALIZER'
 ];
 
 const AvailableMethods = ({
@@ -34,68 +34,107 @@ const AvailableMethods = ({
 
   const availableAlgorithms =
     (algorithms &&
-      algorithms.map((algorithm: any) => {
-        let isEnabled = false;
+      algorithms
+        // .filter(a => a.code === 'tSNE')
+        .map((algorithm: any) => {
+          let isEnabled = false;
 
-        const apiVariable =
-          variables && variables.find((v: any) => v.code === modelVariable);
-        const algoConstraints: any = algorithm.constraints;
-        const algoConstraintVariable = algoConstraints.variable;
-        const apiVariableType = apiVariable && apiVariable.type;
+          const apiVariable =
+            variables && variables.find((v: any) => v.code === modelVariable);
+          const apiCovariables: VariableEntity[] | undefined =
+            variables &&
+            variables.filter((v: any) => modelCovariables.includes(v.code));
+          const apiGroupings: VariableEntity[] | undefined =
+            variables &&
+            variables.filter((v: any) => modelGroupings.includes(v.code));
+          const algoConstraints: any = algorithm.constraints;
+          const algoConstraintVariable = algoConstraints.variable;
+          const apiVariableType = apiVariable && apiVariable.type;
 
-        if (apiVariableType) {
-          if (algoConstraintVariable[apiVariableType]) {
-            isEnabled = true;
+          // Check variables type vs algorithm input types
+          if (apiVariableType) {
+            if (algoConstraintVariable[apiVariableType]) {
+              isEnabled = true;
+            }
           }
-        }
 
-        const algoConstraintCovariable = algoConstraints.covariables;
-        if (
-          modelCovariables.length < algoConstraintCovariable &&
-          algoConstraintCovariable.min_count
-        ) {
-          isEnabled = false;
-        }
+          if (apiCovariables) {
+            const covartypes: string[] = Array.from(
+              new Set([...apiCovariables.map(v => v.type || '')])
+            );
+            isEnabled =
+              isEnabled &&
+              covartypes.every(
+                t =>
+                  algoConstraints.covariables &&
+                  // either there is no constraint, or the constraint has to be from the specified type
+                  (algoConstraints.covariables[t] === undefined ||
+                    algoConstraints.covariables[t])
+              );
+          }
 
-        if (
-          modelCovariables.length < algoConstraintCovariable &&
-          algoConstraintCovariable.max_count
-        ) {
-          isEnabled = false;
-        }
+          if (apiGroupings) {
+            const covartypes: string[] = Array.from(
+              new Set([...apiGroupings.map(v => v.type || '')])
+            );
+            isEnabled =
+              isEnabled &&
+              covartypes.every(
+                t =>
+                  algoConstraints.groupings &&
+                  // either there is no constraint, or the constraint has to be from the specified type
+                  (algoConstraints.groupings[t] === undefined ||
+                    algoConstraints.groupings[t])
+              );
+          }
 
-        const algoConstraintGrouping = algoConstraints.groupings;
-        if (
-          modelGroupings.length < algoConstraintGrouping &&
-          algoConstraintGrouping.min_count
-        ) {
-          isEnabled = false;
-        }
+          const algoConstraintCovariable = algoConstraints.covariables;
+          if (
+            algoConstraintCovariable &&
+            modelCovariables.length < algoConstraintCovariable.min_count
+          ) {
+            isEnabled = false;
+          }
 
-        if (
-          modelGroupings.length < algoConstraintGrouping &&
-          algoConstraintGrouping.max_count
-        ) {
-          isEnabled = false;
-        }
+          if (
+            algoConstraintCovariable &&
+            modelCovariables.length > algoConstraintCovariable.max_count
+          ) {
+            isEnabled = false;
+          }
 
-        const mixed = algoConstraints.mixed;
-        if (
-          modelGroupings.length > 0 &&
-          modelCovariables.length > 0 &&
-          !mixed
-        ) {
-          isEnabled = false;
-        }
+          const algoConstraintGrouping = algoConstraints.groupings;
+          if (
+            algoConstraintGrouping &&
+            modelGroupings.length < algoConstraintGrouping.min_count
+          ) {
+            isEnabled = false;
+          }
 
-        if (isLocal && excludedLocalAlgorithms.includes(algorithm.code)) {
-          isEnabled = false;
-        }
+          if (
+            algoConstraintGrouping &&
+            modelGroupings.length < algoConstraintGrouping.max_count
+          ) {
+            isEnabled = false;
+          }
 
-        return isEnabled
-          ? { ...algorithm, enabled: true }
-          : { ...algorithm, enabled: false };
-      })) ||
+          const mixed = algoConstraints.mixed;
+          if (
+            modelGroupings.length > 0 &&
+            modelCovariables.length > 0 &&
+            !mixed
+          ) {
+            isEnabled = false;
+          }
+
+          if (isLocal && excludedLocalAlgorithms.includes(algorithm.code)) {
+            isEnabled = false;
+          }
+
+          return isEnabled
+            ? { ...algorithm, enabled: true }
+            : { ...algorithm, enabled: false };
+        })) ||
     [];
 
   const dontFakeMethodName = availableAlgorithms.map((f: any) =>

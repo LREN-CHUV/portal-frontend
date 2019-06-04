@@ -30,14 +30,12 @@ const buildConstraints = (algo: any, params: string[]) => {
     real: variableTypes && variableTypes.includes('real') ? true : false
   };
 
-  const minCount = variable.valueNotBlank ? 1 : 0;
-  if (minCount > 0) {
-    variableConstraint.min_count = minCount;
+  if (variable.valueNotBlank) {
+    variableConstraint.min_count = 1;
   }
 
-  const maxCount = variable.valueMultiple ? 20 : 0;
-  if (maxCount > 0) {
-    variableConstraint.max_count = maxCount;
+  if (!variable.valueMultiple) {
+    variableConstraint.max_count = 1;
   }
 
   return variableConstraint;
@@ -139,10 +137,12 @@ const buildExaremeAlgorithmRequest = (
       break;
   }
 
-  params.push({
-    code: yCode,
-    value: covariablesArray.toString()
-  });
+  if (covariablesArray.length > 0) {
+    params.push({
+      code: yCode,
+      value: covariablesArray.toString()
+    });
+  }
 
   params.push({
     code: xCode,
@@ -217,6 +217,12 @@ const buildMimeType = (key: string, result: any) => {
       return {
         mime: result.type,
         data: [result.data]
+      };
+
+    case 'ANOVA':
+      return {
+        mime: MIME_TYPES.JSONDATA,
+        data: [result.resources[0].data]
       };
 
     default:
