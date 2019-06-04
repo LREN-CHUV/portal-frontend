@@ -35,7 +35,7 @@ const AvailableMethods = ({
   const availableAlgorithms =
     (algorithms &&
       algorithms
-        // .filter(a => a.code === 'tSNE')
+        // .filter(a => a.code === 'ID3')
         .map((algorithm: any) => {
           let isEnabled = false;
 
@@ -91,7 +91,7 @@ const AvailableMethods = ({
           const algoConstraintCovariable = algoConstraints.covariables;
           if (
             algoConstraintCovariable &&
-            modelCovariables.length < algoConstraintCovariable.min_count
+            modelCovariables.length > algoConstraintCovariable.min_count
           ) {
             isEnabled = false;
           }
@@ -106,7 +106,7 @@ const AvailableMethods = ({
           const algoConstraintGrouping = algoConstraints.groupings;
           if (
             algoConstraintGrouping &&
-            modelGroupings.length < algoConstraintGrouping.min_count
+            modelGroupings.length > algoConstraintGrouping.min_count
           ) {
             isEnabled = false;
           }
