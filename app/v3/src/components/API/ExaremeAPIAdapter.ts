@@ -15,38 +15,88 @@ const hiddenParameters = [
   'outputformat'
 ];
 
-const buildConstraints = (
-  algo: any,
-  params: string[],
-  allowCategorical: boolean = true
-) => {
-  const variable = algo.parameters.find((p: any) => params.includes(p.name));
+const buildConstraints = (algo: any) => {
+  const variable = algo.parameters.find((p: any) =>
+    dependents.includes(p.name)
+  );
+  const covariables = algo.parameters.find((p: any) =>
+    independents.includes(p.name)
+  );
 
-  if (!variable) return;
   const variableColumnValuesIsCategorical =
     (variable && variable.columnValuesIsCategorical === 'true') || false;
+  const covariableColumnValuesIsCategorical =
+    (covariables && covariables.columnValuesIsCategorical === 'true') || false;
 
-  if (variableColumnValuesIsCategorical && !allowCategorical) return;
   const variableTypes =
     variable &&
     variable.columnValuesSQLType.split(',').map((c: any) => c.trim());
+  const covariableTypes =
+    covariables &&
+    covariables.columnValuesSQLType.split(',').map((c: any) => c.trim());
 
-  const variableConstraint: AlgorithmConstraintParameter = {
-    binominal: variableColumnValuesIsCategorical,
-    integer: variableTypes && variableTypes.includes('integer') ? true : false,
-    polynominal: variableColumnValuesIsCategorical,
-    real: variableTypes && variableTypes.includes('real') ? true : false
-  };
+  const variableColumnValuesIsBinominal =
+    (variable && variable.columnValuesNumOfEnumerations === '2') || false;
+  const variableConstraint: AlgorithmConstraintParameter = variableColumnValuesIsCategorical
+    ? {
+        binominal:
+          variableColumnValuesIsBinominal || variableColumnValuesIsCategorical,
+        polynominal: !variableColumnValuesIsBinominal ? true : false
+      }
+    : {
+        real: variableTypes && variableTypes.includes('real') ? true : false,
+        integer:
+          variableTypes && variableTypes.includes('integer') ? true : false
+      };
 
-  if (variable.valueNotBlank) {
+  const covariableConstraint: AlgorithmConstraintParameter = !covariableColumnValuesIsCategorical
+    ? {
+        integer:
+          covariableTypes && covariableTypes.includes('integer') ? true : false,
+        real: covariableTypes && covariableTypes.includes('real') ? true : false
+      }
+    : {};
+
+  const covariableColumnValuesIsBinominal =
+    (covariables && covariables.columnValuesNumOfEnumerations === '2') || false;
+  const groupingsConstraint: AlgorithmConstraintParameter = covariableColumnValuesIsCategorical
+    ? {
+        binominal:
+          covariableColumnValuesIsBinominal ||
+          covariableColumnValuesIsCategorical,
+        polynominal: !covariableColumnValuesIsBinominal ? true : false
+      }
+    : { max_count: 0 };
+
+  if (variable && variable.valueNotBlank) {
     variableConstraint.min_count = 1;
   }
 
-  if (!variable.valueMultiple) {
+  if (variable && !variable.valueMultiple) {
     variableConstraint.max_count = 1;
   }
 
-  return variableConstraint;
+  if (covariables && covariables.valueNotBlank) {
+    if (covariableColumnValuesIsCategorical) {
+      groupingsConstraint.min_count = 1;
+    } else {
+      covariableConstraint.min_count = 1;
+    }
+  }
+
+  if (covariables && !covariables.valueMultiple) {
+    if (covariableColumnValuesIsCategorical) {
+      groupingsConstraint.max_count = 1;
+    } else {
+      covariableConstraint.max_count = 1;
+    }
+  }
+
+  return {
+    covariables: covariableConstraint,
+    variable: variableConstraint,
+    groupings: groupingsConstraint
+  };
 };
 
 const buildParameters = (algo: any) => {
@@ -96,11 +146,7 @@ const exaremeAlgorithmList = (json: any): Algorithm[] =>
   json.map((algorithm: any) => {
     return {
       code: algorithm.name,
-      constraints: {
-        covariables: buildConstraints(algorithm, dependents, false),
-        variable: buildConstraints(algorithm, independents),
-        groupings: buildConstraints(algorithm, dependents)
-      },
+      constraints: buildConstraints(algorithm),
       description: algorithm.desc,
       enabled: true,
       label: algorithm.name,
@@ -137,31 +183,31 @@ const buildExaremeAlgorithmRequest = (
     ];
   }
 
-  let xCode = 'x';
   let yCode = 'y';
+  let xCode = 'x';
 
   switch (selectedMethod.code) {
     case 'PIPELINE_ISOUP_REGRESSION_TREE_SERIALIZER':
     case 'PIPELINE_ISOUP_MODEL_TREE_SERIALIZER':
-      xCode = 'target_attributes';
-      yCode = 'descriptive_attributes';
+      yCode = 'target_attributes';
+      xCode = 'descriptive_attributes';
       break;
 
     default:
       break;
   }
 
+  params.push({
+    code: yCode,
+    value: variableString
+  });
+
   if (covariablesArray.length > 0) {
     params.push({
-      code: yCode,
+      code: xCode,
       value: covariablesArray.toString()
     });
   }
-
-  params.push({
-    code: xCode,
-    value: variableString
-  });
 
   const datasets = model.query.trainingDatasets;
   if (datasets) {
@@ -239,6 +285,12 @@ const buildMimeType = (key: string, result: any) => {
       return {
         mime: MIME_TYPES.JSONDATA,
         data: [result.resources[0].data]
+      };
+
+    case 'LOGISTIC_REGRESSION':
+      return {
+        mime: MIME_TYPES.HIGHCHARTS,
+        data: [result.data]
       };
 
     default:
