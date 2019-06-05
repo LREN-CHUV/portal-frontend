@@ -35,7 +35,7 @@ const AvailableMethods = ({
   const availableAlgorithms =
     (algorithms &&
       algorithms
-        // .filter(a => a.code === 'ID3')
+        // .filter(a => a.code === 'LOGISTIC_REGRESSION')
         .map((algorithm: any) => {
           let isEnabled = false;
 
@@ -89,33 +89,35 @@ const AvailableMethods = ({
           }
 
           const algoConstraintCovariable = algoConstraints.covariables;
-          if (
-            algoConstraintCovariable &&
-            modelCovariables.length > algoConstraintCovariable.min_count
-          ) {
-            isEnabled = false;
-          }
-
-          if (
-            algoConstraintCovariable &&
-            modelCovariables.length > algoConstraintCovariable.max_count
-          ) {
-            isEnabled = false;
+          if (algoConstraintCovariable) {
+            if (
+              algoConstraintCovariable.min_count &&
+              modelCovariables.length < algoConstraintCovariable.min_count
+            ) {
+              isEnabled = false;
+            }
+            if (
+              algoConstraintCovariable.max_count &&
+              modelCovariables.length > algoConstraintCovariable.max_count
+            ) {
+              isEnabled = false;
+            }
           }
 
           const algoConstraintGrouping = algoConstraints.groupings;
-          if (
-            algoConstraintGrouping &&
-            modelGroupings.length > algoConstraintGrouping.min_count
-          ) {
-            isEnabled = false;
-          }
-
-          if (
-            algoConstraintGrouping &&
-            modelGroupings.length < algoConstraintGrouping.max_count
-          ) {
-            isEnabled = false;
+          if (algoConstraintGrouping) {
+            if (
+              algoConstraintGrouping.min_count &&
+              modelGroupings.length < algoConstraintGrouping.min_count
+            ) {
+              isEnabled = false;
+            }
+            if (
+              algoConstraintGrouping.max_count &&
+              modelGroupings.length > algoConstraintGrouping.max_count
+            ) {
+              isEnabled = false;
+            }
           }
 
           const mixed = algoConstraints.mixed;
