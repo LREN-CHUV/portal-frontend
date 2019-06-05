@@ -156,6 +156,13 @@ const buildParameters = (algo: any) => {
           param.values = ['dummycoding', 'sumscoding', 'simplecoding'];
         }
 
+        if (
+          parameter.type === 'other' &&
+          parameter.name === 'referencevalues'
+        ) {
+          param.type = 'referencevalues';
+        }
+
         return param;
       })) ||
     [];
