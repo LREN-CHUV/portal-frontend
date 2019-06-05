@@ -26,7 +26,7 @@ export default ({ row }: { row: any }) => {
       } else if (headers[i] === 'p-value') {
         return starIt(c, round(c));
       } else {
-        return round(c);
+        return typeof c === 'string' ? c : round(c);
       }
     });
   });

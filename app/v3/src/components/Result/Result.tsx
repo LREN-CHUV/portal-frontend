@@ -35,6 +35,7 @@ export default ({ experimentState }: { experimentState: State }) => {
                 <p>{algorithm.error}</p>
               </div>
             )}
+            {/* {console.log(algorithm)} */}
             {algorithm.mime === MIME_TYPES.JSON &&
               algorithm.data.map((row: any, k: number) => (
                 <JSONDoc key={k} row={row} />
