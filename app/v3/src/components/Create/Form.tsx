@@ -1,15 +1,24 @@
 import * as React from 'react';
 import { Col, Form, FormControl, FormGroup, HelpBlock } from 'react-bootstrap';
+
 import { AlgorithmParameter } from '../API/Core';
+import { Query } from '../API/Model';
+import CategoryChooser from './CategoryValuesChooser';
 
 interface Props {
   method?: any;
   parameters?: [AlgorithmParameter];
+  query?: Query;
   handleChangeParameters: (parameters: any) => void;
 }
 class FForm extends React.Component<Props> {
   public render() {
-    const { method, parameters } = this.props;
+    const { method, parameters, query } = this.props;
+
+    const categoricalVariables = query && [
+      ...(query.groupings || []),
+      ...(query.variables || [])
+    ];
 
     return (
       <div>
@@ -64,6 +73,11 @@ class FForm extends React.Component<Props> {
                     <Col sm={12}>{parameter.description}</Col>
                     <Col sm={6}>{parameter.label}</Col>
                     <Col sm={6}>
+                      {parameter.type === 'referencevalues' && (
+                        <CategoryChooser
+                          categoricalVariables={categoricalVariables}
+                        />
+                      )}
                       {parameter.type !== 'enumeration' && (
                         <FormControl
                           type={type}
@@ -95,6 +109,7 @@ class FForm extends React.Component<Props> {
                             ))}
                         </FormControl>
                       )}
+
                       <FormControl.Feedback />
                       <HelpBlock>
                         {constraints && constraints.required && 'required '}
