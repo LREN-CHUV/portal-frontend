@@ -18,6 +18,9 @@ export default ({ row }: { row: any }) => {
 
   const computedBody = body.map((b: any) => {
     return b.map((c: any, i: number) => {
+      if (c === null) {
+        return '';
+      }
       if (isNaN(Number(c))) {
         return c;
       } else if (headers[i] === 'p-value') {
