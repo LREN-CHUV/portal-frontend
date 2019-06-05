@@ -1,6 +1,6 @@
 import { mount } from 'enzyme';
 import * as React from 'react';
-import { buildExaremeAlgorithmRequest } from '../../../../ExaremeAPIAdapter';
+
 import Result from '../../../../../Result/Result';
 import {
   createExperiment,
@@ -8,21 +8,17 @@ import {
   waitForResult
 } from '../../../../../utils/TestUtils';
 import { VariableEntity } from '../../../../Core';
+import { buildExaremeAlgorithmRequest } from '../../../../ExaremeAPIAdapter';
 
 // config
 
 const modelSlug = `model-${Math.round(Math.random() * 10000)}`;
-const experimentCode = 'PEARSON_CORRELATION';
-const parameters = [
-  { code: 'bins', value: '40' },
-  { code: 'iterations_max_number', value: 20 },
-  { code: 'sstype', value: 2 },
-  { code: 'outputformat', value: 'pfa' }
-];
+const experimentCode = 'LOGISTIC_REGRESSION';
+const parameters: any = [];
 const datasets = [{ code: 'adni' }];
 const model: any = (datasets: VariableEntity[]) => ({
   query: {
-    coVariables: [{ code: 'rightmpogpostcentralgyrusmedialsegment' }],
+    coVariables: [{ code: 'lefthippocampus' }],
     filters: '',
     groupings: [],
     testingDatasets: [],
@@ -32,7 +28,7 @@ const model: any = (datasets: VariableEntity[]) => ({
     validationDatasets: [],
     variables: [
       {
-        code: 'rightmcggmiddlecingulategyrus'
+        code: 'gender'
       }
     ]
   }
