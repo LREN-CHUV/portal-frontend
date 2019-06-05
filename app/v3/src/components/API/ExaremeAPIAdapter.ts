@@ -19,36 +19,57 @@ const buildConstraints = (algo: any) => {
   const variable = algo.parameters.find((p: any) =>
     dependents.includes(p.name)
   );
-  const covariables = algo.parameters.find((p: any) =>
-    independents.includes(p.name)
-  );
-
-  const variableColumnValuesIsCategorical =
-    (variable && variable.columnValuesIsCategorical === 'true') || false;
-  const covariableColumnValuesIsCategorical =
-    (covariables && covariables.columnValuesIsCategorical === 'true') || false;
 
   const variableTypes =
     variable &&
     variable.columnValuesSQLType.split(',').map((c: any) => c.trim());
+  const variableColumnValuesIsCategorical =
+    variable &&
+    (variable.columnValuesIsCategorical === 'true'
+      ? true
+      : variable.columnValuesIsCategorical === 'false'
+      ? false
+      : undefined);
+  const variableColumnValuesIsBinominal =
+    (variable && variable.columnValuesNumOfEnumerations === '2') || false;
+
+  const variableConstraint: AlgorithmConstraintParameter =
+    variableColumnValuesIsCategorical === undefined
+      ? {
+          binominal: variableColumnValuesIsBinominal || true,
+          polynominal: !variableColumnValuesIsBinominal ? true : false,
+          real: variableTypes && variableTypes.includes('real') ? true : false,
+          integer:
+            variableTypes && variableTypes.includes('integer') ? true : false
+        }
+      : variableColumnValuesIsCategorical
+      ? {
+          binominal:
+            variableColumnValuesIsBinominal ||
+            variableColumnValuesIsCategorical,
+          polynominal: !variableColumnValuesIsBinominal ? true : false
+        }
+      : {
+          real: variableTypes && variableTypes.includes('real') ? true : false,
+          integer:
+            variableTypes && variableTypes.includes('integer') ? true : false
+        };
+
+  const covariables = algo.parameters.find((p: any) =>
+    independents.includes(p.name)
+  );
   const covariableTypes =
     covariables &&
     covariables.columnValuesSQLType.split(',').map((c: any) => c.trim());
+  const covariableColumnValuesIsCategorical =
+    covariables &&
+    (covariables.columnValuesIsCategorical === 'true'
+      ? true
+      : covariables.columnValuesIsCategorical === 'false'
+      ? false
+      : undefined);
 
-  const variableColumnValuesIsBinominal =
-    (variable && variable.columnValuesNumOfEnumerations === '2') || false;
-  const variableConstraint: AlgorithmConstraintParameter = variableColumnValuesIsCategorical
-    ? {
-        binominal:
-          variableColumnValuesIsBinominal || variableColumnValuesIsCategorical,
-        polynominal: !variableColumnValuesIsBinominal ? true : false
-      }
-    : {
-        real: variableTypes && variableTypes.includes('real') ? true : false,
-        integer:
-          variableTypes && variableTypes.includes('integer') ? true : false
-      };
-
+  // both false and undefined
   const covariableConstraint: AlgorithmConstraintParameter = !covariableColumnValuesIsCategorical
     ? {
         integer:
@@ -56,17 +77,17 @@ const buildConstraints = (algo: any) => {
         real: covariableTypes && covariableTypes.includes('real') ? true : false
       }
     : {};
-
   const covariableColumnValuesIsBinominal =
     (covariables && covariables.columnValuesNumOfEnumerations === '2') || false;
-  const groupingsConstraint: AlgorithmConstraintParameter = covariableColumnValuesIsCategorical
-    ? {
-        binominal:
-          covariableColumnValuesIsBinominal ||
-          covariableColumnValuesIsCategorical,
-        polynominal: !covariableColumnValuesIsBinominal ? true : false
-      }
-    : { max_count: 0 };
+
+  const groupingsConstraint: AlgorithmConstraintParameter =
+    covariableColumnValuesIsCategorical ||
+    covariableColumnValuesIsCategorical === undefined
+      ? {
+          binominal: covariableColumnValuesIsBinominal || true,
+          polynominal: !covariableColumnValuesIsBinominal ? true : false
+        }
+      : { max_count: 0 };
 
   if (variable && variable.valueNotBlank) {
     variableConstraint.min_count = 1;
@@ -142,7 +163,7 @@ const buildParameters = (algo: any) => {
   return params;
 };
 
-const exaremeAlgorithmList = (json: any): Algorithm[] =>
+const buildExaremeAlgorithmList = (json: any): Algorithm[] =>
   json.map((algorithm: any) => {
     return {
       code: algorithm.name,
@@ -156,8 +177,6 @@ const exaremeAlgorithmList = (json: any): Algorithm[] =>
       validation: true
     };
   });
-
-const parse = (json: any) => exaremeAlgorithmList(json);
 
 const buildExaremeAlgorithmRequest = (
   model: ModelResponse,
@@ -257,8 +276,6 @@ const stripModelParameters = (
 };
 
 const buildMimeType = (key: string, result: any) => {
-  // console.log(result);
-
   if (result.error) {
     return {
       mime: MIME_TYPES.ERROR,
@@ -330,13 +347,12 @@ const buildExaremeExperimentResponse = (
       name: 'local'
     }
   ];
-  // console.log(experimentResponse.results);
 
   return nextExperimentResponse;
 };
 
 export {
-  parse,
+  buildExaremeAlgorithmList,
   buildExaremeAlgorithmRequest,
   buildExaremeExperimentResponse,
   stripModelParameters
