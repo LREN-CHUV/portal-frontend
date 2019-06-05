@@ -2,7 +2,7 @@ import request from 'request-promise-native';
 import { Container } from 'unstated';
 import { backendURL } from '../API';
 import { excludedMethods } from '../constants';
-import { parse } from './ExaremeAPIAdapter';
+import { buildExaremeAlgorithmList } from './ExaremeAPIAdapter';
 export interface Variable {
   code: string;
   label?: string;
@@ -227,10 +227,11 @@ class Core extends Container<State> {
         (a: any) => !excludedMethods.includes(a.name)
       );
 
-      const exaremeAlgorithms = parse(nextJson);
-
+      const exaremeAlgorithms = buildExaremeAlgorithmList(nextJson);
+      console.log(exaremeAlgorithms);
       return { error: undefined, data: exaremeAlgorithms };
     } catch (error) {
+      console.log(error);
       return { error, data: undefined };
     }
   };
