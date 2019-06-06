@@ -11,7 +11,7 @@ const excludedLocalAlgorithms: string[] = [
   // 'PIPELINE_ISOUP_MODEL_TREE_SERIALIZER'
 ];
 
-const AvailableMethods = ({
+const AvailableAlgorithms = ({
   isLocal,
   algorithms,
   variables,
@@ -35,8 +35,13 @@ const AvailableMethods = ({
   const availableAlgorithms =
     (algorithms &&
       algorithms
-        // .filter(a => a.code === 'LINEAR_REGRESSION')
-        .map((algorithm: any) => {
+        // .filter(a => a.code === '3f5830403180d620')
+        .map((algorithm: Algorithm) => {
+
+          if (!algorithm.constraints) {
+            return { ...algorithm, enabled: true }
+          }
+
           let isEnabled = false;
 
           const apiVariable =
@@ -47,12 +52,12 @@ const AvailableMethods = ({
           const apiGroupings: VariableEntity[] | undefined =
             variables &&
             variables.filter((v: any) => modelGroupings.includes(v.code));
-          const algoConstraints: any = algorithm.constraints;
-          const algoConstraintVariable = algoConstraints.variable;
+          const algoConstraints: any = algorithm && algorithm.constraints;
+          const algoConstraintVariable = algoConstraints && algoConstraints.variable;
           const apiVariableType = apiVariable && apiVariable.type;
 
           // Check variables type vs algorithm input types
-          if (apiVariableType) {
+          if (apiVariableType && algoConstraintVariable) {
             if (algoConstraintVariable[apiVariableType]) {
               isEnabled = true;
             }
@@ -88,7 +93,7 @@ const AvailableMethods = ({
               );
           }
 
-          const algoConstraintCovariable = algoConstraints.covariables;
+          const algoConstraintCovariable = algoConstraints && algoConstraints.covariables;
           if (algoConstraintCovariable) {
             if (
               algoConstraintCovariable.min_count &&
@@ -104,7 +109,7 @@ const AvailableMethods = ({
             }
           }
 
-          const algoConstraintGrouping = algoConstraints.groupings;
+          const algoConstraintGrouping = algoConstraints && algoConstraints.groupings;
           if (algoConstraintGrouping) {
             if (
               algoConstraintGrouping.min_count &&
@@ -133,6 +138,8 @@ const AvailableMethods = ({
           if (isLocal && excludedLocalAlgorithms.includes(algorithm.code)) {
             isEnabled = false;
           }
+
+
 
           return isEnabled
             ? { ...algorithm, enabled: true }
@@ -194,4 +201,4 @@ const AvailableMethods = ({
     </React.Fragment>
   );
 };
-export default AvailableMethods;
+export default AvailableAlgorithms;
