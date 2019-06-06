@@ -1,17 +1,28 @@
-import { Algorithm } from './Core'
+import { Algorithm } from './Core';
+import { hiddenParameters } from './ExaremeAPIAdapter';
 
 const buildWorkflowAlgorithmList = (json: any): Algorithm[] => {
+  const algorithms = json.map((j: any) => ({
+    code: j.id,
+    label: j.name,
+    source: 'workflow',
+    parameters: Object.keys(j.inputs).map((k: any) => ({
+      code: j.inputs[k].uuid,
+      constraints: [],
+      default_value: j.inputs[k].value,
+      value: '',
+      description: '',
+      label: j.inputs[k].label,
+      type: '',
+      visible: !hiddenParameters.includes(j.inputs[k].label)
+    })),
+    type: ['workflow'],
+    validation: true
+  }));
 
-    console.log(json)
+  return algorithms;
+};
 
-    const algorithms = json.map((j:any) => ({
-        code: j.id,
-        label: j.name,
-        source: 'workflow',
-        type: ['workflow'],
-        validation: true
-    }))
+const buildWorkflowAlgorithmRequest = () => {};
 
-    return algorithms
-}
-export { buildWorkflowAlgorithmList };
+export { buildWorkflowAlgorithmList, buildWorkflowAlgorithmRequest };

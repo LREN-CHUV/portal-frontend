@@ -1,22 +1,21 @@
-import '../Experiment.css';
-
 import * as React from 'react';
 import { Panel, Tab, Tabs } from 'react-bootstrap';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
-
 import { APICore, APIExperiment, APIModel } from '../API';
 import { Algorithm, AlgorithmParameter } from '../API/Core';
 import { buildExaremeAlgorithmRequest } from '../API/ExaremeAPIAdapter';
 import { ExperimentPayload, ExperimentResponse } from '../API/Experiment';
 import { ModelResponse, Query } from '../API/Model';
+import { buildWorkflowAlgorithmRequest } from '../API/WorkflowAPIAdapter';
 import { globalParameters } from '../constants';
+import '../Experiment.css';
 import { Alert, IAlert } from '../UI/Alert';
 import Model from '../UI/Model';
 import Validation from '../UI/Validation';
 import AvailableAlgorithms from './AvailableAlgorithms';
-import Form from './Form';
 import ExperimentCreateHeader from './Header';
 import Help from './Help';
+import Form from './Parameters';
 
 interface Props extends RouteComponentProps<any> {
   apiExperiment: APIExperiment;
@@ -288,6 +287,8 @@ class Container extends React.Component<Props, State> {
     const requestParameters =
       selectedMethod.source === 'exareme'
         ? buildExaremeAlgorithmRequest(model, selectedMethod, params)
+        : selectedMethod.source === 'workflow'
+        ? buildWorkflowAlgorithmRequest
         : params;
 
     const experiment: ExperimentPayload = {
