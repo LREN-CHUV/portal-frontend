@@ -1,8 +1,17 @@
 import request from 'request-promise-native';
 import { Container } from 'unstated';
+
 import { backendURL } from '../API';
 import { excludedMethods } from '../constants';
 import { buildExaremeAlgorithmList } from './ExaremeAPIAdapter';
+import { buildWorkflowAlgorithmList } from './WorkflowAPIAdapter';
+
+const workflowOptions: RequestInit = {
+  credentials: 'include',
+  headers: {
+    Authorization: process.env.REACT_APP_WORKFLOW_AUTHORIZATION!
+  }
+};
 export interface Variable {
   code: string;
   label?: string;
@@ -168,14 +177,20 @@ class Core extends Container<State> {
   };
 
   public algorithms = async () =>
-    Promise.all([this.wokenAlgorithms(), this.exaremeAlgorithms()]).then(
-      ([wokenAlgorithms, exaremeAlgorithms]: [
+    Promise.all([
+      this.wokenAlgorithms(),
+      this.exaremeAlgorithms(),
+      this.workflows()
+    ]).then(
+      ([wokenAlgorithms, exaremeAlgorithms, workflows]: [
+        PrivateAlgorithm,
         PrivateAlgorithm,
         PrivateAlgorithm
       ]) => {
-        const mergedAlgorithms: any = [
+        const mergedAlgorithms: Algorithm[] = [
           ...((wokenAlgorithms.data && wokenAlgorithms.data.algorithms) || []),
-          ...((exaremeAlgorithms && exaremeAlgorithms.data) || [])
+          ...((exaremeAlgorithms && exaremeAlgorithms.data) || []),
+          ...((workflows && workflows.data) || [])
         ];
 
         return this.setState(state => ({
@@ -185,6 +200,26 @@ class Core extends Container<State> {
         }));
       }
     );
+
+  private workflows = async () => {
+    try {
+      const data = await request.get(
+        `${process.env.REACT_APP_WORKFLOW_URL}/getAllWorkflowWithDetails`,
+        workflowOptions
+      );
+      const json = await JSON.parse(data);
+
+      if (json.error) {
+        return { error: json.error, data: undefined };
+      }
+
+      const workflowAlgorithms = buildWorkflowAlgorithmList(json);
+
+      return { error: undefined, data: workflowAlgorithms };
+    } catch (error) {
+      return { error, data: undefined };
+    }
+  };
 
   private wokenAlgorithms: any = async () => {
     try {

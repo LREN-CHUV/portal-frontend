@@ -13,7 +13,7 @@ import { globalParameters } from '../constants';
 import { Alert, IAlert } from '../UI/Alert';
 import Model from '../UI/Model';
 import Validation from '../UI/Validation';
-import AvailableMethods from './AvailableMethods';
+import AvailableAlgorithms from './AvailableAlgorithms';
 import Form from './Form';
 import ExperimentCreateHeader from './Header';
 import Help from './Help';
@@ -139,7 +139,7 @@ class Container extends React.Component<Props, State> {
                 <h3>Available Methods</h3>
               </Panel.Title>
               <Panel.Body>
-                <AvailableMethods
+                <AvailableAlgorithms
                   isLocal={isLocal}
                   algorithms={apiCore.state.algorithms}
                   variables={apiCore.state.variables}
