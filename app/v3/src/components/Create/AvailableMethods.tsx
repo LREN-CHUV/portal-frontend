@@ -35,7 +35,7 @@ const AvailableMethods = ({
   const availableAlgorithms =
     (algorithms &&
       algorithms
-        // .filter(a => a.code === 'LOGISTIC_REGRESSION')
+        // .filter(a => a.code === 'LINEAR_REGRESSION')
         .map((algorithm: any) => {
           let isEnabled = false;
 
@@ -120,14 +120,15 @@ const AvailableMethods = ({
             }
           }
 
-          const mixed = algoConstraints.mixed;
-          if (
-            modelGroupings.length > 0 &&
-            modelCovariables.length > 0 &&
-            !mixed
-          ) {
-            isEnabled = false;
-          }
+          // FIXME: only for Woken algorithms
+          // const mixed = algoConstraints.mixed;
+          // if (
+          //   modelGroupings.length > 0 &&
+          //   modelCovariables.length > 0 &&
+          //   !mixed
+          // ) {
+          //   isEnabled = false;
+          // }
 
           if (isLocal && excludedLocalAlgorithms.includes(algorithm.code)) {
             isEnabled = false;
