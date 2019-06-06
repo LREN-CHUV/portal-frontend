@@ -217,6 +217,7 @@ class Core extends Container<State> {
 
       return { error: undefined, data: workflowAlgorithms };
     } catch (error) {
+      console.log(error)
       return { error, data: undefined };
     }
   };

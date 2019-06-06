@@ -9,8 +9,8 @@ import { MIME_TYPES } from '../constants';
 
 const independents = ['X', 'column1', 'x', 'descriptive_attributes'];
 const dependents = ['Y', 'column2', 'y', 'target_attributes'];
-
 const hiddenParameters = [
+  ...dependents, ...independents, 'dataset', 'filter',
   'iterations_condition_query_provided',
   'outputformat'
 ];
@@ -121,14 +121,9 @@ const buildConstraints = (algo: any) => {
 };
 
 const buildParameters = (algo: any) => {
-  const parameters = algo.parameters.filter(
-    (p: any) =>
-      ![...dependents, ...independents, 'dataset', 'filter'].includes(p.name)
-  );
-
   const params =
-    (parameters &&
-      parameters.map((parameter: any) => {
+    (algo.parameters &&
+      algo.parameters.map((parameter: any) => {
         const param: AlgorithmParameter = {
           code: parameter.name,
           constraints: {},
@@ -362,5 +357,6 @@ export {
   buildExaremeAlgorithmList,
   buildExaremeAlgorithmRequest,
   buildExaremeExperimentResponse,
-  stripModelParameters
+  stripModelParameters,
+  hiddenParameters
 };

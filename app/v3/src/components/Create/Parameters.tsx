@@ -13,7 +13,7 @@ interface Props {
   query?: Query;
   handleChangeParameters: (parameters: any) => void;
 }
-class FForm extends React.Component<Props> {
+class Parameters extends React.Component<Props> {
   public render() {
     const { apiCore, method, parameters, query } = this.props;
 
@@ -68,10 +68,10 @@ class FForm extends React.Component<Props> {
                     validationState={this.getValidationState(parameter)}
                     key={parameter.code}
                     style={{
-                      visibility:
+                      display:
                         parameter.visible === undefined || parameter.visible
-                          ? 'visible'
-                          : 'hidden'
+                          ? 'inline'
+                          : 'none'
                     }}>
                     <Col sm={12}>{parameter.description}</Col>
                     <Col sm={6}>{parameter.label}</Col>
@@ -180,4 +180,4 @@ class FForm extends React.Component<Props> {
   };
 }
 
-export default FForm;
+export default Parameters;
