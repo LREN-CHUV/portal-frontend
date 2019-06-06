@@ -111,6 +111,7 @@ class Container extends React.Component<Props, State> {
                       parameters={this.state && this.state.parameters}
                       handleChangeParameters={this.handleChangeParameters}
                       query={apiModel.state.model && apiModel.state.model.query}
+                      apiCore={apiCore}
                     />
 
                     <fieldset style={{ padding: '8px' }}>

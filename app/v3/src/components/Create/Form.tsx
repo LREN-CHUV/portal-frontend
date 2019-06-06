@@ -1,11 +1,13 @@
 import * as React from 'react';
 import { Col, Form, FormControl, FormGroup, HelpBlock } from 'react-bootstrap';
 
-import { AlgorithmParameter } from '../API/Core';
+import { APICore } from '../API';
+import { AlgorithmParameter, VariableEntity } from '../API/Core';
 import { Query } from '../API/Model';
 import CategoryChooser from './CategoryValuesChooser';
 
 interface Props {
+  apiCore: APICore;
   method?: any;
   parameters?: [AlgorithmParameter];
   query?: Query;
@@ -13,10 +15,11 @@ interface Props {
 }
 class FForm extends React.Component<Props> {
   public render() {
-    const { method, parameters, query } = this.props;
+    const { apiCore, method, parameters, query } = this.props;
 
-    const categoricalVariables = query && [
+    const categoricalVariables: VariableEntity[] | undefined = query && [
       ...(query.groupings || []),
+      ...(query.coVariables || []),
       ...(query.variables || [])
     ];
 
@@ -73,23 +76,26 @@ class FForm extends React.Component<Props> {
                     <Col sm={12}>{parameter.description}</Col>
                     <Col sm={6}>{parameter.label}</Col>
                     <Col sm={6}>
+                      {parameter.type !== 'enumeration' &&
+                        parameter.type !== 'referencevalues' && (
+                          <FormControl
+                            type={type}
+                            defaultValue={
+                              parameter.value || parameter.default_value
+                            }
+                            // tslint:disable-next-line jsx-no-lambda
+                            onChange={event =>
+                              this.handleChangeParameter(event, parameter.code)
+                            }
+                          />
+                        )}
                       {parameter.type === 'referencevalues' && (
                         <CategoryChooser
+                          apiCore={apiCore}
                           categoricalVariables={categoricalVariables}
                         />
                       )}
-                      {parameter.type !== 'enumeration' && (
-                        <FormControl
-                          type={type}
-                          defaultValue={
-                            parameter.value || parameter.default_value
-                          }
-                          // tslint:disable-next-line jsx-no-lambda
-                          onChange={event =>
-                            this.handleChangeParameter(event, parameter.code)
-                          }
-                        />
-                      )}
+
                       {parameter.type === 'enumeration' && (
                         <FormControl
                           componentClass='select'
