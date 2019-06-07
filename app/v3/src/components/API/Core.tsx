@@ -4,6 +4,7 @@ import { Container } from 'unstated';
 import { backendURL } from '../API';
 import { excludedMethods } from '../constants';
 import { buildExaremeAlgorithmList } from './ExaremeAPIAdapter';
+import hierarchyMockup from './pathologiesHierarchyMockup';
 import { buildWorkflowAlgorithmList } from './WorkflowAPIAdapter';
 
 export const workflowOptions: RequestInit = {
@@ -129,27 +130,32 @@ class Core extends Container<State> {
   };
 
   public hierarchy = async () => {
-    try {
-      const data = await request.get(
-        `${this.backendURL}/variables/hierarchy`,
-        this.options
-      );
-      const json = await JSON.parse(data);
-      if (json.error) {
-        return await this.setState({
-          error: json.error
-        });
-      }
 
-      return await this.setState({
-        error: undefined,
-        hierarchy: json
-      });
-    } catch (error) {
-      return await this.setState({
-        error: error.message
-      });
-    }
+    return await this.setState({
+      error: undefined,
+      hierarchy: hierarchyMockup
+    })
+    // try {
+    //   const data = await request.get(
+    //     `${this.backendURL}/variables/hierarchy`,
+    //     this.options
+    //   );
+    //   const json = await JSON.parse(data);
+    //   if (json.error) {
+    //     return await this.setState({
+    //       error: json.error
+    //     });
+    //   }
+
+    //   return await this.setState({
+    //     error: undefined,
+    //     hierarchy: json
+    //   });
+    // } catch (error) {
+    //   return await this.setState({
+    //     error: error.message
+    //   });
+    // }
   };
 
   public datasets = async () => {
