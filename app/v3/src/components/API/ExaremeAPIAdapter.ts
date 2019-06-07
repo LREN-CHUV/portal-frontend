@@ -267,7 +267,7 @@ const stripModelParameters = (
       ...a,
       parameters: parameters.filter(
         p =>
-          ![...dependents, ...independents, 'dataset', 'filter'].includes(
+          !hiddenParameters.includes(
             p.code
           )
       )
