@@ -152,70 +152,67 @@ const buildWorkflowAlgorithmRequest = (
   // kfold
   const kfoldKey = selectedMethod.parameters.find(
     (p: any) => p.label === 'kfold'
-  ).code;
-  const kFoldParam = newParams.find((p: any) => p.code === kfoldKey);
-  params.push({
-    code: kfoldKey,
-    value: (kFoldParam && kFoldParam.value) || '3'
-  });
+  );
+  if (kfoldKey) {
+    const kFoldParam = newParams.find((p: any) => p.code === kfoldKey.code);
+    params.push({
+      code: kfoldKey.code,
+      value: (kFoldParam && kFoldParam.value) || '3'
+    });
+  }
 
   // alpha
   const alphaKey = selectedMethod.parameters.find(
     (p: any) => p.label === 'alpha'
-  ).code;
-  const alphaParam = newParams.find((p: any) => p.code === alphaKey);
-  params.push({
-    code: alphaKey,
-    value: (alphaParam && alphaParam.value) || '0.1'
-  });
+  );
+  if (alphaKey) {
+    const alphaParam = newParams.find((p: any) => p.code === alphaKey.code);
+    params.push({
+      code: alphaKey.code,
+      value: (alphaParam && alphaParam.value) || '0.1'
+    });
+  }
+
+
+  // others
+  const leftOvers = selectedMethod.parameters.filter((p: any) => !params.map((p: any) => p.code).includes(p.code))
+  if (leftOvers) {
+    leftOvers.forEach((l:any) => {
+      params.push({
+        code: l.code,
+        value: l.value
+      })
+    });
+  }
 
   return params;
 };
 
 const buildWorkflowAlgorithmResponse = (
-  resultParsed: any,
   historyId: string,
   experimentResponse: ExperimentResponse
 ) => {
+  // console.log('buildWorkflowAlgorithmResponse', historyId)
   const workflowResult: Response = workflowResults[historyId];
   const workflowStatus: Response = workflowStatuses[historyId];
 
-  if (!workflowStatus) {
-    fetchStatus(historyId).then(result => {
-      workflowStatuses[historyId] = result;
-
-      if (result.error) {
-        return {
-          ...experimentResponse,
-          error: "Couldn't perform the workflow. Please check the parameters"
-        };
-      }
-    });
-
-    return experimentResponse;
-  }
-
   if (workflowResult) {
-
     if (workflowResult.error) {
       return {
         ...experimentResponse,
-        error: "Couldn't perform the workflow. Please check the parameters"
+        error: "Couldn't perform workflow. Please check the parameters"
       };
     }
+
     const results = workflowResult.data
       .filter((d: any) => d.result.length > 0)
       .map((d: any) => d.result[0])
       .map((d: any) => ({ data: [d.data], mime: d.type }));
 
-    const name =
-      experimentResponse.algorithms.length > 0
-        ? experimentResponse.algorithms[0].code
-        : '';
     experimentResponse.results = [
       {
-        algorithms: results.map((result: any) => ({
-          algorithm: name,
+        algorithms: results.map((result: any, i: number) => ({
+          algorithm: `Naive Bayes ${i}`,
           ...result
         })),
         name: 'local'
@@ -223,6 +220,21 @@ const buildWorkflowAlgorithmResponse = (
     ];
 
     return experimentResponse;
+  }
+
+  if (!workflowStatus) {
+    console.log('!workflowStatus fetchStatus', historyId);
+    fetchStatus(historyId).then(result => {
+      workflowStatuses[historyId] = result;
+      buildWorkflowAlgorithmResponse(historyId, experimentResponse);
+    });
+
+    return experimentResponse;
+  } else if (workflowStatus && workflowStatus.error) {
+    return {
+      ...experimentResponse,
+      error: "Couldn't perform workflow. Please check the parameters"
+    };
   }
 
   if (workflowStatus.data) {
@@ -234,22 +246,28 @@ const buildWorkflowAlgorithmResponse = (
     }
 
     if (workflowStatus.data.state === 'running') {
+      console.log('running: fetchStatus', historyId);
       fetchStatus(historyId).then(result => {
         workflowStatuses[historyId] = result;
+        // buildWorkflowAlgorithmResponse(historyId, experimentResponse);
       });
 
       return experimentResponse;
     }
 
     if (workflowStatus.data.state === 'ok') {
+      console.log('ok', historyId);
       const workflowResult1: Response = workflowResults[historyId];
       if (!workflowResult1) {
+        console.log('fetchResults', historyId);
         fetchResults(historyId).then(result => {
           const content = result.data.filter((d: any) => d.visible);
           const contentId = content.pop().id;
 
+          console.log('fetchResultDetail', historyId);
           fetchResultDetail(historyId, contentId).then(result2 => {
             workflowResults[historyId] = result2;
+            buildWorkflowAlgorithmResponse(historyId, experimentResponse);
           });
         });
       }
