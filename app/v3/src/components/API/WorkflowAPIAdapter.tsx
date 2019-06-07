@@ -1,5 +1,6 @@
-import { Algorithm } from './Core';
+import { Algorithm, AlgorithmConstraintParameter, AlgorithmParameter } from './Core';
 import { hiddenParameters } from './ExaremeAPIAdapter';
+import { ModelResponse } from './Model';
 
 const buildWorkflowAlgorithmList = (json: any): Algorithm[] => {
   const algorithms = json.map((j: any) => ({
@@ -8,6 +9,17 @@ const buildWorkflowAlgorithmList = (json: any): Algorithm[] => {
     parameters: Object.keys(j.inputs).map((k: any) => ({
       code: j.inputs[k].uuid,
       constraints: [],
+        // j.inputs[k].label === 'y'
+        //   ? {
+        //       variable: {
+        //         binominal: true,
+        //         integer: false,
+        //         min_count: 1,
+        //         polynominal: true,
+        //         real: false
+        //       }
+        //     }
+        //   : [],
       default_value: j.inputs[k].value,
       description: '',
       label: j.inputs[k].label,
@@ -23,19 +35,50 @@ const buildWorkflowAlgorithmList = (json: any): Algorithm[] => {
   return algorithms;
 };
 
-const buildWorkflowAlgorithmRequest = () => {
-  const staticValues: any = {
-    '6c623013-79ce-4523-aa89-b1000fcd219a': 'car_buying,car_maint,car_doors,car_persons,car_lug_boot,car_safety',
-    '79b95116-c6c5-45c6-b9b3-9818e1315510': '3',
-    'd0552f27-0c95-4df8-8e58-134b0693bd13': '0.1',
-    'ef9615a6-849f-43e9-a030-f470de321b7c': 'car_class',
-    'f871f859-dce5-4c03-b0fe-2b5400e88bc2': 'car'
-  };
+const buildWorkflowAlgorithmRequest = (model: ModelResponse,
+  selectedMethod: Algorithm,
+  newParams: AlgorithmParameter[]) => {
+  const params: any[] = [];
 
-  const params = Object.keys(staticValues).map(k => ({ 
-    code: k,
-    value: staticValues[k]
-  }))
+  if (model.query.variables) {
+    const variableKey = selectedMethod.parameters.find((p:any) => p.label === 'y').code;
+    params.push({
+      code: variableKey,
+      value: model.query.variables.map(v => v.code).toString()
+    })
+  }
+
+  if (model.query.coVariables) {
+    const covariableKey = selectedMethod.parameters.find((p:any) => p.label === 'x').code;
+    params.push({
+      code: covariableKey,
+      value: model.query.coVariables.map(v => v.code).toString()
+    })
+  }
+
+  if (model.query.trainingDatasets) {
+    const datasetKey = selectedMethod.parameters.find((p:any) => p.label === 'dataset').code;
+    params.push({
+      code: datasetKey,
+      value: model.query.trainingDatasets.map(v => v.code).toString()
+    })
+  }
+
+  // kfold
+  const kfoldKey = selectedMethod.parameters.find((p:any) => p.label === 'kfold').code;
+  const kFoldParam = newParams.find((p:any) => p.code === kfoldKey)
+  params.push({
+    code: kfoldKey,
+    value: (kFoldParam && kFoldParam.value) || '3'
+  })
+
+  // alpha
+  const alphaKey = selectedMethod.parameters.find((p:any) => p.label === 'alpha').code;
+  const alphaParam = newParams.find((p:any) => p.code === alphaKey)
+  params.push({
+    code: alphaKey,
+    value: (alphaParam && alphaParam.value) || '0.1'
+  })
 
   return params;
 };

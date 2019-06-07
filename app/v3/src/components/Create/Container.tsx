@@ -288,7 +288,7 @@ class Container extends React.Component<Props, State> {
       selectedMethod.source === 'exareme'
         ? buildExaremeAlgorithmRequest(model, selectedMethod, params)
         : selectedMethod.source === 'workflow'
-        ? buildWorkflowAlgorithmRequest()
+        ? buildWorkflowAlgorithmRequest(model, selectedMethod, params)
         : params;
 
     const experiment: ExperimentPayload = {
