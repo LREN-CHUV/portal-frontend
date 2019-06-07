@@ -264,7 +264,7 @@ class Core extends Container<State> {
       );
 
       const exaremeAlgorithms = buildExaremeAlgorithmList(nextJson);
-      console.log(exaremeAlgorithms);
+
       return { error: undefined, data: exaremeAlgorithms };
     } catch (error) {
       console.log(error);
