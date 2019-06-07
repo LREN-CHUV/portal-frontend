@@ -3,6 +3,7 @@ import {
   buildExaremeExperimentResponse,
   stripModelParameters
 } from './ExaremeAPIAdapter';
+import { buildWorkflowAlgorithmResponse } from './WorkflowAPIAdapter';
 import {
   ExperimentResponse,
   KfoldValidationScore,
@@ -93,8 +94,18 @@ class APIAdapter {
       return stripModelParameters(experimentResponse);
     }
 
+    // Branch backend responses based on data shape
+    // FIXME
     try {
       const resultParsed = parse(experiment.result);
+
+      const isWorkflow = resultParsed.find((r: any) => r.historyId);
+      if (isWorkflow) {
+        const nextResult3 = buildWorkflowAlgorithmResponse(resultParsed, isWorkflow.historyId, experimentResponse);
+
+        return nextResult3
+      }
+
       const isExareme = resultParsed.some(
         (r: any) => r.error || r.result || r.resources || r.chart
       );
@@ -106,10 +117,13 @@ class APIAdapter {
 
         return nextResults1;
       }
+
+      // Default is woken
       const nextResults2 = parseWokenResults(resultParsed, experimentResponse);
 
       return nextResults2;
     } catch (e) {
+      console.log(e)
       return {
         ...experimentResponse,
         error: e
