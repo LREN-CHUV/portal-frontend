@@ -121,3 +121,12 @@
 .Experiment .sidebar .model .panel-title button {
   margin: 12px 15px 0 0;
 }
+
+.Experiment .sidebar2 .panel-body {
+  padding-top: 0
+}
+
+.method button {
+  white-space: normal;
+  text-align: left
+}

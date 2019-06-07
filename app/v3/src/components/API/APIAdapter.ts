@@ -101,7 +101,7 @@ class APIAdapter {
 
       const isWorkflow = resultParsed.find((r: any) => r.historyId);
       if (isWorkflow) {
-        const nextResult3 = buildWorkflowAlgorithmResponse(resultParsed, isWorkflow.historyId, experimentResponse);
+        const nextResult3 = buildWorkflowAlgorithmResponse(isWorkflow.historyId, experimentResponse);
 
         return nextResult3
       }
