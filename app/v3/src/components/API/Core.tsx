@@ -6,7 +6,7 @@ import { excludedMethods } from '../constants';
 import { buildExaremeAlgorithmList } from './ExaremeAPIAdapter';
 import { buildWorkflowAlgorithmList } from './WorkflowAPIAdapter';
 
-const workflowOptions: RequestInit = {
+export const workflowOptions: RequestInit = {
   credentials: 'include',
   headers: {
     Authorization: process.env.REACT_APP_WORKFLOW_AUTHORIZATION!

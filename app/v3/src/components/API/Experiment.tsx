@@ -142,7 +142,11 @@ class Experiment extends Container<State> {
   public create = async ({ experiment }: { experiment: ExperimentPayload }) => {
     const source = experiment.source;
     const url =
-      source === 'exareme' ? `${this.baseUrl}/exareme` : `${this.baseUrl}`;
+      source === 'exareme'
+        ? `${this.baseUrl}/exareme`
+        : source === 'workflow'
+        ? `${this.baseUrl}/workflow`
+        : `${this.baseUrl}`;
 
     try {
       const data = await request({

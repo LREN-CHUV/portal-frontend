@@ -288,7 +288,7 @@ class Container extends React.Component<Props, State> {
       selectedMethod.source === 'exareme'
         ? buildExaremeAlgorithmRequest(model, selectedMethod, params)
         : selectedMethod.source === 'workflow'
-        ? buildWorkflowAlgorithmRequest
+        ? buildWorkflowAlgorithmRequest()
         : params;
 
     const experiment: ExperimentPayload = {
@@ -307,6 +307,7 @@ class Container extends React.Component<Props, State> {
     };
 
     let uuid;
+
     await apiExperiment.create({ experiment });
     const { experiment: e, error } = apiExperiment.state;
 
