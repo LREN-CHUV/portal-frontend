@@ -252,7 +252,6 @@ const buildExaremeAlgorithmRequest = (
       }))
     : [];
 
-    debugger
   return [...nextParams, ...(newParams.filter((p:any) => p.visible !== false)||[])];
 };
 
