@@ -1,6 +1,6 @@
 import request from 'request-promise-native';
 import { ExperimentResponse } from './Experiment';
-
+import { stripModelParameters} from './ExaremeAPIAdapter';
 import { Algorithm, AlgorithmParameter, workflowOptions } from './Core';
 import { hiddenParameters } from './ExaremeAPIAdapter';
 import { ModelResponse } from './Model';
@@ -12,6 +12,23 @@ interface Status {
 interface Response {
   error: string | undefined;
   data: any | undefined;
+}
+
+const algorithms = JSON.parse(localStorage.getItem('algorithms') || "{}");
+const findParameter = (acode: string, pcode: string) => {
+  const algorithm = algorithms && algorithms.find((a:any) => a.code === acode);
+
+  if (algorithm) {
+    const parameter = algorithm.parameters.find((p:any) => p.code === pcode)
+    return parameter ? parameter.label : pcode;
+  }
+  return pcode;
+}
+
+const findName = (acode: string) => {
+  const algorithm = algorithms && algorithms.find((a:any) => a.code === acode);
+
+  return algorithm ? algorithm.label: acode
 }
 
 const workflowStatuses: Status = {};
@@ -192,6 +209,19 @@ const buildWorkflowAlgorithmResponse = (
   historyId: string,
   experimentResponse: ExperimentResponse
 ) => {
+
+  // Retrieve parameters names
+  experimentResponse.algorithms = experimentResponse.algorithms.map(a => ({
+    ...a,
+    name: findName(a.code),
+    parameters: a.parameters && a.parameters.map((p:any) => ({
+      ...p,
+      code: findParameter(a.code, p.code)
+    }))
+  }))
+
+  experimentResponse = stripModelParameters(experimentResponse);
+
   // console.log('buildWorkflowAlgorithmResponse', historyId)
   const workflowResult: Response = workflowResults[historyId];
   const workflowStatus: Response = workflowStatuses[historyId];

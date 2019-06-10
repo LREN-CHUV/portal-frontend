@@ -3,7 +3,7 @@ import { Panel } from 'react-bootstrap';
 
 import { ExperimentResponse } from '../API/Experiment';
 
-const Methods = ({ experiment }: { experiment?: ExperimentResponse }) => {
+const Algorithms = ({ experiment }: { experiment?: ExperimentResponse }) => {
   const algorithms = experiment && experiment.algorithms;
   const validations = experiment && experiment.validations;
 
@@ -11,7 +11,7 @@ const Methods = ({ experiment }: { experiment?: ExperimentResponse }) => {
     (algorithms && validations && (
       <Panel>
         <Panel.Title>
-          <h3>Methods</h3>
+          <h3>Algorithms</h3>
         </Panel.Title>
         <Panel.Body>
           {algorithms.map((algorithm: any, j: number) => (
@@ -43,4 +43,4 @@ const Methods = ({ experiment }: { experiment?: ExperimentResponse }) => {
   );
 };
 
-export default Methods;
+export default Algorithms;

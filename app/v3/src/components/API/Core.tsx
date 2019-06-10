@@ -177,6 +177,9 @@ class Core extends Container<State> {
           ...((workflows && workflows.data) || [])
         ];
 
+        // FIXME: oh my god, that escalated quickly
+        localStorage.setItem('algorithms', JSON.stringify(mergedAlgorithms));
+
         return this.setState(state => ({
           ...state,
           algorithms: mergedAlgorithms,

@@ -1,13 +1,11 @@
-import '../Experiment.css';
-
 import * as React from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
-
+import { ExperimentResult, ExperimentResultHeader } from '.';
 import { APICore, APIExperiment, APIModel } from '../API';
 import { ExperimentResponse } from '../API/Experiment';
-import Methods from './Methods';
+import '../Experiment.css';
 import Model from '../UI/Model';
-import { ExperimentResult, ExperimentResultHeader } from '.';
+import Algorithms from './Algorithms';
 
 interface Props extends RouteComponentProps<any> {
   apiExperiment: APIExperiment;
@@ -73,7 +71,7 @@ class Experiment extends React.Component<Props> {
             <ExperimentResult experimentState={apiExperiment.state} />
           </div>
           <div className='sidebar2'>
-            <Methods experiment={apiExperiment.state.experiment} />
+            <Algorithms experiment={apiExperiment.state.experiment} />
           </div>
         </div>
       </div>
