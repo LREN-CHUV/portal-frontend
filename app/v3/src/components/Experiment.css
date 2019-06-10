@@ -62,6 +62,10 @@
   margin-left: 8px;
 }
 
+.Experiment .sidebar2 .panel-body {
+  margin-bottom: 16px;
+}
+
 .Experiment .content .parameters,
 .Experiment .content .results {
   flex: 1 auto;
@@ -123,10 +127,10 @@
 }
 
 .Experiment .sidebar2 .panel-body {
-  padding-top: 0
+  padding-top: 0;
 }
 
 .method button {
   white-space: normal;
-  text-align: left
+  text-align: left;
 }

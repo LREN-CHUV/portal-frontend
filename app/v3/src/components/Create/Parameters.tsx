@@ -1,5 +1,12 @@
 import * as React from 'react';
-import { Col, Form, FormControl, FormGroup, HelpBlock } from 'react-bootstrap';
+import {
+  Col,
+  Form,
+  FormControl,
+  FormGroup,
+  HelpBlock,
+  Row
+} from 'react-bootstrap';
 
 import { APICore } from '../API';
 import { AlgorithmParameter, VariableEntity } from '../API/Core';
@@ -16,12 +23,6 @@ interface Props {
 class Parameters extends React.Component<Props> {
   public render() {
     const { apiCore, method, parameters, query } = this.props;
-
-    const categoricalVariables: VariableEntity[] | undefined = query && [
-      ...(query.groupings || []),
-      ...(query.coVariables || []),
-      ...(query.variables || [])
-    ];
 
     return (
       <div>
@@ -73,64 +74,76 @@ class Parameters extends React.Component<Props> {
                           ? 'inline'
                           : 'none'
                     }}>
-                    <Col sm={12}>{parameter.description}</Col>
-                    <Col sm={6}>{parameter.label}</Col>
-                    <Col sm={6}>
-                      {parameter.type !== 'enumeration' &&
-                        parameter.type !== 'referencevalues' && (
+                    <Row>
+                      <Col sm={12}>{parameter.description}</Col>
+                    </Row>
+                    <Row>
+                      <Col sm={6}>{parameter.label}</Col>
+                      <Col sm={6}>
+                        {parameter.type !== 'enumeration' &&
+                          parameter.type !== 'referencevalues' && (
+                            <FormControl
+                              type={type}
+                              defaultValue={
+                                parameter.value || parameter.default_value
+                              }
+                              // tslint:disable-next-line jsx-no-lambda
+                              onChange={event =>
+                                this.handleChangeParameter(
+                                  event,
+                                  parameter.code
+                                )
+                              }
+                            />
+                          )}
+
+                        {parameter.type === 'referencevalues' && (
+                          <CategoryChooser
+                            apiCore={apiCore}
+                            query={query}
+                            code={parameter.code}
+                            handleChangeCategoryParameter={
+                              this.handleChangeCategoryParameter
+                            }
+                          />
+                        )}
+
+                        {parameter.type === 'enumeration' && (
                           <FormControl
-                            type={type}
+                            componentClass='select'
+                            placeholder='select'
                             defaultValue={
                               parameter.value || parameter.default_value
                             }
                             // tslint:disable-next-line jsx-no-lambda
                             onChange={event =>
                               this.handleChangeParameter(event, parameter.code)
-                            }
-                          />
+                            }>
+                            {parameter.values &&
+                              parameter.values.map((v: any) => (
+                                <option key={v} value={v}>
+                                  {v}
+                                </option>
+                              ))}
+                          </FormControl>
                         )}
-                      {parameter.type === 'referencevalues' && (
-                        <CategoryChooser
-                          apiCore={apiCore}
-                          categoricalVariables={categoricalVariables}
-                        />
-                      )}
 
-                      {parameter.type === 'enumeration' && (
-                        <FormControl
-                          componentClass='select'
-                          placeholder='select'
-                          defaultValue={
-                            parameter.value || parameter.default_value
-                          }
-                          // tslint:disable-next-line jsx-no-lambda
-                          onChange={event =>
-                            this.handleChangeParameter(event, parameter.code)
-                          }>
-                          {parameter.values &&
-                            parameter.values.map((v: any) => (
-                              <option key={v} value={v}>
-                                {v}
-                              </option>
-                            ))}
-                        </FormControl>
-                      )}
-
-                      <FormControl.Feedback />
-                      <HelpBlock>
-                        {constraints && constraints.required && 'required '}
-                        {constraints &&
-                          constraints.min >= 0 &&
-                          'min: ' + constraints.min}
-                        {constraints &&
-                          constraints.min >= 0 &&
-                          constraints.max >= 0 &&
-                          ', '}
-                        {constraints &&
-                          constraints.max >= 0 &&
-                          'max: ' + constraints.max}
-                      </HelpBlock>
-                    </Col>
+                        <FormControl.Feedback />
+                        <HelpBlock>
+                          {constraints && constraints.required && 'required '}
+                          {constraints &&
+                            constraints.min >= 0 &&
+                            'min: ' + constraints.min}
+                          {constraints &&
+                            constraints.min >= 0 &&
+                            constraints.max >= 0 &&
+                            ', '}
+                          {constraints &&
+                            constraints.max >= 0 &&
+                            'max: ' + constraints.max}
+                        </HelpBlock>
+                      </Col>
+                    </Row>
                   </FormGroup>
                 );
               })}
@@ -164,19 +177,23 @@ class Parameters extends React.Component<Props> {
     return 'success';
   };
 
-  private handleChangeParameter = (event: any, code: string) => {
-    event.preventDefault();
+  private handleChangeCategoryParameter = (code: string, value: string) => {
     const currentParameters = this.props.parameters;
     if (currentParameters && currentParameters.length) {
       const o = (element: any) => element.code === code;
       const index = currentParameters.findIndex(o);
       const parameter = currentParameters.find(o);
       if (parameter) {
-        parameter.value = event.target.value;
+        parameter.value = value;
         currentParameters.splice(index, 1, parameter);
         this.props.handleChangeParameters(currentParameters);
       }
     }
+  };
+
+  private handleChangeParameter = (event: any, code: string) => {
+    event.preventDefault();
+    this.handleChangeParameter(code, event.target.value)
   };
 }
 
