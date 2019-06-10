@@ -37,9 +37,8 @@ class AppContainer extends React.Component<any, State> {
 
     return await Promise.all([
       this.apiExperiment.all(),
-      this.apiCore.variables(),
       this.apiCore.datasets(),
-      this.apiCore.hierarchy(),
+      this.apiCore.setPathology('neurodegenerativediseases'),
       this.apiCore.algorithms(),
       this.apiModel.all()
     ]);

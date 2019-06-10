@@ -1,5 +1,5 @@
-import './Review.css';
 import '../Model.css';
+import './Review.css';
 
 import * as React from 'react';
 import { Panel } from 'react-bootstrap';
@@ -9,10 +9,10 @@ import { APICore, APIMining, APIModel } from '../API';
 import { VariableEntity } from '../API/Core';
 import { MiningPayload } from '../API/Mining';
 import { ModelResponse, Query } from '../API/Model';
+import { editPath } from '../Explore/Container';
 import { IAlert } from '../UI/Alert';
 import Model from '../UI/Model';
 import Validation from '../UI/Validation';
-import { editPath } from '../Explore/Container';
 import Content from './Content';
 import Filter from './Filter';
 import ExperimentReviewHeader from './Header';
@@ -121,7 +121,11 @@ class Container extends React.Component<Props, State> {
                 <Panel.Collapse>
                   <Panel.Body collapsible={true}>
                     {fields && fields.length > 0 && (
-                      <Filter rules={filters} filters={fields} handleChangeFilter={this.handleUpdateFilter} />
+                      <Filter
+                        rules={filters}
+                        filters={fields}
+                        handleChangeFilter={this.handleUpdateFilter}
+                      />
                     )}
                   </Panel.Body>
                 </Panel.Collapse>
@@ -141,18 +145,22 @@ class Container extends React.Component<Props, State> {
     let fields: any[] = [];
     const buildFilter = (code: string) => {
       if (!variables) {
-        return;
+        return [];
       }
 
-      const originalVar = variables.find((variable: VariableEntity) => variable.code === code);
+      const originalVar = variables.find(
+        (variable: VariableEntity) => variable.code === code
+      );
 
-      const output: any = originalVar
-        ? {
-            id: code,
-            label: originalVar.label,
-            name: code
-          }
-        : {};
+      if (!originalVar) {
+        return [];
+      }
+
+      const output: any = {
+        id: code,
+        label: originalVar.label,
+        name: code
+      };
 
       if (originalVar && originalVar.enumerations) {
         output.values = originalVar.enumerations.map((c: any) => ({
@@ -166,13 +174,27 @@ class Container extends React.Component<Props, State> {
       if (type === 'real') {
         output.type = 'double';
         output.input = 'number';
-        output.operators = ['equal', 'not_equal', 'less', 'greater', 'between', 'not_between'];
+        output.operators = [
+          'equal',
+          'not_equal',
+          'less',
+          'greater',
+          'between',
+          'not_between'
+        ];
       }
 
       if (type === 'integer') {
         output.type = 'integer';
         output.input = 'number';
-        output.operators = ['equal', 'not_equal', 'less', 'greater', 'between', 'not_between'];
+        output.operators = [
+          'equal',
+          'not_equal',
+          'less',
+          'greater',
+          'between',
+          'not_between'
+        ];
       }
 
       return output;
@@ -211,8 +233,11 @@ class Container extends React.Component<Props, State> {
     }
 
     const allUniqVariables = Array.from(new Set(allVariables));
-    fields = (variables && [].concat.apply([], allUniqVariables.map(buildFilter))) || [];
+    fields =
+      (variables && [].concat.apply([], allUniqVariables.map(buildFilter))) ||
+      [];
 
+      console.log(fields)
     const filters = (query && query.filters && JSON.parse(query.filters)) || '';
 
     return { query, filters, fields };
