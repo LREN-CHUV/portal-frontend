@@ -1,31 +1,40 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { FormControl } from 'react-bootstrap';
-
 import { APICore } from '../API';
 import { VariableEntity } from '../API/Core';
+import { Query } from '../API/Model';
+
 
 type LocalVar = VariableEntity[] | undefined;
 interface Props {
   apiCore: APICore;
-  categoricalVariables?: VariableEntity[];
+  query?: Query;
+  code: string;
+  handleChangeCategoryParameter: (code: string, value: string) => void
 }
 
-export default ({ apiCore, categoricalVariables }: Props) => {
+export default ({ apiCore, query, code, handleChangeCategoryParameter }: Props) => {
   const [categories, setCategories] = useState<LocalVar>();
   const [category, setCategory] = useState<VariableEntity | undefined>();
-  const [value, setValue] = useState<string>();
-  //   const categoryRef = useRef(null);
-  //   const valueRef = useRef(null);
 
+  const lookupCallback = useCallback(apiCore.lookup, [])
   useEffect(() => {
+    const categoricalVariables: VariableEntity[] | undefined = query && [
+      ...(query.groupings || []),
+      ...(query.coVariables || []),
+      ...(query.variables || [])
+    ];
+
     const vars =
       categoricalVariables &&
       categoricalVariables
-        .map(v => apiCore.lookup(v.code))
+        .map(v => lookupCallback(v.code))
         .filter(v => v.type === 'polynominal' || v.type === 'binominal');
 
     setCategories(vars);
-  }, []);
+    const first = (vars && vars.length && vars[0]) || undefined;
+    setCategory(first);
+  }, [query, lookupCallback]);
 
   const handleChangeCategory = (event: any) => {
     event.preventDefault();
@@ -36,7 +45,8 @@ export default ({ apiCore, categoricalVariables }: Props) => {
 
   const handleChangeValue = (event: any) => {
     event.preventDefault();
-    setValue(event.target.value);
+    const json = JSON.stringify({name: category && category.code, val: event.target.value})
+    handleChangeCategoryParameter(code, json)
   };
 
   return (
@@ -46,7 +56,7 @@ export default ({ apiCore, categoricalVariables }: Props) => {
           <FormControl
             componentClass='select'
             placeholder='select'
-            // tslint:disable-next-line jsx-no-lambda
+            id='parameter-var-chooser'
             onChange={handleChangeCategory}>
             {/* ref={categoryRef} */}
             {categories.map(v => (
@@ -58,8 +68,8 @@ export default ({ apiCore, categoricalVariables }: Props) => {
           <FormControl
             componentClass='select'
             placeholder='select'
+            id='parameter-category-chooser'
             // ref={valueRef}
-            // tslint:disable-next-line jsx-no-lambda
             onChange={handleChangeValue}>
             {category &&
               category.enumerations &&
