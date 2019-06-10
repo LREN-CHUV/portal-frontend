@@ -13,7 +13,7 @@ export interface ModelState {
 export interface ModelResponse {
   error?: string;
   slug?: string;
-  title: string;
+  title?: string;
   valid?: boolean;
   createdAt?: number;
   query: Query;
@@ -56,8 +56,9 @@ class Model extends Container<ModelState> {
   }
 
   public setDraft = async (draft: ModelResponse) => {
+    const { slug, ...others } = draft;
     return await this.setState({
-      draft,
+      draft: others,
       error: undefined,
       model: undefined
     });

@@ -19,7 +19,7 @@ export default ({
   useEffect(() => {
     if (selectedSlug) {
       const f = items && items.find(i => i.slug === selectedSlug);
-      if (f) {
+      if (f && f.title) {
         setTitle(f.title);
       }
     }
@@ -48,7 +48,7 @@ export default ({
               key={item.title}
               // tslint:disable-next-line jsx-no-lambda
               onSelect={() => {
-                setTitle(item.title);
+                setTitle((item && item.title) || 'edit');
                 handleSelect(item);
               }}>
               <strong>{item.title}</strong>
