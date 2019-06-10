@@ -299,7 +299,6 @@ class Container extends React.Component<Props, State> {
       (variables && [].concat.apply([], allUniqVariables.map(buildFilter))) ||
       [];
 
-      console.log(fields)
     const filters = (query && query.filters && JSON.parse(query.filters)) || '';
 
     return { query, filters, fields };

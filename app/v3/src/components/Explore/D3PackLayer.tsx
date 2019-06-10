@@ -1,12 +1,11 @@
 import * as d3 from 'd3';
-import React, { useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import { APICore, APIModel } from '../API';
 import { VariableEntity } from '../API/Core';
 import { ModelResponse } from '../API/Model';
 import './CirclePack.css';
 import { D3Model, HierarchyCircularNode } from './Container';
 import Explore from './Explore';
-import renderLifeCycle from './renderLifeCycle';
 
 const diameter: number = 800;
 const padding: number = 1.5;
@@ -117,6 +116,8 @@ export default ({ layout, ...props }: Props) => {
       });
   };
 
+  const colorCallback = useCallback(color, [layout])
+
   useEffect(() => {
     const svg = d3.select(svgRef.current);
     const circle = svg.selectAll('circle');
@@ -129,7 +130,7 @@ export default ({ layout, ...props }: Props) => {
             ...(d3Model.filters || [])
           ].includes(d)
       )
-      .style('fill', (d: any) => (d.children ? color(d.depth) : 'white'));
+      .style('fill', (d: any) => (d.children ? colorCallback(d.depth) : 'white'));
     if (d3Model.filters && d3Model.filters.length > 0) {
       circle
         .filter(
@@ -158,7 +159,10 @@ export default ({ layout, ...props }: Props) => {
         .duration(250)
         .style('fill', '#f0ad4e');
     }
-  }, [d3Model, color]);
+  }, [d3Model, colorCallback]);
+
+  const zoomCallback = useCallback(zoom, []);
+  const selectNodeCallback = useCallback(props.handleSelectNode, []);
 
   useEffect(() => {
     const svg = d3
@@ -174,7 +178,7 @@ export default ({ layout, ...props }: Props) => {
       .style('height', 'auto')
       .style('cursor', 'pointer')
       .style('border-radius', '4px')
-      .on('click', () => zoom(layout));
+      .on('click', () => zoomCallback(layout));
 
     svg
       .append('g')
@@ -182,12 +186,12 @@ export default ({ layout, ...props }: Props) => {
       .data(layout.descendants())
       .join('circle')
       .attr('class', 'node')
-      .attr('fill', d => (d.children ? color(d.depth) : 'white'))
+      .attr('fill', d => (d.children ? colorCallback(d.depth) : 'white'))
       .on('click', d => {
-        props.handleSelectNode(d);
+        selectNodeCallback(d);
         d3.event.stopPropagation();
 
-        return focus.current !== d && zoom(d);
+        return focus.current !== d && zoomCallback(d);
       });
 
     svg
@@ -219,10 +223,10 @@ export default ({ layout, ...props }: Props) => {
           : d.data.label
       );
 
-    props.handleSelectNode(layout);
+    selectNodeCallback(layout);
     zoomTo([layout.x, layout.y, layout.r * 2]);
-
-  }, [layout]);
+    console.log('update');
+  }, [layout, colorCallback, selectNodeCallback, zoomCallback]);
 
   return (
     <Explore layout={layout} zoom={zoom} {...props}>
