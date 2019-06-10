@@ -10,9 +10,7 @@ import { MIME_TYPES } from '../constants';
 const independents = ['X', 'column1', 'x', 'descriptive_attributes'];
 const dependents = ['Y', 'column2', 'y', 'target_attributes'];
 const hiddenParameters = [
-  ...dependents, ...independents, 'dataset', 'filter',
-  'iterations_condition_query_provided',
-  'outputformat'
+  ...dependents, ...independents, 'dataset', 'filter'
 ];
 
 const buildConstraints = (algo: any) => {
@@ -254,7 +252,8 @@ const buildExaremeAlgorithmRequest = (
       }))
     : [];
 
-  return [...nextParams, ...newParams];
+    debugger
+  return [...nextParams, ...(newParams.filter((p:any) => p.visible !== false)||[])];
 };
 
 const stripModelParameters = (
