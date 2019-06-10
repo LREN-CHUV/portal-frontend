@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  Button,
-  Checkbox,
-  DropdownButton,
-  MenuItem,
-  Panel
-} from 'react-bootstrap';
+import { Button, Checkbox, Panel } from 'react-bootstrap';
 import { APICore, APIModel } from '../API';
 import { VariableEntity } from '../API/Core';
 import { ModelResponse } from '../API/Model';
@@ -34,7 +28,7 @@ export interface ExploreProps {
   handleUpdateD3Model: Function;
   handleSelectModel: (model?: ModelResponse) => void;
   handleGoToAnalysis: Function;
-  zoom: Function;
+  zoom: (circleNode: HierarchyCircularNode) => void;
 }
 
 export default (props: ExploreProps) => {

@@ -1,11 +1,11 @@
 import * as d3 from 'd3';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { HierarchyCircularNode } from './Container';
 import './D3Search.css';
 
 interface Props {
   hierarchy: HierarchyCircularNode;
-  zoom: Function;
+  zoom: (circleNode: HierarchyCircularNode) => void;
   handleSelectNode: (node: HierarchyCircularNode) => void;
 }
 
@@ -15,8 +15,11 @@ export default (props: Props) => {
   const [visibleResults, setVisibleResults] = useState(false);
   const [searchResult, setSearchResult] = useState<HierarchyCircularNode[]>();
   const [keyDownIndex, setKeyDownIndex] = useState(0);
-  const [enterZoom, setZoomEnter] = useState(false);
+  const [enterZoom, setEnterZoom] = useState(false);
   const { hierarchy, zoom, handleSelectNode } = props;
+
+  const handleSelectNodeCallback = useCallback(handleSelectNode, []);
+  const zoomCallback = useCallback(zoom, []);
 
   const handleKeyDown = (event: KeyboardEvent) => {
     if (event.key === 'ArrowDown') {
@@ -24,7 +27,7 @@ export default (props: Props) => {
     } else if (event.key === 'ArrowUp') {
       setKeyDownIndex(index => index - 1);
     } else if (event.key === 'Enter') {
-      setZoomEnter(true);
+      setEnterZoom(true);
     } else if (event.key === 'Escape') {
       setVisibleResults(false);
     }
@@ -43,13 +46,12 @@ export default (props: Props) => {
       return;
     }
     if (keyDownIndex >= searchResult.length) {
-      setKeyDownIndex(searchResult.length -1 );
+      setKeyDownIndex(searchResult.length - 1);
     }
 
     if (keyDownIndex <= 0) {
       setKeyDownIndex(0);
     }
-
   }, [searchResult, keyDownIndex]);
 
   useEffect(() => {
@@ -69,20 +71,20 @@ export default (props: Props) => {
       .text(d => `${d.data.label} (${d.data.type || 'group'})`)
       .attr('class', (d, i) => (i === keyDownIndex ? 'selected' : ''))
       .on('click', d => {
-        handleSelectNode(d);
-        zoom(d);
+        handleSelectNodeCallback(d);
+        zoomCallback(d);
         d3.event.stopPropagation();
       });
 
     if (enterZoom) {
-      setZoomEnter(false);
+      setEnterZoom(false);
       if (searchRef && searchRef.current) {
         searchRef.current.blur();
       }
       const d3index = d3results2.filter((d, i) => i === keyDownIndex);
       d3index.dispatch('click');
     }
-  }, [searchResult, keyDownIndex, enterZoom, handleSelectNode, zoom]);
+  }, [searchResult, keyDownIndex, handleSelectNodeCallback, zoomCallback, enterZoom, setEnterZoom]);
 
   const handleChangeInput = (e: React.SyntheticEvent<HTMLInputElement>) => {
     const value = e.currentTarget.value;
@@ -110,13 +112,17 @@ export default (props: Props) => {
     <div className='shortcuts'>
       <input
         placeholder='Search'
+        // tslint:disable jsx-no-lambda
         onFocus={() => setVisibleResults(searchResult ? true : false)}
         onBlur={handleBlur}
         onChange={handleChangeInput}
         ref={searchRef}
         className={'form-control'}
       />
-      <div className={`d3-link-results ${visibleResults ? 'visible' : 'hidden'} `} ref={resultRef} />
+      <div
+        className={`d3-link-results ${visibleResults ? 'visible' : 'hidden'} `}
+        ref={resultRef}
+      />
     </div>
   );
 };
