@@ -1,30 +1,6 @@
 export default {
 	"code": "root",
 	"label": "/",
-	"variables": [{
-		"code": "dataset",
-		"description": "Variable used to differentiate datasets.",
-		"enumerations": [{
-				"code": "edsd",
-				"label": "EDSD"
-			},
-			{
-				"code": "adni",
-				"label": "ADNI"
-			},
-			{
-				"code": "ppmi",
-				"label": "PPMI"
-			},
-			{
-				"code": "creactive",
-				"label": "Creactive"
-			}
-		],
-		"label": "Dataset",
-		"methodology": "mip-cde",
-		"type": "polynominal"
-	}],
 	"groups": [{
 			"code": "neurodegenerativediseases",
 			"groups": [{

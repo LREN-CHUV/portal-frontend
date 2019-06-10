@@ -44,9 +44,13 @@ export const editPath = 'edit';
 
 export default ({ apiCore, apiMining, apiModel, ...props }: Props) => {
   const [datasets, setDatasets] = useState<VariableEntity[]>();
-  const [selectedDatasets, setSelectedDatasets] = useState<VariableEntity[]>([]);
+  const [selectedDatasets, setSelectedDatasets] = useState<VariableEntity[]>(
+    []
+  );
   const [d3Layout, setD3Layout] = useState<HierarchyCircularNode>();
-  const [selectedNode, setSelectedNode] = useState<HierarchyCircularNode | undefined>();
+  const [selectedNode, setSelectedNode] = useState<
+    HierarchyCircularNode | undefined
+  >();
   const [d3Model, setD3Model] = useState<D3Model>(initialD3Model);
   const [model, setModel] = useState<ModelResponse | undefined>();
   const [alert, setAlert] = useState<string | null>(null);
@@ -121,20 +125,27 @@ export default ({ apiCore, apiMining, apiModel, ...props }: Props) => {
   }, [selectedNode, selectedDatasets, apiMining]);
 
   const handleSelectDataset = (dataset: VariableEntity) => {
-    const nextSelection = selectedDatasets.map(d => d.code).includes(dataset.code)
+    const nextSelection = selectedDatasets
+      .map(d => d.code)
+      .includes(dataset.code)
       ? [...selectedDatasets.filter(d => d.code !== dataset.code)]
       : [...selectedDatasets, dataset];
     setSelectedDatasets(nextSelection);
   };
 
-  const handleUpdateD3Model = (type: ModelType, node: HierarchyCircularNode) => {
+  const handleUpdateD3Model = (
+    type: ModelType,
+    node: HierarchyCircularNode
+  ) => {
     if (type === ModelType.VARIABLE) {
       const nextModel =
         d3Model.variable === node
           ? { ...d3Model, variable: undefined }
           : {
               ...d3Model,
-              covariables: d3Model.covariables && d3Model.covariables.filter(c => c !== node),
+              covariables:
+                d3Model.covariables &&
+                d3Model.covariables.filter(c => c !== node),
               variable: node
             };
 
@@ -149,12 +160,18 @@ export default ({ apiCore, apiMining, apiModel, ...props }: Props) => {
               ...d3Model.covariables.filter(c => !node.leaves().includes(c)),
               ...node.leaves().filter(c => !d3Model.covariables!.includes(c))
             ],
-            variable: d3Model.variable && node.leaves().includes(d3Model.variable) ? undefined : d3Model.variable
+            variable:
+              d3Model.variable && node.leaves().includes(d3Model.variable)
+                ? undefined
+                : d3Model.variable
           }
         : {
             ...d3Model,
             covariables: node.leaves(),
-            variable: d3Model.variable && node.leaves().includes(d3Model.variable) ? undefined : d3Model.variable
+            variable:
+              d3Model.variable && node.leaves().includes(d3Model.variable)
+                ? undefined
+                : d3Model.variable
           };
 
       setD3Model(nextModel);
@@ -174,7 +191,10 @@ export default ({ apiCore, apiMining, apiModel, ...props }: Props) => {
     }
   };
 
-  const convertModelToD3Model = (aModel: ModelResponse, aD3Layout: HierarchyCircularNode): D3Model => {
+  const convertModelToD3Model = (
+    aModel: ModelResponse,
+    aD3Layout: HierarchyCircularNode
+  ): D3Model => {
     const query = aModel && aModel.query;
 
     const filterVariables: string[] = [];
@@ -195,37 +215,58 @@ export default ({ apiCore, apiMining, apiModel, ...props }: Props) => {
     const nextModel = {
       covariables: [
         ...((query.coVariables &&
-          aD3Layout.descendants().filter(l => query.coVariables!.map(c => c.code).includes(l.data.code))) ||
+          aD3Layout
+            .descendants()
+            .filter(l =>
+              query.coVariables!.map(c => c.code).includes(l.data.code)
+            )) ||
           []),
         ...((query.groupings &&
-          aD3Layout.descendants().filter(l => query.groupings!.map(c => c.code).includes(l.data.code))) ||
+          aD3Layout
+            .descendants()
+            .filter(l =>
+              query.groupings!.map(c => c.code).includes(l.data.code)
+            )) ||
           [])
       ],
-      filters: filterVariables && aD3Layout.descendants().filter(l => filterVariables.includes(l.data.code)),
+      filters:
+        filterVariables &&
+        aD3Layout
+          .descendants()
+          .filter(l => filterVariables.includes(l.data.code)),
       groupings: undefined,
       variable:
         (query.variables !== undefined &&
           query.variables.length > 0 &&
-          aD3Layout.descendants().find(l => l.data.code === query.variables![0].code)) ||
+          aD3Layout
+            .descendants()
+            .find(l => l.data.code === query.variables![0].code)) ||
         undefined
     };
 
     return nextModel;
   };
 
-  const convertD3ModelToModel = (aD3Model: D3Model, aModel?: ModelResponse): ModelResponse => {
+  const convertD3ModelToModel = (
+    aD3Model: D3Model,
+    aModel?: ModelResponse
+  ): ModelResponse => {
     const query: Query = {
       coVariables:
         (aD3Model.covariables &&
           aD3Model.covariables
-            .filter(v => v.data.type !== 'polynominal' && v.data.type !== 'binominal')
+            .filter(
+              v => v.data.type !== 'polynominal' && v.data.type !== 'binominal'
+            )
             .map(v => ({ code: v.data.code }))) ||
         [],
       filters: aModel ? aModel.query.filters : '',
       groupings:
         (aD3Model.covariables &&
           aD3Model.covariables
-            .filter(v => v.data.type === 'polynominal' || v.data.type === 'binominal')
+            .filter(
+              v => v.data.type === 'polynominal' || v.data.type === 'binominal'
+            )
             .map(v => ({ code: v.data.code }))) ||
         [],
       trainingDatasets: selectedDatasets,
@@ -255,6 +296,10 @@ export default ({ apiCore, apiMining, apiModel, ...props }: Props) => {
     }
   };
 
+  const handleSelectPathology = (code: string) => {
+    apiCore.setPathology(code);
+  };
+
   const handleGoToAnalysis = async () => {
     const { history } = props;
 
@@ -277,23 +322,33 @@ export default ({ apiCore, apiMining, apiModel, ...props }: Props) => {
     }
   };
 
+  const selectedPathology =
+    apiCore.state.hierarchy &&
+    apiCore.state.hierarchy.code
+    
+
   const nextProps = {
+    apiCore,
     apiModel,
     datasets,
     handleGoToAnalysis,
     handleSelectDataset,
+    handleSelectPathology,
     handleSelectModel,
     handleSelectNode: setSelectedNode,
     handleUpdateD3Model,
     histograms: apiMining.state.histograms,
     selectedDatasets,
+    selectedPathology,
     selectedNode
   };
 
   return (
     <>
       {alert && <Alert message={alert} />}
-      {d3Layout && <CirclePack layout={d3Layout} d3Model={d3Model} {...nextProps} />}
+      {d3Layout && (
+        <CirclePack layout={d3Layout} d3Model={d3Model} {...nextProps} />
+      )}
     </>
   );
 };

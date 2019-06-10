@@ -1,6 +1,12 @@
 import React from 'react';
-import { Button, Checkbox, Panel } from 'react-bootstrap';
-import { APIModel } from '../API';
+import {
+  Button,
+  Checkbox,
+  DropdownButton,
+  MenuItem,
+  Panel
+} from 'react-bootstrap';
+import { APICore, APIModel } from '../API';
 import { VariableEntity } from '../API/Core';
 import { ModelResponse } from '../API/Model';
 import DropdownModel from '../UI/DropdownModel';
@@ -12,15 +18,18 @@ import './Explore.css';
 import Header from './Header';
 
 export interface ExploreProps {
+  apiCore: APICore;
   apiModel: APIModel;
   children?: any;
   datasets?: VariableEntity[];
   selectedDatasets: VariableEntity[];
+  selectedPathology: string;
   selectedNode: HierarchyCircularNode | undefined;
   layout: HierarchyCircularNode;
   histograms?: any;
   d3Model: D3Model;
   handleSelectDataset: (e: VariableEntity) => void;
+  handleSelectPathology: (code: string) => void;
   handleSelectNode: (node: HierarchyCircularNode) => void;
   handleUpdateD3Model: Function;
   handleSelectModel: (model?: ModelResponse) => void;
@@ -30,26 +39,55 @@ export interface ExploreProps {
 
 export default (props: ExploreProps) => {
   const {
+    apiCore,
     apiModel,
     children,
     layout,
     datasets,
     selectedDatasets,
+    selectedPathology,
     selectedNode,
     histograms,
     d3Model,
     handleSelectNode,
     handleSelectDataset,
+    handleSelectPathology,
     handleUpdateD3Model,
     handleSelectModel,
     handleGoToAnalysis,
     zoom
   } = props;
 
+  
+
   return (
     <div className='Explore'>
       <div className='content'>
         <div className='sidebar'>
+          <Panel className='pathologies'>
+            <Panel.Title>
+              <h3>Pathologies</h3>
+            </Panel.Title>
+            <Panel.Body>
+              {apiCore.state.pathologies &&
+                apiCore.state.pathologies.map(g => (
+                  <label key={g.code}>
+                    <input
+                      type='radio'
+                      id={g.code}
+                      name={g.label}
+                      value={g.code}
+                      checked={selectedPathology === g.code}
+                      // tslint:disable jsx-no-lambda
+                      onChange={(e) => {
+                        e.preventDefault();
+                        handleSelectPathology(e.target.value)}}
+                    />
+                    {' '}{g.label}
+                  </label>
+                ))}
+            </Panel.Body>
+          </Panel>
           <Panel className='datasets'>
             <Panel.Title>
               <h3>Datasets</h3>

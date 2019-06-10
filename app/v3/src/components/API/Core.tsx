@@ -83,6 +83,7 @@ export interface State {
   variables?: VariableEntity[];
   datasets?: VariableEntity[];
   algorithms?: Algorithm[];
+  pathologies?: VariableEntity[];
 }
 
 class Core extends Container<State> {
@@ -95,6 +96,15 @@ class Core extends Container<State> {
     super();
     this.options = config.options;
     this.backendURL = backendURL;
+
+    const pathologies = hierarchyMockup.groups.map(h => ({
+      code: h.code,
+      label: h.label
+    }));
+
+    this.setState({
+      pathologies
+    });
   }
 
   public lookup = (code: string): VariableEntity => {
@@ -105,57 +115,25 @@ class Core extends Container<State> {
     return originalVar || { code, label: code };
   };
 
-  public variables = async () => {
-    try {
-      const data = await request.get(
-        `${this.backendURL}/variables`,
-        this.options
-      );
-      const json = await JSON.parse(data);
-      if (json.error) {
-        return await this.setState({
-          error: json.error
-        });
+  public setPathology = (code: string) => {
+    const hierarchy: any = hierarchyMockup.groups.filter(g => g.code === code).pop()
+
+    let variables: any = [];
+    const dummyAccumulator = (node: any) => {
+      if (node.variables) {
+        variables = [...variables, ...node.variables]
       }
 
-      return await this.setState({
-        error: undefined,
-        variables: json
-      });
-    } catch (error) {
-      return await this.setState({
-        error: error.message
-      });
+      if (node.groups) {
+        return node.groups.map(dummyAccumulator)
+      }
     }
-  };
+    hierarchy.groups.map(dummyAccumulator)
 
-  public hierarchy = async () => {
-
-    return await this.setState({
-      error: undefined,
-      hierarchy: hierarchyMockup
-    })
-    // try {
-    //   const data = await request.get(
-    //     `${this.backendURL}/variables/hierarchy`,
-    //     this.options
-    //   );
-    //   const json = await JSON.parse(data);
-    //   if (json.error) {
-    //     return await this.setState({
-    //       error: json.error
-    //     });
-    //   }
-
-    //   return await this.setState({
-    //     error: undefined,
-    //     hierarchy: json
-    //   });
-    // } catch (error) {
-    //   return await this.setState({
-    //     error: error.message
-    //   });
-    // }
+    return this.setState({
+      hierarchy,
+      variables
+    });
   };
 
   public datasets = async () => {
@@ -223,7 +201,7 @@ class Core extends Container<State> {
 
       return { error: undefined, data: workflowAlgorithms };
     } catch (error) {
-      console.log(error)
+      console.log(error);
       return { error, data: undefined };
     }
   };
