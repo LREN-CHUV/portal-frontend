@@ -9,8 +9,16 @@ import { MIME_TYPES } from '../constants';
 
 const independents = ['X', 'column1', 'x', 'descriptive_attributes'];
 const dependents = ['Y', 'column2', 'y', 'target_attributes'];
-const hiddenParameters = [
-  ...dependents, ...independents, 'dataset', 'filter'
+const hiddenParameters = [...dependents, ...independents, 'dataset', 'filter'];
+const enabledAlgorithms = [
+  'LOGISTIC_REGRESSION',
+  'ANOVA',
+  'NAIVE_BAYES_TRAINING_STANDALONE',
+  // 'KMEANS',
+  'PEARSON_CORRELATION',
+  'ID3',
+  'HISTOGRAMS',
+  'LINEAR_REGRESSION'
 ];
 
 const buildConstraints = (algo: any) => {
@@ -68,13 +76,18 @@ const buildConstraints = (algo: any) => {
       : undefined);
 
   // both false and undefined
-  const covariableConstraint: AlgorithmConstraintParameter = !covariableColumnValuesIsCategorical
-    ? {
-        integer:
-          covariableTypes && covariableTypes.includes('integer') ? true : false,
-        real: covariableTypes && covariableTypes.includes('real') ? true : false
-      }
-    : {};
+  let covariableConstraint: AlgorithmConstraintParameter = {};
+
+  if (!covariableColumnValuesIsCategorical) {
+    if (covariableTypes && covariableTypes.includes('integer')) {
+      covariableConstraint.integer = true;
+    }
+
+    if (covariableTypes && covariableTypes.includes('real')) {
+      covariableConstraint.real = true;
+    }
+  }
+
   const covariableColumnValuesIsBinominal =
     (covariables && covariables.columnValuesNumOfEnumerations === '2') || false;
 
@@ -164,19 +177,24 @@ const buildParameters = (algo: any) => {
 };
 
 const buildExaremeAlgorithmList = (json: any): Algorithm[] =>
-  json.map((algorithm: any) => {
-    return {
-      code: algorithm.name,
-      constraints: buildConstraints(algorithm),
-      description: algorithm.desc,
-      enabled: true,
-      label: algorithm.name,
-      parameters: buildParameters(algorithm),
-      source: 'exareme',
-      type: ['exareme'],
-      validation: true
-    };
-  });
+  json
+    .filter((algorithm: any) => enabledAlgorithms.includes(algorithm.name))
+    .map((algorithm: any) => {
+      return {
+        code: algorithm.name,
+        constraints: buildConstraints(algorithm),
+        description: algorithm.desc,
+        enabled: true,
+        label:
+          algorithm.name === 'NAIVE_BAYES_TRAINING_STANDALONE'
+            ? 'Naive Bayes Training'
+            : algorithm.name,
+        parameters: buildParameters(algorithm),
+        source: 'exareme',
+        type: ['exareme'],
+        validation: true
+      };
+    });
 
 const buildExaremeAlgorithmRequest = (
   model: ModelResponse,
@@ -222,10 +240,16 @@ const buildExaremeAlgorithmRequest = (
   });
 
   if (covariablesArray.length > 0) {
-    params.push({
+    const x = selectedMethod.code === 'LINEAR_REGRESSION' ? {
+      code: xCode,
+      value: covariablesArray.toString().replace(/,/g, '+')
+    } : {
       code: xCode,
       value: covariablesArray.toString()
-    });
+    }
+
+
+    params.push(x);
   }
 
   const datasets = model.query.trainingDatasets;
@@ -252,7 +276,10 @@ const buildExaremeAlgorithmRequest = (
       }))
     : [];
 
-  return [...nextParams, ...(newParams.filter((p:any) => p.visible !== false)||[])];
+  return [
+    ...nextParams,
+    ...(newParams.filter((p: any) => p.visible !== false) || [])
+  ];
 };
 
 const stripModelParameters = (
@@ -263,12 +290,7 @@ const stripModelParameters = (
 
     return {
       ...a,
-      parameters: parameters.filter(
-        p =>
-          !hiddenParameters.includes(
-            p.code
-          )
-      )
+      parameters: parameters.filter(p => !hiddenParameters.includes(p.code))
     };
   });
 
@@ -299,6 +321,7 @@ const buildMimeType = (key: string, result: any) => {
     case 'ANOVA':
     case 'LINEAR_REGRESSION':
     case 'ID3':
+    case 'NAIVE_BAYES_TRAINING_STANDALONE':
       return {
         mime: MIME_TYPES.JSONDATA,
         data: [result.resources[0].data]
