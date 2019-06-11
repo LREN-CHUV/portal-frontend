@@ -193,7 +193,8 @@ class Parameters extends React.Component<Props> {
 
   private handleChangeParameter = (event: any, code: string) => {
     event.preventDefault();
-    this.handleChangeParameter(code, event.target.value)
+    const currentTarget = event.currentTarget as HTMLInputElement;
+    this.handleChangeCategoryParameter(code, currentTarget.value)
   };
 }
 
