@@ -1,70 +1,51 @@
 import { mount } from 'enzyme';
 import * as React from 'react';
 
-import Result from '../../../../../Result/Result';
+import Result from '../../../../Result/Result';
 import {
-    createExperiment, createModel, datasets, waitForResult
-} from '../../../../../utils/TestUtils';
-import { VariableEntity } from '../../../../Core';
+    createExperiment, createModel, datasets, uid, waitForResult
+} from '../../../../utils/TestUtils';
+import { VariableEntity } from '../../../Core';
+
+// Review December 2018 experiment
 
 // config
 
-const modelSlug = `model-${Math.round(Math.random() * 10000)}`;
-const experimentCode = 'gradientBoosting';
+const modelSlug = `model-${uid()}`;
+const experimentCode = 'naiveBayes';
 const parameters = [
+  { code: 'alpha', value: '1' },
+  { code: 'class_prior', value: '' }
+];
+const validations = [
   {
-    code: 'learning_rate',
-    value: '0.1'
-  },
-  {
-    code: 'n_estimators',
-    value: '100'
-  },
-  {
-    code: 'max_depth',
-    value: '3'
-  },
-  {
-    code: 'min_samples_split',
-    value: '2'
-  },
-  {
-    code: 'min_samples_leaf',
-    value: '1'
-  },
-  {
-    code: 'min_weight_fraction_leaf',
-    value: '0'
-  },
-  {
-    code: 'min_impurity_decrease',
-    value: '0'
+    code: 'kfold',
+    name: 'validation',
+    parameters: [
+      {
+        code: 'k',
+        value: '4'
+      }
+    ]
   }
 ];
-const kfold = {
-  code: 'kfold',
-  name: 'validation',
-  parameters: [
-    {
-      code: 'k',
-      value: '2'
-    }
-  ]
-};
 const model: any = (datasets: VariableEntity[]) => ({
   query: {
-    coVariables: [{ code: 'lefthippocampus' }],
+    variables: [{ code: 'agegroup' }],
+    coVariables: [
+      { code: 'rightententorhinalarea' },
+      { code: 'lefthippocampus' }
+    ],
+    filters:
+      '{"condition":"AND","rules":[{"id":"agegroup","field":"agegroup","type":"string","input":"select","operator":"not_equal","value":"-50y"}],"valid":true}',
     groupings: [],
     testingDatasets: [],
-    filters:
-      '{"condition":"AND","rules":[{"id":"subjectageyears","field":"subjectageyears","type":"integer","input":"number","operator":"greater","value":"65"}],"valid":true}',
     trainingDatasets: datasets
-      .slice(0, datasets.length - 1)
-      .map(d => ({ code: d.code })),
-    validationDatasets: datasets
-      .slice(datasets.length - 1)
-      .map(d => ({ code: d.code })),
-    variables: [{ code: 'alzheimerbroadcategory' }]
+      .filter(d => d.code !== 'ppmi')
+      .map(d => ({
+        code: d.code
+      })),
+    validationDatasets: []
   }
 });
 
@@ -79,7 +60,7 @@ const payload: ExperimentPayload = {
   ],
   model: modelSlug,
   name: `${experimentCode}-${modelSlug}`,
-  validations: [kfold]
+  validations
 };
 
 describe('Integration Test for experiment API', () => {
@@ -124,6 +105,12 @@ describe('Integration Test for experiment API', () => {
     expect(wrapper.find('.error')).toHaveLength(0);
     expect(wrapper.find('.loading')).toHaveLength(0);
     expect(wrapper.find('div#tabs-methods')).toHaveLength(1);
-    expect(wrapper.find('.pfa-table')).toHaveLength(1);
+    expect(wrapper.find('.greyGridTable')).toHaveLength(1);
+    // expect(
+    //   wrapper
+    //     .find('.greyGridTable tbody tr td')
+    //     .at(4)
+    //     .text()
+    // ).toEqual('0.000 (***)');
   });
 });

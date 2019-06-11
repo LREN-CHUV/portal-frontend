@@ -1,24 +1,33 @@
 import { mount } from 'enzyme';
 import * as React from 'react';
 
-import Result from '../../../../../Result/Result';
-import { createExperiment, datasets, createModel, uid, waitForResult } from '../../../../../utils/TestUtils';
-import { VariableEntity } from '../../../../Core';
+import Result from '../../../../Result/Result';
+import {
+    createExperiment, createModel, datasets, uid, waitForResult
+} from '../../../../utils/TestUtils';
+import { VariableEntity } from '../../../Core';
+
+// Review May 2018 experiment
 
 // config
 
 const modelSlug = `model-${uid()}`;
-const experimentCode = 'K_MEANS';
-const parameters = [{ code: 'k', value: 4 }];
+const experimentCode = 'anova';
+const parameters = [{ code: 'design', value: 'additive' }];
 const model: any = (datasets: VariableEntity[]) => ({
   query: {
-    variables: [{ code: 'apoe4' }],
-    coVariables: [{ code: 'subjectageyears' }, { code: 'av45' }],
-    grouping: [],
-    trainingDatasets: datasets.slice(0, datasets.length - 1).map(d => ({ code: d.code })),
-    validationDatasets: datasets.slice(datasets.length -1).map(d => ({ code: d.code })),
+    variables: [{ code: 'montrealcognitiveassessment' }],
+    coVariables: [],
+    groupings: [{ code: 'alzheimerbroadcategory' }, { code: 'gender' }],
+    trainingDatasets: datasets
+      .filter(d => d.code !== 'ppmi' && d.code !== 'edsd')
+      .map(d => ({
+        code: d.code
+      })),
     filters:
-      '{"condition":"AND","rules":[{"id":"subjectageyears","field":"subjectageyears","type":"integer","input":"number","operator":"greater","value":50}],"valid":true}'
+      '{"condition":"AND","rules":[{"id":"alzheimerbroadcategory","field":"alzheimerbroadcategory","type":"string","input":"select","operator":"not_equal","value":"Other"}],"valid":true}',
+    testingDatasets: [],
+    validationDatasets: []
   }
 });
 
@@ -26,7 +35,7 @@ const payload: ExperimentPayload = {
   algorithms: [
     {
       code: experimentCode,
-      name: experimentCode, // FIXME: name is used to parse response which is bad !!!
+      name: experimentCode,
       parameters,
       validation: false
     }
@@ -35,8 +44,6 @@ const payload: ExperimentPayload = {
   name: `${experimentCode}-${modelSlug}`,
   validations: []
 };
-
-// Test
 
 describe('Integration Test for experiment API', () => {
   beforeAll(async () => {
@@ -55,6 +62,8 @@ describe('Integration Test for experiment API', () => {
       return true;
     }
   });
+
+  // Test
 
   it(`create ${experimentCode}`, async () => {
     const { error, experiment } = await createExperiment({
@@ -78,5 +87,12 @@ describe('Integration Test for experiment API', () => {
     expect(wrapper.find('.error')).toHaveLength(0);
     expect(wrapper.find('.loading')).toHaveLength(0);
     expect(wrapper.find('div#tabs-methods')).toHaveLength(1);
+    expect(wrapper.find('.greyGridTable')).toHaveLength(1);
+    // expect(
+    //   wrapper
+    //     .find('.greyGridTable tbody tr td')
+    //     .at(4)
+    //     .text()
+    // ).toEqual('0.000 (***)');
   });
 });

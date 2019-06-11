@@ -1,51 +1,47 @@
 import { mount } from 'enzyme';
 import * as React from 'react';
 
-import Result from '../../../../../Result/Result';
+import Result from '../../../../Result/Result';
 import {
-    createExperiment, createModel, datasets, uid, waitForResult
-} from '../../../../../utils/TestUtils';
-import { VariableEntity } from '../../../../Core';
-
-// Review December 2018 experiment
+    createExperiment, createModel, datasets, waitForResult
+} from '../../../../utils/TestUtils';
+import { VariableEntity } from '../../../Core';
 
 // config
 
-const modelSlug = `model-${uid()}`;
-const experimentCode = 'naiveBayes';
-const parameters = [
-  { code: 'alpha', value: '1' },
-  { code: 'class_prior', value: '' }
-];
-const validations = [
-  {
-    code: 'kfold',
-    name: 'validation',
-    parameters: [
-      {
-        code: 'k',
-        value: '4'
-      }
-    ]
-  }
-];
+const modelSlug = `model-${Math.round(Math.random() * 10000)}`;
+const experimentCode = 'tSNE';
 const model: any = (datasets: VariableEntity[]) => ({
   query: {
-    variables: [{ code: 'agegroup' }],
-    coVariables: [
-      { code: 'rightententorhinalarea' },
-      { code: 'lefthippocampus' }
-    ],
-    filters:
-      '{"condition":"AND","rules":[{"id":"agegroup","field":"agegroup","type":"string","input":"select","operator":"not_equal","value":"-50y"}],"valid":true}',
+    // coVariables: [{ code: 'lefthippocampus' }],
     groupings: [],
     testingDatasets: [],
-    trainingDatasets: datasets
-      .filter(d => d.code !== 'ppmi')
-      .map(d => ({
-        code: d.code
-      })),
-    validationDatasets: []
+    // filters:
+    //   '{"condition":"AND","rules":[{"id":"subjectageyears","field":"subjectageyears","type":"integer","input":"number","operator":"greater","value":"65"}],"valid":true}',
+    // // trainingDatasets: datasets.map(d => ({ code: d.code })),
+    // validationDatasets: [],
+    variables: [{ code: 'gender' }],
+    coVariables: [
+      { code: 'righthippocampus' },
+      { code: 'rightententorhinalarea' },
+      { code: 'lefthippocampus' },
+      { code: 'leftthalamusproper' },
+      { code: 'leftacgganteriorcingulategyrus' },
+      { code: 'leftententorhinalarea' },
+      { code: 'leftmcggmiddlecingulategyrus' },
+      { code: 'leftphgparahippocampalgyrus' },
+      { code: 'leftpcggposteriorcingulategyrus' },
+      { code: 'rightthalamusproper' },
+      { code: 'rightacgganteriorcingulategyrus' },
+      { code: 'rightmcggmiddlecingulategyrus' },
+      { code: 'rightphgparahippocampalgyrus' },
+      { code: 'rightpcggposteriorcingulategyrus' }
+    ],
+    grouping: [],
+    trainingDatasets: datasets,
+    validationDatasets: [],
+    filters:
+      '{"condition":"AND","rules":[{"id":"agegroup","field":"agegroup","type":"string","input":"select","operator":"not_equal","value":"-50y"}],"valid":true}'
   }
 });
 
@@ -54,13 +50,13 @@ const payload: ExperimentPayload = {
     {
       code: experimentCode,
       name: experimentCode,
-      parameters,
+      parameters: [],
       validation: false
     }
   ],
   model: modelSlug,
   name: `${experimentCode}-${modelSlug}`,
-  validations
+  validations: []
 };
 
 describe('Integration Test for experiment API', () => {
@@ -104,13 +100,5 @@ describe('Integration Test for experiment API', () => {
     const wrapper = mount(<Result {...props} />);
     expect(wrapper.find('.error')).toHaveLength(0);
     expect(wrapper.find('.loading')).toHaveLength(0);
-    expect(wrapper.find('div#tabs-methods')).toHaveLength(1);
-    expect(wrapper.find('.greyGridTable')).toHaveLength(1);
-    // expect(
-    //   wrapper
-    //     .find('.greyGridTable tbody tr td')
-    //     .at(4)
-    //     .text()
-    // ).toEqual('0.000 (***)');
   });
 });

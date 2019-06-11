@@ -1,19 +1,18 @@
 import { mount } from 'enzyme';
 import * as React from 'react';
-
-import Result from '../../../../../Result/Result';
+import { buildExaremeAlgorithmRequest } from '../../../ExaremeAPIAdapter';
+import Result from '../../../../Result/Result';
 import {
   createExperiment,
   createModel,
   waitForResult
-} from '../../../../../utils/TestUtils';
-import { VariableEntity } from '../../../../Core';
-import { buildExaremeAlgorithmRequest } from '../../../../ExaremeAPIAdapter';
+} from '../../../../utils/TestUtils';
+import { VariableEntity } from '../../../Core';
 
 // config
 
 const modelSlug = `model-${Math.round(Math.random() * 10000)}`;
-const experimentCode = 'PEARSON_CORRELATION';
+const experimentCode = 'ANOVA';
 const parameters = [
   { code: 'bins', value: '40' },
   { code: 'iterations_max_number', value: 20 },
@@ -23,9 +22,9 @@ const parameters = [
 const datasets = [{ code: 'adni' }];
 const model: any = (datasets: VariableEntity[]) => ({
   query: {
-    coVariables: [{ code: 'rightmpogpostcentralgyrusmedialsegment' }],
+    coVariables: [],
     filters: '',
-    groupings: [],
+    groupings: [{ code: 'alzheimerbroadcategory' }],
     testingDatasets: [],
     trainingDatasets: datasets.map(d => ({
       code: d.code
@@ -33,7 +32,7 @@ const model: any = (datasets: VariableEntity[]) => ({
     validationDatasets: [],
     variables: [
       {
-        code: 'rightmcggmiddlecingulategyrus'
+        code: 'lefthippocampus'
       }
     ]
   }
@@ -56,9 +55,7 @@ describe('Integration Test for experiment API', () => {
   it(`create ${experimentCode}`, async () => {
     const requestParameters = buildExaremeAlgorithmRequest(
       model(datasets),
-      {
-        code: experimentCode
-      },
+      { code: experimentCode },
       parameters
     );
 
@@ -89,24 +86,14 @@ describe('Integration Test for experiment API', () => {
       throw new Error('uuid not defined');
     }
 
-    const experimentState = await waitForResult({
-      uuid
-    });
+    const experimentState = await waitForResult({ uuid });
     expect(experimentState.error).toBeFalsy();
     expect(experimentState.experiment).toBeTruthy();
 
-    /*
-    FIXME: Highchart heatmap lib error
-     at /home/manuel/workdir/portal-frontend/app/v3/node_modules/react-dom/cjs/react-dom.development.js:20418:5 TypeError: Cannot read property 'attr' of undefined
-    at q.<anonymous> (/home/manuel/workdir/portal-frontend/app/v3/node_modules/highcharts/modules/heatmap.src.js:1557:25)
-
-
-    */
-    // const props = { experimentState };
-    // const wrapper = mount(<Result {...props} />);
-    // expect(() => mount(<Result {...props} />)).toThrow(TypeError);
-    // expect(wrapper.find('.error')).toHaveLength(0);
-    // expect(wrapper.find('.loading')).toHaveLength(0);
-    // expect(wrapper.find('div#tabs-methods')).toHaveLength(1);
+    const props = { experimentState };
+    const wrapper = mount(<Result {...props} />);
+    expect(wrapper.find('.error')).toHaveLength(0);
+    expect(wrapper.find('.loading')).toHaveLength(0);
+    expect(wrapper.find('div#tabs-methods')).toHaveLength(1);
   });
 });

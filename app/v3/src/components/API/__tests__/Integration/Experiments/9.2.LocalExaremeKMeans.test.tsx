@@ -1,40 +1,26 @@
 import { mount } from 'enzyme';
-import Result from '../../../../../Result/Result';
-import { VariableEntity } from '../../../../Core';
-
 import * as React from 'react';
-import {
-  createExperiment,
-  createModel,
-  datasets,
-  waitForResult
-} from '../../../../../utils/TestUtils';
+
+import Result from '../../../../Result/Result';
+import { createExperiment, createModel, uid, waitForResult } from '../../../../utils/TestUtils';
+import { VariableEntity } from '../../../Core';
 
 // config
 
-const modelSlug = `model-${Math.round(Math.random() * 10000)}`;
-const experimentCode = 'correlationHeatmap';
+const modelSlug = `model-${uid()}`;
+const experimentCode = 'K_MEANS';
+const parameters = [{ code: 'k', value: 4 }];
+const datasets = [{ code: 'adni' }, { code: 'edsd' }];
 const model: any = (datasets: VariableEntity[]) => ({
   query: {
-    coVariables: [
-      {
-        code: 'lefthippocampus'
-      },
-      {
-        code: 'righthippocampus'
-      }
-    ],
-    filters:
-      '{"condition":"AND","rules":[{"id":"subjectageyears","field":"subjectageyears","type":"integer","input":"number","operator":"greater","value":"65"}],"valid":true}',
-    groupings: [],
-    testingDatasets: [],
+    variables: [{ code: 'apoe4' }],
+    coVariables: [{ code: 'subjectageyears' }, { code: 'av45' }],
+    grouping: [],
     trainingDatasets: datasets,
+    testingDatasets: [],
     validationDatasets: [],
-    variables: [
-      {
-        code: 'subjectageyears'
-      }
-    ]
+    filters:
+      '{"condition":"AND","rules":[{"id":"subjectageyears","field":"subjectageyears","type":"integer","input":"number","operator":"greater","value":50}],"valid":true}'
   }
 });
 
@@ -42,8 +28,8 @@ const payload: ExperimentPayload = {
   algorithms: [
     {
       code: experimentCode,
-      name: experimentCode,
-      parameters: [],
+      name: experimentCode, // FIXME: name is used to parse response which is bad !!!
+      parameters,
       validation: false
     }
   ],
@@ -52,25 +38,19 @@ const payload: ExperimentPayload = {
   validations: []
 };
 
+// Test
+
 describe('Integration Test for experiment API', () => {
   beforeAll(async () => {
-    const dstate = await datasets();
-    expect(dstate.error).toBeFalsy();
-    expect(dstate.datasets).toBeTruthy();
+    const mstate = await createModel({
+      model: model(datasets),
+      modelSlug
+    });
+    expect(mstate.error).toBeFalsy();
+    expect(mstate.model).toBeTruthy();
 
-    if (dstate.datasets) {
-      const mstate = await createModel({
-        model: model(dstate.datasets),
-        modelSlug
-      });
-      expect(mstate.error).toBeFalsy();
-      expect(mstate.model).toBeTruthy();
-
-      return true;
-    }
+    return true;
   });
-
-  // Test
 
   it(`create ${experimentCode}`, async () => {
     const { error, experiment } = await createExperiment({

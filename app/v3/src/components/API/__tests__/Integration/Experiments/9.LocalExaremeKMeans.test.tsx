@@ -1,9 +1,9 @@
 import { mount } from 'enzyme';
 import * as React from 'react';
 
-import Result from '../../../../../Result/Result';
-import { createExperiment, createModel, uid, waitForResult } from '../../../../../utils/TestUtils';
-import { VariableEntity } from '../../../../Core';
+import Result from '../../../../Result/Result';
+import { createExperiment, createModel, uid, waitForResult } from '../../../../utils/TestUtils';
+import { VariableEntity } from '../../../Core';
 
 // config
 

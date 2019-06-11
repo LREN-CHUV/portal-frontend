@@ -1,73 +1,57 @@
 import { mount } from 'enzyme';
 import * as React from 'react';
 
-import { MIP } from '../../../../../../types';
-import Result from '../../../../../Result/Result';
+import Result from '../../../../Result/Result';
 import {
-    createExperiment, createModel, datasets, waitForResult
-} from '../../../../../utils/TestUtils';
-import { VariableEntity } from '../../../../Core';
+    createExperiment, createModel, datasets, uid, waitForResult
+} from '../../../../utils/TestUtils';
+import { VariableEntity } from '../../../Core';
+
+// Review December 2018 experiment
 
 // config
 
-const modelSlug = `model-${Math.round(Math.random() * 10000)}`;
-const experimentCode = 'pca';
+const modelSlug = `model-${uid()}`;
+const experimentCode = 'knn';
 const model: any = (datasets: VariableEntity[]) => ({
   query: {
     coVariables: [
       {
-        code: 'leftthalamusproper'
-      },
-      {
-        code: 'leftacgganteriorcingulategyrus'
-      },
-      {
-        code: 'leftententorhinalarea'
-      },
-      {
-        code: 'leftmcggmiddlecingulategyrus'
-      },
-      {
-        code: 'leftphgparahippocampalgyrus'
-      },
-      {
-        code: 'leftpcggposteriorcingulategyrus'
-      },
-      {
-        code: 'righthippocampus'
-      },
-      {
-        code: 'rightthalamusproper'
-      },
-      {
-        code: 'rightacgganteriorcingulategyrus'
+        code: 'subjectageyears'
       },
       {
         code: 'rightententorhinalarea'
-      },
-      {
-        code: 'rightmcggmiddlecingulategyrus'
-      },
-      {
-        code: 'rightphgparahippocampalgyrus'
-      },
-      {
-        code: 'rightpcggposteriorcingulategyrus'
       }
     ],
-    filters:
-      '{"condition":"AND","rules":[{"id":"subjectageyears","field":"subjectageyears","type":"integer","input":"number","operator":"greater","value":"65"},{"id":"alzheimerbroadcategory","field":"alzheimerbroadcategory","type":"string","input":"select","operator":"not_equal","value":"Other"}],"valid":true}',
+    filters: '',
     groupings: [],
     testingDatasets: [],
-    trainingDatasets: datasets.slice(0, datasets.length -1).map(d => ({ code: d.code })),
-    validationDatasets: datasets.slice(datasets.length -1).map(d => ({ code: d.code })),
+    trainingDatasets: datasets
+      .filter(d => d.code !== 'ppmi')
+      .map(d => ({
+        code: d.code
+      })),
+    validationDatasets: [],
     variables: [
       {
-        code: 'lefthippocampus'
+        code: 'righthippocampus'
       }
     ]
   }
 });
+
+const validations = [
+  {
+    code: 'kfold',
+    name: 'validation',
+    parameters: [
+      {
+        code: 'k',
+        value: '3'
+      }
+    ]
+  }
+];
 
 const payload: ExperimentPayload = {
   algorithms: [
@@ -80,8 +64,10 @@ const payload: ExperimentPayload = {
   ],
   model: modelSlug,
   name: `${experimentCode}-${modelSlug}`,
-  validations: []
+  validations
 };
+
+// Test
 
 describe('Integration Test for experiment API', () => {
   beforeAll(async () => {
@@ -100,8 +86,6 @@ describe('Integration Test for experiment API', () => {
       return true;
     }
   });
-
-  // Test
 
   it(`create ${experimentCode}`, async () => {
     const { error, experiment } = await createExperiment({
@@ -124,8 +108,7 @@ describe('Integration Test for experiment API', () => {
     const wrapper = mount(<Result {...props} />);
     expect(wrapper.find('.error')).toHaveLength(0);
     expect(wrapper.find('.loading')).toHaveLength(0);
-    expect(wrapper.find('.loader')).toHaveLength(0);
-
-    expect(wrapper.find('PlotlyComponent')).toHaveLength(1);
+    expect(wrapper.find('div#tabs-methods')).toHaveLength(1);
+    expect(wrapper.find('.pfa-table')).toHaveLength(1);
   });
 });
