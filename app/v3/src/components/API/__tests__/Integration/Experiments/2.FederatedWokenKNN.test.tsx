@@ -1,74 +1,70 @@
 import { mount } from 'enzyme';
 import * as React from 'react';
 
-import Result from '../../../../../Result/Result';
+import Result from '../../../../Result/Result';
 import {
-    createExperiment, createModel, datasets, waitForResult
-} from '../../../../../utils/TestUtils';
-import { VariableEntity } from '../../../../Core';
+    createExperiment, createModel, datasets, uid, waitForResult
+} from '../../../../utils/TestUtils';
+import { VariableEntity } from '../../../Core';
+
+// Review December 2018 experiment
 
 // config
 
-const modelSlug = `model-${Math.round(Math.random() * 10000)}`;
-const experimentCode = 'sgdNeuralNetwork';
-const parameters = [
-  {
-    code: 'hidden_layer_sizes',
-    value: '100'
-  },
-  {
-    code: 'activation',
-    value: 'relu'
-  },
-  {
-    code: 'alpha',
-    value: '0.0001'
-  },
-  {
-    code: 'learning_rate_init',
-    value: '0.001'
-  }
-];
-const kfold = {
-  code: 'kfold',
-  name: 'validation',
-  parameters: [
-    {
-      code: 'k',
-      value: '2'
-    }
-  ]
-};
+const modelSlug = `model-${uid()}`;
+const experimentCode = 'knn';
 const model: any = (datasets: VariableEntity[]) => ({
   query: {
-    coVariables: [{ code: 'lefthippocampus' }],
+    coVariables: [
+      {
+        code: 'subjectageyears'
+      },
+      {
+        code: 'rightententorhinalarea'
+      }
+    ],
+    filters:
+      '{"condition":"AND","rules":[{"id":"subjectageyears","field":"subjectageyears","type":"integer","input":"number","operator":"greater","value":"65"},{"id":"alzheimerbroadcategory","field":"alzheimerbroadcategory","type":"string","input":"select","operator":"not_equal","value":"Other"}],"valid":true}',
     groupings: [],
     testingDatasets: [],
-    filters:
-      '{"condition":"AND","rules":[{"id":"subjectageyears","field":"subjectageyears","type":"integer","input":"number","operator":"greater","value":"65"}],"valid":true}',
-    trainingDatasets: datasets
-      .slice(0, datasets.length - 1)
-      .map(d => ({ code: d.code })),
-    validationDatasets: datasets
-      .slice(datasets.length - 1)
-      .map(d => ({ code: d.code })),
-    variables: [{ code: 'alzheimerbroadcategory' }]
+    trainingDatasets: datasets.slice(0, datasets.length -1).map(d => ({ code: d.code })),
+    validationDatasets: datasets.slice(datasets.length -1).map(d => ({ code: d.code })),
+    variables: [
+      {
+        code: 'righthippocampus'
+      }
+    ]
   }
 });
+
+const validations = [
+  {
+    code: 'kfold',
+    name: 'validation',
+    parameters: [
+      {
+        code: 'k',
+        value: '3'
+      }
+    ]
+  }
+];
 
 const payload: ExperimentPayload = {
   algorithms: [
     {
       code: experimentCode,
       name: experimentCode,
-      parameters,
+      parameters: [],
       validation: false
     }
   ],
   model: modelSlug,
   name: `${experimentCode}-${modelSlug}`,
-  validations: [kfold]
+  validations
 };
+
+// Test
 
 describe('Integration Test for experiment API', () => {
   beforeAll(async () => {
@@ -87,8 +83,6 @@ describe('Integration Test for experiment API', () => {
       return true;
     }
   });
-
-  // Test
 
   it(`create ${experimentCode}`, async () => {
     const { error, experiment } = await createExperiment({

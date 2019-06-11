@@ -1,33 +1,32 @@
 import { mount } from 'enzyme';
 import * as React from 'react';
 
-import Result from '../../../../../Result/Result';
+import Result from '../../../../Result/Result';
 import {
-    createExperiment, createModel, datasets, uid, waitForResult
-} from '../../../../../utils/TestUtils';
-import { VariableEntity } from '../../../../Core';
+    createExperiment, createModel, datasets, waitForResult
+} from '../../../../utils/TestUtils';
+import { VariableEntity } from '../../../Core';
 
-// Review May 2018 experiment
+// Review December 2018 experiment
 
 // config
 
-const modelSlug = `model-${uid()}`;
-const experimentCode = 'anova';
-const parameters = [{ code: 'design', value: 'additive' }];
+const modelSlug = `model-${Math.round(Math.random() * 10000)}`;
+const experimentCode = 'linearRegression';
 const model: any = (datasets: VariableEntity[]) => ({
   query: {
-    variables: [{ code: 'montrealcognitiveassessment' }],
     coVariables: [],
-    groupings: [{ code: 'alzheimerbroadcategory' }, { code: 'gender' }],
+    filters:
+      '{"condition":"AND","rules":[{"id":"subjectageyears","field":"subjectageyears","type":"integer","input":"number","operator":"greater","value":"65"},{"id":"alzheimerbroadcategory","field":"alzheimerbroadcategory","type":"string","input":"select","operator":"not_equal","value":"Other"}],"valid":true}',
+    groupings: [{ code: 'alzheimerbroadcategory' }],
+    testingDatasets: [],
     trainingDatasets: datasets
-      .filter(d => d.code !== 'ppmi' && d.code !== 'edsd')
+      .filter(d => d.code !== 'ppmi')
       .map(d => ({
         code: d.code
       })),
-    filters:
-      '{"condition":"AND","rules":[{"id":"alzheimerbroadcategory","field":"alzheimerbroadcategory","type":"string","input":"select","operator":"not_equal","value":"Other"}],"valid":true}',
-    testingDatasets: [],
-    validationDatasets: []
+    validationDatasets: [],
+    variables: [{ code: 'lefthippocampus' }]
   }
 });
 
@@ -36,7 +35,7 @@ const payload: ExperimentPayload = {
     {
       code: experimentCode,
       name: experimentCode,
-      parameters,
+      parameters: [],
       validation: false
     }
   ],
@@ -88,11 +87,11 @@ describe('Integration Test for experiment API', () => {
     expect(wrapper.find('.loading')).toHaveLength(0);
     expect(wrapper.find('div#tabs-methods')).toHaveLength(1);
     expect(wrapper.find('.greyGridTable')).toHaveLength(1);
-    // expect(
-    //   wrapper
-    //     .find('.greyGridTable tbody tr td')
-    //     .at(4)
-    //     .text()
-    // ).toEqual('0.000 (***)');
+    expect(
+      wrapper
+        .find('.greyGridTable tbody tr td')
+        .at(4)
+        .text()
+    ).toEqual('0.000 (***)');
   });
 });

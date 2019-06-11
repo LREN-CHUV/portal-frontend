@@ -1,19 +1,27 @@
 import { mount } from 'enzyme';
 import * as React from 'react';
 
-import Result from '../../../../../Result/Result';
+import Result from '../../../../Result/Result';
 import {
-    createExperiment, createModel, datasets, waitForResult
-} from '../../../../../utils/TestUtils';
-import { VariableEntity } from '../../../../Core';
+  createExperiment,
+  createModel,
+  waitForResult
+} from '../../../../utils/TestUtils';
+import { VariableEntity } from '../../../Core';
+
+// Review December 2018 experiment
 
 // config
 
 const modelSlug = `model-${Math.round(Math.random() * 10000)}`;
-const experimentCode = 'pca';
+const experimentCode = 'PIPELINE_ISOUP_REGRESSION_TREE_SERIALIZER';
+const datasets = [{ code: 'adni' }, { code: 'edsd' }];
 const model: any = (datasets: VariableEntity[]) => ({
   query: {
     coVariables: [
+      {
+        code: 'lefthippocampus'
+      },
       {
         code: 'leftthalamusproper'
       },
@@ -54,7 +62,8 @@ const model: any = (datasets: VariableEntity[]) => ({
         code: 'rightpcggposteriorcingulategyrus'
       }
     ],
-    filters: '',
+    filters:
+      '{"condition":"AND","rules":[{"id":"subjectageyears","field":"subjectageyears","type":"integer","input":"number","operator":"greater","value":"65"}],"valid":true}',
     groupings: [],
     testingDatasets: [],
     trainingDatasets: datasets.map(d => ({
@@ -63,7 +72,7 @@ const model: any = (datasets: VariableEntity[]) => ({
     validationDatasets: [],
     variables: [
       {
-        code: 'lefthippocampus'
+        code: 'montrealcognitiveassessment'
       }
     ]
   }
@@ -73,7 +82,7 @@ const payload: ExperimentPayload = {
   algorithms: [
     {
       code: experimentCode,
-      name: experimentCode,
+      name: experimentCode, // FIXME: name is used to parse response which is bad !!!
       parameters: [],
       validation: false
     }
@@ -83,25 +92,19 @@ const payload: ExperimentPayload = {
   validations: []
 };
 
+// Test
+
 describe('Integration Test for experiment API', () => {
   beforeAll(async () => {
-    const dstate = await datasets();
-    expect(dstate.error).toBeFalsy();
-    expect(dstate.datasets).toBeTruthy();
+    const mstate = await createModel({
+      model: model(datasets),
+      modelSlug
+    });
+    expect(mstate.error).toBeFalsy();
+    expect(mstate.model).toBeTruthy();
 
-    if (dstate.datasets) {
-      const mstate = await createModel({
-        model: model(dstate.datasets),
-        modelSlug
-      });
-      expect(mstate.error).toBeFalsy();
-      expect(mstate.model).toBeTruthy();
-
-      return true;
-    }
+    return true;
   });
-
-  // Test
 
   it(`create ${experimentCode}`, async () => {
     const { error, experiment } = await createExperiment({
@@ -121,12 +124,10 @@ describe('Integration Test for experiment API', () => {
     expect(experimentState.experiment).toBeTruthy();
 
     const props = { experimentState };
-    const wrapper = mount(<Result {...props} />);
-    expect(wrapper.find('.error')).toHaveLength(0);
-    expect(wrapper.find('.loading')).toHaveLength(0);
 
-    expect(wrapper.find('.loader')).toHaveLength(0);
-    expect(wrapper.find('.loader')).toHaveLength(0);
-    expect(wrapper.find('PlotlyComponent')).toHaveLength(1);
+    // We test if the script was evaluated, which should throw an error
+    // in this test context. Should be fixed in exareme response API
+    // FIXME: Exareme json instead of JS
+    expect(() => mount(<Result {...props} />)).toThrow(TypeError);
   });
 });

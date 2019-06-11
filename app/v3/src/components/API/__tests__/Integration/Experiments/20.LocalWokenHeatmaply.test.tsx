@@ -1,47 +1,39 @@
 import { mount } from 'enzyme';
 import * as React from 'react';
 
-import Result from '../../../../../Result/Result';
+import Result from '../../../../Result/Result';
 import {
     createExperiment, createModel, datasets, waitForResult
-} from '../../../../../utils/TestUtils';
-import { VariableEntity } from '../../../../Core';
+} from '../../../../utils/TestUtils';
+import { VariableEntity } from '../../../Core';
 
 // config
 
 const modelSlug = `model-${Math.round(Math.random() * 10000)}`;
-const experimentCode = 'tSNE';
+const experimentCode = 'heatmaply';
 const model: any = (datasets: VariableEntity[]) => ({
   query: {
-    // coVariables: [{ code: 'lefthippocampus' }],
+    coVariables: [
+      {
+        code: 'lefthippocampus'
+      },
+      {
+        code: 'righthippocampus'
+      }
+    ],
+    filters:
+      '{"condition":"AND","rules":[{"id":"subjectageyears","field":"subjectageyears","type":"integer","input":"number","operator":"greater","value":"65"}],"valid":true}',
     groupings: [],
     testingDatasets: [],
-    // filters:
-    //   '{"condition":"AND","rules":[{"id":"subjectageyears","field":"subjectageyears","type":"integer","input":"number","operator":"greater","value":"65"}],"valid":true}',
-    // // trainingDatasets: datasets.map(d => ({ code: d.code })),
-    // validationDatasets: [],
-    variables: [{ code: 'gender' }],
-    coVariables: [
-      { code: 'righthippocampus' },
-      { code: 'rightententorhinalarea' },
-      { code: 'lefthippocampus' },
-      { code: 'leftthalamusproper' },
-      { code: 'leftacgganteriorcingulategyrus' },
-      { code: 'leftententorhinalarea' },
-      { code: 'leftmcggmiddlecingulategyrus' },
-      { code: 'leftphgparahippocampalgyrus' },
-      { code: 'leftpcggposteriorcingulategyrus' },
-      { code: 'rightthalamusproper' },
-      { code: 'rightacgganteriorcingulategyrus' },
-      { code: 'rightmcggmiddlecingulategyrus' },
-      { code: 'rightphgparahippocampalgyrus' },
-      { code: 'rightpcggposteriorcingulategyrus' }
-    ],
-    grouping: [],
-    trainingDatasets: datasets,
+    trainingDatasets: datasets.map(d => ({
+      code: d.code
+    })),
     validationDatasets: [],
-    filters:
-      '{"condition":"AND","rules":[{"id":"agegroup","field":"agegroup","type":"string","input":"select","operator":"not_equal","value":"-50y"}],"valid":true}'
+    variables: [
+      {
+        code: 'subjectageyears'
+      }
+    ]
   }
 });
 
@@ -79,7 +71,7 @@ describe('Integration Test for experiment API', () => {
 
   // Test
 
-  it(`create ${experimentCode}`, async () => {
+  it.skip(`create ${experimentCode}`, async () => {
     const { error, experiment } = await createExperiment({
       experiment: payload
     });
@@ -100,5 +92,6 @@ describe('Integration Test for experiment API', () => {
     const wrapper = mount(<Result {...props} />);
     expect(wrapper.find('.error')).toHaveLength(0);
     expect(wrapper.find('.loading')).toHaveLength(0);
+    expect(wrapper.find('.html-iframe')).toHaveLength(1);
   });
 });

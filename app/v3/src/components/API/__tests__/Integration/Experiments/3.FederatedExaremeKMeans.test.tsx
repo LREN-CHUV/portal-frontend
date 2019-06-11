@@ -1,41 +1,24 @@
 import { mount } from 'enzyme';
 import * as React from 'react';
 
-import Result from '../../../../../Result/Result';
-import {
-    createExperiment, createModel, datasets, waitForResult
-} from '../../../../../utils/TestUtils';
-import { VariableEntity } from '../../../../Core';
+import Result from '../../../../Result/Result';
+import { createExperiment, datasets, createModel, uid, waitForResult } from '../../../../utils/TestUtils';
+import { VariableEntity } from '../../../Core';
 
 // config
 
-const modelSlug = `model-${Math.round(Math.random() * 10000)}`;
-const experimentCode = 'hinmine';
-const parameters = [
-  {
-    code: 'normalize',
-    value: 'true'
-  },
-  {
-    code: '0.85',
-    value: '0.85'
-  }
-];
-
+const modelSlug = `model-${uid()}`;
+const experimentCode = 'K_MEANS';
+const parameters = [{ code: 'k', value: 4 }];
 const model: any = (datasets: VariableEntity[]) => ({
   query: {
-    coVariables: [{ code: 'lefthippocampus' }],
-    groupings: [],
-    testingDatasets: [],
+    variables: [{ code: 'apoe4' }],
+    coVariables: [{ code: 'subjectageyears' }, { code: 'av45' }],
+    grouping: [],
+    trainingDatasets: datasets.slice(0, datasets.length - 1).map(d => ({ code: d.code })),
+    validationDatasets: datasets.slice(datasets.length -1).map(d => ({ code: d.code })),
     filters:
-      '{"condition":"AND","rules":[{"id":"subjectageyears","field":"subjectageyears","type":"integer","input":"number","operator":"greater","value":"65"}],"valid":true}',
-    trainingDatasets: datasets
-      .slice(0, datasets.length - 1)
-      .map(d => ({ code: d.code })),
-    validationDatasets: datasets
-      .slice(datasets.length - 1)
-      .map(d => ({ code: d.code })),
-    variables: [{ code: 'alzheimerbroadcategory' }]
+      '{"condition":"AND","rules":[{"id":"subjectageyears","field":"subjectageyears","type":"integer","input":"number","operator":"greater","value":50}],"valid":true}'
   }
 });
 
@@ -43,7 +26,7 @@ const payload: ExperimentPayload = {
   algorithms: [
     {
       code: experimentCode,
-      name: experimentCode,
+      name: experimentCode, // FIXME: name is used to parse response which is bad !!!
       parameters,
       validation: false
     }
@@ -52,6 +35,8 @@ const payload: ExperimentPayload = {
   name: `${experimentCode}-${modelSlug}`,
   validations: []
 };
+
+// Test
 
 describe('Integration Test for experiment API', () => {
   beforeAll(async () => {
@@ -71,9 +56,7 @@ describe('Integration Test for experiment API', () => {
     }
   });
 
-  // Test
-
-  it.skip(`create ${experimentCode}`, async () => {
+  it(`create ${experimentCode}`, async () => {
     const { error, experiment } = await createExperiment({
       experiment: payload
     });
@@ -95,6 +78,5 @@ describe('Integration Test for experiment API', () => {
     expect(wrapper.find('.error')).toHaveLength(0);
     expect(wrapper.find('.loading')).toHaveLength(0);
     expect(wrapper.find('div#tabs-methods')).toHaveLength(1);
-    expect(wrapper.find('.pfa-table')).toHaveLength(1);
   });
 });

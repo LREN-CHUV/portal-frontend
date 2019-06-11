@@ -1,28 +1,32 @@
 import { mount } from 'enzyme';
 import * as React from 'react';
 
-import Result from '../../../../../Result/Result';
+import Result from '../../../../Result/Result';
 import {
     createExperiment, createModel, datasets, waitForResult
-} from '../../../../../utils/TestUtils';
-import { VariableEntity } from '../../../../Core';
+} from '../../../../utils/TestUtils';
+import { VariableEntity } from '../../../Core';
 
 // config
 
 const modelSlug = `model-${Math.round(Math.random() * 10000)}`;
-const experimentCode = 'sgdLinearModel';
+const experimentCode = 'sgdNeuralNetwork';
 const parameters = [
+  {
+    code: 'hidden_layer_sizes',
+    value: '100'
+  },
+  {
+    code: 'activation',
+    value: 'relu'
+  },
   {
     code: 'alpha',
     value: '0.0001'
   },
   {
-    code: 'penalty',
-    value: 'l2'
-  },
-  {
-    code: 'l1_ratio',
-    value: '0.15'
+    code: 'learning_rate_init',
+    value: '0.001'
   }
 ];
 const kfold = {
@@ -43,12 +47,12 @@ const model: any = (datasets: VariableEntity[]) => ({
     filters:
       '{"condition":"AND","rules":[{"id":"subjectageyears","field":"subjectageyears","type":"integer","input":"number","operator":"greater","value":"65"}],"valid":true}',
     trainingDatasets: datasets
-      .filter(d => d.code !== 'ppmi' && d.code !== 'edsd')
-      .map(d => ({
-        code: d.code
-      })),
-    validationDatasets: [],
-    variables: [{ code: 'subjectageyears' }]
+      .slice(0, datasets.length - 1)
+      .map(d => ({ code: d.code })),
+    validationDatasets: datasets
+      .slice(datasets.length - 1)
+      .map(d => ({ code: d.code })),
+    variables: [{ code: 'alzheimerbroadcategory' }]
   }
 });
 

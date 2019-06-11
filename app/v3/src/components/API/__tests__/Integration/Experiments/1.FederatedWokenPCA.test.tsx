@@ -1,37 +1,69 @@
 import { mount } from 'enzyme';
 import * as React from 'react';
 
-import Result from '../../../../../Result/Result';
+import { MIP } from '../../../../../../types';
+import Result from '../../../../Result/Result';
 import {
     createExperiment, createModel, datasets, waitForResult
-} from '../../../../../utils/TestUtils';
-import { VariableEntity } from '../../../../Core';
+} from '../../../../utils/TestUtils';
+import { VariableEntity } from '../../../Core';
 
 // config
 
 const modelSlug = `model-${Math.round(Math.random() * 10000)}`;
-const experimentCode = 'heatmaply';
+const experimentCode = 'pca';
 const model: any = (datasets: VariableEntity[]) => ({
   query: {
     coVariables: [
       {
-        code: 'lefthippocampus'
+        code: 'leftthalamusproper'
+      },
+      {
+        code: 'leftacgganteriorcingulategyrus'
+      },
+      {
+        code: 'leftententorhinalarea'
+      },
+      {
+        code: 'leftmcggmiddlecingulategyrus'
+      },
+      {
+        code: 'leftphgparahippocampalgyrus'
+      },
+      {
+        code: 'leftpcggposteriorcingulategyrus'
       },
       {
         code: 'righthippocampus'
+      },
+      {
+        code: 'rightthalamusproper'
+      },
+      {
+        code: 'rightacgganteriorcingulategyrus'
+      },
+      {
+        code: 'rightententorhinalarea'
+      },
+      {
+        code: 'rightmcggmiddlecingulategyrus'
+      },
+      {
+        code: 'rightphgparahippocampalgyrus'
+      },
+      {
+        code: 'rightpcggposteriorcingulategyrus'
       }
     ],
     filters:
-      '{"condition":"AND","rules":[{"id":"subjectageyears","field":"subjectageyears","type":"integer","input":"number","operator":"greater","value":"65"}],"valid":true}',
+      '{"condition":"AND","rules":[{"id":"subjectageyears","field":"subjectageyears","type":"integer","input":"number","operator":"greater","value":"65"},{"id":"alzheimerbroadcategory","field":"alzheimerbroadcategory","type":"string","input":"select","operator":"not_equal","value":"Other"}],"valid":true}',
     groupings: [],
     testingDatasets: [],
-    trainingDatasets: datasets.map(d => ({
-      code: d.code
-    })),
-    validationDatasets: [],
+    trainingDatasets: datasets.slice(0, datasets.length -1).map(d => ({ code: d.code })),
+    validationDatasets: datasets.slice(datasets.length -1).map(d => ({ code: d.code })),
     variables: [
       {
-        code: 'subjectageyears'
+        code: 'lefthippocampus'
       }
     ]
   }
@@ -71,7 +103,7 @@ describe('Integration Test for experiment API', () => {
 
   // Test
 
-  it.skip(`create ${experimentCode}`, async () => {
+  it(`create ${experimentCode}`, async () => {
     const { error, experiment } = await createExperiment({
       experiment: payload
     });
@@ -92,6 +124,8 @@ describe('Integration Test for experiment API', () => {
     const wrapper = mount(<Result {...props} />);
     expect(wrapper.find('.error')).toHaveLength(0);
     expect(wrapper.find('.loading')).toHaveLength(0);
-    expect(wrapper.find('.html-iframe')).toHaveLength(1);
+    expect(wrapper.find('.loader')).toHaveLength(0);
+
+    expect(wrapper.find('PlotlyComponent')).toHaveLength(1);
   });
 });

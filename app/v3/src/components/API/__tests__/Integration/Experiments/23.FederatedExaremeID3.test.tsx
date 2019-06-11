@@ -1,18 +1,19 @@
 import { mount } from 'enzyme';
 import * as React from 'react';
-import { buildExaremeAlgorithmRequest } from '../../../../ExaremeAPIAdapter';
-import Result from '../../../../../Result/Result';
+
+import Result from '../../../../Result/Result';
 import {
   createExperiment,
   createModel,
   waitForResult
-} from '../../../../../utils/TestUtils';
-import { VariableEntity } from '../../../../Core';
+} from '../../../../utils/TestUtils';
+import { VariableEntity } from '../../../Core';
+import { buildExaremeAlgorithmRequest } from '../../../ExaremeAPIAdapter';
 
 // config
 
 const modelSlug = `model-${Math.round(Math.random() * 10000)}`;
-const experimentCode = 'ANOVA';
+const experimentCode = 'ID3';
 const parameters = [
   { code: 'bins', value: '40' },
   { code: 'iterations_max_number', value: 20 },
@@ -24,7 +25,10 @@ const model: any = (datasets: VariableEntity[]) => ({
   query: {
     coVariables: [],
     filters: '',
-    groupings: [{ code: 'alzheimerbroadcategory' }],
+    groupings: [
+      { code: 'parkinsonbroadcategory' },
+      { code: 'alzheimerbroadcategory' }
+    ],
     testingDatasets: [],
     trainingDatasets: datasets.map(d => ({
       code: d.code
@@ -32,7 +36,7 @@ const model: any = (datasets: VariableEntity[]) => ({
     validationDatasets: [],
     variables: [
       {
-        code: 'lefthippocampus'
+        code: 'neurodegenerativescategories'
       }
     ]
   }
@@ -55,7 +59,9 @@ describe('Integration Test for experiment API', () => {
   it(`create ${experimentCode}`, async () => {
     const requestParameters = buildExaremeAlgorithmRequest(
       model(datasets),
-      { code: experimentCode },
+      {
+        code: experimentCode
+      },
       parameters
     );
 
@@ -86,14 +92,10 @@ describe('Integration Test for experiment API', () => {
       throw new Error('uuid not defined');
     }
 
-    const experimentState = await waitForResult({ uuid });
+    const experimentState = await waitForResult({
+      uuid
+    });
     expect(experimentState.error).toBeFalsy();
     expect(experimentState.experiment).toBeTruthy();
-
-    const props = { experimentState };
-    const wrapper = mount(<Result {...props} />);
-    expect(wrapper.find('.error')).toHaveLength(0);
-    expect(wrapper.find('.loading')).toHaveLength(0);
-    expect(wrapper.find('div#tabs-methods')).toHaveLength(1);
   });
 });

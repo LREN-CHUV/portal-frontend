@@ -1,32 +1,41 @@
 import { mount } from 'enzyme';
 import * as React from 'react';
 
-import Result from '../../../../../Result/Result';
+import Result from '../../../../Result/Result';
 import {
     createExperiment, createModel, datasets, waitForResult
-} from '../../../../../utils/TestUtils';
-import { VariableEntity } from '../../../../Core';
-
-// Review December 2018 experiment
+} from '../../../../utils/TestUtils';
+import { VariableEntity } from '../../../Core';
 
 // config
 
 const modelSlug = `model-${Math.round(Math.random() * 10000)}`;
-const experimentCode = 'linearRegression';
+const experimentCode = 'hedwig';
+const parameters = [
+  {
+    code: 'beam',
+    value: '10'
+  },
+  {
+    code: 'support',
+    value: '0.1'
+  }
+];
+
 const model: any = (datasets: VariableEntity[]) => ({
   query: {
-    coVariables: [],
-    filters:
-      '{"condition":"AND","rules":[{"id":"subjectageyears","field":"subjectageyears","type":"integer","input":"number","operator":"greater","value":"65"},{"id":"alzheimerbroadcategory","field":"alzheimerbroadcategory","type":"string","input":"select","operator":"not_equal","value":"Other"}],"valid":true}',
-    groupings: [{ code: 'alzheimerbroadcategory' }],
+    coVariables: [{ code: 'apoe4' }],
+    groupings: [],
     testingDatasets: [],
+    filters:
+      '{"condition":"AND","rules":[{"id":"subjectageyears","field":"subjectageyears","type":"integer","input":"number","operator":"greater","value":"65"}],"valid":true}',
     trainingDatasets: datasets
-      .filter(d => d.code !== 'ppmi')
-      .map(d => ({
-        code: d.code
-      })),
-    validationDatasets: [],
-    variables: [{ code: 'lefthippocampus' }]
+      .slice(0, datasets.length - 1)
+      .map(d => ({ code: d.code })),
+    validationDatasets: datasets
+      .slice(datasets.length - 1)
+      .map(d => ({ code: d.code })),
+    variables: [{ code: 'alzheimerbroadcategory' }]
   }
 });
 
@@ -35,7 +44,7 @@ const payload: ExperimentPayload = {
     {
       code: experimentCode,
       name: experimentCode,
-      parameters: [],
+      parameters,
       validation: false
     }
   ],
@@ -64,7 +73,7 @@ describe('Integration Test for experiment API', () => {
 
   // Test
 
-  it(`create ${experimentCode}`, async () => {
+  it.skip(`create ${experimentCode}`, async () => {
     const { error, experiment } = await createExperiment({
       experiment: payload
     });
@@ -86,12 +95,6 @@ describe('Integration Test for experiment API', () => {
     expect(wrapper.find('.error')).toHaveLength(0);
     expect(wrapper.find('.loading')).toHaveLength(0);
     expect(wrapper.find('div#tabs-methods')).toHaveLength(1);
-    expect(wrapper.find('.greyGridTable')).toHaveLength(1);
-    expect(
-      wrapper
-        .find('.greyGridTable tbody tr td')
-        .at(4)
-        .text()
-    ).toEqual('0.000 (***)');
+    expect(wrapper.find('.pfa-table')).toHaveLength(1);
   });
 });

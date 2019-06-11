@@ -1,42 +1,43 @@
 import { mount } from 'enzyme';
 import * as React from 'react';
 
-import Result from '../../../../../Result/Result';
+import Result from '../../../../Result/Result';
 import {
-    createExperiment, createModel, datasets, uid, waitForResult
-} from '../../../../../utils/TestUtils';
-import { VariableEntity } from '../../../../Core';
+    createExperiment, createModel, datasets, waitForResult
+} from '../../../../utils/TestUtils';
+import { VariableEntity } from '../../../Core';
 
 // config
 
-const modelSlug = `model-${uid()}`;
-const experimentCode = 'kmeans';
-const parameters = [{ code: 'n_clusters', value: 3 }];
+const modelSlug = `model-${Math.round(Math.random() * 10000)}`;
+const experimentCode = 'hinmine';
+const parameters = [
+  {
+    code: 'normalize',
+    value: 'true'
+  },
+  {
+    code: '0.85',
+    value: '0.85'
+  }
+];
+
 const model: any = (datasets: VariableEntity[]) => ({
   query: {
-    coVariables: [{ code: 'lefthippocampus' }, { code: 'righthippocampus' }],
+    coVariables: [{ code: 'lefthippocampus' }],
     groupings: [],
     testingDatasets: [],
     filters:
       '{"condition":"AND","rules":[{"id":"subjectageyears","field":"subjectageyears","type":"integer","input":"number","operator":"greater","value":"65"}],"valid":true}',
-    trainingDatasets: datasets.filter(d => !/nida|qqni/.test(d.code)),
-    validationDatasets: [],
+    trainingDatasets: datasets
+      .slice(0, datasets.length - 1)
+      .map(d => ({ code: d.code })),
+    validationDatasets: datasets
+      .slice(datasets.length - 1)
+      .map(d => ({ code: d.code })),
     variables: [{ code: 'alzheimerbroadcategory' }]
   }
 });
-
-const validations = [
-  {
-    code: 'kfold',
-    name: 'validation',
-    parameters: [
-      {
-        code: 'k',
-        value: '4'
-      }
-    ]
-  }
-];
 
 const payload: ExperimentPayload = {
   algorithms: [
@@ -49,7 +50,7 @@ const payload: ExperimentPayload = {
   ],
   model: modelSlug,
   name: `${experimentCode}-${modelSlug}`,
-  validations
+  validations: []
 };
 
 describe('Integration Test for experiment API', () => {
@@ -93,5 +94,7 @@ describe('Integration Test for experiment API', () => {
     const wrapper = mount(<Result {...props} />);
     expect(wrapper.find('.error')).toHaveLength(0);
     expect(wrapper.find('.loading')).toHaveLength(0);
+    expect(wrapper.find('div#tabs-methods')).toHaveLength(1);
+    expect(wrapper.find('.pfa-table')).toHaveLength(1);
   });
 });

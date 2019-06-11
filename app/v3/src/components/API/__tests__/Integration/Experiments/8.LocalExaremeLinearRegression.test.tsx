@@ -1,14 +1,14 @@
 import { mount } from 'enzyme';
 import * as React from 'react';
 
-import Result from '../../../../../Result/Result';
+import Result from '../../../../Result/Result';
 import {
   createExperiment,
   createModel,
   waitForResult
-} from '../../../../../utils/TestUtils';
-import { VariableEntity } from '../../../../Core';
-import { buildExaremeAlgorithmRequest } from '../../../../ExaremeAPIAdapter';
+} from '../../../../utils/TestUtils';
+import { VariableEntity } from '../../../Core';
+import { buildExaremeAlgorithmRequest } from '../../../ExaremeAPIAdapter';
 
 // Review December 2018 experiment
 

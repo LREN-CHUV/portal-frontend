@@ -1,41 +1,40 @@
 import { mount } from 'enzyme';
-import * as React from 'react';
+import Result from '../../../../Result/Result';
+import { VariableEntity } from '../../../Core';
 
-import Result from '../../../../../Result/Result';
+import * as React from 'react';
 import {
-    createExperiment, createModel, datasets, waitForResult
-} from '../../../../../utils/TestUtils';
-import { VariableEntity } from '../../../../Core';
+  createExperiment,
+  createModel,
+  datasets,
+  waitForResult
+} from '../../../../utils/TestUtils';
 
 // config
 
 const modelSlug = `model-${Math.round(Math.random() * 10000)}`;
-const experimentCode = 'hedwig';
-const parameters = [
-  {
-    code: 'beam',
-    value: '10'
-  },
-  {
-    code: 'support',
-    value: '0.1'
-  }
-];
-
+const experimentCode = 'correlationHeatmap';
 const model: any = (datasets: VariableEntity[]) => ({
   query: {
-    coVariables: [{ code: 'apoe4' }],
-    groupings: [],
-    testingDatasets: [],
+    coVariables: [
+      {
+        code: 'lefthippocampus'
+      },
+      {
+        code: 'righthippocampus'
+      }
+    ],
     filters:
       '{"condition":"AND","rules":[{"id":"subjectageyears","field":"subjectageyears","type":"integer","input":"number","operator":"greater","value":"65"}],"valid":true}',
-    trainingDatasets: datasets
-      .slice(0, datasets.length - 1)
-      .map(d => ({ code: d.code })),
-    validationDatasets: datasets
-      .slice(datasets.length - 1)
-      .map(d => ({ code: d.code })),
-    variables: [{ code: 'alzheimerbroadcategory' }]
+    groupings: [],
+    testingDatasets: [],
+    trainingDatasets: datasets,
+    validationDatasets: [],
+    variables: [
+      {
+        code: 'subjectageyears'
+      }
+    ]
   }
 });
 
@@ -44,7 +43,7 @@ const payload: ExperimentPayload = {
     {
       code: experimentCode,
       name: experimentCode,
-      parameters,
+      parameters: [],
       validation: false
     }
   ],
@@ -73,7 +72,7 @@ describe('Integration Test for experiment API', () => {
 
   // Test
 
-  it.skip(`create ${experimentCode}`, async () => {
+  it(`create ${experimentCode}`, async () => {
     const { error, experiment } = await createExperiment({
       experiment: payload
     });
@@ -95,6 +94,5 @@ describe('Integration Test for experiment API', () => {
     expect(wrapper.find('.error')).toHaveLength(0);
     expect(wrapper.find('.loading')).toHaveLength(0);
     expect(wrapper.find('div#tabs-methods')).toHaveLength(1);
-    expect(wrapper.find('.pfa-table')).toHaveLength(1);
   });
 });
