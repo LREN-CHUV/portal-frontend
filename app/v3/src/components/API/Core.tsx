@@ -7,12 +7,6 @@ import { buildExaremeAlgorithmList } from './ExaremeAPIAdapter';
 import hierarchyMockup from './pathologiesHierarchyMockup';
 import { buildWorkflowAlgorithmList } from './WorkflowAPIAdapter';
 
-export const workflowOptions: RequestInit = {
-  credentials: 'include',
-  headers: {
-    Authorization: process.env.REACT_APP_WORKFLOW_AUTHORIZATION!
-  }
-};
 export interface Variable {
   code: string;
   label?: string;
@@ -191,8 +185,8 @@ class Core extends Container<State> {
   private workflows = async () => {
     try {
       const data = await request.get(
-        `${process.env.REACT_APP_WORKFLOW_URL}/getAllWorkflowWithDetails`,
-        workflowOptions
+        `${this.backendURL}/methods/workflows`,
+        this.options
       );
       const json = await JSON.parse(data);
 

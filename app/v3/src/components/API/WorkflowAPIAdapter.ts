@@ -1,8 +1,10 @@
 import request from 'request-promise-native';
+
+import { backendURL } from '../API';
+import options from '../API/RequestHeaders';
+import { Algorithm, AlgorithmParameter } from './Core';
+import { hiddenParameters, stripModelParameters } from './ExaremeAPIAdapter';
 import { ExperimentResponse } from './Experiment';
-import { stripModelParameters} from './ExaremeAPIAdapter';
-import { Algorithm, AlgorithmParameter, workflowOptions } from './Core';
-import { hiddenParameters } from './ExaremeAPIAdapter';
 import { ModelResponse } from './Model';
 
 interface Status {
@@ -14,22 +16,22 @@ interface Response {
   data: any | undefined;
 }
 
-const algorithms = JSON.parse(localStorage.getItem('algorithms') || "{}");
+const algorithms = JSON.parse(localStorage.getItem('algorithms') || '{}');
 const findParameter = (acode: string, pcode: string) => {
-  const algorithm = algorithms && algorithms.find((a:any) => a.code === acode);
+  const algorithm = algorithms && algorithms.find((a: any) => a.code === acode);
 
   if (algorithm) {
-    const parameter = algorithm.parameters.find((p:any) => p.code === pcode)
+    const parameter = algorithm.parameters.find((p: any) => p.code === pcode);
     return parameter ? parameter.label : pcode;
   }
   return pcode;
-}
+};
 
 const findName = (acode: string) => {
-  const algorithm = algorithms && algorithms.find((a:any) => a.code === acode);
+  const algorithm = algorithms && algorithms.find((a: any) => a.code === acode);
 
-  return algorithm ? algorithm.label: acode
-}
+  return algorithm ? algorithm.label : acode;
+};
 
 const workflowStatuses: Status = {};
 const workflowResults: Status = {};
@@ -37,8 +39,8 @@ const workflowResults: Status = {};
 const fetchStatus = async (historyId: string): Promise<Response> => {
   try {
     const data = await request.get(
-      `${process.env.REACT_APP_WORKFLOW_URL}/getWorkflowStatus/${historyId}`,
-      workflowOptions
+      `${backendURL}/experiments/workflow/status/${historyId}`,
+      options as RequestInit
     );
     const json = await JSON.parse(data);
 
@@ -56,8 +58,8 @@ const fetchStatus = async (historyId: string): Promise<Response> => {
 const fetchResults = async (historyId: string): Promise<Response> => {
   try {
     const data = await request.get(
-      `${process.env.REACT_APP_WORKFLOW_URL}/getWorkflowResults/${historyId}`,
-      workflowOptions
+      `${backendURL}/experiments/workflow/results/${historyId}`,
+      options as RequestInit
     );
     const json = await JSON.parse(data);
 
@@ -78,10 +80,8 @@ const fetchResultDetail = async (
 ): Promise<Response> => {
   try {
     const data = await request.get(
-      `${
-        process.env.REACT_APP_WORKFLOW_URL
-      }/getWorkflowResultsBody/${historyId}/contents/${resultId}`,
-      workflowOptions
+      `${backendURL}/experiments/workflow/resultsbody/${historyId}/content/${resultId}`,
+      options as RequestInit
     );
     const json = await JSON.parse(data);
 
@@ -190,15 +190,16 @@ const buildWorkflowAlgorithmRequest = (
     });
   }
 
-
   // others
-  const leftOvers = selectedMethod.parameters.filter((p: any) => !params.map((p: any) => p.code).includes(p.code))
+  const leftOvers = selectedMethod.parameters.filter(
+    (p: any) => !params.map((p: any) => p.code).includes(p.code)
+  );
   if (leftOvers) {
-    leftOvers.forEach((l:any) => {
+    leftOvers.forEach((l: any) => {
       params.push({
         code: l.code,
         value: l.value
-      })
+      });
     });
   }
 
@@ -209,16 +210,17 @@ const buildWorkflowAlgorithmResponse = (
   historyId: string,
   experimentResponse: ExperimentResponse
 ) => {
-
   // Retrieve parameters names
   experimentResponse.algorithms = experimentResponse.algorithms.map(a => ({
     ...a,
     name: findName(a.code),
-    parameters: a.parameters && a.parameters.map((p:any) => ({
-      ...p,
-      code: findParameter(a.code, p.code)
-    }))
-  }))
+    parameters:
+      a.parameters &&
+      a.parameters.map((p: any) => ({
+        ...p,
+        code: findParameter(a.code, p.code)
+      }))
+  }));
 
   experimentResponse = stripModelParameters(experimentResponse);
 
