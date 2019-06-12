@@ -97,28 +97,46 @@ const fetchResultDetail = async (
 };
 
 const buildWorkflowAlgorithmList = (json: any): Algorithm[] => {
+  const defaults = {
+    kfold: 3,
+    alpha: 0.1,
+    testSize: 0.2
+  };
+
+  const constraints = {
+    covariables: { min_count: 1 },
+    groupings: { max_count: 0, min_count: 0 },
+    mixed: true,
+    variable: {
+      binominal: true,
+      integer: false,
+      polynominal: true,
+      real: false
+    }
+  };
+
+  const defaultValueFor = ({
+    label,
+    defaults
+  }: {
+    label: string;
+    defaults: any;
+  }): string => {
+    return defaults[label] ? defaults[label] : '';
+  };
+
   const algorithms = json.map((j: any) => ({
     code: j.id,
     label: j.name,
+    constraints,
     parameters: Object.keys(j.inputs).map((k: any) => ({
       code: j.inputs[k].uuid,
-      constraints: [],
-      // j.inputs[k].label === 'y'
-      //   ? {
-      //       variable: {
-      //         binominal: true,
-      //         integer: false,
-      //         min_count: 1,
-      //         polynominal: true,
-      //         real: false
-      //       }
-      //     }
-      //   : [],
-      default_value: j.inputs[k].value,
+
+      default_value: defaultValueFor({ label: j.inputs[k].label, defaults }),
       description: '',
       label: j.inputs[k].label,
       type: 'text',
-      value: '',
+      value: defaultValueFor({ label: j.inputs[k].label, defaults }),
       visible: !hiddenParameters.includes(j.inputs[k].label)
     })),
     source: 'workflow',
