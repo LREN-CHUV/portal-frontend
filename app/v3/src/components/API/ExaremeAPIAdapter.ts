@@ -240,7 +240,7 @@ const buildExaremeAlgorithmRequest = (
   });
 
   if (covariablesArray.length > 0) {
-    const x = selectedMethod.code === 'LINEAR_REGRESSION' ? {
+    const x = selectedMethod.code === 'LINEAR_REGRESSION' || selectedMethod.code === 'ANOVA'? {
       code: xCode,
       value: covariablesArray.toString().replace(/,/g, '+')
     } : {
