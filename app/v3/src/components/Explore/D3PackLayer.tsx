@@ -37,7 +37,7 @@ export default ({ layout, ...props }: Props) => {
   const svgRef = useRef(null);
   const view = useRef<IView>([diameter / 2, diameter / 2, diameter]);
   const focus = useRef(layout);
-  const { d3Model } = props;
+  const { d3Model, selectedNode } = props;
 
   const color = d3
     .scaleLinear<string, string>()
@@ -116,12 +116,13 @@ export default ({ layout, ...props }: Props) => {
       });
   };
 
-  const colorCallback = useCallback(color, [layout])
+  const colorCallback = useCallback(color, [layout]);
 
   useEffect(() => {
     const svg = d3.select(svgRef.current);
     const circle = svg.selectAll('circle');
     circle
+      .style('fill-opacity', '1')
       .filter(
         (d: any) =>
           ![
@@ -130,7 +131,18 @@ export default ({ layout, ...props }: Props) => {
             ...(d3Model.filters || [])
           ].includes(d)
       )
-      .style('fill', (d: any) => (d.children ? colorCallback(d.depth) : 'white'));
+      .style('fill', (d: any) =>
+        d.children ? colorCallback(d.depth) : 'white'
+      );
+
+    if (selectedNode && selectedNode !== layout) {
+      circle
+        .filter((d: any) => d.data.code === selectedNode.data.code)
+        .transition()
+        .duration(80)
+        .style('fill-opacity', '0.8');
+    }
+
     if (d3Model.filters && d3Model.filters.length > 0) {
       circle
         .filter(
@@ -159,12 +171,16 @@ export default ({ layout, ...props }: Props) => {
         .duration(250)
         .style('fill', '#f0ad4e');
     }
-  }, [d3Model, colorCallback]);
+  }, [d3Model, colorCallback, selectedNode, layout]);
 
   const zoomCallback = useCallback(zoom, []);
   const selectNodeCallback = useCallback(props.handleSelectNode, []);
 
   useEffect(() => {
+    d3.select(svgRef.current)
+      .selectAll('g')
+      .remove();
+
     const svg = d3
       .select(svgRef.current)
       .attr('width', diameter)
@@ -190,7 +206,11 @@ export default ({ layout, ...props }: Props) => {
       .on('click', d => {
         selectNodeCallback(d);
         d3.event.stopPropagation();
-
+        // Don't zoom on single variable selection
+        if (!d.children) {
+          return;
+        }
+  
         return focus.current !== d && zoomCallback(d);
       });
 
@@ -225,7 +245,7 @@ export default ({ layout, ...props }: Props) => {
 
     selectNodeCallback(layout);
     zoomTo([layout.x, layout.y, layout.r * 2]);
-    console.log('update');
+    console.log('update d3');
   }, [layout, colorCallback, selectNodeCallback, zoomCallback]);
 
   return (
