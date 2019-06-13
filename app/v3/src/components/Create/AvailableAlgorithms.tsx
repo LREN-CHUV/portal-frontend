@@ -126,14 +126,14 @@ const AvailableAlgorithms = ({
           }
 
           // FIXME: only for Woken algorithms
-          // const mixed = algoConstraints.mixed;
-          // if (
-          //   modelGroupings.length > 0 &&
-          //   modelCovariables.length > 0 &&
-          //   !mixed
-          // ) {
-          //   isEnabled = false;
-          // }
+          const mixed = algoConstraints.mixed;
+          if (
+            modelGroupings.length > 0 &&
+            modelCovariables.length > 0 &&
+            !mixed
+          ) {
+            isEnabled = false;
+          }
 
           if (isLocal && excludedLocalAlgorithms.includes(algorithm.code)) {
             isEnabled = false;

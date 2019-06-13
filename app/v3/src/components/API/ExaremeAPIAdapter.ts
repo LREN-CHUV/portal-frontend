@@ -26,6 +26,8 @@ const buildConstraints = (algo: any) => {
     dependents.includes(p.name)
   );
 
+  let mixed = true;
+
   const variableTypes =
     variable &&
     variable.columnValuesSQLType.split(',').map((c: any) => c.trim());
@@ -86,6 +88,9 @@ const buildConstraints = (algo: any) => {
     if (covariableTypes && covariableTypes.includes('real')) {
       covariableConstraint.real = true;
     }
+  } else {
+    mixed = false;
+    covariableConstraint.max_count = 0;
   }
 
   const covariableColumnValuesIsBinominal =
@@ -127,7 +132,8 @@ const buildConstraints = (algo: any) => {
   return {
     covariables: covariableConstraint,
     variable: variableConstraint,
-    groupings: groupingsConstraint
+    groupings: groupingsConstraint,
+    mixed
   };
 };
 
