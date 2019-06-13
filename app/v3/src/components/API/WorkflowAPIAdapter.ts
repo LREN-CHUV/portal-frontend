@@ -74,7 +74,7 @@ const fetchResults = async (historyId: string): Promise<Response> => {
   }
 };
 
-const fetchResultDetail = async (
+const fetchResultDetailBody = async (
   historyId: string,
   resultId: string
 ): Promise<Response> => {
@@ -289,6 +289,18 @@ const buildWorkflowAlgorithmResponse = (
 
   if (workflowStatus.data) {
     if (workflowStatus.data.state === 'error') {
+
+      fetchResults(historyId).then(result => {
+        const content = result.data.filter((d: any) => d.state === 'error');
+        const contentId = content.pop().id;
+
+        console.log('error: fetchResultDetail', historyId);
+        fetchResultDetailBody(historyId, contentId).then(result2 => {
+          workflowResults[historyId] = result2;
+          buildWorkflowAlgorithmResponse(historyId, experimentResponse);
+        });
+      });
+      
       return {
         ...experimentResponse,
         error: "Couldn't perform the workflow. Please check the parameters"
@@ -315,7 +327,7 @@ const buildWorkflowAlgorithmResponse = (
           const contentId = content.pop().id;
 
           console.log('fetchResultDetail', historyId);
-          fetchResultDetail(historyId, contentId).then(result2 => {
+          fetchResultDetailBody(historyId, contentId).then(result2 => {
             workflowResults[historyId] = result2;
             buildWorkflowAlgorithmResponse(historyId, experimentResponse);
           });
