@@ -185,22 +185,20 @@ const buildParameters = (algo: any) => {
 const buildExaremeAlgorithmList = (json: any): Algorithm[] =>
   json
     .filter((algorithm: any) => enabledAlgorithms.includes(algorithm.name))
-    .map((algorithm: any) => {
-      return {
-        code: algorithm.name,
-        constraints: buildConstraints(algorithm),
-        description: algorithm.desc,
-        enabled: true,
-        label:
-          algorithm.name === 'NAIVE_BAYES_TRAINING_STANDALONE'
-            ? 'Naive Bayes Training'
-            : algorithm.name,
-        parameters: buildParameters(algorithm),
-        source: 'exareme',
-        type: ['exareme'],
-        validation: true
-      };
-    });
+    .map((algorithm: any) => ({
+      code: algorithm.name,
+      constraints: buildConstraints(algorithm),
+      description: algorithm.desc,
+      enabled: true,
+      label:
+        algorithm.name === 'NAIVE_BAYES_TRAINING_STANDALONE'
+          ? 'Naive Bayes Training'
+          : algorithm.name,
+      parameters: buildParameters(algorithm),
+      source: 'exareme',
+      type: ['exareme'],
+      validation: true
+    }));
 
 const buildExaremeAlgorithmRequest = (
   model: ModelResponse,
@@ -246,14 +244,17 @@ const buildExaremeAlgorithmRequest = (
   });
 
   if (covariablesArray.length > 0) {
-    const x = selectedMethod.code === 'LINEAR_REGRESSION' || selectedMethod.code === 'ANOVA'? {
-      code: xCode,
-      value: covariablesArray.toString().replace(/,/g, '+')
-    } : {
-      code: xCode,
-      value: covariablesArray.toString()
-    }
-
+    const x =
+      selectedMethod.code === 'LINEAR_REGRESSION' ||
+      selectedMethod.code === 'ANOVA'
+        ? {
+            code: xCode,
+            value: covariablesArray.toString().replace(/,/g, '+')
+          }
+        : {
+            code: xCode,
+            value: covariablesArray.toString()
+          };
 
     params.push(x);
   }
@@ -303,7 +304,7 @@ const stripModelParameters = (
   return experimentResponse;
 };
 
-const buildMimeType = (key: string, result: any) => {
+const buildResult = (key: string, result: any) => {
   if (result.error) {
     return {
       mime: MIME_TYPES.ERROR,
@@ -365,12 +366,12 @@ const buildExaremeExperimentResponse = (
             name: result.name,
             ...result.result
               .filter((r: any) => r.type === MIME_TYPES.HIGHCHARTS)
-              .map((r: any) => buildMimeType(name, r))[0]
+              .map((r: any) => buildResult(name, r))[0]
           };
         }
         return {
           name: result.name,
-          ...buildMimeType(name, result)
+          ...buildResult(name, result)
         };
       }),
       name: 'local'
