@@ -329,9 +329,14 @@ const buildResult = (key: string, result: any) => {
     case 'LINEAR_REGRESSION':
     case 'ID3':
     case 'NAIVE_BAYES_TRAINING_STANDALONE':
+
+      const data = result.resources[0].data
+      const s = JSON.stringify(data)
+      const t = s.replace(/None/g, "");
+      const newData = JSON.parse(t)
       return {
         mime: MIME_TYPES.JSONDATA,
-        data: [result.resources[0].data]
+        data: [newData]
       };
 
     case 'LOGISTIC_REGRESSION':
@@ -362,6 +367,15 @@ const buildExaremeExperimentResponse = (
     {
       algorithms: resultParsed.map((result: any) => {
         if (result.result) {
+
+          // console.log(result.result)
+          // return Object.keys(result.result).map(k => ({
+          //   name: result.name,
+          //   ...result.result[k],
+          //   mime: result.result[k].type,
+          //   ...buildResult(name, result.result[k])
+          // }))
+
           return {
             name: result.name,
             ...result.result
@@ -369,6 +383,7 @@ const buildExaremeExperimentResponse = (
               .map((r: any) => buildResult(name, r))[0]
           };
         }
+
         return {
           name: result.name,
           ...buildResult(name, result)

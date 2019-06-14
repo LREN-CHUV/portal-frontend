@@ -35,5 +35,5 @@ table.greyGridTable thead th {
 }
 table.greyGridTable thead th:first-child {
   border-left: 1px solid #eee;
-  width: 132px !important;
+  width: 200px !important;
 }
