@@ -94,7 +94,7 @@ export interface State {
   datasets?: VariableEntity[];
   algorithms?: Algorithm[];
   pathologies?: VariableEntity[];
-  stats?: Stats
+  stats?: Stats;
 }
 
 class Core extends Container<State> {
@@ -127,20 +127,22 @@ class Core extends Container<State> {
   };
 
   public setPathology = (code: string) => {
-    const hierarchy: any = hierarchyMockup.groups.filter(g => g.code === code).pop()
+    const hierarchy: any = hierarchyMockup.groups
+      .filter(g => g.code === code)
+      .pop();
 
     let variables: any = [];
     // TODO: fanciest function
     const dummyAccumulator = (node: any) => {
       if (node.variables) {
-        variables = [...variables, ...node.variables]
+        variables = [...variables, ...node.variables];
       }
 
       if (node.groups) {
-        return node.groups.map(dummyAccumulator)
+        return node.groups.map(dummyAccumulator);
       }
-    }
-    hierarchy.groups.map(dummyAccumulator)
+    };
+    hierarchy.groups.map(dummyAccumulator);
 
     return this.setState({
       hierarchy,
@@ -174,33 +176,30 @@ class Core extends Container<State> {
 
   public stats = async () => {
     try {
-    const data = await request.get(
-      `${this.backendURL}/stats`,
-      this.options
-    );
-    const json = await JSON.parse(data);
-    if (json.error) {
+      const data = await request.get(`${this.backendURL}/stats`, this.options);
+      const json = await JSON.parse(data);
+      if (json.error) {
+        return await this.setState({
+          error: json.error
+        });
+      }
+
       return await this.setState({
-        error: json.error
+        error: undefined,
+        stats: json
+      });
+    } catch (error) {
+      return await this.setState({
+        error: error.message
       });
     }
+  };
 
-    return await this.setState({
-      error: undefined,
-      stats: json
-    });
-  } catch (error) {
-    return await this.setState({
-      error: error.message
-    });
-  }
-  }
-
-  public algorithms = async () =>
+  public algorithms = async (isLocal: boolean) =>
     Promise.all([
       this.wokenAlgorithms(),
-      this.exaremeAlgorithms(),
-      this.workflows()
+      this.exaremeAlgorithms(isLocal),
+      this.workflows(isLocal)
     ]).then(
       ([wokenAlgorithms, exaremeAlgorithms, workflows]: [
         PrivateAlgorithm,
@@ -224,7 +223,11 @@ class Core extends Container<State> {
       }
     );
 
-  private workflows = async () => {
+  private workflows = async (isLocal: boolean) => {
+    if (isLocal) {
+      return { error: undefined, data: [] };
+    }
+
     try {
       const data = await request.get(
         `${this.backendURL}/methods/workflows`,
@@ -270,7 +273,11 @@ class Core extends Container<State> {
     }
   };
 
-  private exaremeAlgorithms: any = async () => {
+  private exaremeAlgorithms: any = async (isLocal: boolean) => {
+    if (isLocal) {
+      return { error: undefined, data: [] };
+    }
+
     try {
       const data = await request.get(
         `${this.backendURL}/methods/exareme`,
