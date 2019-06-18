@@ -51,7 +51,7 @@ export default ({ apiCore, query, code, handleChangeCategoryParameter }: Props) 
 
   return (
     <>
-      {categories && (
+      {categories && categories.length > 0 && (
         <div>
           <FormControl
             componentClass='select'

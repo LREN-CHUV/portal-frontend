@@ -1,14 +1,16 @@
+import './Explore.css';
+
 import React from 'react';
 import { Button, Checkbox, Panel } from 'react-bootstrap';
+
 import { APICore, APIModel } from '../API';
-import { VariableEntity } from '../API/Core';
+import { Pathology, VariableEntity } from '../API/Core';
 import { ModelResponse } from '../API/Model';
 import DropdownModel from '../UI/DropdownModel';
 import { D3Model, HierarchyCircularNode, ModelType } from './Container';
 import Histograms from './D3Histograms';
 import ModelView from './D3Model';
 import Search from './D3Search';
-import './Explore.css';
 import Header from './Header';
 
 export interface ExploreProps {
@@ -98,7 +100,8 @@ export default (props: ExploreProps) => {
                     }}
                     checked={selectedDatasets
                       .map(s => s.code)
-                      .includes(dataset.code)}>
+                      .includes(dataset.code)}
+                      disabled={selectedPathology === Pathology.TBI}>
                     {dataset.label}
                   </Checkbox>
                 ))}

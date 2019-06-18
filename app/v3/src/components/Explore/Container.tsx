@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 
 import { APICore, APIMining, APIModel } from '../API';
-import { Parameter, VariableEntity } from '../API/Core';
+import { Parameter, Pathology, VariableEntity } from '../API/Core';
 import { ModelResponse, Query } from '../API/Model';
 import { Alert } from '../UI/Alert';
 import { d3Hierarchy, VariableDatum } from './d3Hierarchy';
@@ -315,6 +315,9 @@ export default ({ apiCore, apiMining, apiModel, ...props }: Props) => {
 
   const handleSelectPathology = (code: string) => {
     apiCore.setPathology(code);
+    if (code === Pathology.TBI) {
+      setSelectedDatasets([])
+    }
   };
 
   const handleGoToAnalysis = async () => {
@@ -323,20 +326,8 @@ export default ({ apiCore, apiMining, apiModel, ...props }: Props) => {
     const slug = props.match.params.slug;
     const nextModel = convertD3ModelToModel(d3Model, model);
 
-    // if (slug && slug !== editPath) {
-    //   await apiModel.update({ model: nextModel });
-    //   if (apiModel.state.error) {
-    //     setAlert(apiModel.state.error);
-    //     setTimeout(() => {
-    //       setAlert(null);
-    //     }, 3 * 1000);
-    //     return;
-    //   }
-    //   history.push(`/v3/review/${slug}`);
-    // } else {
     await apiModel.setDraft(nextModel);
     history.push(`/v3/review/${editPath}`);
-    // }
   };
 
   const selectedPathology =
