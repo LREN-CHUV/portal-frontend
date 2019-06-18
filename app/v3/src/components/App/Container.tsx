@@ -40,6 +40,7 @@ class AppContainer extends React.Component<any, State> {
       this.apiCore.datasets(),
       this.apiCore.setPathology('neurodegenerativediseases'),
       this.apiCore.algorithms(),
+      this.apiCore.stats(),
       this.apiModel.all()
     ]);
   }
