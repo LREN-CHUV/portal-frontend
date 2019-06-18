@@ -1,4 +1,6 @@
 .dropdown-menu {
+  max-height: 450px;
+  min-width: 220px;
   overflow-y: scroll;
 }
 
@@ -49,8 +51,4 @@
 #model-dropdown .caret:before,
 #experiment-dropdown .caret:before {
   display: none !important;
-}
-
-.dropdown-menu {
-  min-width: 200px;
 }
