@@ -2,7 +2,7 @@ import React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { APICore, APIExperiment, APIModel } from '../API';
+import { APICore, APIModel } from '../API';
 import Infos from './Infos';
 import Model from './Model';
 

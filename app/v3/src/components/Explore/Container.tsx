@@ -7,7 +7,7 @@ import { RouteComponentProps } from 'react-router-dom';
 import { APICore, APIMining, APIModel } from '../API';
 import { Parameter, Pathology, VariableEntity } from '../API/Core';
 import { ModelResponse, Query } from '../API/Model';
-import { Alert } from '../UI/Alert';
+// import { Alert } from '../UI/Alert';
 import { d3Hierarchy, VariableDatum } from './d3Hierarchy';
 import CirclePack from './D3PackLayer';
 
@@ -55,7 +55,7 @@ export default ({ apiCore, apiMining, apiModel, ...props }: Props) => {
   >();
   const [d3Model, setD3Model] = useState<D3Model>(initialD3Model);
   const [model, setModel] = useState<ModelResponse | undefined>();
-  const [alert, setAlert] = useState<string | null>(null);
+  // const [alert, setAlert] = useState<string | null>(null);
 
   useEffect(() => {
     const slug = props.match.params.slug;
@@ -322,8 +322,6 @@ export default ({ apiCore, apiMining, apiModel, ...props }: Props) => {
 
   const handleGoToAnalysis = async () => {
     const { history } = props;
-
-    const slug = props.match.params.slug;
     const nextModel = convertD3ModelToModel(d3Model, model);
 
     await apiModel.setDraft(nextModel);
@@ -351,7 +349,7 @@ export default ({ apiCore, apiMining, apiModel, ...props }: Props) => {
 
   return (
     <>
-      {alert && <Alert message={alert} />}
+      {/* {alert && <Alert message={alert} />} */}
       {d3Layout && (
         <CirclePack layout={d3Layout} d3Model={d3Model} {...nextProps} />
       )}

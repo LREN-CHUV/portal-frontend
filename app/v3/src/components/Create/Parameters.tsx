@@ -9,7 +9,7 @@ import {
 } from 'react-bootstrap';
 
 import { APICore } from '../API';
-import { AlgorithmParameter, VariableEntity } from '../API/Core';
+import { AlgorithmParameter } from '../API/Core';
 import { Query } from '../API/Model';
 import CategoryChooser from './CategoryValuesChooser';
 
@@ -194,7 +194,7 @@ class Parameters extends React.Component<Props> {
   private handleChangeParameter = (event: any, code: string) => {
     event.preventDefault();
     const currentTarget = event.currentTarget as HTMLInputElement;
-    this.handleChangeCategoryParameter(code, currentTarget.value)
+    this.handleChangeCategoryParameter(code, currentTarget.value);
   };
 }
 
