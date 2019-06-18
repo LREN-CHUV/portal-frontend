@@ -245,7 +245,6 @@ export default ({ layout, ...props }: Props) => {
 
     selectNodeCallback(layout);
     zoomTo([layout.x, layout.y, layout.r * 2]);
-    console.log('update d3');
   }, [layout, colorCallback, selectNodeCallback, zoomCallback]);
 
   return (

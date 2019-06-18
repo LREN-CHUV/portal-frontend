@@ -6,7 +6,7 @@ import { backendURL } from '../API';
 import { Algorithm, Parameter, VariableEntity } from './Core';
 
 interface Response {
-  error: string | undefined;
+  error: string | any | undefined;
   data: any | undefined;
 }
 
@@ -133,30 +133,35 @@ class Mining extends Container<MiningState> {
   }: {
     parameters: Parameter[];
   }): Promise<void> => {
-
-
-    const datasetObject = parameters.find(p => p.name === 'dataset')
-    if (datasetObject && datasetObject.value === "") {
-      return;
+    const datasetObject = parameters.find(p => p.name === 'dataset');
+    if (datasetObject && datasetObject.value === '') {
+      return await this.setState({
+        histograms: {
+          data: undefined,
+          error: 'Please select a dataset',
+          loading: false
+        }
+      });
     }
 
     await this.setState({
       histograms: { loading: true, error: undefined, data: undefined }
     });
 
-    const vars = ['', 'gender', 'agegroup'];
+    const vars = ['', 'gender', 'agegroup', 'alzheimerbroadcategory'];
     const nextParameters = vars.map(v => [
       ...parameters,
       { name: 'y', value: v }
     ]);
 
     const promises = await Promise.all(nextParameters.map(this.oneHistogram));
-
     if (promises.map(p => p.error).some(p => p !== undefined)) {
       return this.setState({
         histograms: {
           data: undefined,
-          error: promises.map(p => p.error)[0],
+          error: promises.map(p =>
+            typeof p.error === 'object' ? p.error && p.error.message : p.error
+          )[0],
           loading: false
         }
       });

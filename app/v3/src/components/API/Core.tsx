@@ -7,6 +7,11 @@ import { buildExaremeAlgorithmList } from './ExaremeAPIAdapter';
 import hierarchyMockup from './pathologiesHierarchyMockup';
 import { buildWorkflowAlgorithmList } from './WorkflowAPIAdapter';
 
+export enum Pathology {
+  DEG = 'neurodegenerativediseases',
+  TBI = 'tbi'
+}
+
 export interface Variable {
   code: string;
   label?: string;
@@ -125,6 +130,7 @@ class Core extends Container<State> {
     const hierarchy: any = hierarchyMockup.groups.filter(g => g.code === code).pop()
 
     let variables: any = [];
+    // TODO: fanciest function
     const dummyAccumulator = (node: any) => {
       if (node.variables) {
         variables = [...variables, ...node.variables]

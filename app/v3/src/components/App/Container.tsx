@@ -2,9 +2,10 @@ import * as React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import request from 'request-promise-native';
 import { Provider, Subscribe } from 'unstated';
-// import UNSTATED from 'unstated-debug';
 
+// import UNSTATED from 'unstated-debug';
 import { APICore, APIExperiment, APIMining, APIModel, webURL } from '../API'; // as interfaces
+import { Pathology } from '../API/Core';
 import config from '../API/RequestHeaders';
 import App from '../App/App';
 
@@ -38,7 +39,7 @@ class AppContainer extends React.Component<any, State> {
     return await Promise.all([
       this.apiExperiment.all(),
       this.apiCore.datasets(),
-      this.apiCore.setPathology('neurodegenerativediseases'),
+      this.apiCore.setPathology(Pathology.DEG),
       this.apiCore.algorithms(),
       this.apiCore.stats(),
       this.apiModel.all()
