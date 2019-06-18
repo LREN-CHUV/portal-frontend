@@ -346,11 +346,6 @@ class Container extends React.Component<Props, State> {
   private handleGoBackToExplore = async () => {
     const { history } = this.props;
     const { apiModel } = this.props;
-    const model = apiModel.state.model;
-    // if (model && model.slug) {
-    //   await apiModel.update({ model });
-    //   history.push(`/v3/explore/${model.slug}`);
-    // } else 
     if (apiModel.state.draft) {
       await apiModel.setDraft(apiModel.state.draft);
       history.push(`/v3/explore/${editPath}`);

@@ -87,7 +87,7 @@ export default ({ stats }: Props) => (
         </Icon>
       </PanelTitle>
       <PanelBody>
-        <Count>{stats && stats.users || 0}</Count>
+        <Count>{(stats && stats.users) || 0}</Count>
         <Summary>Scientists registered on the platform</Summary>
       </PanelBody>
     </Panel>
@@ -100,7 +100,7 @@ export default ({ stats }: Props) => (
         </Icon>
       </PanelTitle>
       <PanelBody>
-        <Count>{stats && stats.articles || 0}</Count>
+        <Count>{(stats && stats.articles) || 0}</Count>
         <Summary>Articles written on the platform</Summary>
       </PanelBody>
     </Panel>
@@ -113,7 +113,7 @@ export default ({ stats }: Props) => (
         </Icon>
       </PanelTitle>
       <PanelBody>
-        <Count>{stats && stats.variables || 0}</Count>
+        <Count>{(stats && stats.variables) || 0}</Count>
         <Summary>Records in database</Summary>
       </PanelBody>
     </Panel>
