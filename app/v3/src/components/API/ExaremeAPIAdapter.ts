@@ -13,11 +13,11 @@ const hiddenParameters = [...dependents, ...independents, 'dataset', 'filter'];
 const enabledAlgorithms = [
   'LOGISTIC_REGRESSION',
   'ANOVA',
-  'NAIVE_BAYES_TRAINING_STANDALONE',
+  // 'NAIVE_BAYES_TRAINING_STANDALONE',
   // 'KMEANS',
   'PEARSON_CORRELATION',
   'ID3',
-  'HISTOGRAMS',
+  // 'HISTOGRAMS',
   'LINEAR_REGRESSION'
 ];
 
