@@ -1,6 +1,7 @@
 import * as d3 from 'd3';
 import React, { useRef } from 'react';
 import { Tab, Tabs } from 'react-bootstrap';
+
 import { MiningResponseShape } from '../API/Mining';
 import Loading from '../UI/Loader';
 import Highchart from '../UI/Visualization/Highchart';
@@ -48,7 +49,7 @@ export default (props: Props) => {
     }
   });
 
-  const overview = (node: HierarchyCircularNode): any => {
+  const overviewChart = (node: HierarchyCircularNode): any => {
     let children = node
       .descendants()
       .filter(d => d.parent === selectedNode && !d.data.isVariable);
@@ -102,7 +103,7 @@ export default (props: Props) => {
 
       <div className={'histograms'}>
         {selectedNode && selectedNode.children && (
-          <Highchart options={overview(selectedNode)} />
+          <Highchart options={overviewChart(selectedNode)} />
         )}
         {histograms && histograms.loading && <Loading />}
         {histograms && histograms.error && (
@@ -111,18 +112,20 @@ export default (props: Props) => {
             <p>{histograms.error}</p>
           </div>
         )}
+
         {selectedNode &&
           !selectedNode.children &&
           histograms &&
           histograms.data && (
             <Tabs defaultActiveKey={0} id='uncontrolled-histogram-tabs'>
               {histograms.data &&
-                histograms.data.map((h: any, i: number) => (
+                histograms.data.map((d: any, i: number) => (
                   <Tab
                     eventKey={i}
-                    title={`${h.label.replace('Histogram - ', '')}`}
+                    title={`${d.label && d.label.toUpperCase()}`}
                     key={i}>
-                    <Highchart options={h} />
+                    {console.log(d.highchart)}
+                    <Highchart options={d.highchart} />
                   </Tab>
                 ))}
             </Tabs>

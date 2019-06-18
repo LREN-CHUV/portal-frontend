@@ -1,13 +1,15 @@
+import './Explore.css';
+
 import * as d3 from 'd3';
 import React, { useEffect, useState } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
+
 import { APICore, APIMining, APIModel } from '../API';
-import { VariableEntity } from '../API/Core';
+import { Parameter, VariableEntity } from '../API/Core';
 import { ModelResponse, Query } from '../API/Model';
 import { Alert } from '../UI/Alert';
 import { d3Hierarchy, VariableDatum } from './d3Hierarchy';
 import CirclePack from './D3PackLayer';
-import './Explore.css';
 
 const diameter: number = 800;
 const padding: number = 1.5;
@@ -115,12 +117,27 @@ export default ({ apiCore, apiMining, apiModel, ...props }: Props) => {
 
   useEffect(() => {
     if (selectedNode && selectedNode.data.isVariable && selectedDatasets) {
-      const payload = {
-        datasets: selectedDatasets.map(d => ({ code: d.code })),
-        variables: [{ code: selectedNode.data.code }]
-      };
+      const parameters: Parameter[] = [
+        {
+          name: 'x',
+          value: selectedNode.data.code
+        },
+        {
+          name: 'dataset',
+          value: selectedDatasets.map(d => d.code).toString()
+        }
+      ];
 
-      apiMining.histograms({ payload });
+      // TODO: move that part to MiningApi
+      const type = selectedNode.data.type || 'real';
+      if (type !== 'polynominal' && type !== 'binominal') {
+        parameters.push({
+          name: 'bins',
+          value: '20'
+        });
+      }
+
+      apiMining.exaremeHistograms({ parameters });
     }
   }, [selectedNode, selectedDatasets, apiMining]);
 
@@ -317,15 +334,13 @@ export default ({ apiCore, apiMining, apiModel, ...props }: Props) => {
     //   }
     //   history.push(`/v3/review/${slug}`);
     // } else {
-      await apiModel.setDraft(nextModel);
-      history.push(`/v3/review/${editPath}`);
+    await apiModel.setDraft(nextModel);
+    history.push(`/v3/review/${editPath}`);
     // }
   };
 
   const selectedPathology =
-    apiCore.state.hierarchy &&
-    apiCore.state.hierarchy.code
-    
+    apiCore.state.hierarchy && apiCore.state.hierarchy.code;
 
   const nextProps = {
     apiCore,
