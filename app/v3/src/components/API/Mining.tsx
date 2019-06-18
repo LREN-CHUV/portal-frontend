@@ -133,6 +133,13 @@ class Mining extends Container<MiningState> {
   }: {
     parameters: Parameter[];
   }): Promise<void> => {
+
+
+    const datasetObject = parameters.find(p => p.name === 'dataset')
+    if (datasetObject && datasetObject.value === "") {
+      return;
+    }
+
     await this.setState({
       histograms: { loading: true, error: undefined, data: undefined }
     });
