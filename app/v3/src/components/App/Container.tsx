@@ -40,7 +40,7 @@ class AppContainer extends React.Component<any, State> {
       this.apiExperiment.all(),
       this.apiCore.datasets(),
       this.apiCore.setPathology(Pathology.DEG),
-      this.apiCore.algorithms(),
+      this.apiCore.algorithms(this.state.appConfig && this.state.appConfig.mode === 'local' || true),
       this.apiCore.stats(),
       this.apiModel.all()
     ]);
