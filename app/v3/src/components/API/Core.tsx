@@ -65,6 +65,11 @@ export interface AlgorithmParameter {
   visible: boolean;
 }
 
+export interface Parameter {
+  name: string;
+  value: string;
+}
+
 interface PrivateAlgorithm {
   error: string | undefined;
   data: any | undefined;

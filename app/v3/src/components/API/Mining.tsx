@@ -3,7 +3,12 @@ import stringHash from 'string-hash';
 import { Container } from 'unstated';
 
 import { backendURL } from '../API';
-import { Algorithm, VariableEntity } from './Core';
+import { Algorithm, Parameter, VariableEntity } from './Core';
+
+interface Response {
+  error: string | undefined;
+  data: any | undefined;
+}
 
 export interface MiningResponseShape {
   data?: any;
@@ -44,7 +49,9 @@ class Mining extends Container<MiningState> {
     "data": { "data": [{ x: n }] }   
     "data": [{ "data": [{ x: n }] }] 
   */
-  public static normalizeHeatmapData = (heatmap: MiningResponseShape): MiningResponseShape[] => {
+  public static normalizeHeatmapData = (
+    heatmap: MiningResponseShape
+  ): MiningResponseShape[] => {
     if (Array.isArray(heatmap.data)) {
       const isDataNested = heatmap.data.map(d => d.data).includes(true);
       if (isDataNested) {
@@ -69,7 +76,7 @@ class Mining extends Container<MiningState> {
 
   private cachedSummaryStatistics: any = {};
   private options: request.Options;
-  private baseUrl: string;
+  private backendURL: string;
 
   constructor(config: any) {
     super();
@@ -79,7 +86,7 @@ class Mining extends Container<MiningState> {
       summaryStatistics: undefined
     };
     this.options = config.options;
-    this.baseUrl = backendURL;
+    this.backendURL = backendURL;
   }
 
   public clear = () => {
@@ -92,7 +99,81 @@ class Mining extends Container<MiningState> {
     }));
   };
 
-  public heatmaps = async ({ payload }: { payload: MiningPayload }): Promise<any> => {
+  public oneHistogram = async (parameters: Parameter[]): Promise<Response> => {
+    try {
+      const data = await request({
+        body: JSON.stringify(parameters),
+        headers: {
+          ...this.options.headers,
+          'Content-Type': 'application/json;charset=UTF-8'
+        },
+        method: 'POST',
+        uri: `${this.backendURL}/mining/exareme`
+      });
+
+      const jsonString = await JSON.parse(data);
+
+      // FIXME: in exareme, return type should be json
+      const json = await JSON.parse(jsonString);
+
+      if (json && json.error) {
+        return { error: json.error, data: undefined };
+      }
+
+      return { error: undefined, data: json };
+    } catch (error) {
+      console.log(error);
+
+      return { error, data: undefined };
+    }
+  };
+
+  public exaremeHistograms = async ({
+    parameters
+  }: {
+    parameters: Parameter[];
+  }): Promise<void> => {
+    await this.setState({
+      histograms: { loading: true, error: undefined, data: undefined }
+    });
+
+    const vars = ['', 'gender', 'agegroup'];
+    const nextParameters = vars.map(v => [
+      ...parameters,
+      { name: 'y', value: v }
+    ]);
+
+    const promises = await Promise.all(nextParameters.map(this.oneHistogram));
+
+    if (promises.map(p => p.error).some(p => p !== undefined)) {
+      return this.setState({
+        histograms: {
+          data: undefined,
+          error: promises.map(p => p.error)[0],
+          loading: false
+        }
+      });
+    }
+
+    const possibleX = parameters.find(p => p.name === 'x');
+    const variable = possibleX ? possibleX.value : 'Selected';
+    this.setState({
+      histograms: {
+        data: promises.map((p, i) => ({
+          highchart: p.data,
+          label: i === 0 ? variable : vars[i]
+        })),
+        error: undefined,
+        loading: false
+      }
+    });
+  };
+
+  public heatmaps = async ({
+    payload
+  }: {
+    payload: MiningPayload;
+  }): Promise<any> => {
     await this.setState({
       heatmaps: [
         {
@@ -139,7 +220,12 @@ class Mining extends Container<MiningState> {
       },
       covariables: [],
       filters: '',
-      grouping: [{ code: 'dataset' }, { code: 'gender' }, { code: 'agegroup' }, { code: 'alzheimerbroadcategory' }]
+      grouping: [
+        { code: 'dataset' },
+        { code: 'gender' },
+        { code: 'agegroup' },
+        { code: 'alzheimerbroadcategory' }
+      ]
     };
     const response = await this.fetchOne({ payload: nextPayload });
     if (response.error) {
@@ -154,12 +240,22 @@ class Mining extends Container<MiningState> {
   };
 
   // fetch for each dataset, otherwise values are aggregated for all datasets
-  public summaryStatisticsByDataset = async ({ payload }: { payload: MiningPayload }): Promise<any> => {
-    const hashKey = stringHash(`${payload.variables}${payload.covariables}${payload.grouping}${payload.filters}`);
+  public summaryStatisticsByDataset = async ({
+    payload
+  }: {
+    payload: MiningPayload;
+  }): Promise<any> => {
+    const hashKey = stringHash(
+      `${payload.variables}${payload.covariables}${payload.grouping}${
+        payload.filters
+      }`
+    );
     const queries = payload.datasets.map(dataset => {
       const code = dataset.code;
 
-      const response = this.cachedSummaryStatistics[code] && this.cachedSummaryStatistics[code].hashKey === hashKey;
+      const response =
+        this.cachedSummaryStatistics[code] &&
+        this.cachedSummaryStatistics[code].hashKey === hashKey;
 
       if (!response) {
         this.cachedSummaryStatistics[code] = {
@@ -196,12 +292,18 @@ class Mining extends Container<MiningState> {
           hashKey
         };
 
-        const summaryStatistics = payload.datasets.map(dataset => this.cachedSummaryStatistics[dataset.code]);
+        const summaryStatistics = payload.datasets.map(
+          dataset => this.cachedSummaryStatistics[dataset.code]
+        );
         this.setState({ summaryStatistics });
       });
   };
 
-  private fetchOne = async ({ payload }: { payload: MiningPayload }): Promise<MiningResponseShape> => {
+  private fetchOne = async ({
+    payload
+  }: {
+    payload: MiningPayload;
+  }): Promise<MiningResponseShape> => {
     const copyOfDataset = payload.datasets && [...payload.datasets];
 
     try {
@@ -212,7 +314,7 @@ class Mining extends Container<MiningState> {
           'Content-Type': 'application/json;charset=UTF-8'
         },
         method: 'POST',
-        uri: `${this.baseUrl}/mining`
+        uri: `${this.backendURL}/mining`
       });
 
       const data = JSON.parse(response);
