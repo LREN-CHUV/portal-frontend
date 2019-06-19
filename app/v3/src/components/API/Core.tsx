@@ -301,7 +301,6 @@ class Core extends Container<State> {
       return { error, data: undefined };
     }
   };
-
 }
 
 export default Core;
