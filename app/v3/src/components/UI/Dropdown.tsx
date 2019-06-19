@@ -6,8 +6,6 @@ import { DropdownButton, MenuItem } from 'react-bootstrap';
 
 import { ExperimentResponse } from '../API/Experiment';
 
-import { ExperimentResponse } from '../API/Experiment';
-
 interface IDropdown {
   items: ExperimentResponse[] | undefined;
   title: string;

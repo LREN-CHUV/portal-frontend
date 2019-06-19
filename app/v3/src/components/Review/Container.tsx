@@ -4,20 +4,18 @@ import './Review.css';
 import * as React from 'react';
 import { Panel } from 'react-bootstrap';
 import { RouteComponentProps } from 'react-router-dom';
-import { APICore, APIMining, APIModel } from '../../API';
-import { VariableEntity } from '../../API/Core';
-import { MiningPayload } from '../../API/Mining';
-import { ModelResponse, Query } from '../../API/Model';
-import { IAlert } from '../../UI/Alert';
-import Model from '../../UI/Model';
-import Validation from '../../UI/Validation';
+
+import { APICore, APIMining, APIModel } from '../API';
+import { VariableEntity } from '../API/Core';
+import { MiningPayload } from '../API/Mining';
+import { ModelResponse, Query } from '../API/Model';
 import { editPath } from '../Explore/Container';
+import { IAlert } from '../UI/Alert';
+import Model from '../UI/Model';
+import Validation from '../UI/Validation';
 import Content from './Content';
 import Filter from './Filter';
 import ExperimentReviewHeader from './Header';
-import './Review.css';
-
-
 
 interface Params {
   slug: string;
@@ -128,66 +126,6 @@ class Container extends React.Component<Props, State> {
                         filters={fields}
                         handleChangeFilter={this.handleUpdateFilter}
                       />
-                    )}
-                  </Panel.Body>
-                </Panel.Collapse>
-              </Panel>
-            </Content>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  private makeFilters = ({ apiCore }: { apiCore: APICore }) => {
-    const { query } = this.state;
-    const { fields, filters } = this.makeFilters({ apiCore });
-    const model = apiModel.state.model || apiModel.state.draft;
-    return (
-      <div className='Model Review'>
-        <div className='header'>
-          <ExperimentReviewHeader
-            handleGoBackToExplore={this.handleGoBackToExplore}
-            handleSaveModel={this.handleSaveModel}
-            handleRunAnalysis={this.handleRunAnalysis}
-            model={model}
-          />
-        </div>
-        <div className='content'>
-          <div className='sidebar'>
-            <Model
-              model={model}
-              selectedSlug={this.props.match.params.slug}
-              showDatasets={false}
-              variables={apiCore.state.variables}
-              items={apiModel.state.models}
-              handleSelectModel={this.handleSelectModel}
-            />
-            <Panel className='model'>
-              <Panel.Body>
-                <Validation
-                  isPredictiveMethod={false}
-                  datasets={apiCore.state.datasets}
-                  query={query}
-                  handleUpdateQuery={this.handleUpdateDataset}
-                />
-              </Panel.Body>
-            </Panel>
-          </div>
-          <div className='results'>
-            <Content
-              apiMining={apiMining}
-              model={model}
-              selectedDatasets={query && query.trainingDatasets}
-              lookup={apiCore.lookup}>
-              <Panel className='filters' defaultExpanded={false}>
-                <Panel.Title toggle={true}>
-                  <h3 className={'btn btn-info'}>Filters</h3>
-                </Panel.Title>
-                <Panel.Collapse>
-                  <Panel.Body collapsible={true}>
-                    {fields && fields.length > 0 && (
-                      <Filter rules={filters} filters={fields} handleChangeFilter={this.handleUpdateFilter} />
                     )}
                   </Panel.Body>
                 </Panel.Collapse>

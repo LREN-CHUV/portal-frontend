@@ -302,29 +302,6 @@ class Core extends Container<State> {
     }
   };
 
-  private exaremeAlgorithms2: any = async () => {
-    try {
-      const data = await request.get(
-        `${this.backendURL}/methods/exareme`,
-        this.options
-      );
-      const json = await JSON.parse(data);
-
-      if (json.error) {
-        return { error: json.error, data: undefined };
-      }
-
-      const nextJson = json.filter(
-        (a: any) => !excludedMethods.includes(a.code)
-      );
-
-      const exaremeAlgorithms = parse(nextJson);
-
-      return { error: undefined, data: exaremeAlgorithms };
-    } catch (error) {
-      return { error, data: undefined };
-    }
-  };
 }
 
 export default Core;
