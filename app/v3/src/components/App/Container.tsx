@@ -31,16 +31,16 @@ class AppContainer extends React.Component<any, State> {
     const json = await request.get(`${webURL}/scripts/app/config.json`);
     try {
       const appConfig = JSON.parse(json);
-      this.setState({ ...appConfig });
+      this.setState({ appConfig });
     } catch (e) {
-      console.log('Couldn\'t read config')
+      console.log("Couldn't read config");
     }
 
     return await Promise.all([
       this.apiExperiment.all(),
       this.apiCore.datasets(),
       this.apiCore.setPathology(Pathology.DEG),
-      this.apiCore.algorithms((this.state.appConfig && this.state.appConfig.mode === 'local') || true),
+      this.apiCore.algorithms(this.state.appConfig.mode === 'local' || true),
       this.apiCore.stats(),
       this.apiModel.all()
     ]);
@@ -53,9 +53,20 @@ class AppContainer extends React.Component<any, State> {
   public render() {
     return (
       <Router>
-        <Provider inject={[this.apiExperiment, this.apiCore, this.apiModel, this.apiMining]}>
+        <Provider
+          inject={[
+            this.apiExperiment,
+            this.apiCore,
+            this.apiModel,
+            this.apiMining
+          ]}>
           <Subscribe to={[APIExperiment, APICore, APIModel, APIMining]}>
-            {(apiExperiment: APIExperiment, apiCore: APICore, apiModel: APIModel, apiMining: APIMining) => {
+            {(
+              apiExperiment: APIExperiment,
+              apiCore: APICore,
+              apiModel: APIModel,
+              apiMining: APIMining
+            ) => {
               return (
                 <App
                   appConfig={this.state}
