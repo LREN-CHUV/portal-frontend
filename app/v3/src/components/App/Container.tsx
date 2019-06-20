@@ -33,14 +33,23 @@ class AppContainer extends React.Component<any, State> {
       const appConfig = JSON.parse(json);
       this.setState({ appConfig });
     } catch (e) {
+      const appConfig = {
+        instanceName: 'MIP LOCAL',
+        mode: 'local',
+        theme: 'mip',
+        version: 'alpha'
+      };
+      this.setState({ appConfig });
       console.log("Couldn't read config");
     }
+
+    console.log(this.state.appConfig.mode);
 
     return await Promise.all([
       this.apiExperiment.all(),
       this.apiCore.datasets(),
       this.apiCore.setPathology(Pathology.DEG),
-      this.apiCore.algorithms(this.state.appConfig.mode === 'local' || true),
+      this.apiCore.algorithms(this.state.appConfig.mode === 'local'),
       this.apiCore.stats(),
       this.apiModel.all()
     ]);
@@ -69,7 +78,7 @@ class AppContainer extends React.Component<any, State> {
             ) => {
               return (
                 <App
-                  appConfig={this.state}
+                  appConfig={this.state.appConfig}
                   apiExperiment={apiExperiment}
                   apiCore={apiCore}
                   apiModel={apiModel}
