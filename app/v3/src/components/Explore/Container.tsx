@@ -117,27 +117,10 @@ export default ({ apiCore, apiMining, apiModel, ...props }: Props) => {
 
   useEffect(() => {
     if (selectedNode && selectedNode.data.isVariable && selectedDatasets) {
-      const parameters: Parameter[] = [
-        {
-          name: 'x',
-          value: selectedNode.data.code
-        },
-        {
-          name: 'dataset',
-          value: selectedDatasets.map(d => d.code).toString()
-        }
-      ];
-
-      // TODO: move that part to MiningApi
-      const type = selectedNode.data.type || 'real';
-      if (type !== 'polynominal' && type !== 'binominal') {
-        parameters.push({
-          name: 'bins',
-          value: '20'
-        });
-      }
-
-      apiMining.exaremeHistograms({ parameters });
+      apiMining.exaremeHistograms({
+        datasets: selectedDatasets,
+        x: selectedNode.data
+      });
     }
   }, [selectedNode, selectedDatasets, apiMining]);
 
@@ -316,7 +299,7 @@ export default ({ apiCore, apiMining, apiModel, ...props }: Props) => {
   const handleSelectPathology = (code: string) => {
     apiCore.setPathology(code);
     if (code === Pathology.TBI) {
-      setSelectedDatasets([])
+      setSelectedDatasets([]);
     }
   };
 

@@ -4,6 +4,7 @@ import { Container } from 'unstated';
 
 import { backendURL } from '../API';
 import { Algorithm, Parameter, VariableEntity } from './Core';
+import { VariableDatum } from '../Explore/d3Hierarchy';
 
 interface Response {
   error: string | any | undefined;
@@ -45,9 +46,9 @@ export interface MiningState {
 //
 class Mining extends Container<MiningState> {
   /*
-    "data": [{ x: n }]   
-    "data": { "data": [{ x: n }] }   
-    "data": [{ "data": [{ x: n }] }] 
+    "data": [{ x: n }]
+    "data": { "data": [{ x: n }] }
+    "data": [{ "data": [{ x: n }] }]
   */
   public static normalizeHeatmapData = (
     heatmap: MiningResponseShape
@@ -129,12 +130,13 @@ class Mining extends Container<MiningState> {
   };
 
   public exaremeHistograms = async ({
-    parameters
+    x,
+    datasets
   }: {
-    parameters: Parameter[];
+    x: VariableDatum;
+    datasets: VariableEntity[];
   }): Promise<void> => {
-    const datasetObject = parameters.find(p => p.name === 'dataset');
-    if (datasetObject && datasetObject.value === '') {
+    if (datasets.length === 0) {
       return await this.setState({
         histograms: {
           data: undefined,
@@ -145,16 +147,46 @@ class Mining extends Container<MiningState> {
     }
 
     await this.setState({
-      histograms: { loading: true, error: undefined, data: undefined }
+      histograms: {
+        data: undefined,
+        error: undefined,
+        loading: true
+      }
     });
 
-    const vars = ['', 'gender', 'agegroup', 'alzheimerbroadcategory'];
-    const nextParameters = vars.map(v => [
+    const parameters: Parameter[] = [
+      {
+        name: 'dataset',
+        value: datasets.map(d => d.code).toString()
+      },
+      {
+        name: 'x',
+        value: x.code
+      }
+    ];
+
+    const dependentsVariables = [
+      '',
+      'gender',
+      'agegroup',
+      'alzheimerbroadcategory'
+    ].filter(v => x.code !== v);
+
+    const type = x.type || 'real';
+    if (type !== 'polynominal' && type !== 'binominal') {
+      parameters.push({
+        name: 'bins',
+        value: '20'
+      });
+    }
+
+    const nextParameters = dependentsVariables.map(v => [
       ...parameters,
       { name: 'y', value: v }
     ]);
 
     const promises = await Promise.all(nextParameters.map(this.oneHistogram));
+
     if (promises.map(p => p.error).some(p => p !== undefined)) {
       return this.setState({
         histograms: {
@@ -167,13 +199,11 @@ class Mining extends Container<MiningState> {
       });
     }
 
-    const possibleX = parameters.find(p => p.name === 'x');
-    const variable = possibleX ? possibleX.value : 'Selected';
     this.setState({
       histograms: {
         data: promises.map((p, i) => ({
           highchart: p.data,
-          label: i === 0 ? variable : vars[i]
+          label: i === 0 ? x.label : dependentsVariables[i]
         })),
         error: undefined,
         loading: false

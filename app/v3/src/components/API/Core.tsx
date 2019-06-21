@@ -72,7 +72,7 @@ export interface AlgorithmParameter {
 
 export interface Parameter {
   name: string;
-  value: string;
+  value: any;
 }
 
 interface PrivateAlgorithm {
