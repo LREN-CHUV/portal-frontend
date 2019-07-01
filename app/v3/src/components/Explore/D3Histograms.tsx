@@ -114,6 +114,21 @@ export default (props: Props) => {
         )}
 
         {selectedNode &&
+          !selectedNode.children && histograms && histograms.data && (
+          <Tabs defaultActiveKey={0} id='uncontrolled-histogram-tabs'>
+            {histograms.data &&
+              histograms.data.map((d: any, i: number) => (
+                <Tab
+                  eventKey={i}
+                  title={`${d.label.replace('Histogram - ', '')}`}
+                  key={i}>
+                  <Highchart options={d.highchart || d} />
+                </Tab>
+              ))}
+          </Tabs>
+        )}
+
+        {/* {selectedNode &&
           !selectedNode.children &&
           histograms &&
           histograms.data && (
@@ -129,7 +144,7 @@ export default (props: Props) => {
                   </Tab>
                 ))}
             </Tabs>
-          )}
+          )} */}
       </div>
     </div>
   );

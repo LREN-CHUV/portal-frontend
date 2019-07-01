@@ -40,11 +40,18 @@ interface Props extends RouteComponentProps<Params> {
   apiCore: APICore;
   apiMining: APIMining;
   apiModel: APIModel;
+  appConfig: any;
 }
 
 export const editPath = 'edit';
 
-export default ({ apiCore, apiMining, apiModel, ...props }: Props) => {
+export default ({
+  apiCore,
+  apiMining,
+  apiModel,
+  appConfig,
+  ...props
+}: Props) => {
   const [datasets, setDatasets] = useState<VariableEntity[]>();
   const [selectedDatasets, setSelectedDatasets] = useState<VariableEntity[]>(
     []
@@ -117,12 +124,21 @@ export default ({ apiCore, apiMining, apiModel, ...props }: Props) => {
 
   useEffect(() => {
     if (selectedNode && selectedNode.data.isVariable && selectedDatasets) {
-      apiMining.exaremeHistograms({
-        datasets: selectedDatasets,
-        x: selectedNode.data
-      });
+      if (appConfig.mode === 'local') {
+        apiMining.histograms({
+          payload: {
+            datasets: selectedDatasets.map(d => ({ code: d.code })),
+            variables: [{ code: selectedNode.data.code }]
+          }
+        });
+      } else {
+        apiMining.exaremeHistograms({
+          datasets: selectedDatasets,
+          x: selectedNode.data
+        });
+      }
     }
-  }, [selectedNode, selectedDatasets, apiMining]);
+  }, [selectedNode, selectedDatasets, apiMining, appConfig]);
 
   const handleSelectDataset = (dataset: VariableEntity) => {
     const nextSelection = selectedDatasets

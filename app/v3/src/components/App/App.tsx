@@ -22,30 +22,71 @@ interface Props {
   apiMining: APIMining;
 }
 
-const App = ({ appConfig, apiExperiment, apiCore, apiModel, apiMining }: Props) => (
+const App = ({
+  appConfig,
+  apiExperiment,
+  apiCore,
+  apiModel,
+  apiMining
+}: Props) => (
   <div className='App'>
     <header>
-      <Navigation apiExperiment={apiExperiment} apiModel={apiModel} appConfig={appConfig} />
+      <Navigation
+        apiExperiment={apiExperiment}
+        apiModel={apiModel}
+        appConfig={appConfig}
+      />
     </header>
     <section className='main-content'>
-      <Route path='/v3/home' render={(props) => <Home apiCore={apiCore} apiModel={apiModel} {...props} />} />
+      <Route
+        path='/v3/home'
+        render={props => (
+          <Home apiCore={apiCore} apiModel={apiModel} {...props} />
+        )}
+      />
       <Route
         path={['/v3/explore/:slug', '/v3/explore']}
-        render={props => <Explore apiCore={apiCore} apiMining={apiMining} apiModel={apiModel} {...props} />}
+        render={props => (
+          <Explore
+            apiCore={apiCore}
+            apiMining={apiMining}
+            apiModel={apiModel}
+            appConfig={appConfig}
+            {...props}
+          />
+        )}
       />
       <Route
         path={['/v3/review/:slug', '/v3/review']}
-        render={props => <ExperimentReview apiMining={apiMining} apiModel={apiModel} apiCore={apiCore} {...props} />}
+        render={props => (
+          <ExperimentReview
+            apiMining={apiMining}
+            apiModel={apiModel}
+            apiCore={apiCore}
+            {...props}
+          />
+        )}
       />
       <Route
         path='/v3/experiment/:slug/:uuid'
-        render={() => <ExperimentResult apiExperiment={apiExperiment} apiModel={apiModel} apiCore={apiCore} />}
+        render={() => (
+          <ExperimentResult
+            apiExperiment={apiExperiment}
+            apiModel={apiModel}
+            apiCore={apiCore}
+          />
+        )}
       />
       <Route
         exact={true}
         path='/v3/experiment/:slug'
         render={() => (
-          <ExperimentCreate apiExperiment={apiExperiment} apiCore={apiCore} apiModel={apiModel} appConfig={appConfig} />
+          <ExperimentCreate
+            apiExperiment={apiExperiment}
+            apiCore={apiCore}
+            apiModel={apiModel}
+            appConfig={appConfig}
+          />
         )}
       />
     </section>
