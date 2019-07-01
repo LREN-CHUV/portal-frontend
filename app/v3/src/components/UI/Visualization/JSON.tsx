@@ -30,7 +30,7 @@ export default ({ row }: { row: any }) => {
           ? `${formatedValue} (*)`
           : `${formatedValue}`;
 
-      if ((key === 'PR(>F)' || key === 'p_values') && isNumber(value)) {
+      if ((key === 'PR(>F)' || key === 'p_values' || key === 'p') && isNumber(value)) {
         output = starIt(value,  round(value));
       } else {
         output = !isNaN(value) ? round(value) : '';
