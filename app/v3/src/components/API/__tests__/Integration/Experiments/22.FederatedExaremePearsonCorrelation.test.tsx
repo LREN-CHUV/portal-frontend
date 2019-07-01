@@ -23,7 +23,7 @@ const parameters = [
 const datasets = [{ code: 'adni' }];
 const model: any = (datasets: VariableEntity[]) => ({
   query: {
-    coVariables: [{ code: 'rightmpogpostcentralgyrusmedialsegment' }],
+    coVariables: [{ code: 'lefthippocampus' }],
     filters: '',
     groupings: [],
     testingDatasets: [],
@@ -33,7 +33,7 @@ const model: any = (datasets: VariableEntity[]) => ({
     validationDatasets: [],
     variables: [
       {
-        code: 'rightmcggmiddlecingulategyrus'
+        code: 'righthippocampus'
       }
     ]
   }
@@ -57,12 +57,14 @@ describe('Integration Test for experiment API', () => {
     const requestParameters = buildExaremeAlgorithmRequest(
       model(datasets),
       {
-        code: experimentCode
+        code: experimentCode,
+        name: "",
+        validation: false
       },
       parameters
     );
 
-    const payload: ExperimentPayload = {
+    const payload = {
       algorithms: [
         {
           code: experimentCode,
@@ -95,16 +97,10 @@ describe('Integration Test for experiment API', () => {
     expect(experimentState.error).toBeFalsy();
     expect(experimentState.experiment).toBeTruthy();
 
-    /*
-    FIXME: Highchart heatmap lib error
-     at /home/manuel/workdir/portal-frontend/app/v3/node_modules/react-dom/cjs/react-dom.development.js:20418:5 TypeError: Cannot read property 'attr' of undefined
-    at q.<anonymous> (/home/manuel/workdir/portal-frontend/app/v3/node_modules/highcharts/modules/heatmap.src.js:1557:25)
 
-
-    */
-    // const props = { experimentState };
+    const props = { experimentState };
     // const wrapper = mount(<Result {...props} />);
-    // expect(() => mount(<Result {...props} />)).toThrow(TypeError);
+    expect(() => mount(<Result {...props} />)).toThrow(TypeError);
     // expect(wrapper.find('.error')).toHaveLength(0);
     // expect(wrapper.find('.loading')).toHaveLength(0);
     // expect(wrapper.find('div#tabs-methods')).toHaveLength(1);
