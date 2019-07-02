@@ -84,24 +84,14 @@ describe('Integration Test for experiment API', () => {
       throw new Error('uuid not defined');
     }
 
-    const experimentState = await waitForResult({
-      uuid
-    });
+    const experimentState = await waitForResult({ uuid });
     expect(experimentState.error).toBeFalsy();
     expect(experimentState.experiment).toBeTruthy();
 
-    /*
-    FIXME: Highchart heatmap lib error
-     at /home/manuel/workdir/portal-frontend/app/v3/node_modules/react-dom/cjs/react-dom.development.js:20418:5 TypeError: Cannot read property 'attr' of undefined
-    at q.<anonymous> (/home/manuel/workdir/portal-frontend/app/v3/node_modules/highcharts/modules/heatmap.src.js:1557:25)
-
-
-    */
-    // const props = { experimentState };
-    // const wrapper = mount(<Result {...props} />);
-    // expect(() => mount(<Result {...props} />)).toThrow(TypeError);
-    // expect(wrapper.find('.error')).toHaveLength(0);
-    // expect(wrapper.find('.loading')).toHaveLength(0);
-    // expect(wrapper.find('div#tabs-methods')).toHaveLength(1);
+    const props = { experimentState };
+    const wrapper = mount(<Result {...props} />);
+    expect(wrapper.find('.error')).toHaveLength(0);
+    expect(wrapper.find('.loading')).toHaveLength(0);
+    expect(wrapper.find('div#tabs-methods')).toHaveLength(1);
   });
 });

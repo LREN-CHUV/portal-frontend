@@ -329,11 +329,10 @@ const buildResult = (key: string, result: any) => {
     case 'LINEAR_REGRESSION':
     case 'ID3':
     case 'NAIVE_BAYES_TRAINING_STANDALONE':
-
-      const data = result.resources[0].data
-      const s = JSON.stringify(data)
-      const t = s.replace(/None/g, "");
-      const newData = JSON.parse(t)
+      const data = result.resources[0].data;
+      const s = JSON.stringify(data);
+      const t = s.replace(/None/g, '');
+      const newData = JSON.parse(t);
       return {
         mime: MIME_TYPES.JSONDATA,
         data: [newData]
@@ -341,8 +340,8 @@ const buildResult = (key: string, result: any) => {
 
     case 'LOGISTIC_REGRESSION':
       return {
-        mime: MIME_TYPES.HIGHCHARTS,
-        data: [result.data]
+        mime: MIME_TYPES.JSONDATA,
+        data: [result.data[0].data]
       };
 
     default:
@@ -367,19 +366,14 @@ const buildExaremeExperimentResponse = (
     {
       algorithms: resultParsed.map((result: any) => {
         if (result.result) {
-
-          // console.log(result.result)
-          // return Object.keys(result.result).map(k => ({
-          //   name: result.name,
-          //   ...result.result[k],
-          //   mime: result.result[k].type,
-          //   ...buildResult(name, result.result[k])
-          // }))
-
           return {
             name: result.name,
             ...result.result
-              .filter((r: any) => r.type === MIME_TYPES.HIGHCHARTS)
+              .filter((r: any) =>
+                name === 'LOGISTIC_REGRESSION'
+                  ? r.type === MIME_TYPES.JSONDATA
+                  : r.type === MIME_TYPES.HIGHCHARTS
+              )
               .map((r: any) => buildResult(name, r))[0]
           };
         }
