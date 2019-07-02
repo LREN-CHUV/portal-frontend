@@ -2,7 +2,12 @@ import { mount } from 'enzyme';
 import * as React from 'react';
 
 import Result from '../../../../Result/Result';
-import { createExperiment, createModel, uid, waitForResult } from '../../../../utils/TestUtils';
+import {
+  createExperiment,
+  createModel,
+  uid,
+  waitForResult
+} from '../../../../utils/TestUtils';
 import { VariableEntity } from '../../../Core';
 
 // config
@@ -42,7 +47,7 @@ const payload: ExperimentPayload = {
 
 // Test
 
-describe('Integration Test for experiment API', () => {
+describe.skip('Integration Test for experiment API', () => {
   beforeAll(async () => {
     const mstate = await createModel({
       model: model(datasets),

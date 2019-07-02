@@ -35,7 +35,7 @@ const model: any = (datasets: VariableEntity[]) => ({
 
 // Test
 
-describe('Integration Test for experiment API', () => {
+describe.skip('Integration Test for experiment API', () => {
   beforeAll(async () => {
     const mstate = await createModel({
       model: model(datasets),
