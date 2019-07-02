@@ -16,7 +16,7 @@ interface Response {
   data: any | undefined;
 }
 
-const algorithms = JSON.parse(localStorage.getItem('algorithms') || '{}');
+const algorithms = JSON.parse(localStorage.getItem('algorithms') || '[]');
 const findParameter = (acode: string, pcode: string) => {
   const algorithm = algorithms && algorithms.find((a: any) => a.code === acode);
 
@@ -242,7 +242,6 @@ const buildWorkflowAlgorithmResponse = (
 
   experimentResponse = stripModelParameters(experimentResponse);
 
-  // console.log('buildWorkflowAlgorithmResponse', historyId)
   const workflowResult: Response = workflowResults[historyId];
   const workflowStatus: Response = workflowStatuses[historyId];
 
@@ -250,7 +249,7 @@ const buildWorkflowAlgorithmResponse = (
     if (workflowResult.error) {
       return {
         ...experimentResponse,
-        error: "Couldn't perform workflow. Please check the parameters"
+        error: workflowResult.error
       };
     }
 
@@ -289,7 +288,6 @@ const buildWorkflowAlgorithmResponse = (
 
   if (workflowStatus.data) {
     if (workflowStatus.data.state === 'error') {
-
       fetchResults(historyId).then(result => {
         const content = result.data.filter((d: any) => d.state === 'error');
         const contentId = content.pop().id;
@@ -300,11 +298,8 @@ const buildWorkflowAlgorithmResponse = (
           buildWorkflowAlgorithmResponse(historyId, experimentResponse);
         });
       });
-      
-      return {
-        ...experimentResponse,
-        error: "Couldn't perform the workflow. Please check the parameters"
-      };
+
+      return experimentResponse;
     }
 
     if (workflowStatus.data.state === 'running') {
