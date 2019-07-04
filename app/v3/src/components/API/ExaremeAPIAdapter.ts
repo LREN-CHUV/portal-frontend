@@ -325,7 +325,6 @@ const buildResult = (key: string, result: any) => {
         data: [result.data]
       };
 
-    case 'ANOVA':
     case 'LINEAR_REGRESSION':
     case 'ID3':
     case 'NAIVE_BAYES_TRAINING_STANDALONE':
@@ -336,6 +335,16 @@ const buildResult = (key: string, result: any) => {
       return {
         mime: MIME_TYPES.JSONDATA,
         data: [newData]
+      };
+
+    case 'ANOVA':
+      const data1 = result.data[0].data;
+      const s1 = JSON.stringify(data1);
+      const t1 = s1.replace(/None/g, '');
+      const newData1 = JSON.parse(t1);
+      return {
+        mime: MIME_TYPES.JSONDATA,
+        data: [newData1]
       };
 
     case 'LOGISTIC_REGRESSION':

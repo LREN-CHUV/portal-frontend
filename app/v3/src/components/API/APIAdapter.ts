@@ -12,6 +12,7 @@ import {
   ValidationScore
 } from './Experiment';
 
+
 interface IPfa {
   crossValidation?:
     | KfoldValidationScore
@@ -107,7 +108,10 @@ class APIAdapter {
       }
 
       const isExareme = resultParsed.some(
-        (r: any) => r.error || r.result || r.resources || r.chart
+        (r: any) => {
+          const name = r.data && r.data.length > 0 && r.data[0].name;
+
+          return name === "ANOVA" || r.error || r.result || r.resources || r.chart}
       );
       if (isExareme) {
         const nextResults1 = buildExaremeExperimentResponse(
