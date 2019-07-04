@@ -6,7 +6,7 @@ import APIAdapter from '../../../API/APIAdapter';
 const parseExperiment = (json: any): ExperimentResponse =>
   APIAdapter.parse(json);
 
-describe('Test linearRegression results', () => {
+describe.skip('Test linearRegression results', () => {
   it('Exareme linearRegression algorithm renders correctly', () => {
     const response = require('../../__mocks__/responses/fed-exareme-linearRegression.json');
     const experiment = parseExperiment(response);

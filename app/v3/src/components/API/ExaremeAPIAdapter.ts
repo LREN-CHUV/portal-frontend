@@ -305,6 +305,7 @@ const stripModelParameters = (
 };
 
 const buildResult = (key: string, result: any) => {
+
   if (result.error) {
     return {
       mime: MIME_TYPES.ERROR,
@@ -325,7 +326,6 @@ const buildResult = (key: string, result: any) => {
         data: [result.data]
       };
 
-    case 'LINEAR_REGRESSION':
     case 'ID3':
     case 'NAIVE_BAYES_TRAINING_STANDALONE':
       const data = result.resources[0].data;
@@ -345,6 +345,16 @@ const buildResult = (key: string, result: any) => {
       return {
         mime: MIME_TYPES.JSONDATA,
         data: [newData1]
+      };
+
+    case 'LINEAR_REGRESSION':
+      const data2 = result.data[0].data;
+      const s2 = JSON.stringify(data2);
+      const t2 = s2.replace(/None/g, '');
+      const newData2 = JSON.parse(t2);
+      return {
+        mime: MIME_TYPES.JSONDATA,
+        data: [newData2]
       };
 
     case 'LOGISTIC_REGRESSION':
@@ -375,16 +385,19 @@ const buildExaremeExperimentResponse = (
     {
       algorithms: resultParsed.map((result: any) => {
         if (result.result) {
-          return {
+          const res =  {
             name: result.name,
             ...result.result
               .filter((r: any) =>
-                name === 'LOGISTIC_REGRESSION'
+                name === 'LOGISTIC_REGRESSION'||
+                name === 'LINEAR_REGRESSION'
                   ? r.type === MIME_TYPES.JSONDATA
                   : r.type === MIME_TYPES.HIGHCHARTS
               )
               .map((r: any) => buildResult(name, r))[0]
           };
+
+          return res;
         }
 
         return {

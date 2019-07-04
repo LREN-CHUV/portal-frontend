@@ -23,7 +23,7 @@ export default ({ row }: { row: any }) => {
       }
       if (isNaN(Number(c))) {
         return c;
-      } else if (headers[i] === 'p-value' || headers[i] === 'p') {
+      } else if (headers[i] === 'p-value' || headers[i] === 'p' || headers[i] === 'prvalue') {
         // console.log(round(c))
         return typeof c === 'string' ? c : starIt(c, round(c));
       } else {
