@@ -8,7 +8,7 @@ import Result from '../../Result';
 const parseExperiment = (json: any): ExperimentResponse =>
   APIAdapter.parse(json);
 
-describe('Test Tree Serializer results', () => {
+describe.skip('Test Tree Serializer results', () => {
   it('Exareme Tree Serializer algorithm renders correctly', () => {
     const response = require('../../__mocks__/responses/fed-exareme-tree-serializer.json');
     const experiment = parseExperiment(response);
