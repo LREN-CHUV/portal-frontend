@@ -122,29 +122,11 @@ export default (props: Props) => {
                   eventKey={i}
                   title={`${d.label.replace('Histogram - ', '')}`}
                   key={i}>
-                  <Highchart options={d.highchart || d} />
+                  <Highchart options={d.highchart && d.highchart.data || d} />
                 </Tab>
               ))}
           </Tabs>
         )}
-
-        {/* {selectedNode &&
-          !selectedNode.children &&
-          histograms &&
-          histograms.data && (
-            <Tabs defaultActiveKey={0} id='uncontrolled-histogram-tabs'>
-              {histograms.data &&
-                histograms.data.map((d: any, i: number) => (
-                  <Tab
-                    eventKey={i}
-                    title={`${d.label && d.label.toUpperCase()}`}
-                    key={i}>
-                    {console.log(d.highchart)}
-                    <Highchart options={d.highchart} />
-                  </Tab>
-                ))}
-            </Tabs>
-          )} */}
       </div>
     </div>
   );
