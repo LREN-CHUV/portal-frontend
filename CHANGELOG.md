@@ -1,5 +1,14 @@
 # Changelog
 
+### 4.0.0 - 05.07.2019
+
+- Removed ID3 and Naive Bayes standalone ( => 5.0 )
+- Histograms:
+  - Local version with Woken
+  - Federated version with Exareme
+  - Galaxy Workflow Error handling
+  - Exareme histograms error handling
+
 ### 4.0.0-beta.1 - 20.06.2019
 
 - Galaxy Workflow POC
