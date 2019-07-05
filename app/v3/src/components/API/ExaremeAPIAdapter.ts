@@ -16,7 +16,7 @@ const enabledAlgorithms = [
   // 'NAIVE_BAYES_TRAINING_STANDALONE',
   // 'KMEANS',
   'PEARSON_CORRELATION',
-  'ID3',
+  // 'ID3',
   // 'HISTOGRAMS',
   'LINEAR_REGRESSION'
 ];
