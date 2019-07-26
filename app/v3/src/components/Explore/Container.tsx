@@ -5,9 +5,8 @@ import React, { useEffect, useState } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 
 import { APICore, APIMining, APIModel } from '../API';
-import { Parameter, Pathology, VariableEntity } from '../API/Core';
+import { Pathology, VariableEntity } from '../API/Core';
 import { ModelResponse, Query } from '../API/Model';
-// import { Alert } from '../UI/Alert';
 import { d3Hierarchy, VariableDatum } from './d3Hierarchy';
 import CirclePack from './D3PackLayer';
 

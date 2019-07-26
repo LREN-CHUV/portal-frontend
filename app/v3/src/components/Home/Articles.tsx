@@ -37,16 +37,15 @@ interface Props {
   history: any;
 }
 export default ({ articles, history }: Props) => {
-
   return (
     <>
-      {articles && articles.length === 0 && (
+      {!articles || (articles && articles.length === 0 && (
         <StyledPanel>
           <Heading>
             <h2>No article available</h2>
           </Heading>
         </StyledPanel>
-      )}
+      ))}
       {articles &&
         articles.length > 0 &&
         articles.map(article => (
@@ -54,14 +53,14 @@ export default ({ articles, history }: Props) => {
             <Heading>
               <h2>{article.title}</h2>
             </Heading>
-            <PanelBody>
-              <>test</>
-            </PanelBody>
+            <PanelBody>{article.abstract}</PanelBody>
             <PanelFooter>
-              <span>by {article.createdBy && article.createdBy.username}, </span>
-        <span>
-          {article.createdAt && moment(article.createdAt).fromNow()}
-        </span>
+              <span>
+                by {article.createdBy && article.createdBy.username},{' '}
+              </span>
+              <span>
+                {article.createdAt && moment(article.createdAt).fromNow()}
+              </span>
             </PanelFooter>
           </StyledPanel>
         ))}

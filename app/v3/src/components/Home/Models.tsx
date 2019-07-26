@@ -53,13 +53,14 @@ export default ({ models, experiments, history }: Props) => {
 
   return (
     <>
-      {!models && (
-        <StyledPanel>
-          <Heading>
-            <h2>No model available</h2>
-          </Heading>
-        </StyledPanel>
-      )}
+      {!models ||
+        (models && models.length === 0 && (
+          <StyledPanel>
+            <Heading>
+              <h2>No model available</h2>
+            </Heading>
+          </StyledPanel>
+        ))}
       {models &&
         models.map(model => {
           const myExperiments =

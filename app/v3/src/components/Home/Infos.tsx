@@ -70,6 +70,7 @@ const Count = styled.h2`
 const Summary = styled.p`
   font-size: small;
   color: white;
+  font-weight: bold;
   margin-bottom: 0px;
 `;
 
@@ -128,7 +129,7 @@ export default ({ stats }: Props) => (
       <PanelBody>
         <Count>Write</Count>
         <Summary>an article</Summary>
-        <Button bsStyle={'Link'} style={{ backgroundColor: 'rgba(0,0,0,0)' }}>
+        <Button bsStyle='link' style={{ backgroundColor: 'rgba(0,0,0,0)' }}>
           <Icon size={25}>
             <FaPlusCircle />
           </Icon>

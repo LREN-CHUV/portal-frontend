@@ -22,7 +22,7 @@ const Title = styled(Panel)`
   font-size: 16px;
   font-weight: bold;
   padding: 1em;
-  margin: 0.5em 0 1em 0;
+  margin: 0.5em 0;
 `;
 
 interface Props extends RouteComponentProps<{}> {

@@ -122,7 +122,7 @@ export default (props: Props) => {
                   eventKey={i}
                   title={`${d.label.replace('Histogram - ', '')}`}
                   key={i}>
-                  <Highchart options={d.highchart && d.highchart.data || d} />
+                  <Highchart options={d || (d.highchart && d.highchart.data)} />
                 </Tab>
               ))}
           </Tabs>
