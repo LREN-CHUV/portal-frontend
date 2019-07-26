@@ -41,7 +41,7 @@ const App = ({
       <Route
         path='/v3/home'
         render={props => (
-          <Home apiCore={apiCore} apiModel={apiModel} {...props} />
+          <Home apiCore={apiCore} apiModel={apiModel} apiExperiment={apiExperiment} {...props} />
         )}
       />
       <Route

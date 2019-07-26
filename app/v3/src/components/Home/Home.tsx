@@ -2,7 +2,8 @@ import React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { APICore, APIModel } from '../API';
+import { APICore, APIExperiment, APIModel } from '../API';
+import { ExperimentResponse } from '../API/Experiment';
 import Infos from './Infos';
 import Model from './Model';
 
@@ -16,29 +17,40 @@ const Models = styled.div`
   grid-column-gap: 8px;
 `;
 
+const Title = styled.h1`
+  font-size: 16px;
+  font-weight: bold;
+`;
+
 interface Props extends RouteComponentProps<{}> {
-  //   apiExperiment: APIExperiment;
+  apiExperiment: APIExperiment;
   apiCore: APICore;
   apiModel: APIModel;
 }
 
 export default ({ ...props }: Props) => {
-  const { apiCore, apiModel, history } = props;
+  const { apiCore, apiModel, apiExperiment, history } = props;
+
+  const experiments = apiExperiment.state && apiExperiment.state.experiments;
   return (
     <Layout>
       <Infos stats={apiCore.state.stats} />
       <Models>
-      <div>
-          <h1>Recent Models</h1>
-          {apiModel.state.models && apiModel.state.models.map(m => <Model key={m.slug} model={m} history={history} />)}
-        </div>
-      <div>
-          <h1>Recent Articles</h1>
-          {apiModel.state.models && apiModel.state.models.map(m => <Model key={m.slug} model={m} history={history} />)}
+        <div>
+          <Title>My Models</Title>
+          {apiModel.state.models &&
+            apiModel.state.models.map(m => (
+              <Model key={m.slug} model={m} history={history} experiments={experiments && experiments.filter((e: ExperimentResponse) => m.slug === e.modelDefinitionId
+              )}/>
+            ))}
         </div>
         <div>
-          <h1>My Models</h1>
-          {apiModel.state.models && apiModel.state.models.map(m => <Model key={m.slug} model={m} history={history} />)}
+          <Title>Recent Articles</Title>
+          
+        </div>
+        <div>
+          <Title>Recent Models</Title>
+          
         </div>
       </Models>
     </Layout>
