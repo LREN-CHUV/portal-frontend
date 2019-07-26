@@ -1,25 +1,28 @@
 import React from 'react';
+import { Panel } from 'react-bootstrap';
 import { RouteComponentProps } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { APICore, APIExperiment, APIModel } from '../API';
-import { ExperimentResponse } from '../API/Experiment';
+import Articles from './Articles';
 import Infos from './Infos';
-import Model from './Model';
+import Models from './Models';
 
 const Layout = styled.div`
   padding: 0 48px 0px 48px;
 `;
 
-const Models = styled.div`
+const ModelsLayout = styled.div`
   display: grid;
   grid-template-columns: 33% 33% 33%;
   grid-column-gap: 8px;
 `;
 
-const Title = styled.h1`
+const Title = styled(Panel)`
   font-size: 16px;
   font-weight: bold;
+  padding: 1em;
+  margin: 0.5em 0 1em 0;
 `;
 
 interface Props extends RouteComponentProps<{}> {
@@ -30,29 +33,34 @@ interface Props extends RouteComponentProps<{}> {
 
 export default ({ ...props }: Props) => {
   const { apiCore, apiModel, apiExperiment, history } = props;
-
+  const articles = apiCore.state && apiCore.state.articles;
   const experiments = apiExperiment.state && apiExperiment.state.experiments;
+
   return (
     <Layout>
       <Infos stats={apiCore.state.stats} />
-      <Models>
+      <ModelsLayout>
         <div>
           <Title>My Models</Title>
-          {apiModel.state.models &&
-            apiModel.state.models.map(m => (
-              <Model key={m.slug} model={m} history={history} experiments={experiments && experiments.filter((e: ExperimentResponse) => m.slug === e.modelDefinitionId
-              )}/>
-            ))}
+          <Models
+            models={apiModel.state.models}
+            history={history}
+            experiments={experiments}
+          />
         </div>
         <div>
           <Title>Recent Articles</Title>
-          
+          <Articles articles={articles} history={history} />
         </div>
         <div>
           <Title>Recent Models</Title>
-          
+          <Models
+            models={apiModel.state.models}
+            history={history}
+            experiments={experiments}
+          />
         </div>
-      </Models>
+      </ModelsLayout>
     </Layout>
   );
 };

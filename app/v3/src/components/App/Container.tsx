@@ -51,6 +51,7 @@ class AppContainer extends React.Component<any, State> {
       this.apiCore.setPathology(Pathology.DEG),
       this.apiCore.algorithms(this.state.appConfig.mode === 'local'),
       this.apiCore.stats(),
+      this.apiCore.articles(),
       this.apiModel.all()
     ]);
   }

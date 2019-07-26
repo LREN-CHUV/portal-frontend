@@ -94,6 +94,7 @@ export interface State {
   datasets?: VariableEntity[];
   algorithms?: Algorithm[];
   pathologies?: VariableEntity[];
+  articles?: any;
   stats?: Stats;
 }
 
@@ -222,6 +223,27 @@ class Core extends Container<State> {
         }));
       }
     );
+
+    public articles = async() => {
+      try {
+        const data = await request.get(`${this.backendURL}/articles`, this.options);
+        const json = await JSON.parse(data);
+        if (json.error) {
+          return await this.setState({
+            error: json.error
+          });
+        }
+  
+        return await this.setState({
+          error: undefined,
+          articles: json
+        });
+      } catch (error) {
+        return await this.setState({
+          error: error.message
+        });
+      }
+    }
 
   private workflows = async (isLocal: boolean) => {
     if (isLocal) {
