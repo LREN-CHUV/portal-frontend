@@ -52,6 +52,7 @@ class AppContainer extends React.Component<any, State> {
       this.apiCore.algorithms(this.state.appConfig.mode === 'local'),
       this.apiCore.stats(),
       this.apiCore.articles(),
+      this.apiCore.user(),
       this.apiModel.all()
     ]);
   }

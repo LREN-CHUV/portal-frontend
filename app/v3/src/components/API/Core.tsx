@@ -96,6 +96,7 @@ export interface State {
   pathologies?: VariableEntity[];
   articles?: any;
   stats?: Stats;
+  user?: any;
 }
 
 class Core extends Container<State> {
@@ -237,6 +238,27 @@ class Core extends Container<State> {
         return await this.setState({
           error: undefined,
           articles: json
+        });
+      } catch (error) {
+        return await this.setState({
+          error: error.message
+        });
+      }
+    }
+
+    public user = async() => {
+      try {
+        const data = await request.get(`${this.backendURL}/user`, this.options);
+        const json = await JSON.parse(data);
+        if (json.error) {
+          return await this.setState({
+            error: json.error
+          });
+        }
+  
+        return await this.setState({
+          error: undefined,
+          user: json
         });
       } catch (error) {
         return await this.setState({

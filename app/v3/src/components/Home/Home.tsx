@@ -34,6 +34,7 @@ interface Props extends RouteComponentProps<{}> {
 export default ({ ...props }: Props) => {
   const { apiCore, apiModel, apiExperiment, history } = props;
   const articles = apiCore.state && apiCore.state.articles;
+  const user = apiCore.state && apiCore.state.user;
   const experiments = apiExperiment.state && apiExperiment.state.experiments;
 
   return (
@@ -53,9 +54,15 @@ export default ({ ...props }: Props) => {
           <Articles articles={articles} history={history} />
         </div>
         <div>
-          <Title>Recent Models</Title>
+          <Title>Users Models</Title>
           <Models
-            models={apiModel.state.models}
+            models={
+              apiModel.state &&
+              apiModel.state.models &&
+              apiModel.state.models.filter(
+                m => m.createdBy && user && user.name && m.createdBy.username !== user.name
+              )
+            }
             history={history}
             experiments={experiments}
           />
