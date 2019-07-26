@@ -90,9 +90,6 @@ class Container extends React.Component<Props, State> {
           </div>
           <div className='parameters'>
             <Panel>
-              <Panel.Title>
-                <h3>Your Experiment</h3>
-              </Panel.Title>
               <Panel.Body>
                 {alert && (
                   <Alert
