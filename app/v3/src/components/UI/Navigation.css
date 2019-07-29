@@ -12,10 +12,7 @@
   top: 8px !important;
 }
 
-.img-circle {
-  border-radius: 50%;
-}
-[role="button"] {
+[role='button'] {
   cursor: pointer;
 }
 
@@ -173,7 +170,7 @@
 .panel-body:before,
 .panel-body:after {
   display: table;
-  content: " ";
+  content: ' ';
 }
 .container-fluid:after,
 .nav:after,
@@ -216,7 +213,7 @@ table {
 }
 .app-instance-name h2 {
   font-size: 48px;
-  font-family: "Open Sans Condensed", sans-serif;
+  font-family: 'Open Sans Condensed', sans-serif;
   font-weight: 700;
   color: #fff;
   line-height: 32px;
@@ -242,10 +239,10 @@ table {
     text-decoration: underline;
   }
   a[href]:after {
-    content: " (" attr(href) ")";
+    content: ' (' attr(href) ')';
   }
-  a[href^="#"]:after {
-    content: "";
+  a[href^='#']:after {
+    content: '';
   }
   thead {
     display: table-header-group;
@@ -288,11 +285,14 @@ button {
   font-size: inherit;
   line-height: inherit;
 }
-
 .img-circle {
   border-radius: 50%;
+}
+
+.uib-dropdown .img-circle {
   width: 40px;
 }
+
 h2,
 h3,
 h5 {
@@ -519,7 +519,7 @@ caption {
 .panel-body:before,
 .panel:after,
 .panel:before {
-  content: " ";
+  content: ' ';
   display: table;
 }
 #topnav .logo-area:after,
@@ -561,7 +561,7 @@ h3,
 h5 {
   margin-top: 16px;
   margin-bottom: 16px;
-  font-family: "Source Sans Pro", "Segoe UI", "Droid Sans", Tahoma, Arial,
+  font-family: 'Source Sans Pro', 'Segoe UI', 'Droid Sans', Tahoma, Arial,
     sans-serif;
 }
 h2 {
@@ -651,7 +651,7 @@ table > tbody > tr:last-child > td:last-child {
   top: -8px;
   right: 12px;
   display: inline-block;
-  content: "";
+  content: '';
   border-right: 8px solid transparent;
   border-left: 8px solid transparent;
 }
@@ -815,7 +815,7 @@ table > tbody > tr:last-child > td:last-child {
   height: 40px;
   width: 40px;
 }
- .unread_count_badge {
+.unread_count_badge {
   position: absolute;
   bottom: -6px;
   right: -15px;
@@ -828,7 +828,7 @@ table > tbody > tr:last-child > td:last-child {
   line-height: 20px;
   font-size: 12px;
   z-index: 10;
-  text-align: center
+  text-align: center;
 }
 #topnav .userinfo {
   min-width: 200px;
@@ -954,7 +954,7 @@ table > tbody > tr:last-child > td:last-child {
   color: #03a9f4;
   font-weight: 700;
 }
-[class*=" ti-"].ti {
+[class*=' ti-'].ti {
   line-height: inherit;
 }
 
@@ -964,13 +964,13 @@ i.ti {
 }
 
 .ti-world:before {
-  content: "\e665";
+  content: '\e665';
 }
 .ti-menu:before {
-  content: "\e68e";
+  content: '\e68e';
 }
 .ti-layout-grid3-alt:before {
-  content: "\e738";
+  content: '\e738';
 }
 
 .navbar-fixed-top {
@@ -1084,7 +1084,7 @@ i.ti {
 }
 #topnav .logo-area .toolbar-trigger a span.icon-bg:after {
   width: 40px;
-  content: "";
+  content: '';
   height: 40px;
   border-radius: 50%;
   top: 50%;
@@ -1145,14 +1145,14 @@ i.ti {
   z-index: 2;
   font-size: 16px;
   text-indent: -0.025em;
-  font-family: "Open Sans Condensed", sans-serif;
+  font-family: 'Open Sans Condensed', sans-serif;
   font-weight: 700;
   font-style: normal;
 }
 #topnav .toolbar a span.icon-bg:after,
-#topnav .toolbar  a .btn-default:after {
+#topnav .toolbar a .btn-default:after {
   width: 40px;
-  content: "";
+  content: '';
   height: 40px;
   border-radius: 50%;
   top: 50%;
@@ -1170,7 +1170,7 @@ i.ti {
   border: 1px solid #fff;
 }
 #topnav .toolbar a:hover .icon-bg:after,
-#topnav .toolbar  a:hover .btn-default:after {
+#topnav .toolbar a:hover .btn-default:after {
   -webkit-transform: scale(1.1);
   -ms-transform: scale(1.1);
   transform: scale(1.1);
@@ -1182,7 +1182,7 @@ i.ti {
   z-index: 2;
   font-size: 16px;
   text-indent: -0.025em;
-  font-family: "Open Sans Condensed", sans-serif;
+  font-family: 'Open Sans Condensed', sans-serif;
   font-weight: 700;
   font-style: normal;
   background-color: transparent !important;

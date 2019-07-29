@@ -3,8 +3,9 @@ import { Container } from 'unstated';
 
 import { backendURL } from '../API';
 
-interface User {
-  name: string;
+export interface User {
+  fullname: string;
+  username: string;
 }
 
 export interface State {

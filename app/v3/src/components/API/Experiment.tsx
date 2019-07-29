@@ -1,8 +1,10 @@
 import request from 'request-promise-native';
 import { Container } from 'unstated';
+
 import { backendURL } from '../API';
 import { Algorithm, AlgorithmResult } from '../API/Core';
 import { Query } from '../API/Model';
+import { User } from '../API/User';
 import APIAdapter from './APIAdapter';
 
 export interface ExperimentPayload {
@@ -26,11 +28,6 @@ export interface ExperimentResponse {
   modelDefinition?: Query;
   validations?: any;
   shared: boolean;
-}
-
-export interface User {
-  username: string;
-  fullname: string;
 }
 
 export interface Node {

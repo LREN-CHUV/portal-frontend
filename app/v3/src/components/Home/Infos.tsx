@@ -21,7 +21,7 @@ const Panel = styled.div`
   padding: 8px;
   border-radius: 4px;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
-  min-height: 180px;
+  height: 144px;
 
   &:last-child {
     margin-right: 0;
@@ -72,6 +72,15 @@ const Summary = styled.p`
   color: white;
   font-weight: bold;
   margin-bottom: 0px;
+`;
+
+const Plus = styled(Button)`
+  margin: 0;
+  padding:0;
+  div {
+    margin: 0;
+    padding: 0;
+  }
 `;
 
 interface Props {
@@ -129,11 +138,11 @@ export default ({ stats }: Props) => (
       <PanelBody>
         <Count>Write</Count>
         <Summary>an article</Summary>
-        <Button bsStyle='link' style={{ backgroundColor: 'rgba(0,0,0,0)' }}>
-          <Icon size={25}>
+        <Plus bsStyle='link' style={{ backgroundColor: 'rgba(0,0,0,0)' }}>
+          <Icon size={16}>
             <FaPlusCircle />
           </Icon>
-        </Button>
+        </Plus>
       </PanelBody>
     </Panel>
   </Infos>

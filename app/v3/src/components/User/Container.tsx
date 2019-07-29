@@ -68,8 +68,8 @@ export default ({ apiUser }: Props) => {
         <Layout>
           <GridLayout>
             <CenteredPanel>
-              <User className='img-circle' src={default_user} alt={user.name} />
-              <h2>{user.name}</h2>
+              <User className='img-circle' src={default_user} alt={user.username} />
+              <h2>{user.username}</h2>
             </CenteredPanel>
             <StyledPanel>
               <Heading>Infos</Heading>
