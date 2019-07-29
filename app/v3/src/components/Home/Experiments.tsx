@@ -59,11 +59,7 @@ export default ({ models, experiments, history }: Props) => {
     <>
       {!experiments ||
         (experiments && experiments.length === 0 && (
-          <StyledPanel>
-            <Heading>
-              <h2>No experiment available</h2>
-            </Heading>
-          </StyledPanel>
+          <p>No experiment available</p>
         ))}
       {experiments &&
         experiments.map(experiment => {
@@ -76,9 +72,11 @@ export default ({ models, experiments, history }: Props) => {
           const nodes = experiment && experiment.results;
 
           return (
-            <StyledPanel key={experiment.name}>
+            <StyledPanel key={experiment.name} defaultExpanded={false}>
               <Heading>
-                <h2>{experiment && experiment.name}</h2>
+                <Panel.Title toggle={true} style={{"flexGrow": 1}}>
+                  <h2>{experiment && experiment.name}</h2>
+                </Panel.Title>
                 <div>
                   <Button
                     bsSize='small'
@@ -101,35 +99,39 @@ export default ({ models, experiments, history }: Props) => {
                   </Button>
                 </div>
               </Heading>
-              <PanelBody>
-                {model && (
-                  <>
-                    {model.query.variables && (
-                      <p>
-                        <b>Variables</b>:{' '}
-                        {model.query.variables.map((v: any) => v.code)}
-                      </p>
-                    )}
-                    {model.query.coVariables !== undefined &&
-                      model.query.coVariables.length > 0 && (
+              <Panel.Collapse>
+                <PanelBody collapsible={true}>
+                  {model && (
+                    <>
+                      {model.query.variables && (
                         <p>
-                          <b>Covariables</b>:{' '}
-                          {model.query.coVariables.map(
-                            (v: any) => `${v.code}, `
-                          )}
+                          <b>Variables</b>:{' '}
+                          {model.query.variables.map((v: any) => v.code)}
                         </p>
                       )}
-                    {model.query.groupings !== undefined &&
-                      model.query.groupings.length > 0 && (
-                        <p>
-                          <b>Groupings</b>:{' '}
-                          {model.query.groupings.map((v: any) => `${v.code}, `)}
-                        </p>
-                      )}
-                  </>
-                )}
-                <RenderResult nodes={nodes} />
-              </PanelBody>
+                      {model.query.coVariables !== undefined &&
+                        model.query.coVariables.length > 0 && (
+                          <p>
+                            <b>Covariables</b>:{' '}
+                            {model.query.coVariables.map(
+                              (v: any) => `${v.code}, `
+                            )}
+                          </p>
+                        )}
+                      {model.query.groupings !== undefined &&
+                        model.query.groupings.length > 0 && (
+                          <p>
+                            <b>Groupings</b>:{' '}
+                            {model.query.groupings.map(
+                              (v: any) => `${v.code}, `
+                            )}
+                          </p>
+                        )}
+                    </>
+                  )}
+                  <RenderResult nodes={nodes} />
+                </PanelBody>
+              </Panel.Collapse>
               <PanelFooter>
                 <span>
                   by {experiment && experiment.user && experiment.user.username}

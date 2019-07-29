@@ -23,7 +23,6 @@ const PanelTitle = styled(Panel)`
   h2 {
     font-size: 16px;
     font-weight: bold;
-    text-transform: uppercase;
   }
   padding: 1em;
   margin: 0 0 1em 0;

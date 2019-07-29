@@ -5,6 +5,7 @@ import * as React from 'react';
 import { Route } from 'react-router-dom';
 
 import { APICore, APIExperiment, APIMining, APIModel, APIUser } from '../API';
+import Article from '../Article/Container';
 import ExperimentCreate from '../Create/Container';
 import Explore from '../Explore/Container';
 import Home from '../Home/Home';
@@ -104,6 +105,19 @@ const App = ({
             apiCore={apiCore}
             apiModel={apiModel}
             appConfig={appConfig}
+          />
+        )}
+      />
+      <Route
+        exact={true}
+        path='/v3/articles/'
+        // tslint:disable-next-line jsx-no-lambda
+        render={() => (
+          <Article
+          // apiExperiment={apiExperiment}
+          // apiCore={apiCore}
+          // apiModel={apiModel}
+          // appConfig={appConfig}
           />
         )}
       />

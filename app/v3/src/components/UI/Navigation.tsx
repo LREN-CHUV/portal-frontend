@@ -34,36 +34,9 @@ class Navigation extends React.Component<Props> {
       <header id='topnav' className='navbar navbar-default navbar-fixed-top '>
         <div className='container-fluid'>
           <div className='logo-area'>
-            <a
-              className='navbar-brand'
-              href='/home'
-              // tslint:disable-next-line jsx-no-lambda
-              onClick={e => this.jumpToAngular(e, '/home')}>
+            <NavLink className='navbar-brand' to='/v3/home'>
               Human Brain Project
-            </a>
-
-            <span className='toolbar-trigger toolbar-icon-bg'>
-              <a
-                title='My data'
-                href='/data/mydata'
-                // tslint:disable-next-line jsx-no-lambda
-                onClick={e => this.jumpToAngular(e, '/data/maydata')}>
-                <span className='icon-bg'>
-                  <i className='ti ti-menu' />
-                </span>
-              </a>
-            </span>
-            <span className='toolbar-trigger toolbar-icon-bg'>
-              <a
-                title='My community'
-                href='/data/communitydata'
-                // tslint:disable-next-line jsx-no-lambda
-                onClick={e => this.jumpToAngular(e, '/data/communitydata')}>
-                <span className='icon-bg'>
-                  <i className='ti ti-world' />
-                </span>
-              </a>
-            </span>
+            </NavLink>
           </div>
 
           <div className='app-instance-name'>

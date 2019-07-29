@@ -42,22 +42,13 @@ const User = styled.img`
   max-width: 160px;
 `;
 
+const Submit = styled.div`
+  text-align: right;
+`;
+
 interface Props extends RouteComponentProps<{}> {
   apiUser: APIUser;
 }
-
-// {
-//     "username": "manu",
-//     "fullname": "Manuel Spuhler",
-//     "firstname": "Manuel",
-//     "lastname": "Spuhler",
-//     "picture": "images/users/default_user.png",
-//     "email": "guy.spuhler@chuv.ch",
-//     "languages": [],
-//     "roles": [],
-//     "agreeNDA": true,
-//     "votedApps": []
-//   }
 
 export default ({ apiUser }: Props) => {
   const user = apiUser.state && apiUser.state.user;
@@ -68,32 +59,51 @@ export default ({ apiUser }: Props) => {
         <Layout>
           <GridLayout>
             <CenteredPanel>
-              <User className='img-circle' src={default_user} alt={user.username} />
-              <h2>{user.username}</h2>
+              <User
+                className='img-circle'
+                src={default_user}
+                alt={user.username}
+              />
+              <h3>{user.username}</h3>
             </CenteredPanel>
             <StyledPanel>
               <Heading>Infos</Heading>
               <PanelBody>
                 <div className='form-group'>
                   <label className='control-label'>Username:</label>
-                  <input className='form-control' type='text' name='username' />
-                </div>
-                <div className='form-group'>
-                  <label className='control-label'>First Name:</label>
                   <input
                     className='form-control'
                     type='text'
-                    name='firstname'
+                    name='username'
+                    defaultValue={user.username}
                   />
                 </div>
                 <div className='form-group'>
-                  <label className='control-label'>Last Name:</label>
-                  <input className='form-control' type='text' name='lastName' />
+                  <label className='control-label'>Full Name:</label>
+                  <input
+                    className='form-control'
+                    type='text'
+                    name='fullname'
+                    defaultValue={user.fullname}
+                  />
                 </div>
-                <div>
-                  <button className='btn-primary btn'>Save</button>
-                  <button className='btn-default btn'>Reset</button>
+                <div className='form-group'>
+                  <label className='control-label'>Email:</label>
+                  <input
+                    className='form-control'
+                    type='text'
+                    name='lastName'
+                    defaultValue={user.email}
+                  />
                 </div>
+                <Submit>
+                  <button className='btn-primary btn' disabled={true}>
+                    Save
+                  </button>
+                  <button className='btn-default btn' disabled={true}>
+                    Reset
+                  </button>
+                </Submit>
               </PanelBody>
             </StyledPanel>
           </GridLayout>

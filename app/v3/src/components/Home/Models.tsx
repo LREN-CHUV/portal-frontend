@@ -56,9 +56,7 @@ export default ({ models, experiments, history }: Props) => {
       {!models ||
         (models && models.length === 0 && (
           <StyledPanel>
-            <Heading>
-              <h2>No model available</h2>
-            </Heading>
+            <p>No model available</p>
           </StyledPanel>
         ))}
       {models &&

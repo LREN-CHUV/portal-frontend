@@ -39,13 +39,8 @@ interface Props {
 export default ({ articles, history }: Props) => {
   return (
     <>
-      {!articles || (articles && articles.length === 0 && (
-        <StyledPanel>
-          <Heading>
-            <h2>No article available</h2>
-          </Heading>
-        </StyledPanel>
-      ))}
+      {!articles ||
+        (articles && articles.length === 0 && <p>No article available</p>)}
       {articles &&
         articles.length > 0 &&
         articles.map(article => (

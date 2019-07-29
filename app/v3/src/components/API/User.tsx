@@ -4,8 +4,10 @@ import { Container } from 'unstated';
 import { backendURL } from '../API';
 
 export interface User {
-  fullname: string;
+  fullname?: string;
   username: string;
+  email?: string;
+  picture?: string;
 }
 
 export interface State {
@@ -32,6 +34,21 @@ class UserContainer extends Container<State> {
       if (json.error) {
         return await this.setState({
           error: json.error
+        });
+      }
+
+      if (json && json.name) {
+        const data = await request.get(`${this.backendURL}/users/${json.name}`, this.options);
+        const newJson = await JSON.parse(data);
+        if (newJson.error) {
+          return await this.setState({
+            error: newJson.error
+          });
+        }
+
+        return await this.setState({
+          error: undefined,
+          user: newJson
         });
       }
 
