@@ -1,11 +1,10 @@
 import 'bootstrap/dist/css/bootstrap.css';
 import './App.css';
 
-// tslint:disable jsx-no-lambda
 import * as React from 'react';
 import { Route } from 'react-router-dom';
 
-import { APICore, APIExperiment, APIMining, APIModel } from '../API';
+import { APICore, APIExperiment, APIMining, APIModel, APIUser } from '../API';
 import ExperimentCreate from '../Create/Container';
 import Explore from '../Explore/Container';
 import Home from '../Home/Home';
@@ -13,6 +12,7 @@ import ExperimentResult from '../Result/Container';
 import ExperimentReview from '../Review/Container';
 import Footer from '../UI/Footer';
 import Navigation from '../UI/Navigation';
+import User from '../User/Container';
 
 interface Props {
   appConfig: any;
@@ -20,6 +20,7 @@ interface Props {
   apiCore: APICore;
   apiModel: APIModel;
   apiMining: APIMining;
+  apiUser: APIUser;
 }
 
 const App = ({
@@ -27,7 +28,8 @@ const App = ({
   apiExperiment,
   apiCore,
   apiModel,
-  apiMining
+  apiMining,
+  apiUser
 }: Props) => (
   <div className='App'>
     <header>
@@ -40,12 +42,25 @@ const App = ({
     <section className='main-content'>
       <Route
         path='/v3/home'
+        // tslint:disable-next-line jsx-no-lambda
         render={props => (
-          <Home apiCore={apiCore} apiModel={apiModel} apiExperiment={apiExperiment} {...props} />
+          <Home
+            apiCore={apiCore}
+            apiModel={apiModel}
+            apiExperiment={apiExperiment}
+            apiUser={apiUser}
+            {...props}
+          />
         )}
       />
       <Route
+        path='/v3/profile'
+        // tslint:disable-next-line jsx-no-lambda
+        render={props => <User apiUser={apiUser} {...props} />}
+      />
+      <Route
         path={['/v3/explore/:slug', '/v3/explore']}
+        // tslint:disable-next-line jsx-no-lambda
         render={props => (
           <Explore
             apiCore={apiCore}
@@ -58,6 +73,7 @@ const App = ({
       />
       <Route
         path={['/v3/review/:slug', '/v3/review']}
+        // tslint:disable-next-line jsx-no-lambda
         render={props => (
           <ExperimentReview
             apiMining={apiMining}
@@ -69,6 +85,7 @@ const App = ({
       />
       <Route
         path='/v3/experiment/:slug/:uuid'
+        // tslint:disable-next-line jsx-no-lambda
         render={() => (
           <ExperimentResult
             apiExperiment={apiExperiment}
@@ -80,6 +97,7 @@ const App = ({
       <Route
         exact={true}
         path='/v3/experiment/:slug'
+        // tslint:disable-next-line jsx-no-lambda
         render={() => (
           <ExperimentCreate
             apiExperiment={apiExperiment}

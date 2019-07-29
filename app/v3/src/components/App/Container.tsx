@@ -4,7 +4,7 @@ import request from 'request-promise-native';
 import { Provider, Subscribe } from 'unstated';
 
 // import UNSTATED from 'unstated-debug';
-import { APICore, APIExperiment, APIMining, APIModel, webURL } from '../API'; // as interfaces
+import { APICore, APIExperiment, APIMining, APIModel, APIUser, webURL } from '../API'; // as interfaces
 import { Pathology } from '../API/Core';
 import config from '../API/RequestHeaders';
 import App from '../App/App';
@@ -21,6 +21,7 @@ class AppContainer extends React.Component<any, State> {
   private apiModel = new APIModel(config);
   private apiCore = new APICore(config);
   private apiMining = new APIMining(config);
+  private apiUser = new APIUser(config);
 
   private intervalId: any; // FIXME: NodeJS.Timer | undefined;
 
@@ -52,7 +53,7 @@ class AppContainer extends React.Component<any, State> {
       this.apiCore.algorithms(this.state.appConfig.mode === 'local'),
       this.apiCore.stats(),
       this.apiCore.articles(),
-      this.apiCore.user(),
+      this.apiUser.user(),
       this.apiModel.all()
     ]);
   }
@@ -69,14 +70,16 @@ class AppContainer extends React.Component<any, State> {
             this.apiExperiment,
             this.apiCore,
             this.apiModel,
-            this.apiMining
+            this.apiMining,
+            this.apiUser
           ]}>
-          <Subscribe to={[APIExperiment, APICore, APIModel, APIMining]}>
+          <Subscribe to={[APIExperiment, APICore, APIModel, APIMining, APIUser]}>
             {(
               apiExperiment: APIExperiment,
               apiCore: APICore,
               apiModel: APIModel,
-              apiMining: APIMining
+              apiMining: APIMining,
+              apiUser: APIUser
             ) => {
               return (
                 <App
@@ -85,6 +88,7 @@ class AppContainer extends React.Component<any, State> {
                   apiCore={apiCore}
                   apiModel={apiModel}
                   apiMining={apiMining}
+                  apiUser={apiUser}
                 />
               );
             }}

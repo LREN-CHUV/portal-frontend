@@ -291,6 +291,7 @@ button {
 
 .img-circle {
   border-radius: 50%;
+  width: 40px;
 }
 h2,
 h3,

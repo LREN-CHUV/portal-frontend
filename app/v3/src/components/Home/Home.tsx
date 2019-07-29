@@ -3,7 +3,7 @@ import { Panel } from 'react-bootstrap';
 import { RouteComponentProps } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { APICore, APIExperiment, APIModel } from '../API';
+import { APICore, APIExperiment, APIModel, APIUser } from '../API';
 import Articles from './Articles';
 import Infos from './Infos';
 import Models from './Models';
@@ -29,12 +29,13 @@ interface Props extends RouteComponentProps<{}> {
   apiExperiment: APIExperiment;
   apiCore: APICore;
   apiModel: APIModel;
+  apiUser: APIUser;
 }
 
 export default ({ ...props }: Props) => {
-  const { apiCore, apiModel, apiExperiment, history } = props;
+  const { apiCore, apiModel, apiExperiment, apiUser, history } = props;
   const articles = apiCore.state && apiCore.state.articles;
-  const user = apiCore.state && apiCore.state.user;
+  const user = apiUser.state && apiUser.state.user;
   const experiments = apiExperiment.state && apiExperiment.state.experiments;
 
   return (

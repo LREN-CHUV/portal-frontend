@@ -100,9 +100,7 @@ class Navigation extends React.Component<Props> {
                   title='BSD'
                   type='models'
                   // tslint:disable-next-line jsx-no-lambda
-                  handleSelect={async (
-                    experiment: ExperimentResponse
-                  ) => {
+                  handleSelect={async (experiment: ExperimentResponse) => {
                     const { modelDefinitionId, uuid } = experiment;
                     this.props.history.push(
                       `/v3/experiment/${modelDefinitionId}/${uuid}`
@@ -122,15 +120,16 @@ class Navigation extends React.Component<Props> {
             </li>
 
             <li className='uib-dropdown toolbar-icon-bg'>
-              <a href='/profile'
-                className='uib-dropdown-toggle username'
-                data-position='right'>
+              <NavLink
+                title='Profile'
+                to='/v3/profile'
+                activeClassName='active'>
                 <img
                   className='img-circle'
                   alt='anonymous'
                   src={default_user}
                 />
-              </a>
+              </NavLink>
               <ul className='dropdown-menu userinfo arrow'>
                 <li>
                   <a ui-sref='profile' href='/profile'>
