@@ -109,17 +109,9 @@ const App = ({
         )}
       />
       <Route
-        exact={true}
-        path='/v3/articles/'
+        path={['/v3/articles/:slug', '/v3/articles']}
         // tslint:disable-next-line jsx-no-lambda
-        render={() => (
-          <Article
-          // apiExperiment={apiExperiment}
-          // apiCore={apiCore}
-          // apiModel={apiModel}
-          // appConfig={appConfig}
-          />
-        )}
+        render={props => <Article apiCore={apiCore} {...props} />}
       />
     </section>
     <footer id='footer'>

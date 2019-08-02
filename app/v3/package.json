@@ -25,6 +25,7 @@
     "react-plotly.js": "^2.3.0",
     "react-router-dom": "^5.0.0",
     "react-spinners": "^0.5.4",
+    "react-wysiwyg-typescript": "^1.0.2",
     "request": "^2.88.0",
     "request-promise-native": "^1.0.7",
     "string-hash": "^1.1.3",

@@ -86,6 +86,14 @@ export interface Stats {
   variables: number;
 }
 
+export interface Article {
+  abstract?: string;
+  content?: string;
+  slug: string;
+  status?: string;
+  title?: string;
+}
+
 export interface State {
   error?: string;
   loading?: boolean;
@@ -94,7 +102,8 @@ export interface State {
   datasets?: VariableEntity[];
   algorithms?: Algorithm[];
   pathologies?: VariableEntity[];
-  articles?: any;
+  article?: Article;
+  articles?: Article[];
   stats?: Stats;
 }
 
@@ -224,26 +233,79 @@ class Core extends Container<State> {
       }
     );
 
-    public articles = async() => {
-      try {
-        const data = await request.get(`${this.backendURL}/articles`, this.options);
-        const json = await JSON.parse(data);
-        if (json.error) {
-          return await this.setState({
-            error: json.error
-          });
-        }
-  
+  public articles = async () => {
+    try {
+      const data = await request.get(
+        `${this.backendURL}/articles`,
+        this.options
+      );
+      const json = await JSON.parse(data);
+      if (json.error) {
         return await this.setState({
-          error: undefined,
-          articles: json
-        });
-      } catch (error) {
-        return await this.setState({
-          error: error.message
+          error: json.error
         });
       }
+
+      return await this.setState({
+        articles: json,
+        error: undefined
+      });
+    } catch (error) {
+      return await this.setState({
+        error: error.message
+      });
     }
+  };
+
+  public createArticle = async (payload: Article) => {
+    try {
+      const data = await request({
+        body: JSON.stringify(payload),
+        headers: {
+          ...this.options.headers,
+          'Content-Type': 'application/json;charset=UTF-8'
+        },
+        method: 'POST',
+        uri: `${this.backendURL}/articles`
+      });
+      const json = await JSON.parse(data);
+      await this.setState({
+        article: json,
+        error: undefined
+      });
+
+      return json.slug;
+    } catch (error) {
+      return await this.setState({
+        error: error.message
+      });
+    }
+  };
+
+  public updateArticle = async (slug: string, payload: Article) => {
+    try {
+      const data = await request({
+        body: JSON.stringify(payload),
+        headers: {
+          ...this.options.headers,
+          'Content-Type': 'application/json;charset=UTF-8'
+        },
+        method: 'PUT',
+        uri: `${this.backendURL}/articles/${slug}`
+      });
+      const json = await JSON.parse(data);
+      await this.setState({
+        article: json,
+        error: undefined
+      });
+
+      return json.slug;
+    } catch (error) {
+      return await this.setState({
+        error: error.message
+      });
+    }
+  };
 
   private workflows = async (isLocal: boolean) => {
     if (isLocal) {
