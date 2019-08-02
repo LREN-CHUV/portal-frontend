@@ -42,18 +42,10 @@ const PanelFooter = styled(Panel.Footer)`
 interface Props {
   experiments: ExperimentResponse[] | undefined;
   models: ModelResponse[] | undefined;
-  history: any;
+  handleSelectExperiment: (modelId: string | undefined, experimentId: string) => void;
+  handleNewExperiment: (modelId: string | undefined) => void;
 }
-export default ({ models, experiments, history }: Props) => {
-  const handleNewExperiment = (modelId: string | undefined) => {
-    history.push(`/v3/experiment/${modelId}`);
-  };
-  const handleGoToExperiment = (
-    modelId: string | undefined,
-    experimentId: string
-  ) => {
-    history.push(`/v3/experiment/${modelId}/${experimentId}`);
-  };
+export default ({ models, experiments, handleSelectExperiment, handleNewExperiment }: Props) => {
 
   return (
     <>
@@ -90,7 +82,7 @@ export default ({ models, experiments, history }: Props) => {
                     bsSize='small'
                     // tslint:disable-next-line jsx-no-lambda
                     onClick={() =>
-                      handleGoToExperiment(
+                      handleSelectExperiment(
                         experiment.modelDefinitionId,
                         experiment.uuid
                       )

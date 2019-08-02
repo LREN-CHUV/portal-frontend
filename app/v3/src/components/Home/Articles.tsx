@@ -34,9 +34,9 @@ const PanelFooter = styled(Panel.Footer)`
 
 interface Props {
   articles: any[] | undefined;
-  history: any;
+  handleSelectArticle: (id: string) => void;
 }
-export default ({ articles, history }: Props) => {
+export default ({ articles, handleSelectArticle }: Props) => {
   return (
     <>
       {!articles ||
@@ -46,7 +46,15 @@ export default ({ articles, history }: Props) => {
         articles.map(article => (
           <StyledPanel key={article.slug}>
             <Heading>
-              <h2>{article.title}</h2>
+              <h2>
+                <a
+                  // tslint:disable-next-line jsx-no-lambda
+                  onClick={() => {
+                    handleSelectArticle(article.slug);
+                  }}>
+                  {article.title}
+                </a>
+              </h2>
             </Heading>
             <PanelBody>{article.abstract}</PanelBody>
             <PanelFooter>

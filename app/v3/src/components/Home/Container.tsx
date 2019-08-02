@@ -41,9 +41,27 @@ export default ({ ...props }: Props) => {
   const user = apiUser.state && apiUser.state.user;
   const experiments = apiExperiment.state && apiExperiment.state.experiments;
 
+  const handleSelectArticle = (id: string) => {
+    history.push(`/v3/articles/${id}`);
+  };
+
+  const handleNewArticle = () => {
+    history.push(`/v3/articles/create`);
+  }
+
+  const handleNewExperiment = (modelId: string | undefined) => {
+    history.push(`/v3/experiment/${modelId}`);
+  };
+  const handleSelectExperiment = (
+    modelId: string | undefined,
+    experimentId: string
+  ) => {
+    history.push(`/v3/experiment/${modelId}/${experimentId}`);
+  };
+
   return (
     <Layout>
-      <Infos stats={apiCore.state.stats} />
+      <Infos stats={apiCore.state.stats} handleNewArticle={handleNewArticle} />
       <ModelsLayout>
         <div>
           <PanelTitle>
@@ -51,14 +69,18 @@ export default ({ ...props }: Props) => {
             <Experiments
               models={apiModel.state.models}
               experiments={experiments}
-              history={history}
+              handleSelectExperiment={handleSelectExperiment}
+              handleNewExperiment={handleNewExperiment}
             />
           </PanelTitle>
         </div>
         <div>
           <PanelTitle>
             <h2>Recent Articles</h2>
-            <Articles articles={articles} history={history} />
+            <Articles
+              articles={articles}
+              handleSelectArticle={handleSelectArticle}
+            />
           </PanelTitle>
           <PanelTitle>
             <h2>Shared experiments</h2>
@@ -75,7 +97,8 @@ export default ({ ...props }: Props) => {
                     m.createdBy.username !== user.username
                 )
               }
-              history={history}
+              handleSelectExperiment={handleSelectExperiment}
+              handleNewExperiment={handleNewExperiment}
               experiments={
                 experiments &&
                 experiments.filter(

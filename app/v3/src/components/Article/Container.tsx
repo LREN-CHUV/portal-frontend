@@ -52,12 +52,17 @@ export default ({ apiCore, ...props }: Props) => {
 
   useEffect(() => {
     const articles = apiCore.state && apiCore.state.articles;
-    
+
     if (!articles) {
       return;
     }
 
     if (slug !== undefined) {
+      if (slug === 'create') {
+        setEditing(Mode.creating);
+        return;
+      }
+
       const nextArticle = articles.find(a => a.slug === slug);
       if (nextArticle) {
         setCurrentArticle(nextArticle);
