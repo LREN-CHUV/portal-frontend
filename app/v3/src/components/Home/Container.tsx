@@ -7,7 +7,6 @@ import { APICore, APIExperiment, APIModel, APIUser } from '../API';
 import Articles from './Articles';
 import Experiments from './Experiments';
 import Infos from './Infos';
-import Models from './Models';
 
 const Layout = styled.div`
   padding: 0 48px 0px 48px;
@@ -47,7 +46,7 @@ export default ({ ...props }: Props) => {
 
   const handleNewArticle = () => {
     history.push(`/v3/articles/create`);
-  }
+  };
 
   const handleNewExperiment = (modelId: string | undefined) => {
     history.push(`/v3/experiment/${modelId}`);

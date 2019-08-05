@@ -11,6 +11,9 @@ import { Mode } from './Container';
 
 const Submit = styled.div`
   text-align: right;
+  button {
+    margin-left: 8px;
+  }
 `;
 
 interface Props {
@@ -19,11 +22,7 @@ interface Props {
   setEditing: any;
 }
 
-export default ({
-  currentArticle,
-  handleSaveArticle,
-  setEditing
-}: Props) => {
+export default ({ currentArticle, handleSaveArticle, setEditing }: Props) => {
   const [article, setArticle] = useState<Article>(currentArticle);
   const [content, setContent] = useState(EmptyState);
 
@@ -55,9 +54,9 @@ export default ({
         handleSaveArticle(article.slug, article);
       }}>
       <Submit>
-        <button className='btn-primary btn'>Save</button>
+        <button className='btn-info btn'>Save</button>
         <button
-          className='btn-default btn'
+          className='btn-info btn'
           // tslint:disable-next-line
           onClick={() => {
             setEditing(Mode.default);

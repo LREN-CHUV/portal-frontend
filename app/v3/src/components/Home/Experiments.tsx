@@ -1,6 +1,6 @@
 import moment from 'moment';
-import React from 'react';
-import { Button, DropdownButton, MenuItem, Panel } from 'react-bootstrap';
+import React, { useState } from 'react';
+import { Button, Panel } from 'react-bootstrap';
 import styled from 'styled-components';
 
 import { ExperimentResponse } from '../API/Experiment';
@@ -42,10 +42,19 @@ const PanelFooter = styled(Panel.Footer)`
 interface Props {
   experiments: ExperimentResponse[] | undefined;
   models: ModelResponse[] | undefined;
-  handleSelectExperiment: (modelId: string | undefined, experimentId: string) => void;
+  handleSelectExperiment: (
+    modelId: string | undefined,
+    experimentId: string
+  ) => void;
   handleNewExperiment: (modelId: string | undefined) => void;
 }
-export default ({ models, experiments, handleSelectExperiment, handleNewExperiment }: Props) => {
+export default ({
+  models,
+  experiments,
+  handleSelectExperiment,
+  handleNewExperiment
+}: Props) => {
+  const [collapsibleState, setCollapsibleState] = useState('');
 
   return (
     <>
@@ -66,7 +75,13 @@ export default ({ models, experiments, handleSelectExperiment, handleNewExperime
           return (
             <StyledPanel key={experiment.name} defaultExpanded={false}>
               <Heading>
-                <Panel.Title toggle={true} style={{"flexGrow": 1}}>
+                <Panel.Title
+                  toggle={true}
+                  style={{ flexGrow: 1 }}
+                  // tslint:disable-next-line jsx-no-lambda
+                  onClick={() => {
+                    setCollapsibleState(experiment.uuid);
+                  }}>
                   <h2>{experiment && experiment.name}</h2>
                 </Panel.Title>
                 <div>
@@ -121,7 +136,9 @@ export default ({ models, experiments, handleSelectExperiment, handleNewExperime
                         )}
                     </>
                   )}
-                  <RenderResult nodes={nodes} />
+                  {collapsibleState === experiment.uuid ? (
+                    <RenderResult nodes={nodes} />
+                  ) : null}
                 </PanelBody>
               </Panel.Collapse>
               <PanelFooter>

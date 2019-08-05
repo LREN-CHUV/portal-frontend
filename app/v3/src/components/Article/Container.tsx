@@ -7,6 +7,7 @@ import styled from 'styled-components';
 import { APICore } from '../API';
 import { Article } from '../API/Core';
 import Edit from './Edit';
+import Header from './Header';
 
 export enum Mode {
   default,
@@ -17,21 +18,19 @@ export enum Mode {
 const Layout = styled.div`
   padding: 0 48px 0px 48px;
   display: flex;
+  flex-direction: column;
 `;
 
-const PanelLayout = styled(Panel)`
-  margin-right: 8px;
-`;
-
-const PanelTitle = styled(Panel.Title)`
+const Content = styled.div`
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-right: 8px;
+  .panel:first-child {
+    flex: 0.3;
+    margin-right: 8px;
+  }
 `;
 
 const Submit = styled.div`
-  text-align: right;
+  float: right;
 `;
 
 const initialFormState: Article = { slug: '', title: '' };
@@ -97,63 +96,65 @@ export default ({ apiCore, ...props }: Props) => {
     });
   };
 
+  const handleNewArticle = () => {
+    setCurrentArticle(initialFormState);
+    setEditing(Mode.creating);
+  };
+
   return (
     <Layout>
-      <PanelLayout style={{ flex: 0.3 }}>
-        <PanelTitle>
-          <h3>My articles</h3>
-          <button
-            className='btn-primary btn' // tslint:disable-next-line
-            onClick={() => {
-              setCurrentArticle(initialFormState);
-              setEditing(Mode.creating);
-            }}>
-            New article
-          </button>
-        </PanelTitle>
-        <Panel.Body>
-          {apiCore.state &&
-            apiCore.state.articles &&
-            apiCore.state.articles.map(a => (
-              <p key={a.slug}>
-                <a
-                  // tslint:disable-next-line jsx-no-lambda
-                  onClick={() => handleSelectArticle(a)}>
-                  {a.title}
-                </a>
-              </p>
-            ))}
-        </Panel.Body>
-      </PanelLayout>
-      <PanelLayout style={{ flex: 0.6 }}>
-        <Panel.Body>
-          {editing ? (
-            <Edit
-              currentArticle={currentArticle}
-              handleSaveArticle={handleSaveArticle}
-              setEditing={setEditing}
-            />
-          ) : (
-            <>
-              <Submit>
-                <button
-                  className='btn-primary btn'
-                  // tslint:disable-next-line
-                  onClick={() => setEditing(Mode.editing)}>
-                  Edit
-                </button>
-              </Submit>
-              <h1>{currentArticle && currentArticle.title}</h1>
-              <h3>{currentArticle && currentArticle.abstract}</h3>
-              <div>
-                {currentArticle &&
-                  currentArticle.content &&
-                  draftStateToHTML(currentArticle.content)}
-              </div>
-            </>
-          )}
-        </Panel.Body>
-      </PanelLayout>
+      <Header handleNewArticle={handleNewArticle} />
+      <Content>
+        <Panel>
+          <Panel.Title>
+            <h3>My articles</h3>
+          </Panel.Title>
+          <Panel.Body>
+            {apiCore.state &&
+              apiCore.state.articles &&
+              apiCore.state.articles.map(a => (
+                <div key={a.slug}>
+                  <button
+                    className='btn btn-link'
+                    style={{ textTransform: 'none' }}
+                    // tslint:disable-next-line jsx-no-lambda
+                    onClick={() => handleSelectArticle(a)}>
+                    {a.title}
+                  </button>
+                </div>
+              ))}
+          </Panel.Body>
+        </Panel>
+        <Panel>
+          <Panel.Body>
+            {editing ? (
+              <Edit
+                currentArticle={currentArticle}
+                handleSaveArticle={handleSaveArticle}
+                setEditing={setEditing}
+              />
+            ) : (
+              <>
+                <Submit>
+                  <button
+                    className='btn-info btn'
+                    // tslint:disable-next-line
+                    onClick={() => setEditing(Mode.editing)}>
+                    Edit
+                  </button>
+                </Submit>
+                <h1>{currentArticle && currentArticle.title}</h1>
+                <h3>{currentArticle && currentArticle.abstract}</h3>
+                <div>
+                  {currentArticle &&
+                    currentArticle.content &&
+                    draftStateToHTML(currentArticle.content)}
+                </div>
+              </>
+            )}
+          </Panel.Body>
+        </Panel>
+      </Content>
     </Layout>
   );
 };

@@ -9,6 +9,7 @@ import Article from '../Article/Container';
 import ExperimentCreate from '../Create/Container';
 import Explore from '../Explore/Container';
 import Home from '../Home/Container';
+import TOS from '../Home/TOS';
 import ExperimentResult from '../Result/Container';
 import ExperimentReview from '../Review/Container';
 import Footer from '../UI/Footer';
@@ -41,6 +42,16 @@ const App = ({
       />
     </header>
     <section className='main-content'>
+      <Route
+        path='/v3/tos'
+        // tslint:disable-next-line jsx-no-lambda
+        render={props => (
+          <TOS
+          // apiUser={apiUser}
+          // {...props}
+          />
+        )}
+      />
       <Route
         path='/v3/home'
         // tslint:disable-next-line jsx-no-lambda

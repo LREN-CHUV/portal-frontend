@@ -5,6 +5,7 @@ import styled from 'styled-components';
 
 import default_user from '../../images/default_user.png';
 import { APIUser } from '../API';
+import Header from './Header';
 
 const Layout = styled.div`
   padding: 0 48px 0px 48px;
@@ -55,8 +56,9 @@ export default ({ apiUser }: Props) => {
 
   return (
     <>
-      {user && (
-        <Layout>
+      <Layout>
+        <Header />
+        {user && (
           <GridLayout>
             <CenteredPanel>
               <User
@@ -75,6 +77,7 @@ export default ({ apiUser }: Props) => {
                     className='form-control'
                     type='text'
                     name='username'
+                    disabled={true}
                     defaultValue={user.username}
                   />
                 </div>
@@ -84,6 +87,7 @@ export default ({ apiUser }: Props) => {
                     className='form-control'
                     type='text'
                     name='fullname'
+                    disabled={true}
                     defaultValue={user.fullname}
                   />
                 </div>
@@ -93,11 +97,12 @@ export default ({ apiUser }: Props) => {
                     className='form-control'
                     type='text'
                     name='lastName'
+                    disabled={true}
                     defaultValue={user.email}
                   />
                 </div>
                 <Submit>
-                  <button className='btn-primary btn' disabled={true}>
+                  <button className='btn-info btn' disabled={true}>
                     Save
                   </button>
                   <button className='btn-default btn' disabled={true}>
@@ -107,8 +112,8 @@ export default ({ apiUser }: Props) => {
               </PanelBody>
             </StyledPanel>
           </GridLayout>
-        </Layout>
-      )}
+        )}
+      </Layout>
     </>
   );
 };
