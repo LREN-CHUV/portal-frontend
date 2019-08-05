@@ -92,7 +92,12 @@ export default ({
                     handleExpand(experiment.uuid);
                   }}>
                   <h2>
-                    <a>{experiment && experiment.name}</a>
+                    <a
+                      href={`/v3/experiment/${model && model.slug}/${
+                        experiment.uuid
+                      }`}>
+                      {experiment && experiment.name}
+                    </a>
                   </h2>
                 </Panel.Title>
                 <div>
