@@ -54,7 +54,16 @@ export default ({
   handleSelectExperiment,
   handleNewExperiment
 }: Props) => {
-  const [collapsibleState, setCollapsibleState] = useState('');
+  const [collapsibleState, setCollapsibleState] = useState(['']);
+
+  const handleExpand = (uuid: string) => {
+    const nextState =
+      collapsibleState && collapsibleState.includes(uuid)
+        ? collapsibleState.filter((c: string) => c !== uuid)
+        : [uuid, ...collapsibleState] || [uuid];
+
+    setCollapsibleState(nextState);
+  };
 
   return (
     <>
@@ -80,9 +89,11 @@ export default ({
                   style={{ flexGrow: 1 }}
                   // tslint:disable-next-line jsx-no-lambda
                   onClick={() => {
-                    setCollapsibleState(experiment.uuid);
+                    handleExpand(experiment.uuid);
                   }}>
-                  <h2>{experiment && experiment.name}</h2>
+                  <h2>
+                    <a>{experiment && experiment.name}</a>
+                  </h2>
                 </Panel.Title>
                 <div>
                   <Button
@@ -136,7 +147,7 @@ export default ({
                         )}
                     </>
                   )}
-                  {collapsibleState === experiment.uuid ? (
+                  {collapsibleState.includes(experiment.uuid) ? (
                     <RenderResult nodes={nodes} />
                   ) : null}
                 </PanelBody>
