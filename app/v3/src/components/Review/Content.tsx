@@ -5,9 +5,7 @@ import { VariableEntity } from '../API/Core';
 import { ModelResponse } from '../API/Model';
 import { Alert } from '../UI/Alert';
 import Boxplot from './Boxplot';
-import HeatMap from './HeatMap';
 import Table from './Table';
-
 
 interface Props {
   apiMining?: APIMining;
@@ -30,15 +28,15 @@ const Content = ({
         {apiMining && apiMining.state && apiMining.state.error && (
           <Alert
             message={apiMining.state && apiMining.state.error}
-            title={"Error"}
-            styled={"info"}
+            title={'Error'}
+            styled={'info'}
           />
         )}
         {children}
         <Panel>
           <Panel.Body>
-            <Tabs defaultActiveKey={1} id="uncontrolled-review-model-tab">
-              <Tab eventKey={1} title="Table">
+            <Tabs defaultActiveKey={1} id='uncontrolled-review-model-tab'>
+              <Tab eventKey={1} title='Table'>
                 <Table
                   minings={apiMining.state.summaryStatistics}
                   selectedDatasets={selectedDatasets}
@@ -46,14 +44,11 @@ const Content = ({
                   lookup={lookup}
                 />
               </Tab>
-              <Tab eventKey={2} title="Boxplot">
+              <Tab eventKey={2} title='Boxplot'>
                 <Boxplot
                   miningState={apiMining.state}
                   selectedDatasets={selectedDatasets}
                 />
-              </Tab>
-              <Tab eventKey={3} title="Heatmap">
-                <HeatMap heatmaps={apiMining.state.heatmaps} />
               </Tab>
             </Tabs>
           </Panel.Body>
