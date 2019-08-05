@@ -311,7 +311,7 @@ export default ({
     }
   };
 
-  const handleSelectPathology = (code: string) => {
+  const handleSelectPathology = (code: Pathology) => {
     apiCore.setPathology(code);
     if (code === Pathology.TBI) {
       setSelectedDatasets([]);
@@ -335,14 +335,14 @@ export default ({
     datasets,
     handleGoToAnalysis,
     handleSelectDataset,
-    handleSelectPathology,
     handleSelectModel,
     handleSelectNode: setSelectedNode,
+    handleSelectPathology,
     handleUpdateD3Model,
     histograms: apiMining.state.histograms,
     selectedDatasets,
-    selectedPathology,
-    selectedNode
+    selectedNode,
+    selectedPathology
   };
 
   return (

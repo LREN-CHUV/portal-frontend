@@ -1,9 +1,11 @@
+import './CirclePack.css';
+
 import * as d3 from 'd3';
 import React, { useCallback, useEffect, useRef } from 'react';
+
 import { APICore, APIModel } from '../API';
-import { VariableEntity } from '../API/Core';
+import { Pathology, VariableEntity } from '../API/Core';
 import { ModelResponse } from '../API/Model';
-import './CirclePack.css';
 import { D3Model, HierarchyCircularNode } from './Container';
 import Explore from './Explore';
 
@@ -26,7 +28,7 @@ export interface Props {
   histograms?: any;
   d3Model: D3Model;
   handleSelectDataset: (e: VariableEntity) => void;
-  handleSelectPathology: (code: string) => void;
+  handleSelectPathology: (code: Pathology) => void;
   handleSelectNode: (node: HierarchyCircularNode) => void;
   handleUpdateD3Model: Function; // (type: ModelType, node?: HierarchyCircularNode) => void;
   handleSelectModel: (d3Model?: ModelResponse) => void;
@@ -210,7 +212,7 @@ export default ({ layout, ...props }: Props) => {
         if (!d.children) {
           return;
         }
-  
+
         return focus.current !== d && zoomCallback(d);
       });
 

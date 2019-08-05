@@ -25,7 +25,7 @@ export interface ExploreProps {
   histograms?: any;
   d3Model: D3Model;
   handleSelectDataset: (e: VariableEntity) => void;
-  handleSelectPathology: (code: string) => void;
+  handleSelectPathology: (code: Pathology) => void;
   handleSelectNode: (node: HierarchyCircularNode) => void;
   handleUpdateD3Model: Function;
   handleSelectModel: (model?: ModelResponse) => void;
@@ -54,8 +54,6 @@ export default (props: ExploreProps) => {
     zoom
   } = props;
 
-  
-
   return (
     <div className='Explore'>
       <div className='content'>
@@ -75,11 +73,13 @@ export default (props: ExploreProps) => {
                       value={g.code}
                       checked={selectedPathology === g.code}
                       // tslint:disable jsx-no-lambda
-                      onChange={(e) => {
+                      onChange={e => {
                         e.preventDefault();
-                        handleSelectPathology(e.target.value)}}
-                    />
-                    {' '}{g.label}
+                        const nextPathology = e.target.value as Pathology;
+                        handleSelectPathology(nextPathology);
+                      }}
+                    />{' '}
+                    {g.label}
                   </label>
                 ))}
             </Panel.Body>
@@ -101,7 +101,7 @@ export default (props: ExploreProps) => {
                     checked={selectedDatasets
                       .map(s => s.code)
                       .includes(dataset.code)}
-                      disabled={selectedPathology === Pathology.TBI}>
+                    disabled={selectedPathology === Pathology.TBI}>
                     {dataset.label}
                   </Checkbox>
                 ))}

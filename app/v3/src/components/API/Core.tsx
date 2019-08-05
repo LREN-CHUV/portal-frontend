@@ -136,7 +136,7 @@ class Core extends Container<State> {
     return originalVar || { code, label: code };
   };
 
-  public setPathology = (code: string) => {
+  public setPathology = (code: Pathology) => {
     const hierarchy: any = hierarchyMockup.groups
       .filter(g => g.code === code)
       .pop();
