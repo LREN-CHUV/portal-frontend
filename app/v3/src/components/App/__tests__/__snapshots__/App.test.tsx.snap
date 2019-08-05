@@ -16,46 +16,13 @@ exports[`Test App components App snapshot renders correctly 1`] = `
           className="logo-area"
         >
           <a
+            aria-current={null}
             className="navbar-brand"
-            href="/home"
+            href="/v3/home"
             onClick={[Function]}
           >
             Human Brain Project
           </a>
-          <span
-            className="toolbar-trigger toolbar-icon-bg"
-          >
-            <a
-              href="/data/mydata"
-              onClick={[Function]}
-              title="My data"
-            >
-              <span
-                className="icon-bg"
-              >
-                <i
-                  className="ti ti-menu"
-                />
-              </span>
-            </a>
-          </span>
-          <span
-            className="toolbar-trigger toolbar-icon-bg"
-          >
-            <a
-              href="/data/communitydata"
-              onClick={[Function]}
-              title="My community"
-            >
-              <span
-                className="icon-bg"
-              >
-                <i
-                  className="ti ti-world"
-                />
-              </span>
-            </a>
-          </span>
         </div>
         <div
           className="app-instance-name"
@@ -156,9 +123,10 @@ exports[`Test App components App snapshot renders correctly 1`] = `
             className="uib-dropdown toolbar-icon-bg"
           >
             <a
-              className="uib-dropdown-toggle username"
-              data-position="right"
-              href="/profile"
+              aria-current={null}
+              href="/v3/profile"
+              onClick={[Function]}
+              title="Profile"
             >
               <img
                 alt="anonymous"
@@ -376,46 +344,13 @@ exports[`Test App components AppContainer snapshot renders correctly 1`] = `
           className="logo-area"
         >
           <a
+            aria-current={null}
             className="navbar-brand"
-            href="/home"
+            href="/v3/home"
             onClick={[Function]}
           >
             Human Brain Project
           </a>
-          <span
-            className="toolbar-trigger toolbar-icon-bg"
-          >
-            <a
-              href="/data/mydata"
-              onClick={[Function]}
-              title="My data"
-            >
-              <span
-                className="icon-bg"
-              >
-                <i
-                  className="ti ti-menu"
-                />
-              </span>
-            </a>
-          </span>
-          <span
-            className="toolbar-trigger toolbar-icon-bg"
-          >
-            <a
-              href="/data/communitydata"
-              onClick={[Function]}
-              title="My community"
-            >
-              <span
-                className="icon-bg"
-              >
-                <i
-                  className="ti ti-world"
-                />
-              </span>
-            </a>
-          </span>
         </div>
         <div
           className="app-instance-name"
@@ -516,9 +451,10 @@ exports[`Test App components AppContainer snapshot renders correctly 1`] = `
             className="uib-dropdown toolbar-icon-bg"
           >
             <a
-              className="uib-dropdown-toggle username"
-              data-position="right"
-              href="/profile"
+              aria-current={null}
+              href="/v3/profile"
+              onClick={[Function]}
+              title="Profile"
             >
               <img
                 alt="anonymous"
