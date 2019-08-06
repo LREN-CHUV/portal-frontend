@@ -24,8 +24,13 @@ const Layout = styled.div`
 const Content = styled.div`
   display: flex;
   .panel:first-child {
-    flex: 0.3;
+    flex: 1;
+    min-width: 360px;
     margin-right: 8px;
+    button {
+      white-space: normal;
+      text-align: left;
+    }
   }
 `;
 
