@@ -33,6 +33,10 @@ export const algorithmDefaultOutputConfig = [
   {
     name: 'ANOVA',
     type: MIME_TYPES.JSONDATA
+  },
+  {
+    name: 'LINEAR_REGRESSION',
+    type: MIME_TYPES.JSONDATA
   }
 ];
 

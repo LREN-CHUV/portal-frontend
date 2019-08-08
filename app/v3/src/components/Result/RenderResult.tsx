@@ -43,10 +43,8 @@ export default ({ results }: { results: Result[] | undefined }) => {
               <PFA key={k} data={data} />
             ))}
         {result.type === MIME_TYPES.JSONDATA && (
-          // result.data.map((row: any, k: number) => (
           <JSONData data={result.data} />
         )
-        // ))
         }
         {result.type === MIME_TYPES.HTML &&
           result.data.map((doc: any, k: number) => <HTML doc={doc} key={k} />)}

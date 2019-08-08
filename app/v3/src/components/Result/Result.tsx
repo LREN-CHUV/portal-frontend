@@ -1,9 +1,14 @@
 import * as React from 'react';
 import { Panel } from 'react-bootstrap';
+import styled from 'styled-components';
 
 import { Engine, Node, Result, State } from '../API/Experiment';
 import RenderResultDeprecated from './deprecated/RenderResult';
 import RenderResult from './RenderResult';
+
+const Body = styled(Panel.Body)`
+  padding: 0 16px;
+`
 
 export default ({ experimentState }: { experimentState: State }) => {
   const experiment = experimentState && experimentState.experiment;
@@ -20,7 +25,7 @@ export default ({ experimentState }: { experimentState: State }) => {
       <Panel.Title>
         <h3>{algorithmName}</h3>
       </Panel.Title>
-      <Panel.Body>
+      <Body>
         {loading ? (
           <div className='loading'>
             <h3>Your experiment is currently running...</h3>
@@ -41,7 +46,7 @@ export default ({ experimentState }: { experimentState: State }) => {
         ) : (
           <RenderResultDeprecated nodes={results as Node[]} />
         )}
-      </Panel.Body>
+      </Body>
     </Panel>
   );
 };

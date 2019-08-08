@@ -2,11 +2,26 @@ import './Model.css';
 
 import * as React from 'react';
 import { Panel } from 'react-bootstrap';
+import styled from 'styled-components';
 
 import { VariableEntity } from '../API/Core';
 import { ModelResponse } from '../API/Model';
 import DropdownModel from './DropdownModel';
 import Loading from './Loader';
+
+const Body = styled(Panel.Body)`
+  padding: 0 16px 16px 16px;
+`;
+
+const Title = styled.h3`
+  margin: 16px 0 0 0;
+`;
+
+const Subtitle = styled.h5`
+  margin-bottom: 4px;
+`;
+
+
 
 interface Props {
   model?: ModelResponse;
@@ -32,9 +47,9 @@ class Model extends React.Component<Props> {
     return (
       <Panel className='model'>
         <Panel.Title>
-          <h3>
+          <Title>
             Model <strong>{(model && model.title) || selectedSlug}</strong>
-          </h3>
+          </Title>
           <div>
             {handleSelectModel && (
               <DropdownModel
@@ -46,17 +61,17 @@ class Model extends React.Component<Props> {
             )}
           </div>
         </Panel.Title>
-        <Panel.Body>
+        <Body>
           {!model && <Loading />}
           {query && variables && (
             <React.Fragment>
-              {query.variables && <h5>Variables</h5>}
+              {query.variables && <Subtitle>Variables</Subtitle>}
               {query.variables &&
                 query.variables.map((v: any) => (
                   <var key={v.code}>{this.lookup(v.code)}</var>
                 ))}
               {query.coVariables && query.coVariables.length > 0 && (
-                <h5>CoVariables</h5>
+                <Subtitle>CoVariables</Subtitle>
               )}
               {query.coVariables &&
                 query.coVariables.length > 0 &&
@@ -64,19 +79,21 @@ class Model extends React.Component<Props> {
                   <var key={v.code}>{this.lookup(v.code)}</var>
                 ))}
               {query.groupings && query.groupings.length > 0 && (
-                <h5>Groupings</h5>
+                <Subtitle>Groupings</Subtitle>
               )}
               {query.groupings &&
                 query.groupings.length > 0 &&
                 query.groupings.map((v: any) => (
                   <var key={v.code}>{this.lookup(v.code)}</var>
                 ))}
-              {query.filters && <h5>Filters</h5>}
+              {query.filters && <Subtitle>Filters</Subtitle>}
               {query.filters && this.formatFilter(query.filters)}
 
               {showDatasets &&
                 query.trainingDatasets &&
-                query.trainingDatasets.length > 0 && <h5>Training datasets</h5>}
+                query.trainingDatasets.length > 0 && (
+                  <Subtitle>Training datasets</Subtitle>
+                )}
               {showDatasets &&
                 query.trainingDatasets &&
                 query.trainingDatasets.map((v: any) => (
@@ -85,7 +102,7 @@ class Model extends React.Component<Props> {
               {showDatasets &&
                 query.validationDatasets &&
                 query.validationDatasets.length > 0 && (
-                  <h5>Validation dataset</h5>
+                  <Subtitle>Validation dataset</Subtitle>
                 )}
               {showDatasets &&
                 query.validationDatasets &&
@@ -94,7 +111,7 @@ class Model extends React.Component<Props> {
                 ))}
             </React.Fragment>
           )}
-        </Panel.Body>
+        </Body>
       </Panel>
     );
   }
