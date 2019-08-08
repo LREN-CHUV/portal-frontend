@@ -26,6 +26,7 @@ const Heading = styled(Panel.Heading)`
     margin: 0;
     text-transform: uppercase;
     font-weight: bold;
+    color: #337ab7;
   }
 `;
 
@@ -92,14 +93,7 @@ export default ({
                   onClick={() => {
                     handleExpand(experiment.uuid);
                   }}>
-                  <h2>
-                    <a
-                      href={`/v3/experiment/${model && model.slug}/${
-                        experiment.uuid
-                      }`}>
-                      {experiment && experiment.name}
-                    </a>
-                  </h2>
+                  <h2>{experiment && experiment.name}</h2>
                 </Panel.Title>
                 <div>
                   <Button

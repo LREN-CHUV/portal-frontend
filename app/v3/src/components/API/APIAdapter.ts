@@ -111,7 +111,7 @@ class APIAdapter {
         (r: any) => r.data && r.type && !r.dataProvenance
       );
       if (isExareme) {
-        const algorithmName = experiment.algorithms[0].name;
+        const algorithmName = experimentResponse.algorithms[0].name;
 
         return {
           ...experimentResponse,
