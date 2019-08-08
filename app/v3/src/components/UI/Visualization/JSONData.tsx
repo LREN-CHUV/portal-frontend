@@ -51,8 +51,7 @@ const Table = styled.table`
 
 const Title = styled.h5`
   margin-bottom: 8px;
-`
-
+`;
 
 interface Field {
   type: string;
@@ -69,12 +68,9 @@ interface TabularDataResource {
   schema: Fields;
 }
 
-export default ({ data: datas }: { data: TabularDataResource[] }) => {
-  // FIXME: exareme data
-  const data = (datas && datas.length > 0 && datas[0]) || undefined;
-
+export default ({ data }: { data: TabularDataResource }) => {
   if (!data) {
-    return <div>No data</div>;
+    return <p>No data</p>;
   }
 
   const formatNumber = (value: any, field: Field): string => {
