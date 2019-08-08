@@ -1,4 +1,4 @@
-import { algorithmDefaultOutputConfig, MIME_TYPES, SCORES } from '../constants';
+import { ALGORITHM_DEFAULT_OUTPUT, MIME_TYPES, SCORES } from '../constants';
 import {
   Engine,
   ExperimentResponse,
@@ -26,7 +26,7 @@ interface IPfa {
 
 const defaultResults = (name: string, results: Result[]): Result[] => {
   const config =
-    algorithmDefaultOutputConfig.find(a => a.name === name) || undefined;
+    ALGORITHM_DEFAULT_OUTPUT.find(a => a.name === name) || undefined;
 
   const nextResults = results.filter(
     r => config && config.types.includes(r.type)

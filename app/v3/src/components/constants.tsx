@@ -29,7 +29,7 @@ export enum MIME_TYPES {
   JSONRAW = 'application/raw+json'
 }
 
-export const algorithmDefaultOutputConfig = [
+export const ALGORITHM_DEFAULT_OUTPUT = [
   {
     name: 'ANOVA',
     types: [MIME_TYPES.JSONDATA]
@@ -41,7 +41,36 @@ export const algorithmDefaultOutputConfig = [
   {
     name: 'LOGISTIC_REGRESSION',
     types: [MIME_TYPES.JSONDATA, MIME_TYPES.HIGHCHARTS]
+  },
+  {
+    name: 'HISTOGRAMS',
+    types: [MIME_TYPES.HIGHCHARTS]
+  },
+  {
+    name: 'TTEST_INDEPENDENT',
+    types: [MIME_TYPES.JSONDATA]
+  },
+  {
+    name: 'TTEST_PAIRED',
+    types: [MIME_TYPES.JSONDATA]
+  },
+  {
+    name: 'PEARSON_CORRELATION',
+    types: [MIME_TYPES.JSONDATA, MIME_TYPES.HIGHCHARTS]
   }
+];
+
+export const ENABLED_ALGORITHMS = [
+  'LOGISTIC_REGRESSION',
+  'ANOVA',
+  // 'NAIVE_BAYES_TRAINING_STANDALONE',
+  // 'KMEANS',
+  'PEARSON_CORRELATION',
+  // 'ID3',
+  // 'HISTOGRAMS',
+  'LINEAR_REGRESSION',
+  'TTEST_INDEPENDENT',
+  'TTEST_PAIRED'
 ];
 
 interface ILabel {

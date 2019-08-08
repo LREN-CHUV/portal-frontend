@@ -69,6 +69,7 @@ interface TabularDataResource {
 }
 
 export default ({ data }: { data: TabularDataResource }) => {
+  
   if (!data) {
     return <p>No data</p>;
   }

@@ -5,21 +5,11 @@ import {
 } from './Core';
 import { ExperimentResponse } from './Experiment';
 import { ModelResponse } from './Model';
-import { MIME_TYPES } from '../constants';
+import { MIME_TYPES, ENABLED_ALGORITHMS } from '../constants';
 
 const independents = ['X', 'column1', 'x', 'descriptive_attributes'];
 const dependents = ['Y', 'column2', 'y', 'target_attributes'];
 const hiddenParameters = [...dependents, ...independents, 'dataset', 'filter'];
-const enabledAlgorithms = [
-  'LOGISTIC_REGRESSION',
-  'ANOVA',
-  // 'NAIVE_BAYES_TRAINING_STANDALONE',
-  // 'KMEANS',
-  'PEARSON_CORRELATION',
-  // 'ID3',
-  // 'HISTOGRAMS',
-  'LINEAR_REGRESSION'
-];
 
 const buildConstraints = (algo: any) => {
   const variable = algo.parameters.find((p: any) =>
@@ -184,7 +174,7 @@ const buildParameters = (algo: any) => {
 
 const buildExaremeAlgorithmList = (json: any): Algorithm[] =>
   json
-    .filter((algorithm: any) => enabledAlgorithms.includes(algorithm.name))
+    .filter((algorithm: any) => ENABLED_ALGORITHMS.includes(algorithm.name))
     .map((algorithm: any) => ({
       code: algorithm.name,
       constraints: buildConstraints(algorithm),
