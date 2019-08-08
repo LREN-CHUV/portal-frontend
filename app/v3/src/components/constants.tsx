@@ -32,11 +32,15 @@ export enum MIME_TYPES {
 export const algorithmDefaultOutputConfig = [
   {
     name: 'ANOVA',
-    type: MIME_TYPES.JSONDATA
+    types: [MIME_TYPES.JSONDATA]
   },
   {
     name: 'LINEAR_REGRESSION',
-    type: MIME_TYPES.JSONDATA
+    types: [MIME_TYPES.JSONDATA]
+  },
+  {
+    name: 'LOGISTIC_REGRESSION',
+    types: [MIME_TYPES.JSONDATA, MIME_TYPES.HIGHCHARTS]
   }
 ];
 

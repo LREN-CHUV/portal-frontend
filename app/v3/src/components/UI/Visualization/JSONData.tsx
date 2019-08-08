@@ -73,7 +73,6 @@ export default ({ data: datas }: { data: TabularDataResource[] }) => {
   // FIXME: exareme data
   const data = (datas && datas.length > 0 && datas[0]) || undefined;
 
-  console.log(data);
   if (!data) {
     return <div>No data</div>;
   }

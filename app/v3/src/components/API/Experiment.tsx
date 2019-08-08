@@ -6,6 +6,7 @@ import { Algorithm, AlgorithmResult } from '../API/Core';
 import { Query } from '../API/Model';
 import { User } from '../API/User';
 import APIAdapter from './APIAdapter';
+import { MIME_TYPES } from '../constants';
 
 export interface ExperimentPayload {
   algorithms: [Algorithm];
@@ -38,7 +39,7 @@ export interface ExperimentResponse {
 }
 
 export interface Result {
-  type: string;
+  type: MIME_TYPES;
   data: any;
 }
 

@@ -1,7 +1,12 @@
 import { algorithmDefaultOutputConfig, MIME_TYPES, SCORES } from '../constants';
 import {
-    Engine, ExperimentResponse, KfoldValidationScore, Node, PolynomialClassificationScore, Result,
-    ValidationScore
+  Engine,
+  ExperimentResponse,
+  KfoldValidationScore,
+  Node,
+  PolynomialClassificationScore,
+  Result,
+  ValidationScore
 } from './Experiment';
 import { buildWorkflowAlgorithmResponse } from './WorkflowAPIAdapter';
 
@@ -19,11 +24,15 @@ interface IPfa {
   error?: any;
 }
 
-const defaultResult = (name: string, results: Result[]): Result[] => {
+const defaultResults = (name: string, results: Result[]): Result[] => {
   const config =
     algorithmDefaultOutputConfig.find(a => a.name === name) || undefined;
 
-  return results.filter(r => config && r.type === config.type);
+  const nextResults = results.filter(
+    r => config && config.types.includes(r.type)
+  );
+
+  return nextResults;
 };
 
 class APIAdapter {
@@ -102,10 +111,12 @@ class APIAdapter {
         (r: any) => r.data && r.type && !r.dataProvenance
       );
       if (isExareme) {
+        const algorithmName = experiment.algorithms[0].name;
+
         return {
           ...experimentResponse,
           engine: Engine.Exareme,
-          results: defaultResult('ANOVA', resultParsed)
+          results: defaultResults(algorithmName, resultParsed)
         };
       }
 
