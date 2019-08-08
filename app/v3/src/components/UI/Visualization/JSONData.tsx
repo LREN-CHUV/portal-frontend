@@ -3,49 +3,69 @@ import { round } from '../../utils';
 
 import './JSON.css';
 
-export default ({ row }: { row: any }) => {
-  const starIt = (vvalue: number, formatedValue: string): string =>
-    vvalue < 0.001
-      ? `${formatedValue} (***)`
-      : vvalue < 0.01
-      ? `${formatedValue} (**)`
-      : vvalue < 0.05
-      ? `${formatedValue} (*)`
-      : `${formatedValue}`;
+interface Field {
+  type: string;
+  name: string;
+}
 
-  const headers = row && row.length > 0 && row[0];
-  const body = row.slice(1);
+interface Fields {
+  fields: Field[];
+}
+interface TabularDataResource {
+  profile: string;
+  name: string;
+  data: object[];
+  schema: Fields;
+}
 
-  const computedBody = body.map((b: any) => {
-    return b.map((c: any, i: number) => {
-      if (c === null) {
-        return '';
-      }
-      if (isNaN(Number(c))) {
-        return c;
-      } else if (headers[i] === 'p-value' || headers[i] === 'p' || headers[i] === 'prvalue') {
-        // console.log(round(c))
-        return typeof c === 'string' ? c : starIt(c, round(c));
-      } else {
-        return typeof c === 'string' ? c : round(c);
-      }
-    });
-  });
+export default ({ data: datas }: { data: TabularDataResource[] }) => {
+
+  // FIXME: exareme data
+  const data = (datas && datas.length > 0 && datas[0]) || undefined;
+
+  if (!data) {
+    return <div>No data</div>;
+  }
+
+  const formatNumber = (value: any, field: Field): string => {
+
+    if (field.type !== 'number' || value === null) {
+      return `${value}`;
+    }
+
+    const roundValue = round(value);
+
+    if (
+      field.name === 'p-value' ||
+      field.name === 'p' ||
+      field.name === 'prvalue'
+    ) {
+      return value < 0.001
+        ? `${roundValue} (***)`
+        : value < 0.01
+        ? `${roundValue} (**)`
+        : value < 0.05
+        ? `${roundValue} (*)`
+        : `${roundValue}`;
+    }
+
+    return `${roundValue}`;
+  };
 
   return (
     <table className='greyGridTable'>
       <thead>
         <tr>
-          {headers.map((c: string) => (
-            <th key={c}>{c}</th>
+          {data.schema.fields.map((f: Field) => (
+            <th key={f.name}>{f.name}</th>
           ))}
         </tr>
       </thead>
       <tbody>
-        {computedBody.map((r: any, k: number) => (
+        {data.data.map((row: any, k: number) => (
           <tr key={k}>
-            {r.map((val: any, l: number) => (
-              <td key={l}>{val}</td>
+            {row.map((col: any, l: number) => (
+              <td key={l}>{formatNumber(col, data.schema.fields[l])}</td>
             ))}
           </tr>
         ))}

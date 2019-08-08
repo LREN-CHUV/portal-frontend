@@ -4,7 +4,7 @@ import { backendURL } from '../API';
 import options from '../API/RequestHeaders';
 import { Algorithm, AlgorithmParameter } from './Core';
 import { hiddenParameters, stripModelParameters } from './ExaremeAPIAdapter';
-import { ExperimentResponse } from './Experiment';
+import { Engine, ExperimentResponse } from './Experiment';
 import { ModelResponse } from './Model';
 
 interface Status {
@@ -241,6 +241,7 @@ const buildWorkflowAlgorithmResponse = (
   }));
 
   experimentResponse = stripModelParameters(experimentResponse);
+  experimentResponse.engine = Engine.Exareme;
 
   const workflowResult: Response = workflowResults[historyId];
   const workflowStatus: Response = workflowStatuses[historyId];

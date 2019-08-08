@@ -3,8 +3,9 @@ import React, { useState } from 'react';
 import { Button, Panel } from 'react-bootstrap';
 import styled from 'styled-components';
 
-import { ExperimentResponse } from '../API/Experiment';
+import { Engine, ExperimentResponse, Node, Result } from '../API/Experiment';
 import { ModelResponse } from '../API/Model';
+import DeprecatedRenderResult from '../Result/deprecated/RenderResult';
 import RenderResult from '../Result/RenderResult';
 
 const StyledPanel = styled(Panel)`
@@ -79,7 +80,7 @@ export default ({
               (m: ModelResponse) => m.slug === experiment.modelDefinitionId
             );
 
-          const nodes = experiment && experiment.results;
+          const results = experiment && experiment.results;
 
           return (
             <StyledPanel key={experiment.name} defaultExpanded={false}>
@@ -153,7 +154,11 @@ export default ({
                     </>
                   )}
                   {collapsibleState.includes(experiment.uuid) ? (
-                    <RenderResult nodes={nodes} />
+                    experiment.engine === Engine.Exareme ? (
+                      <RenderResult results={results as Result[]} />
+                    ) : (
+                      <DeprecatedRenderResult nodes={results as Node[]} />
+                    )
                   ) : null}
                 </PanelBody>
               </Panel.Collapse>

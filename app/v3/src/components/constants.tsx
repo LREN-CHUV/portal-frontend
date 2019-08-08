@@ -29,6 +29,13 @@ export enum MIME_TYPES {
   JSONRAW = 'application/raw+json'
 }
 
+export const algorithmDefaultOutputConfig = [
+  {
+    name: 'ANOVA',
+    type: MIME_TYPES.JSONDATA
+  }
+];
+
 interface ILabel {
   code: string;
   label: string;

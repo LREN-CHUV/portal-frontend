@@ -1,17 +1,9 @@
-import { MIME_TYPES, SCORES } from '../constants';
+import { algorithmDefaultOutputConfig, MIME_TYPES, SCORES } from '../constants';
 import {
-  buildExaremeExperimentResponse,
-  stripModelParameters
-} from './ExaremeAPIAdapter';
-import { buildWorkflowAlgorithmResponse } from './WorkflowAPIAdapter';
-import {
-  ExperimentResponse,
-  KfoldValidationScore,
-  Node,
-  PolynomialClassificationScore,
-  ValidationScore
+    Engine, ExperimentResponse, KfoldValidationScore, Node, PolynomialClassificationScore, Result,
+    ValidationScore
 } from './Experiment';
-
+import { buildWorkflowAlgorithmResponse } from './WorkflowAPIAdapter';
 
 interface IPfa {
   crossValidation?:
@@ -26,6 +18,13 @@ interface IPfa {
     | PolynomialClassificationScore;
   error?: any;
 }
+
+const defaultResult = (name: string, results: Result[]): Result[] => {
+  const config =
+    algorithmDefaultOutputConfig.find(a => a.name === name) || undefined;
+
+  return results.filter(r => config && r.type === config.type);
+};
 
 class APIAdapter {
   public static parse = (experiment: any): ExperimentResponse => {
@@ -78,7 +77,7 @@ class APIAdapter {
         error: `${experiment.result}`
       };
 
-      return stripModelParameters(experimentResponse);
+      return experimentResponse;
     }
 
     if (!experiment.result) {
@@ -92,44 +91,43 @@ class APIAdapter {
         };
       }
 
-      return stripModelParameters(experimentResponse);
+      return experimentResponse;
     }
 
     // Branch backend responses based on data shape
-    // FIXME
     try {
       const resultParsed = parse(experiment.result);
 
-      const isWorkflow = resultParsed.find((r: any) => r.historyId);
-      if (isWorkflow) {
-        const nextResult3 = buildWorkflowAlgorithmResponse(isWorkflow.historyId, experimentResponse);
-
-        return nextResult3
-      }
-
-      const isExareme = resultParsed.some(
-        (r: any) => {
-          const name = r.data && r.data.length > 0 && r.data[0].name;
-
-          return name === "ANOVA" || r.error || r.result || r.resources || r.chart}
+      const isExareme = resultParsed.every(
+        (r: any) => r.data && r.type && !r.dataProvenance
       );
       if (isExareme) {
-        const nextResults1 = buildExaremeExperimentResponse(
-          resultParsed,
+        return {
+          ...experimentResponse,
+          engine: Engine.Exareme,
+          results: defaultResult('ANOVA', resultParsed)
+        };
+      }
+
+      const isWorkflow = resultParsed.find((r: any) => r.historyId);
+      if (isWorkflow) {
+        const nextResult3 = buildWorkflowAlgorithmResponse(
+          isWorkflow.historyId,
           experimentResponse
         );
 
-        return nextResults1;
+        return nextResult3;
       }
 
-      // Default is woken
+      // Deprecated is woken
       const nextResults2 = parseWokenResults(resultParsed, experimentResponse);
 
       return nextResults2;
     } catch (e) {
-      console.log(e)
+      console.log(e);
       return {
         ...experimentResponse,
+        engine: Engine.Woken,
         error: e
       };
     }

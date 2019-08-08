@@ -4,7 +4,14 @@ import request from 'request-promise-native';
 import { Provider, Subscribe } from 'unstated';
 
 // import UNSTATED from 'unstated-debug';
-import { APICore, APIExperiment, APIMining, APIModel, APIUser, webURL } from '../API'; // as interfaces
+import {
+  APICore,
+  APIExperiment,
+  APIMining,
+  APIModel,
+  APIUser,
+  webURL
+} from '../API'; // as interfaces
 import { Pathology } from '../API/Core';
 import config from '../API/RequestHeaders';
 import App from '../App/App';
@@ -73,7 +80,8 @@ class AppContainer extends React.Component<any, State> {
             this.apiMining,
             this.apiUser
           ]}>
-          <Subscribe to={[APIExperiment, APICore, APIModel, APIMining, APIUser]}>
+          <Subscribe
+            to={[APIExperiment, APICore, APIModel, APIMining, APIUser]}>
             {(
               apiExperiment: APIExperiment,
               apiCore: APICore,

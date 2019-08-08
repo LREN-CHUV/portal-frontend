@@ -1,0 +1,39 @@
+table.greyGridTable {
+  margin-top: 16px;
+  margin-bottom: 16px;
+  table-layout: fixed;
+  white-space: nowrap;
+  min-width: 100%;
+  text-align: center;
+  border-collapse: collapse;
+  -webkit-box-shadow: 0 0 0 1px #e3e3e3;
+  box-shadow: 0 0 0 1px #e3e3e3;
+  border-radius: 2px;
+  border-style: none;
+  border: 1px solid #eee;
+}
+table.greyGridTable td,
+table.greyGridTable th {
+  border: 1px solid #e3e3e3;
+  padding: 1px 4px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+table.greyGridTable tr:nth-child(even) {
+  background: #ebebeb;
+}
+
+table.greyGridTable td:first-child {
+  font-weight: bold;
+  text-align: left;
+}
+
+table.greyGridTable thead th {
+  font-weight: bold;
+  text-align: center;
+}
+table.greyGridTable thead th:first-child {
+  border-left: 1px solid #eee;
+  width: 200px !important;
+}

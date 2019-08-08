@@ -1,24 +1,24 @@
 import * as React from 'react';
 import { Panel } from 'react-bootstrap';
 
-import { State } from '../API/Experiment';
+import { Engine, Node, Result, State } from '../API/Experiment';
+import RenderResultDeprecated from './deprecated/RenderResult';
 import RenderResult from './RenderResult';
 
 export default ({ experimentState }: { experimentState: State }) => {
-  // const json = require('./__mocks__/responses/fed-woken-knn-2.json');
-  // const experiment = APIAdapter.parse(json);
   const experiment = experimentState && experimentState.experiment;
-  const nodes = experiment && experiment.results;
+  const results = experiment && experiment.results;
   const error =
     (experimentState && experimentState.error) ||
     (experiment && experiment.error);
-
-  const loading = !nodes && !error;
+  const loading = !results && !error;
+  const algorithms = experiment && experiment.algorithms;
+  const algorithmName = (algorithms && algorithms.length > 0 && algorithms[0].name) || '';
 
   return (
     <Panel>
       <Panel.Title>
-        <h3>Your Experiment</h3>
+        <h3>{algorithmName}</h3>
       </Panel.Title>
       <Panel.Body>
         {loading ? (
@@ -36,7 +36,11 @@ export default ({ experimentState }: { experimentState: State }) => {
             <p>{error}</p>
           </div>
         ) : null}
-        <RenderResult nodes={nodes} />
+        {experiment && experiment.engine === Engine.Exareme ? (
+          <RenderResult results={results as Result[]} />
+        ) : (
+          <RenderResultDeprecated nodes={results as Node[]} />
+        )}
       </Panel.Body>
     </Panel>
   );

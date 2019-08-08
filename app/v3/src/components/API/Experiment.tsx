@@ -15,6 +15,12 @@ export interface ExperimentPayload {
   source?: string;
 }
 
+export enum Engine {
+  Exareme,
+  Workflow,
+  Woken
+}
+
 export interface ExperimentResponse {
   created: Date;
   error?: string;
@@ -22,14 +28,21 @@ export interface ExperimentResponse {
   resultsViewed: boolean;
   uuid: string;
   modelDefinitionId: string;
-  results?: Node[];
+  results?: Result[] | Node[];
   user?: User;
   algorithms: Algorithm[];
   modelDefinition?: Query;
   validations?: any;
   shared: boolean;
+  engine?: Engine;
 }
 
+export interface Result {
+  type: string;
+  data: any;
+}
+
+// deprecated
 export interface Node {
   name: string;
   algorithms: AlgorithmResult[];
