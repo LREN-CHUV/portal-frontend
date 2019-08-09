@@ -58,7 +58,7 @@ export default ({ articles, handleSelectArticle }: Props) => {
                 </a>
               </h2>
             </Heading>
-            <PanelBody>{article.abstract}</PanelBody>
+            {article.abstract && <PanelBody>{article.abstract}</PanelBody>}
             <PanelFooter>
               <span>
                 by {article.createdBy && article.createdBy.username},{' '}

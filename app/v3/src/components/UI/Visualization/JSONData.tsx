@@ -11,11 +11,15 @@ const Table = styled.table`
   border-collapse: collapse;
   box-shadow: 0 0 0 1px #e3e3e3;
   border-radius: 2px;
-  border-style: none;
   border: 1px solid #eee;
+
+  tr {
+    height: 24px;
+  }
 
   tr:nth-child(even) {
     background: #ebebeb;
+    padding: 8px;
   }
 
   th {
@@ -69,7 +73,6 @@ interface TabularDataResource {
 }
 
 export default ({ data }: { data: TabularDataResource }) => {
-  
   if (!data) {
     return <p>No data</p>;
   }

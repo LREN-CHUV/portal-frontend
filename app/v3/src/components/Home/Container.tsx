@@ -12,19 +12,20 @@ const Layout = styled.div`
   padding: 0 48px 0px 48px;
 `;
 
-const ModelsLayout = styled.div`
+const ContentLayout = styled.div`
   display: grid;
   grid-template-columns: 66% 33%;
   grid-column-gap: 8px;
 `;
 
-const PanelTitle = styled(Panel)`
+const PanelContainer = styled(Panel)`
   h2 {
     font-size: 16px;
     font-weight: bold;
   }
   padding: 1em;
   margin: 0 0 1em 0;
+  background-color: #D3D3D399;
 `;
 
 interface Props extends RouteComponentProps<{}> {
@@ -61,9 +62,9 @@ export default ({ ...props }: Props) => {
   return (
     <Layout>
       <Infos stats={apiCore.state.stats} handleNewArticle={handleNewArticle} />
-      <ModelsLayout>
+      <ContentLayout>
         <div>
-          <PanelTitle>
+          <PanelContainer>
             <h2>My experiments</h2>
             <Experiments
               models={apiModel.state.models}
@@ -71,17 +72,17 @@ export default ({ ...props }: Props) => {
               handleSelectExperiment={handleSelectExperiment}
               handleNewExperiment={handleNewExperiment}
             />
-          </PanelTitle>
+          </PanelContainer>
         </div>
         <div>
-          <PanelTitle>
+          <PanelContainer>
             <h2>Recent Articles</h2>
             <Articles
               articles={articles}
               handleSelectArticle={handleSelectArticle}
             />
-          </PanelTitle>
-          <PanelTitle>
+          </PanelContainer>
+          <PanelContainer>
             <h2>Shared experiments</h2>
 
             <Experiments
@@ -109,9 +110,9 @@ export default ({ ...props }: Props) => {
                 )
               }
             />
-          </PanelTitle>
+          </PanelContainer>
         </div>
-      </ModelsLayout>
+      </ContentLayout>
     </Layout>
   );
 };
