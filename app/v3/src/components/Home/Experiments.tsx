@@ -84,7 +84,7 @@ export default ({
           const results = experiment && experiment.results;
 
           return (
-            <StyledPanel key={experiment.name} defaultExpanded={false}>
+            <StyledPanel key={experiment.uuid} defaultExpanded={false}>
               <Heading>
                 <Panel.Title
                   toggle={true}

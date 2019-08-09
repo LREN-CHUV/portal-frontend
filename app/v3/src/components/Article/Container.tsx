@@ -71,10 +71,10 @@ export default ({ apiCore, ...props }: Props) => {
       if (nextArticle) {
         setCurrentArticle(nextArticle);
       }
-    } else {
+    } else if (!currentArticle) {
       setCurrentArticle(articles[0]);
     }
-  }, [slug, apiCore.state]);
+  }, [slug, apiCore.state, currentArticle]);
 
   const handleSelectArticle = (article: Article) => {
     setEditing(Mode.default);
