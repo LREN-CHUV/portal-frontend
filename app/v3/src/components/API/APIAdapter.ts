@@ -24,7 +24,7 @@ interface IPfa {
   error?: any;
 }
 
-const defaultResults = (name: string, results: Result[]): Result[] => {
+export const defaultResults = (name: string, results: Result[]): Result[] => {
   const config =
     ALGORITHM_DEFAULT_OUTPUT.find(a => a.name === name) || undefined;
 

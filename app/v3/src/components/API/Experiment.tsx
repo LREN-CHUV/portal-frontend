@@ -13,7 +13,7 @@ export interface ExperimentPayload {
   model: string;
   name: string;
   validations: any;
-  source?: string;
+  engine?: Engine;
 }
 
 export enum Engine {
@@ -151,11 +151,11 @@ class Experiment extends Container<State> {
   };
 
   public create = async ({ experiment }: { experiment: ExperimentPayload }) => {
-    const source = experiment.source;
+    const engine = experiment.engine;
     const url =
-      source === 'exareme'
+      engine === Engine.Exareme
         ? `${this.baseUrl}/exareme`
-        : source === 'workflow'
+        : engine === Engine.Workflow
         ? `${this.baseUrl}/workflow`
         : `${this.baseUrl}`;
 

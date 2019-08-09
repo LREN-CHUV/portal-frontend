@@ -139,7 +139,7 @@ const buildWorkflowAlgorithmList = (json: any): Algorithm[] => {
       value: defaultValueFor({ label: j.inputs[k].label, defaults }),
       visible: !hiddenParameters.includes(j.inputs[k].label)
     })),
-    source: 'workflow',
+    engine: Engine.Workflow,
     type: ['workflow'],
     validation: true
   }));

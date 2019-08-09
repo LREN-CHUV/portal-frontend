@@ -114,19 +114,23 @@ export default (props: Props) => {
         )}
 
         {selectedNode &&
-          !selectedNode.children && histograms && histograms.data && (
-          <Tabs defaultActiveKey={0} id='uncontrolled-histogram-tabs'>
-            {histograms.data &&
-              histograms.data.map((d: any, i: number) => (
-                <Tab
-                  eventKey={i}
-                  title={`${d.label.replace('Histogram - ', '')}`}
-                  key={i}>
-                  <Highchart options={d || (d.highchart && d.highchart.data)} />
-                </Tab>
-              ))}
-          </Tabs>
-        )}
+          !selectedNode.children &&
+          histograms &&
+          histograms.data && (
+            <Tabs defaultActiveKey={0} id='uncontrolled-histogram-tabs'>
+              {histograms.data &&
+                histograms.data.map((d: any, i: number) => (
+                  <Tab
+                    eventKey={i}
+                    title={`${d.label.replace('Histogram - ', '')}`}
+                    key={i}>
+                    <Highchart
+                      options={(d.highchart && d.highchart.data) || d}
+                    />
+                  </Tab>
+                ))}
+            </Tabs>
+          )}
       </div>
     </div>
   );

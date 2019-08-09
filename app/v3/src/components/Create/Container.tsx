@@ -1,14 +1,20 @@
+import '../Experiment.css';
+
 import * as React from 'react';
 import { Panel, Tab, Tabs } from 'react-bootstrap';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
+
 import { APICore, APIExperiment, APIModel } from '../API';
 import { Algorithm, AlgorithmParameter } from '../API/Core';
 import { buildExaremeAlgorithmRequest } from '../API/ExaremeAPIAdapter';
-import { ExperimentPayload, ExperimentResponse } from '../API/Experiment';
+import {
+  Engine,
+  ExperimentPayload,
+  ExperimentResponse
+} from '../API/Experiment';
 import { ModelResponse, Query } from '../API/Model';
 import { buildWorkflowAlgorithmRequest } from '../API/WorkflowAPIAdapter';
 import { globalParameters } from '../constants';
-import '../Experiment.css';
 import { Alert, IAlert } from '../UI/Alert';
 import Model from '../UI/Model';
 import Validation from '../UI/Validation';
@@ -282,9 +288,9 @@ class Container extends React.Component<Props, State> {
       : [];
 
     const requestParameters =
-      selectedMethod.source === 'exareme'
+      selectedMethod.engine === Engine.Exareme
         ? buildExaremeAlgorithmRequest(model, selectedMethod, params)
-        : selectedMethod.source === 'workflow'
+        : selectedMethod.engine === Engine.Workflow
         ? buildWorkflowAlgorithmRequest(model, selectedMethod, params)
         : params;
 
@@ -297,9 +303,9 @@ class Container extends React.Component<Props, State> {
           validation
         }
       ],
+      engine: selectedMethod.engine,
       model: model.slug,
       name: experimentName,
-      source: selectedMethod.source,
       validations
     };
 

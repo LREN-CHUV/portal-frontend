@@ -4,6 +4,7 @@ import { Container } from 'unstated';
 import { backendURL } from '../API';
 import { excludedMethods } from '../constants';
 import { buildExaremeAlgorithmList } from './ExaremeAPIAdapter';
+import { Engine } from './Experiment';
 import hierarchyMockup from './pathologiesHierarchyMockup';
 import { buildWorkflowAlgorithmList } from './WorkflowAPIAdapter';
 
@@ -31,7 +32,7 @@ export interface Algorithm {
   validation: boolean;
   constraints?: AlgorithmConstraint;
   type?: string[];
-  source?: string;
+  engine?: Engine;
 }
 
 export interface AlgorithmResult {

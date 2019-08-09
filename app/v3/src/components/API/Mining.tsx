@@ -3,8 +3,9 @@ import stringHash from 'string-hash';
 import { Container } from 'unstated';
 
 import { backendURL } from '../API';
-import { Algorithm, Parameter, VariableEntity } from './Core';
+import { MIME_TYPES } from '../constants';
 import { VariableDatum } from '../Explore/d3Hierarchy';
+import { Algorithm, Parameter, VariableEntity } from './Core';
 
 interface Response {
   error: string | any | undefined;
@@ -202,7 +203,9 @@ class Mining extends Container<MiningState> {
     this.setState({
       histograms: {
         data: promises.map((p, i) => ({
-          highchart: p.data,
+          highchart: p.data.result.find(
+            (d: any) => d.type === MIME_TYPES.HIGHCHARTS
+          ),
           label: i === 0 ? x.label : dependentsVariables[i]
         })),
         error: undefined,

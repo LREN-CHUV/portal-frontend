@@ -3,10 +3,9 @@ import {
   AlgorithmConstraintParameter,
   AlgorithmParameter
 } from './Core';
-import { ExperimentResponse } from './Experiment';
+import { ExperimentResponse, Engine } from './Experiment';
 import { ModelResponse } from './Model';
-import { MIME_TYPES, ENABLED_ALGORITHMS } from '../constants';
-
+import { ENABLED_ALGORITHMS } from '../constants';
 const independents = ['X', 'column1', 'x', 'descriptive_attributes'];
 const dependents = ['Y', 'column2', 'y', 'target_attributes'];
 const hiddenParameters = [...dependents, ...independents, 'dataset', 'filter'];
@@ -185,7 +184,7 @@ const buildExaremeAlgorithmList = (json: any): Algorithm[] =>
           ? 'Naive Bayes Training'
           : algorithm.name,
       parameters: buildParameters(algorithm),
-      source: 'exareme',
+      engine: Engine.Exareme,
       type: ['exareme'],
       validation: true
     }));
@@ -273,10 +272,13 @@ const buildExaremeAlgorithmRequest = (
       }))
     : [];
 
-  return [
+  const p = [
     ...nextParams,
     ...(newParams.filter((p: any) => p.visible !== false) || [])
   ];
+
+  console.log(p);
+  return p;
 };
 
 const stripModelParameters = (
@@ -294,118 +296,9 @@ const stripModelParameters = (
   return experimentResponse;
 };
 
-const buildResult = (key: string, result: any) => {
-
-  if (result.error) {
-    return {
-      mime: MIME_TYPES.ERROR,
-      error: result.error
-    };
-  }
-
-  switch (key) {
-    case 'HISTOGRAMS':
-      return {
-        mime: MIME_TYPES.HIGHCHARTS,
-        data: [result]
-      };
-
-    case 'PEARSON_CORRELATION':
-      return {
-        mime: result.type,
-        data: [result.data]
-      };
-
-    case 'ID3':
-    case 'NAIVE_BAYES_TRAINING_STANDALONE':
-      const data = result.resources[0].data;
-      const s = JSON.stringify(data);
-      const t = s.replace(/None/g, '');
-      const newData = JSON.parse(t);
-      return {
-        mime: MIME_TYPES.JSONDATA,
-        data: [newData]
-      };
-
-    case 'ANOVA':
-      const data1 = result.data[0].data;
-      const s1 = JSON.stringify(data1);
-      const t1 = s1.replace(/None/g, '');
-      const newData1 = JSON.parse(t1);
-      return {
-        mime: MIME_TYPES.JSONDATA,
-        data: [newData1]
-      };
-
-    case 'LINEAR_REGRESSION':
-      const data2 = result.data[0].data;
-      const s2 = JSON.stringify(data2);
-      const t2 = s2.replace(/None/g, '');
-      const newData2 = JSON.parse(t2);
-      return {
-        mime: MIME_TYPES.JSONDATA,
-        data: [newData2]
-      };
-
-    case 'LOGISTIC_REGRESSION':
-      return {
-        mime: MIME_TYPES.JSONDATA,
-        data: [result.data[0].data]
-      };
-
-    default:
-      return {
-        mime: MIME_TYPES.JSONRAW,
-        data: result.result || result.resources
-      };
-  }
-};
-
-// FIXME: Results formats are inconsistant
-const buildExaremeExperimentResponse = (
-  resultParsed: any,
-  experimentResponse: ExperimentResponse
-) => {
-  const nextExperimentResponse = stripModelParameters(experimentResponse);
-  const name =
-    nextExperimentResponse.algorithms.length > 0
-      ? nextExperimentResponse.algorithms[0].code
-      : '';
-  nextExperimentResponse.results = [
-    {
-      algorithms: resultParsed.map((result: any) => {
-        if (result.result) {
-          const res =  {
-            name: result.name,
-            ...result.result
-              .filter((r: any) =>
-                name === 'LOGISTIC_REGRESSION'||
-                name === 'LINEAR_REGRESSION'
-                  ? r.type === MIME_TYPES.JSONDATA
-                  : r.type === MIME_TYPES.HIGHCHARTS
-              )
-              .map((r: any) => buildResult(name, r))[0]
-          };
-
-          return res;
-        }
-
-        return {
-          name: result.name,
-          ...buildResult(name, result)
-        };
-      }),
-      name: 'local'
-    }
-  ];
-
-  return nextExperimentResponse;
-};
-
 export {
   buildExaremeAlgorithmList,
   buildExaremeAlgorithmRequest,
-  buildExaremeExperimentResponse,
   stripModelParameters,
   hiddenParameters
 };
