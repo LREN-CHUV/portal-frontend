@@ -4,6 +4,7 @@ import * as React from 'react';
 import Result from '../../../../Result/Result';
 import { createExperiment, datasets, createModel, uid, waitForResult } from '../../../../utils/TestUtils';
 import { VariableEntity } from '../../../Core';
+import { Engine } from '../../../Experiment';
 
 // config
 
@@ -33,12 +34,13 @@ const payload: ExperimentPayload = {
   ],
   model: modelSlug,
   name: `${experimentCode}-${modelSlug}`,
-  validations: []
+  validations: [],
+  engine: Engine.Exareme
 };
 
 // Test
 
-describe.skip('Integration Test for experiment API', () => {
+describe('Integration Test for experiment API', () => {
   beforeAll(async () => {
     const dstate = await datasets();
     expect(dstate.error).toBeFalsy();

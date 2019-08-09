@@ -8,6 +8,7 @@ import {
   waitForResult
 } from '../../../../utils/TestUtils';
 import { VariableEntity } from '../../../Core';
+import { Engine } from '../../../Experiment';
 
 // config
 
@@ -71,7 +72,7 @@ describe('Integration Test for experiment API', () => {
       model: modelSlug,
       name: `${experimentCode}-${modelSlug}`,
       validations: [],
-      source: 'exareme'
+      engine: Engine.Exareme
     };
 
     const { error, experiment } = await createExperiment({

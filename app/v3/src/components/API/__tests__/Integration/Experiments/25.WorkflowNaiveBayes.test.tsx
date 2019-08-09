@@ -76,7 +76,7 @@ describe('Integration Test for experiment API', () => {
         model: modelSlug,
         name: `${algorithm.code}-${modelSlug}`,
         validations: [],
-        source: 'workflow'
+        engine: 'workflow'
       };
 
       const { error, experiment } = await createExperiment({

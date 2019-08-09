@@ -2,13 +2,10 @@ import { mount } from 'enzyme';
 import * as React from 'react';
 
 import Result from '../../../../Result/Result';
-import {
-  createExperiment,
-  createModel,
-  waitForResult
-} from '../../../../utils/TestUtils';
+import { createExperiment, createModel, waitForResult } from '../../../../utils/TestUtils';
 import { VariableEntity } from '../../../Core';
 import { buildExaremeAlgorithmRequest } from '../../../ExaremeAPIAdapter';
+import { Engine } from '../../../Experiment';
 
 // Review December 2018 experiment
 
@@ -82,7 +79,7 @@ describe('Integration Test for experiment API', () => {
       model: modelSlug,
       name: `${experimentCode}-${modelSlug}`,
       validations: [],
-      source: 'exareme'
+      engine: Engine.Exareme
     };
 
     const { error, experiment } = await createExperiment({

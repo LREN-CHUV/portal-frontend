@@ -9,6 +9,7 @@ import {
 } from '../../../../utils/TestUtils';
 import { VariableEntity } from '../../../Core';
 import { buildExaremeAlgorithmRequest } from '../../../ExaremeAPIAdapter';
+import { Engine } from '../../../Experiment';
 
 // config
 
@@ -58,7 +59,7 @@ describe('Integration Test for experiment API', () => {
       model(datasets),
       {
         code: experimentCode,
-        name: "",
+        name: '',
         validation: false
       },
       parameters
@@ -76,7 +77,7 @@ describe('Integration Test for experiment API', () => {
       model: modelSlug,
       name: `${experimentCode}-${modelSlug}`,
       validations: [],
-      source: 'exareme'
+      engine: Engine.Exareme
     };
 
     const { error, experiment } = await createExperiment({
@@ -96,7 +97,6 @@ describe('Integration Test for experiment API', () => {
     });
     expect(experimentState.error).toBeFalsy();
     expect(experimentState.experiment).toBeTruthy();
-
 
     const props = { experimentState };
     // const wrapper = mount(<Result {...props} />);

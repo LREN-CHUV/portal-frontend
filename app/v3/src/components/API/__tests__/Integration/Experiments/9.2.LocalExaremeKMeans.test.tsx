@@ -9,6 +9,7 @@ import {
   waitForResult
 } from '../../../../utils/TestUtils';
 import { VariableEntity } from '../../../Core';
+import { Engine } from '../../../Experiment';
 
 // config
 
@@ -40,7 +41,8 @@ const payload: ExperimentPayload = {
   ],
   model: modelSlug,
   name: `${experimentCode}-${modelSlug}`,
-  validations: []
+  validations: [],
+  engine: Engine.Exareme
 };
 
 // Test

@@ -1,6 +1,6 @@
 import { mount } from 'enzyme';
 import * as React from 'react';
-import { buildExaremeAlgorithmRequest } from '../../../ExaremeAPIAdapter';
+
 import Result from '../../../../Result/Result';
 import {
   createExperiment,
@@ -8,6 +8,8 @@ import {
   waitForResult
 } from '../../../../utils/TestUtils';
 import { VariableEntity } from '../../../Core';
+import { buildExaremeAlgorithmRequest } from '../../../ExaremeAPIAdapter';
+import { Engine } from '../../../Experiment';
 
 // config
 
@@ -17,7 +19,7 @@ const parameters = [{ code: 'bins', value: '40' }];
 const datasets = [{ code: 'adni' }];
 const model: any = (datasets: VariableEntity[]) => ({
   query: {
-    coVariables: [],
+    coVariables: [{ code: 'lefthippocampus' }],
     filters: '',
     groupings: [],
     testingDatasets: [],
@@ -27,7 +29,7 @@ const model: any = (datasets: VariableEntity[]) => ({
     validationDatasets: [],
     variables: [
       {
-        code: 'lefthippocampus'
+        code: 'gender'
       }
     ]
   }
@@ -35,7 +37,7 @@ const model: any = (datasets: VariableEntity[]) => ({
 
 // Test
 
-describe.skip('Integration Test for experiment API', () => {
+describe('Integration Test for experiment API', () => {
   beforeAll(async () => {
     const mstate = await createModel({
       model: model(datasets),
@@ -66,8 +68,10 @@ describe.skip('Integration Test for experiment API', () => {
       model: modelSlug,
       name: `${experimentCode}-${modelSlug}`,
       validations: [],
-      source: 'exareme'
+      engine: Engine.Exareme
     };
+
+    console.log(payload);
 
     const { error, experiment } = await createExperiment({
       experiment: payload
