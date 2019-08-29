@@ -90,9 +90,10 @@ describe('Integration Test for experiment API', () => {
     expect(experimentState.experiment).toBeTruthy();
 
     const props = { experimentState };
+    // console.log( props )
     const wrapper = mount(<Result {...props} />);
     expect(wrapper.find('.error')).toHaveLength(0);
     expect(wrapper.find('.loading')).toHaveLength(0);
-    expect(wrapper.find('div#tabs-methods')).toHaveLength(1);
+    expect(wrapper.find('div.result')).toHaveLength(2);
   });
 });

@@ -8,11 +8,11 @@ exports[`Test Experiment results snapshot renders correctly 1`] = `
     className="panel-title"
   >
     <h3>
-      Your Experiment
+      
     </h3>
   </div>
   <div
-    className="panel-body"
+    className="sc-htpNat ipMFxB panel-body"
   >
     <div
       className="loading"

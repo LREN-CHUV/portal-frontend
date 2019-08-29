@@ -135,14 +135,16 @@ exports[`Test Result components Result snapshot renders correctly 1`] = `
         <div
           className="panel-title"
         >
-          <h3>
+          <h3
+            className="sc-ifAKCX bhzABg"
+          >
             Model 
             <strong />
           </h3>
           <div />
         </div>
         <div
-          className="panel-body"
+          className="sc-bxivhb lmNfdD panel-body"
         >
           <div
             className="loader"
@@ -174,11 +176,11 @@ exports[`Test Result components Result snapshot renders correctly 1`] = `
           className="panel-title"
         >
           <h3>
-            Your Experiment
+            
           </h3>
         </div>
         <div
-          className="panel-body"
+          className="sc-htpNat ipMFxB panel-body"
         >
           <div
             className="loading"

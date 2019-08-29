@@ -5,56 +5,55 @@ import Result from '../../../../Result/Result';
 import {
   createExperiment,
   createModel,
+  uid,
   waitForResult
 } from '../../../../utils/TestUtils';
 import { VariableEntity } from '../../../Core';
-import { buildExaremeAlgorithmRequest } from '../../../ExaremeAPIAdapter';
 import { Engine } from '../../../Experiment';
 
 // config
 
-const modelSlug = `model-${Math.round(Math.random() * 10000)}`;
-const experimentCode = 'TTEST_INDEPENDENT';
-const parameters: any = [
+const modelSlug = `model-${uid()}`;
+const experimentCode = 'KMEANS';
+const parameters = [
+  { code: 'k', value: 4 },
+  { code: 'e', value: '0.01' },
+  { code: 'iterations_max_number', value: '20' },
   {
-    code: 'ylevels',
-    value: 'M,F'
-  },
-  {
-    code: 'hypothesis',
-    value: 'greaterthan'
-  },
-  {
-    code: 'effectsize',
-    value: '1'
-  },
-  {
-    code: 'ci',
-    value: '1'
-  },
-  {
-    code: 'meandiff',
-    value: '1'
+    code: 'centers',
+    value: '[{ clid: 1, lefthippocampus: 1.7, righthippocampus: 1.5 },{ clid: 2, lefthippocampus: 2.5, righthippocampus: 2.0 }]'
   }
 ];
-const datasets = [{ code: 'adni' }];
+const datasets = [{ code: 'adni' }, { code: 'edsd' }];
 const model: any = (datasets: VariableEntity[]) => ({
   query: {
-    coVariables: [{ code: 'subjectage' }, { code: 'righthippocampus' }],
-    filters: '',
+    coVariables: [{ code: 'lefthippocampus' }, { code: 'righthippocampus' }],
+    filters:
+      '{"condition":"AND","rules":[{"id":"subjectageyears","field":"subjectageyears","type":"integer","input":"number","operator":"greater","value":50}],"valid":true}',
     groupings: [],
     testingDatasets: [],
     trainingDatasets: datasets.map(d => ({
       code: d.code
     })),
     validationDatasets: [],
-    variables: [
-      {
-        code: 'gender'
-      }
-    ]
+    variables: [{ code: 'apoe4' }]
   }
 });
+
+const payload: ExperimentPayload = {
+  algorithms: [
+    {
+      code: experimentCode,
+      name: experimentCode, // FIXME: name is used to parse response which is bad !!!
+      parameters,
+      validation: false
+    }
+  ],
+  model: modelSlug,
+  name: `${experimentCode}-${modelSlug}`,
+  validations: [],
+  engine: Engine.Exareme
+};
 
 // Test
 
@@ -71,29 +70,6 @@ describe('Integration Test for experiment API', () => {
   });
 
   it(`create ${experimentCode}`, async () => {
-    const requestParameters = buildExaremeAlgorithmRequest(
-      model(datasets),
-      {
-        code: experimentCode
-      },
-      parameters
-    );
-
-    const payload: ExperimentPayload = {
-      algorithms: [
-        {
-          code: experimentCode,
-          name: experimentCode, // FIXME: name is used to parse response which is bad !!!
-          parameters: requestParameters,
-          validation: false
-        }
-      ],
-      model: modelSlug,
-      name: `${experimentCode}-${modelSlug}`,
-      validations: [],
-      engine: Engine.Exareme
-    };
-
     const { error, experiment } = await createExperiment({
       experiment: payload
     });

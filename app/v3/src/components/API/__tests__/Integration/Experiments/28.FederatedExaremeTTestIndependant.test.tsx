@@ -2,7 +2,11 @@ import { mount } from 'enzyme';
 import * as React from 'react';
 
 import Result from '../../../../Result/Result';
-import { createExperiment, createModel, waitForResult } from '../../../../utils/TestUtils';
+import {
+  createExperiment,
+  createModel,
+  waitForResult
+} from '../../../../utils/TestUtils';
 import { VariableEntity } from '../../../Core';
 import { buildExaremeAlgorithmRequest } from '../../../ExaremeAPIAdapter';
 import { Engine } from '../../../Experiment';
@@ -10,23 +14,43 @@ import { Engine } from '../../../Experiment';
 // config
 
 const modelSlug = `model-${Math.round(Math.random() * 10000)}`;
-const experimentCode = 'ID3';
-const parameters = [
-  { code: 'iterations_max_number', value: 20 },
+const experimentCode = 'TTEST_INDEPENDENT';
+const parameters: any = [
+  {
+    code: 'ylevels',
+    value: 'M,F'
+  },
+  {
+    code: 'hypothesis',
+    value: 'greaterthan'
+  },
+  {
+    code: 'effectsize',
+    value: '1'
+  },
+  {
+    code: 'ci',
+    value: '1'
+  },
+  {
+    code: 'meandiff',
+    value: '1'
+  }
 ];
-const model: any = () => ({
+const datasets = [{ code: 'adni' }];
+const model: any = (datasets: VariableEntity[]) => ({
   query: {
-    coVariables: [],
+    coVariables: [{ code: 'subjectage' }, { code: 'righthippocampus' }],
     filters: '',
-    groupings: [
-      { code: 'alzheimerbroadcategory' }
-    ],
+    groupings: [],
     testingDatasets: [],
-    trainingDatasets: [{ code: 'adni' }],
+    trainingDatasets: datasets.map(d => ({
+      code: d.code
+    })),
     validationDatasets: [],
     variables: [
       {
-        code: 'neurodegenerativescategories'
+        code: 'gender'
       }
     ]
   }
@@ -37,7 +61,7 @@ const model: any = () => ({
 describe('Integration Test for experiment API', () => {
   beforeAll(async () => {
     const mstate = await createModel({
-      model: model(),
+      model: model(datasets),
       modelSlug
     });
     expect(mstate.error).toBeFalsy();
@@ -48,7 +72,7 @@ describe('Integration Test for experiment API', () => {
 
   it(`create ${experimentCode}`, async () => {
     const requestParameters = buildExaremeAlgorithmRequest(
-      model(),
+      model(datasets),
       {
         code: experimentCode
       },
@@ -82,10 +106,14 @@ describe('Integration Test for experiment API', () => {
       throw new Error('uuid not defined');
     }
 
-    const experimentState = await waitForResult({
-      uuid
-    });
+    const experimentState = await waitForResult({ uuid });
     expect(experimentState.error).toBeFalsy();
     expect(experimentState.experiment).toBeTruthy();
+
+    const props = { experimentState };
+    const wrapper = mount(<Result {...props} />);
+    expect(wrapper.find('.error')).toHaveLength(0);
+    expect(wrapper.find('.loading')).toHaveLength(0);
+    expect(wrapper.find('div.result')).toHaveLength(1);
   });
 });

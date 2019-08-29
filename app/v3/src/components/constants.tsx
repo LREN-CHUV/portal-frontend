@@ -57,20 +57,24 @@ export const ALGORITHM_DEFAULT_OUTPUT = [
   {
     name: 'PEARSON_CORRELATION',
     types: [MIME_TYPES.JSONDATA, MIME_TYPES.HIGHCHARTS]
-  }
+  },
+  {
+    name: 'ID3',
+    types: [MIME_TYPES.JSONDATA]
+  },
 ];
 
 export const ENABLED_ALGORITHMS = [
   'LOGISTIC_REGRESSION',
   'ANOVA',
   // 'NAIVE_BAYES_TRAINING_STANDALONE',
-  'KMEANS',
+  // 'KMEANS',
   'PEARSON_CORRELATION',
-  // 'ID3',
+  'ID3',
   // 'HISTOGRAMS',
   'LINEAR_REGRESSION',
   'TTEST_INDEPENDENT',
-  'TTEST_PAIRED'
+  // 'TTEST_PAIRED'
 ];
 
 interface ILabel {
