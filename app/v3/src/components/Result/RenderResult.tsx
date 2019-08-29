@@ -21,7 +21,7 @@ export default ({ results }: { results: Result[] | undefined }) => {
     <>
       {results &&
         results.map((result: any, i: number) => (
-          <div key={i}>{renderResult(result)}</div>
+          <div className="result" key={i}>{renderResult(result)}</div>
         ))}
     </>
   );
