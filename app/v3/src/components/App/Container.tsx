@@ -10,6 +10,7 @@ import {
   APIMining,
   APIModel,
   APIUser,
+  backendURL,
   webURL
 } from '../API'; // as interfaces
 import { Pathology } from '../API/Core';
@@ -53,6 +54,13 @@ class AppContainer extends React.Component<any, State> {
 
     console.log(this.state.appConfig.mode);
 
+    await this.apiUser.user().then(() => {
+      console.log(this.apiUser.state.authenticated);
+      if (!this.apiUser.state.authenticated) {
+        window.location.href = `${backendURL}/login/hbp`;
+      }
+    });
+
     return await Promise.all([
       this.apiExperiment.all(),
       this.apiCore.datasets(),
@@ -61,7 +69,6 @@ class AppContainer extends React.Component<any, State> {
       this.apiCore.algorithms(false),
       this.apiCore.stats(),
       this.apiCore.articles(),
-      this.apiUser.user(),
       this.apiModel.all()
     ]);
   }

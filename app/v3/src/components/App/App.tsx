@@ -26,6 +26,15 @@ interface Props {
   apiUser: APIUser;
 }
 
+//http://localhost:8080/services/login/hbp?code=H3afRQ&state=CI0y77
+
+const Redirect = ({ apiUser, props }: { apiUser: APIUser; props: any }) => {
+  apiUser.login(props.search).then(a => {
+    return <div>hello</div>;
+  });
+  return <div>hello</div>;
+};
+
 const App = ({
   appConfig,
   apiExperiment,
@@ -33,107 +42,122 @@ const App = ({
   apiModel,
   apiMining,
   apiUser
-}: Props) => (
-  <div className='App'>
-    <header>
-      <Navigation
-        apiExperiment={apiExperiment}
-        apiModel={apiModel}
-        appConfig={appConfig}
-      />
-    </header>
-    <section className='main-content'>
-      <Switch>
-        <Route
-          path='/v3/tos'
-          // tslint:disable-next-line jsx-no-lambda
-          render={props => (
-            <TOS
-            // apiUser={apiUser}
-            // {...props}
-            />
-          )}
+}: Props) => {
+  return (
+    <div className='App'>
+      <header>
+        <Navigation
+          apiExperiment={apiExperiment}
+          apiModel={apiModel}
+          appConfig={appConfig}
         />
-        <Route
-          path='/v3/home'
-          // tslint:disable-next-line jsx-no-lambda
-          render={props => (
-            <Home
-              apiCore={apiCore}
-              apiModel={apiModel}
-              apiExperiment={apiExperiment}
-              apiUser={apiUser}
-              {...props}
-            />
-          )}
-        />
-        <Route
-          path='/v3/profile'
-          // tslint:disable-next-line jsx-no-lambda
-          render={props => <User apiUser={apiUser} {...props} />}
-        />
-        <Route
-          path={['/v3/explore/:slug', '/v3/explore']}
-          // tslint:disable-next-line jsx-no-lambda
-          render={props => (
-            <Explore
-              apiCore={apiCore}
-              apiMining={apiMining}
-              apiModel={apiModel}
-              appConfig={appConfig}
-              {...props}
-            />
-          )}
-        />
-        <Route
-          path={['/v3/review/:slug', '/v3/review']}
-          // tslint:disable-next-line jsx-no-lambda
-          render={props => (
-            <ExperimentReview
-              apiMining={apiMining}
-              apiModel={apiModel}
-              apiCore={apiCore}
-              {...props}
-            />
-          )}
-        />
-        <Route
-          path='/v3/experiment/:slug/:uuid'
-          // tslint:disable-next-line jsx-no-lambda
-          render={() => (
-            <ExperimentResult
-              apiExperiment={apiExperiment}
-              apiModel={apiModel}
-              apiCore={apiCore}
-            />
-          )}
-        />
-        <Route
-          exact={true}
-          path='/v3/experiment/:slug'
-          // tslint:disable-next-line jsx-no-lambda
-          render={() => (
-            <ExperimentCreate
-              apiExperiment={apiExperiment}
-              apiCore={apiCore}
-              apiModel={apiModel}
-              appConfig={appConfig}
-            />
-          )}
-        />
-        <Route
-          path={['/v3/articles/:slug', '/v3/articles']}
-          // tslint:disable-next-line jsx-no-lambda
-          render={props => <Article apiCore={apiCore} {...props} />}
-        />
+      </header>
 
-        <Route component={NotFound} />
-      </Switch>
-    </section>
-    <footer id='footer'>
-      <Footer appConfig={appConfig} />
-    </footer>
-  </div>
-);
+      <section className='main-content'>
+        {!apiUser.state.authenticated && (
+          <>
+            <h1>USER LOGIN ERROR</h1>
+            <pre>{JSON.stringify(apiUser.state)}</pre>
+          </>
+        )}
+
+        <Switch>
+          <Route
+            path='/services/login/hbp'
+            // tslint:disable-next-line jsx-no-lambda
+            render={props => <Redirect apiUser={apiUser} props={props} />}
+          />
+          <Route
+            path='/v3/tos'
+            // tslint:disable-next-line jsx-no-lambda
+            render={props => (
+              <TOS
+              // apiUser={apiUser}
+              // {...props}
+              />
+            )}
+          />
+          <Route
+            path='/v3/home'
+            // tslint:disable-next-line jsx-no-lambda
+            render={props => (
+              <Home
+                apiCore={apiCore}
+                apiModel={apiModel}
+                apiExperiment={apiExperiment}
+                apiUser={apiUser}
+                {...props}
+              />
+            )}
+          />
+          <Route
+            path='/v3/profile'
+            // tslint:disable-next-line jsx-no-lambda
+            render={props => <User apiUser={apiUser} {...props} />}
+          />
+          <Route
+            path={['/v3/explore/:slug', '/v3/explore']}
+            // tslint:disable-next-line jsx-no-lambda
+            render={props => (
+              <Explore
+                apiCore={apiCore}
+                apiMining={apiMining}
+                apiModel={apiModel}
+                appConfig={appConfig}
+                {...props}
+              />
+            )}
+          />
+          <Route
+            path={['/v3/review/:slug', '/v3/review']}
+            // tslint:disable-next-line jsx-no-lambda
+            render={props => (
+              <ExperimentReview
+                apiMining={apiMining}
+                apiModel={apiModel}
+                apiCore={apiCore}
+                {...props}
+              />
+            )}
+          />
+          <Route
+            path='/v3/experiment/:slug/:uuid'
+            // tslint:disable-next-line jsx-no-lambda
+            render={() => (
+              <ExperimentResult
+                apiExperiment={apiExperiment}
+                apiModel={apiModel}
+                apiCore={apiCore}
+              />
+            )}
+          />
+          <Route
+            exact={true}
+            path='/v3/experiment/:slug'
+            // tslint:disable-next-line jsx-no-lambda
+            render={() => (
+              <ExperimentCreate
+                apiExperiment={apiExperiment}
+                apiCore={apiCore}
+                apiModel={apiModel}
+                appConfig={appConfig}
+              />
+            )}
+          />
+          <Route
+            path={['/v3/articles/:slug', '/v3/articles']}
+            // tslint:disable-next-line jsx-no-lambda
+            render={props => <Article apiCore={apiCore} {...props} />}
+          />
+
+          <Route component={NotFound} />
+        </Switch>
+      </section>
+      <footer id='footer'>
+        <Footer appConfig={appConfig} />
+      </footer>
+    </div>
+  );
+};
 
 export default App;
