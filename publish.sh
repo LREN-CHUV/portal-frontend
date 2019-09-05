@@ -21,9 +21,9 @@ if pgrep -lf sshuttle > /dev/null ; then
 fi
 
 if groups $USER | grep &>/dev/null '\bdocker\b'; then
-  CAPTAIN="captain"
+  DOCKER="docker"
 else
-  CAPTAIN="sudo captain"
+  DOCKER="sudo docker"
 fi
 
 # Build
@@ -96,7 +96,7 @@ BUILD_DATE=$(date --iso-8601=seconds) \
   VCS_REF=$updated_version \
   VERSION=$updated_version \
   WORKSPACE=$WORKSPACE \
-  $CAPTAIN push portal-frontend --branch-tags=false --commit-tags=false --tag $updated_version
+  $DOCKER push portal-frontend --branch-tags=false --commit-tags=false --tag $updated_version
 
 # Notify on slack
 sed "s/USER/${USER^}/" $WORKSPACE/slack.json > $WORKSPACE/.slack.json

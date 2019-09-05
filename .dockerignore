@@ -1,5 +1,4 @@
 node_modules/
-app/tmp/
-dist/
-.npm/
-.tmp/
+build/
+.vscode/
+.env

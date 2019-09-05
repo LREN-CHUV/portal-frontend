@@ -13,19 +13,14 @@ get_script_dir () {
      pwd
 }
 
-if pgrep -lf sshuttle > /dev/null ; then
-  echo "sshuttle detected. Please close this program as it messes with networking and prevents builds inside Docker to work"
-  exit 1
-fi
-
 if groups $USER | grep &>/dev/null '\bdocker\b'; then
-  CAPTAIN="captain"
+  DOCKER="docker"
 else
-  CAPTAIN="sudo captain"
+  DOCKER="sudo docker"
 fi
 
 BUILD_DATE=$(date --iso-8601=seconds) \
   VCS_REF=$(git describe --tags --dirty) \
   VERSION=$(git describe --tags --dirty) \
   WORKSPACE=$(get_script_dir) \
-  $CAPTAIN build
+  $DOCKER build -t hbpmip/portal-frontend .
