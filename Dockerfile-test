@@ -1,8 +1,17 @@
-FROM node:latest as builder
+FROM node:latest
 
-RUN curl -o- -L https://yarnpkg.com/install.sh | bash
+WORKDIR /frontend
 
-COPY . /frontend
-WORKDIR /frontend/app/v3/
-RUN yarn install
-RUN REACT_APP_BACKEND_URL="http://localhost" CI=true yarn test
+ADD yarn.lock  /frontend
+ADD package.json  /frontend
+
+ENV NODE_PATH=/frontend/node_modules
+ENV PATH=$PATH:/frontend/node_modules/.bin
+RUN yarn
+
+WORKDIR /app
+ADD . /app
+ADD tests/run.sh /app/run.sh
+
+ENTRYPOINT ["/bin/bash", "./run.sh"]
+CMD ["test"]

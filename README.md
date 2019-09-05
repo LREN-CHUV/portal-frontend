@@ -1,4 +1,4 @@
-[![CHUV](https://img.shields.io/badge/CHUV-LREN-AF4C64.svg)](https://www.unil.ch/lren/en/home.html) [![License](https://img.shields.io/badge/license-AGPL--3.0-blue.svg)](https://www.gnu.org/licenses/agpl-3.0.html) [![DockerHub](https://img.shields.io/badge/docker-hbpmip%2Fportal--frontend-008bb8.svg)](https://hub.docker.com/r/hbpmip/portal-frontend/) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/9143f566eca64ffbb06258c61fb64ea0)](https://www.codacy.com/app/hbp-mip/portal-frontend?utm_source=github.com&utm_medium=referral&utm_content=LREN-CHUV/portal-frontend&utm_campaign=Badge_Grade) [![CircleCI](https://circleci.com/gh/LREN-CHUV/portal-frontend/tree/master.svg?style=svg)](https://circleci.com/gh/LREN-CHUV/portal-frontend/tree/master)
+[![CHUV](https://img.shields.io/badge/HBP-AF4C64.svg)](https://www.humanbrainproject.eu) [![License](https://img.shields.io/badge/license-AGPL--3.0-blue.svg)](https://www.gnu.org/licenses/agpl-3.0.html) [![DockerHub](https://img.shields.io/badge/docker-hbpmip%2Fportal--frontend-008bb8.svg)](https://hub.docker.com/r/hbpmip/portal-frontend/) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/9143f566eca64ffbb06258c61fb64ea0)](https://www.codacy.com/app/hbp-mip/portal-frontend?utm_source=github.com&utm_medium=referral&utm_content=HBPMedical/portal-frontend&utm_campaign=Badge_Grade) [![CircleCI](https://circleci.com/gh/HBPMedical/portal-frontend/tree/master.svg?style=svg)](https://circleci.com/gh/HBPMedical/portal-frontend/tree/master)
 
 # MIP portal frontend
 
@@ -6,27 +6,30 @@
 
 MIP Frontend is the web portal for the [Medical Informatics Platform for the Human Brain Project](https://hbpmedical.github.io/).
 
-The portal is currently beeing migrated from Angular to React, and runs on both frameworks.
+The portal runs on [React](https://reactjs.org), a JavaScript library for building user interfaces, and embed several libraries, among them are:
 
-- React 16.8.4
-- AngularJS 1.6.8
-- Bootstrap 3.3.7
+- [TypeScript](https://www.typescriptlang.org), a typed superset of JavaScript
+- [D3.js](https://d3js.org) and [Highcharts](https://www.highcharts.com), visualizations and interactive charts libraries
+- [Bootstrap](https://getbootstrap.com/), a frontend component library
+- [Unstated](https://github.com/jamiebuilds/unstated), a state library
 
-## Frontend development
+## Development
 
 This is a minimal setup to do frontend development in this project:
 
 ### Run the Backend
 
-- Checkout the master branch of the [backend web-analytics-demo](https://github.com/LREN-CHUV/web-analytics-demo) project.
-- If you are an HBP partner, you might want to use the `research_datasets` branch, which requires an authorization. You can ask for an access at support@humanbrainproject.eu . Once you're authorized, follow the [documentation](https://github.com/LREN-CHUV/web-analytics-demo/tree/research_datasets) about how to login to the private gitlab docker registry to get the datasets.
+- Checkout the master branch of the [backend web-analytics-demo](https://github.com/HBPMedical/web-analytics-demo) project.
+- If you are an HBP partner, you might want to use the `research_datasets` branch, which requires an authorization. You can ask for an access at support@humanbrainproject.eu . Once you're authorized, follow the [documentation](https://github.com/HBPMedical/web-analytics-demo/tree/research_datasets) about how to login to the private gitlab docker registry to get the datasets.
 - Create a new line in `/etc/hosts`, so the backend will be accessible through http://frontend/services
   - `sudo sh -c 'echo 127.0.1.1 frontend >> /etc/hosts'`
 - Launch `./run.sh`. You will have the MIP backend running on your computer at http://frontend
 
 ### React
 
-More info about React Infrastructure can be found [in the /app/v3/README.md file](./app/v3/README.md)
+This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
+
+You can find the most recent version of the Create React App guide [here](https://github.com/facebookincubator/create-react-app/blob/master/packages/react-scripts/template/README.md).
 
 - Install [nodejs](https://nodejs.org)
 - Install [yarn](https://yarnpkg.com/en/)
@@ -37,26 +40,51 @@ More info about React Infrastructure can be found [in the /app/v3/README.md file
 - `yarn watch`
 - Browse to [http://localhost:3000/v3/review](http://localhost:3000/v3/review)
 
-#### Tests
+## Tests
+
+### Local
 
 You can generate models and experiments by running the tests:
 
 - `yarn test`
 
-### Angular (deprecated)
+### Test live installations
 
-This part is no longuer updated. Will be migrated to the new React stack
+You can use the mip-fontend test suite against any live installation, either locally
 
-1. Checkout this repo "portal-frontend" on staging branch.
-2. There is two way to start the development frontend:
-3. Either by docker, `./run.sh`
-4. Or manually install gulp & yarn global
+```
+echo REACT_APP_BACKEND_URL = "https://qa.mip.chuv.ch" | tee .env &&
+echo REACT_APP_TOKEN = "xxx" | tee -a .env &&
+echo REACT_APP_JSESSIONID = "xxx" | tee -a .env &&
+echo REACT_APP_AUTHORIZATION = "xxx" | tee -a .env
+yarn test
+```
 
-- `npm install -g gulp` (might require `sudo`)
-- `npm install -g yarn` (might require `sudo`) (Debian/Ubuntu users should use `sudo apt-get install yarn`)
-- `yarn install` (might require `sudo`)
-- `gulp`
-- `google-chrome --disable-web-security --user-data-dir http://localhost:8000` (opens the frontend in Chrome with flags to ignore CORS issues. CORS must be disabled for development because the backend runs on a different domain name than the frontend)
+or as a standalone docker
+
+```
+docker build . -f Dockerfile-test -t hbpmip/portal-frontend-tests
+```
+
+```
+docker run -it \
+-e BACKEND_URL="https://qa.mip.chuv.ch" \
+-e TOKEN="c900a5c9-452e-4514-b8a8-c5dda02d03b6" \
+-e JSESSIONID="2B5967D0870A33E2A55F5C9B641518FB" \
+-e AUTHORIZATION="Basic c2dhMXJldmlld2VyczpIQlBzZ2Ex" \
+--rm hbpmip/portal-frontend-tests:latest
+```
+
+Samples tests queries
+
+```
+hbpmip/portal-frontend-tests test local
+hbpmip/portal-frontend-tests test federated
+hbpmip/portal-frontend-tests test woken
+hbpmip/portal-frontend-tests test exareme
+```
+
+Tests run with Jest, see [the jest cli doc](https://jestjs.io/docs/en/cli) for more details
 
 ## Build (produce a local docker container)
 
@@ -74,69 +102,13 @@ See [Web Analytics starter](https://github.com/HBPMedical/web-analytics-demo) to
 
 See [MIP Microservices Infrastructure](https://github.com/HBPMedical/mip-microservices-infrastructure) for the production deployment of the MIP platform
 
-## Unit-tests
-
-### using gulp
-
-This is a setup to run unit-tests in this project using gulp:
-
-1. To run unit-tests ones:
-
-- `gulp unit-tests`
-
-2. Start running karma unit tests:
-
-- `gulp unit-tests:auto`
-
-### using karma-cli
-
-This is a setup to run unit-tests in this project using karma-cli:
-
-1. Install karma-cli & phantomjs global
-
-- `npm install karma-cli phantomjs -g` (might require `sudo`)
-
-2. Start karma unit tests:
-
-- `karma start karma.conf.js` (might require `sudo`)
-
-## e2e-tests
-
-e2e-testing works in chrome browser
-
-### using gulp
-
-This is a setup to run unit-tests in this project using gulp:
-
-1. To run e2e-tests:
-
-- `gulp e2e-test` (it starts serve "dist" folder with dev config)
-  To run e2e test without rebuild dist folder use `gulp protractor-go` command in new terminal window
-
-### using protractor global
-
-This is a setup to run e2e-tests in this project using protractor:
-
-1. Install protractor global, webdriver-manager
-
-- `npm install -g protractor` (might require `sudo`) This will install two command line tools, protractor and webdriver-manager
-- `webdriver-manager update` (might require `sudo`)
-- `webdriver-manager start` (might require `sudo`)
-
-2. Start karma unit tests:
-
-- `protractor app/tests/e2e/e2e-conf.js` (might require `sudo`)
-  (If you have a java error, try to install java: `sudo apt-get install default-jdk`).
-
 ## License
 
-Copyright © 2016-2018 LREN CHUV
+Copyright © 2016-2019 LREN CHUV
 
 Licensed under the GNU Affero General Public License, Version 3.0 (the "License");
 you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-[https://www.gnu.org/licenses/agpl-3.0.html](https://www.gnu.org/licenses/agpl-3.0.html)
+You may obtain a copy of the License at [https://www.gnu.org/licenses/agpl-3.0.html](https://www.gnu.org/licenses/agpl-3.0.html)
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

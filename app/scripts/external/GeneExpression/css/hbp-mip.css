@@ -1,8 +1,0 @@
-@CHARSET "ISO-8859-1";
-
-html, body {
-    background-image: url("../images/hbp-mip-back.png");
-    background-repeat: repeat-y;
-    background-position: top center;
-    background-size: 100%;
-}

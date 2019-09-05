@@ -1,17 +1,25 @@
-.tmp/
-app/scripts/app/app.config.js
-app/fonts
-dist/
-node_modules/
-app/index.html
-app/tmp/
-app/bower_components/
-reports/
-screenshots/
-*.log
-package-lock.json
-.vscode
-yarn-error.log
-app/scripts/app/config.json
-~/
-app/v3/.env
+# See https://help.github.com/ignore-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+
+# testing
+/coverage
+
+# production
+/build
+
+# vscode
+.vs
+
+# misc
+.DS_Store
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*

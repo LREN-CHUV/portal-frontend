@@ -1,21 +1,19 @@
-FROM node:11.15.0 as builder
+FROM node:latest as builder
 
 WORKDIR /frontend
 
-RUN npm install -g gulp
-RUN npm link gulp
 
-COPY package.json /frontend
+ADD yarn.lock /frontend
+ADD package.json /frontend
+
 RUN yarn install
+
+ENV NODE_PATH=/frontend/node_modules
+ENV PATH=$PATH:/frontend/node_modules/.bin
 
 COPY . /frontend
 
-RUN gulp build
-
-WORKDIR /frontend/app/v3/
-RUN yarn install
 RUN yarn build
-
 
 FROM nginx:1.13.0-alpine
 
@@ -38,23 +36,21 @@ RUN rm -f /etc/nginx/nginx.conf /etc/nginx/conf.d/default.conf
 
 # Add nginx config
 COPY ./docker/runner/conf/nginx.conf.tmpl \
-     ./docker/runner/conf/proxy.conf.tmpl \
-     ./docker/runner/conf/gzip.conf.tmpl \
-     ./docker/runner/conf/portal-backend-upstream.conf.tmpl \
-     ./docker/runner/conf/config.json.tmpl \
-         /portal/conf/
+    ./docker/runner/conf/proxy.conf.tmpl \
+    ./docker/runner/conf/gzip.conf.tmpl \
+    ./docker/runner/conf/portal-backend-upstream.conf.tmpl \
+    ./docker/runner/conf/config.json.tmpl \
+    /portal/conf/
 
 COPY docker/runner/run.sh /
 
 # Add front end resources
-# COPY ./dist/ /usr/share/nginx/html/
-COPY --from=builder /frontend/dist /usr/share/nginx/html/
-COPY --from=builder /frontend/app/v3/build /usr/share/nginx/html/v3/
+COPY --from=builder /frontend/build /usr/share/nginx/html/
 
 # Protected files folder
 ENV PROTECTED_DIR /protected
 RUN mkdir ${PROTECTED_DIR} \
-	&& chown -R nginx:nginx ${PROTECTED_DIR}
+    && chown -R nginx:nginx ${PROTECTED_DIR}
 VOLUME [${PROTECTED_DIR}]
 
 EXPOSE 80 443
@@ -62,15 +58,15 @@ EXPOSE 80 443
 ENTRYPOINT ["/run.sh"]
 
 LABEL org.label-schema.build-date=$BUILD_DATE \
-      org.label-schema.name="hbpmip/portal-frontend" \
-      org.label-schema.description="Nginx server configured to serve the frontend of the MIP portal" \
-      org.label-schema.url="https://mip.humanbrainproject.eu" \
-      org.label-schema.vcs-type="git" \
-      org.label-schema.vcs-url="https://github.com/LREN-CHUV/portal-frontend" \
-      org.label-schema.vcs-ref=$VCS_REF \
-      org.label-schema.version="$VERSION" \
-      org.label-schema.vendor="LREN CHUV" \
-      org.label-schema.license="AGPLv3" \
-      org.label-schema.docker.dockerfile="Dockerfile" \
-      org.label-schema.memory-hint="10" \
-      org.label-schema.schema-version="1.0"
+    org.label-schema.name="hbpmip/portal-frontend" \
+    org.label-schema.description="Nginx server configured to serve the frontend of the MIP portal" \
+    org.label-schema.url="https://mip.humanbrainproject.eu" \
+    org.label-schema.vcs-type="git" \
+    org.label-schema.vcs-url="https://github.com/HBPMedical/portal-frontend" \
+    org.label-schema.vcs-ref=$VCS_REF \
+    org.label-schema.version="$VERSION" \
+    org.label-schema.vendor="LREN CHUV" \
+    org.label-schema.license="AGPLv3" \
+    org.label-schema.docker.dockerfile="Dockerfile" \
+    org.label-schema.memory-hint="10" \
+    org.label-schema.schema-version="1.0"
