@@ -223,7 +223,7 @@ class Container extends React.Component<Props, State> {
       this.setState({
         alert: {
           message: 'An error occured, please try again later',
-          style: 'error',
+          styled: 'error',
           title: 'Info'
         }
       });
@@ -236,7 +236,7 @@ class Container extends React.Component<Props, State> {
       this.setState({
         alert: {
           message: 'An error occured, please choose a model',
-          style: 'error',
+          styled: 'error',
           title: 'Info'
         }
       });
