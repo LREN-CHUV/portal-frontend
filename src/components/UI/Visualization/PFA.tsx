@@ -7,7 +7,6 @@ import { Tab, Tabs } from 'react-bootstrap';
 import {
   ConfusionMatrix,
   KfoldValidationScore,
-  PolynomialClassificationScore,
   ValidationScore
 } from '../../API/Experiment';
 import { SCORES } from '../../constants';
@@ -26,12 +25,7 @@ const removeKeys = (
   return { ...newObj };
 };
 
-const buildChart = (
-  validation:
-    | KfoldValidationScore
-    | ValidationScore
-    | PolynomialClassificationScore
-) => {
+const buildChart = (validation: KfoldValidationScore | ValidationScore) => {
   return {
     chart: {
       type: 'column',
@@ -57,12 +51,7 @@ const buildChart = (
   };
 };
 
-const buildTableValue = (
-  validation:
-    | KfoldValidationScore
-    | ValidationScore
-    | PolynomialClassificationScore
-) =>
+const buildTableValue = (validation: KfoldValidationScore | ValidationScore) =>
   (validation && (
     <ul className="pfa-table">
       {Object.keys(validation).map((key, k) => (

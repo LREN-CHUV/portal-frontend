@@ -33,8 +33,6 @@ interface Props {
   apiUser: APIUser;
 }
 
-//http://localhost:8080/services/login/hbp?code=H3afRQ&state=CI0y77
-
 const Redirect = ({ apiUser, props }: { apiUser: APIUser; props: any }) => {
   apiUser.login(props.search).then(a => {
     return <div>hello</div>;
