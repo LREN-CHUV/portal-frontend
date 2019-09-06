@@ -30,8 +30,11 @@ export default ({ row }: { row: any }) => {
           ? `${formatedValue} (*)`
           : `${formatedValue}`;
 
-      if ((key === 'PR(>F)' || key === 'p_values' || key === 'p') && isNumber(value)) {
-        output = starIt(value,  round(value));
+      if (
+        (key === 'PR(>F)' || key === 'p_values' || key === 'p') &&
+        isNumber(value)
+      ) {
+        output = starIt(value, round(value));
       } else {
         output = !isNaN(value) ? round(value) : '';
       }
@@ -43,7 +46,7 @@ export default ({ row }: { row: any }) => {
   });
 
   return (
-    <table className='greyGridTable'>
+    <table className="greyGridTable">
       <thead>
         <tr>
           <th>Variables</th>

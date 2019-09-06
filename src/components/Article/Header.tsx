@@ -16,7 +16,7 @@ export default ({ handleNewArticle }: Props) => {
     <Panel>
       <PanelBody>
         <h3 style={{ flex: 1 }}>Articles</h3>
-        <Button bsStyle='info' type='submit' onClick={handleNewArticle}>
+        <Button bsStyle="info" type="submit" onClick={handleNewArticle}>
           New article
         </Button>
       </PanelBody>

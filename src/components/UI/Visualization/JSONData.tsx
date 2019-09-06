@@ -115,10 +115,13 @@ export default ({ data }: { data: TabularDataResource }) => {
         <tbody>
           {data.data.map((row: any, k: number) => (
             <tr key={k}>
-              {Array.isArray(row) && row.map((col: any, l: number) => (
-                <td key={l}>{formatNumber(col, data.schema.fields[l])}</td>
-              ))}
-              {!Array.isArray(row) && <td colSpan={data.schema.fields.length}>n/a</td>}
+              {Array.isArray(row) &&
+                row.map((col: any, l: number) => (
+                  <td key={l}>{formatNumber(col, data.schema.fields[l])}</td>
+                ))}
+              {!Array.isArray(row) && (
+                <td colSpan={data.schema.fields.length}>n/a</td>
+              )}
             </tr>
           ))}
         </tbody>

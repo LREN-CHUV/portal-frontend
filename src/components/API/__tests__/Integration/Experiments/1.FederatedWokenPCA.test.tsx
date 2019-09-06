@@ -4,7 +4,10 @@ import * as React from 'react';
 import { MIP } from '../../../../../../types';
 import Result from '../../../../Result/Result';
 import {
-    createExperiment, createModel, datasets, waitForResult
+  createExperiment,
+  createModel,
+  datasets,
+  waitForResult
 } from '../../../../utils/TestUtils';
 import { VariableEntity } from '../../../Core';
 
@@ -59,8 +62,12 @@ const model: any = (datasets: VariableEntity[]) => ({
       '{"condition":"AND","rules":[{"id":"subjectageyears","field":"subjectageyears","type":"integer","input":"number","operator":"greater","value":"65"},{"id":"alzheimerbroadcategory","field":"alzheimerbroadcategory","type":"string","input":"select","operator":"not_equal","value":"Other"}],"valid":true}',
     groupings: [],
     testingDatasets: [],
-    trainingDatasets: datasets.slice(0, datasets.length -1).map(d => ({ code: d.code })),
-    validationDatasets: datasets.slice(datasets.length -1).map(d => ({ code: d.code })),
+    trainingDatasets: datasets
+      .slice(0, datasets.length - 1)
+      .map(d => ({ code: d.code })),
+    validationDatasets: datasets
+      .slice(datasets.length - 1)
+      .map(d => ({ code: d.code })),
     variables: [
       {
         code: 'lefthippocampus'

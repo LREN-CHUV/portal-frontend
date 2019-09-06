@@ -2,7 +2,11 @@ import { mount } from 'enzyme';
 import * as React from 'react';
 
 import Result from '../../../../Result/Result';
-import { createExperiment, createModel, waitForResult } from '../../../../utils/TestUtils';
+import {
+  createExperiment,
+  createModel,
+  waitForResult
+} from '../../../../utils/TestUtils';
 import { VariableEntity } from '../../../Core';
 import { buildExaremeAlgorithmRequest } from '../../../ExaremeAPIAdapter';
 import { Engine } from '../../../Experiment';
@@ -11,16 +15,12 @@ import { Engine } from '../../../Experiment';
 
 const modelSlug = `model-${Math.round(Math.random() * 10000)}`;
 const experimentCode = 'ID3';
-const parameters = [
-  { code: 'iterations_max_number', value: 20 },
-];
+const parameters = [{ code: 'iterations_max_number', value: 20 }];
 const model: any = () => ({
   query: {
     coVariables: [],
     filters: '',
-    groupings: [
-      { code: 'alzheimerbroadcategory' }
-    ],
+    groupings: [{ code: 'alzheimerbroadcategory' }],
     testingDatasets: [],
     trainingDatasets: [{ code: 'adni' }],
     validationDatasets: [],

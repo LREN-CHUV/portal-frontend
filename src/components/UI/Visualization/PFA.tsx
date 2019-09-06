@@ -5,7 +5,10 @@ import * as React from 'react';
 import { Tab, Tabs } from 'react-bootstrap';
 
 import {
-    ConfusionMatrix, KfoldValidationScore, PolynomialClassificationScore, ValidationScore
+  ConfusionMatrix,
+  KfoldValidationScore,
+  PolynomialClassificationScore,
+  ValidationScore
 } from '../../API/Experiment';
 import { SCORES } from '../../constants';
 import { round } from '../../utils';
@@ -61,7 +64,7 @@ const buildTableValue = (
     | PolynomialClassificationScore
 ) =>
   (validation && (
-    <ul className='pfa-table'>
+    <ul className="pfa-table">
       {Object.keys(validation).map((key, k) => (
         <li key={k}>
           <strong>{SCORES[key] && SCORES[key].label}</strong>:{' '}
@@ -75,7 +78,7 @@ const buildTableValue = (
 const buildConfusionMatrix = (matrix: ConfusionMatrix) =>
   matrix &&
   ((
-    <table className='greyGridTable'>
+    <table className="greyGridTable">
       <caption>
         <strong>Confusion matrix</strong>
       </caption>
@@ -104,9 +107,9 @@ const buildConfusionMatrix = (matrix: ConfusionMatrix) =>
 export default ({ data }: { data: any }) => {
   return (
     (data && (
-      <Tabs defaultActiveKey={0} id='pfa-method' style={{ marginTop: '16px' }}>
+      <Tabs defaultActiveKey={0} id="pfa-method" style={{ marginTop: '16px' }}>
         {data && data.error && (
-          <div className='error'>
+          <div className="error">
             <h3>An error has occured</h3>
             <p>{data.error}</p>
           </div>

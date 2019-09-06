@@ -24,35 +24,47 @@ export default class Header extends React.Component<Props, State> {
   };
 
   public render() {
-    const { experiments, model, method, handleGoBackToReview, handleSelectExperiment } = this.props;
+    const {
+      experiments,
+      model,
+      method,
+      handleGoBackToReview,
+      handleSelectExperiment
+    } = this.props;
     const { experimentName } = this.state;
 
     return (
       <Panel>
         <Panel.Body>
-          <Button onClick={handleGoBackToReview} bsStyle='info' type='submit'>
-            <Glyphicon glyph='chevron-left' /> Review
+          <Button onClick={handleGoBackToReview} bsStyle="info" type="submit">
+            <Glyphicon glyph="chevron-left" /> Review
           </Button>
           <h3>Create Experiment</h3>
-          <div className='item'>
+          <div className="item">
             <Dropdown
-              items={model && experiments && experiments.filter((e: any) => e.modelDefinitionId === model.slug)}
-              title='RELATED EXPERIMENTS'
+              items={
+                model &&
+                experiments &&
+                experiments.filter(
+                  (e: any) => e.modelDefinitionId === model.slug
+                )
+              }
+              title="RELATED EXPERIMENTS"
               handleSelect={handleSelectExperiment}
               handleCreateNewExperiment={null}
             />
           </div>
-          <div className='item'>
+          <div className="item">
             <FormControl
-              className='item experiment-name'
-              type='text'
+              className="item experiment-name"
+              type="text"
               placeholder={'Experiment name'}
               value={experimentName}
               onChange={this.handleChangeExperimentName}
               onKeyDown={this.handleKeyPress}
             />
           </div>
-          <div className='item'>
+          <div className="item">
             <Button
               onClick={this.handleSaveAndRunExperiment}
               title={
@@ -62,14 +74,13 @@ export default class Header extends React.Component<Props, State> {
                   ? 'Please enter a title for your experiment'
                   : ''
               }
-              bsStyle='info'
-              type='submit'
-              disabled={method === undefined || experimentName === ''}>
-              Run Experiment{' '}
-              <Glyphicon glyph='chevron-right' />
+              bsStyle="info"
+              type="submit"
+              disabled={method === undefined || experimentName === ''}
+            >
+              Run Experiment <Glyphicon glyph="chevron-right" />
             </Button>
           </div>
-          
         </Panel.Body>
       </Panel>
     );

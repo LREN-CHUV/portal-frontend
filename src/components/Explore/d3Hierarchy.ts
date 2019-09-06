@@ -9,7 +9,7 @@ export interface VariableDatum {
   type?: string;
 }
 
-export type HierarchyNode = d3.HierarchyNode<VariableDatum>
+export type HierarchyNode = d3.HierarchyNode<VariableDatum>;
 
 const hierarchyTransform = (node: any): VariableDatum | undefined =>
   node

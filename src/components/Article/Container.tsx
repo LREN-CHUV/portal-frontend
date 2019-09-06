@@ -120,10 +120,11 @@ export default ({ apiCore, ...props }: Props) => {
               apiCore.state.articles.map(a => (
                 <div key={a.slug}>
                   <button
-                    className='btn btn-link'
+                    className="btn btn-link"
                     style={{ textTransform: 'none' }}
                     // tslint:disable-next-line jsx-no-lambda
-                    onClick={() => handleSelectArticle(a)}>
+                    onClick={() => handleSelectArticle(a)}
+                  >
                     {a.title}
                   </button>
                 </div>
@@ -142,9 +143,10 @@ export default ({ apiCore, ...props }: Props) => {
               <>
                 <Submit>
                   <button
-                    className='btn-info btn'
+                    className="btn-info btn"
                     // tslint:disable-next-line
-                    onClick={() => setEditing(Mode.editing)}>
+                    onClick={() => setEditing(Mode.editing)}
+                  >
                     Edit
                   </button>
                 </Submit>

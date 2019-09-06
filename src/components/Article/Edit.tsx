@@ -52,39 +52,41 @@ export default ({ currentArticle, handleSaveArticle, setEditing }: Props) => {
         // tslint:disable-next-line
         event.preventDefault();
         handleSaveArticle(article.slug, article);
-      }}>
+      }}
+    >
       <Submit>
-        <button className='btn-info btn'>Save</button>
+        <button className="btn-info btn">Save</button>
         <button
-          className='btn-info btn'
+          className="btn-info btn"
           // tslint:disable-next-line
           onClick={() => {
             setEditing(Mode.default);
-          }}>
+          }}
+        >
           Cancel
         </button>
       </Submit>
-      <div className='form-group'>
-        <label className='control-label'>Title</label>
+      <div className="form-group">
+        <label className="control-label">Title</label>
         <input
-          className='form-control'
-          type='text'
-          name='title'
+          className="form-control"
+          type="text"
+          name="title"
           value={article.title}
           onChange={handleInputChange}
         />
       </div>
-      <div className='form-group'>
-        <label className='control-label'>Abstract</label>
+      <div className="form-group">
+        <label className="control-label">Abstract</label>
         <textarea
-          className='form-control'
-          name='abstract'
+          className="form-control"
+          name="abstract"
           value={article.abstract}
           onChange={handleInputChange}
         />
       </div>
-      <div className='form-group'>
-        <label className='control-label'>Content</label>
+      <div className="form-group">
+        <label className="control-label">Content</label>
         <Draft
           editorState={content}
           onEditorStateChange={onEditorStateChange}

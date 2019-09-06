@@ -8,7 +8,7 @@ import RenderResult from './RenderResult';
 
 const Body = styled(Panel.Body)`
   padding: 0 16px;
-`
+`;
 
 export default ({ experimentState }: { experimentState: State }) => {
   const experiment = experimentState && experimentState.experiment;
@@ -18,7 +18,8 @@ export default ({ experimentState }: { experimentState: State }) => {
     (experiment && experiment.error);
   const loading = !results && !error;
   const algorithms = experiment && experiment.algorithms;
-  const algorithmName = (algorithms && algorithms.length > 0 && algorithms[0].name) || '';
+  const algorithmName =
+    (algorithms && algorithms.length > 0 && algorithms[0].name) || '';
 
   return (
     <Panel>
@@ -27,7 +28,7 @@ export default ({ experimentState }: { experimentState: State }) => {
       </Panel.Title>
       <Body>
         {loading ? (
-          <div className='loading'>
+          <div className="loading">
             <h3>Your experiment is currently running...</h3>
             <p>
               Please check back in a few minutes. This page will automatically
@@ -36,7 +37,7 @@ export default ({ experimentState }: { experimentState: State }) => {
           </div>
         ) : null}
         {error ? (
-          <div className='error'>
+          <div className="error">
             <h3>An error has occured</h3>
             <p>{error}</p>
           </div>

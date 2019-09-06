@@ -1,7 +1,7 @@
-import React from "react";
-import { RingLoader } from "react-spinners";
+import React from 'react';
+import { RingLoader } from 'react-spinners';
 
-import "./Loader.css";
+import './Loader.css';
 
 interface Props {
   visible?: boolean;
@@ -12,9 +12,9 @@ class Loader extends React.Component<Props> {
     return (
       <div className="loader">
         <RingLoader
-          sizeUnit={"px"}
+          sizeUnit={'px'}
           size={16}
-          color={"#0c6c94"}
+          color={'#0c6c94'}
           loading={visible}
         />
         <p>loading...</p>

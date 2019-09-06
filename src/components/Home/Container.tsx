@@ -25,7 +25,7 @@ const PanelContainer = styled(Panel)`
   }
   padding: 1em;
   margin: 0 0 1em 0;
-  background-color: #D3D3D399;
+  background-color: #d3d3d399;
 `;
 
 interface Props extends RouteComponentProps<{}> {

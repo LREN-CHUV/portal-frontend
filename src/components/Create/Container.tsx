@@ -72,8 +72,8 @@ class Container extends React.Component<Props, State> {
     const isLocal = (appConfig && appConfig.mode === 'local') || false;
 
     return (
-      <div className='Experiment'>
-        <div className='header'>
+      <div className="Experiment">
+        <div className="header">
           <ExperimentCreateHeader
             model={apiModel.state.model}
             experiments={apiExperiment.state.experiments}
@@ -83,8 +83,8 @@ class Container extends React.Component<Props, State> {
             handleSaveAndRunExperiment={this.handleSaveAndRunExperiment}
           />
         </div>
-        <div className='content'>
-          <div className='sidebar'>
+        <div className="content">
+          <div className="sidebar">
             <Model
               model={apiModel.state.model}
               showDatasets={true}
@@ -94,7 +94,7 @@ class Container extends React.Component<Props, State> {
               handleSelectModel={this.handleSelectModel}
             />
           </div>
-          <div className='parameters'>
+          <div className="parameters">
             <Panel>
               <Panel.Body>
                 {alert && (
@@ -106,8 +106,9 @@ class Container extends React.Component<Props, State> {
                 )}
                 <Tabs
                   defaultActiveKey={1}
-                  id='uncontrolled-create-experiment-tab'>
-                  <Tab eventKey={1} title='Method'>
+                  id="uncontrolled-create-experiment-tab"
+                >
+                  <Tab eventKey={1} title="Method">
                     <Form
                       method={this.state && this.state.method}
                       parameters={this.state && this.state.parameters}
@@ -128,14 +129,14 @@ class Container extends React.Component<Props, State> {
                       />
                     </fieldset>
                   </Tab>
-                  <Tab eventKey={2} title='About running experiments'>
+                  <Tab eventKey={2} title="About running experiments">
                     <Help />
                   </Tab>
                 </Tabs>
               </Panel.Body>
             </Panel>
           </div>
-          <div className='sidebar2'>
+          <div className="sidebar2">
             <Panel>
               <Panel.Title>
                 <h3>Available Methods</h3>

@@ -23,7 +23,11 @@ export default ({ row }: { row: any }) => {
       }
       if (isNaN(Number(c))) {
         return c;
-      } else if (headers[i] === 'p-value' || headers[i] === 'p' || headers[i] === 'prvalue') {
+      } else if (
+        headers[i] === 'p-value' ||
+        headers[i] === 'p' ||
+        headers[i] === 'prvalue'
+      ) {
         // console.log(round(c))
         return typeof c === 'string' ? c : starIt(c, round(c));
       } else {
@@ -33,7 +37,7 @@ export default ({ row }: { row: any }) => {
   });
 
   return (
-    <table className='greyGridTable'>
+    <table className="greyGridTable">
       <thead>
         <tr>
           {headers.map((c: string) => (

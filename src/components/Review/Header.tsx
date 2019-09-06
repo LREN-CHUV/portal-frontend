@@ -35,16 +35,16 @@ export default class Header extends React.Component<Props> {
     return (
       <Panel>
         <Panel.Body>
-          <Button onClick={handleGoBackToExplore} bsStyle='info' type='submit'>
-            <Glyphicon glyph='chevron-left' /> Explore
+          <Button onClick={handleGoBackToExplore} bsStyle="info" type="submit">
+            <Glyphicon glyph="chevron-left" /> Explore
           </Button>
           <h3>Interactive Analysis</h3>
-          <div className='item'>&nbsp;</div>
+          <div className="item">&nbsp;</div>
           {isMock && (
-            <div className='item'>
+            <div className="item">
               <FormControl
-                className='item experiment-name'
-                type='text'
+                className="item experiment-name"
+                type="text"
                 placeholder={'Model name'}
                 value={currentModelName}
                 onChange={this.handleChangeModelName}
@@ -53,25 +53,35 @@ export default class Header extends React.Component<Props> {
             </div>
           )}
           {isMock && (
-            <div className='item'>
+            <div className="item">
               <Button
                 onClick={this.handleSaveModel1}
                 bsStyle={'info'}
-                type='submit'
+                type="submit"
                 disabled={currentModelName === ''}
-                title={currentModelName === '' ? 'Please enter a title for your model' : ''}>
+                title={
+                  currentModelName === ''
+                    ? 'Please enter a title for your model'
+                    : ''
+                }
+              >
                 Save model
               </Button>
             </div>
           )}
-          <div className='item'>
+          <div className="item">
             <Button
               onClick={handleRunAnalysis}
-              bsStyle='info'
-              type='submit'
+              bsStyle="info"
+              type="submit"
               disabled={isMock}
-              title={currentModelName === '' ? 'Please enter a title for your model' : ''}>
-              RUN ML EXPERIMENT <Glyphicon glyph='chevron-right' />{' '}
+              title={
+                currentModelName === ''
+                  ? 'Please enter a title for your model'
+                  : ''
+              }
+            >
+              RUN ML EXPERIMENT <Glyphicon glyph="chevron-right" />{' '}
             </Button>
           </div>
         </Panel.Body>

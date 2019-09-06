@@ -26,7 +26,8 @@ window.addEventListener("load", function(){
 export default class Helpdesk extends React.PureComponent {
   public componentDidMount() {
     const script1 = document.createElement('script');
-    script1.src = 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js';
+    script1.src =
+      'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js';
     document.head.appendChild(script1);
 
     const script = document.createElement('script');
@@ -34,11 +35,9 @@ export default class Helpdesk extends React.PureComponent {
     document.head.appendChild(script);
   }
 
-  
-
   public render = () => (
     <div>
-      <div id='feedback-form' />
+      <div id="feedback-form" />
     </div>
   );
 }

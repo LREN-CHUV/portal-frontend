@@ -21,8 +21,6 @@ const Subtitle = styled.h5`
   margin-bottom: 4px;
 `;
 
-
-
 interface Props {
   model?: ModelResponse;
   selectedSlug?: string;
@@ -45,7 +43,7 @@ class Model extends React.Component<Props> {
     const query = model && model.query;
 
     return (
-      <Panel className='model'>
+      <Panel className="model">
         <Panel.Title>
           <Title>
             Model <strong>{(model && model.title) || selectedSlug}</strong>

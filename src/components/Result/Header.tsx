@@ -28,29 +28,35 @@ export default ({
   return (
     <Panel>
       <Panel.Body>
-        <div className='item text'>
+        <div className="item text">
           <h3>
             Results of Experiment <strong>{name}</strong> on{' '}
-            <Link to={`/v3/review/${modelDefinitionId}`}>{modelDefinitionId}</Link>
+            <Link to={`/v3/review/${modelDefinitionId}`}>
+              {modelDefinitionId}
+            </Link>
           </h3>
-          <h5 className='item'>
-            Created {experiment && moment(new Date(experiment.created), 'YYYYMMDD').fromNow()} by{' '}
-            {experiment && experiment.user && experiment.user.username}
+          <h5 className="item">
+            Created{' '}
+            {experiment &&
+              moment(new Date(experiment.created), 'YYYYMMDD').fromNow()}{' '}
+            by {experiment && experiment.user && experiment.user.username}
           </h5>
         </div>
-        <div className='item'>
+        <div className="item">
           <Button bsStyle={'info'} onClick={handleShareExperiment}>
             {shared ? 'UNSHARE EXPERIMENT' : 'SHARE EXPERIMENT'}
           </Button>
         </div>
-        <div className='item'>
+        <div className="item">
           <Dropdown
             items={
               experiment &&
               experiments &&
-              experiments.filter((e: any) => e.modelDefinitionId === experiment.modelDefinitionId)
+              experiments.filter(
+                (e: any) => e.modelDefinitionId === experiment.modelDefinitionId
+              )
             }
-            title='RELATED EXPERIMENTS'
+            title="RELATED EXPERIMENTS"
             handleSelect={handleSelectExperiment}
             handleCreateNewExperiment={handleCreateNewExperiment}
           />

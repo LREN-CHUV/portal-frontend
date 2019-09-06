@@ -1,1 +1,1 @@
-declare module "jQuery-QueryBuilder";
+declare module 'jQuery-QueryBuilder';

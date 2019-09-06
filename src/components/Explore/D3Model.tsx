@@ -20,7 +20,7 @@ export default (props: ModelProps) => {
     const ref =
       type === ModelType.COVARIABLE
         ? covariableRef.current
-        : variableRef.current
+        : variableRef.current;
 
     const block = d3
       .select(ref)
@@ -58,7 +58,7 @@ export default (props: ModelProps) => {
       d3.select(covariableRef.current)
         .selectAll('p')
         .remove();
-     
+
       if (model && model.variable) {
         makeTree(model.variable.descendants(), ModelType.VARIABLE);
       }
@@ -66,7 +66,6 @@ export default (props: ModelProps) => {
       if (model && model.covariables) {
         makeTree(model.covariables, ModelType.COVARIABLE);
       }
-
     }
   });
 

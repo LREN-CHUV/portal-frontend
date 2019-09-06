@@ -66,7 +66,7 @@ const App = ({
   apiUser
 }: Props) => {
   return (
-    <div className='App'>
+    <div className="App">
       <header>
         {apiUser.state.authenticated && (
           <Navigation
@@ -77,21 +77,21 @@ const App = ({
         )}
       </header>
 
-      <section className='main-content'>
+      <section className="main-content">
         <Switch>
           <Route
-            path='/'
+            path="/"
             exact={true}
             // tslint:disable-next-line jsx-no-lambda
             render={props => <Splash apiUser={apiUser} {...props} />}
           />
           <Route
-            path='/services/login/hbp'
+            path="/services/login/hbp"
             // tslint:disable-next-line jsx-no-lambda
             render={props => <Redirect apiUser={apiUser} props={props} />}
           />
           <Route
-            path='/v3/tos'
+            path="/v3/tos"
             // tslint:disable-next-line jsx-no-lambda
             render={props => (
               <TOS
@@ -101,7 +101,7 @@ const App = ({
             )}
           />
           <Route
-            path='/v3/home'
+            path="/v3/home"
             // tslint:disable-next-line jsx-no-lambda
             render={props => (
               <Home
@@ -114,7 +114,7 @@ const App = ({
             )}
           />
           <Route
-            path='/v3/profile'
+            path="/v3/profile"
             // tslint:disable-next-line jsx-no-lambda
             render={props => <User apiUser={apiUser} {...props} />}
           />
@@ -144,7 +144,7 @@ const App = ({
             )}
           />
           <Route
-            path='/v3/experiment/:slug/:uuid'
+            path="/v3/experiment/:slug/:uuid"
             // tslint:disable-next-line jsx-no-lambda
             render={() => (
               <ExperimentResult
@@ -156,7 +156,7 @@ const App = ({
           />
           <Route
             exact={true}
-            path='/v3/experiment/:slug'
+            path="/v3/experiment/:slug"
             // tslint:disable-next-line jsx-no-lambda
             render={() => (
               <ExperimentCreate
@@ -176,7 +176,7 @@ const App = ({
           <Route component={NotFound} />
         </Switch>
       </section>
-      <footer id='footer'>
+      <footer id="footer">
         <Footer appConfig={appConfig} />
       </footer>
     </div>

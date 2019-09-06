@@ -9,8 +9,8 @@ import { ModelResponse } from '../API/Model';
 import { D3Model, HierarchyCircularNode } from './Container';
 import Explore from './Explore';
 
-const diameter: number = 800;
-const padding: number = 1.5;
+const diameter = 800;
+const padding = 1.5;
 
 type IView = [number, number, number];
 

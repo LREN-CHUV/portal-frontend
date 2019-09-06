@@ -1,4 +1,4 @@
-import * as React from "react";
+import * as React from 'react';
 import {
   Checkbox,
   Col,
@@ -6,7 +6,7 @@ import {
   FormControl,
   FormGroup,
   HelpBlock
-} from "react-bootstrap";
+} from 'react-bootstrap';
 
 enum DatasetType {
   Training,
@@ -29,7 +29,7 @@ const Validation = ({
   handleUpdateQuery: any;
   kfold?: number;
   handleChangeKFold?: (kfold: number) => void;
-  isLocal?: boolean
+  isLocal?: boolean;
 }) => (
   <div>
     <h5>
@@ -67,7 +67,7 @@ const Validation = ({
 
     {isPredictiveMethod && handleChangeKFold && (
       <Form horizontal={true}>
-        <FormGroup key={"kfold"}>
+        <FormGroup key={'kfold'}>
           <Col sm={2}>K-Fold:</Col>
           <Col sm={4}>
             <FormControl
@@ -86,7 +86,7 @@ const Validation = ({
           </Col>
           <Col sm={6}>
             Defines the number of folds used in the cross-validation. Typical
-            numbers are 5 or 10. More information:{" "}
+            numbers are 5 or 10. More information:{' '}
             <a
               target="_blank"
               rel="noopener noreferrer"

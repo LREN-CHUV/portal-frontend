@@ -62,7 +62,7 @@ export default ({ apiUser }: Props) => {
           <GridLayout>
             <CenteredPanel>
               <User
-                className='img-circle'
+                className="img-circle"
                 src={default_user}
                 alt={user.username}
               />
@@ -71,41 +71,41 @@ export default ({ apiUser }: Props) => {
             <StyledPanel>
               <Heading>Infos</Heading>
               <PanelBody>
-                <div className='form-group'>
-                  <label className='control-label'>Username:</label>
+                <div className="form-group">
+                  <label className="control-label">Username:</label>
                   <input
-                    className='form-control'
-                    type='text'
-                    name='username'
+                    className="form-control"
+                    type="text"
+                    name="username"
                     disabled={true}
                     defaultValue={user.username}
                   />
                 </div>
-                <div className='form-group'>
-                  <label className='control-label'>Full Name:</label>
+                <div className="form-group">
+                  <label className="control-label">Full Name:</label>
                   <input
-                    className='form-control'
-                    type='text'
-                    name='fullname'
+                    className="form-control"
+                    type="text"
+                    name="fullname"
                     disabled={true}
                     defaultValue={user.fullname}
                   />
                 </div>
-                <div className='form-group'>
-                  <label className='control-label'>Email:</label>
+                <div className="form-group">
+                  <label className="control-label">Email:</label>
                   <input
-                    className='form-control'
-                    type='text'
-                    name='lastName'
+                    className="form-control"
+                    type="text"
+                    name="lastName"
                     disabled={true}
                     defaultValue={user.email}
                   />
                 </div>
                 <Submit>
-                  <button className='btn-info btn' disabled={true}>
+                  <button className="btn-info btn" disabled={true}>
                     Save
                   </button>
-                  <button className='btn-default btn' disabled={true}>
+                  <button className="btn-default btn" disabled={true}>
                     Reset
                   </button>
                 </Submit>

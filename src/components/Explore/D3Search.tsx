@@ -84,7 +84,14 @@ export default (props: Props) => {
       const d3index = d3results2.filter((d, i) => i === keyDownIndex);
       d3index.dispatch('click');
     }
-  }, [searchResult, keyDownIndex, handleSelectNodeCallback, zoomCallback, enterZoom, setEnterZoom]);
+  }, [
+    searchResult,
+    keyDownIndex,
+    handleSelectNodeCallback,
+    zoomCallback,
+    enterZoom,
+    setEnterZoom
+  ]);
 
   const handleChangeInput = (e: React.SyntheticEvent<HTMLInputElement>) => {
     const value = e.currentTarget.value;
@@ -109,9 +116,9 @@ export default (props: Props) => {
   };
 
   return (
-    <div className='shortcuts'>
+    <div className="shortcuts">
       <input
-        placeholder='Search'
+        placeholder="Search"
         // tslint:disable jsx-no-lambda
         onFocus={() => setVisibleResults(searchResult ? true : false)}
         onBlur={handleBlur}

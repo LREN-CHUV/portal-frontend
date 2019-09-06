@@ -92,27 +92,30 @@ export default ({
                   // tslint:disable-next-line jsx-no-lambda
                   onClick={() => {
                     handleExpand(experiment.uuid);
-                  }}>
+                  }}
+                >
                   <h2>{experiment && experiment.name}</h2>
                 </Panel.Title>
                 <div>
                   <Button
-                    bsSize='small'
+                    bsSize="small"
                     // tslint:disable-next-line jsx-no-lambda
                     onClick={() =>
                       handleNewExperiment(experiment.modelDefinitionId)
-                    }>
+                    }
+                  >
                     New experiment
                   </Button>
                   <Button
-                    bsSize='small'
+                    bsSize="small"
                     // tslint:disable-next-line jsx-no-lambda
                     onClick={() =>
                       handleSelectExperiment(
                         experiment.modelDefinitionId,
                         experiment.uuid
                       )
-                    }>
+                    }
+                  >
                     View
                   </Button>
                 </div>

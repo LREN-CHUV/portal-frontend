@@ -26,7 +26,7 @@ export default ({
   }, [selectedSlug, items]);
 
   return (
-    <DropdownButton bsSize='small' id={'model-dropdown'} title={title}>
+    <DropdownButton bsSize="small" id={'model-dropdown'} title={title}>
       {showClear && (
         <MenuItem
           eventKey={'cancel'}
@@ -35,7 +35,8 @@ export default ({
           onSelect={() => {
             setTitle('undefined');
             handleSelect();
-          }}>
+          }}
+        >
           <strong>NEW MODEL</strong>
         </MenuItem>
       )}
@@ -50,7 +51,8 @@ export default ({
               onSelect={() => {
                 setTitle((item && item.title) || 'edit');
                 handleSelect(item);
-              }}>
+              }}
+            >
               <strong>{item.title}</strong>
             </MenuItem>
           );

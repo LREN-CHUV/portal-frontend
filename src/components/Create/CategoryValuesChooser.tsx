@@ -4,20 +4,24 @@ import { APICore } from '../API';
 import { VariableEntity } from '../API/Core';
 import { Query } from '../API/Model';
 
-
 type LocalVar = VariableEntity[] | undefined;
 interface Props {
   apiCore: APICore;
   query?: Query;
   code: string;
-  handleChangeCategoryParameter: (code: string, value: string) => void
+  handleChangeCategoryParameter: (code: string, value: string) => void;
 }
 
-export default ({ apiCore, query, code, handleChangeCategoryParameter }: Props) => {
+export default ({
+  apiCore,
+  query,
+  code,
+  handleChangeCategoryParameter
+}: Props) => {
   const [categories, setCategories] = useState<LocalVar>();
   const [category, setCategory] = useState<VariableEntity | undefined>();
 
-  const lookupCallback = useCallback(apiCore.lookup, [])
+  const lookupCallback = useCallback(apiCore.lookup, []);
   useEffect(() => {
     const categoricalVariables: VariableEntity[] | undefined = query && [
       ...(query.groupings || []),
@@ -45,8 +49,11 @@ export default ({ apiCore, query, code, handleChangeCategoryParameter }: Props) 
 
   const handleChangeValue = (event: any) => {
     event.preventDefault();
-    const json = JSON.stringify({name: category && category.code, val: event.target.value})
-    handleChangeCategoryParameter(code, json)
+    const json = JSON.stringify({
+      name: category && category.code,
+      val: event.target.value
+    });
+    handleChangeCategoryParameter(code, json);
   };
 
   return (
@@ -54,10 +61,11 @@ export default ({ apiCore, query, code, handleChangeCategoryParameter }: Props) 
       {categories && categories.length > 0 && (
         <div>
           <FormControl
-            componentClass='select'
-            placeholder='select'
-            id='parameter-var-chooser'
-            onChange={handleChangeCategory}>
+            componentClass="select"
+            placeholder="select"
+            id="parameter-var-chooser"
+            onChange={handleChangeCategory}
+          >
             {/* ref={categoryRef} */}
             {categories.map(v => (
               <option key={v.code} value={v.code}>
@@ -66,11 +74,12 @@ export default ({ apiCore, query, code, handleChangeCategoryParameter }: Props) 
             ))}
           </FormControl>
           <FormControl
-            componentClass='select'
-            placeholder='select'
-            id='parameter-category-chooser'
+            componentClass="select"
+            placeholder="select"
+            id="parameter-category-chooser"
             // ref={valueRef}
-            onChange={handleChangeValue}>
+            onChange={handleChangeValue}
+          >
             {category &&
               category.enumerations &&
               category.enumerations.map((v: any) => (

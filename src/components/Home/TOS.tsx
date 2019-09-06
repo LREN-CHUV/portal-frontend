@@ -58,7 +58,7 @@ export default () => (
         European legislations and regulations as well as to the ethical
         principles of Horizon 2020, the EU Framework programme for research and
         innovation (
-        <a href='https://ec.europa.eu/%20programmes/horizon2020/'>
+        <a href="https://ec.europa.eu/%20programmes/horizon2020/">
           https://ec.europa.eu/ programmes/horizon2020/
         </a>
         ).

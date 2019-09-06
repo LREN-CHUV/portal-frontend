@@ -9,8 +9,8 @@ export default ({ handleGoToAnalysis }: Props) => {
     <Panel>
       <Panel.Body>
         {/* <h3>Epidemiological Exploration</h3> */}
-        <Button bsStyle='info' type='submit' onClick={handleGoToAnalysis}>
-          Interactive Analysis <Glyphicon glyph='chevron-right' />
+        <Button bsStyle="info" type="submit" onClick={handleGoToAnalysis}>
+          Interactive Analysis <Glyphicon glyph="chevron-right" />
         </Button>
       </Panel.Body>
     </Panel>

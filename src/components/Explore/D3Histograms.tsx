@@ -90,7 +90,7 @@ export default (props: Props) => {
       {selectedNode && (
         <div className={'overview'}>
           <p>
-            <b>Path</b>: <span className='d3-link-hierarchy' ref={divRef} />
+            <b>Path</b>: <span className="d3-link-hierarchy" ref={divRef} />
           </p>
           <p>
             <b>Type</b>: {selectedNode.data.type || 'group'}
@@ -107,7 +107,7 @@ export default (props: Props) => {
         )}
         {histograms && histograms.loading && <Loading />}
         {histograms && histograms.error && (
-          <div className='error'>
+          <div className="error">
             <h3>An error has occured</h3>
             <p>{histograms.error}</p>
           </div>
@@ -117,13 +117,14 @@ export default (props: Props) => {
           !selectedNode.children &&
           histograms &&
           histograms.data && (
-            <Tabs defaultActiveKey={0} id='uncontrolled-histogram-tabs'>
+            <Tabs defaultActiveKey={0} id="uncontrolled-histogram-tabs">
               {histograms.data &&
                 histograms.data.map((d: any, i: number) => (
                   <Tab
                     eventKey={i}
                     title={`${d.label.replace('Histogram - ', '')}`}
-                    key={i}>
+                    key={i}
+                  >
                     <Highchart
                       options={(d.highchart && d.highchart.data) || d}
                     />

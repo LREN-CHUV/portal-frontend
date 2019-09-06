@@ -1,6 +1,6 @@
 // Source: https://github.com/alexzywiak/d3-react-components/blob/master/src/hooks/renderLifecycle.ts
 
-import { useLayoutEffect, useRef } from "react";
+import { useLayoutEffect, useRef } from 'react';
 
 interface RenderLifecycleArgs {
   firstRender?: Function;
@@ -13,7 +13,6 @@ export default ({
   updateRender,
   lastRender
 }: RenderLifecycleArgs) => {
-
   const isFirstRender = useRef(true);
 
   useLayoutEffect(() => {

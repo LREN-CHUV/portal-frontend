@@ -21,7 +21,8 @@ const parameters = [
   { code: 'iterations_max_number', value: '20' },
   {
     code: 'centers',
-    value: '[{ clid: 1, lefthippocampus: 1.7, righthippocampus: 1.5 },{ clid: 2, lefthippocampus: 2.5, righthippocampus: 2.0 }]'
+    value:
+      '[{ clid: 1, lefthippocampus: 1.7, righthippocampus: 1.5 },{ clid: 2, lefthippocampus: 2.5, righthippocampus: 2.0 }]'
   }
 ];
 const datasets = [{ code: 'adni' }, { code: 'edsd' }];

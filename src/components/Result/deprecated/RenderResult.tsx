@@ -4,18 +4,23 @@ import { Tab, Tabs } from 'react-bootstrap';
 import { Node } from '../../API/Experiment';
 import { MIME_TYPES } from '../../constants';
 import {
-    Highchart, HTML, JSON as JSONDoc, PFA, PlotlyPCA, VISEvilJS
+  Highchart,
+  HTML,
+  JSON as JSONDoc,
+  PFA,
+  PlotlyPCA,
+  VISEvilJS
 } from '../../UI/Visualization';
 import JSONData from '../../UI/Visualization/deprecated/JSONData';
 
 export default ({ nodes }: { nodes: Node[] | undefined }) => {
   const renderAlgorithm = (thenode: Node) => (
-    <Tabs defaultActiveKey={0} id='tabs-methods'>
+    <Tabs defaultActiveKey={0} id="tabs-methods">
       {thenode.algorithms &&
         thenode.algorithms.map((algorithm: any, j: number) => (
           <Tab eventKey={j} title={algorithm.algorithm} key={j}>
             {algorithm.mime === MIME_TYPES.ERROR && (
-              <div className='error'>
+              <div className="error">
                 <h3>An error has occured</h3>
                 <p>{algorithm.error}</p>
               </div>
@@ -62,7 +67,7 @@ export default ({ nodes }: { nodes: Node[] | undefined }) => {
   );
 
   const renderNodes = (thenodes: Node[]) => (
-    <Tabs defaultActiveKey={0} id='tabs-node'>
+    <Tabs defaultActiveKey={0} id="tabs-node">
       {thenodes &&
         thenodes.map((node: any, i: number) => (
           <Tab eventKey={i} title={node.name} key={i}>

@@ -76,7 +76,7 @@ const Summary = styled.p`
 
 const Plus = styled(Button)`
   margin: 0;
-  padding:0;
+  padding: 0;
   div {
     margin: 0;
     padding: 0;
@@ -85,7 +85,7 @@ const Plus = styled(Button)`
 
 interface Props {
   stats?: Stats;
-  handleNewArticle: () => void
+  handleNewArticle: () => void;
 }
 
 export default ({ stats, handleNewArticle }: Props) => (
@@ -139,7 +139,11 @@ export default ({ stats, handleNewArticle }: Props) => (
       <PanelBody>
         <Count>Write</Count>
         <Summary>an article</Summary>
-        <Plus bsStyle='link' style={{ backgroundColor: 'rgba(0,0,0,0)' }} onClick={handleNewArticle}>
+        <Plus
+          bsStyle="link"
+          style={{ backgroundColor: 'rgba(0,0,0,0)' }}
+          onClick={handleNewArticle}
+        >
           <Icon size={16}>
             <FaPlusCircle />
           </Icon>

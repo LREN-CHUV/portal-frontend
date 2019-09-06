@@ -22,14 +22,20 @@ export default ({
   handleCreateNewExperiment,
   noCaret = false
 }: IDropdown) => (
-  <DropdownButton noCaret={noCaret} bsStyle='default' id={'experiment-dropdown'} title={title}>
+  <DropdownButton
+    noCaret={noCaret}
+    bsStyle="default"
+    id={'experiment-dropdown'}
+    title={title}
+  >
     {handleCreateNewExperiment && (
       <React.Fragment>
         <MenuItem
           eventKey={'newexperiment'}
           key={'newexperiment'}
           // tslint:disable-next-line jsx-no-lambda
-          onSelect={() => handleCreateNewExperiment()}>
+          onSelect={() => handleCreateNewExperiment()}
+        >
           <strong>Create New Experiment</strong>
         </MenuItem>
         <MenuItem>---------------------------</MenuItem>
@@ -60,9 +66,12 @@ export default ({
               eventKey={i}
               key={experiment.uuid}
               // tslint:disable-next-line jsx-no-lambda
-              onSelect={() => handleSelect(experiment)}>
+              onSelect={() => handleSelect(experiment)}
+            >
               <span className={experimentState} /> {experiment.name}{' '}
-              <span className={'time'}>({moment(experiment.created, 'YYYYMMDD').fromNow()})</span>
+              <span className={'time'}>
+                ({moment(experiment.created, 'YYYYMMDD').fromNow()})
+              </span>
             </MenuItem>
           );
         })) || (
@@ -70,10 +79,15 @@ export default ({
         {type === 'models' && (
           <span>
             <p>You have no running experiments.</p>
-            <p>You can start one by selecting a model and configuring an experiment on it.</p>
+            <p>
+              You can start one by selecting a model and configuring an
+              experiment on it.
+            </p>
           </span>
         )}
-        {type === 'model' && <p>You have no running experiments on this model.</p>}
+        {type === 'model' && (
+          <p>You have no running experiments on this model.</p>
+        )}
       </div>
     )}
   </DropdownButton>

@@ -73,7 +73,8 @@ class Parameters extends React.Component<Props> {
                         parameter.visible === undefined || parameter.visible
                           ? 'inline'
                           : 'none'
-                    }}>
+                    }}
+                  >
                     <Row>
                       <Col sm={12}>{parameter.description}</Col>
                     </Row>
@@ -110,15 +111,16 @@ class Parameters extends React.Component<Props> {
 
                         {parameter.type === 'enumeration' && (
                           <FormControl
-                            componentClass='select'
-                            placeholder='select'
+                            componentClass="select"
+                            placeholder="select"
                             defaultValue={
                               parameter.value || parameter.default_value
                             }
                             // tslint:disable-next-line jsx-no-lambda
                             onChange={event =>
                               this.handleChangeParameter(event, parameter.code)
-                            }>
+                            }
+                          >
                             {parameter.values &&
                               parameter.values.map((v: any) => (
                                 <option key={v} value={v}>

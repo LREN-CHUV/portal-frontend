@@ -49,7 +49,7 @@ describe('Integration Test Mining API', () => {
       variables: query.variables ? query.variables : []
     };
     await apiMining.summaryStatisticsByDataset({ payload });
-    let { summaryStatistics: minings, error } = apiMining.state;
+    const { summaryStatistics: minings, error } = apiMining.state;
 
     const timer = new Promise(resolve => {
       const timerId = setInterval(async () => {

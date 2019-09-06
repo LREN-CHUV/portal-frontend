@@ -3,7 +3,10 @@ import * as React from 'react';
 
 import Result from '../../../../Result/Result';
 import {
-    createExperiment, createModel, datasets, waitForResult
+  createExperiment,
+  createModel,
+  datasets,
+  waitForResult
 } from '../../../../utils/TestUtils';
 import { VariableEntity } from '../../../Core';
 

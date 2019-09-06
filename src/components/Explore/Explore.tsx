@@ -55,10 +55,10 @@ export default (props: ExploreProps) => {
   } = props;
 
   return (
-    <div className='Explore'>
-      <div className='content'>
-        <div className='sidebar'>
-          <Panel className='pathologies'>
+    <div className="Explore">
+      <div className="content">
+        <div className="sidebar">
+          <Panel className="pathologies">
             <Panel.Title>
               <h3>Pathologies</h3>
             </Panel.Title>
@@ -67,7 +67,7 @@ export default (props: ExploreProps) => {
                 apiCore.state.pathologies.map(g => (
                   <label key={g.code}>
                     <input
-                      type='radio'
+                      type="radio"
                       id={g.code}
                       name={g.label}
                       value={g.code}
@@ -84,7 +84,7 @@ export default (props: ExploreProps) => {
                 ))}
             </Panel.Body>
           </Panel>
-          <Panel className='datasets'>
+          <Panel className="datasets">
             <Panel.Title>
               <h3>Datasets</h3>
             </Panel.Title>
@@ -101,13 +101,14 @@ export default (props: ExploreProps) => {
                     checked={selectedDatasets
                       .map(s => s.code)
                       .includes(dataset.code)}
-                    disabled={selectedPathology === Pathology.TBI}>
+                    disabled={selectedPathology === Pathology.TBI}
+                  >
                     {dataset.label}
                   </Checkbox>
                 ))}
             </Panel.Body>
           </Panel>
-          <Panel className='model'>
+          <Panel className="model">
             <Panel.Title>
               <h3>Model</h3>
               <div>
@@ -121,7 +122,7 @@ export default (props: ExploreProps) => {
                 />
               </div>
             </Panel.Title>
-            <Panel.Body className='model-body'>
+            <Panel.Body className="model-body">
               <ModelView
                 d3Model={d3Model}
                 handleUpdateD3Model={handleUpdateD3Model}
@@ -131,11 +132,11 @@ export default (props: ExploreProps) => {
             </Panel.Body>
           </Panel>
         </div>
-        <div className='column1'>
-          <Panel className='circle-pack'>
+        <div className="column1">
+          <Panel className="circle-pack">
             <Panel.Title>
-              <div className='variable-box'>
-                <h3 className='child'>Variables</h3>
+              <div className="variable-box">
+                <h3 className="child">Variables</h3>
                 <Search
                   hierarchy={layout}
                   zoom={zoom}
@@ -144,12 +145,12 @@ export default (props: ExploreProps) => {
               </div>
             </Panel.Title>
             <Panel.Body>
-              <div className='buttons'>
-                <div className='child-title'>
+              <div className="buttons">
+                <div className="child-title">
                   <h5>Add to model</h5>
                 </div>
                 <Button
-                  className='child'
+                  className="child"
                   bsStyle={'success'}
                   bsSize={'small'}
                   disabled={
@@ -159,18 +160,20 @@ export default (props: ExploreProps) => {
                   // tslint:disable-next-line jsx-no-lambda
                   onClick={() =>
                     handleUpdateD3Model(ModelType.VARIABLE, selectedNode)
-                  }>
+                  }
+                >
                   {d3Model.variable === selectedNode ? '-' : '+'} AS VARIABLE
                 </Button>
                 <Button
-                  className='child'
+                  className="child"
                   bsStyle={'warning'}
                   bsSize={'small'}
                   disabled={!selectedNode}
                   // tslint:disable-next-line jsx-no-lambda
                   onClick={() =>
                     handleUpdateD3Model(ModelType.COVARIABLE, selectedNode)
-                  }>
+                  }
+                >
                   {d3Model.covariables &&
                   selectedNode &&
                   d3Model.covariables.filter(c =>
@@ -185,12 +188,12 @@ export default (props: ExploreProps) => {
             </Panel.Body>
           </Panel>
         </div>
-        <div className='column2'>
-          <div className='header'>
+        <div className="column2">
+          <div className="header">
             <Header handleGoToAnalysis={handleGoToAnalysis} />
           </div>
 
-          <Panel className='statistics'>
+          <Panel className="statistics">
             <Panel.Title>
               <h3>Statistics Summary</h3>
             </Panel.Title>

@@ -8,7 +8,6 @@ const parseExperiment = (json: any): ExperimentResponse =>
   APIAdapter.parse(json);
 
 describe('Test naiveBayes results', () => {
-
   it('Federated naiveBayes algorithm renders correctly', () => {
     const response = require('../../__mocks__/responses/fed-naivebayes.json');
     const experiment = parseExperiment(response);

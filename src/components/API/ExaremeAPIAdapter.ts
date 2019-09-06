@@ -67,7 +67,7 @@ const buildConstraints = (algo: any) => {
       : undefined);
 
   // both false and undefined
-  let covariableConstraint: AlgorithmConstraintParameter = {};
+  const covariableConstraint: AlgorithmConstraintParameter = {};
 
   if (!covariableColumnValuesIsCategorical) {
     if (covariableTypes && covariableTypes.includes('integer')) {

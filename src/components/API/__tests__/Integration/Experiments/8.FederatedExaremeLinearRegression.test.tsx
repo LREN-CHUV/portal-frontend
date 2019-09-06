@@ -2,7 +2,11 @@ import { mount } from 'enzyme';
 import * as React from 'react';
 
 import Result from '../../../../Result/Result';
-import { createExperiment, createModel, waitForResult } from '../../../../utils/TestUtils';
+import {
+  createExperiment,
+  createModel,
+  waitForResult
+} from '../../../../utils/TestUtils';
 import { VariableEntity } from '../../../Core';
 import { buildExaremeAlgorithmRequest } from '../../../ExaremeAPIAdapter';
 import { Engine } from '../../../Experiment';

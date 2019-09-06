@@ -7,7 +7,6 @@ const parseExperiment = (json: any): ExperimentResponse =>
   APIAdapter.parse(json);
 
 describe('Test naiveBayes results', () => {
-
   it('Federated PCA algorithm renders correctly', () => {
     const response = require('../../__mocks__/responses/fed-pca.json');
     const experiment = parseExperiment(response);

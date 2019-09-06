@@ -86,9 +86,11 @@ class AppContainer extends React.Component<any, State> {
             this.apiModel,
             this.apiMining,
             this.apiUser
-          ]}>
+          ]}
+        >
           <Subscribe
-            to={[APIExperiment, APICore, APIModel, APIMining, APIUser]}>
+            to={[APIExperiment, APICore, APIModel, APIMining, APIUser]}
+          >
             {(
               apiExperiment: APIExperiment,
               apiCore: APICore,

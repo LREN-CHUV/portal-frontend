@@ -73,24 +73,27 @@ export default ({ models, experiments, history }: Props) => {
                 <h2>{model && model.title}</h2>
                 <div>
                   <Button
-                    bsSize='small'
+                    bsSize="small"
                     // tslint:disable-next-line jsx-no-lambda
                     onClick={() => {
                       history.push(`/v3/review/${model.slug}`);
-                    }}>
+                    }}
+                  >
                     View
                   </Button>
                   <DropdownButton
-                    bsSize='small'
+                    bsSize="small"
                     id={'home-model-dropdown'}
                     title={`Experiments (${(myExperiments &&
                       myExperiments.length) ||
-                      0} )`}>
+                      0} )`}
+                  >
                     <MenuItem
                       eventKey={'cancel'}
                       key={'cancel'}
                       // tslint:disable-next-line jsx-no-lambda
-                      onSelect={() => handleNewExperiment(model.slug)}>
+                      onSelect={() => handleNewExperiment(model.slug)}
+                    >
                       New experiment
                     </MenuItem>
                     {myExperiments &&
@@ -101,7 +104,8 @@ export default ({ models, experiments, history }: Props) => {
                           // tslint:disable-next-line jsx-no-lambda
                           onSelect={() =>
                             handleGoToExperiment(model.slug, e.uuid)
-                          }>
+                          }
+                        >
                           {e.name}
                         </MenuItem>
                       ))}

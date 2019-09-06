@@ -11,8 +11,6 @@ import Loader from '../UI/Loader';
 import { round } from '../utils';
 import './Table.css';
 
-
-
 interface Props {
   minings?: MiningResponseShape[];
   selectedDatasets?: Variable[];
@@ -48,8 +46,8 @@ const Table = ({ minings, selectedDatasets, query, lookup }: Props) => {
   const columns = selectedDatasets
     ? [
         <Column
-          header='VARIABLES'
-          field='variable'
+          header="VARIABLES"
+          field="variable"
           key={'variable'}
           body={variableTemplate}
         />,
@@ -197,7 +195,8 @@ const computeMinings = ({
 
 const variableTemplate = (rowData: any, column: any) => (
   <span
-    className={rowData.category ? 'datatable category' : 'datatable variable'}>
+    className={rowData.category ? 'datatable category' : 'datatable variable'}
+  >
     {rowData.category ? rowData.category.label : rowData.variable}
   </span>
 );

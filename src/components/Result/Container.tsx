@@ -53,8 +53,8 @@ class Experiment extends React.Component<Props> {
   public render() {
     const { apiExperiment, apiModel, apiCore } = this.props;
     return (
-      <div className='Experiment Result'>
-        <div className='header'>
+      <div className="Experiment Result">
+        <div className="header">
           <ExperimentResultHeader
             experiment={apiExperiment.state.experiment}
             experiments={apiExperiment.state.experiments}
@@ -63,14 +63,18 @@ class Experiment extends React.Component<Props> {
             handleCreateNewExperiment={this.handleCreateNewExperiment}
           />
         </div>
-        <div className='content'>
-          <div className='sidebar'>
-            <Model model={apiModel.state.model} variables={apiCore.state.variables} showDatasets={true} />
+        <div className="content">
+          <div className="sidebar">
+            <Model
+              model={apiModel.state.model}
+              variables={apiCore.state.variables}
+              showDatasets={true}
+            />
           </div>
-          <div className='results'>
+          <div className="results">
             <ExperimentResult experimentState={apiExperiment.state} />
           </div>
-          <div className='sidebar2'>
+          <div className="sidebar2">
             <Algorithms experiment={apiExperiment.state.experiment} />
           </div>
         </div>
@@ -112,7 +116,9 @@ class Experiment extends React.Component<Props> {
     }
 
     const { uuid } = params;
-    return shared ? await apiExperiment.markAsUnshared({ uuid }) : await apiExperiment.markAsShared({ uuid });
+    return shared
+      ? await apiExperiment.markAsUnshared({ uuid })
+      : await apiExperiment.markAsShared({ uuid });
   };
 
   private handleCreateNewExperiment = () => {

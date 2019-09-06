@@ -1,15 +1,15 @@
-import { APICore, APIExperiment, APIMining, APIModel } from "../../API";
-import config from "../../API/RequestHeaders";
-import App from "../../App/App";
-import AppContainer from "../../App/Container";
-import * as React from "react";
-import { BrowserRouter as Router } from "react-router-dom";
-import { shallow } from "enzyme";
-import renderer from "react-test-renderer";
+import { APICore, APIExperiment, APIMining, APIModel } from '../../API';
+import config from '../../API/RequestHeaders';
+import App from '../../App/App';
+import AppContainer from '../../App/Container';
+import * as React from 'react';
+import { BrowserRouter as Router } from 'react-router-dom';
+import { shallow } from 'enzyme';
+import renderer from 'react-test-renderer';
 
-jest.mock("request-promise-native");
+jest.mock('request-promise-native');
 
-describe("Test App components", () => {
+describe('Test App components', () => {
   const apiExperiment = new APIExperiment(config);
   const apiModel = new APIModel(config);
   const apiCore = new APICore(config);
@@ -19,7 +19,7 @@ describe("Test App components", () => {
 
   beforeEach(() => {
     props = {
-      appConfig: { appConfig: "MIP" },
+      appConfig: { appConfig: 'MIP' },
       apiExperiment,
       apiCore,
       apiModel,
@@ -27,22 +27,22 @@ describe("Test App components", () => {
     };
   });
 
-  it("AppContainer dom renders correctly", () => {
+  it('AppContainer dom renders correctly', () => {
     const wrapper = shallow(<AppContainer />);
     expect(wrapper).toBeDefined();
   });
 
-  it("AppContainer snapshot renders correctly", () => {
+  it('AppContainer snapshot renders correctly', () => {
     const tree = renderer.create(<AppContainer />).toJSON();
     expect(tree).toMatchSnapshot();
   });
 
-  it("App dom renders correctly", () => {
+  it('App dom renders correctly', () => {
     const wrapper = shallow(<App {...props} />);
     expect(wrapper).toBeDefined();
   });
 
-  it("App snapshot renders correctly", () => {
+  it('App snapshot renders correctly', () => {
     const tree = renderer
       .create(
         <Router>

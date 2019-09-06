@@ -61,7 +61,7 @@ export const ALGORITHM_DEFAULT_OUTPUT = [
   {
     name: 'ID3',
     types: [MIME_TYPES.JSONDATA]
-  },
+  }
 ];
 
 export const ENABLED_ALGORITHMS = [
@@ -73,7 +73,7 @@ export const ENABLED_ALGORITHMS = [
   'ID3',
   // 'HISTOGRAMS',
   'LINEAR_REGRESSION',
-  'TTEST_INDEPENDENT',
+  'TTEST_INDEPENDENT'
   // 'TTEST_PAIRED'
 ];
 

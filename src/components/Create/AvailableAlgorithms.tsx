@@ -37,9 +37,8 @@ const AvailableAlgorithms = ({
       algorithms
         // .filter(a => a.code === '3f5830403180d620')
         .map((algorithm: Algorithm) => {
-
           if (!algorithm.constraints) {
-            return { ...algorithm, enabled: true }
+            return { ...algorithm, enabled: true };
           }
 
           let isEnabled = false;
@@ -53,7 +52,8 @@ const AvailableAlgorithms = ({
             variables &&
             variables.filter((v: any) => modelGroupings.includes(v.code));
           const algoConstraints: any = algorithm && algorithm.constraints;
-          const algoConstraintVariable = algoConstraints && algoConstraints.variable;
+          const algoConstraintVariable =
+            algoConstraints && algoConstraints.variable;
           const apiVariableType = apiVariable && apiVariable.type;
 
           // Check variables type vs algorithm input types
@@ -93,7 +93,8 @@ const AvailableAlgorithms = ({
               );
           }
 
-          const algoConstraintCovariable = algoConstraints && algoConstraints.covariables;
+          const algoConstraintCovariable =
+            algoConstraints && algoConstraints.covariables;
           if (algoConstraintCovariable) {
             if (
               algoConstraintCovariable.min_count &&
@@ -109,7 +110,8 @@ const AvailableAlgorithms = ({
             }
           }
 
-          const algoConstraintGrouping = algoConstraints && algoConstraints.groupings;
+          const algoConstraintGrouping =
+            algoConstraints && algoConstraints.groupings;
           if (algoConstraintGrouping) {
             if (
               algoConstraintGrouping.min_count &&
@@ -138,8 +140,6 @@ const AvailableAlgorithms = ({
           if (isLocal && excludedLocalAlgorithms.includes(algorithm.code)) {
             isEnabled = false;
           }
-
-
 
           return isEnabled
             ? { ...algorithm, enabled: true }
@@ -174,15 +174,15 @@ const AvailableAlgorithms = ({
   return (
     <React.Fragment>
       {types.map(type => (
-        <div className='method' key={type}>
+        <div className="method" key={type}>
           <h4>{type}</h4>
           {sortedAlgorithms
             .filter(a => a.type && a.type.includes(type))
             .map((algorithm: any) => (
-              <div className='method' key={algorithm.code}>
+              <div className="method" key={algorithm.code}>
                 <Button
                   key={algorithm.code}
-                  bsStyle='link'
+                  bsStyle="link"
                   title={`${algorithm.type} - ${algorithm.description}`}
                   // tslint:disable-next-line jsx-no-lambda
                   onClick={() => handleSelectMethod(algorithm)}
@@ -191,7 +191,8 @@ const AvailableAlgorithms = ({
                     padding: 0,
                     textTransform: 'none'
                   }}
-                  disabled={!algorithm.enabled}>
+                  disabled={!algorithm.enabled}
+                >
                   {algorithm.label}
                 </Button>
               </div>

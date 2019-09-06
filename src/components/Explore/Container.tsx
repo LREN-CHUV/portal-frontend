@@ -10,8 +10,8 @@ import { ModelResponse, Query } from '../API/Model';
 import { d3Hierarchy, VariableDatum } from './d3Hierarchy';
 import CirclePack from './D3PackLayer';
 
-const diameter: number = 800;
-const padding: number = 1.5;
+const diameter = 800;
+const padding = 1.5;
 
 const initialD3Model = {
   covariables: undefined,

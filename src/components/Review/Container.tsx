@@ -78,8 +78,8 @@ class Container extends React.Component<Props, State> {
     const { fields, filters } = this.makeFilters({ apiCore });
     const model = apiModel.state.model || apiModel.state.draft;
     return (
-      <div className='Model Review'>
-        <div className='header'>
+      <div className="Model Review">
+        <div className="header">
           <ExperimentReviewHeader
             handleGoBackToExplore={this.handleGoBackToExplore}
             handleSaveModel={this.handleSaveModel}
@@ -87,8 +87,8 @@ class Container extends React.Component<Props, State> {
             model={model}
           />
         </div>
-        <div className='content'>
-          <div className='sidebar'>
+        <div className="content">
+          <div className="sidebar">
             <Model
               model={model}
               selectedSlug={this.props.match.params.slug}
@@ -97,7 +97,7 @@ class Container extends React.Component<Props, State> {
               items={apiModel.state.models}
               handleSelectModel={this.handleSelectModel}
             />
-            <Panel className='model'>
+            <Panel className="model">
               <Panel.Body>
                 <Validation
                   isPredictiveMethod={false}
@@ -108,13 +108,14 @@ class Container extends React.Component<Props, State> {
               </Panel.Body>
             </Panel>
           </div>
-          <div className='results'>
+          <div className="results">
             <Content
               apiMining={apiMining}
               model={model}
               selectedDatasets={query && query.trainingDatasets}
-              lookup={apiCore.lookup}>
-              <Panel className='filters' defaultExpanded={false}>
+              lookup={apiCore.lookup}
+            >
+              <Panel className="filters" defaultExpanded={false}>
                 <Panel.Title toggle={true}>
                   <h3 className={'btn btn-info'}>Filters</h3>
                 </Panel.Title>

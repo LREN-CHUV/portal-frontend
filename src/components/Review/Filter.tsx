@@ -1,7 +1,7 @@
-import $ from "jquery";
-import QueryBuilder from "jQuery-QueryBuilder";
-import * as React from "react";
-import { Button } from "react-bootstrap";
+import $ from 'jquery';
+import QueryBuilder from 'jQuery-QueryBuilder';
+import * as React from 'react';
+import { Button } from 'react-bootstrap';
 
 interface Props {
   rules: any;
@@ -40,7 +40,7 @@ class Filter extends React.Component<Props, State> {
     // const { filters, rules } = this.props;
     if (nextFilters) {
       // FIXME: && nextFilters !== filters) {
-      this.ref.queryBuilder("destroy");
+      this.ref.queryBuilder('destroy');
 
       if (nextRules) {
         // FIXME: && nextRules !== rules) {
@@ -57,12 +57,12 @@ class Filter extends React.Component<Props, State> {
   };
 
   public componentWillUnmount = () => {
-    this.ref.queryBuilder("destroy");
+    this.ref.queryBuilder('destroy');
   };
 
   public handleSave = () => {
     this.setState({ loading: true, rulesChanged: false });
-    const rules = this.ref.queryBuilder("getRules");
+    const rules = this.ref.queryBuilder('getRules');
     const { handleChangeFilter } = this.props;
     handleChangeFilter(rules).then(() => {
       this.setState({ loading: false });
@@ -73,13 +73,13 @@ class Filter extends React.Component<Props, State> {
     return (
       <div>
         <div id="query-builder" ref={this.createRef} />
-        <div className={"save-filter"}>
+        <div className={'save-filter'}>
           <Button
-            bsStyle={"info"}
+            bsStyle={'info'}
             onClick={this.handleSave}
             disabled={!this.state.rulesChanged}
           >
-            {this.state.loading ? "Saving..." : "Save"}
+            {this.state.loading ? 'Saving...' : 'Save'}
           </Button>
         </div>
       </div>
@@ -93,7 +93,7 @@ class Filter extends React.Component<Props, State> {
   };
 
   private onRulesChanged = () => {
-    this.ref.queryBuilder("on", "rulesChanged", () => {
+    this.ref.queryBuilder('on', 'rulesChanged', () => {
       this.setState({ rulesChanged: true });
     });
     setTimeout(() => {

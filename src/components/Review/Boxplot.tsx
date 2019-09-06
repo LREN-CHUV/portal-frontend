@@ -40,12 +40,21 @@ const Boxplot = ({ miningState }: Props) => {
     []
   );
 
-  const uniqueVariables = filtered && Array.from(new Set(filtered.map((f: any) => f.index)));
+  const uniqueVariables =
+    filtered && Array.from(new Set(filtered.map((f: any) => f.index)));
 
   const highchartsOptions: any[] = uniqueVariables.map((v: any) => {
     const uniqueMinings = filtered.filter((f: any) => f.index === v);
-    const data = uniqueMinings.map((u: any) => [u.min, u['25%'], u['50%'], u['75%'], u.max]);
-    const categories = uniqueMinings.map((u: any, i: number) => `${u.dataset}-${u.group.join('-')}`);
+    const data = uniqueMinings.map((u: any) => [
+      u.min,
+      u['25%'],
+      u['50%'],
+      u['75%'],
+      u.max
+    ]);
+    const categories = uniqueMinings.map(
+      (u: any, i: number) => `${u.dataset}-${u.group.join('-')}`
+    );
     const name = Array.from(new Set(uniqueMinings.map((f: any) => f.label)))[0];
     return {
       chart: {
@@ -71,7 +80,8 @@ const Boxplot = ({ miningState }: Props) => {
   return (
     <div>
       {loading && <Loader />}
-      {error && error.map((e, i) => <Alert message={e} title={'Error'} key={`${i}`} />)}
+      {error &&
+        error.map((e, i) => <Alert message={e} title={'Error'} key={`${i}`} />)}
       {highchartsOptions.map((options: any, k: number) => (
         <HighchartsReact highcharts={Highcharts} options={options} key={k} />
       ))}
