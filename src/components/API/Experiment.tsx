@@ -68,7 +68,6 @@ export interface ConfusionMatrix {
   values: number[][];
 }
 
-export interface PolynomialClassificationScore extends ValidationScore {}
 export interface KfoldValidationScore {
   explainedVariance: number;
   mae: number;

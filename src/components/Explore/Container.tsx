@@ -63,8 +63,65 @@ export default ({
   const [model, setModel] = useState<ModelResponse | undefined>();
   // const [alert, setAlert] = useState<string | null>(null);
 
+  const convertModelToD3Model = (
+    aModel: ModelResponse,
+    aD3Layout: HierarchyCircularNode
+  ): D3Model => {
+    const query = aModel && aModel.query;
+
+    const filterVariables: string[] = [];
+    const extractVariablesFromFilter = (filter: any) =>
+      filter.rules.forEach((r: any) => {
+        if (r.rules) {
+          extractVariablesFromFilter(r);
+        }
+        if (r.id) {
+          filterVariables.push(r.id);
+        }
+      });
+
+    if (query && query.filters) {
+      extractVariablesFromFilter(JSON.parse(query.filters));
+    }
+
+    const nextModel = {
+      covariables: [
+        ...((query.coVariables &&
+          aD3Layout
+            .descendants()
+            .filter(l =>
+              query.coVariables!.map(c => c.code).includes(l.data.code)
+            )) ||
+          []),
+        ...((query.groupings &&
+          aD3Layout
+            .descendants()
+            .filter(l =>
+              query.groupings!.map(c => c.code).includes(l.data.code)
+            )) ||
+          [])
+      ],
+      filters:
+        filterVariables &&
+        aD3Layout
+          .descendants()
+          .filter(l => filterVariables.includes(l.data.code)),
+      groupings: undefined,
+      variable:
+        (query.variables !== undefined &&
+          query.variables.length > 0 &&
+          aD3Layout
+            .descendants()
+            .find(l => l.data.code === query.variables![0].code)) ||
+        undefined
+    };
+
+    return nextModel;
+  };
+
   useEffect(() => {
     const slug = props.match.params.slug;
+    let draft;
     switch (slug) {
       case undefined:
         setModel(undefined);
@@ -72,7 +129,7 @@ export default ({
         break;
 
       case editPath:
-        const draft = apiModel.state.draft;
+        draft = apiModel.state.draft;
         if (draft && d3Layout) {
           setModel(draft);
           setD3Model(convertModelToD3Model(draft, d3Layout));
@@ -204,62 +261,6 @@ export default ({
         : { ...d3Model, filters: node.leaves() };
       setD3Model(nextModel);
     }
-  };
-
-  const convertModelToD3Model = (
-    aModel: ModelResponse,
-    aD3Layout: HierarchyCircularNode
-  ): D3Model => {
-    const query = aModel && aModel.query;
-
-    const filterVariables: string[] = [];
-    const extractVariablesFromFilter = (filter: any) =>
-      filter.rules.forEach((r: any) => {
-        if (r.rules) {
-          extractVariablesFromFilter(r);
-        }
-        if (r.id) {
-          filterVariables.push(r.id);
-        }
-      });
-
-    if (query && query.filters) {
-      extractVariablesFromFilter(JSON.parse(query.filters));
-    }
-
-    const nextModel = {
-      covariables: [
-        ...((query.coVariables &&
-          aD3Layout
-            .descendants()
-            .filter(l =>
-              query.coVariables!.map(c => c.code).includes(l.data.code)
-            )) ||
-          []),
-        ...((query.groupings &&
-          aD3Layout
-            .descendants()
-            .filter(l =>
-              query.groupings!.map(c => c.code).includes(l.data.code)
-            )) ||
-          [])
-      ],
-      filters:
-        filterVariables &&
-        aD3Layout
-          .descendants()
-          .filter(l => filterVariables.includes(l.data.code)),
-      groupings: undefined,
-      variable:
-        (query.variables !== undefined &&
-          query.variables.length > 0 &&
-          aD3Layout
-            .descendants()
-            .find(l => l.data.code === query.variables![0].code)) ||
-        undefined
-    };
-
-    return nextModel;
   };
 
   const convertD3ModelToModel = (

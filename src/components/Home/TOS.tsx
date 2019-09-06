@@ -37,14 +37,15 @@ export default () => (
         </li>
       </ol>
       <li>
-        Access to this HBP Medical Informatics Platform ("Platform") is provided
-        to you under these terms and conditions for service and any amendments
-        or supplements to them (collectively referred to as the "Terms &amp;
-        Conditions") that may be posted on the Platform from time to time. Your
-        use of the Platform, or any other services or content provided through
-        the Platform, shall be deemed to constitute your consent to be legally
-        bound by the Terms &amp; Conditions, which shall be enforceable in the
-        same way as if you had signed the Terms &amp; Conditions.
+        Access to this HBP Medical Informatics Platform (&quot;Platform&quot;)
+        is provided to you under these terms and conditions for service and any
+        amendments or supplements to them (collectively referred to as the
+        &quot;Terms &amp; Conditions&quot;) that may be posted on the Platform
+        from time to time. Your use of the Platform, or any other services or
+        content provided through the Platform, shall be deemed to constitute
+        your consent to be legally bound by the Terms &amp; Conditions, which
+        shall be enforceable in the same way as if you had signed the Terms
+        &amp; Conditions.
       </li>
       <li>
         If you do not accept the Terms &amp; Conditions when applying for

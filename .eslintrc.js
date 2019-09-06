@@ -17,7 +17,10 @@ module.exports = {
   rules: {
     // Place to specify ESLint rules. Can be used to overwrite rules specified from the extended configs
     // e.g. "@typescript-eslint/explicit-function-return-type": "off",
+    '@typescript-eslint/interface-name-prefix': 'off',
+    'react/display-name': 'off'
   },
+  env: { browser: true, node: true, es6: true },
   settings: {
     react: {
       version: 'detect' // Tells eslint-plugin-react to automatically detect the version of React to use

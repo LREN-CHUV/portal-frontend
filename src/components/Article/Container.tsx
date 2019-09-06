@@ -81,12 +81,6 @@ export default ({ apiCore, ...props }: Props) => {
     setCurrentArticle(article);
   };
 
-  const handleSaveArticle = (id: string, article: Article) => {
-    editing === Mode.editing
-      ? updateArticle(article.slug, article)
-      : createArticle(article);
-  };
-
   const updateArticle = (id: string, article: Article) => {
     apiCore.updateArticle(id, article).then(() => {
       apiCore.articles();
@@ -99,6 +93,12 @@ export default ({ apiCore, ...props }: Props) => {
       apiCore.articles();
       setEditing(Mode.default);
     });
+  };
+
+  const handleSaveArticle = (id: string, article: Article) => {
+    editing === Mode.editing
+      ? updateArticle(article.slug, article)
+      : createArticle(article);
   };
 
   const handleNewArticle = () => {

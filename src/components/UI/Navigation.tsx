@@ -4,7 +4,7 @@ import * as React from 'react';
 import { DropdownButton, MenuItem } from 'react-bootstrap';
 import { NavLink, RouteComponentProps, withRouter } from 'react-router-dom';
 
-import default_user from '../../images/default_user.png';
+import defaultUser from '../../images/default_user.png';
 import { APIExperiment, APIModel } from '../API';
 import { ExperimentResponse } from '../API/Experiment';
 import Dropdown from '../UI/Dropdown';
@@ -100,11 +100,7 @@ class Navigation extends React.Component<Props> {
                 to="/v3/profile"
                 activeClassName="active"
               >
-                <img
-                  className="img-circle"
-                  alt="anonymous"
-                  src={default_user}
-                />
+                <img className="img-circle" alt="anonymous" src={defaultUser} />
               </NavLink>
               <ul className="dropdown-menu userinfo arrow">
                 <li>

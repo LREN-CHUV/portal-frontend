@@ -3,7 +3,7 @@ import { Panel } from 'react-bootstrap';
 import { RouteComponentProps } from 'react-router-dom';
 import styled from 'styled-components';
 
-import default_user from '../../images/default_user.png';
+import defaultUser from '../../images/default_user.png';
 import { APIUser } from '../API';
 import Header from './Header';
 
@@ -63,7 +63,7 @@ export default ({ apiUser }: Props) => {
             <CenteredPanel>
               <User
                 className="img-circle"
-                src={default_user}
+                src={defaultUser}
                 alt={user.username}
               />
               <h3>{user.username}</h3>

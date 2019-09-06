@@ -310,8 +310,6 @@ class Container extends React.Component<Props, State> {
       validations
     };
 
-    let uuid;
-
     await apiExperiment.create({ experiment });
     const { experiment: e, error } = apiExperiment.state;
 
@@ -325,7 +323,7 @@ class Container extends React.Component<Props, State> {
       return;
     }
 
-    uuid = e && e.uuid;
+    const uuid = (e && e.uuid) || '';
     history.push(`/v3/experiment/${model && model.slug}/${uuid}`);
   };
 }

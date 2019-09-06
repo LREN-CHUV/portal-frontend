@@ -1,0 +1,3 @@
+src/setupTests.ts
+src/registerServiceWorker.ts
+src/**/__tests__/**

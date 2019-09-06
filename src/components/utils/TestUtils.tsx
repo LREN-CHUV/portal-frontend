@@ -1,7 +1,11 @@
 import APICore from '../API/Core';
-import APIExperiment, { ExperimentPayload, State } from '../API/Experiment';
-import APIModel from '../API/Model';
+import APIExperiment, {
+  ExperimentPayload,
+  State as ExperimentState
+} from '../API/Experiment';
+import APIModel, { ModelState } from '../API/Model';
 import config from '../API/RequestHeaders';
+import { State as CoreState } from '../API/Core';
 
 const apiModel = new APIModel(config);
 const apiExperiment = new APIExperiment(config);
@@ -9,7 +13,7 @@ const apiCore = new APICore(config);
 
 const TIMEOUT_DURATION = 60 * 2;
 
-const datasets = async () => {
+const datasets = async (): Promise<CoreState> => {
   await apiCore.datasets();
   return apiCore.state;
 };
@@ -20,7 +24,7 @@ const createModel = async ({
 }: {
   modelSlug: string;
   model: any;
-}) => {
+}): Promise<ModelState> => {
   await apiModel.save({ model, title: modelSlug });
   return apiModel.state;
 };
@@ -29,12 +33,12 @@ const createExperiment = async ({
   experiment
 }: {
   experiment: ExperimentPayload;
-}) => {
+}): Promise<ExperimentState> => {
   await apiExperiment.create({ experiment });
   return apiExperiment.state;
 };
 
-const waitForResult = ({ uuid }: { uuid: string }): Promise<State> =>
+const waitForResult = ({ uuid }: { uuid: string }): Promise<ExperimentState> =>
   new Promise(resolve => {
     let elapsed = 0;
     const timerId = setInterval(async () => {
@@ -50,7 +54,7 @@ const waitForResult = ({ uuid }: { uuid: string }): Promise<State> =>
       if (elapsed > TIMEOUT_DURATION) {
         // timeout
         clearInterval(timerId);
-        apiExperiment.state.error = `Timeout after ${TIMEOUT_DURATION} s`;
+        // apiExperiment.state.error = `Timeout after ${TIMEOUT_DURATION} s`;
         resolve(apiExperiment.state);
       }
 
@@ -58,12 +62,11 @@ const waitForResult = ({ uuid }: { uuid: string }): Promise<State> =>
     }, 1000);
   });
 
-const uid = () =>
+const uid = (): string =>
   'xxxxxxxx'.replace(/[xy]/g, c => {
-    // tslint:disable
     const r = (Math.random() * 16) | 0;
     const v = c === 'x' ? r : (r & 0x3) | 0x8;
-    // tslint:enable
+
     return v.toString(16);
   });
 

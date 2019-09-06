@@ -1,3 +1,4 @@
+/*eslint-disable */
 export default {
   code: 'root',
   label: '/',
@@ -2402,3 +2403,4 @@ export default {
     }
   ]
 };
+/*eslint-enable */

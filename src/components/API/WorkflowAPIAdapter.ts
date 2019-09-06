@@ -103,9 +103,15 @@ const buildWorkflowAlgorithmList = (json: any): Algorithm[] => {
     testSize: 0.2
   };
 
+  /* eslint-disable */
   const constraints = {
-    covariables: { min_count: 1 },
-    groupings: { max_count: 0, min_count: 0 },
+    covariables: {
+      min_count: 1
+    },
+    groupings: {
+      max_count: 0,
+      min_count: 0
+    },
     mixed: true,
     variable: {
       binominal: true,
@@ -114,6 +120,7 @@ const buildWorkflowAlgorithmList = (json: any): Algorithm[] => {
       real: false
     }
   };
+  /*eslint-enable */
 
   const defaultValueFor = ({
     label,
@@ -131,12 +138,18 @@ const buildWorkflowAlgorithmList = (json: any): Algorithm[] => {
     constraints,
     parameters: Object.keys(j.inputs).map((k: any) => ({
       code: j.inputs[k].uuid,
-
-      default_value: defaultValueFor({ label: j.inputs[k].label, defaults }),
+      /* eslint-disable-next-line */
+      default_value: defaultValueFor({
+        label: j.inputs[k].label,
+        defaults
+      }),
       description: '',
       label: j.inputs[k].label,
       type: 'text',
-      value: defaultValueFor({ label: j.inputs[k].label, defaults }),
+      value: defaultValueFor({
+        label: j.inputs[k].label,
+        defaults
+      }),
       visible: !hiddenParameters.includes(j.inputs[k].label)
     })),
     engine: Engine.Workflow,

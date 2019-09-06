@@ -30,40 +30,6 @@ interface ITableRow {
   [key: string]: string | Variable | undefined;
 }
 
-const Table = ({ minings, selectedDatasets, query, lookup }: Props) => {
-  const rows = computeMinings({
-    minings,
-    selectedDatasets,
-    variables:
-      query &&
-      [
-        ...(query.variables || []),
-        ...(query.coVariables || []),
-        ...(query.groupings || [])
-      ].map(v => lookup(v.code))
-  });
-
-  const columns = selectedDatasets
-    ? [
-        <Column
-          header="VARIABLES"
-          field="variable"
-          key={'variable'}
-          body={variableTemplate}
-        />,
-        ...selectedDatasets.map((mining: Variable) => (
-          <Column header={mining.code} field={mining.code} key={mining.code} />
-        ))
-      ]
-    : [];
-
-  return rows && rows.length > 0 && (columns && columns.length > 0) ? (
-    <DataTable value={rows}>{columns}</DataTable>
-  ) : (
-    <Loader />
-  );
-};
-
 const findVariableData = (code: string, data: any) => {
   const theData = data.data;
 
@@ -113,6 +79,14 @@ const processContinuousData = (code: string, data: any) => {
 
   return;
 };
+
+const variableTemplate = (rowData: any, column: any) => (
+  <span
+    className={rowData.category ? 'datatable category' : 'datatable variable'}
+  >
+    {rowData.category ? rowData.category.label : rowData.variable}
+  </span>
+);
 
 const computeMinings = ({
   minings,
@@ -193,12 +167,38 @@ const computeMinings = ({
   return rows;
 };
 
-const variableTemplate = (rowData: any, column: any) => (
-  <span
-    className={rowData.category ? 'datatable category' : 'datatable variable'}
-  >
-    {rowData.category ? rowData.category.label : rowData.variable}
-  </span>
-);
+const Table = ({ minings, selectedDatasets, query, lookup }: Props) => {
+  const rows = computeMinings({
+    minings,
+    selectedDatasets,
+    variables:
+      query &&
+      [
+        ...(query.variables || []),
+        ...(query.coVariables || []),
+        ...(query.groupings || [])
+      ].map(v => lookup(v.code))
+  });
+
+  const columns = selectedDatasets
+    ? [
+        <Column
+          header="VARIABLES"
+          field="variable"
+          key={'variable'}
+          body={variableTemplate}
+        />,
+        ...selectedDatasets.map((mining: Variable) => (
+          <Column header={mining.code} field={mining.code} key={mining.code} />
+        ))
+      ]
+    : [];
+
+  return rows && rows.length > 0 && (columns && columns.length > 0) ? (
+    <DataTable value={rows}>{columns}</DataTable>
+  ) : (
+    <Loader />
+  );
+};
 
 export default Table;

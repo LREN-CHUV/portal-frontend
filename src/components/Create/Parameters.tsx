@@ -41,8 +41,8 @@ class Parameters extends React.Component<Props> {
               <strong>Your method</strong>
             </h4>
             <p style={{ color: 'orange' }}>
-              Please, select the method to be performed in the 'Available
-              Methods' panel
+              Please, select the method to be performed in the &apos;Available
+              Methods&apos; panel
             </p>
           </div>
         )}

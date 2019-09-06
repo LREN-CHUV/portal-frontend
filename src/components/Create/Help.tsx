@@ -10,7 +10,7 @@ const Help = () => (
     <p>You can design your own MIP Experiment by doing the following:</p>
     <ol>
       <li>Select an algorithms on the right</li>
-      <li>If required, configure parameters (e.g. "k")</li>
+      <li>If required, configure parameters (e.g. &apos;k&apos;)</li>
       <li>Give a name to the Experiment</li>
       <li>
         Select your k-fold Validation (to be applied to predictive model

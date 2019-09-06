@@ -69,6 +69,7 @@ const buildConstraints = (algo: any) => {
   // both false and undefined
   const covariableConstraint: AlgorithmConstraintParameter = {};
 
+  /* eslint-disable */
   if (!covariableColumnValuesIsCategorical) {
     if (covariableTypes && covariableTypes.includes('integer')) {
       covariableConstraint.integer = true;
@@ -170,7 +171,7 @@ const buildParameters = (algo: any) => {
 
   return params;
 };
-
+/* eslint-enable */
 const buildExaremeAlgorithmList = (json: any): Algorithm[] =>
   json
     .filter((algorithm: any) => ENABLED_ALGORITHMS.includes(algorithm.name))
