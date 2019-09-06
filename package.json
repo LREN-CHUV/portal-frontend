@@ -37,7 +37,8 @@
     "watch": "react-scripts start",
     "build": "react-scripts --max_old_space_size=5048 build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "lint:fix": "eslint './src/**/*.{ts,tsx}'"
   },
   "devDependencies": {
     "@types/d3": "^5.7.2",
@@ -62,15 +63,20 @@
     "@types/string-hash": "^1.1.1",
     "@types/styled-components": "^4.1.18",
     "@types/vis": "^4.21.19",
+    "@typescript-eslint/eslint-plugin": "^2.1.0",
+    "@typescript-eslint/parser": "^2.1.0",
     "enzyme": "^3.10.0",
     "enzyme-adapter-react-16": "^1.14.0",
+    "eslint": "^6.3.0",
+    "eslint-config-prettier": "^6.2.0",
+    "eslint-config-react": "^1.1.7",
+    "eslint-plugin-prettier": "^3.1.0",
+    "eslint-plugin-react": "^7.14.3",
     "jest-canvas-mock": "^2.1.1",
-    "prettier-tslint": "^0.4.2",
+    "prettier": "^1.18.2",
     "react-scripts": "^3.1.1",
     "react-test-renderer": "^16.9.0",
     "source-map-explorer": "^2.0.1",
-    "tslint-config-prettier": "^1.18.0",
-    "tslint-react": "^4.0.0",
     "typescript": "^3.6.2"
   },
   "jest": {},
