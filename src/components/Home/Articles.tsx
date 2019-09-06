@@ -48,7 +48,7 @@ export default ({ articles, handleSelectArticle }: Props) => {
             <Heading>
               <h2>
                 <a
-                  href={`/v3/articles/${article.slug}`}
+                  href={`/articles/${article.slug}`}
                   // tslint:disable-next-line jsx-no-lambda
                   onClick={e => {
                     e.preventDefault();

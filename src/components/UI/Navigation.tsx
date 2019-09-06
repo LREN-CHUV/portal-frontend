@@ -34,7 +34,7 @@ class Navigation extends React.Component<Props> {
       <header id="topnav" className="navbar navbar-default navbar-fixed-top ">
         <div className="container-fluid">
           <div className="logo-area">
-            <NavLink className="navbar-brand" to="/v3/home">
+            <NavLink className="navbar-brand" to="/home">
               Human Brain Project
             </NavLink>
           </div>
@@ -47,7 +47,7 @@ class Navigation extends React.Component<Props> {
             <li className="toolbar-icon-bg hidden-xs">
               <NavLink
                 title="Epidemiological Exploration "
-                to="/v3/explore"
+                to="/explore"
                 activeClassName="active"
               >
                 <span className="icon-bg">
@@ -59,7 +59,7 @@ class Navigation extends React.Component<Props> {
             <li className="toolbar-icon-bg hidden-xs">
               <NavLink
                 title="Interactive Analysis"
-                to="/v3/review"
+                to="/review"
                 activeClassName="active"
               >
                 <span className="icon-bg">
@@ -78,7 +78,7 @@ class Navigation extends React.Component<Props> {
                   handleSelect={async (experiment: ExperimentResponse) => {
                     const { modelDefinitionId, uuid } = experiment;
                     this.props.history.push(
-                      `/v3/experiment/${modelDefinitionId}/${uuid}`
+                      `/experiment/${modelDefinitionId}/${uuid}`
                     );
                     await apiExperiment.markAsViewed({ uuid });
                     await apiModel.one(modelDefinitionId);
@@ -97,7 +97,7 @@ class Navigation extends React.Component<Props> {
             <li className="uib-dropdown toolbar-icon-bg">
               <NavLink
                 title="Profile"
-                to="/v3/profile"
+                to="/profile"
                 activeClassName="active"
               >
                 <img className="img-circle" alt="anonymous" src={defaultUser} />

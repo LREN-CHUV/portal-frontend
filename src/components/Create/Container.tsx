@@ -167,7 +167,7 @@ class Container extends React.Component<Props, State> {
     if (model) {
       const { slug } = model;
       const { apiModel, history } = this.props;
-      history.push(`/v3/experiment/${slug}`);
+      history.push(`/experiment/${slug}`);
       if (slug) {
         return await apiModel.one(slug);
       }
@@ -202,7 +202,7 @@ class Container extends React.Component<Props, State> {
   ): Promise<any> => {
     const { modelDefinitionId, uuid } = experiment;
     const { apiExperiment, history } = this.props;
-    history.push(`/v3/experiment/${modelDefinitionId}/${uuid}`);
+    history.push(`/experiment/${modelDefinitionId}/${uuid}`);
 
     return await apiExperiment.one({ uuid });
   };
@@ -211,7 +211,7 @@ class Container extends React.Component<Props, State> {
     const { apiModel, history } = this.props;
     const model = apiModel.state.model;
     if (model) {
-      history.push(`/v3/review/${model.slug}`);
+      history.push(`/review/${model.slug}`);
     }
   };
 
@@ -324,7 +324,7 @@ class Container extends React.Component<Props, State> {
     }
 
     const uuid = (e && e.uuid) || '';
-    history.push(`/v3/experiment/${model && model.slug}/${uuid}`);
+    history.push(`/experiment/${model && model.slug}/${uuid}`);
   };
 }
 

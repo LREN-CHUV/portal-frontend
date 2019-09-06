@@ -31,7 +31,7 @@ export default ({
         <div className="item text">
           <h3>
             Results of Experiment <strong>{name}</strong> on{' '}
-            <Link to={`/v3/review/${modelDefinitionId}`}>
+            <Link to={`/review/${modelDefinitionId}`}>
               {modelDefinitionId}
             </Link>
           </h3>

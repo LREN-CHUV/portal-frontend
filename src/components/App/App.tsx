@@ -43,7 +43,7 @@ const Redirect = ({ apiUser, props }: { apiUser: APIUser; props: any }) => {
 const Splash = ({ apiUser, history }: { apiUser: APIUser; history: any }) => {
   const handleLoginPress = () => {
     if (apiUser.state.authenticated) {
-      history.push(`/v3/home`);
+      history.push(`/home`);
     } else {
       window.location.href = `${backendURL}/login/hbp`;
     }
@@ -62,7 +62,7 @@ const App = ({
   apiModel,
   apiMining,
   apiUser
-}: Props) => {
+}: Props): JSX.Element => {
   return (
     <div className="App">
       <header>
@@ -89,7 +89,7 @@ const App = ({
             render={props => <Redirect apiUser={apiUser} props={props} />}
           />
           <Route
-            path="/v3/tos"
+            path="/tos"
             // tslint:disable-next-line jsx-no-lambda
             render={props => (
               <TOS
@@ -99,7 +99,7 @@ const App = ({
             )}
           />
           <Route
-            path="/v3/home"
+            path="/home"
             // tslint:disable-next-line jsx-no-lambda
             render={props => (
               <Home
@@ -112,12 +112,12 @@ const App = ({
             )}
           />
           <Route
-            path="/v3/profile"
+            path="/profile"
             // tslint:disable-next-line jsx-no-lambda
             render={props => <User apiUser={apiUser} {...props} />}
           />
           <Route
-            path={['/v3/explore/:slug', '/v3/explore']}
+            path={['/explore/:slug', '/explore']}
             // tslint:disable-next-line jsx-no-lambda
             render={props => (
               <Explore
@@ -130,7 +130,7 @@ const App = ({
             )}
           />
           <Route
-            path={['/v3/review/:slug', '/v3/review']}
+            path={['/review/:slug', '/review']}
             // tslint:disable-next-line jsx-no-lambda
             render={props => (
               <ExperimentReview
@@ -142,7 +142,7 @@ const App = ({
             )}
           />
           <Route
-            path="/v3/experiment/:slug/:uuid"
+            path="/experiment/:slug/:uuid"
             // tslint:disable-next-line jsx-no-lambda
             render={() => (
               <ExperimentResult
@@ -154,7 +154,7 @@ const App = ({
           />
           <Route
             exact={true}
-            path="/v3/experiment/:slug"
+            path="/experiment/:slug"
             // tslint:disable-next-line jsx-no-lambda
             render={() => (
               <ExperimentCreate
@@ -166,7 +166,7 @@ const App = ({
             )}
           />
           <Route
-            path={['/v3/articles/:slug', '/v3/articles']}
+            path={['/articles/:slug', '/articles']}
             // tslint:disable-next-line jsx-no-lambda
             render={props => <Article apiCore={apiCore} {...props} />}
           />

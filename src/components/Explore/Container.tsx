@@ -306,9 +306,9 @@ export default ({
   const handleSelectModel = (newModel?: ModelResponse) => {
     const { history } = props;
     if (newModel && newModel.slug) {
-      history.push(`/v3/explore/${newModel.slug}`);
+      history.push(`/explore/${newModel.slug}`);
     } else {
-      history.push(`/v3/explore`);
+      history.push(`/explore`);
     }
   };
 
@@ -324,7 +324,7 @@ export default ({
     const nextModel = convertD3ModelToModel(d3Model, model);
 
     await apiModel.setDraft(nextModel);
-    history.push(`/v3/review/${editPath}`);
+    history.push(`/review/${editPath}`);
   };
 
   const selectedPathology =

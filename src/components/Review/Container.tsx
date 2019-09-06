@@ -268,7 +268,7 @@ class Container extends React.Component<Props, State> {
     this.setState({ alert: { message: 'Model saved' } });
 
     const { history } = this.props;
-    history.push(`/v3/review/${slug}`);
+    history.push(`/review/${slug}`);
   };
 
   private handleRunAnalysis = async () => {
@@ -277,7 +277,7 @@ class Container extends React.Component<Props, State> {
     await apiModel.update({ model });
     const slug = this.props.match.params.slug;
     const { history } = this.props;
-    history.push(`/v3/experiment/${slug}`);
+    history.push(`/experiment/${slug}`);
   };
 
   private handleGoBackToExplore = async () => {
@@ -285,9 +285,9 @@ class Container extends React.Component<Props, State> {
     const { apiModel } = this.props;
     if (apiModel.state.draft) {
       await apiModel.setDraft(apiModel.state.draft);
-      history.push(`/v3/explore/${editPath}`);
+      history.push(`/explore/${editPath}`);
     } else {
-      history.push(`/v3/explore`);
+      history.push(`/explore`);
     }
   };
 
@@ -295,7 +295,7 @@ class Container extends React.Component<Props, State> {
     if (model) {
       const { slug } = model;
       const { history } = this.props;
-      history.push(`/v3/review/${slug}`);
+      history.push(`/review/${slug}`);
     }
   };
 

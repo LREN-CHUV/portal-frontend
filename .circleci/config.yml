@@ -33,7 +33,6 @@ jobs:
       - run:
           name: 'Build frontend'
           command: |
-            cd app/v3
             echo REACT_APP_BACKEND_URL=\"http://portalbackend:8080\" | tee -a .env
             docker build -t frontend:latest .
       - run:

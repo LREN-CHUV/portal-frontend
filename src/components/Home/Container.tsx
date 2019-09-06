@@ -42,21 +42,21 @@ export default ({ ...props }: Props) => {
   const experiments = apiExperiment.state && apiExperiment.state.experiments;
 
   const handleSelectArticle = (id: string) => {
-    history.push(`/v3/articles/${id}`);
+    history.push(`/articles/${id}`);
   };
 
   const handleNewArticle = () => {
-    history.push(`/v3/articles/create`);
+    history.push(`/articles/create`);
   };
 
   const handleNewExperiment = (modelId: string | undefined) => {
-    history.push(`/v3/experiment/${modelId}`);
+    history.push(`/experiment/${modelId}`);
   };
   const handleSelectExperiment = (
     modelId: string | undefined,
     experimentId: string
   ) => {
-    history.push(`/v3/experiment/${modelId}/${experimentId}`);
+    history.push(`/experiment/${modelId}/${experimentId}`);
   };
 
   return (

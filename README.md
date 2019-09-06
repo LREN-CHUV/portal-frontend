@@ -33,7 +33,6 @@ You can find the most recent version of the Create React App guide [here](https:
 
 - Install [nodejs](https://nodejs.org)
 - Install [yarn](https://yarnpkg.com/en/)
-- `cd /app/v3/`
 - create a `.env` file
   - `echo REACT_APP_BACKEND_URL = \"http://frontend\" | tee .env`
 - `yarn install`

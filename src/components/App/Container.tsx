@@ -97,7 +97,7 @@ class AppContainer extends React.Component<any, State> {
               apiModel: APIModel,
               apiMining: APIMining,
               apiUser: APIUser
-            ) => {
+            ): JSX.Element => {
               return (
                 <App
                   appConfig={this.state.appConfig}

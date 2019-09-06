@@ -100,7 +100,7 @@ class Experiment extends React.Component<Props> {
   private handleSelectExperiment = async (experiment: ExperimentResponse) => {
     const { modelDefinitionId, uuid } = experiment;
     const { history, apiExperiment } = this.props;
-    history.push(`/v3/experiment/${modelDefinitionId}/${uuid}`);
+    history.push(`/experiment/${modelDefinitionId}/${uuid}`);
     await apiExperiment.markAsViewed({ uuid });
     return await apiExperiment.one({ uuid });
   };
@@ -127,7 +127,7 @@ class Experiment extends React.Component<Props> {
     if (!params) {
       return;
     }
-    history.push(`/v3/experiment/${params.slug}`);
+    history.push(`/experiment/${params.slug}`);
   };
 
   private pollFetchExperiment = (uuid: string) => {

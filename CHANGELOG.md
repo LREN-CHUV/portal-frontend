@@ -1,5 +1,14 @@
 # Changelog
 
+### React migration
+
+- Removed /v3 path
+- React Login
+- Re-enabled Bugsnag for production build
+- Removed Angular
+- Switched React Linter from TSLint to ESLint
+  - See [ESLint and Prettier in a TypeScript Project](https://dev.to/robertcoopercode/using-eslint-and-prettier-in-a-typescript-project-53jb)
+
 ### 4.0.0 - 05.07.2019
 
 - Removed ID3 and Naive Bayes standalone ( => 5.0 )

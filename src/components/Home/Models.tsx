@@ -42,13 +42,13 @@ interface Props {
 }
 export default ({ models, experiments, history }: Props) => {
   const handleNewExperiment = (modelId: string | undefined) => {
-    history.push(`/v3/experiment/${modelId}`);
+    history.push(`/experiment/${modelId}`);
   };
   const handleGoToExperiment = (
     modelId: string | undefined,
     experimentId: string
   ) => {
-    history.push(`/v3/experiment/${modelId}/${experimentId}`);
+    history.push(`/experiment/${modelId}/${experimentId}`);
   };
 
   return (
@@ -76,7 +76,7 @@ export default ({ models, experiments, history }: Props) => {
                     bsSize="small"
                     // tslint:disable-next-line jsx-no-lambda
                     onClick={() => {
-                      history.push(`/v3/review/${model.slug}`);
+                      history.push(`/review/${model.slug}`);
                     }}
                   >
                     View
