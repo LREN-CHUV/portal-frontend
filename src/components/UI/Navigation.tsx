@@ -95,11 +95,7 @@ class Navigation extends React.Component<Props> {
             </li>
 
             <li className="uib-dropdown toolbar-icon-bg">
-              <NavLink
-                title="Profile"
-                to="/profile"
-                activeClassName="active"
-              >
+              <NavLink title="Profile" to="/profile" activeClassName="active">
                 <img className="img-circle" alt="anonymous" src={defaultUser} />
               </NavLink>
               <ul className="dropdown-menu userinfo arrow">

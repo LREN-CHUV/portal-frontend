@@ -4,14 +4,7 @@ import './App.css';
 import * as React from 'react';
 import { Route, Switch } from 'react-router-dom';
 
-import {
-  APICore,
-  APIExperiment,
-  APIMining,
-  APIModel,
-  APIUser,
-  backendURL
-} from '../API';
+import { APICore, APIExperiment, APIMining, APIModel, APIUser } from '../API';
 import Article from '../Article/Container';
 import ExperimentCreate from '../Create/Container';
 import Explore from '../Explore/Container';
@@ -23,6 +16,7 @@ import Footer from '../UI/Footer';
 import Navigation from '../UI/Navigation';
 import NotFound from '../UI/NotFound';
 import User from '../User/Container';
+import Splash from '../UI/Splash';
 
 interface Props {
   appConfig: any;
@@ -38,21 +32,6 @@ const Redirect = ({ apiUser, props }: { apiUser: APIUser; props: any }) => {
     return <div>hello</div>;
   });
   return <div>hello</div>;
-};
-
-const Splash = ({ apiUser, history }: { apiUser: APIUser; history: any }) => {
-  const handleLoginPress = () => {
-    if (apiUser.state.authenticated) {
-      history.push(`/home`);
-    } else {
-      window.location.href = `${backendURL}/login/hbp`;
-    }
-  };
-  return (
-    <>
-      <button onClick={handleLoginPress}>Login</button>
-    </>
-  );
 };
 
 const App = ({
