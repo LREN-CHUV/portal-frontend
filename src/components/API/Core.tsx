@@ -19,6 +19,20 @@ export interface VariableEntity extends Variable {
   group?: Variable[];
 }
 
+interface Pathology {
+  code: string;
+  label: string;
+  datasets: VariableEntity[];
+  hierarchy: Hierarchy;
+}
+
+interface Hierarchy {
+  code: string;
+  label: string;
+  groups: VariableEntity[];
+  variables: VariableEntity[];
+}
+
 export interface Algorithm {
   code: string;
   name: string;
@@ -92,7 +106,7 @@ export interface Article {
 export interface State {
   error?: string;
   loading?: boolean;
-  hierarchy?: any;
+  hierarchy?: Hierarchy;
   variables?: VariableEntity[];
   datasets?: VariableEntity[];
   algorithms?: Algorithm[];
@@ -103,7 +117,7 @@ export interface State {
   stats?: Stats;
 }
 
-let pathologiesCached: any = {};
+let pathologiesCached: Pathology[] | undefined;
 
 class Core extends Container<State> {
   public state: State = {};
@@ -125,7 +139,7 @@ class Core extends Container<State> {
     return originalVar || { code, label: code };
   };
 
-  public pathologies = async (): Promise<any> => {
+  public pathologies = async (): Promise<void> => {
     try {
       const data = await request.get(
         `${this.backendURL}/pathologies`,
@@ -161,21 +175,21 @@ class Core extends Container<State> {
     }
   };
 
-  public setPathology = (code: string) => {
-    const pathology: any = pathologiesCached
-      .filter((g: any) => g.code === code)
-      .pop();
+  public setPathology = (code: string): Promise<void> => {
+    const pathology =
+      pathologiesCached && pathologiesCached.filter(g => g.code === code).pop();
 
     return this.setState({
-      datasets: pathology.datasets,
-      hierarchy: pathology.hierarchy,
-      pathology: pathology.code
+      datasets: pathology && pathology.datasets,
+      hierarchy: pathology && pathology.hierarchy,
+      pathology: pathology && pathology.code
     });
   };
 
-  public datasets = async () => Promise.resolve(this.state.datasets);
+  public datasets = async (): Promise<VariableEntity[] | undefined> =>
+    Promise.resolve(this.state.datasets);
 
-  public stats = async () => {
+  public stats = async (): Promise<void> => {
     try {
       const data = await request.get(`${this.backendURL}/stats`, this.options);
       const json = await JSON.parse(data);
@@ -196,7 +210,7 @@ class Core extends Container<State> {
     }
   };
 
-  public algorithms = async (isLocal: boolean) =>
+  public algorithms = async (isLocal: boolean): Promise<void> =>
     Promise.all([
       this.wokenAlgorithms(),
       this.exaremeAlgorithms(isLocal),
@@ -224,7 +238,7 @@ class Core extends Container<State> {
       }
     );
 
-  public articles = async () => {
+  public articles = async (): Promise<void> => {
     try {
       const data = await request.get(
         `${this.backendURL}/articles`,
@@ -248,7 +262,7 @@ class Core extends Container<State> {
     }
   };
 
-  public createArticle = async (payload: Article) => {
+  public createArticle = async (payload: Article): Promise<void> => {
     try {
       const data = await request({
         body: JSON.stringify(payload),
@@ -273,7 +287,10 @@ class Core extends Container<State> {
     }
   };
 
-  public updateArticle = async (slug: string, payload: Article) => {
+  public updateArticle = async (
+    slug: string,
+    payload: Article
+  ): Promise<void> => {
     try {
       const data = await request({
         body: JSON.stringify(payload),
@@ -298,7 +315,7 @@ class Core extends Container<State> {
     }
   };
 
-  private workflows = async (isLocal: boolean) => {
+  private workflows = async (isLocal: boolean): Promise<any> => {
     if (isLocal) {
       return { error: undefined, data: [] };
     }
@@ -323,7 +340,7 @@ class Core extends Container<State> {
     }
   };
 
-  private wokenAlgorithms: any = async () => {
+  private wokenAlgorithms: any = async (): Promise<any> => {
     try {
       const data = await request.get(
         `${this.backendURL}/methods`,
