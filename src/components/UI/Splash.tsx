@@ -1,10 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
 
-// import SVGBrain from '../../images/brain.svg';
 import HBPLogo from '../../images/hbp_logo_320.png';
-// import SVGNetworkMap from '../../images/map-network.svg';
-// import SVGWorldMap from '../../images/worldmap.svg';
 import { APIUser, backendURL } from '../API';
 
 const MainBox = styled.div`
