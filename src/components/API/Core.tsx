@@ -5,7 +5,6 @@ import { backendURL } from '../API';
 import { excludedMethods } from '../constants';
 import { buildExaremeAlgorithmList } from './ExaremeAPIAdapter';
 import { Engine } from './Experiment';
-import hierarchyMockup from './pathologiesHierarchyMockup';
 import { buildWorkflowAlgorithmList } from './WorkflowAPIAdapter';
 
 export enum Pathology {
@@ -106,6 +105,7 @@ export interface State {
   article?: Article;
   articles?: Article[];
   stats?: Stats;
+  hierarchyCached?: any;
 }
 
 class Core extends Container<State> {
@@ -118,15 +118,6 @@ class Core extends Container<State> {
     super();
     this.options = config.options;
     this.backendURL = backendURL;
-
-    const pathologies = hierarchyMockup.groups.map(h => ({
-      code: h.code,
-      label: h.label
-    }));
-
-    this.setState({
-      pathologies
-    });
   }
 
   public lookup = (code: string): VariableEntity => {
@@ -137,34 +128,10 @@ class Core extends Container<State> {
     return originalVar || { code, label: code };
   };
 
-  public setPathology = (code: Pathology) => {
-    const hierarchy: any = hierarchyMockup.groups
-      .filter(g => g.code === code)
-      .pop();
-
-    let variables: any = [];
-    // TODO: fanciest function
-    const dummyAccumulator = (node: any) => {
-      if (node.variables) {
-        variables = [...variables, ...node.variables];
-      }
-
-      if (node.groups) {
-        return node.groups.map(dummyAccumulator);
-      }
-    };
-    hierarchy.groups.map(dummyAccumulator);
-
-    return this.setState({
-      hierarchy,
-      variables
-    });
-  };
-
-  public datasets = async () => {
+  public pathologies = async (): Promise<any> => {
     try {
       const data = await request.get(
-        `${this.backendURL}/datasets`,
+        `${this.backendURL}/pathologies`,
         this.options
       );
       const json = await JSON.parse(data);
@@ -174,9 +141,19 @@ class Core extends Container<State> {
         });
       }
 
+      const pathologies = json.map((h: any) => ({
+        code: h.code,
+        label: h.label
+      }));
+
+      const hierarchy = json.length > 0 ? json[0] : undefined;
+
       return await this.setState({
-        datasets: json,
-        error: undefined
+        hierarchy,
+        error: undefined,
+        pathologies,
+        datasets: hierarchy.datasets,
+        hierarchyCached: json
       });
     } catch (error) {
       return await this.setState({
@@ -184,6 +161,20 @@ class Core extends Container<State> {
       });
     }
   };
+
+  public setPathology = (code: Pathology) => {
+    const rawHierarchy = this.state.hierarchyCached;
+    const hierarchy: any = rawHierarchy
+      .filter((g: any) => g.code === code)
+      .pop();
+
+    return this.setState({
+      hierarchy,
+      datasets: hierarchy.datasets
+    });
+  };
+
+  public datasets = async () => Promise.resolve(this.state.datasets);
 
   public stats = async () => {
     try {
