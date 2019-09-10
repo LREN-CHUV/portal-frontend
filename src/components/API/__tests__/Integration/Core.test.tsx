@@ -1,11 +1,11 @@
-import APICore, { Pathology } from '../../Core';
+import APICore from '../../Core';
 import config from '../../RequestHeaders';
 
 describe('Integration Test Core API', () => {
   const apiCore = new APICore(config);
 
   it('get variables', async () => {
-    await apiCore.setPathology(Pathology.DEG);
+    await apiCore.setPathology('tbi');
     const result = apiCore.state.variables;
     const error = apiCore.state.error;
     expect(error).toBeFalsy();

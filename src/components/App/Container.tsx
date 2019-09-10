@@ -12,7 +12,6 @@ import {
   APIUser,
   webURL
 } from '../API'; // as interfaces
-import { Pathology } from '../API/Core';
 import config from '../API/RequestHeaders';
 import App from '../App/App';
 

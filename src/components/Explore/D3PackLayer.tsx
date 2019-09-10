@@ -4,7 +4,7 @@ import * as d3 from 'd3';
 import React, { useCallback, useEffect, useRef } from 'react';
 
 import { APICore, APIModel } from '../API';
-import { Pathology, VariableEntity } from '../API/Core';
+import { VariableEntity } from '../API/Core';
 import { ModelResponse } from '../API/Model';
 import { D3Model, HierarchyCircularNode } from './Container';
 import Explore from './Explore';
@@ -22,13 +22,13 @@ export interface Props {
   apiModel: APIModel;
   datasets?: VariableEntity[];
   selectedDatasets: VariableEntity[];
-  selectedPathology: string;
+  selectedPathology: string | undefined;
   selectedNode: HierarchyCircularNode | undefined;
   layout: HierarchyCircularNode;
   histograms?: any;
   d3Model: D3Model;
   handleSelectDataset: (e: VariableEntity) => void;
-  handleSelectPathology: (code: Pathology) => void;
+  handleSelectPathology: (code: string) => void;
   handleSelectNode: (node: HierarchyCircularNode) => void;
   handleUpdateD3Model: Function; // (type: ModelType, node?: HierarchyCircularNode) => void;
   handleSelectModel: (d3Model?: ModelResponse) => void;

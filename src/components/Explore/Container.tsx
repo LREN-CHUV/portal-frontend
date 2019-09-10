@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 
 import { APICore, APIMining, APIModel } from '../API';
-import { Pathology, VariableEntity } from '../API/Core';
+import { VariableEntity } from '../API/Core';
 import { ModelResponse, Query } from '../API/Model';
 import { d3Hierarchy, VariableDatum } from './d3Hierarchy';
 import CirclePack from './D3PackLayer';
@@ -312,11 +312,8 @@ export default ({
     }
   };
 
-  const handleSelectPathology = (code: Pathology) => {
+  const handleSelectPathology = (code: string) => {
     apiCore.setPathology(code);
-    if (code === Pathology.TBI) {
-      setSelectedDatasets([]);
-    }
   };
 
   const handleGoToAnalysis = async () => {
@@ -326,9 +323,6 @@ export default ({
     await apiModel.setDraft(nextModel);
     history.push(`/review/${editPath}`);
   };
-
-  const selectedPathology =
-    apiCore.state.hierarchy && apiCore.state.hierarchy.code;
 
   const nextProps = {
     apiCore,
@@ -343,7 +337,7 @@ export default ({
     histograms: apiMining.state.histograms,
     selectedDatasets,
     selectedNode,
-    selectedPathology
+    selectedPathology: apiCore.state.pathology
   };
 
   return (

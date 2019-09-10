@@ -4,7 +4,7 @@ import React from 'react';
 import { Button, Checkbox, Panel } from 'react-bootstrap';
 
 import { APICore, APIModel } from '../API';
-import { Pathology, VariableEntity } from '../API/Core';
+import { VariableEntity } from '../API/Core';
 import { ModelResponse } from '../API/Model';
 import DropdownModel from '../UI/DropdownModel';
 import { D3Model, HierarchyCircularNode, ModelType } from './Container';
@@ -19,13 +19,13 @@ export interface ExploreProps {
   children?: any;
   datasets?: VariableEntity[];
   selectedDatasets: VariableEntity[];
-  selectedPathology: string;
+  selectedPathology: string | undefined;
   selectedNode: HierarchyCircularNode | undefined;
   layout: HierarchyCircularNode;
   histograms?: any;
   d3Model: D3Model;
   handleSelectDataset: (e: VariableEntity) => void;
-  handleSelectPathology: (code: Pathology) => void;
+  handleSelectPathology: (code: string) => void;
   handleSelectNode: (node: HierarchyCircularNode) => void;
   handleUpdateD3Model: Function;
   handleSelectModel: (model?: ModelResponse) => void;
@@ -58,13 +58,13 @@ export default (props: ExploreProps) => {
     <div className="Explore">
       <div className="content">
         <div className="sidebar">
-          <Panel className="pathologies">
-            <Panel.Title>
-              <h3>Pathologies</h3>
-            </Panel.Title>
-            <Panel.Body>
-              {apiCore.state.pathologies &&
-                apiCore.state.pathologies.map(g => (
+          {apiCore.state.pathologies && apiCore.state.pathologies.length > 1 && (
+            <Panel className="pathologies">
+              <Panel.Title>
+                <h3>Pathologies</h3>
+              </Panel.Title>
+              <Panel.Body>
+                {apiCore.state.pathologies.map(g => (
                   <label key={g.code}>
                     <input
                       type="radio"
@@ -75,15 +75,16 @@ export default (props: ExploreProps) => {
                       // tslint:disable jsx-no-lambda
                       onChange={e => {
                         e.preventDefault();
-                        const nextPathology = e.target.value as Pathology;
+                        const nextPathology = e.target.value;
                         handleSelectPathology(nextPathology);
                       }}
                     />{' '}
                     {g.label}
                   </label>
                 ))}
-            </Panel.Body>
-          </Panel>
+              </Panel.Body>
+            </Panel>
+          )}
           <Panel className="datasets">
             <Panel.Title>
               <h3>Datasets</h3>
@@ -101,7 +102,6 @@ export default (props: ExploreProps) => {
                     checked={selectedDatasets
                       .map(s => s.code)
                       .includes(dataset.code)}
-                    disabled={selectedPathology === Pathology.TBI}
                   >
                     {dataset.label}
                   </Checkbox>

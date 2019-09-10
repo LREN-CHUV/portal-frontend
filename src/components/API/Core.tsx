@@ -7,11 +7,6 @@ import { buildExaremeAlgorithmList } from './ExaremeAPIAdapter';
 import { Engine } from './Experiment';
 import { buildWorkflowAlgorithmList } from './WorkflowAPIAdapter';
 
-export enum Pathology {
-  DEG = 'neurodegenerativediseases',
-  TBI = 'tbi'
-}
-
 export interface Variable {
   code: string;
   label?: string;
@@ -102,11 +97,13 @@ export interface State {
   datasets?: VariableEntity[];
   algorithms?: Algorithm[];
   pathologies?: VariableEntity[];
+  pathology?: string;
   article?: Article;
   articles?: Article[];
   stats?: Stats;
-  hierarchyCached?: any;
 }
+
+let pathologiesCached: any = {};
 
 class Core extends Container<State> {
   public state: State = {};
@@ -141,19 +138,21 @@ class Core extends Container<State> {
         });
       }
 
+      pathologiesCached = json;
+
       const pathologies = json.map((h: any) => ({
         code: h.code,
         label: h.label
       }));
 
-      const hierarchy = json.length > 0 ? json[0] : undefined;
+      const pathology = json.length > 0 ? json[0] : undefined;
 
       return await this.setState({
-        hierarchy,
+        datasets: pathology.datasets,
         error: undefined,
+        hierarchy: pathology.hierarchy,
         pathologies,
-        datasets: hierarchy.datasets,
-        hierarchyCached: json
+        pathology: pathology.code
       });
     } catch (error) {
       return await this.setState({
@@ -162,15 +161,15 @@ class Core extends Container<State> {
     }
   };
 
-  public setPathology = (code: Pathology) => {
-    const rawHierarchy = this.state.hierarchyCached;
-    const hierarchy: any = rawHierarchy
+  public setPathology = (code: string) => {
+    const pathology: any = pathologiesCached
       .filter((g: any) => g.code === code)
       .pop();
 
     return this.setState({
-      hierarchy,
-      datasets: hierarchy.datasets
+      datasets: pathology.datasets,
+      hierarchy: pathology.hierarchy,
+      pathology: pathology.code
     });
   };
 
