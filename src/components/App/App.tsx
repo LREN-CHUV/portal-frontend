@@ -1,9 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.css';
-import './App.css';
-
 import * as React from 'react';
 import { Route, Switch } from 'react-router-dom';
-
 import { APICore, APIExperiment, APIMining, APIModel, APIUser } from '../API';
 import Article from '../Article/Container';
 import ExperimentCreate from '../Create/Container';
@@ -13,10 +10,14 @@ import TOS from '../Home/TOS';
 import ExperimentResult from '../Result/Container';
 import ExperimentReview from '../Review/Container';
 import Footer from '../UI/Footer';
+import Galaxy from '../UI/Galaxy';
 import Navigation from '../UI/Navigation';
 import NotFound from '../UI/NotFound';
-import User from '../User/Container';
 import Splash from '../UI/Splash';
+import User from '../User/Container';
+import './App.css';
+
+
 
 interface Props {
   appConfig: any;
@@ -67,6 +68,8 @@ const App = ({
             // tslint:disable-next-line jsx-no-lambda
             render={props => <Redirect apiUser={apiUser} props={props} />}
           />
+          <Route path="/galaxy"
+          render={props => <Galaxy />} />
           <Route
             path="/tos"
             // tslint:disable-next-line jsx-no-lambda
