@@ -378,17 +378,20 @@ class APIAdapter {
     try {
       const resultParsed = parse(experiment.result);
 
-      const isExareme = resultParsed.every(
-        (r: any) => r.data && r.type && !r.dataProvenance
-      );
-      if (isExareme) {
-        const algorithmName = experimentResponse.algorithms[0].name;
+      const p =
+        resultParsed && resultParsed.length > 0 && resultParsed[0].result;
+      if (p) {
+        const isExareme = p.every((r: any) => r.data && r.type);
 
-        return {
-          ...experimentResponse,
-          engine: Engine.Exareme,
-          results: defaultResults(algorithmName, resultParsed)
-        };
+        if (isExareme) {
+          const algorithmName = experimentResponse.algorithms[0].name;
+
+          return {
+            ...experimentResponse,
+            engine: Engine.Exareme,
+            results: defaultResults(algorithmName, p)
+          };
+        }
       }
 
       const isWorkflow = resultParsed.find((r: any) => r.historyId);
