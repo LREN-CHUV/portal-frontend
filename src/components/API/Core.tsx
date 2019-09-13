@@ -160,13 +160,26 @@ class Core extends Container<State> {
       }));
 
       const pathology = json.length > 0 ? json[0] : undefined;
+      let variables: any = [];
+      // TODO: fanciest function
+      const dummyAccumulator = (node: any) => {
+        if (node.variables) {
+          variables = [...variables, ...node.variables];
+        }
+
+        if (node.groups) {
+          return node.groups.map(dummyAccumulator);
+        }
+      };
+      pathology.hierarchy.groups.map(dummyAccumulator);
 
       return await this.setState({
         datasets: pathology.datasets,
         error: undefined,
         hierarchy: pathology.hierarchy,
         pathologies,
-        pathology: pathology.code
+        pathology: pathology.code,
+        variables
       });
     } catch (error) {
       return await this.setState({
