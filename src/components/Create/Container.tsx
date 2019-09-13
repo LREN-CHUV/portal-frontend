@@ -55,7 +55,7 @@ class Container extends React.Component<Props, State> {
     });
   }
 
-  public componentWillReceiveProps = (props: any) => {
+  public UNSAFE_componentWillReceiveProps = (props: any) => {
     const {
       apiModel: {
         state: { model }

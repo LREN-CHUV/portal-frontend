@@ -11,7 +11,7 @@ bugsnagClient.use(bugsnagReact, React);
 const ErrorBoundary = bugsnagClient.getPlugin('react');
 
 const App =
-  process.env.NODE_ENV === 'development' ? (
+  process.env.NODE_ENV !== 'production' ? (
     <AppContainer />
   ) : (
     <ErrorBoundary>

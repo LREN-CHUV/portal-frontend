@@ -31,7 +31,7 @@ class Filter extends React.Component<Props, State> {
     this.onRulesChanged();
   };
 
-  public componentWillReceiveProps = (nextProps: any) => {
+  public UNSAFE_componentWillReceiveProps = (nextProps: any) => {
     if (this.state.rulesChanged) {
       return; // user is editing
     }

@@ -52,13 +52,6 @@ class AppContainer extends React.Component<any, State> {
 
     console.log(this.state.appConfig.mode);
 
-    await this.apiUser.user().then(() => {
-      console.log(this.apiUser.state);
-      if (!this.apiUser.state.authenticated) {
-        return Promise.resolve();
-      }
-    });
-
     return await Promise.all([
       this.apiExperiment.all(),
       this.apiCore.pathologies(),

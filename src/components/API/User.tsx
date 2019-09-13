@@ -28,11 +28,10 @@ class UserContainer extends Container<State> {
     this.backendURL = backendURL;
   }
 
-  public login = async (params: any) => {
-    return await request.get(
-      `${this.backendURL}/login/hbp${params}`,
-      this.options
-    );
+  public login = async (params: any): Promise<void> => {
+    const loginURL = `${this.backendURL}/login/hbp${params}`;
+    // console.log('login', loginURL, this.options);
+    return await request.get(loginURL, this.options);
   };
 
   public user = async () => {

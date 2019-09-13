@@ -1,8 +1,10 @@
 import * as React from 'react';
+import { Button } from 'react-bootstrap';
 import styled from 'styled-components';
 
 import HBPLogo from '../../images/hbp_logo_320.png';
 import { APIUser, backendURL } from '../API';
+import HelpButton from './HelpButton';
 
 const MainBox = styled.div`
   position: absolute;
@@ -13,6 +15,7 @@ const MainBox = styled.div`
   left: 16px;
   z-index: 1000;
   background: #000000aa;
+  border-radius: 4px;
 
   display: flex;
   flex-direction: column;
@@ -40,13 +43,15 @@ const MainBox = styled.div`
   }
 `;
 
-const Login = styled.button`
-  align-self: flex-end;
+const ActionBar = styled.div`
+  display: flex;
+  justify-content: space-between;
 `;
 
 const Columns = styled.div`
   display: flex;
-  padding: 0 16em;
+  padding: 0 10%;
+  overflow: hidden;
 
   section {
     flex: 1;
@@ -73,17 +78,25 @@ export default ({
   apiUser: APIUser;
   history: any;
 }): JSX.Element => {
-  const handleLoginPress = () => {
-    if (apiUser.state.authenticated) {
-      history.push(`/home`);
-    } else {
-      window.location.href = `${backendURL}/login/hbp`;
-    }
+  const handleLoginPress = async (): Promise<void> => {
+    await apiUser.user().then(() => {
+      console.log(apiUser.state);
+      if (apiUser.state.authenticated) {
+        history.push(`/home`);
+      } else {
+        window.location.href = `${backendURL}/login/hbp`;
+      }
+    });
   };
 
   return (
     <MainBox>
-      <Login onClick={handleLoginPress}>Login</Login>
+      <ActionBar>
+        <HelpButton />
+        <Button onClick={handleLoginPress} bsStyle="default" type="submit">
+          Login
+        </Button>
+      </ActionBar>
       <img alt="HBP logo" title={'Human Brain Project'} src={HBPLogo} />
       <h1>THE MEDICAL INFORMATICS PLATFORM</h1>
 

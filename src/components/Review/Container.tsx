@@ -59,7 +59,10 @@ class Container extends React.Component<Props, State> {
     }
   }
 
-  public async componentWillReceiveProps(nextProps: Props, prevState: State) {
+  public async UNSAFE_componentWillReceiveProps(
+    nextProps: Props,
+    prevState: State
+  ) {
     const slug = nextProps.match.params.slug;
     const prevSlug = this.props.match.params.slug;
     if (slug && prevSlug !== slug) {

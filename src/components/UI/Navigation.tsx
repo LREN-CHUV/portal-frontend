@@ -1,14 +1,13 @@
 import './Navigation.css';
 
 import * as React from 'react';
-import { DropdownButton, MenuItem } from 'react-bootstrap';
 import { NavLink, RouteComponentProps, withRouter } from 'react-router-dom';
 
 import defaultUser from '../../images/default_user.png';
 import { APIExperiment, APIModel } from '../API';
 import { ExperimentResponse } from '../API/Experiment';
 import Dropdown from '../UI/Dropdown';
-import Helpdesk from './Helpdesk';
+import HelpButton from './HelpButton';
 
 interface Props extends RouteComponentProps<any> {
   appConfig: any;
@@ -116,38 +115,7 @@ class Navigation extends React.Component<Props> {
             </li>
 
             <li className="toolbar-icon-bg hidden-xs help">
-              <DropdownButton
-                noCaret={true}
-                bsStyle="default"
-                id={'experiment-dropdown'}
-                title={'?'}
-              >
-                <MenuItem
-                  // tslint:disable-next-line jsx-no-lambda
-                  onSelect={() => {
-                    window.open('https://hbpmedical.github.io/documentation/');
-                  }}
-                >
-                  <span className="glyphicon-book glyph" /> MIP Documentation
-                </MenuItem>
-                <MenuItem // tslint:disable-next-line jsx-no-lambda
-                  onSelect={() => {
-                    window.open('https://www.youtube.com/watch?v=MNWExzouMJw');
-                  }}
-                >
-                  <span className="glyphicon-film glyph" /> MIP introduction
-                  (video)
-                </MenuItem>
-                <div style={{ marginLeft: '28px' }}>
-                  <span className="glyphicon-envelope glyph" /> Email us at{' '}
-                  <a href="mailto://support@humanbrainproject.eu">
-                    support@humanbrainproject.eu
-                  </a>
-                </div>
-                <div style={{ width: '380px', padding: '1em' }}>
-                  <Helpdesk />
-                </div>
-              </DropdownButton>
+              <HelpButton />
             </li>
 
             <li className="toolbar-trigger toolbar-icon-bg">

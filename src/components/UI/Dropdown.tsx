@@ -10,8 +10,8 @@ interface IDropdown {
   items: ExperimentResponse[] | undefined;
   title: string;
   type?: string;
-  handleSelect: any;
-  handleCreateNewExperiment: any;
+  handleSelect: (experiment: ExperimentResponse) => void;
+  handleCreateNewExperiment: (() => void) | null;
   noCaret?: boolean;
 }
 export default ({
@@ -21,11 +21,11 @@ export default ({
   handleSelect,
   handleCreateNewExperiment,
   noCaret = false
-}: IDropdown) => (
+}: IDropdown): JSX.Element => (
   <DropdownButton
     noCaret={noCaret}
     bsStyle="default"
-    id={'experiment-dropdown'}
+    id={'experimmanuelent-dropdown'}
     title={title}
   >
     {handleCreateNewExperiment && (
@@ -33,8 +33,7 @@ export default ({
         <MenuItem
           eventKey={'newexperiment'}
           key={'newexperiment'}
-          // tslint:disable-next-line jsx-no-lambda
-          onSelect={() => handleCreateNewExperiment()}
+          onSelect={handleCreateNewExperiment}
         >
           <strong>Create New Experiment</strong>
         </MenuItem>

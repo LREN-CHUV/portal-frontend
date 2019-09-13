@@ -50,7 +50,7 @@ export default ({
   apiModel,
   appConfig,
   ...props
-}: Props) => {
+}: Props): JSX.Element => {
   const [datasets, setDatasets] = useState<VariableEntity[]>();
   const [selectedDatasets, setSelectedDatasets] = useState<VariableEntity[]>(
     []
@@ -342,7 +342,6 @@ export default ({
 
   return (
     <>
-      {/* {alert && <Alert message={alert} />} */}
       {d3Layout && (
         <CirclePack layout={d3Layout} d3Model={d3Model} {...nextProps} />
       )}

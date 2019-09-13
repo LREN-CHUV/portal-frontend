@@ -17,10 +17,16 @@ import Splash from '../UI/Splash';
 import User from '../User/Container';
 import './App.css';
 
+import styled from 'styled-components';
 
-
+interface AppConfig {
+  version?: string;
+  instanceName: string;
+  mode: string;
+  theme: string;
+}
 interface Props {
-  appConfig: any;
+  appConfig: AppConfig;
   apiExperiment: APIExperiment;
   apiCore: APICore;
   apiModel: APIModel;
@@ -28,12 +34,26 @@ interface Props {
   apiUser: APIUser;
 }
 
-const Redirect = ({ apiUser, props }: { apiUser: APIUser; props: any }) => {
-  apiUser.login(props.search).then(a => {
-    return <div>hello</div>;
+const Redirect = ({
+  apiUser,
+  props
+}: {
+  apiUser: APIUser;
+  props: any;
+}): JSX.Element => {
+  const {
+    location: { search }
+  } = props;
+  apiUser.login(search).then(() => {
+    props.history.push(`/home`);
   });
-  return <div>hello</div>;
+
+  return <Splash apiUser={apiUser} {...props} />;
 };
+
+const Content = styled.section`
+  margin-top: 116px;
+`;
 
 const App = ({
   appConfig,
@@ -46,16 +66,14 @@ const App = ({
   return (
     <div className="App">
       <header>
-        {apiUser.state.authenticated && (
-          <Navigation
-            apiExperiment={apiExperiment}
-            apiModel={apiModel}
-            appConfig={appConfig}
-          />
-        )}
+        <Navigation
+          apiExperiment={apiExperiment}
+          apiModel={apiModel}
+          appConfig={appConfig}
+        />
       </header>
 
-      <section className="main-content">
+      <Content className="main-content">
         <Switch>
           <Route
             path="/"
@@ -68,8 +86,7 @@ const App = ({
             // tslint:disable-next-line jsx-no-lambda
             render={props => <Redirect apiUser={apiUser} props={props} />}
           />
-          <Route path="/galaxy"
-          render={props => <Galaxy />} />
+          <Route path="/galaxy" render={props => <Galaxy />} />
           <Route
             path="/tos"
             // tslint:disable-next-line jsx-no-lambda
@@ -155,7 +172,7 @@ const App = ({
 
           <Route component={NotFound} />
         </Switch>
-      </section>
+      </Content>
       <footer id="footer">
         <Footer appConfig={appConfig} />
       </footer>

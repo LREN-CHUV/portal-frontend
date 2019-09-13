@@ -40,10 +40,6 @@ body {
   background-size: 100% auto;
 }
 
-.App section {
-  margin-top: 116px;
-}
-
 .filters .panel-title h3::after {
   font-family: 'themify';
   content: '\e64b';
@@ -170,7 +166,6 @@ button::-moz-focus-inner {
   }
 }
 
-
 #footer {
   background: #333;
   font-size: 12px;
@@ -228,16 +223,16 @@ button::-moz-focus-inner {
 .header .dropdown-toggle::after,
 .content .dropdown-toggle::after {
   display: inline-block;
-  margin-left: .255em;
-  vertical-align: .255em;
-  content: "";
-  border-top: .3em solid;
-  border-right: .3em solid transparent;
+  margin-left: 0.255em;
+  vertical-align: 0.255em;
+  content: '';
+  border-top: 0.3em solid;
+  border-right: 0.3em solid transparent;
   border-bottom: 0;
-  border-left: .3em solid transparent;
+  border-left: 0.3em solid transparent;
 }
 
 .main-content .alert {
   width: 640px;
-  margin: 16px
+  margin: 16px;
 }

@@ -278,7 +278,6 @@ const buildExaremeAlgorithmRequest = (
     ...(newParams.filter((p: any) => p.visible !== false) || [])
   ];
 
-  console.log(p);
   return p;
 };
 
