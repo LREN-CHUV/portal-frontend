@@ -1,7 +1,7 @@
-import { createModel, datasets } from '../../../utils/TestUtils';
-import { VariableEntity } from '../../Core';
+import APICore, { VariableEntity } from '../../Core';
 import APIMining from '../../Mining';
 import config from '../../RequestHeaders';
+import { createModel } from '../../Utils';
 
 const modelSlug = `model-${Math.round(Math.random() * 10000)}`;
 const buildModel: any = (datasets: VariableEntity[]) => ({
@@ -19,10 +19,12 @@ const buildModel: any = (datasets: VariableEntity[]) => ({
 
 describe('Integration Test Mining API', () => {
   const apiMining = new APIMining(config);
+  const apiCore = new APICore(config);
   let model: any;
 
   beforeAll(async () => {
-    const dstate = await datasets();
+    await apiCore.datasets();
+    const dstate = apiCore.state;
     expect(dstate.error).toBeFalsy();
     expect(dstate.datasets).toBeTruthy();
 

@@ -27,4 +27,12 @@ describe('Integration Test Core API', () => {
     expect(error).toBeFalsy();
     expect(result).toBeTruthy();
   });
+
+  it('get pathologies', async () => {
+    await apiCore.pathologies();
+    const result = apiCore.state.pathologies;
+    const error = apiCore.state.error;
+    expect(error).toBeFalsy();
+    expect(result).toBeTruthy();
+  });
 });

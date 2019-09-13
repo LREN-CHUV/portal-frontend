@@ -59,9 +59,12 @@ class Parameters extends React.Component<Props> {
                   'number',
                   'numeric'
                 ];
-                const type = numberTypes.includes(parameter.type)
-                  ? 'number'
-                  : 'text';
+                const type =
+                  parameter &&
+                  parameter.type &&
+                  numberTypes.includes(parameter.type)
+                    ? 'number'
+                    : 'text';
                 const { constraints } = parameter;
 
                 return (

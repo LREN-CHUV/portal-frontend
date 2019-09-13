@@ -47,10 +47,7 @@ class AppContainer extends React.Component<any, State> {
         version: 'alpha'
       };
       this.setState({ appConfig });
-      console.log("Couldn't read config");
     }
-
-    console.log(this.state.appConfig.mode);
 
     return await Promise.all([
       this.apiExperiment.all(),

@@ -14,6 +14,10 @@ highcharts3d(Highcharts);
 Exporting(Highcharts);
 SeriesLabel(Highcharts);
 
-export default ({ options }: { options: any }) => (
+export default ({
+  options
+}: {
+  options: Highcharts.Options | any;
+}): JSX.Element => (
   <HighchartsReact highcharts={Highcharts} options={options} />
 );

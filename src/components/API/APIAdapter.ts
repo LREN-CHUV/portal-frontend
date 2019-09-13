@@ -380,6 +380,7 @@ class APIAdapter {
 
       const p =
         resultParsed && resultParsed.length > 0 && resultParsed[0].result;
+
       if (p) {
         const isExareme = p.every((r: any) => r.data && r.type);
 

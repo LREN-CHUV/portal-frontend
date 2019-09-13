@@ -69,14 +69,14 @@ export interface AlgorithmConstraint {
 
 export interface AlgorithmParameter {
   code: string;
-  constraints: any;
-  default_value: any;
+  constraints?: any;
+  default_value?: any;
   value: any;
   values?: any;
-  description: string;
-  label: string;
-  type: string;
-  visible: boolean;
+  description?: string;
+  label?: string;
+  type?: string;
+  visible?: boolean;
 }
 
 export interface Parameter {
@@ -161,6 +161,7 @@ class Core extends Container<State> {
 
       const pathology = json.length > 0 ? json[0] : undefined;
       let variables: any = [];
+
       // TODO: fanciest function
       const dummyAccumulator = (node: any) => {
         if (node.variables) {
@@ -188,7 +189,11 @@ class Core extends Container<State> {
     }
   };
 
-  public setPathology = (code: string): Promise<void> => {
+  public setPathology = async (code: string): Promise<void> => {
+    if (!this.state.datasets) {
+      await this.pathologies();
+    }
+
     const pathology =
       pathologiesCached && pathologiesCached.filter(g => g.code === code).pop();
 
@@ -199,8 +204,13 @@ class Core extends Container<State> {
     });
   };
 
-  public datasets = async (): Promise<VariableEntity[] | undefined> =>
-    Promise.resolve(this.state.datasets);
+  public datasets = async (): Promise<VariableEntity[] | undefined> => {
+    if (!this.state.datasets) {
+      await this.pathologies();
+    }
+
+    return Promise.resolve(this.state.datasets);
+  };
 
   public stats = async (): Promise<void> => {
     try {

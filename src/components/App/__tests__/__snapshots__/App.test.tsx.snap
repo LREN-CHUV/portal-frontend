@@ -18,7 +18,7 @@ exports[`Test App components App snapshot renders correctly 1`] = `
           <a
             aria-current={null}
             className="navbar-brand"
-            href="/v3/home"
+            href="/home"
             onClick={[Function]}
           >
             Human Brain Project
@@ -39,7 +39,7 @@ exports[`Test App components App snapshot renders correctly 1`] = `
           >
             <a
               aria-current={null}
-              href="/v3/explore"
+              href="/explore"
               onClick={[Function]}
               title="Epidemiological Exploration "
             >
@@ -57,7 +57,7 @@ exports[`Test App components App snapshot renders correctly 1`] = `
           >
             <a
               aria-current={null}
-              href="/v3/review"
+              href="/review"
               onClick={[Function]}
               title="Interactive Analysis"
             >
@@ -84,7 +84,7 @@ exports[`Test App components App snapshot renders correctly 1`] = `
                   aria-haspopup={true}
                   className="dropdown-toggle btn btn-default"
                   disabled={false}
-                  id="experiment-dropdown"
+                  id="experimmanuelent-dropdown"
                   onClick={[Function]}
                   onKeyDown={[Function]}
                   role="button"
@@ -93,7 +93,7 @@ exports[`Test App components App snapshot renders correctly 1`] = `
                   BSD
                 </button>
                 <ul
-                  aria-labelledby="experiment-dropdown"
+                  aria-labelledby="experimmanuelent-dropdown"
                   className="dropdown-menu"
                   role="menu"
                 >
@@ -124,7 +124,7 @@ exports[`Test App components App snapshot renders correctly 1`] = `
           >
             <a
               aria-current={null}
-              href="/v3/profile"
+              href="/profile"
               onClick={[Function]}
               title="Profile"
             >
@@ -173,97 +173,89 @@ exports[`Test App components App snapshot renders correctly 1`] = `
             className="toolbar-icon-bg hidden-xs help"
           >
             <div
-              className="dropdown btn-group btn-group-default"
+              className="sc-jWBwVP bVKmFf"
             >
-              <button
-                aria-expanded={false}
-                aria-haspopup={true}
-                className="dropdown-toggle btn btn-default"
-                disabled={false}
-                id="experiment-dropdown"
-                onClick={[Function]}
-                onKeyDown={[Function]}
-                role="button"
-                type="button"
+              <div
+                className="dropdown btn-group btn-group-default"
               >
-                ?
-              </button>
-              <ul
-                aria-labelledby="experiment-dropdown"
-                className="dropdown-menu"
-                role="menu"
-              >
-                <li
-                  className=""
-                  role="presentation"
-                >
-                  <a
-                    href="#"
-                    onClick={[Function]}
-                    onKeyDown={[Function]}
-                    role="menuitem"
-                    tabIndex="-1"
-                  >
-                    <span
-                      className="glyphicon-book glyph"
-                    />
-                     MIP Documentation
-                  </a>
-                </li>
-                <li
-                  className=""
-                  role="presentation"
-                >
-                  <a
-                    href="#"
-                    onClick={[Function]}
-                    onKeyDown={[Function]}
-                    role="menuitem"
-                    tabIndex="-1"
-                  >
-                    <span
-                      className="glyphicon-film glyph"
-                    />
-                     MIP introduction (video)
-                  </a>
-                </li>
-                <div
+                <button
+                  aria-expanded={false}
+                  aria-haspopup={true}
+                  className="dropdown-toggle btn btn-default"
+                  disabled={false}
+                  id="help-dropdown"
+                  onClick={[Function]}
                   onKeyDown={[Function]}
-                  onSelect={[Function]}
-                  style={
-                    Object {
-                      "marginLeft": "28px",
-                    }
-                  }
+                  role="button"
+                  type="button"
                 >
-                  <span
-                    className="glyphicon-envelope glyph"
-                  />
-                   Email us at
+                  help
                    
-                  <a
-                    href="mailto://support@humanbrainproject.eu"
-                  >
-                    support@humanbrainproject.eu
-                  </a>
-                </div>
-                <div
-                  onKeyDown={[Function]}
-                  onSelect={[Function]}
-                  style={
-                    Object {
-                      "padding": "1em",
-                      "width": "380px",
-                    }
-                  }
+                  <span
+                    className="caret"
+                  />
+                </button>
+                <ul
+                  aria-labelledby="help-dropdown"
+                  className="dropdown-menu"
+                  role="menu"
                 >
+                  <li
+                    className=""
+                    role="presentation"
+                  >
+                    <a
+                      href="#"
+                      onClick={[Function]}
+                      onKeyDown={[Function]}
+                      role="menuitem"
+                      tabIndex="-1"
+                    >
+                      <span
+                        className="glyphicon-book glyph"
+                      />
+                       MIP Documentation
+                    </a>
+                  </li>
+                  <li
+                    className=""
+                    role="presentation"
+                  >
+                    <a
+                      href="#"
+                      onClick={[Function]}
+                      onKeyDown={[Function]}
+                      role="menuitem"
+                      tabIndex="-1"
+                    >
+                      <span
+                        className="glyphicon-film glyph"
+                      />
+                       MIP introduction (video)
+                    </a>
+                  </li>
+                  <div
+                    onKeyDown={[Function]}
+                    onSelect={[Function]}
+                  >
+                    <span
+                      className="glyphicon-envelope glyph"
+                    />
+                     Email us at
+                     
+                    <a
+                      href="mailto://support@humanbrainproject.eu"
+                    >
+                      support@humanbrainproject.eu
+                    </a>
+                  </div>
                   <div>
                     <div
                       id="feedback-form"
                     />
                   </div>
-                </div>
-              </ul>
+                </ul>
+              </div>
             </div>
           </li>
           <li
@@ -294,8 +286,164 @@ exports[`Test App components App snapshot renders correctly 1`] = `
     </header>
   </header>
   <section
-    className="main-content"
-  />
+    className="main-content sc-fBuWsC fLqrZW"
+  >
+    <div
+      className="sc-cMljjf hlOImX"
+    >
+      <div
+        className="sc-jAaTju sqzQM"
+      >
+        <div
+          className="sc-jWBwVP bVKmFf"
+        >
+          <div
+            className="dropdown btn-group btn-group-default"
+          >
+            <button
+              aria-expanded={false}
+              aria-haspopup={true}
+              className="dropdown-toggle btn btn-default"
+              disabled={false}
+              id="help-dropdown"
+              onClick={[Function]}
+              onKeyDown={[Function]}
+              role="button"
+              type="button"
+            >
+              help
+               
+              <span
+                className="caret"
+              />
+            </button>
+            <ul
+              aria-labelledby="help-dropdown"
+              className="dropdown-menu"
+              role="menu"
+            >
+              <li
+                className=""
+                role="presentation"
+              >
+                <a
+                  href="#"
+                  onClick={[Function]}
+                  onKeyDown={[Function]}
+                  role="menuitem"
+                  tabIndex="-1"
+                >
+                  <span
+                    className="glyphicon-book glyph"
+                  />
+                   MIP Documentation
+                </a>
+              </li>
+              <li
+                className=""
+                role="presentation"
+              >
+                <a
+                  href="#"
+                  onClick={[Function]}
+                  onKeyDown={[Function]}
+                  role="menuitem"
+                  tabIndex="-1"
+                >
+                  <span
+                    className="glyphicon-film glyph"
+                  />
+                   MIP introduction (video)
+                </a>
+              </li>
+              <div
+                onKeyDown={[Function]}
+                onSelect={[Function]}
+              >
+                <span
+                  className="glyphicon-envelope glyph"
+                />
+                 Email us at
+                 
+                <a
+                  href="mailto://support@humanbrainproject.eu"
+                >
+                  support@humanbrainproject.eu
+                </a>
+              </div>
+              <div>
+                <div
+                  id="feedback-form"
+                />
+              </div>
+            </ul>
+          </div>
+        </div>
+        <button
+          className="btn btn-default"
+          disabled={false}
+          onClick={[Function]}
+          type="submit"
+        >
+          Login
+        </button>
+      </div>
+      <img
+        alt="HBP logo"
+        src="hbp_logo_320.png"
+        title="Human Brain Project"
+      />
+      <h1>
+        THE MEDICAL INFORMATICS PLATFORM
+      </h1>
+      <div
+        className="sc-jDwBTQ guuMGV"
+      >
+        <section>
+          <p>
+            Thousands of brain images and terabytes of invaluable associated medical data are produced every day at a gigantic pace around the world. The Medical Informatics Platform (MIP) aims to federate this information and provide the tools to the experts to effectively analyse it and advance more rapidly in understanding the neurological and psychiatric diseases. This will in turn allow identifying the biological changes associated and open real possibilities for early diagnosis and personalised medicine.
+          </p>
+          <p>
+            The MIP provides methods to analyse federated data from hospitals, research centres and biobanks. Clinical scientists can develop, share and release results of their research. The MIP aims to bring together people across professional and scientific fields encourages them to actively contribute to the design and development of the services which the MIP provides.
+          </p>
+        </section>
+        <div>
+          <section>
+            <h3>
+              The MIP has three main goals:
+            </h3>
+            <ul>
+              <li>
+                Build the tools to federate clinical data, currently inaccessible outside hospital and research archives;
+              </li>
+              <li>
+                Recruit hospitals to contribute to and benefit by using the platform;
+              </li>
+              <li>
+                Develop tools for extracting biological signatures of diseases from multi-level data.
+              </li>
+            </ul>
+          </section>
+          <section>
+            <h3>
+              You can use the MIP
+            </h3>
+            <ul>
+              <li>
+                as a clinician, for objective diagnoses and treatment of brain disease;
+              </li>
+              <li>
+                as a neuroscientist, for the application and testing of new models and methods;
+              </li>
+              <li>
+                as a pharmaceutical or biotech company, for disease target discovery.
+              </li>
+            </ul>
+          </section>
+        </div>
+      </div>
+    </div>
+  </section>
   <footer
     id="footer"
   >
@@ -312,7 +460,15 @@ exports[`Test App components App snapshot renders correctly 1`] = `
             <h6
               className="copyright"
             >
-              © 2015-2019 Human Brain Project. All right reserved
+              © 2015-2019
+               
+              <a
+                href="https://www.humanbrainproject.eu/en/"
+                title="The Human Brain Project Website"
+              >
+                Human Brain Project
+              </a>
+              . All right reserved
             </h6>
           </li>
         </ul>
@@ -346,7 +502,7 @@ exports[`Test App components AppContainer snapshot renders correctly 1`] = `
           <a
             aria-current={null}
             className="navbar-brand"
-            href="/v3/home"
+            href="/home"
             onClick={[Function]}
           >
             Human Brain Project
@@ -367,7 +523,7 @@ exports[`Test App components AppContainer snapshot renders correctly 1`] = `
           >
             <a
               aria-current={null}
-              href="/v3/explore"
+              href="/explore"
               onClick={[Function]}
               title="Epidemiological Exploration "
             >
@@ -385,7 +541,7 @@ exports[`Test App components AppContainer snapshot renders correctly 1`] = `
           >
             <a
               aria-current={null}
-              href="/v3/review"
+              href="/review"
               onClick={[Function]}
               title="Interactive Analysis"
             >
@@ -412,7 +568,7 @@ exports[`Test App components AppContainer snapshot renders correctly 1`] = `
                   aria-haspopup={true}
                   className="dropdown-toggle btn btn-default"
                   disabled={false}
-                  id="experiment-dropdown"
+                  id="experimmanuelent-dropdown"
                   onClick={[Function]}
                   onKeyDown={[Function]}
                   role="button"
@@ -421,7 +577,7 @@ exports[`Test App components AppContainer snapshot renders correctly 1`] = `
                   BSD
                 </button>
                 <ul
-                  aria-labelledby="experiment-dropdown"
+                  aria-labelledby="experimmanuelent-dropdown"
                   className="dropdown-menu"
                   role="menu"
                 >
@@ -452,7 +608,7 @@ exports[`Test App components AppContainer snapshot renders correctly 1`] = `
           >
             <a
               aria-current={null}
-              href="/v3/profile"
+              href="/profile"
               onClick={[Function]}
               title="Profile"
             >
@@ -501,97 +657,89 @@ exports[`Test App components AppContainer snapshot renders correctly 1`] = `
             className="toolbar-icon-bg hidden-xs help"
           >
             <div
-              className="dropdown btn-group btn-group-default"
+              className="sc-jWBwVP bVKmFf"
             >
-              <button
-                aria-expanded={false}
-                aria-haspopup={true}
-                className="dropdown-toggle btn btn-default"
-                disabled={false}
-                id="experiment-dropdown"
-                onClick={[Function]}
-                onKeyDown={[Function]}
-                role="button"
-                type="button"
+              <div
+                className="dropdown btn-group btn-group-default"
               >
-                ?
-              </button>
-              <ul
-                aria-labelledby="experiment-dropdown"
-                className="dropdown-menu"
-                role="menu"
-              >
-                <li
-                  className=""
-                  role="presentation"
-                >
-                  <a
-                    href="#"
-                    onClick={[Function]}
-                    onKeyDown={[Function]}
-                    role="menuitem"
-                    tabIndex="-1"
-                  >
-                    <span
-                      className="glyphicon-book glyph"
-                    />
-                     MIP Documentation
-                  </a>
-                </li>
-                <li
-                  className=""
-                  role="presentation"
-                >
-                  <a
-                    href="#"
-                    onClick={[Function]}
-                    onKeyDown={[Function]}
-                    role="menuitem"
-                    tabIndex="-1"
-                  >
-                    <span
-                      className="glyphicon-film glyph"
-                    />
-                     MIP introduction (video)
-                  </a>
-                </li>
-                <div
+                <button
+                  aria-expanded={false}
+                  aria-haspopup={true}
+                  className="dropdown-toggle btn btn-default"
+                  disabled={false}
+                  id="help-dropdown"
+                  onClick={[Function]}
                   onKeyDown={[Function]}
-                  onSelect={[Function]}
-                  style={
-                    Object {
-                      "marginLeft": "28px",
-                    }
-                  }
+                  role="button"
+                  type="button"
                 >
-                  <span
-                    className="glyphicon-envelope glyph"
-                  />
-                   Email us at
+                  help
                    
-                  <a
-                    href="mailto://support@humanbrainproject.eu"
-                  >
-                    support@humanbrainproject.eu
-                  </a>
-                </div>
-                <div
-                  onKeyDown={[Function]}
-                  onSelect={[Function]}
-                  style={
-                    Object {
-                      "padding": "1em",
-                      "width": "380px",
-                    }
-                  }
+                  <span
+                    className="caret"
+                  />
+                </button>
+                <ul
+                  aria-labelledby="help-dropdown"
+                  className="dropdown-menu"
+                  role="menu"
                 >
+                  <li
+                    className=""
+                    role="presentation"
+                  >
+                    <a
+                      href="#"
+                      onClick={[Function]}
+                      onKeyDown={[Function]}
+                      role="menuitem"
+                      tabIndex="-1"
+                    >
+                      <span
+                        className="glyphicon-book glyph"
+                      />
+                       MIP Documentation
+                    </a>
+                  </li>
+                  <li
+                    className=""
+                    role="presentation"
+                  >
+                    <a
+                      href="#"
+                      onClick={[Function]}
+                      onKeyDown={[Function]}
+                      role="menuitem"
+                      tabIndex="-1"
+                    >
+                      <span
+                        className="glyphicon-film glyph"
+                      />
+                       MIP introduction (video)
+                    </a>
+                  </li>
+                  <div
+                    onKeyDown={[Function]}
+                    onSelect={[Function]}
+                  >
+                    <span
+                      className="glyphicon-envelope glyph"
+                    />
+                     Email us at
+                     
+                    <a
+                      href="mailto://support@humanbrainproject.eu"
+                    >
+                      support@humanbrainproject.eu
+                    </a>
+                  </div>
                   <div>
                     <div
                       id="feedback-form"
                     />
                   </div>
-                </div>
-              </ul>
+                </ul>
+              </div>
             </div>
           </li>
           <li
@@ -622,8 +770,164 @@ exports[`Test App components AppContainer snapshot renders correctly 1`] = `
     </header>
   </header>
   <section
-    className="main-content"
-  />
+    className="main-content sc-fBuWsC fLqrZW"
+  >
+    <div
+      className="sc-cMljjf hlOImX"
+    >
+      <div
+        className="sc-jAaTju sqzQM"
+      >
+        <div
+          className="sc-jWBwVP bVKmFf"
+        >
+          <div
+            className="dropdown btn-group btn-group-default"
+          >
+            <button
+              aria-expanded={false}
+              aria-haspopup={true}
+              className="dropdown-toggle btn btn-default"
+              disabled={false}
+              id="help-dropdown"
+              onClick={[Function]}
+              onKeyDown={[Function]}
+              role="button"
+              type="button"
+            >
+              help
+               
+              <span
+                className="caret"
+              />
+            </button>
+            <ul
+              aria-labelledby="help-dropdown"
+              className="dropdown-menu"
+              role="menu"
+            >
+              <li
+                className=""
+                role="presentation"
+              >
+                <a
+                  href="#"
+                  onClick={[Function]}
+                  onKeyDown={[Function]}
+                  role="menuitem"
+                  tabIndex="-1"
+                >
+                  <span
+                    className="glyphicon-book glyph"
+                  />
+                   MIP Documentation
+                </a>
+              </li>
+              <li
+                className=""
+                role="presentation"
+              >
+                <a
+                  href="#"
+                  onClick={[Function]}
+                  onKeyDown={[Function]}
+                  role="menuitem"
+                  tabIndex="-1"
+                >
+                  <span
+                    className="glyphicon-film glyph"
+                  />
+                   MIP introduction (video)
+                </a>
+              </li>
+              <div
+                onKeyDown={[Function]}
+                onSelect={[Function]}
+              >
+                <span
+                  className="glyphicon-envelope glyph"
+                />
+                 Email us at
+                 
+                <a
+                  href="mailto://support@humanbrainproject.eu"
+                >
+                  support@humanbrainproject.eu
+                </a>
+              </div>
+              <div>
+                <div
+                  id="feedback-form"
+                />
+              </div>
+            </ul>
+          </div>
+        </div>
+        <button
+          className="btn btn-default"
+          disabled={false}
+          onClick={[Function]}
+          type="submit"
+        >
+          Login
+        </button>
+      </div>
+      <img
+        alt="HBP logo"
+        src="hbp_logo_320.png"
+        title="Human Brain Project"
+      />
+      <h1>
+        THE MEDICAL INFORMATICS PLATFORM
+      </h1>
+      <div
+        className="sc-jDwBTQ guuMGV"
+      >
+        <section>
+          <p>
+            Thousands of brain images and terabytes of invaluable associated medical data are produced every day at a gigantic pace around the world. The Medical Informatics Platform (MIP) aims to federate this information and provide the tools to the experts to effectively analyse it and advance more rapidly in understanding the neurological and psychiatric diseases. This will in turn allow identifying the biological changes associated and open real possibilities for early diagnosis and personalised medicine.
+          </p>
+          <p>
+            The MIP provides methods to analyse federated data from hospitals, research centres and biobanks. Clinical scientists can develop, share and release results of their research. The MIP aims to bring together people across professional and scientific fields encourages them to actively contribute to the design and development of the services which the MIP provides.
+          </p>
+        </section>
+        <div>
+          <section>
+            <h3>
+              The MIP has three main goals:
+            </h3>
+            <ul>
+              <li>
+                Build the tools to federate clinical data, currently inaccessible outside hospital and research archives;
+              </li>
+              <li>
+                Recruit hospitals to contribute to and benefit by using the platform;
+              </li>
+              <li>
+                Develop tools for extracting biological signatures of diseases from multi-level data.
+              </li>
+            </ul>
+          </section>
+          <section>
+            <h3>
+              You can use the MIP
+            </h3>
+            <ul>
+              <li>
+                as a clinician, for objective diagnoses and treatment of brain disease;
+              </li>
+              <li>
+                as a neuroscientist, for the application and testing of new models and methods;
+              </li>
+              <li>
+                as a pharmaceutical or biotech company, for disease target discovery.
+              </li>
+            </ul>
+          </section>
+        </div>
+      </div>
+    </div>
+  </section>
   <footer
     id="footer"
   >
@@ -640,7 +944,15 @@ exports[`Test App components AppContainer snapshot renders correctly 1`] = `
             <h6
               className="copyright"
             >
-              © 2015-2019 Human Brain Project. All right reserved
+              © 2015-2019
+               
+              <a
+                href="https://www.humanbrainproject.eu/en/"
+                title="The Human Brain Project Website"
+              >
+                Human Brain Project
+              </a>
+              . All right reserved
             </h6>
           </li>
         </ul>

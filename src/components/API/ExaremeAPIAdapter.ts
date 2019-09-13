@@ -194,7 +194,7 @@ const buildExaremeAlgorithmRequest = (
   model: ModelResponse,
   selectedMethod: Algorithm,
   newParams: AlgorithmParameter[]
-) => {
+): AlgorithmParameter[] => {
   const params = [];
   let variableString;
   let covariablesArray: string[] = [];
