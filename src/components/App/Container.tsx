@@ -1,4 +1,5 @@
 import * as React from 'react';
+import ReactGA from 'react-ga';
 import { BrowserRouter as Router } from 'react-router-dom';
 import request from 'request-promise-native';
 import { Provider, Subscribe } from 'unstated';
@@ -41,6 +42,10 @@ class AppContainer extends React.Component<any, State> {
     try {
       const appConfig = JSON.parse(json);
       this.setState({ appConfig });
+
+      if (appConfig.ga) {
+        ReactGA.initialize(appConfig.ga);
+      }
     } catch (e) {
       const appConfig = {
         instanceName: 'MIP DEV',

@@ -19,6 +19,7 @@
     "react": "^16.9.0",
     "react-bootstrap": "^0.32.4",
     "react-dom": "^16.9.0",
+    "react-ga": "^2.6.0",
     "react-icons": "^3.7.0",
     "react-plotly.js": "^2.3.0",
     "react-router-dom": "^5.0.1",
