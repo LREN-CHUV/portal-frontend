@@ -19,11 +19,11 @@ import './App.css';
 
 import styled from 'styled-components';
 
-interface AppConfig {
+export interface AppConfig {
   version?: string;
-  instanceName: string;
-  mode: string;
-  theme: string;
+  instanceName?: string;
+  mode?: string;
+  ga?: string;
 }
 interface Props {
   appConfig: AppConfig;

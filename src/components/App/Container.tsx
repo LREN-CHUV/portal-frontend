@@ -13,12 +13,12 @@ import {
   webURL
 } from '../API'; // as interfaces
 import config from '../API/RequestHeaders';
-import App from '../App/App';
+import App, { AppConfig } from '../App/App';
 
 // UNSTATED.logStateChanges = process.env.NODE_ENV === "development";
 
 interface State {
-  appConfig: any;
+  appConfig: AppConfig;
 }
 
 class AppContainer extends React.Component<any, State> {
@@ -31,19 +31,20 @@ class AppContainer extends React.Component<any, State> {
 
   private intervalId: any; // FIXME: NodeJS.Timer | undefined;
 
-  public async componentDidMount() {
+  public async componentDidMount(): Promise<
+    [void, void, void, void, void, void]
+  > {
     this.intervalId = setInterval(() => this.apiExperiment.all(), 10 * 1000);
 
     // Conf written by dockerize
-    const json = await request.get(`${webURL}/config.json`);
+    const json = await request.get(`${webURL}/static/config.json`);
     try {
       const appConfig = JSON.parse(json);
       this.setState({ appConfig });
     } catch (e) {
       const appConfig = {
-        instanceName: 'MIP LOCAL',
-        mode: 'local',
-        theme: 'mip',
+        instanceName: 'MIP DEV',
+        mode: 'federation',
         version: 'alpha'
       };
       this.setState({ appConfig });

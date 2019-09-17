@@ -1,7 +1,7 @@
 FROM node:latest as builder
+LABEL maintainer = "manuel.spuhler@chuv.ch"
 
 WORKDIR /frontend
-
 
 ADD yarn.lock /frontend
 ADD package.json /frontend
@@ -15,15 +15,15 @@ COPY . /frontend
 
 RUN yarn build
 
-FROM nginx:1.13.0-alpine
 
-MAINTAINER arnaud.jutzeler@chuv.ch
+FROM nginx:alpine
+LABEL maintainer = "manuel.spuhler@chuv.ch"
 
 ARG BUILD_DATE
 ARG VCS_REF
 ARG VERSION
 
-ENV DOCKERIZE_VERSION=v0.6.0
+ENV DOCKERIZE_VERSION=v0.6.1
 
 RUN apk add --no-cache --update ca-certificates wget openssl bash \
     && update-ca-certificates \
