@@ -139,6 +139,24 @@ class Core extends Container<State> {
     return originalVar || { code, label: code };
   };
 
+  public variableList = (hierarchy: any) => {
+    let variables: any = [];
+
+    // TODO: fanciest function
+    const dummyAccumulator = (node: any) => {
+      if (node.variables) {
+        variables = [...variables, ...node.variables];
+      }
+
+      if (node.groups) {
+        return node.groups.map(dummyAccumulator);
+      }
+    };
+    dummyAccumulator(hierarchy);
+
+    return variables;
+  };
+
   public pathologies = async (): Promise<void> => {
     try {
       const data = await request.get(
@@ -160,19 +178,6 @@ class Core extends Container<State> {
       }));
 
       const pathology = json.length > 0 ? json[0] : undefined;
-      let variables: any = [];
-
-      // TODO: fanciest function
-      const dummyAccumulator = (node: any) => {
-        if (node.variables) {
-          variables = [...variables, ...node.variables];
-        }
-
-        if (node.groups) {
-          return node.groups.map(dummyAccumulator);
-        }
-      };
-      pathology.hierarchy.groups.map(dummyAccumulator);
 
       return await this.setState({
         datasets: pathology.datasets,
@@ -180,7 +185,7 @@ class Core extends Container<State> {
         hierarchy: pathology.hierarchy,
         pathologies,
         pathology: pathology.code,
-        variables
+        variables: this.variableList(pathology.hierarchy)
       });
     } catch (error) {
       return await this.setState({
@@ -200,7 +205,8 @@ class Core extends Container<State> {
     return this.setState({
       datasets: pathology && pathology.datasets,
       hierarchy: pathology && pathology.hierarchy,
-      pathology: pathology && pathology.code
+      pathology: pathology && pathology.code,
+      variables: pathology && this.variableList(pathology.hierarchy)
     });
   };
 
