@@ -132,10 +132,12 @@ class Mining extends Container<MiningState> {
 
   public exaremeHistograms = async ({
     x,
-    datasets
+    datasets,
+    pathology
   }: {
     x: VariableDatum;
     datasets: VariableEntity[];
+    pathology: string;
   }): Promise<void> => {
     if (datasets.length === 0) {
       return await this.setState({
@@ -163,6 +165,10 @@ class Mining extends Container<MiningState> {
       {
         name: 'x',
         value: x.code
+      },
+      {
+        name: 'pathology',
+        value: pathology
       }
     ];
 

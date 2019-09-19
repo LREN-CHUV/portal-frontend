@@ -180,7 +180,8 @@ export default ({
       } else {
         apiMining.exaremeHistograms({
           datasets: selectedDatasets,
-          x: selectedNode.data
+          x: selectedNode.data,
+          pathology: apiCore.state.pathology || ''
         });
       }
     }
