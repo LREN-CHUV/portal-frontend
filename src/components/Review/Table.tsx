@@ -167,7 +167,12 @@ const computeMinings = ({
   return rows;
 };
 
-const Table = ({ minings, selectedDatasets, query, lookup }: Props) => {
+const Table = ({
+  minings,
+  selectedDatasets,
+  query,
+  lookup
+}: Props): JSX.Element => {
   const rows = computeMinings({
     minings,
     selectedDatasets,
@@ -194,6 +199,7 @@ const Table = ({ minings, selectedDatasets, query, lookup }: Props) => {
       ]
     : [];
 
+  console.log(selectedDatasets);
   return rows && rows.length > 0 && (columns && columns.length > 0) ? (
     <DataTable value={rows}>{columns}</DataTable>
   ) : (

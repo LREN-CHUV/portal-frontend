@@ -51,7 +51,6 @@ export default ({
   appConfig,
   ...props
 }: Props): JSX.Element => {
-  const [datasets, setDatasets] = useState<VariableEntity[]>();
   const [selectedDatasets, setSelectedDatasets] = useState<VariableEntity[]>(
     []
   );
@@ -61,7 +60,6 @@ export default ({
   >();
   const [d3Model, setD3Model] = useState<D3Model>(initialD3Model);
   const [model, setModel] = useState<ModelResponse | undefined>();
-  // const [alert, setAlert] = useState<string | null>(null);
 
   const convertModelToD3Model = (
     aModel: ModelResponse,
@@ -128,16 +126,16 @@ export default ({
         setD3Model(initialD3Model);
         break;
 
-      case editPath:
-        draft = apiModel.state.draft;
-        if (draft && d3Layout) {
-          setModel(draft);
-          setD3Model(convertModelToD3Model(draft, d3Layout));
-          if (draft.query.trainingDatasets) {
-            setSelectedDatasets(draft.query.trainingDatasets);
-          }
-        }
-        break;
+      // case editPath:
+      //   draft = apiModel.state.draft;
+      //   if (draft && d3Layout) {
+      //     setModel(draft);
+      //     setD3Model(convertModelToD3Model(draft, d3Layout));
+      //     if (draft.query.trainingDatasets) {
+      //       setSelectedDatasets(draft.query.trainingDatasets);
+      //     }
+      //   }
+      //   break;
 
       default:
         apiModel.one(slug);
@@ -155,14 +153,6 @@ export default ({
       }
     }
   }, [apiModel.state.model, d3Layout]);
-
-  useEffect(() => {
-    const d = apiCore.state.datasets;
-    if (d) {
-      setDatasets(d);
-      setSelectedDatasets(d);
-    }
-  }, [apiCore.state.datasets]);
 
   useEffect(() => {
     const hierarchy = apiCore.state.hierarchy;
@@ -303,6 +293,8 @@ export default ({
     }
   };
 
+  useEffect(() => console.log(selectedDatasets), [selectedDatasets]);
+
   const handleSelectModel = (newModel?: ModelResponse) => {
     const { history } = props;
     if (newModel && newModel.slug) {
@@ -312,8 +304,10 @@ export default ({
     }
   };
 
-  const handleSelectPathology = (code: string) => {
-    apiCore.setPathology(code);
+  const handleSelectPathology = async (code: string) => {
+    await apiCore.setPathology(code);
+    await setSelectedDatasets([]);
+    await setModel(undefined);
   };
 
   const handleGoToAnalysis = async () => {
@@ -327,7 +321,7 @@ export default ({
   const nextProps = {
     apiCore,
     apiModel,
-    datasets,
+    datasets: apiCore.state.datasets,
     handleGoToAnalysis,
     handleSelectDataset,
     handleSelectModel,

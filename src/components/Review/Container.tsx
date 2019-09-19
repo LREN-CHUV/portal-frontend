@@ -331,7 +331,6 @@ class Container extends React.Component<Props, State> {
       };
 
       apiMining.summaryStatisticsByDataset({ payload });
-      apiMining.heatmaps({ payload });
     }
   };
 

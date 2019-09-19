@@ -214,35 +214,6 @@ class Mining extends Container<MiningState> {
     });
   };
 
-  public heatmaps = async ({
-    payload
-  }: {
-    payload: MiningPayload;
-  }): Promise<any> => {
-    await this.setState({
-      heatmaps: [
-        {
-          data: undefined,
-          dataset: undefined,
-          error: undefined
-        }
-      ]
-    });
-    payload = {
-      ...payload,
-      algorithm: {
-        code: 'correlationHeatmap',
-        name: 'Correlation heatmap',
-        parameters: [],
-        validation: false
-      }
-    };
-    const heatmap = await this.fetchOne({ payload });
-    return await this.setState({
-      heatmaps: Mining.normalizeHeatmapData(heatmap)
-    });
-  };
-
   public histograms = async ({
     payload
   }: {
