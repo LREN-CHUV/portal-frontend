@@ -128,7 +128,7 @@ export default ({ layout, ...props }: Props) => {
       .filter(
         (d: any) =>
           ![
-            d3Model.variable,
+            ...(d3Model.variables || []),
             ...(d3Model.covariables || []),
             ...(d3Model.filters || [])
           ].includes(d)
@@ -155,9 +155,12 @@ export default ({ layout, ...props }: Props) => {
         .duration(250)
         .style('fill', '#337ab7');
     }
-    if (d3Model.variable) {
+    if (d3Model.variables) {
       circle
-        .filter((d: any) => d3Model.variable === d)
+        .filter(
+          (d: any) =>
+            d3Model.variables !== undefined && d3Model.variables.includes(d)
+        )
         .transition()
         .duration(250)
         .style('fill', '#5cb85c');

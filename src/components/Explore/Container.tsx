@@ -16,7 +16,7 @@ const padding = 1.5;
 const initialD3Model = {
   covariables: undefined,
   filters: undefined,
-  variable: undefined
+  variables: undefined
 };
 
 export type HierarchyCircularNode = d3.HierarchyCircularNode<VariableDatum>;
@@ -24,7 +24,7 @@ export type HierarchyCircularNode = d3.HierarchyCircularNode<VariableDatum>;
 export interface D3Model {
   covariables: HierarchyCircularNode[] | undefined;
   filters: HierarchyCircularNode[] | undefined;
-  variable: HierarchyCircularNode | undefined;
+  variables: HierarchyCircularNode[] | undefined;
 }
 
 export enum ModelType {
@@ -105,13 +105,15 @@ export default ({
           .descendants()
           .filter(l => filterVariables.includes(l.data.code)),
       groupings: undefined,
-      variable:
+      variables:
         (query.variables !== undefined &&
           query.variables.length > 0 &&
           aD3Layout
             .descendants()
-            .find(l => l.data.code === query.variables![0].code)) ||
-        undefined
+            .filter(l =>
+              query.variables!.map(c => c.code).includes(l.data.code)
+            )) ||
+        []
     };
 
     return nextModel;
@@ -126,16 +128,16 @@ export default ({
         setD3Model(initialD3Model);
         break;
 
-      // case editPath:
-      //   draft = apiModel.state.draft;
-      //   if (draft && d3Layout) {
-      //     setModel(draft);
-      //     setD3Model(convertModelToD3Model(draft, d3Layout));
-      //     if (draft.query.trainingDatasets) {
-      //       setSelectedDatasets(draft.query.trainingDatasets);
-      //     }
-      //   }
-      //   break;
+      case editPath:
+        draft = apiModel.state.draft;
+        if (draft && d3Layout) {
+          setModel(draft);
+          setD3Model(convertModelToD3Model(draft, d3Layout));
+          if (draft.query.trainingDatasets) {
+            setSelectedDatasets(draft.query.trainingDatasets);
+          }
+        }
+        break;
 
       default:
         apiModel.one(slug);
@@ -199,18 +201,25 @@ export default ({
   const handleUpdateD3Model = (
     type: ModelType,
     node: HierarchyCircularNode
-  ) => {
+  ): void => {
     if (type === ModelType.VARIABLE) {
-      const nextModel =
-        d3Model.variable === node
-          ? { ...d3Model, variable: undefined }
-          : {
-              ...d3Model,
-              covariables:
-                d3Model.covariables &&
-                d3Model.covariables.filter(c => c !== node),
-              variable: node
-            };
+      const nextModel = d3Model.variables
+        ? {
+            ...d3Model,
+            variables: [
+              ...d3Model.variables.filter(c => !node.leaves().includes(c)),
+              ...node.leaves().filter(c => !d3Model.variables!.includes(c))
+            ],
+            covariables: d3Model.covariables
+              ? [...d3Model.covariables.filter(c => !node.leaves().includes(c))]
+              : []
+          }
+        : {
+            ...d3Model,
+            variables: node.leaves(),
+            covariables:
+              d3Model.covariables && d3Model.covariables.filter(c => c !== node)
+          };
 
       setD3Model(nextModel);
     }
@@ -223,18 +232,15 @@ export default ({
               ...d3Model.covariables.filter(c => !node.leaves().includes(c)),
               ...node.leaves().filter(c => !d3Model.covariables!.includes(c))
             ],
-            variable:
-              d3Model.variable && node.leaves().includes(d3Model.variable)
-                ? undefined
-                : d3Model.variable
+            variables: d3Model.variables
+              ? [...d3Model.variables.filter(c => !node.leaves().includes(c))]
+              : []
           }
         : {
             ...d3Model,
             covariables: node.leaves(),
-            variable:
-              d3Model.variable && node.leaves().includes(d3Model.variable)
-                ? undefined
-                : d3Model.variable
+            variables:
+              d3Model.variables && d3Model.variables.filter(c => c !== node)
           };
 
       setD3Model(nextModel);
@@ -277,7 +283,10 @@ export default ({
             .map(v => ({ code: v.data.code }))) ||
         [],
       trainingDatasets: selectedDatasets,
-      variables: aD3Model.variable && [{ code: aD3Model.variable.data.code }]
+      variables:
+        (aD3Model.variables &&
+          aD3Model.variables.map(v => ({ code: v.data.code }))) ||
+        []
     };
 
     if (aModel) {
@@ -294,7 +303,7 @@ export default ({
     }
   };
 
-  useEffect(() => console.log(selectedDatasets), [selectedDatasets]);
+  // useEffect(() => console.log(selectedDatasets), [selectedDatasets]);
 
   const handleSelectModel = (newModel?: ModelResponse) => {
     const { history } = props;

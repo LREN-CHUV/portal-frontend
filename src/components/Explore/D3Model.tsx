@@ -59,8 +59,8 @@ export default (props: ModelProps) => {
         .selectAll('p')
         .remove();
 
-      if (model && model.variable) {
-        makeTree(model.variable.descendants(), ModelType.VARIABLE);
+      if (model && model.variables) {
+        makeTree(model.variables, ModelType.VARIABLE);
       }
 
       if (model && model.covariables) {

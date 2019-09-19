@@ -153,16 +153,20 @@ export default (props: ExploreProps) => {
                   className="child"
                   bsStyle={'success'}
                   bsSize={'small'}
-                  disabled={
-                    !selectedNode ||
-                    (selectedNode && !selectedNode.data.isVariable)
-                  }
+                  disabled={!selectedNode}
                   // tslint:disable-next-line jsx-no-lambda
                   onClick={() =>
                     handleUpdateD3Model(ModelType.VARIABLE, selectedNode)
                   }
                 >
-                  {d3Model.variable === selectedNode ? '-' : '+'} AS VARIABLE
+                  {d3Model.variables &&
+                  selectedNode &&
+                  d3Model.variables.filter(c =>
+                    selectedNode.leaves().includes(c)
+                  ).length === selectedNode.leaves().length
+                    ? '-'
+                    : '+'}{' '}
+                  AS VARIABLE
                 </Button>
                 <Button
                   className="child"
