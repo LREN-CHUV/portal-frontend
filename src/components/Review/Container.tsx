@@ -330,7 +330,7 @@ class Container extends React.Component<Props, State> {
         variables: query.variables ? query.variables : []
       };
 
-      apiMining.summaryStatisticsByDataset({ payload });
+      // apiMining.summaryStatisticsByDataset({ payload });
     }
   };
 
