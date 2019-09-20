@@ -199,7 +199,6 @@ const Table = ({
       ]
     : [];
 
-  console.log(selectedDatasets);
   return rows && rows.length > 0 && (columns && columns.length > 0) ? (
     <DataTable value={rows}>{columns}</DataTable>
   ) : (
