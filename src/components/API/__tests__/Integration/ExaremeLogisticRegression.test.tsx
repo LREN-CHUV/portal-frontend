@@ -16,7 +16,7 @@ import {
 
 const modelSlug = `model-${Math.round(Math.random() * 10000)}`;
 const experimentCode = 'LOGISTIC_REGRESSION';
-const parameters: any = [];
+const parameters: any = [{ code: 'pathology', value: 'dementia' }];
 
 const model: any = (datasets: VariableEntity[]) => ({
   query: {

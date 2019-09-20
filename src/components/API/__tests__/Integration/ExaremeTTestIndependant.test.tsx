@@ -36,7 +36,8 @@ const parameters: any = [
   {
     code: 'meandiff',
     value: '1'
-  }
+  },
+  { code: 'pathology', value: 'dementia' }
 ];
 const datasets = [{ code: 'adni' }];
 const model: any = (datasets: VariableEntity[]) => ({

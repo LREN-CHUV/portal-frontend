@@ -21,7 +21,8 @@ const parameters = [
     code: 'referencevalues',
     value: '[{"name":"alzheimerbroadcategory","val":"Other"}]'
   },
-  { code: 'encodingparameter', value: 'dummycoding' }
+  { code: 'encodingparameter', value: 'dummycoding' },
+  { code: 'pathology', value: 'dementia' }
 ];
 
 const model: any = (datasets: VariableEntity[]) => ({

@@ -16,7 +16,10 @@ import {
 
 const modelSlug = `model-${Math.round(Math.random() * 10000)}`;
 const experimentCode = 'HISTOGRAMS';
-const parameters = [{ code: 'bins', value: '40' }];
+const parameters = [
+  { code: 'bins', value: '40' },
+  { code: 'pathology', value: 'dementia' }
+];
 
 const model: any = (datasets: VariableEntity[]) => ({
   query: {

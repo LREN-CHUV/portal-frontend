@@ -16,7 +16,10 @@ import {
 
 const modelSlug = `model-${Math.round(Math.random() * 10000)}`;
 const experimentCode = 'ID3';
-const parameters = [{ code: 'iterations_max_number', value: 20 }];
+const parameters = [
+  { code: 'iterations_max_number', value: 20 },
+  { code: 'pathology', value: 'dementia' }
+];
 
 const model: any = () => ({
   query: {

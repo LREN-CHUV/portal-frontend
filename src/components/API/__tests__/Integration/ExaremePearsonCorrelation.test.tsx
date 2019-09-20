@@ -20,7 +20,8 @@ const parameters = [
   { code: 'bins', value: '40' },
   { code: 'iterations_max_number', value: 20 },
   { code: 'sstype', value: 2 },
-  { code: 'outputformat', value: 'pfa' }
+  { code: 'outputformat', value: 'pfa' },
+  { code: 'pathology', value: 'dementia' }
 ];
 
 const model: any = (datasets: VariableEntity[]) => ({

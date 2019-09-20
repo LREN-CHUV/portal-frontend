@@ -36,7 +36,8 @@ const parameters: any = [
   {
     code: 'sediff',
     value: '1'
-  }
+  },
+  { code: 'pathology', value: 'dementia' }
 ];
 const model: any = (datasets: VariableEntity[]) => ({
   query: {

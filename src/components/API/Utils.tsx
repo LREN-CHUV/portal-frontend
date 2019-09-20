@@ -16,10 +16,17 @@ const TIMEOUT_DURATION = 60 * 2;
 
 // Tests utils
 
-const getDatasets = async (): Promise<VariableEntity[] | undefined> => {
-  await apiCore.datasets();
+const RESEARCH_DATASETS = ['adni', 'ppmi', 'edsd'];
 
-  return apiCore.state.datasets;
+const getDatasets = async (
+  researchOnly = true
+): Promise<VariableEntity[] | undefined> => {
+  await apiCore.datasets();
+  const datasets = apiCore.state.datasets;
+
+  return researchOnly
+    ? datasets && datasets.filter(d => RESEARCH_DATASETS.includes(d.code))
+    : datasets;
 };
 
 const createModel = async ({
