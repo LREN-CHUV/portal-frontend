@@ -136,6 +136,7 @@ const App = ({
                 apiMining={apiMining}
                 apiModel={apiModel}
                 apiCore={apiCore}
+                appConfig={appConfig}
                 {...props}
               />
             )}

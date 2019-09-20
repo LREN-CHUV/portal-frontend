@@ -154,7 +154,7 @@ const computeMinings = ({
               )
             }));
           } else {
-            row[code] = processContinuousData(variable.code, data);
+            row[code] = JSON.stringify(data); //processContinuousData(variable.code, data);
           }
         }
       }

@@ -7,6 +7,7 @@ import { RouteComponentProps } from 'react-router-dom';
 import { APICore, APIMining, APIModel } from '../API';
 import { VariableEntity } from '../API/Core';
 import { ModelResponse, Query } from '../API/Model';
+import { AppConfig } from '../App/App';
 import { d3Hierarchy, VariableDatum } from './d3Hierarchy';
 import CirclePack from './D3PackLayer';
 
@@ -39,7 +40,7 @@ interface Props extends RouteComponentProps<Params> {
   apiCore: APICore;
   apiMining: APIMining;
   apiModel: APIModel;
-  appConfig: any;
+  appConfig: AppConfig;
 }
 
 export const editPath = 'edit';

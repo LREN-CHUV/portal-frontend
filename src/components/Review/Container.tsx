@@ -9,6 +9,7 @@ import { APICore, APIMining, APIModel } from '../API';
 import { VariableEntity } from '../API/Core';
 import { MiningPayload } from '../API/Mining';
 import { ModelResponse, Query } from '../API/Model';
+import { AppConfig } from '../App/App';
 import { editPath } from '../Explore/Container';
 import { IAlert } from '../UI/Alert';
 import Model from '../UI/Model';
@@ -24,6 +25,7 @@ interface Props extends RouteComponentProps<Params> {
   apiModel: APIModel;
   apiCore: APICore;
   apiMining: APIMining;
+  appConfig: AppConfig;
 }
 interface State {
   alert?: IAlert;
@@ -327,7 +329,7 @@ class Container extends React.Component<Props, State> {
   };
 
   private setMinings = async ({ query }: { query: Query }) => {
-    const { apiMining } = this.props;
+    const { apiMining, appConfig, apiCore } = this.props;
     const datasets = query.trainingDatasets;
 
     if (datasets && query) {
@@ -336,10 +338,14 @@ class Container extends React.Component<Props, State> {
         datasets,
         filters: query.filters ? query.filters : '',
         grouping: query.groupings ? query.groupings : [],
-        variables: query.variables ? query.variables : []
+        variables: query.variables ? query.variables : [],
+        pathology: apiCore.state.pathology // FIXME: should be in the model
       };
-
-      apiMining.summaryStatisticsByDataset({ payload });
+      if (appConfig.mode === 'local') {
+        apiMining.summaryStatisticsByDataset({ payload });
+      } else {
+        apiMining.descriptiveStatisticsByDataset({ payload });
+      }
     }
   };
 

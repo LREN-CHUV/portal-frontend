@@ -35,6 +35,7 @@ export interface MiningPayload {
   covariables?: VariableEntity[];
   datasets: VariableEntity[];
   filters: string;
+  pathology?: string;
 }
 
 export interface MiningState {
@@ -46,34 +47,6 @@ export interface MiningState {
 
 //
 class Mining extends Container<MiningState> {
-  /*
-    "data": [{ x: n }]
-    "data": { "data": [{ x: n }] }
-    "data": [{ "data": [{ x: n }] }]
-  */
-  public static normalizeHeatmapData = (
-    heatmap: MiningResponseShape
-  ): MiningResponseShape[] => {
-    if (Array.isArray(heatmap.data)) {
-      const isDataNested = heatmap.data.map(d => d.data).includes(true);
-      if (isDataNested) {
-        return heatmap.data.map(d => ({
-          ...heatmap,
-          data: d.data
-        }));
-      } else {
-        return [heatmap];
-      }
-    } else {
-      const data = heatmap.data && heatmap.data.data;
-      return [
-        {
-          ...heatmap,
-          data
-        }
-      ];
-    }
-  };
   public state: MiningState;
 
   private cachedSummaryStatistics: any = {};
@@ -259,6 +232,104 @@ class Mining extends Container<MiningState> {
     return await this.setState({
       histograms: { loading: false, error: undefined, data: response.data }
     });
+  };
+
+  public descriptiveStatisticsByDataset = async ({
+    payload
+  }: {
+    payload: MiningPayload;
+  }): Promise<any> => {
+    const hashKey = stringHash(
+      `${payload.variables}${payload.covariables}${payload.grouping}${payload.filters}`
+    );
+    const queries = payload.datasets.map(dataset => {
+      const code = dataset.code;
+
+      const response =
+        this.cachedSummaryStatistics[code] &&
+        this.cachedSummaryStatistics[code].hashKey === hashKey;
+
+      if (!response) {
+        this.cachedSummaryStatistics[code] = {
+          data: undefined,
+          dataset,
+          error: undefined,
+          hashKey
+        };
+      }
+
+      return this.cachedSummaryStatistics[code];
+    });
+
+    this.setState({ summaryStatistics: queries });
+
+    queries
+      .filter(q => !q.data)
+      .forEach(async q => {
+        const parameters: Parameter[] = [
+          {
+            name: 'dataset',
+            value: q.dataset.code
+          },
+          {
+            name: 'x',
+            value: payload.variables.map(v => v.code).toString()
+          },
+          {
+            name: 'pathology',
+            value: payload.pathology
+          }
+        ];
+
+        const mining = await this.fetchExaremeStats(parameters);
+        console.log(mining.data.result.map((d: any) => d.data));
+
+        this.cachedSummaryStatistics[q.dataset.code] = {
+          data: mining.data.result
+            .map((d: any) => d.data)
+            .map((d: any) => d.data)
+            .flat(),
+          dataset: q.dataset,
+          error: mining.error,
+          hashKey
+        };
+
+        const summaryStatistics = payload.datasets.map(
+          dataset => this.cachedSummaryStatistics[dataset.code]
+        );
+        this.setState({ summaryStatistics });
+      });
+  };
+
+  public fetchExaremeStats = async (
+    parameters: Parameter[]
+  ): Promise<Response> => {
+    try {
+      const data = await request({
+        body: JSON.stringify(parameters),
+        headers: {
+          ...this.options.headers,
+          'Content-Type': 'application/json;charset=UTF-8'
+        },
+        method: 'POST',
+        uri: `${this.backendURL}/mining/exareme-stats`
+      });
+
+      const jsonString = await JSON.parse(data);
+
+      // FIXME: in exareme, return type should be json
+      const json = await JSON.parse(jsonString);
+
+      if (json && json.error) {
+        return { error: json.error, data: undefined };
+      }
+
+      return { error: undefined, data: json };
+    } catch (error) {
+      console.log(error);
+
+      return { error, data: undefined };
+    }
   };
 
   // fetch for each dataset, otherwise values are aggregated for all datasets
