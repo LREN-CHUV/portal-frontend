@@ -377,9 +377,23 @@ class APIAdapter {
     // Branch backend responses based on data shape
     try {
       const resultParsed = parse(experiment.result);
-
       const p =
         resultParsed && resultParsed.length > 0 && resultParsed[0].result;
+      const e =
+        resultParsed && resultParsed.length > 0 && resultParsed[0].error;
+
+      if (e) {
+        return {
+          ...experimentResponse,
+          engine: Engine.Exareme,
+          results: [
+            {
+              type: MIME_TYPES.ERROR,
+              data: e
+            }
+          ]
+        };
+      }
 
       if (p) {
         const isExareme = p.every((r: any) => r.data && r.type);
