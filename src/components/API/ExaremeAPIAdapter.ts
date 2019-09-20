@@ -8,7 +8,13 @@ import { ModelResponse } from './Model';
 import { ENABLED_ALGORITHMS } from '../constants';
 const independents = ['X', 'column1', 'x', 'descriptive_attributes'];
 const dependents = ['Y', 'column2', 'y', 'target_attributes'];
-const hiddenParameters = [...dependents, ...independents, 'dataset', 'filter'];
+const hiddenParameters = [
+  ...dependents,
+  ...independents,
+  'dataset',
+  'filter',
+  'pathology'
+];
 
 const buildConstraints = (algo: any) => {
   const variable = algo.parameters.find((p: any) =>
@@ -214,35 +220,22 @@ const buildExaremeAlgorithmRequest = (
     ];
   }
 
-  let yCode = 'y';
-  let xCode = 'x';
-
-  switch (selectedMethod.code) {
-    case 'PIPELINE_ISOUP_REGRESSION_TREE_SERIALIZER':
-    case 'PIPELINE_ISOUP_MODEL_TREE_SERIALIZER':
-      yCode = 'target_attributes';
-      xCode = 'descriptive_attributes';
-      break;
-
-    default:
-      break;
-  }
-
   params.push({
-    code: yCode,
+    code: 'y',
     value: variableString
   });
 
+  // FIXME: Formula input
   if (covariablesArray.length > 0) {
     const x =
       selectedMethod.code === 'LINEAR_REGRESSION' ||
       selectedMethod.code === 'ANOVA'
         ? {
-            code: xCode,
+            code: 'x',
             value: covariablesArray.toString().replace(/,/g, '+')
           }
         : {
-            code: xCode,
+            code: 'x',
             value: covariablesArray.toString()
           };
 
@@ -255,6 +248,14 @@ const buildExaremeAlgorithmRequest = (
     params.push({
       code: 'dataset',
       value: nextDatasets.toString()
+    });
+  }
+
+  const pathology = model.query.pathology;
+  if (pathology) {
+    params.push({
+      code: 'pathology',
+      value: pathology.toString()
     });
   }
 

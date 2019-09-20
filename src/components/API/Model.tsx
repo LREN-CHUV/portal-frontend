@@ -32,7 +32,8 @@ export interface IUser {
   votedApps?: string[];
 }
 export interface Query {
-  filters: string;
+  filters?: string;
+  pathology?: string;
   filterVariables?: VariableEntity[];
   variables?: VariableEntity[];
   coVariables?: VariableEntity[];

@@ -136,6 +136,9 @@ export default ({
           if (draft.query.trainingDatasets) {
             setSelectedDatasets(draft.query.trainingDatasets);
           }
+          if (draft.query.pathology) {
+            apiCore.setPathology(draft.query.pathology);
+          }
         }
         break;
 
@@ -152,6 +155,9 @@ export default ({
       setD3Model(convertModelToD3Model(next, d3Layout));
       if (next.query.trainingDatasets) {
         setSelectedDatasets(next.query.trainingDatasets);
+      }
+      if (next.query.pathology) {
+        apiCore.setPathology(next.query.pathology);
       }
     }
   }, [apiModel.state.model, d3Layout]);
@@ -315,9 +321,14 @@ export default ({
   };
 
   const handleSelectPathology = async (code: string) => {
+    // FIXME: handle that smoothly
+    // FIXME: display warning to the user
+    // const { history } = props;
+    // history.push(`/explore`);
     await apiCore.setPathology(code);
-    await setSelectedDatasets([]);
-    await setModel(undefined);
+    // await setSelectedDatasets([]);
+    // await setModel(undefined);
+    // await setD3Model(initialD3Model);
   };
 
   const handleGoToAnalysis = async () => {

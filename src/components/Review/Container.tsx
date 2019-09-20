@@ -267,9 +267,18 @@ class Container extends React.Component<Props, State> {
   };
 
   private handleSaveModel = async ({ title }: { title: string }) => {
-    const { apiModel } = this.props;
+    const { apiModel, apiCore } = this.props;
     const model = apiModel.state.draft;
-    const slug = await apiModel.save({ model, title });
+    const nextModel = model
+      ? {
+          ...model,
+          query: {
+            ...model.query,
+            pathology: apiCore.state.pathology
+          }
+        }
+      : undefined;
+    const slug = await apiModel.save({ model: nextModel, title });
     this.setState({ alert: { message: 'Model saved' } });
 
     const { history } = this.props;
@@ -325,12 +334,12 @@ class Container extends React.Component<Props, State> {
       const payload: MiningPayload = {
         covariables: query.coVariables ? query.coVariables : [],
         datasets,
-        filters: query.filters,
+        filters: query.filters ? query.filters : '',
         grouping: query.groupings ? query.groupings : [],
         variables: query.variables ? query.variables : []
       };
 
-      // apiMining.summaryStatisticsByDataset({ payload });
+      apiMining.summaryStatisticsByDataset({ payload });
     }
   };
 
