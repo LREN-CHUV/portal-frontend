@@ -98,7 +98,9 @@ class Container extends React.Component<Props, State> {
               model={model}
               selectedSlug={this.props.match.params.slug}
               showDatasets={false}
-              variables={apiCore.state.variables}
+              variables={apiCore.variablesForPathology(
+                apiModel.state.model && apiModel.state.model.query.pathology
+              )}
               items={apiModel.state.models}
               handleSelectModel={this.handleSelectModel}
             />
@@ -106,7 +108,9 @@ class Container extends React.Component<Props, State> {
               <Panel.Body>
                 <Validation
                   isPredictiveMethod={false}
-                  datasets={apiCore.state.datasets}
+                  datasets={apiCore.datasetsForPathology(
+                    query && query.pathology
+                  )}
                   query={query}
                   handleUpdateQuery={this.handleUpdateDataset}
                 />
@@ -145,7 +149,7 @@ class Container extends React.Component<Props, State> {
 
   private makeFilters = ({ apiCore }: { apiCore: APICore }) => {
     const { query } = this.state;
-    const variables = apiCore.state.variables;
+    const variables = apiCore.variablesForPathology(query && query.pathology);
 
     // FIXME: move to Filter, refactor in a pure way
     let fields: any[] = [];
@@ -269,18 +273,9 @@ class Container extends React.Component<Props, State> {
   };
 
   private handleSaveModel = async ({ title }: { title: string }) => {
-    const { apiModel, apiCore } = this.props;
+    const { apiModel } = this.props;
     const model = apiModel.state.draft;
-    const nextModel = model
-      ? {
-          ...model,
-          query: {
-            ...model.query,
-            pathology: apiCore.state.pathology
-          }
-        }
-      : undefined;
-    const slug = await apiModel.save({ model: nextModel, title });
+    const slug = await apiModel.save({ model, title });
     this.setState({ alert: { message: 'Model saved' } });
 
     const { history } = this.props;
@@ -329,7 +324,7 @@ class Container extends React.Component<Props, State> {
   };
 
   private setMinings = async ({ query }: { query: Query }) => {
-    const { apiMining, appConfig, apiCore } = this.props;
+    const { apiMining, appConfig } = this.props;
     const datasets = query.trainingDatasets;
 
     if (datasets && query) {
@@ -339,7 +334,7 @@ class Container extends React.Component<Props, State> {
         filters: query.filters ? query.filters : '',
         grouping: query.groupings ? query.groupings : [],
         variables: query.variables ? query.variables : [],
-        pathology: apiCore.state.pathology // FIXME: should be in the model
+        pathology: query.pathology ? query.pathology : ''
       };
       if (appConfig.mode === 'local') {
         apiMining.summaryStatisticsByDataset({ payload });

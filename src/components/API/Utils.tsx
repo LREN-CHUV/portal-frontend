@@ -1,12 +1,12 @@
 import APICore, { AlgorithmParameter, VariableEntity } from './Core';
 import { buildExaremeAlgorithmRequest } from './ExaremeAPIAdapter';
 import APIExperiment, {
+  Engine,
   ExperimentPayload,
   State as ExperimentState
 } from './Experiment';
-import APIModel, { ModelState, ModelResponse } from './Model';
+import APIModel, { ModelResponse, ModelState } from './Model';
 import config from './RequestHeaders';
-import { Engine } from './Experiment';
 
 const apiModel = new APIModel(config);
 const apiExperiment = new APIExperiment(config);
@@ -19,10 +19,10 @@ const TIMEOUT_DURATION = 60 * 2;
 const RESEARCH_DATASETS = ['adni', 'ppmi', 'edsd'];
 
 const getDatasets = async (
-  researchOnly = true
+  researchOnly = true,
+  code = 'dementia'
 ): Promise<VariableEntity[] | undefined> => {
-  await apiCore.datasets();
-  const datasets = apiCore.state.datasets;
+  const datasets = apiCore.datasetsForPathology(code);
 
   return researchOnly
     ? datasets && datasets.filter(d => RESEARCH_DATASETS.includes(d.code))

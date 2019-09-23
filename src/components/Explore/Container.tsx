@@ -52,6 +52,9 @@ export default ({
   appConfig,
   ...props
 }: Props): JSX.Element => {
+  const [selectedPathology, setSelectedPathology] = useState<
+    string | undefined
+  >();
   const [selectedDatasets, setSelectedDatasets] = useState<VariableEntity[]>(
     []
   );
@@ -120,6 +123,31 @@ export default ({
     return nextModel;
   };
 
+  // select  default pathology at start
+  useEffect(() => {
+    if (!selectedPathology && apiCore.state.pathologies) {
+      const defaultPathology = apiCore.state.pathologies[0];
+      setSelectedPathology(defaultPathology.code);
+    }
+  }, [apiCore.state.pathologies, selectedPathology]);
+
+  // Switch datasets, variables, models based on selected pathology
+  useEffect(() => {
+    if (selectedPathology) {
+      const hierarchy = apiCore.hierarchyForPathology(selectedPathology);
+      if (hierarchy) {
+        const node = d3Hierarchy(hierarchy);
+        const bubbleLayout = d3
+          .pack<VariableDatum>()
+          .size([diameter, diameter])
+          .padding(padding);
+
+        const d3layout = node && bubbleLayout(node);
+        setD3Layout(d3layout);
+      }
+    }
+  }, [apiCore, selectedPathology]);
+
   useEffect(() => {
     const slug = props.match.params.slug;
     let draft;
@@ -138,7 +166,7 @@ export default ({
             setSelectedDatasets(draft.query.trainingDatasets);
           }
           if (draft.query.pathology) {
-            apiCore.setPathology(draft.query.pathology);
+            setSelectedPathology(draft.query.pathology);
           }
         }
         break;
@@ -149,6 +177,7 @@ export default ({
     }
   }, [props.match.params.slug, d3Layout, apiModel]);
 
+  // Sync selected variables and D3 Model
   useEffect(() => {
     const next = apiModel.state.model;
     if (next && d3Layout) {
@@ -158,25 +187,12 @@ export default ({
         setSelectedDatasets(next.query.trainingDatasets);
       }
       if (next.query.pathology) {
-        apiCore.setPathology(next.query.pathology);
+        setSelectedPathology(next.query.pathology);
       }
     }
   }, [apiModel.state.model, d3Layout]);
 
-  useEffect(() => {
-    const hierarchy = apiCore.state.hierarchy;
-    if (hierarchy) {
-      const node = d3Hierarchy(hierarchy);
-      const bubbleLayout = d3
-        .pack<VariableDatum>()
-        .size([diameter, diameter])
-        .padding(padding);
-
-      const d3layout = node && bubbleLayout(node);
-      setD3Layout(d3layout);
-    }
-  }, [apiCore.state.hierarchy]);
-
+  // Load Histograms for selected variable
   useEffect(() => {
     if (selectedNode && selectedNode.data.isVariable && selectedDatasets) {
       if (appConfig.mode === 'local') {
@@ -190,7 +206,7 @@ export default ({
         apiMining.exaremeHistograms({
           datasets: selectedDatasets,
           x: selectedNode.data,
-          pathology: apiCore.state.pathology || ''
+          pathology: selectedPathology || ''
         });
       }
     }
@@ -310,8 +326,6 @@ export default ({
     }
   };
 
-  // useEffect(() => console.log(selectedDatasets), [selectedDatasets]);
-
   const handleSelectModel = (newModel?: ModelResponse) => {
     const { history } = props;
     if (newModel && newModel.slug) {
@@ -319,17 +333,6 @@ export default ({
     } else {
       history.push(`/explore`);
     }
-  };
-
-  const handleSelectPathology = async (code: string) => {
-    // FIXME: handle that smoothly
-    // FIXME: display warning to the user
-    // const { history } = props;
-    // history.push(`/explore`);
-    await apiCore.setPathology(code);
-    // await setSelectedDatasets([]);
-    // await setModel(undefined);
-    // await setD3Model(initialD3Model);
   };
 
   const handleGoToAnalysis = async () => {
@@ -343,17 +346,17 @@ export default ({
   const nextProps = {
     apiCore,
     apiModel,
-    datasets: apiCore.state.datasets,
+    datasets: apiCore.datasetsForPathology(selectedPathology),
     handleGoToAnalysis,
     handleSelectDataset,
     handleSelectModel,
     handleSelectNode: setSelectedNode,
-    handleSelectPathology,
+    handleSelectPathology: setSelectedPathology,
     handleUpdateD3Model,
     histograms: apiMining.state.histograms,
     selectedDatasets,
     selectedNode,
-    selectedPathology: apiCore.state.pathology
+    selectedPathology
   };
 
   return (

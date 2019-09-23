@@ -106,18 +106,13 @@ export interface Article {
 export interface State {
   error?: string;
   loading?: boolean;
-  hierarchy?: Hierarchy;
-  variables?: VariableEntity[];
-  datasets?: VariableEntity[];
   algorithms?: Algorithm[];
   pathologies?: VariableEntity[];
-  pathology?: string;
+  pathologyJSON?: Pathology[];
   article?: Article;
   articles?: Article[];
   stats?: Stats;
 }
-
-let pathologiesCached: Pathology[] | undefined;
 
 class Core extends Container<State> {
   public state: State = {};
@@ -132,32 +127,16 @@ class Core extends Container<State> {
   }
 
   public lookup = (code: string): VariableEntity => {
-    const variables = this.state.variables;
-    const originalVar =
-      variables && variables.find(variable => variable.code === code);
+    // FIXME: restore traversal function
+    // const variables = this.state.variables;
+    // const originalVar =
+    //   variables && variables.find(variable => variable.code === code);
 
-    return originalVar || { code, label: code };
+    // return originalVar || { code, label: code };
+    return { code, label: code };
   };
 
-  public variableList = (hierarchy: any) => {
-    let variables: any = [];
-
-    // TODO: fanciest function
-    const dummyAccumulator = (node: any) => {
-      if (node.variables) {
-        variables = [...variables, ...node.variables];
-      }
-
-      if (node.groups) {
-        return node.groups.map(dummyAccumulator);
-      }
-    };
-    dummyAccumulator(hierarchy);
-
-    return variables;
-  };
-
-  public pathologies = async (): Promise<void> => {
+  public fetchPathologies = async (): Promise<void> => {
     try {
       const data = await request.get(
         `${this.backendURL}/pathologies`,
@@ -170,22 +149,15 @@ class Core extends Container<State> {
         });
       }
 
-      pathologiesCached = json;
-
       const pathologies = json.map((h: any) => ({
         code: h.code,
         label: h.label
       }));
 
-      const pathology = json.length > 0 ? json[0] : undefined;
-
       return await this.setState({
-        datasets: pathology.datasets,
         error: undefined,
-        hierarchy: pathology.hierarchy,
-        pathologies,
-        pathology: pathology.code,
-        variables: this.variableList(pathology.hierarchy)
+        pathologyJSON: json,
+        pathologies: pathologies
       });
     } catch (error) {
       return await this.setState({
@@ -194,28 +166,55 @@ class Core extends Container<State> {
     }
   };
 
-  public setPathology = async (code: string): Promise<void> => {
-    if (!this.state.datasets) {
-      await this.pathologies();
+  public datasetsForPathology = (
+    code: string | undefined
+  ): VariableEntity[] | undefined => {
+    const pathologyJSON = this.state.pathologyJSON;
+    if (code && pathologyJSON) {
+      const pathology = pathologyJSON.find(p => p.code === code);
+
+      return pathology && pathology.datasets;
     }
 
-    const pathology =
-      pathologiesCached && pathologiesCached.filter(g => g.code === code).pop();
-
-    return this.setState({
-      datasets: pathology && pathology.datasets,
-      hierarchy: pathology && pathology.hierarchy,
-      pathology: pathology && pathology.code,
-      variables: pathology && this.variableList(pathology.hierarchy)
-    });
+    return undefined;
   };
 
-  public datasets = async (): Promise<VariableEntity[] | undefined> => {
-    if (!this.state.datasets) {
-      await this.pathologies();
+  public hierarchyForPathology = (code: string | undefined) => {
+    const pathologyJSON = this.state.pathologyJSON;
+    if (code && pathologyJSON) {
+      const pathology = pathologyJSON.find(p => p.code === code);
+
+      return pathology && pathology.hierarchy;
     }
 
-    return Promise.resolve(this.state.datasets);
+    return undefined;
+  };
+
+  public variablesForPathology = (code: string | undefined) => {
+    const pathologyJSON = this.state.pathologyJSON;
+    if (code && pathologyJSON) {
+      const pathology = pathologyJSON.find(p => p.code === code);
+
+      let variables: any = [];
+
+      // TODO: fanciest function
+      const dummyAccumulator = (node: any) => {
+        if (node.variables) {
+          variables = [...variables, ...node.variables];
+        }
+
+        if (node.groups) {
+          return node.groups.map(dummyAccumulator);
+        }
+      };
+
+      if (pathology) {
+        dummyAccumulator(pathology.hierarchy);
+      }
+      return variables;
+    }
+
+    return undefined;
   };
 
   public stats = async (): Promise<void> => {

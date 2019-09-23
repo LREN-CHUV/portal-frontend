@@ -57,7 +57,7 @@ class AppContainer extends React.Component<any, State> {
 
     return await Promise.all([
       this.apiExperiment.all(),
-      this.apiCore.pathologies(),
+      this.apiCore.fetchPathologies(),
       this.apiCore.algorithms(this.state.appConfig.mode === 'local'),
       this.apiCore.stats(),
       this.apiCore.articles(),

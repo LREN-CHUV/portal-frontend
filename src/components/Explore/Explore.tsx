@@ -1,6 +1,6 @@
 import './Explore.css';
 
-import React from 'react';
+import * as React from 'react';
 import { Button, Checkbox, Panel } from 'react-bootstrap';
 
 import { APICore, APIModel } from '../API';
@@ -33,7 +33,7 @@ export interface ExploreProps {
   zoom: (circleNode: HierarchyCircularNode) => void;
 }
 
-export default (props: ExploreProps) => {
+export default (props: ExploreProps): JSX.Element => {
   const {
     apiCore,
     apiModel,
@@ -73,10 +73,8 @@ export default (props: ExploreProps) => {
                       value={g.code}
                       checked={selectedPathology === g.code}
                       // tslint:disable jsx-no-lambda
-                      onChange={e => {
-                        e.preventDefault();
-                        const nextPathology = e.target.value;
-                        handleSelectPathology(nextPathology);
+                      onChange={(e): void => {
+                        handleSelectPathology(e.target.value);
                       }}
                     />{' '}
                     {g.label}

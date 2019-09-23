@@ -88,7 +88,9 @@ class Container extends React.Component<Props, State> {
             <Model
               model={apiModel.state.model}
               showDatasets={true}
-              variables={apiCore.state.variables}
+              variables={apiCore.variablesForPathology(
+                apiModel.state.model && apiModel.state.model.query.pathology
+              )}
               selectedSlug={this.props.match.params.slug}
               items={apiModel.state.models}
               handleSelectModel={this.handleSelectModel}
@@ -123,7 +125,11 @@ class Container extends React.Component<Props, State> {
                         handleChangeKFold={this.handleChangeKFold}
                         isLocal={isLocal}
                         isPredictiveMethod={this.isPredictiveMethod(method)}
-                        datasets={apiCore.state.datasets}
+                        datasets={apiCore.datasetsForPathology(
+                          this.state &&
+                            this.state.query &&
+                            this.state.query.pathology
+                        )}
                         query={this.state && this.state.query}
                         handleUpdateQuery={this.handleUpdateQuery}
                       />
@@ -145,7 +151,9 @@ class Container extends React.Component<Props, State> {
                 <AvailableAlgorithms
                   isLocal={isLocal}
                   algorithms={apiCore.state.algorithms}
-                  variables={apiCore.state.variables}
+                  variables={apiCore.variablesForPathology(
+                    apiModel.state.model && apiModel.state.model.query.pathology
+                  )}
                   handleSelectMethod={this.handleSelectMethod}
                   model={apiModel.state.model}
                 />

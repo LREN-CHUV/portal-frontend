@@ -113,6 +113,8 @@ class Model extends React.Component<Props> {
       </Panel>
     );
   }
+
+  // FIXME: model should a least carry the label of the variable
   private lookup = (code: string): string => {
     const { variables } = this.props;
     const originalVar =
