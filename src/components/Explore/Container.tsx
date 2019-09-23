@@ -34,10 +34,8 @@ export enum ModelType {
   FILTER,
   VARIABLE
 }
-interface Params {
-  slug: string;
-}
-interface Props extends RouteComponentProps<Params> {
+
+interface Props extends RouteComponentProps {
   apiCore: APICore;
   apiMining: APIMining;
   apiModel: APIModel;
@@ -51,9 +49,6 @@ export default ({
   appConfig,
   ...props
 }: Props): JSX.Element => {
-  const [selectedPathology, setSelectedPathology] = useState<
-    string | undefined
-  >();
   const [d3Layout, setD3Layout] = useState<HierarchyCircularNode>();
   const [selectedNode, setSelectedNode] = useState<
     HierarchyCircularNode | undefined
@@ -64,7 +59,35 @@ export default ({
   );
   const [nextPathologyCode, setNextPathologyCode] = useState(''); // TODO: maybe there is a better way... like promise.then() ?
 
-  const convertModelToD3Model = (
+  // select default pathology at start
+  useEffect(() => {
+    const model = apiModel.state.model;
+    if (!model && apiCore.state.pathologies) {
+        const defaultPathology = apiCore.state.pathologies[0];
+        const newModel = { query: { pathology: defaultPathology.code } };
+        apiModel.setModel(newModel);
+    }
+  }, [apiCore.state.pathologies, apiModel.state.model]);
+
+  // Switch datasets, variables, models based on selected pathology
+  useEffect(() => {
+    const model = apiModel.state.model;
+    if (model) {
+      const hierarchy = apiCore.hierarchyForPathology(model.query.pathology);
+      if (hierarchy) {
+        const node = d3Hierarchy(hierarchy);
+        const bubbleLayout = d3
+          .pack<VariableDatum>()
+          .size([diameter, diameter])
+          .padding(padding);
+
+        const d3layout = node && bubbleLayout(node);
+        setD3Layout(d3layout);
+      }
+    }
+  }, [apiCore, apiModel.state.model]);
+
+ const convertModelToD3Model = (
     aModel: ModelResponse,
     aD3Layout: HierarchyCircularNode
   ): D3Model => {
@@ -122,44 +145,15 @@ export default ({
     return nextModel;
   };
 
-  // select  default pathology at start
-  useEffect(() => {
-    if (!selectedPathology && apiCore.state.pathologies) {
-      const defaultPathology = apiCore.state.pathologies[0];
-      setSelectedPathology(defaultPathology.code);
-    }
-  }, [apiCore.state.pathologies, selectedPathology]);
-
-  // Switch datasets, variables, models based on selected pathology
-  useEffect(() => {
-    if (selectedPathology) {
-      const hierarchy = apiCore.hierarchyForPathology(selectedPathology);
-      if (hierarchy) {
-        const node = d3Hierarchy(hierarchy);
-        const bubbleLayout = d3
-          .pack<VariableDatum>()
-          .size([diameter, diameter])
-          .padding(padding);
-
-        const d3layout = node && bubbleLayout(node);
-        setD3Layout(d3layout);
-      }
-    }
-  }, [apiCore, selectedPathology]);
-
   // Sync selected variables and D3 Model
   useEffect(() => {
     const next = apiModel.state.model;
     if (next && d3Layout) {
       setD3Model(convertModelToD3Model(next, d3Layout));
-
-      if (next.query.pathology) {
-        setSelectedPathology(next.query.pathology);
-      }
     } else {
       setD3Model(initialD3Model);
     }
-  }, [apiModel.state.model, d3Layout]);
+  }, [apiModel.state, d3Layout]);
 
   // Load Histograms for selected variable
   useEffect(() => {
@@ -178,16 +172,15 @@ export default ({
         apiMining.exaremeHistograms({
           datasets: datasets,
           x: selectedNode.data,
-          pathology: selectedPathology || ''
+          pathology: model && model.query && model.query.pathology || ''
         });
       }
     }
   }, [
     selectedNode,
-    apiModel.state.model,
+    apiModel.state,
     apiMining,
-    appConfig,
-    selectedPathology
+    appConfig
   ]);
 
   const handleSelectDataset = (dataset: VariableEntity) => {
@@ -205,9 +198,6 @@ export default ({
       if (model) {
         model.query.trainingDatasets = nextDatasets;
         apiModel.setModel(model);
-      } else {
-        const newModel = { query: { trainingDatasets: nextDatasets } };
-        apiModel.setModel(newModel);
       }
     }
   };
@@ -304,7 +294,7 @@ export default ({
         (aD3Model.variables &&
           aD3Model.variables.map(v => ({ code: v.data.code }))) ||
         [],
-      pathology: selectedPathology
+      pathology: (model && model.query && model.query.pathology) || ''
     };
 
     if (aModel) {
@@ -337,10 +327,13 @@ export default ({
   const handleCancelSwitchPathology = () => {
     setShowPathologySwitchWarning(false);
   };
+
   const handleOKSwitchPathology = () => {
     setShowPathologySwitchWarning(false);
-    apiModel.setModel(undefined);
-    setSelectedPathology(nextPathologyCode);
+    if (apiCore.state.pathologies) {
+        const newModel = { query: { pathology: nextPathologyCode } };
+        apiModel.setModel(newModel);
+    }
   };
 
   const handleGoToAnalysis = async (): Promise<void> => {
@@ -354,6 +347,7 @@ export default ({
   const model = apiModel.state.model;
   const selectedDatasets =
     (model && model.query && model.query.trainingDatasets) || [];
+  const selectedPathology = model && model.query && model.query.pathology;
 
   const nextProps = {
     apiCore,
