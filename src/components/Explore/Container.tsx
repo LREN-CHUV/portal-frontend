@@ -54,9 +54,6 @@ export default ({
   const [selectedPathology, setSelectedPathology] = useState<
     string | undefined
   >();
-  const [selectedDatasets, setSelectedDatasets] = useState<VariableEntity[]>(
-    []
-  );
   const [d3Layout, setD3Layout] = useState<HierarchyCircularNode>();
   const [selectedNode, setSelectedNode] = useState<
     HierarchyCircularNode | undefined
@@ -156,9 +153,6 @@ export default ({
     if (next && d3Layout) {
       setD3Model(convertModelToD3Model(next, d3Layout));
 
-      if (next.query.trainingDatasets) {
-        setSelectedDatasets(next.query.trainingDatasets);
-      }
       if (next.query.pathology) {
         setSelectedPathology(next.query.pathology);
       }
@@ -169,31 +163,52 @@ export default ({
 
   // Load Histograms for selected variable
   useEffect(() => {
-    if (selectedNode && selectedNode.data.isVariable && selectedDatasets) {
+    const model = apiModel.state.model;
+    const datasets = model && model.query && model.query.trainingDatasets;
+    if (selectedNode && selectedNode.data.isVariable && datasets) {
       if (appConfig.mode === 'local') {
         apiMining.histograms({
           payload: {
-            datasets: selectedDatasets.map(d => ({ code: d.code })),
+            datasets: datasets.map(d => ({ code: d.code })),
             variables: [{ code: selectedNode.data.code }]
           }
         });
       } else {
         apiMining.exaremeHistograms({
-          datasets: selectedDatasets,
+          datasets: datasets,
           x: selectedNode.data,
           pathology: selectedPathology || ''
         });
       }
     }
-  }, [selectedNode, selectedDatasets, apiMining, appConfig, selectedPathology]);
+  }, [
+    selectedNode,
+    apiModel.state.model,
+    apiMining,
+    appConfig,
+    selectedPathology
+  ]);
 
   const handleSelectDataset = (dataset: VariableEntity) => {
-    const nextSelection = selectedDatasets
-      .map(d => d.code)
-      .includes(dataset.code)
-      ? [...selectedDatasets.filter(d => d.code !== dataset.code)]
-      : [...selectedDatasets, dataset];
-    setSelectedDatasets(nextSelection);
+    const model = apiModel.state.model;
+    const trainingDatasets =
+      (model && model.query && model.query.trainingDatasets) || [];
+
+    if (trainingDatasets) {
+      const nextDatasets = trainingDatasets
+        .map(d => d.code)
+        .includes(dataset.code)
+        ? [...trainingDatasets.filter(d => d.code !== dataset.code)]
+        : [...trainingDatasets, dataset];
+
+      if (model) {
+        model.query.trainingDatasets = nextDatasets;
+        apiModel.setModel(model);
+      } else {
+        const newModel = { query: { trainingDatasets: nextDatasets } };
+        apiModel.setModel(newModel);
+      }
+    }
   };
 
   const handleUpdateD3Model = (
@@ -262,6 +277,9 @@ export default ({
     aD3Model: D3Model,
     aModel?: ModelResponse
   ): ModelResponse => {
+    const model = apiModel.state.model;
+    const datasets = model && model.query && model.query.trainingDatasets;
+
     const query: Query = {
       coVariables:
         (aD3Model.covariables &&
@@ -280,7 +298,7 @@ export default ({
             )
             .map(v => ({ code: v.data.code }))) ||
         [],
-      trainingDatasets: selectedDatasets,
+      trainingDatasets: datasets,
       variables:
         (aD3Model.variables &&
           aD3Model.variables.map(v => ({ code: v.data.code }))) ||
@@ -331,6 +349,10 @@ export default ({
     await apiModel.setModel(nextModel);
     history.push(`/review`);
   };
+
+  const model = apiModel.state.model;
+  const selectedDatasets =
+    (model && model.query && model.query.trainingDatasets) || [];
 
   const nextProps = {
     apiCore,
