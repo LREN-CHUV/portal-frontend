@@ -67,7 +67,7 @@ export default ({
       const newModel = { query: { pathology: defaultPathology.code } };
       apiModel.setModel(newModel);
     }
-  }, [apiCore.state.pathologies, apiModel.state.model]);
+  }, [apiCore.state.pathologies, apiModel]);
 
   // Switch datasets, variables, models based on selected pathology
   useEffect(() => {
@@ -339,15 +339,9 @@ export default ({
     history.push(`/review`);
   };
 
-  const model = apiModel.state.model;
-  const selectedDatasets =
-    (model && model.query && model.query.trainingDatasets) || [];
-  const selectedPathology = model && model.query && model.query.pathology;
-
   const nextProps = {
     apiCore,
     apiModel,
-    datasets: apiCore.datasetsForPathology(selectedPathology),
     handleGoToAnalysis,
     handleSelectDataset,
     handleSelectModel,
@@ -355,9 +349,7 @@ export default ({
     handleSelectPathology,
     handleUpdateD3Model,
     histograms: apiMining.state.histograms,
-    selectedDatasets,
-    selectedNode,
-    selectedPathology
+    selectedNode
   };
 
   return (

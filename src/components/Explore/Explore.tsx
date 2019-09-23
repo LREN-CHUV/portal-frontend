@@ -17,9 +17,6 @@ export interface ExploreProps {
   apiCore: APICore;
   apiModel: APIModel;
   children?: any;
-  datasets?: VariableEntity[];
-  selectedDatasets: VariableEntity[];
-  selectedPathology: string | undefined;
   selectedNode: HierarchyCircularNode | undefined;
   layout: HierarchyCircularNode;
   histograms?: any;
@@ -39,9 +36,6 @@ export default (props: ExploreProps): JSX.Element => {
     apiModel,
     children,
     layout,
-    datasets,
-    selectedDatasets,
-    selectedPathology,
     selectedNode,
     histograms,
     d3Model,
@@ -53,6 +47,12 @@ export default (props: ExploreProps): JSX.Element => {
     handleGoToAnalysis,
     zoom
   } = props;
+
+  const model = apiModel.state.model;
+  const selectedDatasets =
+    (model && model.query && model.query.trainingDatasets) || [];
+  const selectedPathology = model && model.query && model.query.pathology;
+  const datasets = apiCore.datasetsForPathology(selectedPathology);
 
   return (
     <div className="Explore">

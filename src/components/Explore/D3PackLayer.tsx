@@ -20,9 +20,6 @@ const depth = (n: HierarchyCircularNode): number =>
 export interface Props {
   apiCore: APICore;
   apiModel: APIModel;
-  datasets?: VariableEntity[];
-  selectedDatasets: VariableEntity[];
-  selectedPathology: string | undefined;
   selectedNode: HierarchyCircularNode | undefined;
   layout: HierarchyCircularNode;
   histograms?: any;

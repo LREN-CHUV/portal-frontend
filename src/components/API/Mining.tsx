@@ -283,7 +283,7 @@ class Mining extends Container<MiningState> {
         ];
 
         const mining = await this.fetchExaremeStats(parameters);
-        console.log(mining.data.result.map((d: any) => d.data));
+        // console.log(mining.data.result.map((d: any) => d.data));
 
         this.cachedSummaryStatistics[q.dataset.code] = {
           data: mining.data.result
