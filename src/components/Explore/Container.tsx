@@ -63,9 +63,9 @@ export default ({
   useEffect(() => {
     const model = apiModel.state.model;
     if (!model && apiCore.state.pathologies) {
-        const defaultPathology = apiCore.state.pathologies[0];
-        const newModel = { query: { pathology: defaultPathology.code } };
-        apiModel.setModel(newModel);
+      const defaultPathology = apiCore.state.pathologies[0];
+      const newModel = { query: { pathology: defaultPathology.code } };
+      apiModel.setModel(newModel);
     }
   }, [apiCore.state.pathologies, apiModel.state.model]);
 
@@ -87,7 +87,7 @@ export default ({
     }
   }, [apiCore, apiModel.state.model]);
 
- const convertModelToD3Model = (
+  const convertModelToD3Model = (
     aModel: ModelResponse,
     aD3Layout: HierarchyCircularNode
   ): D3Model => {
@@ -172,16 +172,11 @@ export default ({
         apiMining.exaremeHistograms({
           datasets: datasets,
           x: selectedNode.data,
-          pathology: model && model.query && model.query.pathology || ''
+          pathology: (model && model.query && model.query.pathology) || ''
         });
       }
     }
-  }, [
-    selectedNode,
-    apiModel.state,
-    apiMining,
-    appConfig
-  ]);
+  }, [selectedNode, apiModel.state, apiMining, appConfig]);
 
   const handleSelectDataset = (dataset: VariableEntity) => {
     const model = apiModel.state.model;
@@ -331,8 +326,8 @@ export default ({
   const handleOKSwitchPathology = () => {
     setShowPathologySwitchWarning(false);
     if (apiCore.state.pathologies) {
-        const newModel = { query: { pathology: nextPathologyCode } };
-        apiModel.setModel(newModel);
+      const newModel = { query: { pathology: nextPathologyCode } };
+      apiModel.setModel(newModel);
     }
   };
 
