@@ -113,6 +113,12 @@ export default (props: Props) => {
           </div>
         )}
 
+        {histograms && histograms.warning && (
+          <div className="warning">
+            <p>{histograms.warning}</p>
+          </div>
+        )}
+
         {selectedNode &&
           !selectedNode.children &&
           histograms &&

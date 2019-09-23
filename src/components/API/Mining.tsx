@@ -15,6 +15,7 @@ interface Response {
 export interface MiningResponseShape {
   data?: any;
   error?: string;
+  warning?: string;
   dataset?: VariableEntity;
   loading?: boolean;
 }
@@ -116,7 +117,7 @@ class Mining extends Container<MiningState> {
       return await this.setState({
         histograms: {
           data: undefined,
-          error: 'Please select a dataset',
+          warning: 'Please select a dataset',
           loading: false
         }
       });

@@ -164,8 +164,9 @@ export default ({
   // Load Histograms for selected variable
   useEffect(() => {
     const model = apiModel.state.model;
-    const datasets = model && model.query && model.query.trainingDatasets;
-    if (selectedNode && selectedNode.data.isVariable && datasets) {
+    const datasets =
+      (model && model.query && model.query.trainingDatasets) || [];
+    if (selectedNode && selectedNode.data.isVariable) {
       if (appConfig.mode === 'local') {
         apiMining.histograms({
           payload: {
