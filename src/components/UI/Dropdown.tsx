@@ -25,7 +25,7 @@ export default ({
   <DropdownButton
     noCaret={noCaret}
     bsStyle="default"
-    id={'experimmanuelent-dropdown'}
+    id={'experiment-dropdown'}
     title={title}
   >
     {handleCreateNewExperiment && (

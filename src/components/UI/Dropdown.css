@@ -1,6 +1,6 @@
 .dropdown-menu {
   max-height: 450px;
-  min-width: 220px;
+  min-width: 256px;
   overflow-y: scroll;
 }
 

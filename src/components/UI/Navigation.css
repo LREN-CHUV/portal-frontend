@@ -2,7 +2,7 @@
   display: none !important;
 }
 .dropdown-menu li {
-  margin: 1em;
+  margin: 0.5em 8px;
 }
 
 .dropdown-menu {

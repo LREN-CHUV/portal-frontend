@@ -32,7 +32,6 @@
 }
 
 .Explore .content .sidebar {
-  overflow: hidden;
   width: 240px;
   flex: 0 0 auto;
 }

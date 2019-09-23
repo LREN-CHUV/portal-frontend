@@ -310,7 +310,11 @@ export default ({
     if (nextModel && nextModel.slug) {
       apiModel.one(nextModel.slug);
     } else {
-      apiModel.setModel(undefined);
+      const model = apiModel.state.model;
+      if (model) {
+        const newModel = { query: { pathology: model.query.pathology } };
+        apiModel.setModel(newModel);
+      }
     }
   };
 
