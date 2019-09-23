@@ -10,6 +10,7 @@ import { ModelResponse, Query } from '../API/Model';
 import { AppConfig } from '../App/App';
 import { d3Hierarchy, VariableDatum } from './d3Hierarchy';
 import CirclePack from './D3PackLayer';
+import Modal from '../UI/Modal';
 
 const diameter = 800;
 const padding = 1.5;
@@ -61,6 +62,10 @@ export default ({
     HierarchyCircularNode | undefined
   >();
   const [d3Model, setD3Model] = useState<D3Model>(initialD3Model);
+  const [showPathologySwitchWarning, setShowPathologySwitchWarning] = useState(
+    false
+  );
+  const [nextPathologyCode, setNextPathologyCode] = useState(''); // TODO: maybe there is a better way... like promise.then() ?
 
   const convertModelToD3Model = (
     aModel: ModelResponse,
@@ -305,6 +310,20 @@ export default ({
     }
   };
 
+  const handleSelectPathology = (code: string): void => {
+    setNextPathologyCode(code);
+    setShowPathologySwitchWarning(true);
+  };
+
+  const handleCancelSwitchPathology = () => {
+    setShowPathologySwitchWarning(false);
+  };
+  const handleOKSwitchPathology = () => {
+    setShowPathologySwitchWarning(false);
+    apiModel.setModel(undefined);
+    setSelectedPathology(nextPathologyCode);
+  };
+
   const handleGoToAnalysis = async (): Promise<void> => {
     const { history } = props;
     const nextModel = convertD3ModelToModel(d3Model, apiModel.state.model);
@@ -321,7 +340,7 @@ export default ({
     handleSelectDataset,
     handleSelectModel,
     handleSelectNode: setSelectedNode,
-    handleSelectPathology: setSelectedPathology,
+    handleSelectPathology,
     handleUpdateD3Model,
     histograms: apiMining.state.histograms,
     selectedDatasets,
@@ -331,6 +350,14 @@ export default ({
 
   return (
     <>
+      {showPathologySwitchWarning && (
+        <Modal
+          title="Change Pathology ?"
+          body="Selecting a new pathology will reset your selection"
+          handleCancel={handleCancelSwitchPathology}
+          handleOK={handleOKSwitchPathology}
+        />
+      )}
       {d3Layout && (
         <CirclePack layout={d3Layout} d3Model={d3Model} {...nextProps} />
       )}
