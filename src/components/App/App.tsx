@@ -116,7 +116,7 @@ const App = ({
             render={props => <User apiUser={apiUser} {...props} />}
           />
           <Route
-            path={['/explore/:slug', '/explore']}
+            path="/explore"
             // tslint:disable-next-line jsx-no-lambda
             render={props => (
               <Explore

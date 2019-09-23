@@ -43,8 +43,6 @@ interface Props extends RouteComponentProps<Params> {
   appConfig: AppConfig;
 }
 
-export const editPath = 'edit';
-
 export default ({
   apiCore,
   apiMining,
@@ -63,7 +61,6 @@ export default ({
     HierarchyCircularNode | undefined
   >();
   const [d3Model, setD3Model] = useState<D3Model>(initialD3Model);
-  const [model, setModel] = useState<ModelResponse | undefined>();
 
   const convertModelToD3Model = (
     aModel: ModelResponse,
@@ -148,47 +145,20 @@ export default ({
     }
   }, [apiCore, selectedPathology]);
 
-  useEffect(() => {
-    const slug = props.match.params.slug;
-    let draft;
-    switch (slug) {
-      case undefined:
-        setModel(undefined);
-        setD3Model(initialD3Model);
-        break;
-
-      case editPath:
-        draft = apiModel.state.draft;
-        if (draft && d3Layout) {
-          setModel(draft);
-          setD3Model(convertModelToD3Model(draft, d3Layout));
-          if (draft.query.trainingDatasets) {
-            setSelectedDatasets(draft.query.trainingDatasets);
-          }
-          if (draft.query.pathology) {
-            setSelectedPathology(draft.query.pathology);
-          }
-        }
-        break;
-
-      default:
-        apiModel.one(slug);
-        break;
-    }
-  }, [props.match.params.slug, d3Layout, apiModel]);
-
   // Sync selected variables and D3 Model
   useEffect(() => {
     const next = apiModel.state.model;
     if (next && d3Layout) {
-      setModel(next);
       setD3Model(convertModelToD3Model(next, d3Layout));
+
       if (next.query.trainingDatasets) {
         setSelectedDatasets(next.query.trainingDatasets);
       }
       if (next.query.pathology) {
         setSelectedPathology(next.query.pathology);
       }
+    } else {
+      setD3Model(initialD3Model);
     }
   }, [apiModel.state.model, d3Layout]);
 
@@ -210,7 +180,7 @@ export default ({
         });
       }
     }
-  }, [selectedNode, selectedDatasets, apiMining, appConfig]);
+  }, [selectedNode, selectedDatasets, apiMining, appConfig, selectedPathology]);
 
   const handleSelectDataset = (dataset: VariableEntity) => {
     const nextSelection = selectedDatasets
@@ -309,7 +279,8 @@ export default ({
       variables:
         (aD3Model.variables &&
           aD3Model.variables.map(v => ({ code: v.data.code }))) ||
-        []
+        [],
+      pathology: selectedPathology
     };
 
     if (aModel) {
@@ -326,21 +297,20 @@ export default ({
     }
   };
 
-  const handleSelectModel = (newModel?: ModelResponse) => {
-    const { history } = props;
-    if (newModel && newModel.slug) {
-      history.push(`/explore/${newModel.slug}`);
+  const handleSelectModel = (nextModel?: ModelResponse): void => {
+    if (nextModel && nextModel.slug) {
+      apiModel.one(nextModel.slug);
     } else {
-      history.push(`/explore`);
+      apiModel.setModel(undefined);
     }
   };
 
-  const handleGoToAnalysis = async () => {
+  const handleGoToAnalysis = async (): Promise<void> => {
     const { history } = props;
-    const nextModel = convertD3ModelToModel(d3Model, model);
+    const nextModel = convertD3ModelToModel(d3Model, apiModel.state.model);
 
-    await apiModel.setDraft(nextModel);
-    history.push(`/review/${editPath}`);
+    await apiModel.setModel(nextModel);
+    history.push(`/review`);
   };
 
   const nextProps = {

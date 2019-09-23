@@ -14,7 +14,7 @@ export default ({
   handleSelect,
   showClear = false,
   selectedSlug
-}: Dropdown) => {
+}: Dropdown): JSX.Element => {
   const [title, setTitle] = useState(selectedSlug || 'undefined');
   useEffect(() => {
     if (selectedSlug) {

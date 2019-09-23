@@ -40,6 +40,7 @@ class Model extends React.Component<Props> {
       showDatasets,
       variables
     } = this.props;
+
     const query = model && model.query;
 
     return (
@@ -61,7 +62,7 @@ class Model extends React.Component<Props> {
         </Panel.Title>
         <Body>
           {!model && <Loading />}
-          {query && variables && (
+          {query && (
             <React.Fragment>
               {query.variables && <Subtitle>Variables</Subtitle>}
               {query.variables &&

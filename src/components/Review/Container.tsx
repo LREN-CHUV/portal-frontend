@@ -10,7 +10,6 @@ import { VariableEntity } from '../API/Core';
 import { MiningPayload } from '../API/Mining';
 import { ModelResponse, Query } from '../API/Model';
 import { AppConfig } from '../App/App';
-import { editPath } from '../Explore/Container';
 import { IAlert } from '../UI/Alert';
 import Model from '../UI/Model';
 import Validation from '../UI/Validation';
@@ -18,10 +17,7 @@ import Content from './Content';
 import Filter from './Filter';
 import ExperimentReviewHeader from './Header';
 
-interface Params {
-  slug: string;
-}
-interface Props extends RouteComponentProps<Params> {
+interface Props extends RouteComponentProps {
   apiModel: APIModel;
   apiCore: APICore;
   apiMining: APIMining;
@@ -30,58 +26,16 @@ interface Props extends RouteComponentProps<Params> {
 interface State {
   alert?: IAlert;
   loadingSummary?: boolean;
-  query?: Query;
   summaryStatistics?: any;
 }
 
 class Container extends React.Component<Props, State> {
   public state: State = {};
 
-  public async componentDidMount() {
-    const slug = this.props.match.params.slug;
-
-    if (!slug) {
-      return;
-    }
-
-    if (slug !== editPath) {
-      await this.loadModel({ slug });
-      const query = this.state.query;
-      if (query) {
-        this.setMinings({ query });
-      }
-    } else {
-      const { apiModel } = this.props;
-      const draft = apiModel.state.draft;
-      if (draft) {
-        const query = draft.query;
-        this.setState({ query });
-        this.setMinings({ query });
-      }
-    }
-  }
-
-  public async UNSAFE_componentWillReceiveProps(
-    nextProps: Props,
-    prevState: State
-  ) {
-    const slug = nextProps.match.params.slug;
-    const prevSlug = this.props.match.params.slug;
-    if (slug && prevSlug !== slug) {
-      await this.loadModel({ slug });
-      const query = this.state.query;
-      if (query) {
-        this.props.apiMining.clear();
-        this.setMinings({ query });
-      }
-    }
-  }
-
-  public render() {
+  public render(): JSX.Element {
     const { apiCore, apiModel, apiMining } = this.props;
-    const { query } = this.state;
-    const { fields, filters } = this.makeFilters({ apiCore });
-    const model = apiModel.state.model || apiModel.state.draft;
+    const { fields, filters } = this.makeFilters({ apiCore, apiModel });
+    const model = apiModel.state.model;
     return (
       <div className="Model Review">
         <div className="header">
@@ -96,7 +50,7 @@ class Container extends React.Component<Props, State> {
           <div className="sidebar">
             <Model
               model={model}
-              selectedSlug={this.props.match.params.slug}
+              selectedSlug={model && model.slug}
               showDatasets={false}
               variables={apiCore.variablesForPathology(
                 apiModel.state.model && apiModel.state.model.query.pathology
@@ -104,15 +58,15 @@ class Container extends React.Component<Props, State> {
               items={apiModel.state.models}
               handleSelectModel={this.handleSelectModel}
             />
-            <Panel className="model">
+            <Panel className="datasets">
               <Panel.Body>
                 <Validation
                   isPredictiveMethod={false}
                   datasets={apiCore.datasetsForPathology(
-                    query && query.pathology
+                    model && model.query && model.query.pathology
                   )}
-                  query={query}
-                  handleUpdateQuery={this.handleUpdateDataset}
+                  query={model && model.query}
+                  handleUpdateQuery={this.handleUpdateDatasets}
                 />
               </Panel.Body>
             </Panel>
@@ -121,7 +75,9 @@ class Container extends React.Component<Props, State> {
             <Content
               apiMining={apiMining}
               model={model}
-              selectedDatasets={query && query.trainingDatasets}
+              selectedDatasets={
+                model && model.query && model.query.trainingDatasets
+              }
               lookup={apiCore.lookup}
             >
               <Panel className="filters" defaultExpanded={false}>
@@ -147,8 +103,14 @@ class Container extends React.Component<Props, State> {
     );
   }
 
-  private makeFilters = ({ apiCore }: { apiCore: APICore }) => {
-    const { query } = this.state;
+  private makeFilters = ({
+    apiCore,
+    apiModel
+  }: {
+    apiCore: APICore;
+    apiModel: APIModel;
+  }): any => {
+    const query = apiModel.state.model && apiModel.state.model.query;
     const variables = apiCore.variablesForPathology(query && query.pathology);
 
     // FIXME: move to Filter, refactor in a pure way
@@ -252,78 +214,35 @@ class Container extends React.Component<Props, State> {
     return { query, filters, fields };
   };
 
-  private handleUpdateFilter = async (filters: string): Promise<boolean> => {
-    const { apiModel, apiMining } = this.props;
-    const model = apiModel.state.model;
-    const draft = apiModel.state.draft;
-    if (model) {
-      model.query.filters = (filters && JSON.stringify(filters)) || '';
-      await apiModel.update({ model });
-    } else if (draft) {
-      draft.query.filters = (filters && JSON.stringify(filters)) || '';
-      apiModel.setDraft(draft);
-    }
-    const query = this.state.query;
-    if (query) {
-      apiMining.clear();
-      this.setMinings({ query });
-    }
-
-    return Promise.resolve(true);
-  };
-
   private handleSaveModel = async ({ title }: { title: string }) => {
     const { apiModel } = this.props;
-    const model = apiModel.state.draft;
-    const slug = await apiModel.save({ model, title });
+    const model = apiModel.state.model;
+    await apiModel.save({ model, title });
     this.setState({ alert: { message: 'Model saved' } });
-
-    const { history } = this.props;
-    history.push(`/review/${slug}`);
   };
 
   private handleRunAnalysis = async () => {
     const { apiModel } = this.props;
     const model = apiModel.state.model;
-    await apiModel.update({ model });
-    const slug = this.props.match.params.slug;
-    const { history } = this.props;
-    history.push(`/experiment/${slug}`);
-  };
-
-  private handleGoBackToExplore = async () => {
-    const { history } = this.props;
-    const { apiModel } = this.props;
-    if (apiModel.state.draft) {
-      await apiModel.setDraft(apiModel.state.draft);
-      history.push(`/explore/${editPath}`);
-    } else {
-      history.push(`/explore`);
-    }
-  };
-
-  private handleSelectModel = (model?: ModelResponse) => {
     if (model) {
-      const { slug } = model;
+      await apiModel.update({ model });
+      const slug = model && model.slug;
       const { history } = this.props;
-      history.push(`/review/${slug}`);
+      history.push(`/experiment/${slug}`);
     }
   };
 
-  private loadModel = async ({ slug }: { slug: string }) => {
-    const { apiModel } = this.props;
-    await apiModel.one(slug);
-
-    const model = apiModel.state.model;
-    if (!model) {
-      return this.setState({ alert: { message: 'Fail to load model' } });
-    }
-
-    const { query } = model;
-    return this.setState({ query });
+  private handleGoBackToExplore = (): void => {
+    this.props.history.push(`/explore`);
   };
 
-  private setMinings = async ({ query }: { query: Query }) => {
+  private handleSelectModel = (model?: ModelResponse): void => {
+    if (model) {
+      this.props.apiModel.one(model && model.slug);
+    }
+  };
+
+  private fetchMinings = async ({ query }: { query: Query }) => {
     const { apiMining, appConfig } = this.props;
     const datasets = query.trainingDatasets;
 
@@ -344,9 +263,32 @@ class Container extends React.Component<Props, State> {
     }
   };
 
-  private handleUpdateDataset = (query: Query): void => {
-    this.setState({ query });
-    this.setMinings({ query });
+  private handleUpdateDatasets = async (query: Query): Promise<void> => {
+    const { apiModel } = this.props;
+    const model = apiModel.state.model;
+    if (model) {
+      model.query = query;
+      await apiModel.setModel(model);
+    }
+
+    this.fetchMinings({ query });
+  };
+
+  private handleUpdateFilter = async (filters: string): Promise<boolean> => {
+    const { apiModel, apiMining } = this.props;
+    const model = apiModel.state.model;
+    if (model) {
+      model.query.filters = (filters && JSON.stringify(filters)) || '';
+      await apiModel.setModel(model);
+    }
+
+    const query = model && model.query;
+    if (query) {
+      apiMining.clear();
+      this.fetchMinings({ query });
+    }
+
+    return Promise.resolve(true);
   };
 }
 

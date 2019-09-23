@@ -18,19 +18,19 @@ export default class Header extends React.Component<Props> {
     };
   }
 
-  public handleClose = () => {
+  public handleClose = (): void => {
     this.setState({ show: false });
   };
 
-  public handleShow = () => {
+  public handleShow = (): void => {
     this.setState({ show: true });
   };
 
-  public render() {
+  public render(): JSX.Element {
     const { model, handleGoBackToExplore, handleRunAnalysis } = this.props;
 
     const currentModelName = this.state.modelName;
-    const isMock = model && !model.slug;
+    const modelNotSaved = model && !model.slug;
 
     return (
       <Panel>
@@ -40,7 +40,7 @@ export default class Header extends React.Component<Props> {
           </Button>
           <h3>Interactive Analysis</h3>
           <div className="item">&nbsp;</div>
-          {isMock && (
+          {modelNotSaved && (
             <div className="item">
               <FormControl
                 className="item experiment-name"
@@ -52,7 +52,7 @@ export default class Header extends React.Component<Props> {
               />
             </div>
           )}
-          {isMock && (
+          {modelNotSaved && (
             <div className="item">
               <Button
                 onClick={this.handleSaveModel1}
@@ -74,7 +74,7 @@ export default class Header extends React.Component<Props> {
               onClick={handleRunAnalysis}
               bsStyle="info"
               type="submit"
-              disabled={isMock}
+              disabled={modelNotSaved}
               title={
                 currentModelName === ''
                   ? 'Please enter a title for your model'

@@ -90,109 +90,111 @@ const Validation = ({
   kfold?: number;
   handleChangeKFold?: (kfold: number) => void;
   isLocal?: boolean;
-}): JSX.Element => (
-  <div>
-    <h5>
-      {isPredictiveMethod && <strong>Training and kfold</strong>}
-      {!isPredictiveMethod && <strong>Datasets</strong>}
-    </h5>
+}): JSX.Element => {
+  return (
+    <div>
+      <h5>
+        {isPredictiveMethod && <strong>Training and kfold</strong>}
+        {!isPredictiveMethod && <strong>Datasets</strong>}
+      </h5>
 
-    <FormGroup>
-      {datasets &&
-        datasets.map((dataset: any) => {
-          return (
-            <Checkbox
-              key={dataset.code}
-              inline={true}
-              // tslint:disable-next-line jsx-no-lambda
-              onChange={event =>
-                handleChangeDataset(
-                  query,
-                  query && query.trainingDatasets,
-                  dataset.code,
-                  DatasetType.Training,
-                  handleUpdateQuery
-                )
-              }
-              checked={getDatasetCheckedState(
-                query && query.trainingDatasets,
-                dataset.code
-              )}
-            >
-              {dataset.label}
-            </Checkbox>
-          );
-        })}
-    </FormGroup>
-
-    {isPredictiveMethod && handleChangeKFold && (
-      <Form horizontal={true}>
-        <FormGroup key={'kfold'}>
-          <Col sm={2}>K-Fold:</Col>
-          <Col sm={4}>
-            <FormControl
-              type="number"
-              value={kfold}
-              // tslint:disable-next-line jsx-no-lambda
-              onChange={(event: any) => {
-                if (event.target) {
-                  event.preventDefault();
-                  handleChangeKFold(event.target.value);
+      <FormGroup>
+        {datasets &&
+          datasets.map((dataset: any) => {
+            return (
+              <Checkbox
+                key={dataset.code}
+                inline={true}
+                // tslint:disable-next-line jsx-no-lambda
+                onChange={event =>
+                  handleChangeDataset(
+                    query,
+                    query && query.trainingDatasets,
+                    dataset.code,
+                    DatasetType.Training,
+                    handleUpdateQuery
+                  )
                 }
-              }}
-            />
-            <HelpBlock>min: 2, max 20</HelpBlock>
-            <FormControl.Feedback />
-          </Col>
-          <Col sm={6}>
-            Defines the number of folds used in the cross-validation. Typical
-            numbers are 5 or 10. More information:{' '}
-            <a
-              target="_blank"
-              rel="noopener noreferrer"
-              href="https://en.wikipedia.org/wiki/Cross-validation_(statistics)"
-            >
-              https://en.wikipedia.org/wiki/Cross-validation_(statistics)
-            </a>
-          </Col>
-        </FormGroup>
-      </Form>
-    )}
-    {isPredictiveMethod && !isLocal && (
-      <div>
-        <h5>
-          <strong>Remote-validation</strong>
-        </h5>
-        <FormGroup>
-          {datasets &&
-            datasets.map((dataset: any) => {
-              return (
-                <Checkbox
-                  key={dataset.code}
-                  inline={true}
-                  // tslint:disable-next-line jsx-no-lambda
-                  onChange={(): void =>
-                    handleChangeDataset(
-                      query,
-                      query && query.validationDatasets,
-                      dataset.code,
-                      DatasetType.Validation,
-                      handleUpdateQuery
-                    )
+                checked={getDatasetCheckedState(
+                  query && query.trainingDatasets,
+                  dataset.code
+                )}
+              >
+                {dataset.label}
+              </Checkbox>
+            );
+          })}
+      </FormGroup>
+
+      {isPredictiveMethod && handleChangeKFold && (
+        <Form horizontal={true}>
+          <FormGroup key={'kfold'}>
+            <Col sm={2}>K-Fold:</Col>
+            <Col sm={4}>
+              <FormControl
+                type="number"
+                value={kfold}
+                // tslint:disable-next-line jsx-no-lambda
+                onChange={(event: any) => {
+                  if (event.target) {
+                    event.preventDefault();
+                    handleChangeKFold(event.target.value);
                   }
-                  checked={getDatasetCheckedState(
-                    query && query.validationDatasets,
-                    dataset.code
-                  )}
-                >
-                  {dataset.label}
-                </Checkbox>
-              );
-            })}
-        </FormGroup>
-      </div>
-    )}
-  </div>
-);
+                }}
+              />
+              <HelpBlock>min: 2, max 20</HelpBlock>
+              <FormControl.Feedback />
+            </Col>
+            <Col sm={6}>
+              Defines the number of folds used in the cross-validation. Typical
+              numbers are 5 or 10. More information:{' '}
+              <a
+                target="_blank"
+                rel="noopener noreferrer"
+                href="https://en.wikipedia.org/wiki/Cross-validation_(statistics)"
+              >
+                https://en.wikipedia.org/wiki/Cross-validation_(statistics)
+              </a>
+            </Col>
+          </FormGroup>
+        </Form>
+      )}
+      {isPredictiveMethod && !isLocal && (
+        <div>
+          <h5>
+            <strong>Remote-validation</strong>
+          </h5>
+          <FormGroup>
+            {datasets &&
+              datasets.map((dataset: any) => {
+                return (
+                  <Checkbox
+                    key={dataset.code}
+                    inline={true}
+                    // tslint:disable-next-line jsx-no-lambda
+                    onChange={(): void =>
+                      handleChangeDataset(
+                        query,
+                        query && query.validationDatasets,
+                        dataset.code,
+                        DatasetType.Validation,
+                        handleUpdateQuery
+                      )
+                    }
+                    checked={getDatasetCheckedState(
+                      query && query.validationDatasets,
+                      dataset.code
+                    )}
+                  >
+                    {dataset.label}
+                  </Checkbox>
+                );
+              })}
+          </FormGroup>
+        </div>
+      )}
+    </div>
+  );
+};
 
 export default Validation;

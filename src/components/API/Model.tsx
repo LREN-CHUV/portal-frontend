@@ -7,7 +7,6 @@ import { VariableEntity } from './Core';
 export interface ModelState {
   error?: string;
   model?: ModelResponse;
-  draft?: ModelResponse;
   models?: ModelResponse[];
 }
 export interface ModelResponse {
@@ -56,19 +55,15 @@ class Model extends Container<ModelState> {
     this.baseUrl = `${backendURL}/models`;
   }
 
-  public setDraft = async (draft: ModelResponse) => {
-    const { slug, ...others } = draft;
+  public setModel = async (model?: ModelResponse): Promise<void> => {
     return await this.setState({
-      draft: others,
-      error: undefined,
-      model: undefined
+      model
     });
   };
 
-  public one = async (slug: string) => {
+  public one = async (slug?: string) => {
     this.setState({
-      draft: undefined,
-      error: undefined,
+      error: slug ? undefined : "Can't find model",
       model: undefined
     });
     try {
@@ -91,7 +86,11 @@ class Model extends Container<ModelState> {
     }
   };
 
-  public update = async ({ model }: { model: any }) => {
+  public update = async ({
+    model
+  }: {
+    model: ModelResponse;
+  }): Promise<void> => {
     try {
       const { slug } = model;
       await request({
