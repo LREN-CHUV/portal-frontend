@@ -53,6 +53,7 @@ class Mining extends Container<MiningState> {
   private cachedSummaryStatistics: any = {};
   private options: request.Options;
   private backendURL: string;
+  private requests: request.RequestPromise<any>[] = [];
 
   constructor(config: any) {
     super();
@@ -75,9 +76,18 @@ class Mining extends Container<MiningState> {
     }));
   };
 
+  public abort = () => {
+    try {
+      this.requests.forEach(r => r.abort());
+      this.requests = [];
+    } finally {
+      //
+    }
+  };
+
   public oneHistogram = async (parameters: Parameter[]): Promise<Response> => {
     try {
-      const data = await request({
+      const r = request({
         body: JSON.stringify(parameters),
         headers: {
           ...this.options.headers,
@@ -87,6 +97,9 @@ class Mining extends Container<MiningState> {
         uri: `${this.backendURL}/mining/exareme`
       });
 
+      this.requests.push(r);
+
+      const data = await r;
       const jsonString = await JSON.parse(data);
 
       // FIXME: in exareme, return type should be json
@@ -165,6 +178,8 @@ class Mining extends Container<MiningState> {
       ...parameters,
       { name: 'y', value: v }
     ]);
+
+    this.abort();
 
     const promises = await Promise.all(nextParameters.map(this.oneHistogram));
 
