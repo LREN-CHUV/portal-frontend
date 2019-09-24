@@ -1,6 +1,7 @@
 import * as React from 'react';
+import { AppConfig, InstanceMode } from '../App/App';
 
-export default ({ appConfig }: { appConfig: any }): JSX.Element => (
+export default ({ appConfig }: { appConfig: AppConfig }): JSX.Element => (
   <div className="clearfix container-fluid">
     <div className="row">
       <ul className="list-unstyled list-inline col-md-6">
@@ -19,7 +20,8 @@ export default ({ appConfig }: { appConfig: any }): JSX.Element => (
       </ul>
       <div className="col-md-6 text-right">
         {appConfig.version}
-        {appConfig.version ? ' | ' : ''}Mode: {appConfig.mode}
+        {appConfig.version ? ' | ' : ''}Mode:{' '}
+        {appConfig.mode === InstanceMode.Local ? 'Local' : 'Federation'}
       </div>
     </div>
   </div>
