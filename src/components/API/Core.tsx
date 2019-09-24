@@ -112,6 +112,7 @@ export interface State {
   article?: Article;
   articles?: Article[];
   stats?: Stats;
+  variables?: VariableEntity[];
 }
 
 class Core extends Container<State> {
@@ -127,12 +128,38 @@ class Core extends Container<State> {
   }
 
   public lookup = (code: string): VariableEntity => {
-    // FIXME: restore traversal function
-    // const variables = this.state.variables;
-    // const originalVar =
-    //   variables && variables.find(variable => variable.code === code);
+    const variables = this.state.variables;
+    if (variables) {
+      const originalVar =
+        variables && variables.find((variable: any) => variable.code === code);
 
-    // return originalVar || { code, label: code };
+      return originalVar || { code, label: code };
+    } else {
+      const pathologyJSON = this.state.pathologyJSON;
+      if (pathologyJSON) {
+        let variables: any = [];
+
+        const dummyAccumulator = (node: any) => {
+          if (node.variables) {
+            variables = [...variables, ...node.variables];
+          }
+
+          if (node.groups) {
+            return node.groups.map(dummyAccumulator);
+          }
+        };
+
+        pathologyJSON.map(p => dummyAccumulator(p.hierarchy));
+        this.setState({ variables });
+
+        const originalVar =
+          variables &&
+          variables.find((variable: any) => variable.code === code);
+
+        return originalVar || { code, label: code };
+      }
+    }
+
     return { code, label: code };
   };
 
