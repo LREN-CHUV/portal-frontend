@@ -49,11 +49,14 @@ export default ({
   appConfig,
   ...props
 }: Props): JSX.Element => {
-  const [d3Layout, setD3Layout] = useState<HierarchyCircularNode>();
   const [selectedNode, setSelectedNode] = useState<
     HierarchyCircularNode | undefined
   >();
+
+  // D3Model is used to expose D3 data and interact with the D3 Layout.
   const [d3Model, setD3Model] = useState<D3Model>(initialD3Model);
+  const [d3Layout, setD3Layout] = useState<HierarchyCircularNode>();
+
   const [showPathologySwitchWarning, setShowPathologySwitchWarning] = useState(
     false
   );
@@ -87,6 +90,7 @@ export default ({
     }
   }, [apiCore, apiModel.state.model]);
 
+  // Utility to convert variables to D3 model
   const convertModelToD3Model = (
     aModel: ModelResponse,
     aD3Layout: HierarchyCircularNode
@@ -197,68 +201,7 @@ export default ({
     }
   };
 
-  const handleUpdateD3Model = (
-    type: ModelType,
-    node: HierarchyCircularNode
-  ): void => {
-    if (type === ModelType.VARIABLE) {
-      const nextModel = d3Model.variables
-        ? {
-            ...d3Model,
-            variables: [
-              ...d3Model.variables.filter(c => !node.leaves().includes(c)),
-              ...node.leaves().filter(c => !d3Model.variables!.includes(c))
-            ],
-            covariables: d3Model.covariables
-              ? [...d3Model.covariables.filter(c => !node.leaves().includes(c))]
-              : []
-          }
-        : {
-            ...d3Model,
-            variables: node.leaves(),
-            covariables:
-              d3Model.covariables && d3Model.covariables.filter(c => c !== node)
-          };
-
-      setD3Model(nextModel);
-    }
-
-    if (type === ModelType.COVARIABLE) {
-      const nextModel = d3Model.covariables
-        ? {
-            ...d3Model,
-            covariables: [
-              ...d3Model.covariables.filter(c => !node.leaves().includes(c)),
-              ...node.leaves().filter(c => !d3Model.covariables!.includes(c))
-            ],
-            variables: d3Model.variables
-              ? [...d3Model.variables.filter(c => !node.leaves().includes(c))]
-              : []
-          }
-        : {
-            ...d3Model,
-            covariables: node.leaves(),
-            variables:
-              d3Model.variables && d3Model.variables.filter(c => c !== node)
-          };
-
-      setD3Model(nextModel);
-    }
-
-    if (type === ModelType.FILTER) {
-      const nextModel = d3Model.filters
-        ? {
-            ...d3Model,
-            filters: [
-              ...d3Model.filters.filter(c => !node.leaves().includes(c)),
-              ...node.leaves().filter(c => !d3Model.filters!.includes(c))
-            ]
-          }
-        : { ...d3Model, filters: node.leaves() };
-      setD3Model(nextModel);
-    }
-  };
-
+  // Utility to convert  D3 model to variables
   const convertD3ModelToModel = (
     aD3Model: D3Model,
     aModel?: ModelResponse
@@ -303,6 +246,72 @@ export default ({
       };
 
       return draft;
+    }
+  };
+
+  // Update D3 data from interaction with D3 widgets (PackLayer, Model, breadcrumb, search bar)
+  const handleUpdateD3Model = (
+    type: ModelType,
+    node: HierarchyCircularNode
+  ): void => {
+    if (type === ModelType.VARIABLE) {
+      const nextModel = d3Model.variables
+        ? {
+            ...d3Model,
+            variables: [
+              ...d3Model.variables.filter(c => !node.leaves().includes(c)),
+              ...node.leaves().filter(c => !d3Model.variables!.includes(c))
+            ],
+            covariables: d3Model.covariables
+              ? [...d3Model.covariables.filter(c => !node.leaves().includes(c))]
+              : []
+          }
+        : {
+            ...d3Model,
+            variables: node.leaves(),
+            covariables:
+              d3Model.covariables && d3Model.covariables.filter(c => c !== node)
+          };
+
+      setD3Model(nextModel);
+      apiModel.setModel(convertD3ModelToModel(nextModel, apiModel.state.model));
+    }
+
+    if (type === ModelType.COVARIABLE) {
+      const nextModel = d3Model.covariables
+        ? {
+            ...d3Model,
+            covariables: [
+              ...d3Model.covariables.filter(c => !node.leaves().includes(c)),
+              ...node.leaves().filter(c => !d3Model.covariables!.includes(c))
+            ],
+            variables: d3Model.variables
+              ? [...d3Model.variables.filter(c => !node.leaves().includes(c))]
+              : []
+          }
+        : {
+            ...d3Model,
+            covariables: node.leaves(),
+            variables:
+              d3Model.variables && d3Model.variables.filter(c => c !== node)
+          };
+
+      setD3Model(nextModel);
+      apiModel.setModel(convertD3ModelToModel(nextModel, apiModel.state.model));
+    }
+
+    if (type === ModelType.FILTER) {
+      const nextModel = d3Model.filters
+        ? {
+            ...d3Model,
+            filters: [
+              ...d3Model.filters.filter(c => !node.leaves().includes(c)),
+              ...node.leaves().filter(c => !d3Model.filters!.includes(c))
+            ]
+          }
+        : { ...d3Model, filters: node.leaves() };
+      setD3Model(nextModel);
+      apiModel.setModel(convertD3ModelToModel(nextModel, apiModel.state.model));
     }
   };
 
