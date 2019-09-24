@@ -7,7 +7,7 @@ import { RouteComponentProps } from 'react-router-dom';
 import { APICore, APIMining, APIModel } from '../API';
 import { VariableEntity } from '../API/Core';
 import { ModelResponse, Query } from '../API/Model';
-import { AppConfig } from '../App/App';
+import { AppConfig, InstanceMode } from '../App/App';
 import { d3Hierarchy, VariableDatum } from './d3Hierarchy';
 import CirclePack from './D3PackLayer';
 import Modal from '../UI/Modal';
@@ -165,7 +165,7 @@ export default ({
     const datasets =
       (model && model.query && model.query.trainingDatasets) || [];
     if (selectedNode && selectedNode.data.isVariable) {
-      if (appConfig.mode === 'local') {
+      if (appConfig.mode === InstanceMode.Local) {
         apiMining.histograms({
           payload: {
             datasets: datasets.map(d => ({ code: d.code })),

@@ -14,6 +14,7 @@ import {
 } from '../API/Experiment';
 import { ModelResponse, Query } from '../API/Model';
 import { buildWorkflowAlgorithmRequest } from '../API/WorkflowAPIAdapter';
+import { AppConfig, InstanceMode } from '../App/App';
 import { globalParameters } from '../constants';
 import { Alert, IAlert } from '../UI/Alert';
 import Model from '../UI/Model';
@@ -27,7 +28,7 @@ interface Props extends RouteComponentProps<any> {
   apiExperiment: APIExperiment;
   apiCore: APICore;
   apiModel: APIModel;
-  appConfig: any;
+  appConfig: AppConfig;
 }
 
 interface State {
@@ -69,7 +70,8 @@ class Container extends React.Component<Props, State> {
     const { apiCore, apiModel, apiExperiment, appConfig } = this.props;
     const alert = this.state && this.state.alert;
     const method = this.state && this.state.method;
-    const isLocal = (appConfig && appConfig.mode === 'local') || false;
+    const isLocal =
+      (appConfig && appConfig.mode === InstanceMode.Local) || false;
 
     return (
       <div className="Experiment">

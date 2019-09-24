@@ -9,7 +9,7 @@ import { APICore, APIMining, APIModel } from '../API';
 import { VariableEntity } from '../API/Core';
 import { MiningPayload } from '../API/Mining';
 import { ModelResponse, Query } from '../API/Model';
-import { AppConfig } from '../App/App';
+import { AppConfig, InstanceMode } from '../App/App';
 import { IAlert } from '../UI/Alert';
 import Model from '../UI/Model';
 import Validation from '../UI/Validation';
@@ -82,7 +82,7 @@ class Container extends React.Component<Props, State> {
             </Panel>
           </div>
           <div className="results">
-            {appConfig.mode !== 'local' && (
+            {appConfig.mode !== InstanceMode.Local && (
               <Content
                 apiMining={apiMining}
                 model={model}
@@ -109,7 +109,7 @@ class Container extends React.Component<Props, State> {
                 </Panel>
               </Content>
             )}
-            {appConfig.mode === 'local' && (
+            {appConfig.mode === InstanceMode.Local && (
               <ContentDeprecated
                 apiMining={apiMining}
                 model={model}
@@ -299,7 +299,7 @@ class Container extends React.Component<Props, State> {
         variables: query.variables ? query.variables : [],
         pathology: query.pathology ? query.pathology : ''
       };
-      if (appConfig.mode === 'local') {
+      if (appConfig.mode === InstanceMode.Local) {
         apiMining.summaryStatisticsByDataset({ payload });
       } else {
         apiMining.descriptiveStatisticsByDataset({ payload });

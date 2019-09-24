@@ -14,7 +14,7 @@ import {
   webURL
 } from '../API'; // as interfaces
 import config from '../API/RequestHeaders';
-import App, { AppConfig } from '../App/App';
+import App, { AppConfig, InstanceMode } from '../App/App';
 
 // UNSTATED.logStateChanges = process.env.NODE_ENV === "development";
 
@@ -51,7 +51,7 @@ class AppContainer extends React.Component<any, State> {
     } catch (e) {
       const appConfig: AppConfig = {
         instanceName: 'MIP DEV',
-        mode: 'local',
+        mode: InstanceMode.Federation,
         version: 'alpha',
         galaxyAPIUrl: '',
         galaxyApacheUrl: 'http://ch.ch'
@@ -62,7 +62,7 @@ class AppContainer extends React.Component<any, State> {
     return await Promise.all([
       this.apiExperiment.all(),
       this.apiCore.fetchPathologies(),
-      this.apiCore.algorithms(this.state.appConfig.mode === 'local'),
+      this.apiCore.algorithms(this.state.appConfig.mode === InstanceMode.Local),
       this.apiCore.stats(),
       this.apiCore.articles(),
       this.apiModel.all()

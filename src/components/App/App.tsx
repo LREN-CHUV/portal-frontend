@@ -19,10 +19,14 @@ import './App.css';
 
 import styled from 'styled-components';
 
+export enum InstanceMode {
+  Local,
+  Federation
+}
 export interface AppConfig {
   version?: string;
   instanceName?: string;
-  mode?: string;
+  mode?: InstanceMode;
   ga?: string;
   galaxyAPIUrl?: string;
   galaxyApacheUrl?: string;
