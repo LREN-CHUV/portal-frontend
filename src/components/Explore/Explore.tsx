@@ -61,7 +61,7 @@ export default (props: ExploreProps): JSX.Element => {
           {apiCore.state.pathologies && apiCore.state.pathologies.length > 1 && (
             <Panel className="pathologies">
               <Panel.Title>
-                <h3>Pathologies</h3>
+                <h3>Medical Conditions</h3>
               </Panel.Title>
               <Panel.Body>
                 {apiCore.state.pathologies.map(g => (
