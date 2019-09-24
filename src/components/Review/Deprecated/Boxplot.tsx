@@ -3,10 +3,10 @@ import HighchartsReact from 'highcharts-react-official';
 import addHighchartsMore from 'highcharts/highcharts-more';
 import * as React from 'react';
 
-import { VariableEntity } from '../API/Core';
-import { MiningResponseShape, MiningState } from '../API/Mining';
-import { Alert } from '../UI/Alert';
-import Loader from '../UI/Loader';
+import { VariableEntity } from '../../API/Core';
+import { MiningResponseShape, MiningState } from '../../API/Mining';
+import { Alert } from '../../UI/Alert';
+import Loader from '../../UI/Loader';
 
 addHighchartsMore(Highcharts);
 

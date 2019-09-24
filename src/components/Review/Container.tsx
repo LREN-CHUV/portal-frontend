@@ -14,6 +14,7 @@ import { IAlert } from '../UI/Alert';
 import Model from '../UI/Model';
 import Validation from '../UI/Validation';
 import Content from './Content';
+import ContentDeprecated from './Deprecated/Content';
 import Filter from './Filter';
 import ExperimentReviewHeader from './Header';
 
@@ -42,7 +43,7 @@ class Container extends React.Component<Props, State> {
   }
 
   public render(): JSX.Element {
-    const { apiCore, apiModel, apiMining } = this.props;
+    const { apiCore, apiModel, apiMining, appConfig } = this.props;
     const { fields, filters } = this.makeFilters({ apiCore, apiModel });
     const model = apiModel.state.model;
     return (
@@ -81,31 +82,60 @@ class Container extends React.Component<Props, State> {
             </Panel>
           </div>
           <div className="results">
-            <Content
-              apiMining={apiMining}
-              model={model}
-              selectedDatasets={
-                model && model.query && model.query.trainingDatasets
-              }
-              lookup={apiCore.lookup}
-            >
-              <Panel className="filters" defaultExpanded={false}>
-                <Panel.Title toggle={true}>
-                  <h3 className={'btn btn-info'}>Filters</h3>
-                </Panel.Title>
-                <Panel.Collapse>
-                  <Panel.Body collapsible={true}>
-                    {fields && fields.length > 0 && (
-                      <Filter
-                        rules={filters}
-                        filters={fields}
-                        handleChangeFilter={this.handleUpdateFilter}
-                      />
-                    )}
-                  </Panel.Body>
-                </Panel.Collapse>
-              </Panel>
-            </Content>
+            {appConfig.mode !== 'local' && (
+              <Content
+                apiMining={apiMining}
+                model={model}
+                selectedDatasets={
+                  model && model.query && model.query.trainingDatasets
+                }
+                lookup={apiCore.lookup}
+              >
+                <Panel className="filters" defaultExpanded={false}>
+                  <Panel.Title toggle={true}>
+                    <h3 className={'btn btn-info'}>Filters</h3>
+                  </Panel.Title>
+                  <Panel.Collapse>
+                    <Panel.Body collapsible={true}>
+                      {fields && fields.length > 0 && (
+                        <Filter
+                          rules={filters}
+                          filters={fields}
+                          handleChangeFilter={this.handleUpdateFilter}
+                        />
+                      )}
+                    </Panel.Body>
+                  </Panel.Collapse>
+                </Panel>
+              </Content>
+            )}
+            {appConfig.mode === 'local' && (
+              <ContentDeprecated
+                apiMining={apiMining}
+                model={model}
+                selectedDatasets={
+                  model && model.query && model.query.trainingDatasets
+                }
+                lookup={apiCore.lookup}
+              >
+                <Panel className="filters" defaultExpanded={false}>
+                  <Panel.Title toggle={true}>
+                    <h3 className={'btn btn-info'}>Filters</h3>
+                  </Panel.Title>
+                  <Panel.Collapse>
+                    <Panel.Body collapsible={true}>
+                      {fields && fields.length > 0 && (
+                        <Filter
+                          rules={filters}
+                          filters={fields}
+                          handleChangeFilter={this.handleUpdateFilter}
+                        />
+                      )}
+                    </Panel.Body>
+                  </Panel.Collapse>
+                </Panel>
+              </ContentDeprecated>
+            )}
           </div>
         </div>
       </div>

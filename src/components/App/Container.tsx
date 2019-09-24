@@ -51,7 +51,7 @@ class AppContainer extends React.Component<any, State> {
     } catch (e) {
       const appConfig: AppConfig = {
         instanceName: 'MIP DEV',
-        mode: 'federation',
+        mode: 'local',
         version: 'alpha',
         galaxyAPIUrl: '',
         galaxyApacheUrl: 'http://ch.ch'
