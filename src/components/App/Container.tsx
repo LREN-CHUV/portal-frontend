@@ -49,10 +49,12 @@ class AppContainer extends React.Component<any, State> {
         ReactGA.initialize(appConfig.ga);
       }
     } catch (e) {
-      const appConfig = {
+      const appConfig: AppConfig = {
         instanceName: 'MIP DEV',
         mode: 'federation',
-        version: 'alpha'
+        version: 'alpha',
+        galaxyAPIUrl: '',
+        galaxyApacheUrl: 'https://google.com'
       };
       this.setState({ appConfig });
     }

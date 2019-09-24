@@ -24,6 +24,8 @@ export interface AppConfig {
   instanceName?: string;
   mode?: string;
   ga?: string;
+  galaxyAPIUrl?: string;
+  galaxyApacheUrl?: string;
 }
 interface Props {
   appConfig: AppConfig;
@@ -86,7 +88,10 @@ const App = ({
             // tslint:disable-next-line jsx-no-lambda
             render={props => <Redirect apiUser={apiUser} props={props} />}
           />
-          <Route path="/galaxy" render={props => <Galaxy />} />
+          <Route
+            path="/galaxy"
+            render={props => <Galaxy appConfig={appConfig} />}
+          />
           <Route
             path="/tos"
             // tslint:disable-next-line jsx-no-lambda

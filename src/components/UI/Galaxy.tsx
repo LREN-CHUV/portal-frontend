@@ -1,10 +1,16 @@
 import React, { useRef } from 'react';
+import { AppConfig } from '../App/App';
 
-export default () => {
+interface Props {
+  appConfig: AppConfig;
+}
+
+export default React.memo(({ appConfig }: Props) => {
+
   const divRef = useRef<HTMLIFrameElement>(null);
+  const URL = appConfig.galaxyAPIUrl || '';
+  const URL_APACHE = appConfig.galaxyApacheUrl || '';
 
-  const URL = 'http://localhost:8090/api';
-  const URL_APACHE = 'http://dl083.madgik.di.uoa.gr/galaxy';
   // const tokenURL = (user = 'nikos', pass = 'koikas') => `${URL}/getToken?user=${user}&pass=${pass}`
   // const authURL = (token) => `${URL}/getBasicAuth?token=${token}`
   const tokenURL = (user = 'nikos', pass = 'koikas'): string =>
@@ -35,7 +41,7 @@ export default () => {
         mode: 'no-cors',
         method: 'GET',
         headers: {
-          Authorization: `Basic YWRtaW46YWRtaW4=`
+          Authorization: `Basic YWRtaW46cEBzc3cwcmQ=`
         }
       })
         .then(response => response.text())
@@ -48,19 +54,19 @@ export default () => {
     .then(result => {
       if (divRef && divRef.current) {
         divRef.current.src = URL_APACHE;
+        console.log(URL_APACHE)
       }
     })
     .catch((error: string) => console.error(`Error html: ${error}`));
 
   return (
     <iframe
-      title="HTML results"
+      title="Galaxy Workflow"
       className="html-iframe"
-      src={URL_APACHE}
-      width={500}
-      height={500}
+      width={800}
+      height={600}
       frameBorder={0}
       ref={divRef}
     />
   );
-};
+});
