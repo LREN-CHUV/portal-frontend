@@ -43,7 +43,7 @@ const findVariableData = (code: string, data: any) => {
 const processPolynominalDataHeader = (code: string, data: any) => {
   const variableData = findVariableData(code, data);
   if (variableData) {
-    return `${variableData.Count} (null: ${variableData.null_count})`;
+    return `${variableData.Count}`;
   }
 
   return;
@@ -56,7 +56,7 @@ const processPolynominalData = (
 ) => {
   const variableData = findVariableData(code, data);
   if (variableData) {
-    return variableData.frequency[categoryCode];
+    return variableData.Frequencies[categoryCode];
   }
 
   return;
@@ -121,7 +121,7 @@ const computeMinings = ({
       const code = dataset.code;
       const mining = minings.find((m: any) => m.dataset.code === code);
       if (mining) {
-        console.log(mining);
+        // console.log(mining);
         const { error, data } = mining;
         if (!error && !data) {
           row[code] = 'loading...';
@@ -171,16 +171,19 @@ const Table = ({
   query,
   lookup
 }: Props): JSX.Element => {
+  const variables =
+    query &&
+    [
+      ...(query.variables || []),
+      ...(query.coVariables || []),
+      ...(query.groupings || [])
+    ].map(v => lookup(v.code));
+
+  // console.log(variables);
   const rows = computeMinings({
     minings,
     selectedDatasets,
-    variables:
-      query &&
-      [
-        ...(query.variables || []),
-        ...(query.coVariables || []),
-        ...(query.groupings || [])
-      ].map(v => lookup(v.code))
+    variables
   });
 
   const columns = selectedDatasets

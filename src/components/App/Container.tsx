@@ -54,7 +54,7 @@ class AppContainer extends React.Component<any, State> {
         mode: 'federation',
         version: 'alpha',
         galaxyAPIUrl: '',
-        galaxyApacheUrl: 'https://google.com'
+        galaxyApacheUrl: 'http://ch.ch'
       };
       this.setState({ appConfig });
     }
