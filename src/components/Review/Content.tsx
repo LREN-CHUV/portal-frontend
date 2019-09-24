@@ -35,22 +35,22 @@ const Content = ({
         {children}
         <Panel>
           <Panel.Body>
-            <Tabs defaultActiveKey={1} id="uncontrolled-review-model-tab">
-              <Tab eventKey={1} title="Table">
-                <Table
-                  minings={apiMining.state.summaryStatistics}
-                  selectedDatasets={selectedDatasets}
-                  query={model && model.query}
-                  lookup={lookup}
-                />
-              </Tab>
-              <Tab eventKey={2} title="Boxplot">
+            {/* <Tabs defaultActiveKey={1} id="uncontrolled-review-model-tab"> */}
+            {/* <Tab eventKey={1} title="Table"> */}
+            <Table
+              minings={apiMining.state.summaryStatistics}
+              selectedDatasets={selectedDatasets}
+              query={model && model.query}
+              lookup={lookup}
+            />
+            {/* </Tab> */}
+            {/* <Tab eventKey={2} title="Boxplot">
                 <Boxplot
                   miningState={apiMining.state}
                   selectedDatasets={selectedDatasets}
                 />
-              </Tab>
-            </Tabs>
+              </Tab> */}
+            {/* </Tabs> */}
           </Panel.Body>
         </Panel>
       </Panel.Body>

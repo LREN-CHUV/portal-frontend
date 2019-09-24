@@ -32,6 +32,15 @@ interface State {
 class Container extends React.Component<Props, State> {
   public state: State = {};
 
+  public async componentDidMount() {
+    const { apiModel } = this.props;
+    const model = apiModel.state.model;
+    const query = model && model.query;
+    if (query) {
+      this.fetchStatistics({ query });
+    }
+  }
+
   public render(): JSX.Element {
     const { apiCore, apiModel, apiMining } = this.props;
     const { fields, filters } = this.makeFilters({ apiCore, apiModel });
@@ -42,7 +51,7 @@ class Container extends React.Component<Props, State> {
           <ExperimentReviewHeader
             handleGoBackToExplore={this.handleGoBackToExplore}
             handleSaveModel={this.handleSaveModel}
-            handleRunAnalysis={this.handleRunAnalysis}
+            handleRunAnalysis={this.handleRunExperiment}
             model={model}
           />
         </div>
@@ -221,7 +230,7 @@ class Container extends React.Component<Props, State> {
     this.setState({ alert: { message: 'Model saved' } });
   };
 
-  private handleRunAnalysis = async () => {
+  private handleRunExperiment = async () => {
     const { apiModel } = this.props;
     const model = apiModel.state.model;
     if (model) {
@@ -238,11 +247,16 @@ class Container extends React.Component<Props, State> {
 
   private handleSelectModel = (model?: ModelResponse): void => {
     if (model) {
-      this.props.apiModel.one(model && model.slug);
+      this.props.apiModel.one(model && model.slug).then(() => {
+        const query = model && model.query;
+        if (query) {
+          this.fetchStatistics({ query });
+        }
+      });
     }
   };
 
-  private fetchMinings = async ({ query }: { query: Query }) => {
+  private fetchStatistics = async ({ query }: { query: Query }) => {
     const { apiMining, appConfig } = this.props;
     const datasets = query.trainingDatasets;
 
@@ -271,7 +285,7 @@ class Container extends React.Component<Props, State> {
       await apiModel.setModel(model);
     }
 
-    this.fetchMinings({ query });
+    this.fetchStatistics({ query });
   };
 
   private handleUpdateFilter = async (filters: string): Promise<boolean> => {
@@ -285,7 +299,7 @@ class Container extends React.Component<Props, State> {
     const query = model && model.query;
     if (query) {
       apiMining.clear();
-      this.fetchMinings({ query });
+      this.fetchStatistics({ query });
     }
 
     return Promise.resolve(true);

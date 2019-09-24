@@ -32,8 +32,8 @@ export interface IMiningResponse {
 export interface MiningPayload {
   algorithm?: Algorithm;
   variables: VariableEntity[];
-  grouping?: VariableEntity[];
-  covariables?: VariableEntity[];
+  grouping: VariableEntity[];
+  covariables: VariableEntity[];
   datasets: VariableEntity[];
   filters: string;
   pathology?: string;
@@ -274,7 +274,9 @@ class Mining extends Container<MiningState> {
           },
           {
             name: 'x',
-            value: payload.variables.map(v => v.code).toString()
+            value: [...payload.variables, ...payload.covariables]
+              .map(v => v.code)
+              .toString()
           },
           {
             name: 'pathology',
@@ -285,14 +287,18 @@ class Mining extends Container<MiningState> {
         const mining = await this.fetchExaremeStats(parameters);
         // console.log(mining.data.result.map((d: any) => d.data));
 
+        const error = mining.data.result.find(
+          (d: any) =>
+            d.type === 'text/plain+warning' || d.type === 'text/plain+error'
+        );
+        // console.log(error);
         this.cachedSummaryStatistics[q.dataset.code] = {
           data: mining.data.result
             .map((d: any) => d.data)
             .map((d: any) => d.data)
             .flat(),
           dataset: q.dataset,
-          error: mining.error,
-          hashKey
+          error: error ? error.data : undefined
         };
 
         const summaryStatistics = payload.datasets.map(

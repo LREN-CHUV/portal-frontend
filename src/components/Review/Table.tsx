@@ -31,12 +31,8 @@ interface ITableRow {
 }
 
 const findVariableData = (code: string, data: any) => {
-  const theData = data.data;
-
-  if (theData) {
-    const variableData = theData.find(
-      (r: any) => r.group && (r.group[0] === 'all' && r.index === code)
-    );
+  if (data) {
+    const variableData = data.find((r: any) => r.Label && r.Label === code);
 
     return variableData;
   }
@@ -47,7 +43,7 @@ const findVariableData = (code: string, data: any) => {
 const processPolynominalDataHeader = (code: string, data: any) => {
   const variableData = findVariableData(code, data);
   if (variableData) {
-    return `${variableData.count} (null: ${variableData.null_count})`;
+    return `${variableData.Count} (null: ${variableData.null_count})`;
   }
 
   return;
@@ -69,10 +65,10 @@ const processPolynominalData = (
 const processContinuousData = (code: string, data: any) => {
   const variableData = findVariableData(code, data);
   if (variableData) {
-    const mean = round(variableData.mean, 2);
-    const min = round(variableData.min, 2);
-    const max = round(variableData.max, 2);
-    const std = round(variableData.std, 2);
+    const mean = round(variableData.Mean, 2);
+    const min = round(variableData.Min, 2);
+    const max = round(variableData.Max, 2);
+    const std = round(variableData['Std.Err.'], 2);
 
     return mean ? `${mean} (${min}-${max}) - std: ${std}` : '-';
   }
@@ -125,6 +121,7 @@ const computeMinings = ({
       const code = dataset.code;
       const mining = minings.find((m: any) => m.dataset.code === code);
       if (mining) {
+        console.log(mining);
         const { error, data } = mining;
         if (!error && !data) {
           row[code] = 'loading...';
@@ -135,11 +132,11 @@ const computeMinings = ({
             }));
           }
         } else if (error) {
-          row[code] = 'error';
+          row[code] = error;
           if (isPolynominal) {
             polynominalRows = polynominalRows.map(r => ({
               ...r,
-              [code]: 'error'
+              [code]: error
             }));
           }
         } else if (data) {
@@ -154,7 +151,8 @@ const computeMinings = ({
               )
             }));
           } else {
-            row[code] = JSON.stringify(data); //processContinuousData(variable.code, data);
+            // row[code] = JSON.stringify(data);
+            row[code] = processContinuousData(variable.code, data);
           }
         }
       }
