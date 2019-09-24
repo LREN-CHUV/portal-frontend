@@ -1,12 +1,24 @@
 import React, { useRef } from 'react';
 import { AppConfig } from '../App/App';
+import styled from 'styled-components';
 
 interface Props {
   appConfig: AppConfig;
 }
 
-export default React.memo(({ appConfig }: Props) => {
+const IFrameContainer = styled.div`
+  width: 100%;
+  height: 100%;
 
+  iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    position: fixed;
+  }
+`;
+
+export default React.memo(({ appConfig }: Props) => {
   const divRef = useRef<HTMLIFrameElement>(null);
   const URL = appConfig.galaxyAPIUrl || '';
   const URL_APACHE = appConfig.galaxyApacheUrl || '';
@@ -54,19 +66,13 @@ export default React.memo(({ appConfig }: Props) => {
     .then(result => {
       if (divRef && divRef.current) {
         divRef.current.src = URL_APACHE;
-        console.log(URL_APACHE)
       }
     })
     .catch((error: string) => console.error(`Error html: ${error}`));
 
   return (
-    <iframe
-      title="Galaxy Workflow"
-      className="html-iframe"
-      width={800}
-      height={600}
-      frameBorder={0}
-      ref={divRef}
-    />
+    <IFrameContainer>
+      <iframe title="Galaxy Workflow" className="html-iframe" ref={divRef} />
+    </IFrameContainer>
   );
 });
