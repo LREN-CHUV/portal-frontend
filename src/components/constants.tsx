@@ -10,7 +10,9 @@ export const excludedMethods = [
   'hedwig',
   'ggparci',
   'kmeans',
-  'heatmaply'
+  'heatmaply',
+  'linearRegression',
+  'anova'
 ];
 
 // Mime types

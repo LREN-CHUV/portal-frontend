@@ -147,18 +147,8 @@ const AvailableAlgorithms = ({
         })) ||
     [];
 
-  const dontFakeMethodName = availableAlgorithms.map((f: any) =>
-    f.label === 'Bayesian Linear Regression'
-      ? {
-          ...f,
-          label: 'Standard Linear Regression'
-        }
-      : f
-  );
-
-  const sortedAlgorithms =
-    dontFakeMethodName &&
-    dontFakeMethodName.sort((a: Algorithm, b: Algorithm) => {
+  const sortedAlgorithms = availableAlgorithms.sort(
+    (a: Algorithm, b: Algorithm) => {
       try {
         const typea = (a && a.type && a.type.length > 0 && a.type[0]) || '';
         const typeb = (b && b.type && b.type.length > 0 && b.type[0]) || '';
@@ -167,7 +157,8 @@ const AvailableAlgorithms = ({
       } catch (e) {
         return 0;
       }
-    });
+    }
+  );
 
   const types = Array.from(new Set(sortedAlgorithms.map(f => f.type).flat(1)));
 
