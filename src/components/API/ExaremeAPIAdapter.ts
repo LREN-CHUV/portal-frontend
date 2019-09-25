@@ -110,7 +110,7 @@ const buildConstraints = (algo: any) => {
   }
 
   if (covariables && covariables.valueNotBlank) {
-    if (covariableColumnValuesIsCategorical) {
+    if (covariableColumnValuesIsCategorical !== false) {
       groupingsConstraint.min_count = 1;
     } else {
       covariableConstraint.min_count = 1;
