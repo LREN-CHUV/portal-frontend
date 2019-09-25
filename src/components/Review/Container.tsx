@@ -58,16 +58,6 @@ class Container extends React.Component<Props, State> {
         </div>
         <div className="content">
           <div className="sidebar">
-            <Model
-              model={model}
-              selectedSlug={model && model.slug}
-              showDatasets={false}
-              variables={apiCore.variablesForPathology(
-                apiModel.state.model && apiModel.state.model.query.pathology
-              )}
-              items={apiModel.state.models}
-              handleSelectModel={this.handleSelectModel}
-            />
             <Panel className="datasets">
               <Panel.Body>
                 <Validation
@@ -80,6 +70,16 @@ class Container extends React.Component<Props, State> {
                 />
               </Panel.Body>
             </Panel>
+            <Model
+              model={model}
+              selectedSlug={model && model.slug}
+              showDatasets={false}
+              variables={apiCore.variablesForPathology(
+                apiModel.state.model && apiModel.state.model.query.pathology
+              )}
+              items={apiModel.state.models}
+              handleSelectModel={this.handleSelectModel}
+            />
           </div>
           <div className="results">
             {appConfig.mode !== InstanceMode.Local && (
@@ -272,7 +272,7 @@ class Container extends React.Component<Props, State> {
       await apiModel.update({ model });
       const slug = model && model.slug;
       const { history } = this.props;
-      history.push(`/experiment/${slug}`);
+      history.push(`/experiment`);
     }
   };
 
