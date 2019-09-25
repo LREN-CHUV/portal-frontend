@@ -76,7 +76,8 @@ class Mining extends Container<MiningState> {
     }));
   };
 
-  public abort = () => {
+  public abortMiningRequests = (): void => {
+    console.log('abort', this.requests);
     try {
       this.requests.forEach(r => r.abort());
       this.requests = [];
@@ -179,7 +180,7 @@ class Mining extends Container<MiningState> {
       { name: 'y', value: v }
     ]);
 
-    this.abort();
+    this.abortMiningRequests();
 
     const promises = await Promise.all(nextParameters.map(this.oneHistogram));
 

@@ -180,9 +180,14 @@ export default ({
         });
       }
     }
-  }, [selectedNode, apiModel.state, apiMining, appConfig]);
+  }, [
+    selectedNode,
+    apiModel.state.model && apiModel.state.model.query.trainingDatasets,
+    apiMining,
+    appConfig.mode
+  ]);
 
-  const handleSelectDataset = (dataset: VariableEntity) => {
+  const handleSelectDataset = (dataset: VariableEntity): void => {
     const model = apiModel.state.model;
     const trainingDatasets =
       (model && model.query && model.query.trainingDatasets) || [];
@@ -332,11 +337,11 @@ export default ({
     setShowPathologySwitchWarning(true);
   };
 
-  const handleCancelSwitchPathology = () => {
+  const handleCancelSwitchPathology = (): void => {
     setShowPathologySwitchWarning(false);
   };
 
-  const handleOKSwitchPathology = () => {
+  const handleOKSwitchPathology = (): void => {
     setShowPathologySwitchWarning(false);
     if (apiCore.state.pathologies) {
       const newModel = { query: { pathology: nextPathologyCode } };
@@ -350,6 +355,8 @@ export default ({
 
     await apiModel.setModel(nextModel);
     history.push(`/review`);
+
+    apiMining.abortMiningRequests();
   };
 
   const nextProps = {
