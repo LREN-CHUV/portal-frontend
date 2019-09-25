@@ -35,12 +35,17 @@ const Content = ({
           {children}
           <Panel>
             <Panel.Body>
-              <Table
-                minings={apiMining.state.summaryStatistics}
-                selectedDatasets={selectedDatasets}
-                query={model && model.query}
-                lookup={lookup}
-              />
+              {(!selectedDatasets || selectedDatasets.length === 0) && (
+                <p>Please, select a dataset</p>
+              )}
+              {selectedDatasets && selectedDatasets.length > 0 && (
+                <Table
+                  minings={apiMining.state.summaryStatistics}
+                  selectedDatasets={selectedDatasets}
+                  query={model && model.query}
+                  lookup={lookup}
+                />
+              )}
             </Panel.Body>
           </Panel>
         </Panel.Body>

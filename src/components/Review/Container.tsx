@@ -253,14 +253,18 @@ class Container extends React.Component<Props, State> {
     return { query, filters, fields };
   };
 
-  private handleSaveModel = async ({ title }: { title: string }) => {
+  private handleSaveModel = async ({
+    title
+  }: {
+    title: string;
+  }): Promise<void> => {
     const { apiModel } = this.props;
     const model = apiModel.state.model;
     await apiModel.save({ model, title });
     this.setState({ alert: { message: 'Model saved' } });
   };
 
-  private handleRunExperiment = async () => {
+  private handleRunExperiment = async (): Promise<void> => {
     const { apiModel } = this.props;
     const model = apiModel.state.model;
     if (model) {
@@ -286,7 +290,11 @@ class Container extends React.Component<Props, State> {
     }
   };
 
-  private fetchStatistics = async ({ query }: { query: Query }) => {
+  private fetchStatistics = async ({
+    query
+  }: {
+    query: Query;
+  }): Promise<void> => {
     const { apiMining, appConfig } = this.props;
     const datasets = query.trainingDatasets;
 
