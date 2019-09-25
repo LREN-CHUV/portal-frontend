@@ -84,7 +84,7 @@ exports[`Test App components App snapshot renders correctly 1`] = `
                   aria-haspopup={true}
                   className="dropdown-toggle btn btn-default"
                   disabled={false}
-                  id="experimmanuelent-dropdown"
+                  id="experiment-dropdown"
                   onClick={[Function]}
                   onKeyDown={[Function]}
                   role="button"
@@ -93,7 +93,7 @@ exports[`Test App components App snapshot renders correctly 1`] = `
                   BSD
                 </button>
                 <ul
-                  aria-labelledby="experimmanuelent-dropdown"
+                  aria-labelledby="experiment-dropdown"
                   className="dropdown-menu"
                   role="menu"
                 >
@@ -173,7 +173,7 @@ exports[`Test App components App snapshot renders correctly 1`] = `
             className="toolbar-icon-bg hidden-xs help"
           >
             <div
-              className="sc-jWBwVP bVKmFf"
+              className="sc-brqgnP hzzHZ"
             >
               <div
                 className="dropdown btn-group btn-group-default"
@@ -286,16 +286,16 @@ exports[`Test App components App snapshot renders correctly 1`] = `
     </header>
   </header>
   <section
-    className="main-content sc-fBuWsC fLqrZW"
+    className="main-content sc-fMiknA eEoNzf"
   >
     <div
-      className="sc-cMljjf hlOImX"
+      className="sc-jAaTju qNdbr"
     >
       <div
-        className="sc-jAaTju sqzQM"
+        className="sc-jDwBTQ cdxgNu"
       >
         <div
-          className="sc-jWBwVP bVKmFf"
+          className="sc-brqgnP hzzHZ"
         >
           <div
             className="dropdown btn-group btn-group-default"
@@ -397,7 +397,7 @@ exports[`Test App components App snapshot renders correctly 1`] = `
         THE MEDICAL INFORMATICS PLATFORM
       </h1>
       <div
-        className="sc-jDwBTQ guuMGV"
+        className="sc-gPEVay ftfKKm"
       >
         <section>
           <p>
@@ -476,7 +476,9 @@ exports[`Test App components App snapshot renders correctly 1`] = `
           className="col-md-6 text-right"
         >
           
-          Mode: 
+          Mode:
+           
+          Federation
         </div>
       </div>
     </div>
@@ -568,7 +570,7 @@ exports[`Test App components AppContainer snapshot renders correctly 1`] = `
                   aria-haspopup={true}
                   className="dropdown-toggle btn btn-default"
                   disabled={false}
-                  id="experimmanuelent-dropdown"
+                  id="experiment-dropdown"
                   onClick={[Function]}
                   onKeyDown={[Function]}
                   role="button"
@@ -577,7 +579,7 @@ exports[`Test App components AppContainer snapshot renders correctly 1`] = `
                   BSD
                 </button>
                 <ul
-                  aria-labelledby="experimmanuelent-dropdown"
+                  aria-labelledby="experiment-dropdown"
                   className="dropdown-menu"
                   role="menu"
                 >
@@ -657,7 +659,7 @@ exports[`Test App components AppContainer snapshot renders correctly 1`] = `
             className="toolbar-icon-bg hidden-xs help"
           >
             <div
-              className="sc-jWBwVP bVKmFf"
+              className="sc-brqgnP hzzHZ"
             >
               <div
                 className="dropdown btn-group btn-group-default"
@@ -770,16 +772,16 @@ exports[`Test App components AppContainer snapshot renders correctly 1`] = `
     </header>
   </header>
   <section
-    className="main-content sc-fBuWsC fLqrZW"
+    className="main-content sc-fMiknA eEoNzf"
   >
     <div
-      className="sc-cMljjf hlOImX"
+      className="sc-jAaTju qNdbr"
     >
       <div
-        className="sc-jAaTju sqzQM"
+        className="sc-jDwBTQ cdxgNu"
       >
         <div
-          className="sc-jWBwVP bVKmFf"
+          className="sc-brqgnP hzzHZ"
         >
           <div
             className="dropdown btn-group btn-group-default"
@@ -881,7 +883,7 @@ exports[`Test App components AppContainer snapshot renders correctly 1`] = `
         THE MEDICAL INFORMATICS PLATFORM
       </h1>
       <div
-        className="sc-jDwBTQ guuMGV"
+        className="sc-gPEVay ftfKKm"
       >
         <section>
           <p>
@@ -960,7 +962,9 @@ exports[`Test App components AppContainer snapshot renders correctly 1`] = `
           className="col-md-6 text-right"
         >
           
-          Mode: 
+          Mode:
+           
+          Federation
         </div>
       </div>
     </div>

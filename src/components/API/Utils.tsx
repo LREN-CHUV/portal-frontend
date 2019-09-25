@@ -22,6 +22,8 @@ const getDatasets = async (
   researchOnly = true,
   code = 'dementia'
 ): Promise<VariableEntity[] | undefined> => {
+  await apiCore.fetchPathologies();
+
   const datasets = apiCore.datasetsForPathology(code);
 
   return researchOnly
