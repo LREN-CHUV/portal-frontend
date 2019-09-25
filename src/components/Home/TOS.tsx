@@ -7,7 +7,7 @@ const Container = styled.div`
   margin: 0 48px;
 `;
 
-export default () => (
+export default (): JSX.Element => (
   <Container>
     <h1>HBP Medical Informatics Platform</h1>
     <h2>Terms and Conditions for Service</h2>

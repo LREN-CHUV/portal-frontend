@@ -55,10 +55,10 @@ export default ({
   experiments,
   handleSelectExperiment,
   handleNewExperiment
-}: Props) => {
+}: Props): JSX.Element => {
   const [collapsibleState, setCollapsibleState] = useState(['']);
 
-  const handleExpand = (uuid: string) => {
+  const handleExpand = (uuid: string): void => {
     const nextState =
       collapsibleState && collapsibleState.includes(uuid)
         ? collapsibleState.filter((c: string) => c !== uuid)
@@ -90,7 +90,7 @@ export default ({
                   toggle={true}
                   style={{ flexGrow: 1 }}
                   // tslint:disable-next-line jsx-no-lambda
-                  onClick={() => {
+                  onClick={(): void => {
                     handleExpand(experiment.uuid);
                   }}
                 >
@@ -100,7 +100,7 @@ export default ({
                   <Button
                     bsSize="small"
                     // tslint:disable-next-line jsx-no-lambda
-                    onClick={() =>
+                    onClick={(): void =>
                       handleNewExperiment(experiment.modelDefinitionId)
                     }
                   >
@@ -109,7 +109,7 @@ export default ({
                   <Button
                     bsSize="small"
                     // tslint:disable-next-line jsx-no-lambda
-                    onClick={() =>
+                    onClick={(): void =>
                       handleSelectExperiment(
                         experiment.modelDefinitionId,
                         experiment.uuid

@@ -40,14 +40,14 @@ interface Props {
   models: ModelResponse[] | undefined;
   history: any;
 }
-export default ({ models, experiments, history }: Props) => {
-  const handleNewExperiment = (modelId: string | undefined) => {
+export default ({ models, experiments, history }: Props): JSX.Element => {
+  const handleNewExperiment = (modelId: string | undefined): void => {
     history.push(`/experiment/${modelId}`);
   };
   const handleGoToExperiment = (
     modelId: string | undefined,
     experimentId: string
-  ) => {
+  ): void => {
     history.push(`/experiment/${modelId}/${experimentId}`);
   };
 
@@ -75,7 +75,7 @@ export default ({ models, experiments, history }: Props) => {
                   <Button
                     bsSize="small"
                     // tslint:disable-next-line jsx-no-lambda
-                    onClick={() => {
+                    onClick={(): void => {
                       history.push(`/review/${model.slug}`);
                     }}
                   >
@@ -92,7 +92,7 @@ export default ({ models, experiments, history }: Props) => {
                       eventKey={'cancel'}
                       key={'cancel'}
                       // tslint:disable-next-line jsx-no-lambda
-                      onSelect={() => handleNewExperiment(model.slug)}
+                      onSelect={(): void => handleNewExperiment(model.slug)}
                     >
                       New experiment
                     </MenuItem>
@@ -102,7 +102,7 @@ export default ({ models, experiments, history }: Props) => {
                           eventKey={'cancel'}
                           key={'cancel'}
                           // tslint:disable-next-line jsx-no-lambda
-                          onSelect={() =>
+                          onSelect={(): void =>
                             handleGoToExperiment(model.slug, e.uuid)
                           }
                         >

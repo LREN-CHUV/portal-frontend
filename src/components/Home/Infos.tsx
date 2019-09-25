@@ -88,7 +88,7 @@ interface Props {
   handleNewArticle: () => void;
 }
 
-export default ({ stats, handleNewArticle }: Props) => (
+export default ({ stats, handleNewArticle }: Props): JSX.Element => (
   <Infos>
     <Panel style={{ backgroundColor: 'rgba(222, 147, 109, 0.4)' }}>
       <PanelTitle>

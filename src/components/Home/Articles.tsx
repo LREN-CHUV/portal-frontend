@@ -36,7 +36,7 @@ interface Props {
   articles: any[] | undefined;
   handleSelectArticle: (id: string) => void;
 }
-export default ({ articles, handleSelectArticle }: Props) => {
+export default ({ articles, handleSelectArticle }: Props): JSX.Element => {
   return (
     <>
       {!articles ||
@@ -50,7 +50,7 @@ export default ({ articles, handleSelectArticle }: Props) => {
                 <a
                   href={`/articles/${article.slug}`}
                   // tslint:disable-next-line jsx-no-lambda
-                  onClick={e => {
+                  onClick={(e): void => {
                     e.preventDefault();
                     handleSelectArticle(article.slug);
                   }}
