@@ -42,6 +42,7 @@ const parameters: any = [
 const datasets = [{ code: 'adni' }];
 const model: any = (datasets: VariableEntity[]) => ({
   query: {
+    pathology: 'dementia', // FIXME: should by dynamic
     coVariables: [{ code: 'subjectage' }, { code: 'righthippocampus' }],
     filters: '',
     groupings: [],

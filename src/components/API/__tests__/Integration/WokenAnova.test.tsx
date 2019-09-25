@@ -18,6 +18,7 @@ const experimentCode = 'anova';
 const parameters = [{ code: 'design', value: 'additive' }];
 const model: any = (datasets: VariableEntity[]) => ({
   query: {
+    pathology: 'dementia', // FIXME: should by dynamic
     variables: [{ code: 'montrealcognitiveassessment' }],
     coVariables: [],
     groupings: [{ code: 'alzheimerbroadcategory' }, { code: 'gender' }],

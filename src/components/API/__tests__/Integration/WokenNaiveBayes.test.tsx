@@ -32,6 +32,7 @@ const validations = [
 ];
 const model: any = (datasets: VariableEntity[]) => ({
   query: {
+    pathology: 'dementia', // FIXME: should by dynamic
     variables: [{ code: 'agegroup' }],
     coVariables: [
       { code: 'rightententorhinalarea' },

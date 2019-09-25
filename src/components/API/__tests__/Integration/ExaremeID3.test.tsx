@@ -23,6 +23,7 @@ const parameters = [
 
 const model: any = () => ({
   query: {
+    pathology: 'dementia', // FIXME: should by dynamic
     coVariables: [],
     filters: '',
     groupings: [{ code: 'alzheimerbroadcategory' }],
