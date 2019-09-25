@@ -17,6 +17,7 @@ const modelSlug = `model-${Math.round(Math.random() * 10000)}`;
 const experimentCode = 'pca';
 const model: any = (datasets: VariableEntity[]) => ({
   query: {
+    pathology: 'dementia', // FIXME: should by dynamic
     coVariables: [
       {
         code: 'leftthalamusproper'

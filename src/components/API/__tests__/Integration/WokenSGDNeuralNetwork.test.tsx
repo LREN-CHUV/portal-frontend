@@ -46,6 +46,7 @@ const kfold = {
 };
 const model: any = (datasets: VariableEntity[]) => ({
   query: {
+    pathology: 'dementia', // FIXME: should by dynamic
     coVariables: [{ code: 'lefthippocampus' }],
     groupings: [],
     testingDatasets: [],
