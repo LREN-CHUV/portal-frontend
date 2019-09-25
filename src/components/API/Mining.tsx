@@ -77,9 +77,8 @@ class Mining extends Container<MiningState> {
   };
 
   public abortMiningRequests = (): void => {
-    console.log('abort', this.requests);
     try {
-      this.requests.forEach(r => r.abort());
+      this.requests.forEach(r => r.abort && r.abort());
       this.requests = [];
     } finally {
       //
@@ -99,11 +98,10 @@ class Mining extends Container<MiningState> {
       });
 
       this.requests.push(r);
-
       const data = await r;
       const jsonString = await JSON.parse(data);
 
-      // FIXME: in exareme, return type should be json
+      // FIXME: in exareme, or backend API ? return type should be json
       const json = await JSON.parse(jsonString);
 
       if (json && json.error) {
@@ -279,6 +277,7 @@ class Mining extends Container<MiningState> {
     });
 
     this.setState({ summaryStatistics: queries });
+    this.abortMiningRequests();
 
     queries
       .filter(q => !q.data)
@@ -305,8 +304,6 @@ class Mining extends Container<MiningState> {
         ];
 
         const mining = await this.fetchExaremeStats(parameters);
-        // console.log(mining.data.result.map((d: any) => d.data));
-
         const error = mining.data.result.find(
           (d: any) =>
             d.type === 'text/plain+warning' || d.type === 'text/plain+error'
@@ -332,7 +329,7 @@ class Mining extends Container<MiningState> {
     parameters: Parameter[]
   ): Promise<Response> => {
     try {
-      const data = await request({
+      const r = request({
         body: JSON.stringify(parameters),
         headers: {
           ...this.options.headers,
@@ -342,9 +339,11 @@ class Mining extends Container<MiningState> {
         uri: `${this.backendURL}/mining/exareme-stats`
       });
 
+      this.requests.push(r);
+      const data = await r;
       const jsonString = await JSON.parse(data);
 
-      // FIXME: in exareme, return type should be json
+      // FIXME: in exareme? backend API ? , return type should be json
       const json = await JSON.parse(jsonString);
 
       if (json && json.error) {

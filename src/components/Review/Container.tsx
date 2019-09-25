@@ -265,9 +265,10 @@ class Container extends React.Component<Props, State> {
   };
 
   private handleRunExperiment = async (): Promise<void> => {
-    const { apiModel } = this.props;
+    const { apiModel, apiMining } = this.props;
     const model = apiModel.state.model;
     if (model) {
+      apiMining.abortMiningRequests();
       await apiModel.update({ model });
       const slug = model && model.slug;
       const { history } = this.props;
