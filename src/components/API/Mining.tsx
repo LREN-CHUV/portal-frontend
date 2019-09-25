@@ -290,7 +290,11 @@ class Mining extends Container<MiningState> {
           },
           {
             name: 'x',
-            value: [...payload.variables, ...payload.covariables]
+            value: [
+              ...payload.variables,
+              ...payload.covariables,
+              ...payload.grouping
+            ]
               .map(v => v.code)
               .toString()
           },
