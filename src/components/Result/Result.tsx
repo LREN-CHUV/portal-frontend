@@ -10,7 +10,11 @@ const Body = styled(Panel.Body)`
   padding: 0 16px;
 `;
 
-export default ({ experimentState }: { experimentState: State }) => {
+export default ({
+  experimentState
+}: {
+  experimentState: State;
+}): JSX.Element => {
   const experiment = experimentState && experimentState.experiment;
   const results = experiment && experiment.results;
   const error =

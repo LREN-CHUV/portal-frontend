@@ -18,6 +18,8 @@ export const excludedMethods = [
 // Mime types
 export enum MIME_TYPES {
   ERROR = 'text/plain+error',
+  WARNING = 'text/plain+warning',
+  USER_WARNING = 'text/plain+user_error',
   HIGHCHARTS = 'application/vnd.highcharts+json',
   JSON = 'application/json',
   MIP_PFA = 'application/vnd.hbp.mip.experiment.pfa+json',
@@ -34,35 +36,77 @@ export enum MIME_TYPES {
 export const ALGORITHM_DEFAULT_OUTPUT = [
   {
     name: 'ANOVA',
-    types: [MIME_TYPES.JSONDATA]
+    types: [
+      MIME_TYPES.ERROR,
+      MIME_TYPES.WARNING,
+      MIME_TYPES.USER_WARNING,
+      MIME_TYPES.JSONDATA
+    ]
   },
   {
     name: 'LINEAR_REGRESSION',
-    types: [MIME_TYPES.JSONDATA]
+    types: [
+      MIME_TYPES.ERROR,
+      MIME_TYPES.WARNING,
+      MIME_TYPES.USER_WARNING,
+      MIME_TYPES.JSONDATA
+    ]
   },
   {
     name: 'LOGISTIC_REGRESSION',
-    types: [MIME_TYPES.JSONDATA, MIME_TYPES.HIGHCHARTS]
+    types: [
+      MIME_TYPES.ERROR,
+      MIME_TYPES.WARNING,
+      MIME_TYPES.USER_WARNING,
+      MIME_TYPES.JSONDATA,
+      MIME_TYPES.HIGHCHARTS
+    ]
   },
   {
     name: 'HISTOGRAMS',
-    types: [MIME_TYPES.HIGHCHARTS]
+    types: [
+      MIME_TYPES.ERROR,
+      MIME_TYPES.WARNING,
+      MIME_TYPES.USER_WARNING,
+      MIME_TYPES.HIGHCHARTS
+    ]
   },
   {
     name: 'TTEST_INDEPENDENT',
-    types: [MIME_TYPES.JSONDATA]
+    types: [
+      MIME_TYPES.ERROR,
+      MIME_TYPES.WARNING,
+      MIME_TYPES.USER_WARNING,
+      MIME_TYPES.JSONDATA
+    ]
   },
   {
     name: 'TTEST_PAIRED',
-    types: [MIME_TYPES.JSONDATA]
+    types: [
+      MIME_TYPES.ERROR,
+      MIME_TYPES.WARNING,
+      MIME_TYPES.USER_WARNING,
+      MIME_TYPES.JSONDATA
+    ]
   },
   {
     name: 'PEARSON_CORRELATION',
-    types: [MIME_TYPES.JSONDATA, MIME_TYPES.HIGHCHARTS]
+    types: [
+      MIME_TYPES.ERROR,
+      MIME_TYPES.WARNING,
+      MIME_TYPES.USER_WARNING,
+      MIME_TYPES.JSONDATA,
+      MIME_TYPES.HIGHCHARTS
+    ]
   },
   {
     name: 'ID3',
-    types: [MIME_TYPES.JSONDATA]
+    types: [
+      MIME_TYPES.ERROR,
+      MIME_TYPES.WARNING,
+      MIME_TYPES.USER_WARNING,
+      MIME_TYPES.JSONDATA
+    ]
   }
 ];
 

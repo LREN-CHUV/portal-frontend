@@ -4,12 +4,23 @@ import { Result } from '../API/Experiment';
 import { MIME_TYPES } from '../constants';
 import { Highchart, JSONData } from '../UI/Visualization';
 import Error from '../UI/Visualization/Error';
+import Warning from '../UI/Visualization/Warning';
 
-export default ({ results }: { results: Result[] | undefined }) => {
-  const renderResult = (result: Result) =>
+export default ({
+  results
+}: {
+  results: Result[] | undefined;
+}): JSX.Element => {
+  const renderResult = (result: Result): JSX.Element =>
     result && (
       <>
         {result.type === MIME_TYPES.ERROR && <Error message={result.data} />}
+        {result.type === MIME_TYPES.WARNING && (
+          <Warning message={result.data} />
+        )}
+        {result.type === MIME_TYPES.USER_WARNING && (
+          <Warning message={result.data} />
+        )}
         {result.type === MIME_TYPES.JSONDATA && <JSONData data={result.data} />}
         {result.type === MIME_TYPES.HIGHCHARTS && (
           <Highchart options={result.data} />
