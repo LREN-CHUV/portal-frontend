@@ -20,7 +20,7 @@ export default ({
   handleSelectExperiment,
   handleShareExperiment,
   handleCreateNewExperiment
-}: Props) => {
+}: Props): JSX.Element => {
   const name = experiment && experiment.name;
   const modelDefinitionId = experiment && experiment.modelDefinitionId;
   const shared = experiment && experiment.shared;
@@ -31,7 +31,7 @@ export default ({
         <div className="item text">
           <h3>
             Results of Experiment <strong>{name}</strong> on{' '}
-            <Link to={`/review/${modelDefinitionId}`}>{modelDefinitionId}</Link>
+            <Link to={`/review`}>{modelDefinitionId}</Link>
           </h3>
           <h5 className="item">
             Created{' '}

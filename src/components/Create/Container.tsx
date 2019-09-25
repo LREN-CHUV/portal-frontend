@@ -43,30 +43,13 @@ class Container extends React.Component<Props, State> {
   public state!: State; // TODO: double check init https://mariusschulz.com/blog/typescript-2-7-strict-property-initialization
 
   public async componentDidMount() {
-    const {
-      match: {
-        params: { slug }
-      }
-    } = this.props;
     const { apiModel } = this.props;
-    await apiModel.one(slug);
-
     return this.setState({
       query: apiModel.state.model && apiModel.state.model.query
     });
   }
 
-  public UNSAFE_componentWillReceiveProps = (props: any) => {
-    const {
-      apiModel: {
-        state: { model }
-      }
-    } = props;
-
-    return this.setState({ query: model ? model.query : undefined });
-  };
-
-  public render() {
+  public render(): JSX.Element {
     const { apiCore, apiModel, apiExperiment, appConfig } = this.props;
     const alert = this.state && this.state.alert;
     const method = this.state && this.state.method;
@@ -93,7 +76,7 @@ class Container extends React.Component<Props, State> {
               variables={apiCore.variablesForPathology(
                 apiModel.state.model && apiModel.state.model.query.pathology
               )}
-              selectedSlug={this.props.match.params.slug}
+              selectedSlug={apiModel.state.model && apiModel.state.model.slug}
               items={apiModel.state.models}
               handleSelectModel={this.handleSelectModel}
             />
@@ -176,8 +159,7 @@ class Container extends React.Component<Props, State> {
   private handleSelectModel = async (model?: ModelResponse): Promise<any> => {
     if (model) {
       const { slug } = model;
-      const { apiModel, history } = this.props;
-      history.push(`/experiment/${slug}`);
+      const { apiModel } = this.props;
       if (slug) {
         return await apiModel.one(slug);
       }
@@ -217,12 +199,9 @@ class Container extends React.Component<Props, State> {
     return await apiExperiment.one({ uuid });
   };
 
-  private handleGoBackToReview = () => {
-    const { apiModel, history } = this.props;
-    const model = apiModel.state.model;
-    if (model) {
-      history.push(`/review/${model.slug}`);
-    }
+  private handleGoBackToReview = (): void => {
+    const { history } = this.props;
+    history.push(`/review`);
   };
 
   private handleSaveAndRunExperiment = async (

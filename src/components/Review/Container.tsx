@@ -270,7 +270,6 @@ class Container extends React.Component<Props, State> {
     if (model) {
       apiMining.abortMiningRequests();
       await apiModel.update({ model });
-      const slug = model && model.slug;
       const { history } = this.props;
       history.push(`/experiment`);
     }

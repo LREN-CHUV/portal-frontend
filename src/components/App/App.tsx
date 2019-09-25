@@ -138,7 +138,7 @@ const App = ({
             )}
           />
           <Route
-            path={['/review/:slug', '/review']}
+            path="/review"
             // tslint:disable-next-line jsx-no-lambda
             render={props => (
               <ExperimentReview
@@ -163,7 +163,7 @@ const App = ({
           />
           <Route
             exact={true}
-            path="/experiment/:slug"
+            path="/experiment"
             // tslint:disable-next-line jsx-no-lambda
             render={() => (
               <ExperimentCreate

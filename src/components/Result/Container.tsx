@@ -125,11 +125,7 @@ class Experiment extends React.Component<Props> {
 
   private handleCreateNewExperiment = () => {
     const { history } = this.props;
-    const params = this.urlParams(this.props);
-    if (!params) {
-      return;
-    }
-    history.push(`/experiment/${params.slug}`);
+    history.push(`/experiment`);
   };
 
   private pollFetchExperiment = (uuid: string) => {
