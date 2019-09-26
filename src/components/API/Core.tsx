@@ -265,33 +265,43 @@ class Core extends Container<State> {
     }
   };
 
-  public algorithms = async (isLocal: boolean): Promise<void> =>
-    Promise.all([
-      this.wokenAlgorithms(),
-      this.exaremeAlgorithms(isLocal),
-      this.workflows(isLocal)
-    ]).then(
-      ([wokenAlgorithms, exaremeAlgorithms, workflows]: [
-        PrivateAlgorithm,
-        PrivateAlgorithm,
-        PrivateAlgorithm
-      ]) => {
-        const mergedAlgorithms: Algorithm[] = [
-          ...((wokenAlgorithms.data && wokenAlgorithms.data.algorithms) || []),
-          ...((exaremeAlgorithms && exaremeAlgorithms.data) || []),
-          ...((workflows && workflows.data) || [])
-        ];
+  public algorithms = async (isLocal: boolean): Promise<void> => {
+    const wokenAlgorithms = await this.wokenAlgorithms();
+    this.setState(state => ({
+      ...state,
+      algorithms: [
+        ...((wokenAlgorithms.data && wokenAlgorithms.data.algorithms) || [])
+      ],
+      error: undefined
+    }));
 
-        // FIXME: oh my god, that escalated quickly
-        localStorage.setItem('algorithms', JSON.stringify(mergedAlgorithms));
-
-        return this.setState(state => ({
-          ...state,
-          algorithms: mergedAlgorithms,
-          error: undefined
-        }));
-      }
+    const exaremeAlgorithms: PrivateAlgorithm = await this.exaremeAlgorithms(
+      isLocal
     );
+    this.setState(state => ({
+      ...state,
+      algorithms: [
+        ...(state.algorithms || []),
+        ...((exaremeAlgorithms && exaremeAlgorithms.data) || [])
+      ],
+      error: undefined
+    }));
+
+    const workflows: PrivateAlgorithm = await this.workflows(isLocal);
+    this.setState(state => ({
+      ...state,
+      algorithms: [
+        ...(state.algorithms || []),
+        ...((workflows && workflows.data) || [])
+      ],
+      error: undefined
+    }));
+
+    // FIXME: oh my god, that escalated quickly
+    localStorage.setItem('algorithms', JSON.stringify(this.state.algorithms));
+
+    return Promise.resolve();
+  };
 
   public articles = async (): Promise<void> => {
     try {
