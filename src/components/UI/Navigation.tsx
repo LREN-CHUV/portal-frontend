@@ -93,7 +93,25 @@ class Navigation extends React.Component<Props> {
               </span>
             </li>
 
-            <li className="uib-dropdown toolbar-icon-bg">
+            <li
+              className="toolbar-icon-bg hidden-xs wf"
+              style={{ marginLeft: '16px' }}
+            >
+              <NavLink
+                title="Galaxy Workflow"
+                to="/galaxy"
+                activeClassName="active"
+              >
+                <span className="icon-bg">
+                  <i>WF</i>
+                </span>
+              </NavLink>
+            </li>
+
+            <li
+              className="uib-dropdown toolbar-icon-bg"
+              style={{ marginLeft: '16px' }}
+            >
               <NavLink title="Profile" to="/profile" activeClassName="active">
                 <img className="img-circle" alt="anonymous" src={defaultUser} />
               </NavLink>
@@ -118,7 +136,7 @@ class Navigation extends React.Component<Props> {
               <HelpButton />
             </li>
 
-            <li className="toolbar-trigger toolbar-icon-bg">
+            {/* <li className="toolbar-trigger toolbar-icon-bg">
               <a ui-sref="hbpapps" title="App" href="/hbpapps">
                 <span className="icon-bg">
                   <i
@@ -127,7 +145,7 @@ class Navigation extends React.Component<Props> {
                   />
                 </span>
               </a>
-            </li>
+            </li> */}
           </ul>
         </div>
       </header>
