@@ -33,7 +33,6 @@ interface Props extends RouteComponentProps<any> {
 
 interface State {
   parameters?: [AlgorithmParameter];
-  query?: Query;
   method?: Algorithm;
   alert: IAlert;
   kfold: number;
@@ -42,19 +41,13 @@ interface State {
 class Container extends React.Component<Props, State> {
   public state!: State; // TODO: double check init https://mariusschulz.com/blog/typescript-2-7-strict-property-initialization
 
-  public async componentDidMount() {
-    const { apiModel } = this.props;
-    return this.setState({
-      query: apiModel.state.model && apiModel.state.model.query
-    });
-  }
-
   public render(): JSX.Element {
     const { apiCore, apiModel, apiExperiment, appConfig } = this.props;
     const alert = this.state && this.state.alert;
     const method = this.state && this.state.method;
     const isLocal =
       (appConfig && appConfig.mode === InstanceMode.Local) || false;
+    const query = apiModel.state.model && apiModel.state.model.query;
 
     return (
       <div className="Experiment">
@@ -74,7 +67,7 @@ class Container extends React.Component<Props, State> {
               model={apiModel.state.model}
               showDatasets={true}
               variables={apiCore.variablesForPathology(
-                apiModel.state.model && apiModel.state.model.query.pathology
+                query && query.pathology
               )}
               selectedSlug={apiModel.state.model && apiModel.state.model.slug}
               items={apiModel.state.models}
@@ -111,11 +104,9 @@ class Container extends React.Component<Props, State> {
                         isLocal={isLocal}
                         isPredictiveMethod={this.isPredictiveMethod(method)}
                         datasets={apiCore.datasetsForPathology(
-                          this.state &&
-                            this.state.query &&
-                            this.state.query.pathology
+                          query && query.pathology
                         )}
-                        query={this.state && this.state.query}
+                        query={query}
                         handleUpdateQuery={this.handleUpdateQuery}
                       />
                     </fieldset>
@@ -178,7 +169,12 @@ class Container extends React.Component<Props, State> {
   };
 
   private handleUpdateQuery = (query: Query): void => {
-    this.setState({ query });
+    const { apiModel } = this.props;
+    const model = apiModel.state.model;
+    if (model) {
+      model.query = query;
+      apiModel.setModel(model);
+    }
   };
 
   private handleChangeKFold = (kfold: number) => {
@@ -219,7 +215,7 @@ class Container extends React.Component<Props, State> {
       });
       return;
     }
-    const { query, parameters } = this.state;
+    const { parameters } = this.state;
 
     const model = apiModel.state.model;
     if (!model) {
@@ -234,7 +230,6 @@ class Container extends React.Component<Props, State> {
     }
 
     const selectedMethod = this.state && this.state.method;
-    model.query = query!;
     await apiModel.update({ model });
 
     const validation =
