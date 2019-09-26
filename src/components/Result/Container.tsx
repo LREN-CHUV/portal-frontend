@@ -67,10 +67,8 @@ class Experiment extends React.Component<Props> {
           <div className="sidebar">
             <Model
               model={apiModel.state.model}
-              variables={apiCore.variablesForPathology(
-                apiModel.state.model && apiModel.state.model.query.pathology
-              )}
               showDatasets={true}
+              lookup={apiCore.lookup}
             />
           </div>
           <div className="results">

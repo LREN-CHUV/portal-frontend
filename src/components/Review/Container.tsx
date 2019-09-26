@@ -256,9 +256,7 @@ const Container = ({
             model={model}
             selectedSlug={model && model.slug}
             showDatasets={false}
-            variables={apiCore.variablesForPathology(
-              apiModel.state.model && apiModel.state.model.query.pathology
-            )}
+            lookup={apiCore.lookup}
             items={apiModel.state.models}
             handleSelectModel={handleSelectModel}
           />

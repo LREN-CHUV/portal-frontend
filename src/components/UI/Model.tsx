@@ -25,20 +25,20 @@ interface Props {
   model?: ModelResponse;
   selectedSlug?: string;
   showDatasets?: boolean;
-  variables?: VariableEntity[];
   items?: ModelResponse[];
   handleSelectModel?: (model?: ModelResponse) => void;
+  lookup: (code: string) => VariableEntity;
 }
 
 class Model extends React.Component<Props> {
-  public render() {
+  public render(): JSX.Element {
     const {
       items,
       handleSelectModel,
       model,
       selectedSlug,
       showDatasets,
-      variables
+      lookup
     } = this.props;
 
     const query = model && model.query;
@@ -67,7 +67,7 @@ class Model extends React.Component<Props> {
               {query.variables && <Subtitle>Variables</Subtitle>}
               {query.variables &&
                 query.variables.map((v: any) => (
-                  <var key={v.code}>{this.lookup(v.code)}</var>
+                  <var key={v.code}>{lookup(v.code).label}</var>
                 ))}
               {query.coVariables && query.coVariables.length > 0 && (
                 <Subtitle>CoVariables</Subtitle>
@@ -75,7 +75,7 @@ class Model extends React.Component<Props> {
               {query.coVariables &&
                 query.coVariables.length > 0 &&
                 query.coVariables.map((v: any) => (
-                  <var key={v.code}>{this.lookup(v.code)}</var>
+                  <var key={v.code}>{lookup(v.code).label}</var>
                 ))}
               {query.groupings && query.groupings.length > 0 && (
                 <Subtitle>Groupings</Subtitle>
@@ -83,7 +83,7 @@ class Model extends React.Component<Props> {
               {query.groupings &&
                 query.groupings.length > 0 &&
                 query.groupings.map((v: any) => (
-                  <var key={v.code}>{this.lookup(v.code)}</var>
+                  <var key={v.code}>{lookup(v.code).label}</var>
                 ))}
               {query.filters && <Subtitle>Filters</Subtitle>}
               {query.filters && this.formatFilter(query.filters)}
@@ -115,16 +115,6 @@ class Model extends React.Component<Props> {
     );
   }
 
-  // FIXME: model should a least carry the label of the variable
-  private lookup = (code: string): string => {
-    const { variables } = this.props;
-    const originalVar =
-      variables && variables.find(variable => variable.code === code);
-
-    return (
-      (originalVar && `${originalVar.label} (${originalVar.type})`) || code
-    );
-  };
   private ruleOperator = (operator: string) => {
     switch (operator) {
       case 'greater':
@@ -146,6 +136,7 @@ class Model extends React.Component<Props> {
 
   private formatFilter = (filter: any) => {
     // TODO: refactor
+    const { lookup } = this.props;
     const humanRules: any = [];
     try {
       const json = JSON.parse(filter);
@@ -159,7 +150,7 @@ class Model extends React.Component<Props> {
           }
 
           humanRules.push({
-            data: `${this.lookup(rule.field)} ${this.ruleOperator(
+            data: `${lookup(rule.field).label} ${this.ruleOperator(
               rule.operator
             )} ${rule.value}`,
             level

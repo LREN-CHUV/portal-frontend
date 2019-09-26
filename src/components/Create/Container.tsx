@@ -66,12 +66,10 @@ class Container extends React.Component<Props, State> {
             <Model
               model={apiModel.state.model}
               showDatasets={true}
-              variables={apiCore.variablesForPathology(
-                query && query.pathology
-              )}
               selectedSlug={apiModel.state.model && apiModel.state.model.slug}
               items={apiModel.state.models}
               handleSelectModel={this.handleSelectModel}
+              lookup={apiCore.lookup}
             />
           </div>
           <div className="parameters">
