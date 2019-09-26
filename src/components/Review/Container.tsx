@@ -30,119 +30,91 @@ interface State {
   summaryStatistics?: any;
 }
 
-class Container extends React.Component<Props, State> {
-  public state: State = {};
+const Container = ({
+  apiModel,
+  apiCore,
+  apiMining,
+  appConfig,
+  ...props
+}: Props): JSX.Element => {
+  const { history } = props;
 
-  public async componentDidMount() {
-    const { apiModel } = this.props;
-    const model = apiModel.state.model;
-    const query = model && model.query;
-    if (query) {
-      this.fetchStatistics({ query });
+  React.useEffect(() => {
+    const query = apiModel.state.model && apiModel.state.model.query;
+    const datasets = query && query.trainingDatasets;
+
+    if (datasets && query) {
+      const payload: MiningPayload = {
+        covariables: query.coVariables ? query.coVariables : [],
+        datasets,
+        filters: query.filters ? query.filters : '',
+        grouping: query.groupings ? query.groupings : [],
+        variables: query.variables ? query.variables : [],
+        pathology: query.pathology ? query.pathology : ''
+      };
+      if (appConfig.mode === InstanceMode.Local) {
+        apiMining.summaryStatisticsByDataset({
+          payload
+        });
+      } else {
+        apiMining.descriptiveStatisticsByDataset({
+          payload
+        });
+      }
     }
-  }
+  }, [
+    apiModel.state.model,
+    // eslint:eslint-disable-next-line react-hooks/exhaustive-deps
+    apiModel.state.model && apiModel.state.model.query.trainingDatasets,
+    apiMining,
+    appConfig.mode
+  ]);
 
-  public render(): JSX.Element {
-    const { apiCore, apiModel, apiMining, appConfig } = this.props;
-    const { fields, filters } = this.makeFilters({ apiCore, apiModel });
+  const handleSaveModel = async ({
+    title
+  }: {
+    title: string;
+  }): Promise<void> => {
     const model = apiModel.state.model;
-    return (
-      <div className="Model Review">
-        <div className="header">
-          <ExperimentReviewHeader
-            handleGoBackToExplore={this.handleGoBackToExplore}
-            handleSaveModel={this.handleSaveModel}
-            handleRunAnalysis={this.handleRunExperiment}
-            model={model}
-          />
-        </div>
-        <div className="content">
-          <div className="sidebar">
-            <Panel className="datasets">
-              <Panel.Body>
-                <Validation
-                  isPredictiveMethod={false}
-                  datasets={apiCore.datasetsForPathology(
-                    model && model.query && model.query.pathology
-                  )}
-                  query={model && model.query}
-                  handleUpdateQuery={this.handleUpdateDatasets}
-                />
-              </Panel.Body>
-            </Panel>
-            <Model
-              model={model}
-              selectedSlug={model && model.slug}
-              showDatasets={false}
-              variables={apiCore.variablesForPathology(
-                apiModel.state.model && apiModel.state.model.query.pathology
-              )}
-              items={apiModel.state.models}
-              handleSelectModel={this.handleSelectModel}
-            />
-          </div>
-          <div className="results">
-            {appConfig.mode !== InstanceMode.Local && (
-              <Content
-                apiMining={apiMining}
-                model={model}
-                selectedDatasets={
-                  model && model.query && model.query.trainingDatasets
-                }
-                lookup={apiCore.lookup}
-              >
-                <Panel className="filters" defaultExpanded={false}>
-                  <Panel.Title toggle={true}>
-                    <h3 className={'btn btn-info'}>Filters</h3>
-                  </Panel.Title>
-                  <Panel.Collapse>
-                    <Panel.Body collapsible={true}>
-                      {fields && fields.length > 0 && (
-                        <Filter
-                          rules={filters}
-                          filters={fields}
-                          handleChangeFilter={this.handleUpdateFilter}
-                        />
-                      )}
-                    </Panel.Body>
-                  </Panel.Collapse>
-                </Panel>
-              </Content>
-            )}
-            {appConfig.mode === InstanceMode.Local && (
-              <ContentDeprecated
-                apiMining={apiMining}
-                model={model}
-                selectedDatasets={
-                  model && model.query && model.query.trainingDatasets
-                }
-                lookup={apiCore.lookup}
-              >
-                <Panel className="filters" defaultExpanded={false}>
-                  <Panel.Title toggle={true}>
-                    <h3 className={'btn btn-info'}>Filters</h3>
-                  </Panel.Title>
-                  <Panel.Collapse>
-                    <Panel.Body collapsible={true}>
-                      {fields && fields.length > 0 && (
-                        <Filter
-                          rules={filters}
-                          filters={fields}
-                          handleChangeFilter={this.handleUpdateFilter}
-                        />
-                      )}
-                    </Panel.Body>
-                  </Panel.Collapse>
-                </Panel>
-              </ContentDeprecated>
-            )}
-          </div>
-        </div>
-      </div>
-    );
-  }
+    await apiModel.save({ model, title });
+  };
 
-  private makeFilters = ({
+  const handleRunExperiment = async (): Promise<void> => {
+    const model = apiModel.state.model;
+    if (model) {
+      apiMining.abortMiningRequests();
+      await apiModel.update({ model });
+      history.push(`/experiment`);
+    }
+  };
+
+  const handleGoBackToExplore = (): void => {
+    history.push(`/explore`);
+  };
+
+  const handleUpdateDatasets = async (query: Query): Promise<void> => {
+    const model = apiModel.state.model;
+    if (model) {
+      model.query = query;
+      await apiModel.setModel(model);
+    }
+  };
+
+  const handleUpdateFilter = async (filters: string): Promise<void> => {
+    const model = apiModel.state.model;
+    if (model) {
+      model.query.filters = (filters && JSON.stringify(filters)) || '';
+      await apiModel.setModel(model);
+    }
+  };
+
+  const handleSelectModel = async (model?: ModelResponse): Promise<void> => {
+    if (model) {
+      await apiModel.setModel(model);
+    }
+  };
+
+  const makeFilters = ({
     apiCore,
     apiModel
   }: {
@@ -253,95 +225,103 @@ class Container extends React.Component<Props, State> {
     return { query, filters, fields };
   };
 
-  private handleSaveModel = async ({
-    title
-  }: {
-    title: string;
-  }): Promise<void> => {
-    const { apiModel } = this.props;
-    const model = apiModel.state.model;
-    await apiModel.save({ model, title });
-    this.setState({ alert: { message: 'Model saved' } });
-  };
+  const { fields, filters } = makeFilters({ apiCore, apiModel });
+  const model = apiModel.state.model;
 
-  private handleRunExperiment = async (): Promise<void> => {
-    const { apiModel, apiMining } = this.props;
-    const model = apiModel.state.model;
-    if (model) {
-      apiMining.abortMiningRequests();
-      await apiModel.update({ model });
-      const { history } = this.props;
-      history.push(`/experiment`);
-    }
-  };
-
-  private handleGoBackToExplore = (): void => {
-    this.props.history.push(`/explore`);
-  };
-
-  private handleSelectModel = (model?: ModelResponse): void => {
-    if (model) {
-      this.props.apiModel.one(model && model.slug).then(() => {
-        const query = model && model.query;
-        if (query) {
-          this.fetchStatistics({ query });
-        }
-      });
-    }
-  };
-
-  private fetchStatistics = async ({
-    query
-  }: {
-    query: Query;
-  }): Promise<void> => {
-    const { apiMining, appConfig } = this.props;
-    const datasets = query.trainingDatasets;
-
-    if (datasets && query) {
-      const payload: MiningPayload = {
-        covariables: query.coVariables ? query.coVariables : [],
-        datasets,
-        filters: query.filters ? query.filters : '',
-        grouping: query.groupings ? query.groupings : [],
-        variables: query.variables ? query.variables : [],
-        pathology: query.pathology ? query.pathology : ''
-      };
-      if (appConfig.mode === InstanceMode.Local) {
-        apiMining.summaryStatisticsByDataset({ payload });
-      } else {
-        apiMining.descriptiveStatisticsByDataset({ payload });
-      }
-    }
-  };
-
-  private handleUpdateDatasets = async (query: Query): Promise<void> => {
-    const { apiModel } = this.props;
-    const model = apiModel.state.model;
-    if (model) {
-      model.query = query;
-      await apiModel.setModel(model);
-    }
-
-    this.fetchStatistics({ query });
-  };
-
-  private handleUpdateFilter = async (filters: string): Promise<boolean> => {
-    const { apiModel, apiMining } = this.props;
-    const model = apiModel.state.model;
-    if (model) {
-      model.query.filters = (filters && JSON.stringify(filters)) || '';
-      await apiModel.setModel(model);
-    }
-
-    const query = model && model.query;
-    if (query) {
-      apiMining.clear();
-      this.fetchStatistics({ query });
-    }
-
-    return Promise.resolve(true);
-  };
-}
+  return (
+    <div className="Model Review">
+      <div className="header">
+        <ExperimentReviewHeader
+          handleGoBackToExplore={handleGoBackToExplore}
+          handleSaveModel={handleSaveModel}
+          handleRunAnalysis={handleRunExperiment}
+          model={model}
+        />
+      </div>
+      <div className="content">
+        <div className="sidebar">
+          <Panel className="datasets">
+            <Panel.Body>
+              <Validation
+                isPredictiveMethod={false}
+                datasets={apiCore.datasetsForPathology(
+                  model && model.query && model.query.pathology
+                )}
+                query={model && model.query}
+                handleUpdateQuery={handleUpdateDatasets}
+              />
+            </Panel.Body>
+          </Panel>
+          <Model
+            model={model}
+            selectedSlug={model && model.slug}
+            showDatasets={false}
+            variables={apiCore.variablesForPathology(
+              apiModel.state.model && apiModel.state.model.query.pathology
+            )}
+            items={apiModel.state.models}
+            handleSelectModel={handleSelectModel}
+          />
+        </div>
+        <div className="results">
+          {appConfig.mode !== InstanceMode.Local && (
+            <Content
+              apiMining={apiMining}
+              model={model}
+              selectedDatasets={
+                model && model.query && model.query.trainingDatasets
+              }
+              lookup={apiCore.lookup}
+            >
+              <Panel className="filters" defaultExpanded={false}>
+                <Panel.Title toggle={true}>
+                  <h3 className={'btn btn-info'}>Filters</h3>
+                </Panel.Title>
+                <Panel.Collapse>
+                  <Panel.Body collapsible={true}>
+                    {fields && fields.length > 0 && (
+                      <Filter
+                        rules={filters}
+                        filters={fields}
+                        handleChangeFilter={handleUpdateFilter}
+                      />
+                    )}
+                  </Panel.Body>
+                </Panel.Collapse>
+              </Panel>
+            </Content>
+          )}
+          {appConfig.mode === InstanceMode.Local && (
+            <ContentDeprecated
+              apiMining={apiMining}
+              model={model}
+              selectedDatasets={
+                model && model.query && model.query.trainingDatasets
+              }
+              lookup={apiCore.lookup}
+            >
+              <Panel className="filters" defaultExpanded={false}>
+                <Panel.Title toggle={true}>
+                  <h3 className={'btn btn-info'}>Filters</h3>
+                </Panel.Title>
+                <Panel.Collapse>
+                  <Panel.Body collapsible={true}>
+                    {fields && fields.length > 0 && (
+                      <Filter
+                        rules={filters}
+                        filters={fields}
+                        handleChangeFilter={handleUpdateFilter}
+                      />
+                    )}
+                  </Panel.Body>
+                </Panel.Collapse>
+              </Panel>
+            </ContentDeprecated>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
 
 export default Container;
