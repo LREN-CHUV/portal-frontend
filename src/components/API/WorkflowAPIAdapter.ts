@@ -85,6 +85,10 @@ const fetchResultDetailBody = async (
     );
     const json = await JSON.parse(data);
 
+    if (!json) {
+      return { error: 'An unhandled error occured', data: undefined };
+    }
+
     if (json.error) {
       return { error: json.error, data: undefined };
     }
@@ -104,22 +108,22 @@ const buildWorkflowAlgorithmList = (json: any): Algorithm[] => {
   };
 
   /* eslint-disable */
-  const constraints = {
-    covariables: {
-      min_count: 1
-    },
-    groupings: {
-      max_count: 0,
-      min_count: 0
-    },
-    mixed: true,
-    variable: {
-      binominal: true,
-      integer: false,
-      polynominal: true,
-      real: false
-    }
-  };
+  // const constraints = {
+  //   covariables: {
+  //     min_count: 1
+  //   },
+  //   groupings: {
+  //     max_count: 0,
+  //     min_count: 0
+  //   },
+  //   mixed: true,
+  //   variable: {
+  //     binominal: true,
+  //     integer: false,
+  //     polynominal: true,
+  //     real: false
+  //   }
+  // };
   /*eslint-enable */
 
   const defaultValueFor = ({
@@ -135,7 +139,7 @@ const buildWorkflowAlgorithmList = (json: any): Algorithm[] => {
   const algorithms = json.map((j: any) => ({
     code: j.id,
     label: j.name,
-    constraints,
+    // constraints,
     parameters: Object.keys(j.inputs).map((k: any) => ({
       code: j.inputs[k].uuid,
       /* eslint-disable-next-line */
@@ -177,13 +181,25 @@ const buildWorkflowAlgorithmRequest = (
     });
   }
 
-  if (model.query.coVariables) {
+  if (model.query.coVariables || model.query.groupings) {
     const covariableKey = selectedMethod.parameters.find(
       (p: any) => p.label === 'x'
     ).code;
+
+    const coVariables =
+      model.query.coVariables &&
+      model.query.coVariables.map(v => v.code).toString();
+    const groupings =
+      model.query.groupings &&
+      model.query.groupings.map(v => v.code).toString();
+    const value = coVariables
+      ? groupings
+        ? `${coVariables},${groupings}`
+        : `${coVariables}`
+      : groupings;
     params.push({
       code: covariableKey,
-      value: model.query.coVariables.map(v => v.code).toString()
+      value
     });
   }
 
@@ -194,6 +210,16 @@ const buildWorkflowAlgorithmRequest = (
     params.push({
       code: datasetKey,
       value: model.query.trainingDatasets.map(v => v.code).toString()
+    });
+  }
+
+  if (model.query.pathology) {
+    const datasetKey = selectedMethod.parameters.find(
+      (p: any) => p.label === 'pathology'
+    ).code;
+    params.push({
+      code: datasetKey,
+      value: model.query.pathology
     });
   }
 
@@ -269,18 +295,9 @@ const buildWorkflowAlgorithmResponse = (
 
     const results = workflowResult.data
       .filter((d: any) => d.result.length > 0)
-      .map((d: any) => d.result[0])
-      .map((d: any) => ({ data: [d.data], mime: d.type }));
+      .map((d: any) => d.result[0]);
 
-    experimentResponse.results = [
-      {
-        algorithms: results.map((result: any, i: number) => ({
-          algorithm: `Naive Bayes ${i}`,
-          ...result
-        })),
-        name: 'local'
-      }
-    ];
+    experimentResponse.results = results;
 
     return experimentResponse;
   }
@@ -304,9 +321,9 @@ const buildWorkflowAlgorithmResponse = (
     if (workflowStatus.data.state === 'error') {
       fetchResults(historyId).then(result => {
         const content = result.data.filter((d: any) => d.state === 'error');
-        const contentId = content.pop().id;
+        const contentId = content && content.length > 0 && content[0].id;
 
-        console.log('error: fetchResultDetail', historyId);
+        console.log('error: fetchResultDetail', contentId);
         fetchResultDetailBody(historyId, contentId).then(result2 => {
           workflowResults[historyId] = result2;
           buildWorkflowAlgorithmResponse(historyId, experimentResponse);
