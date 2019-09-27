@@ -13,7 +13,7 @@ import Footer from '../UI/Footer';
 import Galaxy from '../UI/Galaxy';
 import Navigation from '../UI/Navigation';
 import NotFound from '../UI/NotFound';
-import Splash from '../UI/Splash';
+
 import User from '../User/Container';
 import './App.css';
 
@@ -40,23 +40,6 @@ interface Props {
   apiUser: APIUser;
 }
 
-const Redirect = ({
-  apiUser,
-  props
-}: {
-  apiUser: APIUser;
-  props: any;
-}): JSX.Element => {
-  const {
-    location: { search }
-  } = props;
-  apiUser.login(search).then(() => {
-    props.history.push(`/home`);
-  });
-
-  return <Splash apiUser={apiUser} {...props} />;
-};
-
 const Content = styled.section`
   margin-top: 116px;
 `;
@@ -82,24 +65,13 @@ const App = ({
       <Content className="main-content">
         <Switch>
           <Route
-            path="/"
-            exact={true}
-            // tslint:disable-next-line jsx-no-lambda
-            render={props => <Splash apiUser={apiUser} {...props} />}
-          />
-          <Route
-            path="/services/login/hbp"
-            // tslint:disable-next-line jsx-no-lambda
-            render={props => <Redirect apiUser={apiUser} props={props} />}
-          />
-          <Route
             path="/galaxy"
-            render={props => <Galaxy appConfig={appConfig} />}
+            render={(): JSX.Element => <Galaxy appConfig={appConfig} />}
           />
           <Route
             path="/tos"
             // tslint:disable-next-line jsx-no-lambda
-            render={props => (
+            render={(): JSX.Element => (
               <TOS
               // apiUser={apiUser}
               // {...props}
@@ -107,9 +79,10 @@ const App = ({
             )}
           />
           <Route
-            path="/home"
+            path="/"
+            exact={true}
             // tslint:disable-next-line jsx-no-lambda
-            render={props => (
+            render={(props): JSX.Element => (
               <Home
                 apiCore={apiCore}
                 apiModel={apiModel}
@@ -122,12 +95,14 @@ const App = ({
           <Route
             path="/profile"
             // tslint:disable-next-line jsx-no-lambda
-            render={props => <User apiUser={apiUser} {...props} />}
+            render={(props): JSX.Element => (
+              <User apiUser={apiUser} {...props} />
+            )}
           />
           <Route
             path="/explore"
             // tslint:disable-next-line jsx-no-lambda
-            render={props => (
+            render={(props): JSX.Element => (
               <Explore
                 apiCore={apiCore}
                 apiMining={apiMining}
@@ -140,7 +115,7 @@ const App = ({
           <Route
             path="/review"
             // tslint:disable-next-line jsx-no-lambda
-            render={props => (
+            render={(props): JSX.Element => (
               <ExperimentReview
                 apiMining={apiMining}
                 apiModel={apiModel}
@@ -153,7 +128,7 @@ const App = ({
           <Route
             path="/experiment/:slug/:uuid"
             // tslint:disable-next-line jsx-no-lambda
-            render={() => (
+            render={(): JSX.Element => (
               <ExperimentResult
                 apiExperiment={apiExperiment}
                 apiModel={apiModel}
@@ -165,7 +140,7 @@ const App = ({
             exact={true}
             path="/experiment"
             // tslint:disable-next-line jsx-no-lambda
-            render={() => (
+            render={(): JSX.Element => (
               <ExperimentCreate
                 apiExperiment={apiExperiment}
                 apiCore={apiCore}
@@ -177,7 +152,9 @@ const App = ({
           <Route
             path={['/articles/:slug', '/articles']}
             // tslint:disable-next-line jsx-no-lambda
-            render={props => <Article apiCore={apiCore} {...props} />}
+            render={(props): JSX.Element => (
+              <Article apiCore={apiCore} {...props} />
+            )}
           />
 
           <Route component={NotFound} />

@@ -1,7 +1,9 @@
 import * as React from 'react';
 import ReactGA from 'react-ga';
-import { BrowserRouter as Router } from 'react-router-dom';
-import request from 'request-promise-native';
+import {
+  BrowserRouter as Router,
+  Route,
+} from 'react-router-dom';
 import { Provider, Subscribe } from 'unstated';
 
 // import UNSTATED from 'unstated-debug';
@@ -15,6 +17,7 @@ import {
 } from '../API'; // as interfaces
 import config from '../API/RequestHeaders';
 import App, { AppConfig, InstanceMode } from '../App/App';
+import Splash from '../UI/Splash';
 
 // UNSTATED.logStateChanges = process.env.NODE_ENV === "development";
 
@@ -33,16 +36,23 @@ class AppContainer extends React.Component<any, State> {
   private intervalId: any; // FIXME: NodeJS.Timer | undefined;
 
   public async componentDidMount(): Promise<
-    [void, void, void, void, void, void]
+    [void, void, void, void, void, void] | void
   > {
     if (process.env.NODE_ENV === 'production') {
       this.intervalId = setInterval(() => this.apiExperiment.all(), 10 * 1000);
     }
 
     // Conf written by dockerize
-    const json = await request.get(`${webURL}/static/config.json`);
+    const response = await fetch(`${webURL}/static/config.json`);
     try {
-      const appConfig = JSON.parse(json);
+      const config = await response.json();
+      const appConfig = {
+        ...config,
+        mode:
+          config.mode === 'federation'
+            ? InstanceMode.Federation
+            : InstanceMode.Local
+      };
       this.setState({ appConfig });
 
       if (appConfig.ga) {
@@ -56,24 +66,32 @@ class AppContainer extends React.Component<any, State> {
         galaxyAPIUrl: '',
         galaxyApacheUrl: 'http://ch.ch'
       };
+
       this.setState({ appConfig });
     }
 
-    return await Promise.all([
-      this.apiExperiment.all(),
-      this.apiCore.fetchPathologies(),
-      this.apiCore.algorithms(this.state.appConfig.mode === InstanceMode.Local),
-      this.apiCore.stats(),
-      this.apiCore.articles(),
-      this.apiModel.all()
-    ]);
+    await this.apiUser.user();
+    if (this.apiUser.state.authenticated) {
+      return await Promise.all([
+        this.apiExperiment.all(),
+        this.apiCore.fetchPathologies(),
+        this.apiCore.algorithms(
+          this.state.appConfig.mode === InstanceMode.Local
+        ),
+        this.apiCore.stats(),
+        this.apiCore.articles(),
+        this.apiModel.all()
+      ]);
+    }
+
+    return Promise.resolve();
   }
 
-  public componentWillUnmount() {
+  public componentWillUnmount(): void {
     clearInterval(this.intervalId);
   }
 
-  public render() {
+  public render(): JSX.Element {
     return (
       <Router>
         <Provider
@@ -96,14 +114,32 @@ class AppContainer extends React.Component<any, State> {
               apiUser: APIUser
             ): JSX.Element => {
               return (
-                <App
-                  appConfig={this.state.appConfig}
-                  apiExperiment={apiExperiment}
-                  apiCore={apiCore}
-                  apiModel={apiModel}
-                  apiMining={apiMining}
-                  apiUser={apiUser}
-                />
+                <>
+                  <Route
+                    // Callback from the auth server, redirected to the API
+                    path="/services/login/hbp"
+                    // tslint:disable-next-line jsx-no-lambda
+                    render={(props): JSX.Element => {
+                      const {
+                        location: { search }
+                      } = props;
+                      apiUser.login(search);
+
+                      return <div />;
+                    }}
+                  />
+                  {!apiUser.state.authenticated && <Splash />}
+                  {apiUser.state.authenticated && (
+                    <App
+                      appConfig={this.state.appConfig}
+                      apiExperiment={apiExperiment}
+                      apiCore={apiCore}
+                      apiModel={apiModel}
+                      apiMining={apiMining}
+                      apiUser={apiUser}
+                    />
+                  )}
+                </>
               );
             }}
           </Subscribe>

@@ -6,7 +6,6 @@ import Helpdesk from './Helpdesk';
 
 const MainBox = styled.div`
   .dropdown-menu {
-    left: 0 !important;
     width: fit-content !important;
     max-height: none;
     overflow-y: auto;

@@ -7,7 +7,7 @@ export interface User {
   fullname?: string;
   username: string;
   email?: string;
-  picture?: string;
+  groups?: string;
 }
 
 export interface State {
@@ -30,16 +30,18 @@ class UserContainer extends Container<State> {
 
   public login = async (params: any): Promise<void> => {
     const loginURL = `${this.backendURL}/login/hbp${params}`;
-    // console.log('login', loginURL, this.options);
-    return await request.get(loginURL, this.options);
+    const data = await request.get(loginURL, this.options);
+
+    return data;
   };
 
   public user = async () => {
+    console.log('Check user authorization');
     try {
       const data = await request.get(`${this.backendURL}/user`, this.options);
       const json = await JSON.parse(data);
 
-      if (json.error) {
+      if (!json || (json && json.error)) {
         return await this.setState({
           authenticated: false,
           error: json.error,
@@ -47,39 +49,28 @@ class UserContainer extends Container<State> {
         });
       }
 
-      if (json && json.name) {
-        if (json.name === 'anonymous') {
-          await this.setState({
-            authenticated: true,
-            error: undefined,
-            user: json
-          });
-        }
-
-        const userData = await request.get(
-          `${this.backendURL}/users/${json.name}`,
-          this.options
-        );
-        const newJson = await JSON.parse(userData);
-        if (newJson.error) {
-          return await this.setState({
-            authenticated: false,
-            error: newJson.error,
-            user: undefined
-          });
-        }
-
+      if (process.env.NODE_ENV !== 'production') {
         return await this.setState({
           authenticated: true,
           error: undefined,
-          user: newJson
+          user: undefined
         });
       }
+
+      const details = json && json.userAuthentication.details;
+      const user: User =
+        (details && {
+          fullname: details.name,
+          username: details.preferred_username,
+          email: details.email,
+          groups: details.groups
+        }) ||
+        {};
 
       return await this.setState({
         authenticated: json.authenticated,
         error: undefined,
-        user: json
+        user
       });
     } catch (error) {
       return await this.setState({

@@ -9,13 +9,14 @@ import HelpButton from './HelpButton';
 const MainBox = styled.div`
   position: absolute;
   padding: 1em;
-  top: 16px;
-  right: 16px;
-  bottom: 44px;
-  left: 16px;
+  top: 8px;
+  right: 8px;
+  bottom: 8px;
+  left: 8px;
   z-index: 1000;
   background: #000000aa;
   border-radius: 4px;
+  overflow-y: none !important;
 
   display: flex;
   flex-direction: column;
@@ -41,6 +42,10 @@ const MainBox = styled.div`
     text-align: center;
     margin-bottom: 32px;
   }
+
+  .dropdown-menu {
+    left: 0 !important;
+  }
 `;
 
 const ActionBar = styled.div`
@@ -56,6 +61,11 @@ const Columns = styled.div`
   section {
     flex: 1;
     padding: 0 1em;
+    text-align: justify;
+  }
+
+  section p {
+    margin-right: 16px;
   }
 
   div {
@@ -71,28 +81,17 @@ const Columns = styled.div`
   }
 `;
 
-export default ({
-  apiUser,
-  history
-}: {
-  apiUser: APIUser;
-  history: any;
-}): JSX.Element => {
-  const handleLoginPress = async (): Promise<void> => {
-    await apiUser.user().then(() => {
-      console.log(apiUser.state);
-      if (apiUser.state.authenticated) {
-        history.push(`/home`);
-      } else {
-        window.location.href = `${backendURL}/login/hbp`;
-      }
-    });
+export default (): JSX.Element => {
+  const handleLoginPress = (): void => {
+    window.location.href = `${backendURL}/login/hbp`;
   };
 
   return (
     <MainBox>
       <ActionBar>
-        <HelpButton />
+        <div style={{ left: 100 }}>
+          <HelpButton />
+        </div>
         <Button onClick={handleLoginPress} bsStyle="default" type="submit">
           Login
         </Button>

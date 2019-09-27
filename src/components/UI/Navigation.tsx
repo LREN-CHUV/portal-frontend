@@ -33,7 +33,7 @@ class Navigation extends React.Component<Props> {
       <header id="topnav" className="navbar navbar-default navbar-fixed-top ">
         <div className="container-fluid">
           <div className="logo-area">
-            <NavLink className="navbar-brand" to="/home">
+            <NavLink className="navbar-brand" to="/">
               Human Brain Project
             </NavLink>
           </div>
