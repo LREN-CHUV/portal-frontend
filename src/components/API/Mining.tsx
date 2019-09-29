@@ -305,6 +305,9 @@ class Mining extends Container<MiningState> {
         ];
 
         const mining = await this.fetchExaremeStats(parameters);
+        if (mining && !mining.data) {
+          return this.setState({ error: 'No data available. Please retry.' });
+        }
         const error = mining.data.result.find(
           (d: any) =>
             d.type === 'text/plain+warning' || d.type === 'text/plain+error'
