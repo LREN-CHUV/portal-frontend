@@ -1,9 +1,5 @@
 /* layout header */
 
-.Explore .header {
-  /* padding: 0 48px 0px 48px; */
-}
-
 .Explore .header .panel-body {
   display: flex;
   padding-top: 15px !important;
@@ -12,13 +8,10 @@
   margin-bottom: 0px !important;
 }
 
-
-
 /* layout content */
 
 .Explore .content {
   display: flex;
-  padding: 0 48px;
 }
 
 .Explore .content .column1 {
@@ -97,7 +90,7 @@
 
 .Explore .content .variable-box .shortcuts input {
   margin-right: 8px;
-  margin-left: -15px
+  margin-left: -15px;
 }
 
 .Explore .content .statistics {
@@ -119,7 +112,9 @@
   margin-right: 8px;
 }
 
-.Explore .content .statistics .nav-tabs li.active a, .nav-tabs li.active a:focus, .nav-tabs li.active a:hover {
+.Explore .content .statistics .nav-tabs li.active a,
+.nav-tabs li.active a:focus,
+.nav-tabs li.active a:hover {
   font-weight: normal;
 }
 
@@ -133,9 +128,8 @@
 }
 
 .Explore .content .datasets .panel-title {
-  margin-bottom: 15px
+  margin-bottom: 15px;
 }
-
 
 .Explore .content .datasets .panel-title .checkbox-inline {
   display: block !important;

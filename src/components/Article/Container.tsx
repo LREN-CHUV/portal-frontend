@@ -16,7 +16,6 @@ export enum Mode {
 }
 
 const Layout = styled.div`
-  padding: 0 48px 0px 48px;
   display: flex;
   flex-direction: column;
 `;

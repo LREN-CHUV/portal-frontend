@@ -7,7 +7,6 @@
 
 .Experiment .header {
   flex-basis: 100%;
-  padding: 0 48px;
 }
 
 .Experiment .header .panel-body {
@@ -44,7 +43,6 @@
 .Experiment .content {
   flex-basis: 100%;
   display: flex;
-  padding: 0 48px;
 }
 
 .Experiment .content .sidebar,

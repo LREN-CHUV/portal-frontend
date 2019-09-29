@@ -266,14 +266,14 @@ class Core extends Container<State> {
   };
 
   public algorithms = async (isLocal: boolean): Promise<void> => {
-    const wokenAlgorithms = await this.wokenAlgorithms();
-    this.setState(state => ({
-      ...state,
-      algorithms: [
-        ...((wokenAlgorithms.data && wokenAlgorithms.data.algorithms) || [])
-      ],
-      error: undefined
-    }));
+    // const wokenAlgorithms = await this.wokenAlgorithms();
+    // this.setState(state => ({
+    //   ...state,
+    //   algorithms: [
+    //     ...((wokenAlgorithms.data && wokenAlgorithms.data.algorithms) || [])
+    //   ],
+    //   error: undefined
+    // }));
 
     const exaremeAlgorithms: PrivateAlgorithm = await this.exaremeAlgorithms(
       isLocal

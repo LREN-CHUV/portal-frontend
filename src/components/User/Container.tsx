@@ -7,9 +7,7 @@ import defaultUser from '../../images/default_user.png';
 import { APIUser } from '../API';
 import Header from './Header';
 
-const Layout = styled.div`
-  padding: 0 48px 0px 48px;
-`;
+const Layout = styled.div``;
 
 const GridLayout = styled.div`
   display: grid;

@@ -40,8 +40,8 @@ interface Props {
   apiUser: APIUser;
 }
 
-const Content = styled.section`
-  margin-top: 116px;
+const Main = styled.main`
+  padding: 0 48px 0px 48px;
 `;
 
 const App = ({
@@ -53,7 +53,7 @@ const App = ({
   apiUser
 }: Props): JSX.Element => {
   return (
-    <div className="App">
+    <>
       <header>
         <Navigation
           apiExperiment={apiExperiment}
@@ -61,8 +61,7 @@ const App = ({
           appConfig={appConfig}
         />
       </header>
-
-      <Content className="main-content">
+      <Main>
         <Switch>
           <Route
             path="/galaxy"
@@ -159,11 +158,11 @@ const App = ({
 
           <Route component={NotFound} />
         </Switch>
-      </Content>
-      <footer id="footer">
+      </Main>
+      <footer>
         <Footer appConfig={appConfig} />
       </footer>
-    </div>
+    </>
   );
 };
 

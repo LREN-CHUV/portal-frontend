@@ -22,16 +22,16 @@ const Content = ({
   children
 }: Props): JSX.Element => (
   <>
+    {apiMining && apiMining.state && apiMining.state.error && (
+      <Alert
+        message={apiMining.state && apiMining.state.error}
+        title={'Error'}
+        styled={'info'}
+      />
+    )}
     {apiMining && (
       <Panel>
         <Panel.Body>
-          {apiMining && apiMining.state && apiMining.state.error && (
-            <Alert
-              message={apiMining.state && apiMining.state.error}
-              title={'Error'}
-              styled={'info'}
-            />
-          )}
           {children}
           <Panel>
             <Panel.Body>

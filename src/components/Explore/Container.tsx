@@ -373,7 +373,7 @@ export default ({
   };
 
   return (
-    <>
+    <section>
       {showPathologySwitchWarning && (
         <Modal
           title="Change Pathology ?"
@@ -385,6 +385,6 @@ export default ({
       {d3Layout && (
         <CirclePack layout={d3Layout} d3Model={d3Model} {...nextProps} />
       )}
-    </>
+    </section>
   );
 };

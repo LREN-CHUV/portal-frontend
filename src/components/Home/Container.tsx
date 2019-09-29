@@ -8,9 +8,7 @@ import Articles from './Articles';
 import Experiments from './Experiments';
 import Infos from './Infos';
 
-const Layout = styled.div`
-  padding: 0 48px 0px 48px;
-`;
+const Layout = styled.section``;
 
 const ContentLayout = styled.div`
   display: grid;

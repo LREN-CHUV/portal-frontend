@@ -1,9 +1,6 @@
 import * as React from 'react';
 import ReactGA from 'react-ga';
-import {
-  BrowserRouter as Router,
-  Route,
-} from 'react-router-dom';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { Provider, Subscribe } from 'unstated';
 
 // import UNSTATED from 'unstated-debug';

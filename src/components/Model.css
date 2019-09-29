@@ -1,9 +1,5 @@
 /* layout header */
 
-.Model .header {
-  padding: 0 48px 0px 48px;
-}
-
 .Model .header .panel-body {
   display: flex;
   padding-top: 15px !important;
@@ -29,7 +25,6 @@
 
 .Model .content {
   display: flex;
-  padding: 0 48px;
 }
 
 .Model .content .results {
