@@ -56,7 +56,9 @@ export default ({ ...props }: Props): JSX.Element => {
   };
 
   const handleNewExperiment = (modelId: string | undefined): void => {
-    history.push(`/experiment/${modelId}`);
+    apiModel.one(modelId).then(() => {
+      history.push(`/experiment`);
+    });
   };
   const handleSelectExperiment = (
     modelId: string | undefined,

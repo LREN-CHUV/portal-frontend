@@ -23,13 +23,16 @@ const Layout = styled.div`
 const Content = styled.div`
   display: flex;
   .panel:first-child {
-    flex: 1;
-    min-width: 360px;
+    flex: 0;
+    min-width: 240px;
     margin-right: 8px;
     button {
       white-space: normal;
       text-align: left;
     }
+  }
+  .panel:last-child {
+    flex: 1;
   }
 `;
 

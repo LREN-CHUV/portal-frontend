@@ -8,8 +8,8 @@ import { APICore, APIExperiment, APIMining, APIModel, APIUser } from '../API';
 import Article from '../Article/Container';
 import ExperimentCreate from '../Create/Container';
 import Explore from '../Explore/Container';
-import Home from '../Home/Container';
-import TOS from '../Home/TOS';
+import Home from '../Dashboard/Container';
+import TOS from '../Dashboard/TOS';
 import ExperimentResult from '../Result/Container';
 import ExperimentReview from '../Review/Container';
 import Footer from '../UI/Footer';
@@ -26,6 +26,15 @@ const GlobalStyles = createGlobalStyle`
     background: url(${backgroundImage}) top center no-repeat fixed #f5f5f5;
     background-size: 100% auto;
     overflow-y: scroll
+  }
+
+  .panel {
+    margin-bottom: 8px;
+    background-color: #fff;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+}
   }
 `;
 
@@ -66,11 +75,7 @@ const App = ({
     <>
       <GlobalStyles />
       <header>
-        <Navigation
-          apiExperiment={apiExperiment}
-          apiModel={apiModel}
-          appConfig={appConfig}
-        />
+        <Navigation name={appConfig.instanceName} />
       </header>
       <Main>
         <Switch>
