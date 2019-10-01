@@ -10,7 +10,7 @@ interface Props {
 }
 
 const NavBar = styled.nav`
-  font-family: 'Open Sans Condensed';
+  font-family: 'Open Sans Condensed', sans-serif;
   background: #00000077;
   display: flex;
   align-items: center;
