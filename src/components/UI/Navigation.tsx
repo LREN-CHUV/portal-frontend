@@ -2,59 +2,120 @@ import * as React from 'react';
 import { NavLink, RouteComponentProps, withRouter } from 'react-router-dom';
 
 import defaultUser from '../../images/default_user.png';
+import logo from '../../images/hbp-logo.png';
 import { APIExperiment, APIModel } from '../API';
 import { ExperimentResponse } from '../API/Experiment';
 import Dropdown from '../UI/Dropdown';
 import HelpButton from './HelpButton';
-import { Navbar, Nav, NavItem, NavDropdown, MenuItem } from 'react-bootstrap';
+import { NavItem, NavDropdown, MenuItem } from 'react-bootstrap';
+import styled from 'styled-components';
 interface Props {
   appConfig: any;
   apiExperiment: APIExperiment;
   apiModel: APIModel;
 }
 
+const NavBar = styled.nav`
+  font-family: 'Open Sans Condensed';
+  background: #00000077;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-bottom: 16px;
+  box-shadow: 2px 2px 2px #333;
+
+  a:link,
+  a:visited {
+    color: #fff;
+    text-decoration: none;
+  }
+
+  a:hover,
+  a:active {
+    color: #ccc;
+    text-decoration: none;
+  }
+`;
+
+const Brand = styled.div`
+  display: flex;
+  align-items: center;
+  margin: 0 0 0 16px;
+  height: 44px;
+
+  font-size: 32px;
+  font-weight: bold;
+
+  div {
+    background: url(${logo}) left center no-repeat;
+    width: 40px;
+    height: 40px;
+  }
+`;
+
+const Links = styled.div`
+  display: flex;
+  margin: 0 16px 0 0;
+
+  .active {
+    color: #5bc0de !important;
+  }
+`;
+
+const RightLinks = styled(Links)`
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+
+  button {
+    color: white;
+  }
+`;
+
+const Link = styled(NavLink)`
+  margin: 0 16px 0 0;
+`;
+
+const Group = styled.div`
+  display: flex;
+  align-items: center;
+  margin: 0 16px;
+  span {
+    color: white;
+    margin: 0 8px 0 0;
+  }
+`;
+
+const GroupLink = styled(Link)`
+  margin: 0 8px 0 0;
+`;
+
 export default ({ apiExperiment, apiModel, appConfig }: Props): JSX.Element => {
+  const instanceName = appConfig.instanceName || 'MIP';
   return (
-    <Navbar inverse collapseOnSelect>
-      <Navbar.Header>
-        <Navbar.Brand>
-          <NavLink to="/">HBP MIP</NavLink>
-        </Navbar.Brand>
-        <Navbar.Toggle />
-      </Navbar.Header>
-      <Navbar.Collapse>
-        <Nav>
-          <NavItem eventKey={1}>
-            <NavLink to="/">Dashboard</NavLink>
-          </NavItem>
-          <NavItem eventKey={2}>
-            <NavLink to="/explore">Explore Data</NavLink>
-          </NavItem>
-          <NavItem eventKey={2}>
-            <NavLink to="/review">Analysis</NavLink>
-          </NavItem>
-          <NavItem eventKey={2}>
-            <NavLink to="/create">New experiment</NavLink>
-          </NavItem>
-          <NavItem eventKey={2}>
-            <NavLink to="/">Experiments</NavLink>
-          </NavItem>
-          <NavItem eventKey={2}>
-            <NavLink to="/galaxy">Workflow</NavLink>
-          </NavItem>
-          <NavItem eventKey={2}>
-            <NavLink to="/articles">Articles</NavLink>
-          </NavItem>
-        </Nav>
-        <Nav pullRight>
-          <NavDropdown eventKey={3} title="User" id="basic-nav-dropdown">
-            <MenuItem eventKey={3.1}>Profile</MenuItem>
-            <MenuItem eventKey={3.2}>Logout</MenuItem>
-          </NavDropdown>
-          <NavItem eventKey={2}>Help</NavItem>
-        </Nav>
-      </Navbar.Collapse>
-    </Navbar>
+    <NavBar>
+      <Brand>
+        <Link to="/">
+          <div title="Human Brain Project"></div>
+        </Link>
+        <Link to="/">{instanceName}</Link>
+      </Brand>
+      <Links>
+        <Group>
+          <GroupLink to="/explore">Explore</GroupLink>
+          <span> &gt; </span>
+          <GroupLink to="/review">Analysis</GroupLink>
+          <span> &gt; </span>
+          <GroupLink to="/experiment">New experiment</GroupLink>
+        </Group>
+        <Link to="/galaxy">Workflow</Link>
+        <Link to="/articles">Articles</Link>
+      </Links>
+      <RightLinks>
+        <Link to="/profile">Profile</Link>
+        <HelpButton />
+      </RightLinks>
+    </NavBar>
   );
 };
 

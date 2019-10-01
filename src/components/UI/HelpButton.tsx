@@ -6,6 +6,8 @@ import Helpdesk from './Helpdesk';
 
 const MainBox = styled.div`
   .dropdown-menu {
+    right: 0;
+    left: auto;
     width: fit-content !important;
     max-height: none;
     overflow-y: auto;
@@ -18,6 +20,7 @@ const MainBox = styled.div`
 
     li > a {
       padding: 0;
+      color: black;
     }
   }
 `;
@@ -27,7 +30,7 @@ export default () => {
     <MainBox>
       <DropdownButton
         noCaret={false}
-        bsStyle="default"
+        bsStyle="link"
         id={'help-dropdown'}
         title={'help'}
       >

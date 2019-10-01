@@ -1,6 +1,9 @@
 import 'bootstrap/dist/css/bootstrap.css';
+
 import * as React from 'react';
 import { Route, Switch } from 'react-router-dom';
+import styled, { css, createGlobalStyle } from 'styled-components';
+
 import { APICore, APIExperiment, APIMining, APIModel, APIUser } from '../API';
 import Article from '../Article/Container';
 import ExperimentCreate from '../Create/Container';
@@ -13,11 +16,18 @@ import Footer from '../UI/Footer';
 import Galaxy from '../UI/Galaxy';
 import Navigation from '../UI/Navigation';
 import NotFound from '../UI/NotFound';
-
 import User from '../User/Container';
-import './App.css';
+import backgroundImage from '../../images/body-bg.jpg';
 
-import styled from 'styled-components';
+const GlobalStyles = createGlobalStyle`
+  body {
+    import url('https://fonts.googleapis.com/css?family=Open+Sans|Open+Sans+Condensed&display=swap');
+    font-family: 'Open Sans', sans-serif;
+    background: url(${backgroundImage}) top center no-repeat fixed #f5f5f5;
+    background-size: 100% auto;
+    overflow-y: scroll
+  }
+`;
 
 export enum InstanceMode {
   Local,
@@ -54,6 +64,7 @@ const App = ({
 }: Props): JSX.Element => {
   return (
     <>
+      <GlobalStyles />
       <header>
         <Navigation
           apiExperiment={apiExperiment}
