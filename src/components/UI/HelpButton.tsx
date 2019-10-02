@@ -32,7 +32,7 @@ export default () => {
         noCaret={false}
         bsStyle="link"
         id={'help-dropdown'}
-        title={'help'}
+        title={'Help'}
       >
         <MenuItem
           // tslint:disable-next-line jsx-no-lambda

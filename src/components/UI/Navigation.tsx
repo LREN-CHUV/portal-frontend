@@ -96,12 +96,14 @@ export default ({ name }: Props): JSX.Element => {
       </Brand>
       <Links>
         <Group>
-          <GroupLink to="/explore">Explore</GroupLink>
+          <GroupLink to="/explore">Variables</GroupLink>
           <span> &gt; </span>
           <GroupLink to="/review">Analysis</GroupLink>
           <span> &gt; </span>
           <GroupLink to="/experiment">Experiment</GroupLink>
         </Group>
+
+        <Link to="/experiments">My Experiments</Link>
         <Link to="/galaxy">Workflow</Link>
         <Link to="/articles">Articles</Link>
       </Links>

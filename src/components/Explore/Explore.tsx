@@ -57,7 +57,7 @@ export default (props: ExploreProps): JSX.Element => {
   return (
     <div className="Explore">
       <div className="content">
-        <div className="sidebar">
+        {/* <div className="sidebar">
           {apiCore.state.pathologies && apiCore.state.pathologies.length > 1 && (
             <Panel className="pathologies">
               <Panel.Title>
@@ -129,20 +129,73 @@ export default (props: ExploreProps): JSX.Element => {
               />
             </Panel.Body>
           </Panel>
-        </div>
+        </div> */}
         <div className="column1">
           <Panel className="circle-pack">
             <Panel.Title>
               <div className="variable-box">
-                <h3 className="child">Variables</h3>
+                {apiCore.state.pathologies &&
+                  apiCore.state.pathologies.length > 1 &&
+                  apiCore.state.pathologies.map(g => (
+                    <label key={g.code}>
+                      <input
+                        type="radio"
+                        id={g.code}
+                        name={g.label}
+                        value={g.code}
+                        checked={selectedPathology === g.code}
+                        // tslint:disable jsx-no-lambda
+                        onChange={(e): void => {
+                          handleSelectPathology(e.target.value);
+                        }}
+                      />{' '}
+                      {g.label}
+                    </label>
+                  ))}
                 <Search
                   hierarchy={layout}
                   zoom={zoom}
                   handleSelectNode={handleSelectNode}
                 />
+                <div>
+                  {datasets &&
+                    datasets.map((dataset: any) => (
+                      <Checkbox
+                        key={dataset.code}
+                        inline={true}
+                        // tslint:disable-next-line jsx-no-lambda
+                        onChange={() => {
+                          handleSelectDataset(dataset);
+                        }}
+                        checked={selectedDatasets
+                          .map(s => s.code)
+                          .includes(dataset.code)}
+                      >
+                        {dataset.label}
+                      </Checkbox>
+                    ))}
+                </div>
               </div>
             </Panel.Title>
+            <Panel.Body>{children}</Panel.Body>
+          </Panel>
+        </div>
+        <div className="column2">
+          <div className="header">
+            <Header handleGoToAnalysis={handleGoToAnalysis} />
+          </div>
+
+          <Panel className="statistics">
+            <Panel.Title>
+              <h2>{selectedNode && selectedNode.data.label}</h2>
+            </Panel.Title>
             <Panel.Body>
+              <Histograms
+                histograms={histograms}
+                selectedNode={selectedNode}
+                handleSelectedNode={handleSelectNode}
+                zoom={zoom}
+              />
               <div className="buttons">
                 <div className="child-title">
                   <h5>Add to model</h5>
@@ -186,24 +239,11 @@ export default (props: ExploreProps): JSX.Element => {
                   AS COVARIABLE
                 </Button>
               </div>
-              {children}
-            </Panel.Body>
-          </Panel>
-        </div>
-        <div className="column2">
-          <div className="header">
-            <Header handleGoToAnalysis={handleGoToAnalysis} />
-          </div>
 
-          <Panel className="statistics">
-            <Panel.Title>
-              <h3>Statistics Summary</h3>
-            </Panel.Title>
-            <Panel.Body>
-              <Histograms
-                histograms={histograms}
-                selectedNode={selectedNode}
-                handleSelectedNode={handleSelectNode}
+              <ModelView
+                d3Model={d3Model}
+                handleUpdateD3Model={handleUpdateD3Model}
+                handleSelectNode={handleSelectNode}
                 zoom={zoom}
               />
             </Panel.Body>
