@@ -9,7 +9,7 @@ import { VariableEntity } from '../API/Core';
 import { ModelResponse, Query } from '../API/Model';
 import { AppConfig, InstanceMode } from '../App/App';
 import { d3Hierarchy, VariableDatum } from './d3Hierarchy';
-import CirclePack from './D3PackLayer';
+import CirclePack from './D3CirclePackLayer';
 import Modal from '../UI/Modal';
 
 const diameter = 800;
