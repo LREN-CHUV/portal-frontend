@@ -14,7 +14,7 @@ const MainBox = styled.div`
   bottom: 8px;
   left: 8px;
   z-index: 1000;
-  background: #000000aa;
+  background: #000000dd;
   border-radius: 4px;
   overflow-y: none !important;
 
