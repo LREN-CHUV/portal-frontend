@@ -2,22 +2,22 @@ import 'bootstrap/dist/css/bootstrap.css';
 
 import * as React from 'react';
 import { Route, Switch } from 'react-router-dom';
-import styled, { css, createGlobalStyle } from 'styled-components';
+import styled, { createGlobalStyle } from 'styled-components';
 
+import backgroundImage from '../../images/body-bg.jpg';
 import { APICore, APIExperiment, APIMining, APIModel, APIUser } from '../API';
 import Article from '../Article/Container';
 import ExperimentCreate from '../Create/Container';
-import Explore from '../Explore/Container';
 import Home from '../Dashboard/Container';
-import TOS from '../Dashboard/TOS';
+import TOS from '../UI/TOS';
+import Explore from '../Explore/Container';
 import ExperimentResult from '../Result/Container';
-import ExperimentReview from '../Review/Container';
+import ExperimentReview from '../Analysis/Container';
 import Footer from '../UI/Footer';
 import Galaxy from '../UI/Galaxy';
 import Navigation from '../UI/Navigation';
 import NotFound from '../UI/NotFound';
 import User from '../User/Container';
-import backgroundImage from '../../images/body-bg.jpg';
 
 const GlobalStyles = createGlobalStyle`
   body {
@@ -86,11 +86,8 @@ const App = ({
           <Route
             path="/tos"
             // tslint:disable-next-line jsx-no-lambda
-            render={(): JSX.Element => (
-              <TOS
-              // apiUser={apiUser}
-              // {...props}
-              />
+            render={(props): JSX.Element => (
+              <TOS apiUser={apiUser} {...props} />
             )}
           />
           <Route

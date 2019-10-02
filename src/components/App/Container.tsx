@@ -33,7 +33,7 @@ class AppContainer extends React.Component<any, State> {
   private intervalId: any; // FIXME: NodeJS.Timer | undefined;
 
   public async componentDidMount(): Promise<
-    [void, void, void, void, void, void] | void
+    [void, void, void, void, void, void, void] | void
   > {
     if (process.env.NODE_ENV === 'production') {
       this.intervalId = setInterval(() => this.apiExperiment.all(), 10 * 1000);
@@ -69,7 +69,11 @@ class AppContainer extends React.Component<any, State> {
 
     await this.apiUser.user();
     if (this.apiUser.state.authenticated) {
+      const username =
+        this.apiUser.state.user && this.apiUser.state.user.username;
+
       return await Promise.all([
+        this.apiUser.profile({ username }),
         this.apiExperiment.all(),
         this.apiCore.fetchPathologies(),
         this.apiCore.algorithms(
@@ -110,6 +114,9 @@ class AppContainer extends React.Component<any, State> {
               apiMining: APIMining,
               apiUser: APIUser
             ): JSX.Element => {
+              const loading = apiUser.state.loading;
+              const authenticated = apiUser.state.authenticated;
+
               return (
                 <>
                   <Route
@@ -125,17 +132,16 @@ class AppContainer extends React.Component<any, State> {
                       return <div />;
                     }}
                   />
-                  {!apiUser.state.authenticated && <Splash />}
-                  {apiUser.state.authenticated && (
-                    <App
-                      appConfig={this.state.appConfig}
-                      apiExperiment={apiExperiment}
-                      apiCore={apiCore}
-                      apiModel={apiModel}
-                      apiMining={apiMining}
-                      apiUser={apiUser}
-                    />
-                  )}
+                  {!loading && !authenticated && <Splash />}
+                  <App
+                    appConfig={this.state.appConfig}
+                    apiExperiment={apiExperiment}
+                    apiCore={apiCore}
+                    apiModel={apiModel}
+                    apiMining={apiMining}
+                    apiUser={apiUser}
+                  />
+                  )
                 </>
               );
             }}
