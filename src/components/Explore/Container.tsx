@@ -1,4 +1,4 @@
-import './Explore.css';
+// import './Explore.css';
 
 import * as d3 from 'd3';
 import React, { useEffect, useState } from 'react';

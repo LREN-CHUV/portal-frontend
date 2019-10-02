@@ -1,6 +1,7 @@
 import * as d3 from 'd3';
 import React, { useRef } from 'react';
 import { Tab, Tabs } from 'react-bootstrap';
+import styled from 'styled-components';
 
 import { MiningResponseShape } from '../API/Mining';
 import Loading from '../UI/Loader';
@@ -23,7 +24,32 @@ const breadcrumb = (
     ? breadcrumb(variable.parent, [...paths, variable])
     : [...paths, variable];
 
-export default (props: Props) => {
+const Histogram = styled.div`
+  min-height: 400px;
+`;
+
+const Overview = styled.div`
+  p {
+    margin: 0;
+  }
+`;
+
+const Breadcrumb = styled.span`
+  a:after {
+    content: ' > ';
+  }
+  a:last-child:after {
+    content: '';
+  }
+  a:after {
+    content: ' | ';
+  }
+  a:last-child:after {
+    content: '';
+  }
+`;
+
+export default (props: Props): JSX.Element => {
   const divRef = useRef(null);
   const { handleSelectedNode, histograms, selectedNode, zoom } = props;
 
@@ -86,11 +112,11 @@ export default (props: Props) => {
   };
 
   return (
-    <div>
+    <>
       {selectedNode && (
-        <div className={'overview'}>
+        <Overview>
           <p>
-            <b>Path</b>: <span className="d3-link-hierarchy" ref={divRef} />
+            <b>Path</b>: <Breadcrumb ref={divRef} />
           </p>
           <p>
             <b>Type</b>: {selectedNode.data.type || 'group'}
@@ -98,10 +124,10 @@ export default (props: Props) => {
           <p>
             <b>Description</b>: {selectedNode.data.description || '-'}
           </p>
-        </div>
+        </Overview>
       )}
 
-      <div className={'histograms'}>
+      <Histogram>
         {selectedNode && selectedNode.children && (
           <Highchart options={overviewChart(selectedNode)} />
         )}
@@ -138,7 +164,7 @@ export default (props: Props) => {
                 ))}
             </Tabs>
           )}
-      </div>
-    </div>
+      </Histogram>
+    </>
   );
 };

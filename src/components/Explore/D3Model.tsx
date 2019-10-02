@@ -2,6 +2,7 @@ import * as d3 from 'd3';
 import React, { useRef } from 'react';
 import { D3Model, HierarchyCircularNode, ModelType } from './Container';
 import renderLifeCycle from './renderLifeCycle';
+import styled from 'styled-components';
 
 export interface ModelProps {
   children?: any;
@@ -11,12 +12,31 @@ export interface ModelProps {
   zoom: Function;
 }
 
+const Wrapper = styled.div`
+  display: flex;
+
+  div {
+    flex: 1;
+  }
+
+  span {
+    margin-right: 4px;
+  }
+
+  p {
+    margin: 0;
+  }
+`;
+
 export default (props: ModelProps) => {
   const variableRef = useRef(null);
   const covariableRef = useRef(null);
   const { d3Model: model, handleUpdateD3Model, handleSelectNode, zoom } = props;
 
-  const makeTree = (variables: HierarchyCircularNode[], type: ModelType) => {
+  const makeTree = (
+    variables: HierarchyCircularNode[],
+    type: ModelType
+  ): void => {
     const ref =
       type === ModelType.COVARIABLE
         ? covariableRef.current
@@ -70,11 +90,15 @@ export default (props: ModelProps) => {
   });
 
   return (
-    <>
-      <h5>Variables</h5>
-      <div ref={variableRef} />
-      <h5>Covariables</h5>
-      <div ref={covariableRef} />
-    </>
+    <Wrapper>
+      <div>
+        <h5>Variables</h5>
+        <div ref={variableRef} />
+      </div>
+      <div>
+        <h5>Covariables</h5>
+        <div ref={covariableRef} />
+      </div>
+    </Wrapper>
   );
 };
