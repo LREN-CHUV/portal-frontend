@@ -10,8 +10,11 @@ interface Props {
 }
 
 const NavBar = styled.nav`
+  position: fixed;
+  top: 0;
+  width: 100%;
   font-family: 'Open Sans Condensed', sans-serif;
-  background: #00000077;
+  background: #000000aa;
   display: flex;
   align-items: center;
   justify-content: flex-start;

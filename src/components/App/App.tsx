@@ -61,6 +61,7 @@ interface Props {
 }
 
 const Main = styled.main`
+  margin-top: 52px;
   padding: 0 48px 0px 48px;
 `;
 
