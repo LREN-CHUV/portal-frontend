@@ -21,8 +21,8 @@ import TOS from '../UI/TOS';
 import User from '../User/Container';
 
 const GlobalStyles = createGlobalStyle`
+
   body {
-    import url('https://fonts.googleapis.com/css?family=Open+Sans|Open+Sans+Condensed&display=swap');
     font-family: 'Open Sans', sans-serif;
     background: url(${backgroundImage}) top center no-repeat fixed #f5f5f5;
     background-size: 100% auto;
