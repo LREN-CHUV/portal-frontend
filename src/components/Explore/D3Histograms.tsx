@@ -25,7 +25,8 @@ const breadcrumb = (
     : [...paths, variable];
 
 const Histogram = styled.div`
-  min-height: 400px;
+  min-height: 440px;
+  margin-top: 8px;
 `;
 
 const Overview = styled.div`

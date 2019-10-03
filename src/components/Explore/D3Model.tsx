@@ -14,6 +14,11 @@ export interface ModelProps {
 
 const Wrapper = styled.div`
   display: flex;
+  height: 120px;
+
+  h5 {
+    font-weight: bold;
+  }
 
   div {
     flex: 1;
@@ -25,6 +30,12 @@ const Wrapper = styled.div`
 
   p {
     margin: 0;
+  }
+
+  div div {
+    padding: 0 1em;
+    height: 100px;
+    overflow-y: auto;
   }
 `;
 

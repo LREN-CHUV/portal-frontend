@@ -86,13 +86,40 @@ export default (props: ExploreProps): JSX.Element => {
     justifyContent: 'space-between'
   };
 
+  const TitleBox = styled(Panel.Title)`
+    display: flex;
+    padding: 0.4em;
+    margin-bottom: 4px;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #eee;
+  `;
+
+  const PathologyBox = styled.div`
+    margin-top: 4px;
+    label {
+      margin-left: 16px;
+      font-weight: normal;
+    }
+  `;
+
+  const DatasetsBox = styled.div`
+    margin: 8px;
+    padding: 1em;
+    background-color: #eeeeee33;
+    position: absolute;
+  `;
+
+  const SearchBox = styled.div`
+    width: 320px;
+  `;
+
   return (
     <div style={style}>
       <div style={{ flex: 1, marginRight: '8px' }}>
         <Panel>
-          <Panel.Title>
-            <div style={{ padding: '1em', border: '1px solid #999' }}>
-              <b>Pathologies</b>
+          <TitleBox>
+            <PathologyBox>
               {apiCore.state.pathologies &&
                 apiCore.state.pathologies.length > 1 &&
                 apiCore.state.pathologies.map(g => (
@@ -111,33 +138,38 @@ export default (props: ExploreProps): JSX.Element => {
                     {g.label}
                   </label>
                 ))}
-              <div>
-                <b>Datasets</b>{' '}
-                {datasets &&
-                  datasets.map((dataset: any) => (
-                    <Checkbox
-                      key={dataset.code}
-                      inline={true}
-                      // tslint:disable-next-line jsx-no-lambda
-                      onChange={() => {
-                        handleSelectDataset(dataset);
-                      }}
-                      checked={selectedDatasets
-                        .map(s => s.code)
-                        .includes(dataset.code)}
-                    >
-                      {dataset.label}
-                    </Checkbox>
-                  ))}
-              </div>
+            </PathologyBox>
+            <SearchBox>
               <Search
                 hierarchy={layout}
                 zoom={zoom}
                 handleSelectNode={handleSelectNode}
               />
-            </div>
-          </Panel.Title>
-          <Panel.Body>{children}</Panel.Body>
+            </SearchBox>
+          </TitleBox>
+          <DatasetsBox>
+            <p>
+              <b>Datasets</b>
+            </p>
+            {datasets &&
+              datasets.map((dataset: any) => (
+                <div key={dataset.code}>
+                  <Checkbox
+                    inline={true}
+                    // tslint:disable-next-line jsx-no-lambda
+                    onChange={() => {
+                      handleSelectDataset(dataset);
+                    }}
+                    checked={selectedDatasets
+                      .map(s => s.code)
+                      .includes(dataset.code)}
+                  >
+                    {dataset.label}
+                  </Checkbox>
+                </div>
+              ))}
+          </DatasetsBox>
+          <Panel.Body style={{ margin: 0, padding: 0 }}>{children}</Panel.Body>
         </Panel>
       </div>
       <div style={{ flex: 1 }}>
@@ -148,14 +180,6 @@ export default (props: ExploreProps): JSX.Element => {
               Interactive Analysis <Glyphicon glyph="chevron-right" />
             </Button>
           </PanelTitle>
-          <Panel.Body>
-            <Histograms
-              histograms={histograms}
-              selectedNode={selectedNode}
-              handleSelectedNode={handleSelectNode}
-              zoom={zoom}
-            />
-          </Panel.Body>
         </Panel>
         <Panel>
           <Panel.Body>
@@ -212,6 +236,16 @@ export default (props: ExploreProps): JSX.Element => {
               d3Model={d3Model}
               handleUpdateD3Model={handleUpdateD3Model}
               handleSelectNode={handleSelectNode}
+              zoom={zoom}
+            />
+          </Panel.Body>
+        </Panel>
+        <Panel className="statistics">
+          <Panel.Body>
+            <Histograms
+              histograms={histograms}
+              selectedNode={selectedNode}
+              handleSelectedNode={handleSelectNode}
               zoom={zoom}
             />
           </Panel.Body>

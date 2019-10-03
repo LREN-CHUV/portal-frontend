@@ -67,7 +67,10 @@ export default ({
     const model = apiModel.state.model;
     if (!model && apiCore.state.pathologies) {
       const defaultPathology = apiCore.state.pathologies[0];
-      const newModel = { query: { pathology: defaultPathology.code } };
+      const datasets = apiCore.datasetsForPathology(defaultPathology.code);
+      const newModel = {
+        query: { pathology: defaultPathology.code, trainingDatasets: datasets }
+      };
       apiModel.setModel(newModel);
     }
   }, [apiCore.state.pathologies, apiModel]);
