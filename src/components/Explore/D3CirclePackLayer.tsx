@@ -6,7 +6,7 @@ import React, { useCallback, useEffect, useRef } from 'react';
 import { APICore, APIModel } from '../API';
 import { VariableEntity } from '../API/Core';
 import { ModelResponse } from '../API/Model';
-import { D3Model, HierarchyCircularNode } from './Container';
+import { D3Model, HierarchyCircularNode, ModelType } from './Container';
 import Explore from './Explore';
 
 const diameter = 800;
@@ -27,7 +27,7 @@ export interface Props {
   handleSelectDataset: (e: VariableEntity) => void;
   handleSelectPathology: (code: string) => void;
   handleSelectNode: (node: HierarchyCircularNode) => void;
-  handleUpdateD3Model: Function; // (type: ModelType, node?: HierarchyCircularNode) => void;
+  handleUpdateD3Model: (type?: ModelType, node?: HierarchyCircularNode) => void;
   handleSelectModel: (d3Model?: ModelResponse) => void;
   handleGoToAnalysis: Function;
 }

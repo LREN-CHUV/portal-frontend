@@ -1,15 +1,16 @@
 import * as React from 'react';
 import { Button, Checkbox, Glyphicon, Panel } from 'react-bootstrap';
-
+import styled from 'styled-components';
 import { APICore, APIModel } from '../API';
 import { VariableEntity } from '../API/Core';
 import { ModelResponse } from '../API/Model';
 import DropdownModel from '../UI/DropdownModel';
+import Modal from '../UI/Modal';
 import { D3Model, HierarchyCircularNode, ModelType } from './Container';
 import Histograms from './D3Histograms';
 import ModelView from './D3Model';
 import Search from './D3Search';
-import styled from 'styled-components';
+
 export interface ExploreProps {
   apiCore: APICore;
   apiModel: APIModel;
@@ -21,7 +22,10 @@ export interface ExploreProps {
   handleSelectDataset: (e: VariableEntity) => void;
   handleSelectPathology: (code: string) => void;
   handleSelectNode: (node: HierarchyCircularNode) => void;
-  handleUpdateD3Model: Function;
+  handleUpdateD3Model: (
+    model?: ModelType,
+    node?: HierarchyCircularNode
+  ) => void;
   handleSelectModel: (model?: ModelResponse) => void;
   handleGoToAnalysis: any; // FIXME Promise<void>
   zoom: (circleNode: HierarchyCircularNode) => void;
@@ -51,6 +55,10 @@ export default (props: ExploreProps): JSX.Element => {
   const selectedPathology = model && model.query && model.query.pathology;
   const datasets = apiCore.datasetsForPathology(selectedPathology);
 
+  const handleSaveModel = (): void => {
+    apiModel.save({ model, title: 'title' });
+  };
+
   const PanelTitle = styled(Panel.Title)`
     display: flex;
     flex-direction: row;
@@ -72,7 +80,8 @@ export default (props: ExploreProps): JSX.Element => {
     }
 
     h5 {
-      margin-right: 4px;
+      font-weight: bold;
+      margin-right: 8px;
     }
 
     button {
@@ -97,6 +106,7 @@ export default (props: ExploreProps): JSX.Element => {
 
   const PathologyBox = styled.div`
     margin-top: 4px;
+    font-size: 14px;
     label {
       margin-left: 16px;
       font-weight: normal;
@@ -115,142 +125,158 @@ export default (props: ExploreProps): JSX.Element => {
   `;
 
   return (
-    <div style={style}>
-      <div style={{ flex: 1, marginRight: '8px' }}>
-        <Panel>
-          <TitleBox>
-            <PathologyBox>
-              {apiCore.state.pathologies &&
-                apiCore.state.pathologies.length > 1 &&
-                apiCore.state.pathologies.map(g => (
-                  <label key={g.code}>
-                    <input
-                      type="radio"
-                      id={g.code}
-                      name={g.label}
-                      value={g.code}
-                      checked={selectedPathology === g.code}
-                      // tslint:disable jsx-no-lambda
-                      onChange={(e): void => {
-                        handleSelectPathology(e.target.value);
+    <>
+      <div style={style}>
+        <div style={{ flex: 1, marginRight: '8px' }}>
+          <Panel>
+            <TitleBox>
+              <PathologyBox>
+                {apiCore.state.pathologies &&
+                  apiCore.state.pathologies.length > 1 &&
+                  apiCore.state.pathologies.map(g => (
+                    <label key={g.code}>
+                      <input
+                        type="radio"
+                        id={g.code}
+                        name={g.label}
+                        value={g.code}
+                        checked={selectedPathology === g.code}
+                        // tslint:disable jsx-no-lambda
+                        onChange={(e): void => {
+                          handleSelectPathology(e.target.value);
+                        }}
+                      />{' '}
+                      {g.label}
+                    </label>
+                  ))}
+              </PathologyBox>
+              <SearchBox>
+                <Search
+                  hierarchy={layout}
+                  zoom={zoom}
+                  handleSelectNode={handleSelectNode}
+                />
+              </SearchBox>
+            </TitleBox>
+            <DatasetsBox>
+              <p>
+                <b>Datasets</b>
+              </p>
+              {datasets &&
+                datasets.map((dataset: any) => (
+                  <div key={dataset.code}>
+                    <Checkbox
+                      inline={true}
+                      // tslint:disable-next-line jsx-no-lambda
+                      onChange={() => {
+                        handleSelectDataset(dataset);
                       }}
-                    />{' '}
-                    {g.label}
-                  </label>
+                      checked={selectedDatasets
+                        .map(s => s.code)
+                        .includes(dataset.code)}
+                    >
+                      {dataset.label}
+                    </Checkbox>
+                  </div>
                 ))}
-            </PathologyBox>
-            <SearchBox>
-              <Search
-                hierarchy={layout}
-                zoom={zoom}
-                handleSelectNode={handleSelectNode}
-              />
-            </SearchBox>
-          </TitleBox>
-          <DatasetsBox>
-            <p>
-              <b>Datasets</b>
-            </p>
-            {datasets &&
-              datasets.map((dataset: any) => (
-                <div key={dataset.code}>
-                  <Checkbox
-                    inline={true}
+            </DatasetsBox>
+            <Panel.Body style={{ margin: 0, padding: 0 }}>
+              {children}
+            </Panel.Body>
+          </Panel>
+        </div>
+        <div style={{ flex: 1 }}>
+          <Panel className="statistics">
+            <PanelTitle>
+              <h3>{selectedNode && selectedNode.data.label}</h3>
+              <Button bsStyle="info" type="submit" onClick={handleGoToAnalysis}>
+                Interactive Analysis <Glyphicon glyph="chevron-right" />
+              </Button>
+            </PanelTitle>
+          </Panel>
+          <Panel>
+            <Panel.Body>
+              <Buttons>
+                <DropdownModel
+                  items={apiModel.state.models}
+                  selectedSlug={
+                    apiModel.state.model && apiModel.state.model.slug
+                  }
+                  reset={apiModel.state.model ? true : false}
+                  handleSelect={handleSelectModel}
+                />
+                {/* {apiModel.state.model && !apiModel.state.model.slug && (
+                  <Button
+                    bsStyle={'info'}
+                    bsSize={'small'}
                     // tslint:disable-next-line jsx-no-lambda
-                    onChange={() => {
-                      handleSelectDataset(dataset);
-                    }}
-                    checked={selectedDatasets
-                      .map(s => s.code)
-                      .includes(dataset.code)}
+                    onClick={() => handleSaveModel()}
                   >
-                    {dataset.label}
-                  </Checkbox>
-                </div>
-              ))}
-          </DatasetsBox>
-          <Panel.Body style={{ margin: 0, padding: 0 }}>{children}</Panel.Body>
-        </Panel>
-      </div>
-      <div style={{ flex: 1 }}>
-        <Panel className="statistics">
-          <PanelTitle>
-            <h3>{selectedNode && selectedNode.data.label}</h3>
-            <Button bsStyle="info" type="submit" onClick={handleGoToAnalysis}>
-              Interactive Analysis <Glyphicon glyph="chevron-right" />
-            </Button>
-          </PanelTitle>
-        </Panel>
-        <Panel>
-          <Panel.Body>
-            <Buttons>
-              <DropdownModel
-                items={apiModel.state.models}
-                selectedSlug={apiModel.state.model && apiModel.state.model.slug}
-                showClear={true}
-                handleSelect={handleSelectModel}
+                    Save
+                  </Button>
+                )} */}
+                <h5>Add to model</h5>
+
+                <Button
+                  className="child"
+                  bsStyle={'success'}
+                  bsSize={'small'}
+                  disabled={!selectedNode}
+                  // tslint:disable-next-line jsx-no-lambda
+                  onClick={() =>
+                    handleUpdateD3Model(ModelType.VARIABLE, selectedNode)
+                  }
+                >
+                  {d3Model.variables &&
+                  selectedNode &&
+                  d3Model.variables.filter(c =>
+                    selectedNode.leaves().includes(c)
+                  ).length === selectedNode.leaves().length
+                    ? '-'
+                    : '+'}{' '}
+                  AS VARIABLE
+                </Button>
+                <Button
+                  className="child"
+                  bsStyle={'warning'}
+                  bsSize={'small'}
+                  disabled={!selectedNode}
+                  // tslint:disable-next-line jsx-no-lambda
+                  onClick={() =>
+                    handleUpdateD3Model(ModelType.COVARIABLE, selectedNode)
+                  }
+                >
+                  {d3Model.covariables &&
+                  selectedNode &&
+                  d3Model.covariables.filter(c =>
+                    selectedNode.leaves().includes(c)
+                  ).length === selectedNode.leaves().length
+                    ? '-'
+                    : '+'}{' '}
+                  AS COVARIABLE
+                </Button>
+              </Buttons>
+
+              <ModelView
+                d3Model={d3Model}
+                handleUpdateD3Model={handleUpdateD3Model}
+                handleSelectNode={handleSelectNode}
+                zoom={zoom}
               />
-
-              <h5>Add to model</h5>
-
-              <Button
-                className="child"
-                bsStyle={'success'}
-                bsSize={'small'}
-                disabled={!selectedNode}
-                // tslint:disable-next-line jsx-no-lambda
-                onClick={() =>
-                  handleUpdateD3Model(ModelType.VARIABLE, selectedNode)
-                }
-              >
-                {d3Model.variables &&
-                selectedNode &&
-                d3Model.variables.filter(c => selectedNode.leaves().includes(c))
-                  .length === selectedNode.leaves().length
-                  ? '-'
-                  : '+'}{' '}
-                AS VARIABLE
-              </Button>
-              <Button
-                className="child"
-                bsStyle={'warning'}
-                bsSize={'small'}
-                disabled={!selectedNode}
-                // tslint:disable-next-line jsx-no-lambda
-                onClick={() =>
-                  handleUpdateD3Model(ModelType.COVARIABLE, selectedNode)
-                }
-              >
-                {d3Model.covariables &&
-                selectedNode &&
-                d3Model.covariables.filter(c =>
-                  selectedNode.leaves().includes(c)
-                ).length === selectedNode.leaves().length
-                  ? '-'
-                  : '+'}{' '}
-                AS COVARIABLE
-              </Button>
-            </Buttons>
-
-            <ModelView
-              d3Model={d3Model}
-              handleUpdateD3Model={handleUpdateD3Model}
-              handleSelectNode={handleSelectNode}
-              zoom={zoom}
-            />
-          </Panel.Body>
-        </Panel>
-        <Panel className="statistics">
-          <Panel.Body>
-            <Histograms
-              histograms={histograms}
-              selectedNode={selectedNode}
-              handleSelectedNode={handleSelectNode}
-              zoom={zoom}
-            />
-          </Panel.Body>
-        </Panel>
+            </Panel.Body>
+          </Panel>
+          <Panel className="statistics">
+            <Panel.Body>
+              <Histograms
+                histograms={histograms}
+                selectedNode={selectedNode}
+                handleSelectedNode={handleSelectNode}
+                zoom={zoom}
+              />
+            </Panel.Body>
+          </Panel>
+        </div>
       </div>
-    </div>
+    </>
   );
 };

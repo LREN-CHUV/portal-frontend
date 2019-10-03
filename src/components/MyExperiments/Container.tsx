@@ -1,7 +1,7 @@
 import React from 'react';
-import { Panel } from 'react-bootstrap';
 import { RouteComponentProps } from 'react-router-dom';
 import styled from 'styled-components';
+import { Button, FormControl, Glyphicon, Panel } from 'react-bootstrap';
 
 import { APIExperiment, APIModel } from '../API';
 import Experiments from './Experiments';
@@ -49,6 +49,22 @@ export default ({ ...props }: Props): JSX.Element => {
       <Panel>
         <PanelBody>
           <h3>My experiments</h3>
+          <div className="item">
+            <Button
+              onClick={(): void => {
+                apiModel.state.models
+                  ? handleNewExperiment(apiModel.state.models[0].slug)
+                  : history.push(`/explore`);
+              }}
+              title={
+                apiModel.state.models ? 'New Experiment' : 'Explore Variables'
+              }
+              bsStyle="info"
+              type="submit"
+            >
+              New Experiment
+            </Button>
+          </div>
         </PanelBody>
       </Panel>
       <Panel>

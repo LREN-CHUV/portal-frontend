@@ -6,7 +6,7 @@ import styled from 'styled-components';
 
 export interface ModelProps {
   children?: any;
-  handleUpdateD3Model: Function;
+  handleUpdateD3Model: (model: ModelType, node: HierarchyCircularNode) => void;
   handleSelectNode: Function;
   d3Model: D3Model;
   zoom: Function;
@@ -26,6 +26,7 @@ const Wrapper = styled.div`
 
   span {
     margin-right: 4px;
+    cursor: pointer;
   }
 
   p {
@@ -34,8 +35,14 @@ const Wrapper = styled.div`
 
   div div {
     padding: 0 1em;
-    height: 100px;
+    margin: 0 0 4px 0;
+    border: 1px solid #ddd;
+    height: 84px;
     overflow-y: auto;
+  }
+
+  div div a {
+    cursor: pointer;
   }
 `;
 
@@ -65,7 +72,7 @@ export default (props: ModelProps) => {
       .append('a')
       .text('x')
       .on('click', d => {
-        handleUpdateD3Model(type, d, true);
+        handleUpdateD3Model(type, d);
         d3.event.stopPropagation();
       });
 

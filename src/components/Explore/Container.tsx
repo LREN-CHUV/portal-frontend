@@ -259,9 +259,12 @@ export default ({
 
   // Update D3 data from interaction with D3 widgets (PackLayer, Model, breadcrumb, search bar)
   const handleUpdateD3Model = (
-    type: ModelType,
-    node: HierarchyCircularNode
+    type?: ModelType,
+    node?: HierarchyCircularNode
   ): void => {
+    if (node === undefined) {
+      return;
+    }
     if (type === ModelType.VARIABLE) {
       const nextModel = d3Model.variables
         ? {
