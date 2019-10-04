@@ -10,6 +10,8 @@ import { D3Model, HierarchyCircularNode, ModelType } from './Container';
 import Histograms from './D3Histograms';
 import ModelView from './D3Model';
 import Search from './D3Search';
+import Header from './Header';
+import Formula from './Formula';
 
 export interface ExploreProps {
   apiCore: APICore;
@@ -196,6 +198,7 @@ export default (props: ExploreProps): JSX.Element => {
           </Panel>
           <Panel>
             <Panel.Body>
+              {/* <Formula parameters={d3Model} /> */}
               <Buttons>
                 <DropdownModel
                   items={apiModel.state.models}
@@ -215,7 +218,7 @@ export default (props: ExploreProps): JSX.Element => {
                     Save
                   </Button>
                 )} */}
-                <h5>Add to model</h5>
+                <h5>Add to parameters</h5>
 
                 <Button
                   className="child"
@@ -265,6 +268,7 @@ export default (props: ExploreProps): JSX.Element => {
               />
             </Panel.Body>
           </Panel>
+
           <Panel className="statistics">
             <Panel.Body>
               <Histograms

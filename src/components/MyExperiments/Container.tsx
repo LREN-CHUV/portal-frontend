@@ -6,10 +6,6 @@ import { Button, FormControl, Glyphicon, Panel } from 'react-bootstrap';
 import { APIExperiment, APIModel } from '../API';
 import Experiments from './Experiments';
 
-const Body = styled(Panel.Body)`
-  padding: 0 16px;
-`;
-
 const PanelBody = styled(Panel.Body)`
   display: flex;
   padding-top: 15px !important;
@@ -67,16 +63,13 @@ export default ({ ...props }: Props): JSX.Element => {
           </div>
         </PanelBody>
       </Panel>
-      <Panel>
-        <Body>
-          <Experiments
-            models={apiModel.state.models}
-            experiments={experiments}
-            handleSelectExperiment={handleSelectExperiment}
-            handleNewExperiment={handleNewExperiment}
-          />
-        </Body>
-      </Panel>
+
+      <Experiments
+        models={apiModel.state.models}
+        experiments={experiments}
+        handleSelectExperiment={handleSelectExperiment}
+        handleNewExperiment={handleNewExperiment}
+      />
     </>
   );
 };
