@@ -54,7 +54,7 @@ class Model extends React.Component<Props> {
               <DropdownModel
                 items={items}
                 selectedSlug={selectedSlug}
-                showClear={false}
+                reset={false}
                 handleSelect={handleSelectModel}
               />
             )}

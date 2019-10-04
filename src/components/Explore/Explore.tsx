@@ -1,17 +1,15 @@
-import './Explore.css';
-
 import * as React from 'react';
-import { Button, Checkbox, Panel } from 'react-bootstrap';
-
+import { Button, Checkbox, Glyphicon, Panel } from 'react-bootstrap';
+import styled from 'styled-components';
 import { APICore, APIModel } from '../API';
 import { VariableEntity } from '../API/Core';
 import { ModelResponse } from '../API/Model';
 import DropdownModel from '../UI/DropdownModel';
+import Modal from '../UI/Modal';
 import { D3Model, HierarchyCircularNode, ModelType } from './Container';
 import Histograms from './D3Histograms';
 import ModelView from './D3Model';
 import Search from './D3Search';
-import Header from './Header';
 
 export interface ExploreProps {
   apiCore: APICore;
@@ -24,9 +22,12 @@ export interface ExploreProps {
   handleSelectDataset: (e: VariableEntity) => void;
   handleSelectPathology: (code: string) => void;
   handleSelectNode: (node: HierarchyCircularNode) => void;
-  handleUpdateD3Model: Function;
+  handleUpdateD3Model: (
+    model?: ModelType,
+    node?: HierarchyCircularNode
+  ) => void;
   handleSelectModel: (model?: ModelResponse) => void;
-  handleGoToAnalysis: Function;
+  handleGoToAnalysis: any; // FIXME Promise<void>
   zoom: (circleNode: HierarchyCircularNode) => void;
 }
 
@@ -54,99 +55,168 @@ export default (props: ExploreProps): JSX.Element => {
   const selectedPathology = model && model.query && model.query.pathology;
   const datasets = apiCore.datasetsForPathology(selectedPathology);
 
+  const handleSaveModel = (): void => {
+    apiModel.save({ model, title: 'title' });
+  };
+
+  const PanelTitle = styled(Panel.Title)`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0 16px 0 0;
+  `;
+
+  const Buttons = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin: 0 0 8px 0;
+    padding: 2px;
+    border-bottom: 1px solid lightgray;
+
+    div:first-child {
+      flex: 1;
+    }
+
+    h5 {
+      font-weight: bold;
+      margin-right: 8px;
+    }
+
+    button {
+      flex: 1;
+      margin-right: 4px;
+    }
+  `;
+
+  const style = {
+    display: 'flex',
+    justifyContent: 'space-between'
+  };
+
+  const TitleBox = styled(Panel.Title)`
+    display: flex;
+    padding: 0.4em;
+    margin-bottom: 4px;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #eee;
+  `;
+
+  const PathologyBox = styled.div`
+    margin-top: 4px;
+    font-size: 14px;
+    label {
+      margin-left: 16px;
+      font-weight: normal;
+    }
+  `;
+
+  const DatasetsBox = styled.div`
+    margin: 8px;
+    padding: 1em;
+    background-color: #eeeeee33;
+    position: absolute;
+  `;
+
+  const SearchBox = styled.div`
+    width: 320px;
+  `;
+
   return (
-    <div className="Explore">
-      <div className="content">
-        <div className="sidebar">
-          {apiCore.state.pathologies && apiCore.state.pathologies.length > 1 && (
-            <Panel className="pathologies">
-              <Panel.Title>
-                <h3>Medical Conditions</h3>
-              </Panel.Title>
-              <Panel.Body>
-                {apiCore.state.pathologies.map(g => (
-                  <label key={g.code}>
-                    <input
-                      type="radio"
-                      id={g.code}
-                      name={g.label}
-                      value={g.code}
-                      checked={selectedPathology === g.code}
-                      // tslint:disable jsx-no-lambda
-                      onChange={(e): void => {
-                        handleSelectPathology(e.target.value);
-                      }}
-                    />{' '}
-                    {g.label}
-                  </label>
-                ))}
-              </Panel.Body>
-            </Panel>
-          )}
-          <Panel className="datasets">
-            <Panel.Title>
-              <h3>Datasets</h3>
-            </Panel.Title>
-            <Panel.Body>
-              {datasets &&
-                datasets.map((dataset: any) => (
-                  <Checkbox
-                    key={dataset.code}
-                    inline={true}
-                    // tslint:disable-next-line jsx-no-lambda
-                    onChange={() => {
-                      handleSelectDataset(dataset);
-                    }}
-                    checked={selectedDatasets
-                      .map(s => s.code)
-                      .includes(dataset.code)}
-                  >
-                    {dataset.label}
-                  </Checkbox>
-                ))}
-            </Panel.Body>
-          </Panel>
-          <Panel className="model">
-            <Panel.Title>
-              <h3>Model</h3>
-              <div>
-                <DropdownModel
-                  items={apiModel.state.models}
-                  selectedSlug={
-                    apiModel.state.model && apiModel.state.model.slug
-                  }
-                  showClear={true}
-                  handleSelect={handleSelectModel}
-                />
-              </div>
-            </Panel.Title>
-            <Panel.Body className="model-body">
-              <ModelView
-                d3Model={d3Model}
-                handleUpdateD3Model={handleUpdateD3Model}
-                handleSelectNode={handleSelectNode}
-                zoom={zoom}
-              />
-            </Panel.Body>
-          </Panel>
-        </div>
-        <div className="column1">
-          <Panel className="circle-pack">
-            <Panel.Title>
-              <div className="variable-box">
-                <h3 className="child">Variables</h3>
+    <>
+      <div style={style}>
+        <div style={{ flex: 1, marginRight: '8px' }}>
+          <Panel>
+            <TitleBox>
+              <PathologyBox>
+                {apiCore.state.pathologies &&
+                  apiCore.state.pathologies.length > 1 &&
+                  apiCore.state.pathologies.map(g => (
+                    <label key={g.code}>
+                      <input
+                        type="radio"
+                        id={g.code}
+                        name={g.label}
+                        value={g.code}
+                        checked={selectedPathology === g.code}
+                        // tslint:disable jsx-no-lambda
+                        onChange={(e): void => {
+                          handleSelectPathology(e.target.value);
+                        }}
+                      />{' '}
+                      {g.label}
+                    </label>
+                  ))}
+              </PathologyBox>
+              <SearchBox>
                 <Search
                   hierarchy={layout}
                   zoom={zoom}
                   handleSelectNode={handleSelectNode}
                 />
-              </div>
-            </Panel.Title>
+              </SearchBox>
+            </TitleBox>
+            <DatasetsBox>
+              <p>
+                <b>Datasets</b>
+              </p>
+              {datasets &&
+                datasets.map((dataset: any) => (
+                  <div key={dataset.code}>
+                    <Checkbox
+                      inline={true}
+                      // tslint:disable-next-line jsx-no-lambda
+                      onChange={() => {
+                        handleSelectDataset(dataset);
+                      }}
+                      checked={selectedDatasets
+                        .map(s => s.code)
+                        .includes(dataset.code)}
+                    >
+                      {dataset.label}
+                    </Checkbox>
+                  </div>
+                ))}
+            </DatasetsBox>
+            <Panel.Body style={{ margin: 0, padding: 0 }}>
+              {children}
+            </Panel.Body>
+          </Panel>
+        </div>
+        <div style={{ flex: 1 }}>
+          <Panel className="statistics">
+            <PanelTitle>
+              <h3>{selectedNode && selectedNode.data.label}</h3>
+              <Button bsStyle="info" type="submit" onClick={handleGoToAnalysis}>
+                Interactive Analysis <Glyphicon glyph="chevron-right" />
+              </Button>
+            </PanelTitle>
+          </Panel>
+          <Panel>
             <Panel.Body>
-              <div className="buttons">
-                <div className="child-title">
-                  <h5>Add to model</h5>
-                </div>
+              <Buttons>
+                <DropdownModel
+                  items={apiModel.state.models}
+                  selectedSlug={
+                    apiModel.state.model && apiModel.state.model.slug
+                  }
+                  reset={apiModel.state.model ? true : false}
+                  handleSelect={handleSelectModel}
+                />
+                {/* {apiModel.state.model && !apiModel.state.model.slug && (
+                  <Button
+                    bsStyle={'info'}
+                    bsSize={'small'}
+                    // tslint:disable-next-line jsx-no-lambda
+                    onClick={() => handleSaveModel()}
+                  >
+                    Save
+                  </Button>
+                )} */}
+                <h5>Add to model</h5>
+
                 <Button
                   className="child"
                   bsStyle={'success'}
@@ -185,20 +255,17 @@ export default (props: ExploreProps): JSX.Element => {
                     : '+'}{' '}
                   AS COVARIABLE
                 </Button>
-              </div>
-              {children}
+              </Buttons>
+
+              <ModelView
+                d3Model={d3Model}
+                handleUpdateD3Model={handleUpdateD3Model}
+                handleSelectNode={handleSelectNode}
+                zoom={zoom}
+              />
             </Panel.Body>
           </Panel>
-        </div>
-        <div className="column2">
-          <div className="header">
-            <Header handleGoToAnalysis={handleGoToAnalysis} />
-          </div>
-
           <Panel className="statistics">
-            <Panel.Title>
-              <h3>Statistics Summary</h3>
-            </Panel.Title>
             <Panel.Body>
               <Histograms
                 histograms={histograms}
@@ -210,6 +277,6 @@ export default (props: ExploreProps): JSX.Element => {
           </Panel>
         </div>
       </div>
-    </div>
+    </>
   );
 };

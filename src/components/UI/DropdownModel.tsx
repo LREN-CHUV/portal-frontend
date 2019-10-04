@@ -6,13 +6,13 @@ import './Dropdown.css';
 interface Dropdown {
   items: ModelResponse[] | undefined;
   selectedSlug?: string;
-  showClear?: boolean;
+  reset?: boolean;
   handleSelect: (model?: ModelResponse) => void;
 }
 export default ({
   items,
   handleSelect,
-  showClear = false,
+  reset = false,
   selectedSlug
 }: Dropdown): JSX.Element => {
   const [title, setTitle] = useState(selectedSlug || 'undefined');
@@ -27,19 +27,20 @@ export default ({
 
   return (
     <DropdownButton bsSize="small" id={'model-dropdown'} title={title}>
-      {showClear && (
+      {reset && (
         <MenuItem
-          eventKey={'cancel'}
-          key={'cancel'}
+          eventKey={'reset'}
+          key={'reset'}
           // tslint:disable-next-line jsx-no-lambda
           onSelect={() => {
             setTitle('undefined');
             handleSelect();
           }}
         >
-          <strong>NEW MODEL</strong>
+          <strong>Reset</strong>
         </MenuItem>
       )}
+
       {items &&
         handleSelect &&
         items.map((item, i: number) => {
@@ -48,7 +49,7 @@ export default ({
               eventKey={i}
               key={item.title}
               // tslint:disable-next-line jsx-no-lambda
-              onSelect={() => {
+              onSelect={(): void => {
                 setTitle((item && item.title) || 'edit');
                 handleSelect(item);
               }}

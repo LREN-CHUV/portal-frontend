@@ -1,4 +1,4 @@
-import './Explore.css';
+// import './Explore.css';
 
 import * as d3 from 'd3';
 import React, { useEffect, useState } from 'react';
@@ -9,7 +9,7 @@ import { VariableEntity } from '../API/Core';
 import { ModelResponse, Query } from '../API/Model';
 import { AppConfig, InstanceMode } from '../App/App';
 import { d3Hierarchy, VariableDatum } from './d3Hierarchy';
-import CirclePack from './D3PackLayer';
+import CirclePack from './D3CirclePackLayer';
 import Modal from '../UI/Modal';
 
 const diameter = 800;
@@ -67,7 +67,10 @@ export default ({
     const model = apiModel.state.model;
     if (!model && apiCore.state.pathologies) {
       const defaultPathology = apiCore.state.pathologies[0];
-      const newModel = { query: { pathology: defaultPathology.code } };
+      const datasets = apiCore.datasetsForPathology(defaultPathology.code);
+      const newModel = {
+        query: { pathology: defaultPathology.code, trainingDatasets: datasets }
+      };
       apiModel.setModel(newModel);
     }
   }, [apiCore.state.pathologies, apiModel]);
@@ -256,9 +259,12 @@ export default ({
 
   // Update D3 data from interaction with D3 widgets (PackLayer, Model, breadcrumb, search bar)
   const handleUpdateD3Model = (
-    type: ModelType,
-    node: HierarchyCircularNode
+    type?: ModelType,
+    node?: HierarchyCircularNode
   ): void => {
+    if (node === undefined) {
+      return;
+    }
     if (type === ModelType.VARIABLE) {
       const nextModel = d3Model.variables
         ? {

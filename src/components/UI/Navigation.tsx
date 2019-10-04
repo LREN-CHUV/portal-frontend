@@ -10,8 +10,11 @@ interface Props {
 }
 
 const NavBar = styled.nav`
+  position: fixed;
+  top: 0;
+  width: 100%;
   font-family: 'Open Sans Condensed', sans-serif;
-  background: #00000077;
+  background: #000000aa;
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -96,12 +99,14 @@ export default ({ name }: Props): JSX.Element => {
       </Brand>
       <Links>
         <Group>
-          <GroupLink to="/explore">Explore</GroupLink>
+          <GroupLink to="/explore">Variables</GroupLink>
           <span> &gt; </span>
           <GroupLink to="/review">Analysis</GroupLink>
           <span> &gt; </span>
           <GroupLink to="/experiment">Experiment</GroupLink>
         </Group>
+
+        <Link to="/experiments">My Experiments</Link>
         <Link to="/galaxy">Workflow</Link>
         <Link to="/articles">Articles</Link>
       </Links>

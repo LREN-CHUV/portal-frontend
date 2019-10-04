@@ -12,6 +12,7 @@ const MainBox = styled.div`
     max-height: none;
     overflow-y: auto;
     padding: 0.5em 1em;
+    z-index: 1001;
 
     li {
       padding: 0.5em 0;
@@ -32,7 +33,7 @@ export default () => {
         noCaret={false}
         bsStyle="link"
         id={'help-dropdown'}
-        title={'help'}
+        title={'Help'}
       >
         <MenuItem
           // tslint:disable-next-line jsx-no-lambda

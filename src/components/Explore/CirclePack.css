@@ -22,7 +22,7 @@ circle.node.variable {
 }
 
 .model .variable {
-  flex-grow: 1
+  flex-grow: 1;
 }
 
 circle.node.covariable {
@@ -30,7 +30,7 @@ circle.node.covariable {
 }
 
 .model .covariable {
-  flex-grow: 2
+  flex-grow: 2;
 }
 
 circle.node.grouping {

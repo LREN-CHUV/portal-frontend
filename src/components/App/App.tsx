@@ -5,23 +5,24 @@ import { Route, Switch } from 'react-router-dom';
 import styled, { createGlobalStyle } from 'styled-components';
 
 import backgroundImage from '../../images/body-bg.jpg';
+import ExperimentReview from '../Analysis/Container';
 import { APICore, APIExperiment, APIMining, APIModel, APIUser } from '../API';
 import Article from '../Article/Container';
 import ExperimentCreate from '../Create/Container';
 import Home from '../Dashboard/Container';
-import TOS from '../UI/TOS';
 import Explore from '../Explore/Container';
+import MyExperiments from '../MyExperiments/Container';
 import ExperimentResult from '../Result/Container';
-import ExperimentReview from '../Analysis/Container';
 import Footer from '../UI/Footer';
 import Galaxy from '../UI/Galaxy';
 import Navigation from '../UI/Navigation';
 import NotFound from '../UI/NotFound';
+import TOS from '../UI/TOS';
 import User from '../User/Container';
 
 const GlobalStyles = createGlobalStyle`
+
   body {
-    import url('https://fonts.googleapis.com/css?family=Open+Sans|Open+Sans+Condensed&display=swap');
     font-family: 'Open Sans', sans-serif;
     background: url(${backgroundImage}) top center no-repeat fixed #f5f5f5;
     background-size: 100% auto;
@@ -60,6 +61,7 @@ interface Props {
 }
 
 const Main = styled.main`
+  margin-top: 52px;
   padding: 0 48px 0px 48px;
 `;
 
@@ -104,13 +106,7 @@ const App = ({
               />
             )}
           />
-          <Route
-            path="/profile"
-            // tslint:disable-next-line jsx-no-lambda
-            render={(props): JSX.Element => (
-              <User apiUser={apiUser} {...props} />
-            )}
-          />
+
           <Route
             path="/explore"
             // tslint:disable-next-line jsx-no-lambda
@@ -162,10 +158,29 @@ const App = ({
             )}
           />
           <Route
+            exact={true}
+            path="/experiments"
+            // tslint:disable-next-line jsx-no-lambda
+            render={(props): JSX.Element => (
+              <MyExperiments
+                apiExperiment={apiExperiment}
+                apiModel={apiModel}
+                {...props}
+              />
+            )}
+          />
+          <Route
             path={['/articles/:slug', '/articles']}
             // tslint:disable-next-line jsx-no-lambda
             render={(props): JSX.Element => (
               <Article apiCore={apiCore} {...props} />
+            )}
+          />
+          <Route
+            path="/profile"
+            // tslint:disable-next-line jsx-no-lambda
+            render={(props): JSX.Element => (
+              <User apiUser={apiUser} {...props} />
             )}
           />
 
