@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Panel } from 'react-bootstrap';
 import { RouteComponentProps } from 'react-router-dom';
 import styled from 'styled-components';
@@ -47,6 +47,16 @@ export default ({ ...props }: Props): JSX.Element => {
   const user = apiUser.state && apiUser.state.user;
   const experiments = apiExperiment.state && apiExperiment.state.experiments;
 
+  useEffect(() => {
+    if (
+      !apiUser.state.loading &&
+      apiUser.state.authenticated &&
+      !apiUser.state.agreeNDA
+    ) {
+      history.push('/tos');
+    }
+  }, [apiUser.state]);
+
   const handleSelectArticle = (id: string): void => {
     history.push(`/articles/${id}`);
   };
@@ -92,7 +102,6 @@ export default ({ ...props }: Props): JSX.Element => {
               <Title>Recent Articles</Title>
             </Panel.Title>
             <Body>
-              {' '}
               <Articles
                 articles={articles}
                 handleSelectArticle={handleSelectArticle}

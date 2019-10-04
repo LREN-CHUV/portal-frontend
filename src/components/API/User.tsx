@@ -5,19 +5,26 @@ import { backendURL } from '../API';
 
 export interface User {
   fullname?: string;
-  username: string;
+  username?: string;
   email?: string;
   groups?: string;
+  picture?: string;
 }
 
 export interface State {
   error?: string;
   user?: User;
   authenticated: boolean;
+  agreeNDA: boolean;
+  loading: boolean;
 }
 
 class UserContainer extends Container<State> {
-  public state: State = { authenticated: false };
+  public state: State = {
+    authenticated: false,
+    agreeNDA: false,
+    loading: true
+  };
 
   private options: request.Options;
   private backendURL: string;
@@ -35,7 +42,7 @@ class UserContainer extends Container<State> {
     return data;
   };
 
-  public user = async () => {
+  public user = async (): Promise<void> => {
     console.log('Check user authorization');
     try {
       const data = await request.get(`${this.backendURL}/user`, this.options);
@@ -45,15 +52,8 @@ class UserContainer extends Container<State> {
         return await this.setState({
           authenticated: false,
           error: json.error,
-          user: undefined
-        });
-      }
-
-      if (process.env.NODE_ENV !== 'production') {
-        return await this.setState({
-          authenticated: true,
-          error: undefined,
-          user: undefined
+          user: undefined,
+          loading: false
         });
       }
 
@@ -67,16 +67,74 @@ class UserContainer extends Container<State> {
         }) ||
         {};
 
+      const authenticated =
+        process.env.NODE_ENV !== 'production' ? true : json.authenticated;
+
       return await this.setState({
-        authenticated: json.authenticated,
+        authenticated,
         error: undefined,
+        loading: false,
         user
       });
     } catch (error) {
       return await this.setState({
         authenticated: false,
-        error: error.message
+        error: error.message,
+        loading: false
       });
+    }
+  };
+
+  public profile = async ({
+    username = ''
+  }: {
+    username?: string;
+  }): Promise<void> => {
+    await this.setState({
+      loading: true
+    });
+
+    try {
+      const data = await request.get(
+        `${this.backendURL}/users/${username}`,
+        this.options
+      );
+      const json = await JSON.parse(data);
+
+      if (!json || (json && json.error)) {
+        return await this.setState({
+          error: json.error,
+          loading: false
+        });
+      }
+
+      const user = this.state.user;
+      const nextUser: User = {
+        ...user,
+        picture: json.picture
+      };
+
+      return await this.setState({
+        error: undefined,
+        agreeNDA: json.agreeNDA,
+        user: nextUser,
+        loading: false
+      });
+    } catch (error) {
+      return await this.setState({
+        error: error.message,
+        loading: false
+      });
+    }
+  };
+
+  public acceptTOS = async () => {
+    try {
+      await request.post(`${this.backendURL}/user?agreeNDA=true`, this.options);
+
+      return this.setState({ agreeNDA: true });
+    } catch (e) {
+      console.log(e);
     }
   };
 }
