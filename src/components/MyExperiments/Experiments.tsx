@@ -11,15 +11,26 @@ import RenderResult from '../Result/RenderResult';
 const Experiments = styled.div`
   display: flex;
   flex-flow: row wrap;
+  justify-content: space-between;
 `;
 
 const Experiment = styled(Panel)`
-  margin-right: 8px;
-  min-width: 360px;
-  flex: 1 1 auto;
+  flex: 0 0 calc(33% - 4px);
 `;
 
-const ExperimentBody = styled(Panel.Body)``;
+const ExperimentBody = styled(Panel.Body)`
+  margin: 0;
+  padding-top: 0;
+
+  p {
+    margin: 0;
+  }
+
+  button {
+    margin-top: 8px;
+    float: right;
+  }
+`;
 
 const PanelFooter = styled(Panel.Footer)`
   border: 0px none transparent;
@@ -61,8 +72,21 @@ export default ({
 
           return (
             <Experiment key={experiment.uuid}>
+              <Panel.Title>
+                <h3>
+                  <a
+                    onClick={(): void =>
+                      handleSelectExperiment(
+                        experiment.modelDefinitionId,
+                        experiment.uuid
+                      )
+                    }
+                  >
+                    {experiment && experiment.name}
+                  </a>
+                </h3>
+              </Panel.Title>
               <ExperimentBody>
-                <h2>{experiment && experiment.name}</h2>
                 {model && (
                   <>
                     {model.query.variables && (
@@ -89,29 +113,15 @@ export default ({
                       )}
                   </>
                 )}
-                <div>
-                  <Button
-                    bsSize="small"
-                    // tslint:disable-next-line jsx-no-lambda
-                    onClick={(): void =>
-                      handleNewExperiment(experiment.modelDefinitionId)
-                    }
-                  >
-                    New experiment
-                  </Button>
-                  <Button
-                    bsSize="small"
-                    // tslint:disable-next-line jsx-no-lambda
-                    onClick={(): void =>
-                      handleSelectExperiment(
-                        experiment.modelDefinitionId,
-                        experiment.uuid
-                      )
-                    }
-                  >
-                    View
-                  </Button>
-                </div>
+                <Button
+                  bsSize="small"
+                  // tslint:disable-next-line jsx-no-lambda
+                  onClick={(): void =>
+                    handleNewExperiment(experiment.modelDefinitionId)
+                  }
+                >
+                  New experiment
+                </Button>
               </ExperimentBody>
               <PanelFooter>
                 <span>
