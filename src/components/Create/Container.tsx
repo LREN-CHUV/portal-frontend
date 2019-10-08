@@ -23,6 +23,7 @@ import AvailableAlgorithms from './AvailableAlgorithms';
 import ExperimentCreateHeader from './Header';
 import Help from './Help';
 import Form from './Parameters';
+import Datasets from '../UI/Datasets';
 
 interface Props extends RouteComponentProps<any> {
   apiExperiment: APIExperiment;
@@ -63,9 +64,9 @@ class Container extends React.Component<Props, State> {
         </div>
         <div className="content">
           <div className="sidebar">
+            <Datasets model={apiModel.state.model} />
             <Model
               model={apiModel.state.model}
-              showDatasets={true}
               selectedSlug={apiModel.state.model && apiModel.state.model.slug}
               items={apiModel.state.models}
               handleSelectModel={this.handleSelectModel}

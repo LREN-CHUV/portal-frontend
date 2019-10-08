@@ -255,7 +255,6 @@ const Container = ({
           <Model
             model={model}
             selectedSlug={model && model.slug}
-            showDatasets={false}
             lookup={apiCore.lookup}
             items={apiModel.state.models}
             handleSelectModel={handleSelectModel}

@@ -1,16 +1,23 @@
 import React from 'react';
 import { RingLoader } from 'react-spinners';
+import styled from 'styled-components'
 
-import './Loader.css';
+const Loader = styled.div`
+  display: flex;
+  p {
+    padding-left: 8px;
+    color: cadetblue;
+  }
+`;
 
 interface Props {
   visible?: boolean;
 }
-class Loader extends React.Component<Props> {
-  public render() {
+class LoaderComponent extends React.Component<Props> {
+  public render(): JSX.Element {
     const { visible } = this.props || true;
     return (
-      <div className="loader">
+      <Loader>
         <RingLoader
           sizeUnit={'px'}
           size={16}
@@ -18,9 +25,9 @@ class Loader extends React.Component<Props> {
           loading={visible}
         />
         <p>loading...</p>
-      </div>
+      </Loader>
     );
   }
 }
 
-export default Loader;
+export default LoaderComponent;
