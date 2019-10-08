@@ -1,10 +1,20 @@
-import './Dropdown.css';
-
 import moment from 'moment';
 import * as React from 'react';
-import { DropdownButton, MenuItem } from 'react-bootstrap';
+import { DropdownButton, Glyphicon, MenuItem } from 'react-bootstrap';
+import styled from 'styled-components';
 
 import { ExperimentResponse } from '../API/Experiment';
+
+const Link = styled(MenuItem)`
+  a {
+    color: black !important;
+  }
+`;
+
+const Dropdown = styled(DropdownButton)`
+  color: white !important;
+  z-index: 99999;
+`;
 
 interface IDropdown {
   items: ExperimentResponse[] | undefined;
@@ -13,32 +23,35 @@ interface IDropdown {
   handleSelect: (experiment: ExperimentResponse) => void;
   handleCreateNewExperiment: (() => void) | null;
   noCaret?: boolean;
+  style?: string;
 }
+
 export default ({
   items,
   title = 'No Model',
   type = 'model',
   handleSelect,
   handleCreateNewExperiment,
-  noCaret = false
+  noCaret = false,
+  style = 'default'
 }: IDropdown): JSX.Element => (
-  <DropdownButton
+  <Dropdown
     noCaret={noCaret}
-    bsStyle="default"
+    bsStyle={style}
     id={'experiment-dropdown'}
     title={title}
   >
     {handleCreateNewExperiment && (
-      <React.Fragment>
-        <MenuItem
+      <>
+        <Link
           eventKey={'newexperiment'}
           key={'newexperiment'}
           onSelect={handleCreateNewExperiment}
         >
           <strong>Create New Experiment</strong>
-        </MenuItem>
-        <MenuItem>---------------------------</MenuItem>
-      </React.Fragment>
+        </Link>
+        <Link>---------------------------</Link>
+      </>
     )}
     {(items &&
       handleSelect &&
@@ -54,24 +67,22 @@ export default ({
           let experimentState;
 
           experimentState = experiment.error
-            ? 'glyphicon-exclamation-sign glyph'
+            ? 'exclamation-sign'
             : !experiment.results
-            ? 'glyphicon-transfer glyph loading'
-            : 'glyphicon-eye-open glyph';
+            ? 'transfer'
+            : 'eye-open';
           experimentState += experiment.resultsViewed ? ' viewed' : ' ready';
 
           return (
-            <MenuItem
+            <Link
               eventKey={i}
               key={experiment.uuid}
               // tslint:disable-next-line jsx-no-lambda
               onSelect={() => handleSelect(experiment)}
             >
-              <span className={experimentState} /> {experiment.name}{' '}
-              <span className={'time'}>
-                ({moment(experiment.created, 'YYYYMMDD').fromNow()})
-              </span>
-            </MenuItem>
+              <Glyphicon glyph={experimentState} /> {experiment.name}{' '}
+              <span>({moment(experiment.created, 'YYYYMMDD').fromNow()})</span>
+            </Link>
           );
         })) || (
       <div style={{ margin: '8px' }}>
@@ -89,5 +100,5 @@ export default ({
         )}
       </div>
     )}
-  </DropdownButton>
+  </Dropdown>
 );

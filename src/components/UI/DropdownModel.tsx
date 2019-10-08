@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { DropdownButton, MenuItem } from 'react-bootstrap';
 import { ModelResponse } from '../API/Model';
-import './Dropdown.css';
 
 interface Dropdown {
   items: ModelResponse[] | undefined;

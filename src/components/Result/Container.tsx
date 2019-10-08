@@ -34,7 +34,7 @@ class Experiment extends React.Component<Props> {
     return await apiModel.one(slug);
   }
 
-  public componentDidUpdate(prevProps: Props) {
+  public async componentDidUpdate(prevProps: Props) {
     const params = this.urlParams(this.props);
     if (!params) {
       return;
@@ -46,6 +46,9 @@ class Experiment extends React.Component<Props> {
     if (uuid !== previousUUID) {
       this.pollFetchExperiment(uuid);
     }
+    
+    const { apiExperiment } = this.props;
+    await apiExperiment.one({ uuid });
   }
 
   public componentWillUnmount() {

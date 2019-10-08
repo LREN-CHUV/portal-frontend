@@ -4,7 +4,7 @@ import { Button, Panel } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 import { ExperimentResponse } from '../API/Experiment';
-import Dropdown from '../UI/Dropdown';
+import Dropdown from '../UI/DropdownExperiments';
 
 interface Props {
   experiment?: ExperimentResponse;

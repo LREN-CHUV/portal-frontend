@@ -1,6 +1,6 @@
 import React from 'react';
 import { RingLoader } from 'react-spinners';
-import styled from 'styled-components'
+import styled from 'styled-components';
 
 const Loader = styled.div`
   display: flex;

@@ -4,7 +4,7 @@ import { Button, FormControl, Glyphicon, Panel } from 'react-bootstrap';
 import { Algorithm } from '../API/Core';
 import { ExperimentResponse } from '../API/Experiment';
 import { ModelResponse } from '../API/Model';
-import Dropdown from '../UI/Dropdown';
+import Dropdown from '../UI/DropdownExperiments';
 
 interface Props {
   model?: ModelResponse;
@@ -23,7 +23,7 @@ export default class Header extends React.Component<Props, State> {
     experimentName: ''
   };
 
-  public render() {
+  public render(): JSX.Element {
     const {
       experiments,
       model,

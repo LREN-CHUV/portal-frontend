@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { DropdownButton, MenuItem } from 'react-bootstrap';
+import { DropdownButton, Glyphicon, MenuItem } from 'react-bootstrap';
 import styled from 'styled-components';
 
 import Helpdesk from './Helpdesk';
@@ -41,17 +41,17 @@ export default () => {
             window.open('https://hbpmedical.github.io/documentation/');
           }}
         >
-          <span className="glyphicon-book glyph" /> MIP Documentation
+          <Glyphicon glyph="book" /> MIP Documentation
         </MenuItem>
         <MenuItem // tslint:disable-next-line jsx-no-lambda
           onSelect={() => {
             window.open('https://www.youtube.com/watch?v=MNWExzouMJw');
           }}
         >
-          <span className="glyphicon-film glyph" /> MIP introduction (video)
+          <Glyphicon glyph="film" /> MIP introduction (video)
         </MenuItem>
         <div>
-          <span className="glyphicon-envelope glyph" /> Email us at{' '}
+          <Glyphicon glyph="envelope" /> Email us at{' '}
           <a href="mailto://support@humanbrainproject.eu">
             support@humanbrainproject.eu
           </a>

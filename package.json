@@ -10,6 +10,7 @@
     "dotenv": "^8.1.0",
     "highcharts": "^7.2.0",
     "highcharts-react-official": "^2.2.2",
+    "history": "^4.10.1",
     "jQuery-QueryBuilder": "^2.5.2",
     "numbro": "^2.1.2",
     "plotly.js": "^1.49.4",
