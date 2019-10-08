@@ -1,12 +1,15 @@
 import * as React from 'react';
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
-
+import Dropdown from './DropdownExperiments';
 import logo from '../../images/hbp-logo.png';
 import HelpButton from './HelpButton';
+import { ExperimentResponse } from '../API/Experiment';
 
 interface Props {
   name?: string;
+  experiments?: ExperimentResponse[];
+  handleSelect: (experiment: ExperimentResponse) => void;
 }
 
 const NavBar = styled.nav`
@@ -52,6 +55,7 @@ const Brand = styled.div`
 
 const Links = styled.div`
   display: flex;
+  align-items: center;
   margin: 0 16px 0 0;
 
   .active {
@@ -87,7 +91,7 @@ const GroupLink = styled(Link)`
   margin: 0 8px 0 0;
 `;
 
-export default ({ name }: Props): JSX.Element => {
+export default ({ name, experiments, handleSelect }: Props): JSX.Element => {
   const instanceName = name || 'MIP';
   return (
     <NavBar>
@@ -105,8 +109,13 @@ export default ({ name }: Props): JSX.Element => {
           <span> &gt; </span>
           <GroupLink to="/experiment">Experiment</GroupLink>
         </Group>
-
-        <Link to="/experiments">My Experiments</Link>
+        <Dropdown
+          items={experiments}
+          style="link"
+          title="My Experiments"
+          handleSelect={handleSelect}
+          handleCreateNewExperiment={null}
+        />
         <Link to="/galaxy">Workflow</Link>
         <Link to="/articles">Articles</Link>
       </Links>

@@ -3,7 +3,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import * as React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import styled, { createGlobalStyle } from 'styled-components';
-
+import { ExperimentResponse } from '../API/Experiment';
 import backgroundImage from '../../images/body-bg.jpg';
 import ExperimentReview from '../Analysis/Container';
 import { APICore, APIExperiment, APIMining, APIModel, APIUser } from '../API';
@@ -11,7 +11,6 @@ import Article from '../Article/Container';
 import ExperimentCreate from '../Create/Container';
 import Home from '../Dashboard/Container';
 import Explore from '../Explore/Container';
-import MyExperiments from '../MyExperiments/Container';
 import ExperimentResult from '../Result/Container';
 import Footer from '../UI/Footer';
 import Galaxy from '../UI/Galaxy';
@@ -19,9 +18,9 @@ import Navigation from '../UI/Navigation';
 import NotFound from '../UI/NotFound';
 import TOS from '../UI/TOS';
 import User from '../User/Container';
+import { history } from '../utils';
 
 const GlobalStyles = createGlobalStyle`
-
   body {
     font-family: 'Open Sans', sans-serif;
     background: url(${backgroundImage}) top center no-repeat fixed #f5f5f5;
@@ -77,7 +76,15 @@ const App = ({
     <>
       <GlobalStyles />
       <header>
-        <Navigation name={appConfig.instanceName} />
+        <Navigation
+          name={appConfig.instanceName}
+          experiments={apiExperiment.state.experiments}
+          handleSelect={(experiment: ExperimentResponse): void => {
+            history.push(
+              `/experiment/${experiment.modelDefinitionId}/${experiment.uuid}`
+            );
+          }}
+        />
       </header>
       <Main>
         <Switch>
@@ -154,18 +161,6 @@ const App = ({
                 apiCore={apiCore}
                 apiModel={apiModel}
                 appConfig={appConfig}
-              />
-            )}
-          />
-          <Route
-            exact={true}
-            path="/experiments"
-            // tslint:disable-next-line jsx-no-lambda
-            render={(props): JSX.Element => (
-              <MyExperiments
-                apiExperiment={apiExperiment}
-                apiModel={apiModel}
-                {...props}
               />
             )}
           />

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import ReactGA from 'react-ga';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { Router, Route } from 'react-router-dom';
 import { Provider, Subscribe } from 'unstated';
 
 // import UNSTATED from 'unstated-debug';
@@ -15,6 +15,7 @@ import {
 import config from '../API/RequestHeaders';
 import App, { AppConfig, InstanceMode } from '../App/App';
 import Splash from '../UI/Splash';
+import { history } from '../utils';
 
 // UNSTATED.logStateChanges = process.env.NODE_ENV === "development";
 
@@ -94,16 +95,16 @@ class AppContainer extends React.Component<any, State> {
 
   public render(): JSX.Element {
     return (
-      <Router>
-        <Provider
-          inject={[
-            this.apiExperiment,
-            this.apiCore,
-            this.apiModel,
-            this.apiMining,
-            this.apiUser
-          ]}
-        >
+      <Provider
+        inject={[
+          this.apiExperiment,
+          this.apiCore,
+          this.apiModel,
+          this.apiMining,
+          this.apiUser
+        ]}
+      >
+        <Router history={history}>
           <Subscribe
             to={[APIExperiment, APICore, APIModel, APIMining, APIUser]}
           >
@@ -146,8 +147,8 @@ class AppContainer extends React.Component<any, State> {
               );
             }}
           </Subscribe>
-        </Provider>
-      </Router>
+        </Router>
+      </Provider>
     );
   }
 }
