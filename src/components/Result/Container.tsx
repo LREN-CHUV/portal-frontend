@@ -46,9 +46,9 @@ class Experiment extends React.Component<Props> {
     if (uuid !== previousUUID) {
       this.pollFetchExperiment(uuid);
     }
-    
-    const { apiExperiment } = this.props;
-    await apiExperiment.one({ uuid });
+
+    // const { apiExperiment } = this.props;
+    // await apiExperiment.one({ uuid });
   }
 
   public componentWillUnmount() {
