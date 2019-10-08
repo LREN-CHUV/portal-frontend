@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Panel } from 'react-bootstrap';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { ExperimentResult, ExperimentResultHeader } from '.';
 import { APICore, APIExperiment, APIModel } from '../API';
@@ -6,6 +7,7 @@ import { ExperimentResponse } from '../API/Experiment';
 import '../Experiment.css';
 import Model from '../UI/Model';
 import Algorithms from './Algorithms';
+import Datasets from '../UI/Datasets';
 
 interface Props extends RouteComponentProps<any> {
   apiExperiment: APIExperiment;
@@ -65,17 +67,12 @@ class Experiment extends React.Component<Props> {
         </div>
         <div className="content">
           <div className="sidebar">
-            <Model
-              model={apiModel.state.model}
-              showDatasets={true}
-              lookup={apiCore.lookup}
-            />
+            <Datasets model={apiModel.state.model} />
+            <Model model={apiModel.state.model} lookup={apiCore.lookup} />
+            <Algorithms experiment={apiExperiment.state.experiment} />
           </div>
           <div className="results">
             <ExperimentResult experimentState={apiExperiment.state} />
-          </div>
-          <div className="sidebar2">
-            <Algorithms experiment={apiExperiment.state.experiment} />
           </div>
         </div>
       </div>

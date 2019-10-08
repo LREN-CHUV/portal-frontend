@@ -115,9 +115,6 @@
   align-items: center;
   justify-content: flex-start;
 }
-.Experiment .sidebar .model {
-  margin-bottom: 32px;
-}
 
 .Experiment .sidebar .model .panel-title h3 {
   flex: 2;

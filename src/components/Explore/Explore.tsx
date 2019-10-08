@@ -118,7 +118,7 @@ export default (props: ExploreProps): JSX.Element => {
   const DatasetsBox = styled.div`
     margin: 8px;
     padding: 1em;
-    background-color: #eeeeee33;
+    background-color: #eeeeee99;
     position: absolute;
   `;
 
@@ -208,16 +208,7 @@ export default (props: ExploreProps): JSX.Element => {
                   reset={apiModel.state.model ? true : false}
                   handleSelect={handleSelectModel}
                 />
-                {/* {apiModel.state.model && !apiModel.state.model.slug && (
-                  <Button
-                    bsStyle={'info'}
-                    bsSize={'small'}
-                    // tslint:disable-next-line jsx-no-lambda
-                    onClick={() => handleSaveModel()}
-                  >
-                    Save
-                  </Button>
-                )} */}
+
                 <h5>Add to parameters</h5>
 
                 <Button

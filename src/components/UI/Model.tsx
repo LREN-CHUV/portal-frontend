@@ -11,6 +11,10 @@ import Loading from './Loader';
 
 const Body = styled(Panel.Body)`
   padding: 0 16px 16px 16px;
+
+  var {
+    display: block;
+  }
 `;
 
 const Title = styled.h3`
@@ -24,7 +28,6 @@ const Subtitle = styled.h5`
 interface Props {
   model?: ModelResponse;
   selectedSlug?: string;
-  showDatasets?: boolean;
   items?: ModelResponse[];
   handleSelectModel?: (model?: ModelResponse) => void;
   lookup: (code: string) => VariableEntity;
@@ -37,7 +40,6 @@ class Model extends React.Component<Props> {
       handleSelectModel,
       model,
       selectedSlug,
-      showDatasets,
       lookup
     } = this.props;
 
@@ -46,10 +48,10 @@ class Model extends React.Component<Props> {
     return (
       <Panel className="model">
         <Panel.Title>
+          {!handleSelectModel && (
+            <Title>{(model && model.title) || selectedSlug}</Title>
+          )}
           <Title>
-            Model <strong>{(model && model.title) || selectedSlug}</strong>
-          </Title>
-          <div>
             {handleSelectModel && (
               <DropdownModel
                 items={items}
@@ -58,12 +60,16 @@ class Model extends React.Component<Props> {
                 handleSelect={handleSelectModel}
               />
             )}
-          </div>
+          </Title>
         </Panel.Title>
         <Body>
-          {!model && <Loading />}
+          {!model && (
+            <div style={{ marginTop: '8px' }}>
+              <Loading />
+            </div>
+          )}
           {query && (
-            <React.Fragment>
+            <>
               {query.variables && <Subtitle>Variables</Subtitle>}
               {query.variables &&
                 query.variables.map((v: any) => (
@@ -87,28 +93,7 @@ class Model extends React.Component<Props> {
                 ))}
               {query.filters && <Subtitle>Filters</Subtitle>}
               {query.filters && this.formatFilter(query.filters)}
-
-              {showDatasets &&
-                query.trainingDatasets &&
-                query.trainingDatasets.length > 0 && (
-                  <Subtitle>Training datasets</Subtitle>
-                )}
-              {showDatasets &&
-                query.trainingDatasets &&
-                query.trainingDatasets.map((v: any) => (
-                  <var key={v.code}>{v.code}</var>
-                ))}
-              {showDatasets &&
-                query.validationDatasets &&
-                query.validationDatasets.length > 0 && (
-                  <Subtitle>Validation dataset</Subtitle>
-                )}
-              {showDatasets &&
-                query.validationDatasets &&
-                query.validationDatasets.map((v: any) => (
-                  <var key={v.code}>{v.code}</var>
-                ))}
-            </React.Fragment>
+            </>
           )}
         </Body>
       </Panel>
