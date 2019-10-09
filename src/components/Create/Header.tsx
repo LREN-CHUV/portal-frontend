@@ -49,6 +49,7 @@ export default class Header extends React.Component<Props, State> {
                   (e: any) => e.modelDefinitionId === model.slug
                 )
               }
+              style="default"
               title="RELATED EXPERIMENTS"
               handleSelect={handleSelectExperiment}
               handleCreateNewExperiment={null}

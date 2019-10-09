@@ -9,6 +9,10 @@
   flex-basis: 100%;
 }
 
+.Experiment .header button.dropdown-toggle {
+  color: #999 !important;
+}
+
 .Experiment .header .panel-body {
   display: flex;
   padding-top: 15px !important;
