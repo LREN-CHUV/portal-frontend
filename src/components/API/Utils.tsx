@@ -5,6 +5,7 @@ import APIExperiment, {
   ExperimentPayload,
   State as ExperimentState
 } from './Experiment';
+import { buildWorkflowAlgorithmRequest } from './WorkflowAPIAdapter';
 import APIModel, { ModelResponse, ModelState } from './Model';
 import config from './RequestHeaders';
 
@@ -40,6 +41,45 @@ const createModel = async ({
 }): Promise<ModelState> => {
   await apiModel.save({ model, title: modelSlug });
   return apiModel.state;
+};
+
+const createWorkflowPayload = async (
+  model: (datasets: VariableEntity[]) => ModelResponse,
+  datasets: VariableEntity[],
+  experimentCode: string,
+  parameters: AlgorithmParameter[],
+  modelSlug: string
+): Promise<ExperimentPayload | void> => {
+  await apiCore.algorithms(false);
+  const algorithms = apiCore.state.algorithms || [];
+  const selectedAlgorithm = algorithms.find(a => a.code === experimentCode);
+
+  if (selectedAlgorithm) {
+    const requestParameters = buildWorkflowAlgorithmRequest(
+      model(datasets),
+      selectedAlgorithm,
+      parameters
+    );
+
+    const payload: ExperimentPayload = {
+      algorithms: [
+        {
+          code: experimentCode,
+          name: experimentCode,
+          parameters: requestParameters,
+          validation: false
+        }
+      ],
+      model: modelSlug,
+      name: experimentCode,
+      validations: [],
+      engine: Engine.Workflow
+    };
+
+    return payload;
+  }
+
+  return;
 };
 
 const createExaremePayload = (
@@ -118,6 +158,7 @@ export {
   createExperiment,
   createModel,
   createExaremePayload,
+  createWorkflowPayload,
   getDatasets,
   uid,
   waitForResult
