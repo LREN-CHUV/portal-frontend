@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { Panel } from 'react-bootstrap';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { ExperimentResult, ExperimentResultHeader } from '.';
 import { APICore, APIExperiment, APIModel } from '../API';
@@ -9,7 +8,12 @@ import Model from '../UI/Model';
 import Algorithms from './Algorithms';
 import Datasets from '../UI/Datasets';
 
-interface Props extends RouteComponentProps<any> {
+interface RouteParams {
+  uuid: string;
+  slug: string;
+}
+
+interface Props extends RouteComponentProps<RouteParams> {
   apiExperiment: APIExperiment;
   apiModel: APIModel;
   apiCore: APICore;
@@ -18,7 +22,7 @@ interface Props extends RouteComponentProps<any> {
 class Experiment extends React.Component<Props> {
   private intervalId: any;
 
-  public async componentDidMount() {
+  public async componentDidMount(): Promise<void> {
     const params = this.urlParams(this.props);
     if (!params) {
       return;
@@ -34,7 +38,7 @@ class Experiment extends React.Component<Props> {
     return await apiModel.one(slug);
   }
 
-  public async componentDidUpdate(prevProps: Props) {
+  public async componentDidUpdate(prevProps: Props): Promise<void> {
     const params = this.urlParams(this.props);
     if (!params) {
       return;
@@ -44,18 +48,19 @@ class Experiment extends React.Component<Props> {
     const previousUUID = previousParams && previousParams.uuid;
 
     if (uuid !== previousUUID) {
-      this.pollFetchExperiment(uuid);
+      const { apiExperiment } = this.props;
+      await apiExperiment.one({ uuid });
+      if (!apiExperiment.loaded) {
+        this.pollFetchExperiment(uuid);
+      }
     }
-
-    // const { apiExperiment } = this.props;
-    // await apiExperiment.one({ uuid });
   }
 
-  public componentWillUnmount() {
+  public componentWillUnmount(): void {
     clearInterval(this.intervalId);
   }
 
-  public render() {
+  public render(): JSX.Element {
     const { apiExperiment, apiModel, apiCore } = this.props;
     return (
       <div className="Experiment Result">
@@ -97,7 +102,9 @@ class Experiment extends React.Component<Props> {
     return match.params;
   };
 
-  private handleSelectExperiment = async (experiment: ExperimentResponse) => {
+  private handleSelectExperiment = async (
+    experiment: ExperimentResponse
+  ): Promise<void> => {
     const { modelDefinitionId, uuid } = experiment;
     const { history, apiExperiment } = this.props;
     history.push(`/experiment/${modelDefinitionId}/${uuid}`);
@@ -105,7 +112,7 @@ class Experiment extends React.Component<Props> {
     return await apiExperiment.one({ uuid });
   };
 
-  private handleShareExperiment = async () => {
+  private handleShareExperiment = async (): Promise<void> => {
     const { apiExperiment } = this.props;
     const experiment = apiExperiment.state.experiment;
     const shared = experiment && experiment.shared;
@@ -121,12 +128,12 @@ class Experiment extends React.Component<Props> {
       : await apiExperiment.markAsShared({ uuid });
   };
 
-  private handleCreateNewExperiment = () => {
+  private handleCreateNewExperiment = (): void => {
     const { history } = this.props;
     history.push(`/experiment`);
   };
 
-  private pollFetchExperiment = (uuid: string) => {
+  private pollFetchExperiment = (uuid: string): void => {
     clearInterval(this.intervalId);
     const { apiExperiment } = this.props;
     this.intervalId = setInterval(async () => {
