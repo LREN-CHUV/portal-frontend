@@ -9,6 +9,14 @@ const Link = styled(MenuItem)`
   a {
     color: black !important;
   }
+
+  .ready {
+    color: #5bc0de;
+  }
+
+  .viewed {
+    color: #5cb85c;
+  }
 `;
 
 const Dropdown = styled(DropdownButton)`
