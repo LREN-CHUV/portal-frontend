@@ -142,7 +142,6 @@ class AppContainer extends React.Component<any, State> {
                     apiMining={apiMining}
                     apiUser={apiUser}
                   />
-                  )
                 </>
               );
             }}
