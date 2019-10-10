@@ -2,6 +2,15 @@
 
 ### React migration
 
+### 5.0.0 - 08.10.2019
+
+- Galaxy iFrame integration
+- Navigation reworked
+- Explore layout
+- Removed css
+- Login workflow
+- multipathologies
+- Exareme statistics
 - Removed /v3 path
 - React Login
 - Re-enabled Bugsnag for production build

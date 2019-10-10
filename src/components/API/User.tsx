@@ -58,6 +58,7 @@ class UserContainer extends Container<State> {
       }
 
       const details = json && json.userAuthentication.details;
+
       const user: User =
         (details && {
           fullname: details.name,
@@ -68,7 +69,11 @@ class UserContainer extends Container<State> {
         {};
 
       const authenticated =
-        process.env.NODE_ENV !== 'production' ? true : json.authenticated;
+        process.env.NODE_ENV !== 'production'
+          ? true
+          : details.preferred_username === 'anonymous'
+          ? true
+          : json.authenticated;
 
       return await this.setState({
         authenticated,
@@ -128,7 +133,7 @@ class UserContainer extends Container<State> {
     }
   };
 
-  public acceptTOS = async () => {
+  public acceptTOS = async (): Promise<void> => {
     try {
       await request.post(`${this.backendURL}/user?agreeNDA=true`, this.options);
 
