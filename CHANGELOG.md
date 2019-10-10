@@ -4,13 +4,12 @@
 
 ### 5.0.0 - 08.10.2019
 
-- Galaxy iFrame integration
 - Navigation reworked
-- Explore layout
-- Removed css
-- Login workflow
+- Explore layout redesigned
+- Removed lots of css, migrating to styled-components
+- Galaxy iFrame integration
 - multipathologies
-- Exareme statistics
+- Exareme statistics replace Woken summary statistics
 - Removed /v3 path
 - React Login
 - Re-enabled Bugsnag for production build
