@@ -18,7 +18,7 @@ const modelSlug = `model-${Math.round(Math.random() * 10000)}`;
 const experimentCode = 'TTEST_INDEPENDENT';
 const parameters: any = [
   {
-    code: 'ylevels',
+    code: 'xlevels',
     value: 'M,F'
   },
   {
@@ -43,7 +43,7 @@ const datasets = [{ code: 'adni' }];
 const model: any = (datasets: VariableEntity[]) => ({
   query: {
     pathology: 'dementia', // FIXME: should by dynamic
-    coVariables: [{ code: 'subjectage' }, { code: 'righthippocampus' }],
+    variables : [{ code: 'righthippocampus' }],
     filters: '',
     groupings: [],
     testingDatasets: [],
@@ -51,7 +51,7 @@ const model: any = (datasets: VariableEntity[]) => ({
       code: d.code
     })),
     validationDatasets: [],
-    variables: [
+    coVariables: [
       {
         code: 'gender'
       }
