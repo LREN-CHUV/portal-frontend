@@ -1,9 +1,12 @@
-import React, { useRef } from 'react';
-import { AppConfig } from '../App/App';
+import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
+
+import { AppConfig } from '../App/App';
+import Error from './Error';
 
 interface Props {
   appConfig: AppConfig;
+  token?: string;
 }
 
 const IFrameContainer = styled.div`
@@ -18,61 +21,31 @@ const IFrameContainer = styled.div`
   }
 `;
 
-export default React.memo(({ appConfig }: Props) => {
-  const divRef = useRef<HTMLIFrameElement>(null);
-  const URL = appConfig.galaxyAPIUrl || '';
-  const URL_APACHE = appConfig.galaxyApacheUrl || '';
+export default React.memo(
+  ({ appConfig, token = 'Basic YWRtaW46cEBzc3cwcmQ=' }: Props) => {
+    const divRef = useRef<HTMLIFrameElement>(null);
+    const [error, setError] = useState<string | null>(null);
 
-  // const tokenURL = (user = 'nikos', pass = 'koikas') => `${URL}/getToken?user=${user}&pass=${pass}`
-  // const authURL = (token) => `${URL}/getBasicAuth?token=${token}`
-  const tokenURL = (user = 'nikos', pass = 'koikas'): string =>
-    `${URL}/noAuth/getToken?user=${user}&pass=${pass}`;
-  const authURL = (token: string) =>
-    `${URL}/getGalaxyBasicAccessToken?Authorization=${token}`;
-
-  // Service methods
-  const getTokenService = (url: string): Promise<any> => {
-    return new Promise((resolve, reject) => {
-      fetch(url)
-        .then(response => response.json())
-        .then(data => resolve(data))
-        .catch(error => reject(`Error token: ${error}`));
-    });
-  };
-  const getAuthService = (token: string): Promise<any> => {
-    return new Promise((resolve, reject) => {
-      fetch(token)
-        .then(response => response.json())
-        .then(data => resolve(data))
-        .catch(error => reject(`Error auth: ${error}`));
-    });
-  };
-  const getHTML = (auth: string): Promise<any> => {
-    return new Promise((resolve, reject) => {
-      fetch(URL_APACHE, {
-        mode: 'no-cors',
-        method: 'GET',
-        headers: {
-          Authorization: `Basic YWRtaW46cEBzc3cwcmQ=`
+    const URL_APACHE = appConfig.galaxyApacheUrl || '';
+    fetch(URL_APACHE, {
+      headers: new Headers({
+        Authorization: `${token}`
+      })
+    })
+      .then(() => {
+        if (divRef && divRef.current) {
+          divRef.current.src = URL_APACHE;
         }
       })
-        .then(response => response.text())
-        .then(data => resolve(data))
-        .catch(error => reject(error));
-    });
-  };
+      .catch(error => {
+        setError(error.message);
+      });
 
-  getHTML('123')
-    .then(result => {
-      if (divRef && divRef.current) {
-        divRef.current.src = URL_APACHE;
-      }
-    })
-    .catch((error: string) => console.error(`Error html: ${error}`));
-
-  return (
-    <IFrameContainer>
-      <iframe title="Galaxy Workflow" className="html-iframe" ref={divRef} />
-    </IFrameContainer>
-  );
-});
+    return (
+      <IFrameContainer>
+        {error && <Error message={error} />}
+        {!error && <iframe title="Galaxy Workflow" ref={divRef} />}
+      </IFrameContainer>
+    );
+  }
+);

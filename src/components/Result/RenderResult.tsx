@@ -3,7 +3,7 @@ import * as React from 'react';
 import { Result } from '../API/Experiment';
 import { MIME_TYPES } from '../constants';
 import { Highchart, JSONData } from '../UI/Visualization';
-import Error from '../UI/Visualization/Error';
+import Error from '../UI/Error';
 import Warning from '../UI/Visualization/Warning';
 
 export default ({
