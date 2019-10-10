@@ -89,17 +89,6 @@ const App = ({
       <Main>
         <Switch>
           <Route
-            path="/galaxy"
-            render={(): JSX.Element => <Galaxy appConfig={appConfig} />}
-          />
-          <Route
-            path="/tos"
-            // tslint:disable-next-line jsx-no-lambda
-            render={(props): JSX.Element => (
-              <TOS apiUser={apiUser} {...props} />
-            )}
-          />
-          <Route
             path="/"
             exact={true}
             // tslint:disable-next-line jsx-no-lambda
@@ -113,7 +102,13 @@ const App = ({
               />
             )}
           />
-
+          <Route
+            path="/tos"
+            // tslint:disable-next-line jsx-no-lambda
+            render={(props): JSX.Element => (
+              <TOS apiUser={apiUser} {...props} />
+            )}
+          />
           <Route
             path="/explore"
             // tslint:disable-next-line jsx-no-lambda
@@ -164,6 +159,11 @@ const App = ({
               />
             )}
           />
+          <Route
+            path="/galaxy"
+            render={(): JSX.Element => <Galaxy appConfig={appConfig} />}
+          />
+
           <Route
             path={['/articles/:slug', '/articles']}
             // tslint:disable-next-line jsx-no-lambda
