@@ -34,8 +34,8 @@ const GlobalStyles = createGlobalStyle`
     border: 1px solid transparent;
     border-radius: 4px;
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
-}
   }
+}
 `;
 
 export enum InstanceMode {
