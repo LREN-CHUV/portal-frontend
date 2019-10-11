@@ -14,7 +14,7 @@ import {
 
 // config
 
-const modelSlug = `model-${Math.round(Math.random() * 10000)}`;
+const modelSlug = `ttest-p-${Math.round(Math.random() * 10000)}`;
 const experimentCode = 'TTEST_PAIRED';
 const parameters: any = [
   {

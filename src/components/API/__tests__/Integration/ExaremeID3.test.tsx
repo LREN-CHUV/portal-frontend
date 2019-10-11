@@ -14,7 +14,7 @@ import {
 
 // config
 
-const modelSlug = `model-${Math.round(Math.random() * 10000)}`;
+const modelSlug = `id3-${Math.round(Math.random() * 10000)}`;
 const experimentCode = 'ID3';
 const parameters = [
   { code: 'iterations_max_number', value: 20 },
