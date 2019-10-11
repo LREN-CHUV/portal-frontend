@@ -14,7 +14,7 @@ import {
 
 // config
 
-const modelSlug = `model-${Math.round(Math.random() * 10000)}`;
+const modelSlug = `logistic-${Math.round(Math.random() * 10000)}`;
 const experimentCode = 'LOGISTIC_REGRESSION';
 const parameters: any = [{ code: 'pathology', value: 'dementia' }];
 

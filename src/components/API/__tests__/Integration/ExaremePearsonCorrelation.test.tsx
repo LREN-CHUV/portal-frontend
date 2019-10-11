@@ -14,7 +14,7 @@ import {
 
 // config
 
-const modelSlug = `model-${Math.round(Math.random() * 10000)}`;
+const modelSlug = `pearson-${Math.round(Math.random() * 10000)}`;
 const experimentCode = 'PEARSON_CORRELATION';
 const parameters = [
   { code: 'bins', value: '40' },

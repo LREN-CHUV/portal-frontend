@@ -13,7 +13,7 @@ import {
 
 // config
 
-const modelSlug = `model-${Math.round(Math.random() * 10000)}`;
+const modelSlug = `workflow-nb-${Math.round(Math.random() * 10000)}`;
 const experimentCode = 'f2db41e1fa331b3e';
 const parameters: AlgorithmParameter[] = [{ code: 'pathology', value: 'dementia' }];
 

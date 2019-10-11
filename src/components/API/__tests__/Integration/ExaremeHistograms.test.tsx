@@ -14,7 +14,7 @@ import {
 
 // config
 
-const modelSlug = `model-${Math.round(Math.random() * 10000)}`;
+const modelSlug = `histograms-${Math.round(Math.random() * 10000)}`;
 const experimentCode = 'HISTOGRAMS';
 const parameters = [
   { code: 'bins', value: '40' },
