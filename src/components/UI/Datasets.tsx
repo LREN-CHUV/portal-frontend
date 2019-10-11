@@ -1,21 +1,17 @@
 import * as React from 'react';
-import { Panel } from 'react-bootstrap';
 import styled from 'styled-components';
+
 import { ModelResponse } from '../API/Model';
+import Panel from '../UI/Panel';
 
-const Body = styled(Panel.Body)`
-  padding: 0 16px 16px 16px;
-
-  var {
-    display: block;
+const Body = styled.div`
+  p {
+    margin: 0;
   }
 `;
 
-const Title = styled.h3`
-  margin: 16px 0 0 0;
-`;
-
 const Subtitle = styled.h5`
+  font-weight: bold;
   margin-bottom: 4px;
 `;
 
@@ -30,19 +26,17 @@ class Model extends React.Component<Props> {
     const query = model && model.query;
 
     return (
-      <Panel className="model">
-        <Panel.Title>
-          <Title>Datasets</Title>
-        </Panel.Title>
-        <Body>
-          {query && (
-            <>
+      <Panel
+        title="Datasets"
+        body={
+          query && (
+            <Body>
               {query.trainingDatasets && query.trainingDatasets.length > 0 && (
                 <Subtitle>Training datasets</Subtitle>
               )}
               {query.trainingDatasets &&
                 query.trainingDatasets.map((v: any) => (
-                  <var key={v.code}>{v.code}</var>
+                  <p key={v.code}>{v.code}</p>
                 ))}
               {query.validationDatasets &&
                 query.validationDatasets.length > 0 && (
@@ -50,12 +44,12 @@ class Model extends React.Component<Props> {
                 )}
               {query.validationDatasets &&
                 query.validationDatasets.map((v: any) => (
-                  <var key={v.code}>{v.code}</var>
+                  <p key={v.code}>{v.code}</p>
                 ))}
-            </>
-          )}
-        </Body>
-      </Panel>
+            </Body>
+          )
+        }
+      />
     );
   }
 }
