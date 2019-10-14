@@ -8,8 +8,7 @@ import {
   HTML,
   JSON as JSONDoc,
   PFA,
-  PlotlyPCA,
-  VISEvilJS
+  PlotlyPCA
 } from '../../UI/Visualization';
 import JSONData from '../../UI/Visualization/deprecated/JSONData';
 
@@ -32,10 +31,6 @@ export default ({ nodes }: { nodes: Node[] | undefined }) => {
             {algorithm.mime === MIME_TYPES.PLOTLY &&
               algorithm.data.map((d: { data: any; layout: any }, k: number) => (
                 <PlotlyPCA data={d.data} layout={d.layout} key={k} />
-              ))}
-            {algorithm.mime === MIME_TYPES.VISJS &&
-              algorithm.data.map((d: any, k: number) => (
-                <VISEvilJS jsString={d} key={k} />
               ))}
             {algorithm.mime === MIME_TYPES.HIGHCHARTS &&
               algorithm.data.map((d: { data: any }, k: number) => (
