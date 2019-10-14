@@ -20,9 +20,14 @@ const NavBar = styled.nav`
   background: #000000aa;
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: space-between;
   margin-bottom: 16px;
   box-shadow: 2px 2px 2px #333;
+
+  #experiment-dropdown,
+  #help-dropdown {
+    font-size: 16px;
+  }
 
   a:link,
   a:visited {
@@ -43,7 +48,6 @@ const Brand = styled.div`
   margin: 0 0 0 16px;
   height: 44px;
 
-  font-size: 32px;
   font-weight: bold;
 
   div {
@@ -51,11 +55,16 @@ const Brand = styled.div`
     width: 40px;
     height: 40px;
   }
+
+  a {
+    font-size: 32px !important;
+  }
 `;
 
 const Links = styled.div`
   display: flex;
   align-items: center;
+  justify-content: flex-end;
   margin: 0 16px 0 0;
 
   .active {
@@ -66,7 +75,7 @@ const Links = styled.div`
 const RightLinks = styled(Links)`
   display: flex;
   align-items: center;
-  margin-left: auto;
+  // margin-left: auto;
 
   button {
     color: white;
@@ -74,6 +83,7 @@ const RightLinks = styled(Links)`
 `;
 
 const Link = styled(NavLink)`
+  font-size: 16px;
   margin: 0 16px 0 0;
 `;
 
