@@ -202,16 +202,6 @@ const parseWokenResults = (
         }
         break;
 
-      case MIME_TYPES.VISJS:
-        try {
-          const visFunction = `var network; ${results[0].result.slice(1, -1)}`;
-          method.data = [visFunction]; // FIXME: EXAREME evil eval code
-          break;
-        } catch (e) {
-          method.error = 'Failed to parse results';
-          break;
-        }
-
       case MIME_TYPES.HTML:
         html = results.map((result1: any) =>
           result1.replace('\u0026lt;!DOCTYPE html\u0026gt;', '<!DOCTYPE html>')
