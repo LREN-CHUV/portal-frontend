@@ -26,13 +26,13 @@ const model: any = () => ({
     pathology: 'dementia', // FIXME: should by dynamic
     coVariables: [],
     filters: '',
-    groupings: [{ code: 'alzheimerbroadcategory' }],
+    groupings: [{ code: 'agegroup' }, { code: 'gender' }],
     testingDatasets: [],
     trainingDatasets: [{ code: 'adni' }],
     validationDatasets: [],
     variables: [
       {
-        code: 'neurodegenerativescategories'
+        code: 'alzheimerbroadcategory'
       }
     ]
   }
