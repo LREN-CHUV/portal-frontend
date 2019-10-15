@@ -54,7 +54,7 @@ export default ({
                 (e: any) => e.modelDefinitionId === experiment.modelDefinitionId
               )
             }
-            style="default"
+            style="info"
             title="RELATED EXPERIMENTS"
             handleSelect={handleSelectExperiment}
             handleCreateNewExperiment={handleCreateNewExperiment}

@@ -62,7 +62,7 @@ const GlobalStyles = createGlobalStyle`
 const Main = styled.main`
   margin: 52px 0 32px 0;
   padding: 0 48px 0px 48px;
-`; 
+`;
 
 const App = ({
   appConfig,
