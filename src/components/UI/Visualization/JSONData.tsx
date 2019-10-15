@@ -42,7 +42,6 @@ const Table = styled.table`
   td {
     border: 1px solid #e3e3e3;
     padding: 1px 4px;
-    overflow: hidden;
     text-overflow: ellipsis;
     text-align: center;
   }

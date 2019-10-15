@@ -9,10 +9,6 @@
   flex-basis: 100%;
 }
 
-.Experiment .header button.dropdown-toggle {
-  color: #999 !important;
-}
-
 .Experiment .header .panel-body {
   display: flex;
   padding-top: 15px !important;
@@ -51,7 +47,6 @@
 
 .Experiment .content .sidebar,
 .Experiment .content .sidebar2 {
-  overflow: hidden;
   width: 240px;
   flex: 0 0 auto;
 }
@@ -111,7 +106,6 @@
 
 .alert {
   position: absolute;
-  z-index: 10;
 }
 
 .Experiment .sidebar .model .panel-title {

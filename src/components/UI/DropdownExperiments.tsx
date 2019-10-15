@@ -21,7 +21,6 @@ const Link = styled(MenuItem)`
 
 const Dropdown = styled(DropdownButton)`
   color: white !important;
-  z-index: 99999;
 `;
 
 interface IDropdown {

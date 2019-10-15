@@ -13,7 +13,6 @@ const MainBox = styled.div`
   right: 8px;
   bottom: 8px;
   left: 8px;
-  z-index: 1000;
   background: #000000dd;
   border-radius: 4px;
   overflow-y: none !important;
@@ -56,7 +55,6 @@ const ActionBar = styled.div`
 const Columns = styled.div`
   display: flex;
   padding: 0 10%;
-  overflow: hidden;
 
   section {
     flex: 1;
