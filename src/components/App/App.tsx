@@ -20,24 +20,6 @@ import TOS from '../UI/TOS';
 import User from '../User/Container';
 import { history } from '../utils';
 
-const GlobalStyles = createGlobalStyle`
-  body {
-    font-family: 'Open Sans', sans-serif;
-    background: url(${backgroundImage}) top center no-repeat fixed #f5f5f5;
-    background-size: 100% auto;
-    overflow-y: scroll
-  }
-
-  .panel {
-    margin-bottom: 8px;
-    background-color: #fff;
-    border: 1px solid transparent;
-    border-radius: 4px;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
-  }
-}
-`;
-
 export enum InstanceMode {
   Local,
   Federation
@@ -59,10 +41,28 @@ interface Props {
   apiUser: APIUser;
 }
 
-const Main = styled.main`
-  margin-top: 52px;
-  padding: 0 48px 0px 48px;
+const GlobalStyles = createGlobalStyle`
+  body {
+    font-family: 'Open Sans', sans-serif;
+    background: url(${backgroundImage}) top center no-repeat fixed #f5f5f5;
+    background-size: 100% auto;
+    overflow-y: scroll
+  }
+
+  .panel {
+    margin-bottom: 8px;
+    background-color: #fff;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+  }
+}
 `;
+
+const Main = styled.main`
+  margin: 52px 0 32px 0;
+  padding: 0 48px 0px 48px;
+`; 
 
 const App = ({
   appConfig,
