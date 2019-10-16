@@ -11,6 +11,8 @@ import {
   waitForResult
 } from '../../Utils';
 
+import { buildWorkflowAlgorithmResponse } from '../../WorkflowAPIAdapter'
+
 // config
 
 const modelSlug = `workflow-nb-${Math.round(Math.random() * 10000)}`;
@@ -81,19 +83,20 @@ describe('Integration Test for experiment API', () => {
     expect(experimentState.error).toBeFalsy();
     expect(experimentState.experiment).toBeTruthy();
 
-    const props = { experimentState };
+    console.log(experimentState)
+    // const props = { experimentState };
 
-    let wrapper: any = shallow(<Result {...props} />);
-    expect(wrapper.find('.error')).toHaveLength(0);
-    expect(wrapper.find('.loading')).toHaveLength(0);
-    // expect(wrapper.find('.result')).toHaveLength(2);
+    // let wrapper: any = shallow(<Result {...props} />);
+    // expect(wrapper.find('.error')).toHaveLength(0);
+    // expect(wrapper.find('.loading')).toHaveLength(0);
+    // // expect(wrapper.find('.result')).toHaveLength(2);
 
-    // Ensure Highchart is loading by catching error
-    // Annoying highcharts Type error due to embbedding visualisation in algorithms output
-    // FIXME: Exareme output as data
+    // // Ensure Highchart is loading by catching error
+    // // Annoying highcharts Type error due to embbedding visualisation in algorithms output
+    // // FIXME: Exareme output as data
 
-    expect(() => {
-      wrapper = mount(<Result {...props} />);
-    }).toThrow(TypeError);
+    // expect(() => {
+    //   wrapper = mount(<Result {...props} />);
+    // }).toThrow(TypeError);
   });
 });
