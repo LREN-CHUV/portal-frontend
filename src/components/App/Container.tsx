@@ -34,7 +34,7 @@ class AppContainer extends React.Component<any, State> {
   private intervalId: any; // FIXME: NodeJS.Timer | undefined;
 
   public async componentDidMount(): Promise<
-    [void, void, void, void, void, void, void] | void
+    [void, void, void, void, void, void] | void
   > {
     if (process.env.NODE_ENV === 'production') {
       this.intervalId = setInterval(() => this.apiExperiment.all(), 10 * 1000);
@@ -80,7 +80,6 @@ class AppContainer extends React.Component<any, State> {
         this.apiCore.algorithms(
           this.state.appConfig.mode === InstanceMode.Local
         ),
-        this.apiCore.stats(),
         this.apiCore.articles(),
         this.apiModel.all()
       ]);
