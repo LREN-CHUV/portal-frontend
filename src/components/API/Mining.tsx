@@ -299,6 +299,10 @@ class Mining extends Container<MiningState> {
               .toString()
           },
           {
+            name: 'filter',
+            value: payload.filters
+          },
+          {
             name: 'pathology',
             value: payload.pathology
           }
