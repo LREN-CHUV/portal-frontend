@@ -22,7 +22,6 @@ interface Props extends RouteComponentProps {
   apiModel: APIModel;
   apiCore: APICore;
   apiMining: APIMining;
-  appConfig: AppConfig;
 }
 interface State {
   alert?: IAlert;
@@ -34,7 +33,6 @@ const Container = ({
   apiModel,
   apiCore,
   apiMining,
-  appConfig,
   ...props
 }: Props): JSX.Element => {
   const { history } = props;
@@ -52,22 +50,17 @@ const Container = ({
         variables: query.variables ? query.variables : [],
         pathology: query.pathology ? query.pathology : ''
       };
-      if (appConfig.mode === InstanceMode.Local) {
-        apiMining.summaryStatisticsByDataset({
-          payload
-        });
-      } else {
-        apiMining.descriptiveStatisticsByDataset({
-          payload
-        });
-      }
+
+      apiMining.descriptiveStatisticsByDataset({
+        payload
+      });
     }
   }, [
     apiModel.state.model,
     // eslint:eslint-disable-next-line react-hooks/exhaustive-deps
     apiModel.state.model && apiModel.state.model.query.trainingDatasets,
-    apiMining,
-    appConfig.mode
+    apiModel.state.model && apiModel.state.model.query.filters,
+    apiMining
   ]);
 
   const handleSaveModel = async ({
@@ -261,60 +254,31 @@ const Container = ({
           />
         </div>
         <div className="results">
-          {appConfig.mode !== InstanceMode.Local && (
-            <Content
-              apiMining={apiMining}
-              model={model}
-              selectedDatasets={
-                model && model.query && model.query.trainingDatasets
-              }
-              lookup={apiCore.lookup}
-            >
-              <Panel className="filters" defaultExpanded={false}>
-                <Panel.Title toggle={true}>
-                  <h3 className={'btn btn-info'}>Filters</h3>
-                </Panel.Title>
-                <Panel.Collapse>
-                  <Panel.Body collapsible={true}>
-                    {fields && fields.length > 0 && (
-                      <Filter
-                        rules={filters}
-                        filters={fields}
-                        handleChangeFilter={handleUpdateFilter}
-                      />
-                    )}
-                  </Panel.Body>
-                </Panel.Collapse>
-              </Panel>
-            </Content>
-          )}
-          {appConfig.mode === InstanceMode.Local && (
-            <ContentDeprecated
-              apiMining={apiMining}
-              model={model}
-              selectedDatasets={
-                model && model.query && model.query.trainingDatasets
-              }
-              lookup={apiCore.lookup}
-            >
-              <Panel className="filters" defaultExpanded={false}>
-                <Panel.Title toggle={true}>
-                  <h3 className={'btn btn-info'}>Filters</h3>
-                </Panel.Title>
-                <Panel.Collapse>
-                  <Panel.Body collapsible={true}>
-                    {fields && fields.length > 0 && (
-                      <Filter
-                        rules={filters}
-                        filters={fields}
-                        handleChangeFilter={handleUpdateFilter}
-                      />
-                    )}
-                  </Panel.Body>
-                </Panel.Collapse>
-              </Panel>
-            </ContentDeprecated>
-          )}
+          <Content
+            apiMining={apiMining}
+            model={model}
+            selectedDatasets={
+              model && model.query && model.query.trainingDatasets
+            }
+            lookup={apiCore.lookup}
+          >
+            <Panel className="filters" defaultExpanded={false}>
+              <Panel.Title toggle={true}>
+                <h3 className={'btn btn-info'}>Filters</h3>
+              </Panel.Title>
+              <Panel.Collapse>
+                <Panel.Body collapsible={true}>
+                  {fields && fields.length > 0 && (
+                    <Filter
+                      rules={filters}
+                      filters={fields}
+                      handleChangeFilter={handleUpdateFilter}
+                    />
+                  )}
+                </Panel.Body>
+              </Panel.Collapse>
+            </Panel>
+          </Content>
         </div>
       </div>
     </div>
