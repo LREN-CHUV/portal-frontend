@@ -22,7 +22,7 @@ import Validation from '../UI/Validation';
 import AvailableAlgorithms from './AvailableAlgorithms';
 import ExperimentCreateHeader from './Header';
 import Help from './Help';
-import Form from './Parameters';
+import Parameters from './Parameters';
 import Datasets from '../UI/Datasets';
 
 interface Props extends RouteComponentProps<any> {
@@ -88,7 +88,7 @@ class Container extends React.Component<Props, State> {
                   id="uncontrolled-create-experiment-tab"
                 >
                   <Tab eventKey={1} title="Method">
-                    <Form
+                    <Parameters
                       method={this.state && this.state.method}
                       parameters={this.state && this.state.parameters}
                       handleChangeParameters={this.handleChangeParameters}

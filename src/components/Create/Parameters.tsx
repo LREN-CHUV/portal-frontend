@@ -1,4 +1,5 @@
-import * as React from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
+import { VariableEntity } from '../API/Core';
 import {
   Col,
   Form,
@@ -7,11 +8,13 @@ import {
   HelpBlock,
   Row
 } from 'react-bootstrap';
-
 import { APICore } from '../API';
 import { AlgorithmParameter } from '../API/Core';
 import { Query } from '../API/Model';
 import CategoryChooser from './CategoryValuesChooser';
+import Select from 'react-select';
+
+type LocalVar = { value: string; label: string }[] | undefined;
 
 interface Props {
   apiCore: APICore;
@@ -20,147 +23,44 @@ interface Props {
   query?: Query;
   handleChangeParameters: (parameters: any) => void;
 }
-class Parameters extends React.Component<Props> {
-  public render() {
-    const { apiCore, method, parameters, query } = this.props;
 
-    return (
-      <div>
-        {method && (
-          <div>
-            <h4>
-              <strong>{method.label}</strong>
-            </h4>
-            <p>{method.description}</p>
-            {/* <pre>{JSON.stringify(method.constraints, null, 4)}</pre> */}
-          </div>
-        )}
-        {!method && (
-          <div>
-            <h4>
-              <strong>Your method</strong>
-            </h4>
-            <p style={{ color: 'orange' }}>
-              Please, select the method to be performed in the &apos;Available
-              Methods&apos; panel
-            </p>
-          </div>
-        )}
-        {parameters && parameters.length > 0 && <h4>Parameters</h4>}
-        {parameters && parameters.length > 0 && (
-          <Form horizontal={true}>
-            {parameters &&
-              parameters.length &&
-              parameters.map((parameter: AlgorithmParameter) => {
-                const numberTypes = [
-                  'int',
-                  'integer',
-                  'real',
-                  'number',
-                  'numeric'
-                ];
-                const type =
-                  parameter &&
-                  parameter.type &&
-                  numberTypes.includes(parameter.type)
-                    ? 'number'
-                    : 'text';
-                const { constraints } = parameter;
+const Parameters = ({
+  apiCore,
+  method,
+  parameters,
+  query,
+  handleChangeParameters
+}: Props): JSX.Element => {
+  const [selectedOptions, setSelectedOptions] = useState(null);
+  const [modalities, setModalities] = useState<LocalVar>();
 
-                return (
-                  <FormGroup
-                    validationState={this.getValidationState(parameter)}
-                    key={parameter.code}
-                    style={{
-                      display:
-                        parameter.visible === undefined || parameter.visible
-                          ? 'inline'
-                          : 'none'
-                    }}
-                  >
-                    <Row>
-                      <Col sm={12}>{parameter.description}</Col>
-                    </Row>
-                    <Row>
-                      <Col sm={6}>{parameter.label}</Col>
-                      <Col sm={6}>
-                        {parameter.type !== 'enumeration' &&
-                          parameter.type !== 'referencevalues' && (
-                            <FormControl
-                              type={type}
-                              defaultValue={
-                                parameter.value || parameter.default_value
-                              }
-                              // tslint:disable-next-line jsx-no-lambda
-                              onChange={event =>
-                                this.handleChangeParameter(
-                                  event,
-                                  parameter.code
-                                )
-                              }
-                            />
-                          )}
+  const lookupCallback = useCallback(apiCore.lookup, []);
+  useEffect(() => {
+    const categoricalVariables: VariableEntity[] | undefined = query && [
+      ...(query.groupings || []),
+      ...(query.coVariables || []),
+      ...(query.variables || [])
+    ];
 
-                        {parameter.type === 'referencevalues' && (
-                          <CategoryChooser
-                            apiCore={apiCore}
-                            query={query}
-                            code={parameter.code}
-                            handleChangeCategoryParameter={
-                              this.handleChangeCategoryParameter
-                            }
-                          />
-                        )}
+    const vars =
+      categoricalVariables &&
+      categoricalVariables
+        .map(v => lookupCallback(v.code))
+        .filter(v => v.type === 'polynominal' || v.type === 'binominal');
 
-                        {parameter.type === 'enumeration' && (
-                          <FormControl
-                            componentClass="select"
-                            placeholder="select"
-                            defaultValue={
-                              parameter.value || parameter.default_value
-                            }
-                            // tslint:disable-next-line jsx-no-lambda
-                            onChange={event =>
-                              this.handleChangeParameter(event, parameter.code)
-                            }
-                          >
-                            {parameter.values &&
-                              parameter.values.map((v: any) => (
-                                <option key={v} value={v}>
-                                  {v}
-                                </option>
-                              ))}
-                          </FormControl>
-                        )}
+    const first = (vars && vars.length && vars[0]) || undefined;
+    if (first && first.enumerations) {
+      setModalities(
+        first.enumerations.map((v: any) => ({
+          value: v.code,
+          label: v.label
+        }))
+      );
+    }
+  }, [query, lookupCallback]);
 
-                        <FormControl.Feedback />
-                        <HelpBlock>
-                          {constraints && constraints.required && 'required '}
-                          {constraints &&
-                            constraints.min >= 0 &&
-                            'min: ' + constraints.min}
-                          {constraints &&
-                            constraints.min >= 0 &&
-                            constraints.max >= 0 &&
-                            ', '}
-                          {constraints &&
-                            constraints.max >= 0 &&
-                            'max: ' + constraints.max}
-                        </HelpBlock>
-                      </Col>
-                    </Row>
-                  </FormGroup>
-                );
-              })}
-          </Form>
-        )}
-      </div>
-    );
-  }
-
-  private getValidationState = (params: any) => {
+  const getValidationState = (params: any): any => {
     const { constraints, code } = params;
-    const { parameters } = this.props;
     if (constraints && parameters) {
       const { min, max } = constraints;
       const parameter = parameters.find(
@@ -182,25 +82,168 @@ class Parameters extends React.Component<Props> {
     return 'success';
   };
 
-  private handleChangeCategoryParameter = (code: string, value: string) => {
-    const currentParameters = this.props.parameters;
-    if (currentParameters && currentParameters.length) {
+  const handleChangeCategoryParameter = (code: string, value: string): void => {
+    if (parameters && parameters.length) {
       const o = (element: any) => element.code === code;
-      const index = currentParameters.findIndex(o);
-      const parameter = currentParameters.find(o);
+      const index = parameters.findIndex(o);
+      const parameter = parameters.find(o);
       if (parameter) {
         parameter.value = value;
-        currentParameters.splice(index, 1, parameter);
-        this.props.handleChangeParameters(currentParameters);
+        parameters.splice(index, 1, parameter);
+        handleChangeParameters(parameters);
       }
     }
   };
 
-  private handleChangeParameter = (event: any, code: string) => {
+  const handleChangeParameter = (event: any, code: string): void => {
     event.preventDefault();
     const currentTarget = event.currentTarget as HTMLInputElement;
-    this.handleChangeCategoryParameter(code, currentTarget.value);
+    handleChangeCategoryParameter(code, currentTarget.value);
   };
-}
+
+  const handleSelect = (options: any): void => {
+    setSelectedOptions(options);
+  };
+
+  return (
+    <div>
+      {method && (
+        <div>
+          <h4>
+            <strong>{method.label}</strong>
+          </h4>
+          <p>{method.description}</p>
+          {/* <pre>{JSON.stringify(method.constraints, null, 4)}</pre> */}
+        </div>
+      )}
+      {!method && (
+        <div>
+          <h4>
+            <strong>Your method</strong>
+          </h4>
+          <p style={{ color: 'orange' }}>
+            Please, select the method to be performed in the &apos;Available
+            Methods&apos; panel
+          </p>
+        </div>
+      )}
+      {parameters && parameters.length > 0 && <h4>Parameters</h4>}
+      {parameters && parameters.length > 0 && (
+        <Form horizontal={true}>
+          {parameters &&
+            parameters.length &&
+            parameters.map((parameter: AlgorithmParameter) => {
+              const numberTypes = [
+                'int',
+                'integer',
+                'real',
+                'number',
+                'numeric'
+              ];
+              const type =
+                parameter &&
+                parameter.type &&
+                numberTypes.includes(parameter.type)
+                  ? 'number'
+                  : 'text';
+              const { constraints } = parameter;
+
+              return (
+                <FormGroup
+                  validationState={getValidationState(parameter)}
+                  key={parameter.code}
+                  style={{
+                    display:
+                      parameter.visible === undefined || parameter.visible
+                        ? 'inline'
+                        : 'none'
+                  }}
+                >
+                  <Row>
+                    <Col sm={12}>{parameter.description}</Col>
+                  </Row>
+                  <Row>
+                    <Col sm={6}>{parameter.label}</Col>
+                    <Col sm={6}>
+                      {parameter.type !== 'enumeration' &&
+                        parameter.type !== 'referencevalues' &&
+                        parameter.code !== 'xlevels' && (
+                          <FormControl
+                            type={type}
+                            defaultValue={
+                              parameter.value || parameter.default_value
+                            }
+                            // tslint:disable-next-line jsx-no-lambda
+                            onChange={event =>
+                              handleChangeParameter(event, parameter.code)
+                            }
+                          />
+                        )}
+
+                      {parameter.code === 'xlevels' && (
+                        <Select
+                          value={selectedOptions}
+                          onChange={handleSelect}
+                          options={modalities}
+                          isMulti={true}
+                        />
+                      )}
+
+                      {parameter.type === 'referencevalues' && (
+                        <CategoryChooser
+                          apiCore={apiCore}
+                          query={query}
+                          code={parameter.code}
+                          handleChangeCategoryParameter={
+                            handleChangeCategoryParameter
+                          }
+                        />
+                      )}
+
+                      {parameter.type === 'enumeration' && (
+                        <FormControl
+                          componentClass="select"
+                          placeholder="select"
+                          defaultValue={
+                            parameter.value || parameter.default_value
+                          }
+                          // tslint:disable-next-line jsx-no-lambda
+                          onChange={event =>
+                            handleChangeParameter(event, parameter.code)
+                          }
+                        >
+                          {parameter.values &&
+                            parameter.values.map((v: any) => (
+                              <option key={v} value={v}>
+                                {v}
+                              </option>
+                            ))}
+                        </FormControl>
+                      )}
+
+                      <FormControl.Feedback />
+                      <HelpBlock>
+                        {constraints && constraints.required && 'required '}
+                        {constraints &&
+                          constraints.min >= 0 &&
+                          'min: ' + constraints.min}
+                        {constraints &&
+                          constraints.min >= 0 &&
+                          constraints.max >= 0 &&
+                          ', '}
+                        {constraints &&
+                          constraints.max >= 0 &&
+                          'max: ' + constraints.max}
+                      </HelpBlock>
+                    </Col>
+                  </Row>
+                </FormGroup>
+              );
+            })}
+        </Form>
+      )}
+    </div>
+  );
+};
 
 export default Parameters;
