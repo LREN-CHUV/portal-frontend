@@ -76,7 +76,7 @@ const payload: ExperimentPayload = {
   validations: [kfold]
 };
 
-describe('Integration Test for experiment API', () => {
+describe.skip('Integration Test for experiment API', () => {
   let datasets: VariableEntity[] | undefined;
 
   beforeAll(async () => {

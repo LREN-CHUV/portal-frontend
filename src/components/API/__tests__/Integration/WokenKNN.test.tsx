@@ -73,7 +73,7 @@ const payload: ExperimentPayload = {
 
 // Test
 
-describe('Integration Test for experiment API', () => {
+describe.skip('Integration Test for experiment API', () => {
   let datasets: VariableEntity[] | undefined;
 
   beforeAll(async () => {
