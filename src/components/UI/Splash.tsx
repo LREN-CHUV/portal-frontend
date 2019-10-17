@@ -7,15 +7,15 @@ import { APIUser, backendURL } from '../API';
 import HelpButton from './HelpButton';
 
 const MainBox = styled.div`
-  position: absolute;
+  position: fixed;
+  z-index: 1000;
   padding: 1em;
-  top: 8px;
-  right: 8px;
-  bottom: 8px;
-  left: 8px;
-  background: #000000dd;
-  border-radius: 4px;
-  overflow-y: none !important;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: #000000;
+  overflow: hidden !important;
 
   display: flex;
   flex-direction: column;
@@ -29,12 +29,21 @@ const MainBox = styled.div`
     margin: 0;
   }
 
+  .btn-link {
+    color: white;
+  }
+
   h1,
+  h2,
   h3,
   p,
   ul,
   li {
     color: white;
+  }
+
+  h2 {
+    text-align: center;
   }
 
   h1 {
@@ -95,6 +104,7 @@ export default (): JSX.Element => {
         </Button>
       </ActionBar>
       <img alt="HBP logo" title={'Human Brain Project'} src={HBPLogo} />
+      <h2>Human Brain Project</h2>
       <h1>THE MEDICAL INFORMATICS PLATFORM</h1>
 
       <Columns>
