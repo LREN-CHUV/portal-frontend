@@ -17,7 +17,7 @@ export default ({
   query,
   code,
   handleChangeCategoryParameter
-}: Props) => {
+}: Props): JSX.Element => {
   const [categories, setCategories] = useState<LocalVar>();
   const [category, setCategory] = useState<VariableEntity | undefined>();
 
