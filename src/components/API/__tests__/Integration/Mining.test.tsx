@@ -17,7 +17,7 @@ const buildModel: any = (datasets: VariableEntity[]) => ({
   }
 });
 
-describe('Integration Test Mining API', () => {
+describe.skip('Integration Test Mining API', () => {
   const apiMining = new APIMining(config);
   const apiCore = new APICore(config);
   let model: any;
