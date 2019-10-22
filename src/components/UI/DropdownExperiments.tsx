@@ -78,7 +78,9 @@ export default ({
             : !experiment.results
             ? 'transfer'
             : 'eye-open';
-          experimentState += experiment.resultsViewed ? ' viewed' : ' ready';
+          experimentState += ' ready';
+          // FIXME: various colors for states
+          // experimentState += experiment.resultsViewed ? ' viewed' : ' ready';
 
           return (
             <Link
