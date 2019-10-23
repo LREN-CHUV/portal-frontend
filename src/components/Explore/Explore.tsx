@@ -12,6 +12,7 @@ import ModelView from './D3Model';
 import Search from './D3Search';
 import Header from './Header';
 import Formula from './Formula';
+import AvailableAlgorithms from '../Create/AvailableAlgorithms';
 
 export interface ExploreProps {
   apiCore: APICore;
@@ -256,6 +257,12 @@ export default (props: ExploreProps): JSX.Element => {
                 handleUpdateD3Model={handleUpdateD3Model}
                 handleSelectNode={handleSelectNode}
                 zoom={zoom}
+              />
+              <AvailableAlgorithms
+                algorithms={apiCore.state.algorithms}
+                lookup={apiCore.lookup}
+                handleSelectMethod={() => {}}
+                model={apiModel.state.model}
               />
             </Panel.Body>
           </Panel>

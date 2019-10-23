@@ -1,5 +1,5 @@
 import APICore, { AlgorithmParameter, VariableEntity } from './Core';
-import { buildExaremeAlgorithmRequest } from './ExaremeAPIAdapter';
+// import { buildExaremeAlgorithmRequest } from './ExaremeAPIAdapter';
 import APIExperiment, {
   Engine,
   ExperimentPayload,
@@ -66,8 +66,7 @@ const createWorkflowPayload = async (
         {
           code: experimentCode,
           name: experimentCode,
-          parameters: requestParameters,
-          validation: false
+          parameters: requestParameters
         }
       ],
       model: modelSlug,
@@ -89,19 +88,19 @@ const createExaremePayload = (
   parameters: AlgorithmParameter[],
   modelSlug: string
 ): ExperimentPayload => {
-  const requestParameters = buildExaremeAlgorithmRequest(
-    model(datasets),
-    { code: experimentCode, name: experimentCode, validation: false },
-    parameters
-  );
+  // const requestParameters = buildExaremeAlgorithmRequest(
+  //   model(datasets),
+  //   parameters
+  // );
+
+  const requestParameters = parameters;
 
   const payload: ExperimentPayload = {
     algorithms: [
       {
         code: experimentCode,
         name: experimentCode,
-        parameters: requestParameters,
-        validation: false
+        parameters: requestParameters
       }
     ],
     model: modelSlug,

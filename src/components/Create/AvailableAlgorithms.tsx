@@ -1,191 +1,134 @@
 import * as React from 'react';
-import { Button } from 'react-bootstrap';
+import { Button, OverlayTrigger, Popover } from 'react-bootstrap';
 
-import { Algorithm, VariableEntity } from '../API/Core';
+import { Algorithm, VariableEntity, AlgorithmParameter } from '../API/Core';
 import { ModelResponse } from '../API/Model';
 
-const excludedLocalAlgorithms: string[] = [
-  // 'K_MEANS',
-  // 'WP_LINEAR_REGRESSION',
-  // 'PIPELINE_ISOUP_REGRESSION_TREE_SERIALIZER',
-  // 'PIPELINE_ISOUP_MODEL_TREE_SERIALIZER'
-];
+interface AvailableAlgorithm extends Algorithm {
+  enabled: boolean;
+}
 
 const AvailableAlgorithms = ({
-  isLocal,
   algorithms,
-  variables,
+  lookup,
   handleSelectMethod,
   model
 }: {
-  isLocal: boolean;
   algorithms: Algorithm[] | undefined;
-  variables: VariableEntity[] | undefined;
+  lookup: (code: string) => VariableEntity;
   handleSelectMethod: (method: Algorithm) => void;
   model: ModelResponse | undefined;
-}) => {
+}): JSX.Element => {
   const query = model && model.query;
   const modelVariable =
-    (query && query.variables && query.variables.map(v => v.code)[0]) || '';
-  const modelCovariables =
-    (query && query.coVariables && query.coVariables.map(v => v.code)) || [];
-  const modelGroupings =
-    (query && query.groupings && query.groupings.map(v => v.code)) || [];
+    (query && query.variables && query.variables.map(v => lookup(v.code))) ||
+    [];
+  const modelCovariables = [
+    ...((query &&
+      query.coVariables &&
+      query.coVariables.map(v => lookup(v.code))) ||
+      []),
+    ...((query &&
+      query.groupings &&
+      query.groupings.map(v => lookup(v.code))) ||
+      [])
+  ];
 
-  const availableAlgorithms =
+  const algorithmEnabled = (
+    parameters: AlgorithmParameter[],
+    { x, y }: { x: VariableEntity[]; y: VariableEntity[] }
+  ): boolean => {
+    const checkSelectedVariables = (
+      axis: string,
+      variables: VariableEntity[]
+    ): boolean => {
+      const definition = parameters.find(p => p.name === axis);
+      if (definition) {
+        const isCategorical =
+          definition.columnValuesIsCategorical === ''
+            ? undefined
+            : definition.columnValuesIsCategorical === 'true'
+            ? true
+            : false;
+        // const type = xDefinition.columnValuesSQLType;
+        // const multiple = definition.valueMultiple;
+        const notBlank = definition.valueNotBlank;
+
+        if (isCategorical && !variables.every(c => c.isCategorical)) {
+          return false;
+        }
+
+        if (!isCategorical && variables.some(c => c.isCategorical)) {
+          return false;
+        }
+
+        if (notBlank && variables.length === 0) {
+          return false;
+        }
+
+        // FIXME: not sure if it MUST or SHOULD be multiple
+        // Guessing SHOULD now
+        // if (multiple && variables.length <= 1) {
+        //   return false;
+        // }
+
+        return true;
+      }
+
+      return true;
+    };
+    // Independant variable check
+    return checkSelectedVariables('x', x) && checkSelectedVariables('y', y);
+  };
+
+  const availableAlgorithms: AvailableAlgorithm[] =
     (algorithms &&
-      algorithms
-        // .filter(a => a.code === '3f5830403180d620')
-        .map((algorithm: Algorithm) => {
-          if (!algorithm.constraints) {
-            return { ...algorithm, enabled: true };
-          }
-
-          let isEnabled = false;
-
-          const apiVariable =
-            variables && variables.find((v: any) => v.code === modelVariable);
-          const apiCovariables: VariableEntity[] | undefined =
-            variables &&
-            variables.filter((v: any) => modelCovariables.includes(v.code));
-          const apiGroupings: VariableEntity[] | undefined =
-            variables &&
-            variables.filter((v: any) => modelGroupings.includes(v.code));
-          const algoConstraints: any = algorithm && algorithm.constraints;
-          const algoConstraintVariable =
-            algoConstraints && algoConstraints.variable;
-          const apiVariableType = apiVariable && apiVariable.type;
-
-          // Check variables type vs algorithm input types
-          if (apiVariableType && algoConstraintVariable) {
-            if (algoConstraintVariable[apiVariableType]) {
-              isEnabled = true;
-            }
-          }
-
-          if (apiCovariables) {
-            const covartypes: string[] = Array.from(
-              new Set([...apiCovariables.map(v => v.type || '')])
-            );
-            isEnabled =
-              isEnabled &&
-              covartypes.every(
-                t =>
-                  algoConstraints.covariables &&
-                  // either there is no constraint, or the constraint has to be from the specified type
-                  (algoConstraints.covariables[t] === undefined ||
-                    algoConstraints.covariables[t])
-              );
-          }
-
-          if (apiGroupings) {
-            const covartypes: string[] = Array.from(
-              new Set([...apiGroupings.map(v => v.type || '')])
-            );
-            isEnabled =
-              isEnabled &&
-              covartypes.every(
-                t =>
-                  algoConstraints.groupings &&
-                  // either there is no constraint, or the constraint has to be from the specified type
-                  (algoConstraints.groupings[t] === undefined ||
-                    algoConstraints.groupings[t])
-              );
-          }
-
-          const algoConstraintCovariable =
-            algoConstraints && algoConstraints.covariables;
-          if (algoConstraintCovariable) {
-            if (
-              algoConstraintCovariable.min_count &&
-              modelCovariables.length < algoConstraintCovariable.min_count
-            ) {
-              isEnabled = false;
-            }
-            if (
-              algoConstraintCovariable.max_count &&
-              modelCovariables.length > algoConstraintCovariable.max_count
-            ) {
-              isEnabled = false;
-            }
-          }
-
-          const algoConstraintGrouping =
-            algoConstraints && algoConstraints.groupings;
-          if (algoConstraintGrouping) {
-            if (
-              algoConstraintGrouping.min_count &&
-              modelGroupings.length < algoConstraintGrouping.min_count
-            ) {
-              isEnabled = false;
-            }
-            if (
-              algoConstraintGrouping.max_count &&
-              modelGroupings.length > algoConstraintGrouping.max_count
-            ) {
-              isEnabled = false;
-            }
-          }
-
-          // FIXME: only for Woken algorithms
-          const mixed = algoConstraints.mixed;
-          if (
-            modelGroupings.length > 0 &&
-            modelCovariables.length > 0 &&
-            !mixed
-          ) {
-            isEnabled = false;
-          }
-
-          if (isLocal && excludedLocalAlgorithms.includes(algorithm.code)) {
-            isEnabled = false;
-          }
-
-          return isEnabled
-            ? { ...algorithm, enabled: true }
-            : { ...algorithm, enabled: false };
-        })) ||
+      algorithms.map(algorithm => ({
+        ...algorithm,
+        enabled: algorithmEnabled(algorithm.parameters, {
+          x: modelCovariables,
+          y: modelVariable
+        })
+      }))) ||
     [];
 
-  const sortedAlgorithms = availableAlgorithms.sort(
-    (a: Algorithm, b: Algorithm) => {
-      try {
-        const typea = (a && a.type && a.type.length > 0 && a.type[0]) || '';
-        const typeb = (b && b.type && b.type.length > 0 && b.type[0]) || '';
-
-        return typea < typeb ? 1 : typea > typeb ? -1 : 0;
-      } catch (e) {
-        return 0;
-      }
-    }
+  const types = Array.from(
+    new Set(availableAlgorithms.map(f => f.type).flat(1))
   );
 
-  const types = Array.from(new Set(sortedAlgorithms.map(f => f.type).flat(1)));
-
+  console.log(types);
   return (
     <React.Fragment>
       {types.map(type => (
         <div className="method" key={type}>
           <h4>{type}</h4>
-          {sortedAlgorithms
-            .filter(a => a.type && a.type.includes(type))
-            .map((algorithm: any) => (
+          {availableAlgorithms
+            .filter(a => a.type && a.type === type)
+            .map(algorithm => (
               <div className="method" key={algorithm.code}>
-                <Button
-                  key={algorithm.code}
-                  bsStyle="link"
-                  title={`${algorithm.type} - ${algorithm.description}`}
-                  // tslint:disable-next-line jsx-no-lambda
-                  onClick={() => handleSelectMethod(algorithm)}
-                  style={{
-                    color: algorithm.enabled ? '#03a9f4' : 'gray',
-                    padding: 0,
-                    textTransform: 'none'
-                  }}
-                  disabled={!algorithm.enabled}
+                <OverlayTrigger
+                  placement="left"
+                  overlay={
+                    <Popover
+                      id={`tooltip-${algorithm.code}`}
+                    >{`${algorithm.desc}`}</Popover>
+                  }
                 >
-                  {algorithm.label}
-                </Button>
+                  <Button
+                    key={algorithm.code}
+                    bsStyle="link"
+                    // ts lint:disable-next-line jsx-no-lambda
+                    onClick={() => handleSelectMethod(algorithm)}
+                    style={{
+                      color: algorithm.enabled ? '#03a9f4' : 'gray',
+                      padding: 0,
+                      textTransform: 'none'
+                    }}
+                    // disabled={!algorithm.enabled}
+                  >
+                    {algorithm.name}
+                  </Button>
+                </OverlayTrigger>
               </div>
             ))}
         </div>

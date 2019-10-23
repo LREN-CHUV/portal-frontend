@@ -75,7 +75,8 @@ class Model extends React.Component<Props> {
                 query.variables.map((v: any) => (
                   <var key={v.code}>{lookup(v.code).label}</var>
                 ))}
-              {query.coVariables && query.coVariables.length > 0 && (
+              {((query.coVariables && query.coVariables.length > 0) ||
+                (query.groupings && query.groupings.length > 0)) && (
                 <Subtitle>CoVariables</Subtitle>
               )}
               {query.coVariables &&
@@ -83,9 +84,6 @@ class Model extends React.Component<Props> {
                 query.coVariables.map((v: any) => (
                   <var key={v.code}>{lookup(v.code).label}</var>
                 ))}
-              {query.groupings && query.groupings.length > 0 && (
-                <Subtitle>Groupings</Subtitle>
-              )}
               {query.groupings &&
                 query.groupings.length > 0 &&
                 query.groupings.map((v: any) => (

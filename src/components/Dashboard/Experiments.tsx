@@ -137,15 +137,11 @@ export default ({
                             {model.query.coVariables.map(
                               (v: any) => `${v.code}, `
                             )}
-                          </p>
-                        )}
-                      {model.query.groupings !== undefined &&
-                        model.query.groupings.length > 0 && (
-                          <p>
-                            <b>Groupings</b>:{' '}
-                            {model.query.groupings.map(
-                              (v: any) => `${v.code}, `
-                            )}
+                            {model.query.groupings !== undefined &&
+                              model.query.groupings.length > 0 &&
+                              model.query.groupings.map(
+                                (v: any) => `${v.code}, `
+                              )}
                           </p>
                         )}
                     </>

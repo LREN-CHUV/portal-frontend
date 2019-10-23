@@ -1,20 +1,3 @@
-export const excludedMethods = [
-  //  'HISTOGRAMS',
-  'LIST_DATASET',
-  'LIST_VARIABLES',
-  'PIPELINE_ISOUP_MODEL_TREE_SERIALIZER',
-  'PIPELINE_ISOUP_REGRESSION_TREE_SERIALIZER',
-  'histograms',
-  'statisticsSummary',
-  'hinmine',
-  'hedwig',
-  'ggparci',
-  'kmeans',
-  'heatmaply',
-  'linearRegression',
-  'anova'
-];
-
 // Mime types
 export enum MIME_TYPES {
   ERROR = 'text/plain+error',

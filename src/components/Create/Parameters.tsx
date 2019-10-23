@@ -64,7 +64,7 @@ const Parameters = ({
     if (constraints && parameters) {
       const { min, max } = constraints;
       const parameter = parameters.find(
-        (p: AlgorithmParameter) => p.code === code
+        (p: AlgorithmParameter) => p.name === code
       );
       if (
         (parameter && parameter.value < min) ||
@@ -146,12 +146,11 @@ const Parameters = ({
                 numberTypes.includes(parameter.type)
                   ? 'number'
                   : 'text';
-              const { constraints } = parameter;
 
               return (
                 <FormGroup
                   validationState={getValidationState(parameter)}
-                  key={parameter.code}
+                  key={parameter.name}
                   style={{
                     display:
                       parameter.visible === undefined || parameter.visible
@@ -160,27 +159,25 @@ const Parameters = ({
                   }}
                 >
                   <Row>
-                    <Col sm={12}>{parameter.description}</Col>
+                    <Col sm={12}>{parameter.desc}</Col>
                   </Row>
                   <Row>
-                    <Col sm={6}>{parameter.label}</Col>
+                    <Col sm={6}>{parameter.name}</Col>
                     <Col sm={6}>
                       {parameter.type !== 'enumeration' &&
                         parameter.type !== 'referencevalues' &&
-                        parameter.code !== 'xlevels' && (
+                        parameter.name !== 'xlevels' && (
                           <FormControl
                             type={type}
-                            defaultValue={
-                              parameter.value || parameter.default_value
-                            }
+                            defaultValue={parameter.value}
                             // tslint:disable-next-line jsx-no-lambda
                             onChange={event =>
-                              handleChangeParameter(event, parameter.code)
+                              handleChangeParameter(event, parameter.name)
                             }
                           />
                         )}
 
-                      {parameter.code === 'xlevels' && (
+                      {parameter.name === 'xlevels' && (
                         <Select
                           value={selectedOptions}
                           onChange={handleSelect}
@@ -193,7 +190,7 @@ const Parameters = ({
                         <CategoryChooser
                           apiCore={apiCore}
                           query={query}
-                          code={parameter.code}
+                          code={parameter.name}
                           handleChangeCategoryParameter={
                             handleChangeCategoryParameter
                           }
@@ -204,26 +201,24 @@ const Parameters = ({
                         <FormControl
                           componentClass="select"
                           placeholder="select"
-                          defaultValue={
-                            parameter.value || parameter.default_value
-                          }
+                          defaultValue={parameter.value}
                           // tslint:disable-next-line jsx-no-lambda
                           onChange={event =>
-                            handleChangeParameter(event, parameter.code)
+                            handleChangeParameter(event, parameter.name)
                           }
                         >
-                          {parameter.values &&
+                          {/* {parameter.values &&
                             parameter.values.map((v: any) => (
                               <option key={v} value={v}>
                                 {v}
                               </option>
-                            ))}
+                            ))} */}
                         </FormControl>
                       )}
 
                       <FormControl.Feedback />
                       <HelpBlock>
-                        {constraints && constraints.required && 'required '}
+                        {/* {constraints && constraints.required && 'required '}
                         {constraints &&
                           constraints.min >= 0 &&
                           'min: ' + constraints.min}
@@ -233,7 +228,7 @@ const Parameters = ({
                           ', '}
                         {constraints &&
                           constraints.max >= 0 &&
-                          'max: ' + constraints.max}
+                          'max: ' + constraints.max} */}
                       </HelpBlock>
                     </Col>
                   </Row>

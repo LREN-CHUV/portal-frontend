@@ -171,94 +171,94 @@ const buildWorkflowAlgorithmRequest = (
 ) => {
   const params: any[] = [];
 
-  if (model.query.variables) {
-    const variableKey = selectedMethod.parameters.find(
-      (p: any) => p.label === 'y'
-    ).code;
-    params.push({
-      code: variableKey,
-      value: model.query.variables.map(v => v.code).toString()
-    });
-  }
+  // if (model.query.variables) {
+  //   const variableKey =
+  //     selectedMethod &&
+  //     selectedMethod.parameters.find((p: any) => p.label === 'y').code;
+  //   params.push({
+  //     code: variableKey,
+  //     value: model.query.variables.map(v => v.code).toString()
+  //   });
+  // }
 
-  if (model.query.coVariables || model.query.groupings) {
-    const covariableKey = selectedMethod.parameters.find(
-      (p: any) => p.label === 'x'
-    ).code;
+  // if (model.query.coVariables || model.query.groupings) {
+  //   const covariableKey = selectedMethod.parameters.find(
+  //     (p: any) => p.label === 'x'
+  //   ).code;
 
-    const coVariables =
-      model.query.coVariables &&
-      model.query.coVariables.map(v => v.code).toString();
-    const groupings =
-      model.query.groupings &&
-      model.query.groupings.map(v => v.code).toString();
-    const value = coVariables
-      ? groupings
-        ? `${coVariables},${groupings}`
-        : `${coVariables}`
-      : groupings;
-    params.push({
-      code: covariableKey,
-      value
-    });
-  }
+  //   const coVariables =
+  //     model.query.coVariables &&
+  //     model.query.coVariables.map(v => v.code).toString();
+  //   const groupings =
+  //     model.query.groupings &&
+  //     model.query.groupings.map(v => v.code).toString();
+  //   const value = coVariables
+  //     ? groupings
+  //       ? `${coVariables},${groupings}`
+  //       : `${coVariables}`
+  //     : groupings;
+  //   params.push({
+  //     code: covariableKey,
+  //     value
+  //   });
+  // }
 
-  if (model.query.trainingDatasets) {
-    const datasetKey = selectedMethod.parameters.find(
-      (p: any) => p.label === 'dataset'
-    ).code;
-    params.push({
-      code: datasetKey,
-      value: model.query.trainingDatasets.map(v => v.code).toString()
-    });
-  }
+  // if (model.query.trainingDatasets) {
+  //   const datasetKey = selectedMethod.parameters.find(
+  //     (p: any) => p.label === 'dataset'
+  //   ).code;
+  //   params.push({
+  //     code: datasetKey,
+  //     value: model.query.trainingDatasets.map(v => v.code).toString()
+  //   });
+  // }
 
-  if (model.query.pathology) {
-    const datasetKey = selectedMethod.parameters.find(
-      (p: any) => p.label === 'pathology'
-    ).code;
-    params.push({
-      code: datasetKey,
-      value: model.query.pathology
-    });
-  }
+  // if (model.query.pathology) {
+  //   const datasetKey = selectedMethod.parameters.find(
+  //     (p: any) => p.label === 'pathology'
+  //   ).code;
+  //   params.push({
+  //     code: datasetKey,
+  //     value: model.query.pathology
+  //   });
+  // }
 
-  // kfold
-  const kfoldKey = selectedMethod.parameters.find(
-    (p: any) => p.label === 'kfold'
-  );
-  if (kfoldKey) {
-    const kFoldParam = newParams.find((p: any) => p.code === kfoldKey.code);
-    params.push({
-      code: kfoldKey.code,
-      value: (kFoldParam && kFoldParam.value) || '3'
-    });
-  }
+  // // kfold
+  // const kfoldKey = selectedMethod.parameters.find(
+  //   (p: any) => p.label === 'kfold'
+  // );
+  // if (kfoldKey) {
+  //   const kFoldParam = newParams.find((p: any) => p.code === kfoldKey.code);
+  //   params.push({
+  //     code: kfoldKey.code,
+  //     value: (kFoldParam && kFoldParam.value) || '3'
+  //   });
+  // }
 
-  // alpha
-  const alphaKey = selectedMethod.parameters.find(
-    (p: any) => p.label === 'alpha'
-  );
-  if (alphaKey) {
-    const alphaParam = newParams.find((p: any) => p.code === alphaKey.code);
-    params.push({
-      code: alphaKey.code,
-      value: (alphaParam && alphaParam.value) || '0.1'
-    });
-  }
+  // // alpha
+  // const alphaKey = selectedMethod.parameters.find(
+  //   (p: any) => p.label === 'alpha'
+  // );
+  // if (alphaKey) {
+  //   const alphaParam = newParams.find((p: any) => p.code === alphaKey.code);
+  //   params.push({
+  //     code: alphaKey.code,
+  //     value: (alphaParam && alphaParam.value) || '0.1'
+  //   });
+  // }
 
-  // others
-  const leftOvers = selectedMethod.parameters.filter(
-    (p: any) => !params.map((p: any) => p.code).includes(p.code)
-  );
-  if (leftOvers) {
-    leftOvers.forEach((l: any) => {
-      params.push({
-        code: l.code,
-        value: l.value
-      });
-    });
-  }
+  // // others
+  // const leftOvers = selectedMethod.parameters.filter(
+  //   (p: any) => !params.map((p: any) => p.code).includes(p.code)
+  // );
+  // if (leftOvers) {
+  //   leftOvers.forEach((l: any) => {
+  //     params.push({
+  //       code: l.code,
+  //       value: l.value
+  //     });
+  //   });
+  // }
 
   return params;
 };

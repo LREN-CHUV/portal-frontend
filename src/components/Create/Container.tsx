@@ -6,7 +6,6 @@ import { RouteComponentProps, withRouter } from 'react-router-dom';
 
 import { APICore, APIExperiment, APIModel } from '../API';
 import { Algorithm, AlgorithmParameter } from '../API/Core';
-import { buildExaremeAlgorithmRequest } from '../API/ExaremeAPIAdapter';
 import {
   Engine,
   ExperimentPayload,
@@ -124,11 +123,8 @@ class Container extends React.Component<Props, State> {
               </Panel.Title>
               <Panel.Body>
                 <AvailableAlgorithms
-                  isLocal={isLocal}
                   algorithms={apiCore.state.algorithms}
-                  variables={apiCore.variablesForPathology(
-                    apiModel.state.model && apiModel.state.model.query.pathology
-                  )}
+                  lookup={apiCore.lookup}
                   handleSelectMethod={this.handleSelectMethod}
                   model={apiModel.state.model}
                 />
@@ -157,13 +153,13 @@ class Container extends React.Component<Props, State> {
   };
 
   private handleSelectMethod = (method: Algorithm): void => {
-    const kfold = this.isPredictiveMethod(method)
-      ? globalParameters.kfold.k
-      : 0;
+    // const kfold = this.isPredictiveMethod(method)
+    //   ? globalParameters.kfold.k
+    //   : 0;
     this.setState({
-      kfold,
-      method,
-      parameters: method && method.parameters
+      //   kfold,
+      method
+      //   parameters: method && method.parameters
     });
   };
 
@@ -271,23 +267,22 @@ class Container extends React.Component<Props, State> {
         }))
       : [];
 
-    const requestParameters =
-      selectedMethod.engine === Engine.Exareme
-        ? buildExaremeAlgorithmRequest(model, selectedMethod, params)
-        : selectedMethod.engine === Engine.Workflow
-        ? buildWorkflowAlgorithmRequest(model, selectedMethod, params)
-        : params;
+    const requestParameters = params;
+    // selectedMethod.source === Engine.Exareme
+    //   ? buildExaremeAlgorithmRequest(model, params)
+    //   : // : selectedMethod.source === Engine.Workflow
+    //     // ? buildWorkflowAlgorithmRequest(model, selectedMethod, params)
+    //     params;
 
     const experiment: ExperimentPayload = {
       algorithms: [
         {
           code: selectedMethod.code,
           name: selectedMethod.code,
-          parameters: requestParameters,
-          validation
+          parameters: requestParameters
         }
       ],
-      engine: selectedMethod.engine,
+      engine: selectedMethod.source,
       model: model.slug,
       name: experimentName,
       validations

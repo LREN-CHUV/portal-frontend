@@ -1,9 +1,7 @@
 import request from 'request-promise-native';
 import { Container } from 'unstated';
-
 import { backendURL } from '../API';
-import { excludedMethods } from '../constants';
-import { buildExaremeAlgorithmList } from './ExaremeAPIAdapter';
+import { ENABLED_ALGORITHMS } from '../constants';
 import { Engine } from './Experiment';
 import { buildWorkflowAlgorithmList } from './WorkflowAPIAdapter';
 
@@ -17,6 +15,7 @@ export interface VariableEntity extends Variable {
   description?: string;
   enumerations?: Variable[];
   group?: Variable[];
+  isCategorical?: boolean;
 }
 
 interface Pathology {
@@ -36,11 +35,10 @@ interface Hierarchy {
 export interface Algorithm {
   code: string;
   name: string;
-  parameters?: AlgorithmParameter[] | any;
-  validation: boolean;
-  constraints?: AlgorithmConstraint;
-  type?: string[];
-  engine?: Engine;
+  desc?: string;
+  parameters: AlgorithmParameter[];
+  type?: string;
+  source?: Engine;
 }
 
 export interface AlgorithmResult {
@@ -68,25 +66,22 @@ export interface AlgorithmConstraint {
 }
 
 export interface AlgorithmParameter {
-  code: string;
-  constraints?: any;
-  default_value?: any;
-  value: any;
-  values?: any;
-  description?: string;
-  label?: string;
-  type?: string;
+  name: string;
+  desc: string;
+  type: string;
+  columnValuesSQLType: string;
+  columnValuesIsCategorical: string;
+  columnValuesNumOfEnumerations: string;
+  value: string;
+  valueNotBlank: boolean;
+  valueMultiple: boolean;
+  valueType: string;
   visible?: boolean;
 }
 
 export interface Parameter {
   name: string;
   value: any;
-}
-
-interface PrivateAlgorithm {
-  error: string | undefined;
-  data: any | undefined;
 }
 
 export interface Stats {
@@ -266,18 +261,7 @@ class Core extends Container<State> {
   };
 
   public algorithms = async (isLocal: boolean): Promise<void> => {
-    // const wokenAlgorithms = await this.wokenAlgorithms();
-    // this.setState(state => ({
-    //   ...state,
-    //   algorithms: [
-    //     ...((wokenAlgorithms.data && wokenAlgorithms.data.algorithms) || [])
-    //   ],
-    //   error: undefined
-    // }));
-
-    const exaremeAlgorithms: PrivateAlgorithm = await this.exaremeAlgorithms(
-      isLocal
-    );
+    const exaremeAlgorithms = await this.exaremeAlgorithms(isLocal);
     this.setState(state => ({
       ...state,
       algorithms: [
@@ -287,7 +271,7 @@ class Core extends Container<State> {
       error: undefined
     }));
 
-    const workflows: PrivateAlgorithm = await this.workflows(isLocal);
+    const workflows = await this.workflows(isLocal);
     this.setState(state => ({
       ...state,
       algorithms: [
@@ -404,54 +388,27 @@ class Core extends Container<State> {
     }
   };
 
-  private wokenAlgorithms: any = async (): Promise<any> => {
-    try {
-      const data = await request.get(
-        `${this.backendURL}/methods`,
-        this.options
-      );
-      const json = await JSON.parse(data);
-
-      if (json.error) {
-        return { error: json.error, data: undefined };
-      }
-
-      const nextJson = {
-        ...json,
-        algorithms: json.algorithms.filter(
-          (a: any) => !excludedMethods.includes(a.code)
-        )
-      };
-
-      return { error: undefined, data: nextJson };
-    } catch (error) {
-      return { error, data: undefined };
-    }
-  };
-
   private exaremeAlgorithms: any = async (isLocal: boolean) => {
     if (isLocal) {
       return { error: undefined, data: [] };
     }
 
     try {
-      const data = await request.get(
+      const response = await request.get(
         `${this.backendURL}/methods/exareme`,
         this.options
       );
-      const json = await JSON.parse(data);
+      const json = await JSON.parse(response);
 
       if (json.error) {
         return { error: json.error, data: undefined };
       }
 
-      const nextJson = json.filter(
-        (a: any) => !excludedMethods.includes(a.name)
+      const data = json.filter((algorithm: any) =>
+        ENABLED_ALGORITHMS.includes(algorithm.name)
       );
 
-      const exaremeAlgorithms = buildExaremeAlgorithmList(nextJson);
-
-      return { error: undefined, data: exaremeAlgorithms };
+      return { error: undefined, data };
     } catch (error) {
       console.log(error);
       return { error, data: undefined };

@@ -1,14 +1,8 @@
-import {
-  Algorithm,
-  AlgorithmConstraintParameter,
-  AlgorithmParameter
-} from './Core';
-import { ExperimentResponse, Engine } from './Experiment';
-import { ModelResponse } from './Model';
-import { ENABLED_ALGORITHMS } from '../constants';
+import { AlgorithmConstraintParameter, AlgorithmParameter } from './Core';
+import { ExperimentResponse } from './Experiment';
 const independents = ['X', 'column1', 'x', 'descriptive_attributes'];
 const dependents = ['Y', 'column2', 'y', 'target_attributes'];
-const hiddenParameters = [
+const HIDDEN_PARAMETERS = [
   ...dependents,
   ...independents,
   'dataset',
@@ -133,154 +127,6 @@ const buildConstraints = (algo: any) => {
   };
 };
 
-const buildParameters = (algo: any) => {
-  const params =
-    (algo.parameters &&
-      algo.parameters.map((parameter: any) => {
-        const param: AlgorithmParameter = {
-          code: parameter.name,
-          constraints: {},
-          default_value: parameter.value,
-          description: parameter.desc,
-          label: parameter.name,
-          type: parameter.valueType,
-          value: parameter.value,
-          visible: hiddenParameters.includes(parameter.name) ? false : true
-        };
-
-        if (parameter.valueNotBlank) {
-          param.constraints =
-            parameter.valueType === 'string' || parameter.type === 'other'
-              ? {
-                  required: true
-                }
-              : {
-                  min: 1
-                };
-        }
-
-        if (parameter.type === 'other' && parameter.value === 'dummycoding') {
-          param.type = 'enumeration';
-          param.values = ['dummycoding', 'sumscoding', 'simplecoding'];
-        }
-
-        if (
-          parameter.type === 'other' &&
-          parameter.name === 'referencevalues'
-        ) {
-          param.type = 'referencevalues';
-        }
-
-        return param;
-      })) ||
-    [];
-
-  return params;
-};
-/* eslint-enable */
-const buildExaremeAlgorithmList = (json: any): Algorithm[] =>
-  json
-    .filter((algorithm: any) => ENABLED_ALGORITHMS.includes(algorithm.name))
-    .map((algorithm: any) => ({
-      code: algorithm.name,
-      constraints: buildConstraints(algorithm),
-      description: algorithm.desc,
-      enabled: true,
-      label:
-        algorithm.name === 'NAIVE_BAYES_TRAINING_STANDALONE'
-          ? 'Naive Bayes Training'
-          : algorithm.name,
-      parameters: buildParameters(algorithm),
-      engine: Engine.Exareme,
-      type: ['exareme'],
-      validation: true
-    }));
-
-const buildExaremeAlgorithmRequest = (
-  model: ModelResponse,
-  selectedMethod: Algorithm,
-  newParams: AlgorithmParameter[]
-): AlgorithmParameter[] => {
-  const params = [];
-  let variableString;
-  let covariablesArray: string[] = [];
-
-  if (model.query.variables) {
-    variableString = model.query.variables.map(v => v.code).toString();
-  }
-
-  if (model.query.coVariables) {
-    covariablesArray = model.query.coVariables.map(v => v.code);
-  }
-
-  if (model.query.groupings) {
-    covariablesArray = [
-      ...covariablesArray,
-      ...model.query.groupings.map(v => v.code)
-    ];
-  }
-
-  params.push({
-    code: 'y',
-    value: variableString
-  });
-
-  // FIXME: Formula input
-  if (covariablesArray.length > 0) {
-    const x =
-      selectedMethod.code === 'LINEAR_REGRESSION' ||
-      selectedMethod.code === 'ANOVA'
-        ? {
-            code: 'x',
-            value: covariablesArray.toString().replace(/,/g, '+')
-          }
-        : {
-            code: 'x',
-            value: covariablesArray.toString()
-          };
-
-    params.push(x);
-  }
-
-  const datasets = model.query.trainingDatasets;
-  if (datasets) {
-    const nextDatasets = datasets.map(v => v.code);
-    params.push({
-      code: 'dataset',
-      value: nextDatasets.toString()
-    });
-  }
-
-  const pathology = model.query.pathology;
-  if (pathology) {
-    params.push({
-      code: 'pathology',
-      value: pathology.toString()
-    });
-  }
-
-  const filters = model.query.filters;
-  if (filters) {
-    params.push({
-      code: 'filter',
-      value: filters
-    });
-  }
-
-  const nextParams = params
-    ? params.map((p: any) => ({
-        ...p,
-        value: p.value || p.default_value
-      }))
-    : [];
-
-  const p = [
-    ...nextParams,
-    ...(newParams.filter((p: any) => p.visible !== false) || [])
-  ];
-
-  return p;
-};
 
 const stripModelParameters = (
   experimentResponse: ExperimentResponse
@@ -290,7 +136,7 @@ const stripModelParameters = (
 
     return {
       ...a,
-      parameters: parameters.filter(p => !hiddenParameters.includes(p.code))
+      parameters: parameters.filter(p => !HIDDEN_PARAMETERS.includes(p.name))
     };
   });
 
@@ -298,8 +144,6 @@ const stripModelParameters = (
 };
 
 export {
-  buildExaremeAlgorithmList,
-  buildExaremeAlgorithmRequest,
   stripModelParameters,
-  hiddenParameters
+  HIDDEN_PARAMETERS as hiddenParameters
 };
