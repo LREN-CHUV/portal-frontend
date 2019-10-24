@@ -1,22 +1,18 @@
-import '../Model.css';
-import './Review.css';
-
 import * as React from 'react';
 import { Panel } from 'react-bootstrap';
 import { RouteComponentProps } from 'react-router-dom';
-
 import { APICore, APIMining, APIModel } from '../API';
 import { VariableEntity } from '../API/Core';
 import { MiningPayload } from '../API/Mining';
 import { ModelResponse, Query } from '../API/Model';
-import { AppConfig, InstanceMode } from '../App/App';
+import '../Model.css';
 import { IAlert } from '../UI/Alert';
-import Model from '../UI/Model';
 import DatasetsForm from '../UI/DatasetsForm';
+import Model from '../UI/Model';
 import Content from './Content';
-import ContentDeprecated from './Deprecated/Content';
 import Filter from './Filter';
 import ExperimentReviewHeader from './Header';
+import './Review.css';
 
 interface Props extends RouteComponentProps {
   apiModel: APIModel;

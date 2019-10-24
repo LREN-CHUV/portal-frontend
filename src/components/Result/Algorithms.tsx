@@ -1,10 +1,8 @@
 import * as React from 'react';
-import Panel from '../UI/Panel';
 import styled from 'styled-components';
-import { ENABLED_ALGORITHMS, UI_HIDDEN_PARAMETERS } from '../constants';
-
 import { ExperimentResponse } from '../API/Experiment';
-import { AlgorithmParameter } from '../API/Core';
+import { UI_HIDDEN_PARAMETERS } from '../constants';
+import Panel from '../UI/Panel';
 
 const Param = styled.p`
   margin: 0 0 8px 0;

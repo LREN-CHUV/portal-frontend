@@ -7,7 +7,6 @@ import Exporting from 'highcharts/modules/exporting.js';
 import Heatmap from 'highcharts/modules/heatmap.js';
 import SeriesLabel from 'highcharts/modules/series-label.js';
 import * as React from 'react';
-import styled from 'styled-components';
 
 HCMore(Highcharts);
 Heatmap(Highcharts);
@@ -15,17 +14,10 @@ highcharts3d(Highcharts);
 Exporting(Highcharts);
 SeriesLabel(Highcharts);
 
-const HighchartContainer = styled.div`
-  width: 800px;
-  height: 600px;
-`;
-
 export default ({
   options
 }: {
   options: Highcharts.Options | any;
 }): JSX.Element => (
-  <HighchartContainer>
-    <HighchartsReact highcharts={Highcharts} options={options} />
-  </HighchartContainer>
+  <HighchartsReact highcharts={Highcharts} options={options} />
 );
