@@ -62,14 +62,14 @@ const AvailableAlgorithms = ({
             ? true
             : false;
         // const type = xDefinition.columnValuesSQLType;
-        // const multiple = definition.valueMultiple;
+        const multiple = definition.valueMultiple;
         const notBlank = definition.valueNotBlank;
 
         if (isCategorical && !variables.every(c => c.isCategorical)) {
           return false;
         }
 
-        if (!isCategorical && variables.some(c => c.isCategorical)) {
+        if (isCategorical === false && variables.some(c => c.isCategorical)) {
           return false;
         }
 
@@ -79,9 +79,9 @@ const AvailableAlgorithms = ({
 
         // FIXME: not sure if it MUST or SHOULD be multiple
         // Guessing SHOULD now
-        // if (multiple && variables.length <= 1) {
-        //   return false;
-        // }
+        if (!multiple && variables.length > 1) {
+          return false;
+        }
 
         return true;
       }
@@ -125,18 +125,30 @@ const AvailableAlgorithms = ({
             ? true
             : false;
 
+        let multipleconstraint = '';
+        if (!variable.valueMultiple) {
+          multipleconstraint = ', one var max';
+        } else {
+          multipleconstraint = ', multiple vars';
+        }
+
         if (isCategorical) {
           message.push(
             <p key={`${algorithm.name}-${axis}-1`}>
-              {term} should be multinominal
+              {term} should be multinominal{multipleconstraint}
             </p>
           );
-        }
-
-        if (isCategorical === false) {
+        } else if (isCategorical === false) {
           message.push(
             <p key={`${algorithm.name}-${axis}-2`}>
-              {term} should be continous
+              {term} should be continous{multipleconstraint}
+            </p>
+          );
+        } else if (!isCategorical) {
+          message.push(
+            <p key={`${algorithm.name}-${axis}-3`}>
+              {term} can be either multinominal or continuous
+              {multipleconstraint}
             </p>
           );
         }
@@ -164,7 +176,7 @@ const AvailableAlgorithms = ({
                     overlay={
                       <Popover id={`tooltip-${algorithm.code}`}>
                         <p>{algorithm.desc}</p>
-                        {!algorithm.enabled && variablesHelpMessage(algorithm)}
+                        {variablesHelpMessage(algorithm)}
                       </Popover>
                     }
                   >
@@ -178,7 +190,6 @@ const AvailableAlgorithms = ({
                         padding: 0,
                         textTransform: 'none'
                       }}
-                      // disabled={!algorithm.enabled}
                     >
                       {algorithm.name}
                     </Button>
@@ -196,7 +207,7 @@ const AvailableAlgorithms = ({
                 overlay={
                   <Popover id={`tooltip-${algorithm.name}`}>
                     <p>{algorithm.desc}</p>
-                    {!algorithm.enabled && variablesHelpMessage(algorithm)}
+                    {variablesHelpMessage(algorithm)}
                   </Popover>
                 }
               >
