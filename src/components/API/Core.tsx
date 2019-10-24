@@ -79,6 +79,7 @@ export interface AlgorithmParameter {
   valueMultiple: boolean;
   valueType: string;
   visible?: boolean;
+  enumeration?: string[];
 }
 
 export interface AlgorithmParameterRequest {
@@ -407,7 +408,10 @@ class Core extends Container<State> {
     }
   };
 
-  private exaremeAlgorithms: any = async () => {
+  private exaremeAlgorithms = async (): Promise<{
+    error: string | undefined;
+    data: Algorithm[] | undefined;
+  }> => {
     try {
       const response = await request.get(
         `${this.backendURL}/methods/exareme`,
@@ -423,16 +427,29 @@ class Core extends Container<State> {
         ENABLED_ALGORITHMS.includes(algorithm.name)
       );
 
-      const extraParametersData = data.map((d: Algorithm) => ({
-        ...d,
+      const extraParametersData = data.map((algorithm: Algorithm) => ({
+        ...algorithm,
         source: Engine.Exareme,
-        parameters: (d.parameters as AlgorithmParameter[]).map(
-          (p: AlgorithmParameter) => ({
-            ...p,
-            value: '',
-            visible: !UI_HIDDEN_PARAMETERS.includes(p.name)
-          })
-        )
+        parameters: [
+          ...(algorithm.parameters as AlgorithmParameter[]).map(
+            (p: AlgorithmParameter) => ({
+              ...p,
+              value: '',
+              visible: !UI_HIDDEN_PARAMETERS.includes(p.name)
+            })
+          ),
+          ...(algorithm.name === 'ANOVA' ||
+          algorithm.name === 'LINEAR_REGRESSION'
+            ? [
+                {
+                  name: 'design',
+                  enumeration: ['factorial', 'additive'],
+                  defaultValue: 'factorial',
+                  desc: 'Operator for the variables'
+                }
+              ]
+            : [])
+        ]
       }));
 
       return { error: undefined, data: extraParametersData };

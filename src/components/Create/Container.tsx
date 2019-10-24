@@ -225,11 +225,15 @@ class Container extends React.Component<Props, State> {
             : covariablesArray;
 
           if (covariablesArray.length > 0) {
-            value =
-              selectedAlgorithm.code === 'LINEAR_REGRESSION' ||
-              selectedAlgorithm.code === 'ANOVA'
-                ? covariablesArray.toString().replace(/,/g, '+')
-                : covariablesArray.toString();
+            const design = parameters.find(p => p.name === 'design');
+            if (design) {
+              value =
+                design.value === 'additive'
+                  ? covariablesArray.toString().replace(/,/g, '+')
+                  : covariablesArray.toString().replace(/,/g, '*');
+            } else {
+              value = covariablesArray.toString();
+            }
           }
         }
 
@@ -257,7 +261,7 @@ class Container extends React.Component<Props, State> {
 
       return {
         code: p.name,
-        value
+        value: value || p.defaultValue
       };
     });
 

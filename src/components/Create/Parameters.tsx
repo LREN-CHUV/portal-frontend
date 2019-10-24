@@ -168,7 +168,8 @@ const Parameters = ({
                   <Row>
                     <Col sm={6}>{parameter.name}</Col>
                     <Col sm={6}>
-                      {parameter.name !== 'referencevalues' &&
+                      {!parameter.enumeration &&
+                        parameter.name !== 'referencevalues' &&
                         parameter.name !== 'xlevels' && (
                           <FormControl
                             type={type}
@@ -180,25 +181,24 @@ const Parameters = ({
                           />
                         )}
 
-                      {/* {parameter.name === 'encodingparameter' && (
-                        <FormControl
-                          componentClass="select"
-                          placeholder="select"
-                          defaultValue={parameter.value}
-                          // tslint:disable-next-line jsx-no-lambda
-                          onChange={event =>
-                            handleChangeParameter(event, parameter.name)
-                          }
-                        >
-                          {['dummycoding', 'sumscoding', 'simplecoding'].map(
-                            (v: string) => (
+                      {parameter.enumeration &&
+                        parameter.enumeration.length > 0 && (
+                          <FormControl
+                            componentClass="select"
+                            placeholder="select"
+                            defaultValue={parameter.defaultValue}
+                            // tslint:disable-next-line jsx-no-lambda
+                            onChange={event =>
+                              handleChangeParameter(event, parameter.name)
+                            }
+                          >
+                            {parameter.enumeration.map((v: string) => (
                               <option key={v} value={v}>
                                 {v}
                               </option>
-                            )
-                          )}
-                        </FormControl>
-                      )} */}
+                            ))}
+                          </FormControl>
+                        )}
 
                       {parameter.name === 'xlevels' && (
                         <Select
