@@ -1,4 +1,8 @@
-import APICore, { AlgorithmParameter, VariableEntity } from './Core';
+import APICore, {
+  AlgorithmParameter,
+  AlgorithmParameterRequest,
+  VariableEntity
+} from './Core';
 import APIExperiment, {
   Engine,
   ExperimentPayload,
@@ -86,20 +90,52 @@ const createExaremePayload = (
   experimentCode: string,
   parameters: AlgorithmParameter[],
   modelSlug: string
-): ExperimentPayload => {
-  // const requestParameters = buildExaremeAlgorithmRequest(
-  //   model(datasets),
-  //   parameters
-  // );
+): any => {
+  const query = model(datasets).query;
+  const nextParameters = [
+    {
+      code: 'y',
+      value:
+        (query.variables && query.variables.map(v => v.code).toString()) || ''
+    },
+    {
+      code: 'dataset',
+      value:
+        (query.trainingDatasets &&
+          query.trainingDatasets.map(v => v.code).toString()) ||
+        ''
+    },
+    {
+      code: 'pathology',
+      value: (query.pathology && query.pathology.toString()) || ''
+    },
+    {
+      code: 'filter',
+      value: (query.filters && query.filters) || ''
+    }
+  ];
 
-  const requestParameters = parameters;
+  let covariablesArray =
+    (query.coVariables && query.coVariables.map(v => v.code)) || [];
+  covariablesArray = query.groupings
+    ? [...covariablesArray, ...query.groupings.map(v => v.code)]
+    : covariablesArray;
 
-  const payload: ExperimentPayload = {
+  if (covariablesArray.length > 0) {
+    const value =
+      experimentCode === 'LINEAR_REGRESSION' || experimentCode === 'ANOVA'
+        ? covariablesArray.toString().replace(/,/g, '+')
+        : covariablesArray.toString();
+
+    nextParameters.push({ code: 'x', value });
+  }
+
+  const payload: any = {
     algorithms: [
       {
         code: experimentCode,
         name: experimentCode,
-        parameters: requestParameters
+        parameters: [...parameters, ...nextParameters]
       }
     ],
     model: modelSlug,

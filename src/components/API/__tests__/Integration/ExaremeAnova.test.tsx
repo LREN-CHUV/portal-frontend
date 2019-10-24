@@ -74,6 +74,8 @@ describe('Integration Test for experiment API', () => {
       parameters,
       modelSlug
     );
+
+    console.log(JSON.stringify(payload, null, 2));
     const { error, experiment } = await createExperiment({
       experiment: payload
     });

@@ -126,11 +126,19 @@ const AvailableAlgorithms = ({
             : false;
 
         if (isCategorical) {
-          message.push(<p>{term} should be multinominal</p>);
+          message.push(
+            <p key={`${algorithm.name}-${axis}-1`}>
+              {term} should be multinominal
+            </p>
+          );
         }
 
         if (isCategorical === false) {
-          message.push(<p>{term} should be continous</p>);
+          message.push(
+            <p key={`${algorithm.name}-${axis}-2`}>
+              {term} should be continous
+            </p>
+          );
         }
       }
     };
@@ -182,11 +190,11 @@ const AvailableAlgorithms = ({
       {layout === 'inline' && (
         <InlineAlgorithms>
           {availableAlgorithms.map(algorithm => (
-            <span className="method" key={algorithm.code}>
+            <span className="method" key={algorithm.name}>
               <OverlayTrigger
                 placement="left"
                 overlay={
-                  <Popover id={`tooltip-${algorithm.code}`}>
+                  <Popover id={`tooltip-${algorithm.name}`}>
                     <p>{algorithm.desc}</p>
                     {!algorithm.enabled && variablesHelpMessage(algorithm)}
                   </Popover>

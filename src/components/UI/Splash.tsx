@@ -21,7 +21,7 @@ const MainBox = styled.div`
   flex-direction: column;
 
   img {
-    margin: 0 auto;
+    margin: -64px auto 0 auto;
     background-color: #ffffff00;
   }
 
@@ -44,11 +44,12 @@ const MainBox = styled.div`
 
   h2 {
     text-align: center;
+    margin: 0;
   }
 
   h1 {
     text-align: center;
-    margin-bottom: 32px;
+    margin-bottom: 16px;
   }
 
   .dropdown-menu {

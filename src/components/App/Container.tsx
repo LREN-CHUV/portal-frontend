@@ -36,9 +36,9 @@ class AppContainer extends React.Component<any, State> {
   public async componentDidMount(): Promise<
     [void, void, void, void, void, void] | void
   > {
-    if (process.env.NODE_ENV === 'production') {
-      this.intervalId = setInterval(() => this.apiExperiment.all(), 10 * 1000);
-    }
+    // if (process.env.NODE_ENV === 'production') {
+    this.intervalId = setInterval(() => this.apiExperiment.all(), 10 * 1000);
+    // }
 
     // Conf written by dockerize
     const response = await fetch(`${webURL}/static/config.json`);

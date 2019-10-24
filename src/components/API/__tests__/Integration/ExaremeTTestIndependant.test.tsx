@@ -19,7 +19,7 @@ const experimentCode = 'TTEST_INDEPENDENT';
 const parameters: any = [
   {
     code: 'xlevels',
-    value: 'M,F'
+    value: 'AD,MCI'
   },
   {
     code: 'hypothesis',
@@ -43,8 +43,9 @@ const datasets = [{ code: 'adni' }];
 const model: any = (datasets: VariableEntity[]) => ({
   query: {
     pathology: 'dementia', // FIXME: should by dynamic
-    variables : [{ code: 'righthippocampus' }],
-    filters: '',
+    variables: [{ code: 'righthippocampus' }],
+    filters:
+      '{"condition":"AND","rules":[{"id":"alzheimerbroadcategory","field":"alzheimerbroadcategory","type":"string","input":"select","operator":"not_equal","value":"CN"},{"id":"alzheimerbroadcategory","field":"alzheimerbroadcategory","type":"string","input":"select","operator":"not_equal","value":"Other"}],"valid":true}',
     groupings: [],
     testingDatasets: [],
     trainingDatasets: datasets.map(d => ({
@@ -53,7 +54,7 @@ const model: any = (datasets: VariableEntity[]) => ({
     validationDatasets: [],
     coVariables: [
       {
-        code: 'gender'
+        code: 'alzheimerbroadcategory'
       }
     ]
   }
