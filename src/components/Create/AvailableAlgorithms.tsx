@@ -96,10 +96,13 @@ const AvailableAlgorithms = ({
     (algorithms &&
       algorithms.map(algorithm => ({
         ...algorithm,
-        enabled: algorithmEnabled(algorithm.parameters, {
-          x: modelCovariables,
-          y: modelVariable
-        })
+        enabled: algorithmEnabled(
+          algorithm.parameters as AlgorithmParameter[],
+          {
+            x: modelCovariables,
+            y: modelVariable
+          }
+        )
       }))) ||
     [];
 
@@ -111,7 +114,9 @@ const AvailableAlgorithms = ({
     const message: JSX.Element[] = [];
 
     const helpFor = (axis: string, term: string): void => {
-      const variable = algorithm.parameters.find(p => p.name === axis);
+      const variable = (algorithm.parameters as AlgorithmParameter[]).find(
+        p => p.name === axis
+      );
       if (variable) {
         const isCategorical =
           variable.columnValuesIsCategorical === ''

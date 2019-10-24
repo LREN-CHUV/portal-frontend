@@ -2,7 +2,11 @@ import * as React from 'react';
 import { Panel, Tab, Tabs } from 'react-bootstrap';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { APICore, APIExperiment, APIModel } from '../API';
-import { Algorithm, AlgorithmParameter } from '../API/Core';
+import {
+  Algorithm,
+  AlgorithmParameter,
+  AlgorithmParameterRequest
+} from '../API/Core';
 import { ExperimentPayload, ExperimentResponse } from '../API/Experiment';
 import { ModelResponse, Query } from '../API/Model';
 import { AppConfig } from '../App/App';
@@ -132,7 +136,7 @@ class Container extends React.Component<Props, State> {
   private handleSelectAlgorithm = (algorithm: Algorithm): void => {
     this.setState({
       algorithm: algorithm,
-      parameters: algorithm && algorithm.parameters
+      parameters: algorithm && (algorithm.parameters as AlgorithmParameter[])
     });
   };
 
@@ -208,17 +212,67 @@ class Container extends React.Component<Props, State> {
       return;
     }
 
+    const nextParameters: AlgorithmParameterRequest[] = parameters.map(p => {
+      let value: string = p.value;
+      const query = model && model.query;
+
+      if (query) {
+        if (p.name === 'x') {
+          let covariablesArray =
+            (query.coVariables && query.coVariables.map(v => v.code)) || [];
+          covariablesArray = query.groupings
+            ? [...covariablesArray, ...query.groupings.map(v => v.code)]
+            : covariablesArray;
+
+          if (covariablesArray.length > 0) {
+            value =
+              selectedAlgorithm.code === 'LINEAR_REGRESSION' ||
+              selectedAlgorithm.code === 'ANOVA'
+                ? covariablesArray.toString().replace(/,/g, '+')
+                : covariablesArray.toString();
+          }
+        }
+
+        if (p.name === 'y') {
+          value =
+            (query.variables && query.variables.map(v => v.code).toString()) ||
+            '';
+        }
+
+        if (p.name === 'dataset') {
+          value =
+            (query.trainingDatasets &&
+              query.trainingDatasets.map(v => v.code).toString()) ||
+            '';
+        }
+
+        if (p.name === 'pathology') {
+          value = (query.pathology && query.pathology.toString()) || '';
+        }
+
+        if (p.name === 'filter') {
+          value = (query.filters && query.filters) || '';
+        }
+      }
+
+      return {
+        code: p.name,
+        value
+      };
+    });
+
     const experiment: ExperimentPayload = {
       algorithms: [
         {
-          code: selectedAlgorithm.code,
-          name: selectedAlgorithm.code,
-          parameters
+          code: selectedAlgorithm.name,
+          name: selectedAlgorithm.name,
+          parameters: nextParameters
         }
       ],
       engine: selectedAlgorithm.source,
       model: model.slug,
-      name: experimentName
+      name: experimentName,
+      validations: []
     };
 
     await apiExperiment.create({ experiment });

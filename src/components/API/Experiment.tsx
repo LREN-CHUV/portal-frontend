@@ -2,7 +2,7 @@ import request from 'request-promise-native';
 import { Container } from 'unstated';
 
 import { backendURL } from '../API';
-import { Algorithm, AlgorithmResult } from '../API/Core';
+import { Algorithm } from '../API/Core';
 import { Query } from '../API/Model';
 import { User } from '../API/User';
 import APIAdapter from './APIAdapter';
@@ -13,6 +13,7 @@ export interface ExperimentPayload {
   model: string;
   name: string;
   engine?: Engine;
+  validations: any[]; // FIXME: deprecated
 }
 
 export enum Engine {
@@ -41,39 +42,9 @@ export interface Result {
   data: any;
 }
 
-// deprecated
-export interface Node {
-  name: string;
-  algorithms: AlgorithmResult[];
-  // Validation of all predictive methods, ranked by descending order of performance
-  rankedCrossValidations?: ValidationScore[];
-}
-
-export interface ValidationScore {
-  recall: number;
-  precision: number;
-  f1score: number;
-  falsePositiveRate: number;
-  accuracy: number;
-  weighted?: boolean;
-  confusionMatrix?: ConfusionMatrix;
-  node: string;
-  [key: string]: any;
-}
-
 export interface ConfusionMatrix {
   labels: string[];
   values: number[][];
-}
-
-export interface KfoldValidationScore {
-  explainedVariance: number;
-  mae: number;
-  mse: number;
-  rsquared: number;
-  rmse: number;
-  type: string;
-  [key: string]: any;
 }
 
 interface IUUID {
@@ -156,6 +127,7 @@ class Experiment extends Container<State> {
         ? `${this.baseUrl}/workflow`
         : `${this.baseUrl}`;
 
+    console.log(url, experiment);
     try {
       const data = await request({
         body: JSON.stringify(experiment),

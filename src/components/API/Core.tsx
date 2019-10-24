@@ -37,7 +37,7 @@ export interface Algorithm {
   code: string;
   name: string;
   desc?: string;
-  parameters: AlgorithmParameter[];
+  parameters: AlgorithmParameter[] | AlgorithmParameterRequest[];
   type?: string;
   source?: Engine;
 }
@@ -79,6 +79,11 @@ export interface AlgorithmParameter {
   valueMultiple: boolean;
   valueType: string;
   visible?: boolean;
+}
+
+export interface AlgorithmParameterRequest {
+  code: string;
+  value: string;
 }
 
 export interface Parameter {
@@ -418,16 +423,19 @@ class Core extends Container<State> {
         ENABLED_ALGORITHMS.includes(algorithm.name)
       );
 
-      const surchargedParameter = data.map((d: Algorithm) => ({
+      const extraParametersData = data.map((d: Algorithm) => ({
         ...d,
-        parameters: d.parameters.map((p: AlgorithmParameter) => ({
-          ...p,
-          value: '',
-          visible: !UI_HIDDEN_PARAMETERS.includes(p.name)
-        }))
+        source: Engine.Exareme,
+        parameters: (d.parameters as AlgorithmParameter[]).map(
+          (p: AlgorithmParameter) => ({
+            ...p,
+            value: '',
+            visible: !UI_HIDDEN_PARAMETERS.includes(p.name)
+          })
+        )
       }));
 
-      return { error: undefined, data: surchargedParameter };
+      return { error: undefined, data: extraParametersData };
     } catch (error) {
       console.log(error);
       return { error, data: undefined };

@@ -70,7 +70,8 @@ const createWorkflowPayload = async (
       ],
       model: modelSlug,
       name: experimentCode,
-      engine: Engine.Workflow
+      engine: Engine.Workflow,
+      validations: []
     };
 
     return payload;
@@ -103,7 +104,8 @@ const createExaremePayload = (
     ],
     model: modelSlug,
     name: experimentCode,
-    engine: Engine.Exareme
+    engine: Engine.Exareme,
+    validations: []
   };
 
   return payload;

@@ -273,7 +273,7 @@ const buildWorkflowAlgorithmResponse = (
     name: findName(a.code),
     parameters:
       a.parameters &&
-      a.parameters.map((p: any) => ({
+      (a.parameters as AlgorithmParameter[]).map((p: any) => ({
         ...p,
         code: findParameter(a.code, p.code)
       }))

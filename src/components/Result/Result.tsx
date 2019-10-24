@@ -2,8 +2,7 @@ import * as React from 'react';
 import { Panel } from 'react-bootstrap';
 import styled from 'styled-components';
 
-import { Engine, Node, Result, State } from '../API/Experiment';
-import RenderResultDeprecated from './deprecated/RenderResult';
+import { Engine, Result, State } from '../API/Experiment';
 import RenderResult from './RenderResult';
 
 const Body = styled(Panel.Body)`
@@ -46,11 +45,7 @@ export default ({
             <p>{error}</p>
           </div>
         ) : null}
-        {experiment && experiment.engine === Engine.Exareme ? (
-          <RenderResult results={results as Result[]} />
-        ) : (
-          <RenderResultDeprecated nodes={results as Node[]} />
-        )}
+        <RenderResult results={results as Result[]} />
       </Body>
     </Panel>
   );

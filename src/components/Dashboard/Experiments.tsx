@@ -2,10 +2,8 @@ import moment from 'moment';
 import React, { useState } from 'react';
 import { Button, Panel } from 'react-bootstrap';
 import styled from 'styled-components';
-
-import { Engine, ExperimentResponse, Node, Result } from '../API/Experiment';
+import { Engine, ExperimentResponse, Result } from '../API/Experiment';
 import { ModelResponse } from '../API/Model';
-import DeprecatedRenderResult from '../Result/deprecated/RenderResult';
 import RenderResult from '../Result/RenderResult';
 
 const StyledPanel = styled(Panel)`
@@ -147,11 +145,7 @@ export default ({
                     </>
                   )}
                   {collapsibleState.includes(experiment.uuid) ? (
-                    experiment.engine === Engine.Exareme ? (
-                      <RenderResult results={results as Result[]} />
-                    ) : (
-                      <DeprecatedRenderResult nodes={results as Node[]} />
-                    )
+                    <RenderResult results={results as Result[]} />
                   ) : null}
                 </PanelBody>
               </Panel.Collapse>
