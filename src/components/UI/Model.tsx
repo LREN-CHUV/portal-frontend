@@ -6,8 +6,6 @@ import { ModelResponse } from '../API/Model';
 import DropdownModel from './DropdownModel';
 import './Model.css';
 
-
-
 const Body = styled(Panel.Body)`
   padding: 0 16px 16px 16px;
 

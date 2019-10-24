@@ -3,7 +3,7 @@ import request from 'request-promise-native';
 import { backendURL } from '../API';
 import options from '../API/RequestHeaders';
 import { Algorithm, AlgorithmParameter } from './Core';
-import { UI_HIDDEN_PARAMETERS } from '../constants'
+import { UI_HIDDEN_PARAMETERS } from '../constants';
 import { Engine, ExperimentResponse } from './Experiment';
 import { ModelResponse } from './Model';
 

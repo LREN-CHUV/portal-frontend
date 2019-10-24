@@ -41,7 +41,7 @@ const Parameters = ({
   query,
   handleChangeParameters
 }: Props): JSX.Element => {
-  const [selectedOptions, setSelectedOptions] = useState(null);
+  const [selectedOptions, setSelectedOptions] = useState<any>();
   const [modalities, setModalities] = useState<LocalVar>();
 
   // TODO effect in Select component
@@ -108,6 +108,10 @@ const Parameters = ({
 
   const handleSelect = (options: any): void => {
     setSelectedOptions(options);
+    handleChangeCategoryParameter(
+      'xlevels',
+      options.map((o: any) => o.value).toString()
+    );
   };
 
   return (

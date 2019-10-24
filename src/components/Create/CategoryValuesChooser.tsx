@@ -45,7 +45,6 @@ export default ({
         val: first.enumerations && first.enumerations[0].code
       });
       handleChangeCategoryParameter(code, json);
-
     }
   }, [query, lookupCallback]);
 

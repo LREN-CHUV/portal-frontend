@@ -124,7 +124,7 @@ class Core extends Container<State> {
     this.backendURL = backendURL;
   }
 
-  formatLookup = ( code: string, originalVar: VariableEntity | undefined) => {
+  formatLookup = (code: string, originalVar: VariableEntity | undefined) => {
     if (originalVar) {
       const info = `${originalVar.label} (${originalVar.type})`;
       return { ...originalVar, info };
