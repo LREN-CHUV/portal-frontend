@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { LABELS } from '../../constants';
 import { round } from '../../utils';
 
 import { isNumber } from 'util';
@@ -9,8 +8,7 @@ export default ({ row }: { row: any }) => {
   const variables = Object.keys(row);
   const tables = variables.map(v => row[v]);
   const tableKeys = tables.map((k: any) => Object.keys(k)).pop() || [];
-  const mapCode = (code: string) =>
-    LABELS.find(l => l.code === code) || { code, label: code, order: -1 };
+  const mapCode = (code: string) => ({ code, label: code, order: -1 });
   const headersKeys: string[] = tableKeys
     .map(mapCode)
     .sort((a, b) => a.order - b.order)

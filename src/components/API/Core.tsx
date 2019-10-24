@@ -1,7 +1,7 @@
 import request from 'request-promise-native';
 import { Container } from 'unstated';
 import { backendURL } from '../API';
-import { ENABLED_ALGORITHMS } from '../constants';
+import { ENABLED_ALGORITHMS, UI_HIDDEN_PARAMETERS } from '../constants';
 import { Engine } from './Experiment';
 import { buildWorkflowAlgorithmList } from './WorkflowAPIAdapter';
 
@@ -16,6 +16,7 @@ export interface VariableEntity extends Variable {
   enumerations?: Variable[];
   group?: Variable[];
   isCategorical?: boolean;
+  info?: string;
 }
 
 interface Pathology {
@@ -67,6 +68,7 @@ export interface AlgorithmConstraint {
 
 export interface AlgorithmParameter {
   name: string;
+  defaultValue: string;
   desc: string;
   type: string;
   columnValuesSQLType: string;
@@ -122,13 +124,25 @@ class Core extends Container<State> {
     this.backendURL = backendURL;
   }
 
+  formatLookup = ( code: string, originalVar: VariableEntity | undefined) => {
+    if (originalVar) {
+      const info = `${originalVar.label} (${originalVar.type})`;
+      return { ...originalVar, info };
+    } else {
+      return { code, label: code, info: code };
+    }
+  };
+
+  // FIXME: those infos should be in the frontend model
   public lookup = (code: string): VariableEntity => {
     const variables = this.state.variables;
+
     if (variables) {
       const originalVar =
-        variables && variables.find((variable: any) => variable.code === code);
+        variables &&
+        variables.find((variable: VariableEntity) => variable.code === code);
 
-      return originalVar || { code, label: code };
+      return this.formatLookup(code, originalVar);
     } else {
       const pathologyJSON = this.state.pathologyJSON;
       if (pathologyJSON) {
@@ -151,11 +165,11 @@ class Core extends Container<State> {
           variables &&
           variables.find((variable: any) => variable.code === code);
 
-        return originalVar || { code, label: code };
+        return this.formatLookup(code, originalVar);
       }
     }
 
-    return { code, label: code };
+    return { code, label: code, info: code };
   };
 
   public fetchPathologies = async (): Promise<void> => {
@@ -261,7 +275,7 @@ class Core extends Container<State> {
   };
 
   public algorithms = async (isLocal: boolean): Promise<void> => {
-    const exaremeAlgorithms = await this.exaremeAlgorithms(isLocal);
+    const exaremeAlgorithms = await this.exaremeAlgorithms();
     this.setState(state => ({
       ...state,
       algorithms: [
@@ -388,11 +402,7 @@ class Core extends Container<State> {
     }
   };
 
-  private exaremeAlgorithms: any = async (isLocal: boolean) => {
-    if (isLocal) {
-      return { error: undefined, data: [] };
-    }
-
+  private exaremeAlgorithms: any = async () => {
     try {
       const response = await request.get(
         `${this.backendURL}/methods/exareme`,
@@ -404,11 +414,20 @@ class Core extends Container<State> {
         return { error: json.error, data: undefined };
       }
 
-      const data = json.filter((algorithm: any) =>
+      const data = json.filter((algorithm: Algorithm) =>
         ENABLED_ALGORITHMS.includes(algorithm.name)
       );
 
-      return { error: undefined, data };
+      const surchargedParameter = data.map((d: Algorithm) => ({
+        ...d,
+        parameters: d.parameters.map((p: AlgorithmParameter) => ({
+          ...p,
+          value: '',
+          visible: !UI_HIDDEN_PARAMETERS.includes(p.name)
+        }))
+      }));
+
+      return { error: undefined, data: surchargedParameter };
     } catch (error) {
       console.log(error);
       return { error, data: undefined };

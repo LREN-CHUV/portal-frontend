@@ -1,13 +1,12 @@
-import './Model.css';
-
 import * as React from 'react';
 import { Panel } from 'react-bootstrap';
 import styled from 'styled-components';
-
 import { VariableEntity } from '../API/Core';
 import { ModelResponse } from '../API/Model';
 import DropdownModel from './DropdownModel';
-import Loading from './Loader';
+import './Model.css';
+
+
 
 const Body = styled(Panel.Body)`
   padding: 0 16px 16px 16px;
@@ -63,17 +62,17 @@ class Model extends React.Component<Props> {
           </Title>
         </Panel.Title>
         <Body>
-          {!model && (
+          {/* {!model && (
             <div style={{ marginTop: '8px' }}>
               <Loading />
             </div>
-          )}
+          )} */}
           {query && (
             <>
               {query.variables && <Subtitle>Variables</Subtitle>}
               {query.variables &&
                 query.variables.map((v: any) => (
-                  <var key={v.code}>{lookup(v.code).label}</var>
+                  <var key={v.code}>{lookup(v.code).info}</var>
                 ))}
               {((query.coVariables && query.coVariables.length > 0) ||
                 (query.groupings && query.groupings.length > 0)) && (
@@ -82,12 +81,12 @@ class Model extends React.Component<Props> {
               {query.coVariables &&
                 query.coVariables.length > 0 &&
                 query.coVariables.map((v: any) => (
-                  <var key={v.code}>{lookup(v.code).label}</var>
+                  <var key={v.code}>{lookup(v.code).info}</var>
                 ))}
               {query.groupings &&
                 query.groupings.length > 0 &&
                 query.groupings.map((v: any) => (
-                  <var key={v.code}>{lookup(v.code).label}</var>
+                  <var key={v.code}>{lookup(v.code).info}</var>
                 ))}
               {query.filters && <Subtitle>Filters</Subtitle>}
               {query.filters && this.formatFilter(query.filters)}

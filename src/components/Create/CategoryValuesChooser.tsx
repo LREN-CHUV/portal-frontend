@@ -19,13 +19,13 @@ export default ({
   handleChangeCategoryParameter
 }: Props): JSX.Element => {
   const [categories, setCategories] = useState<LocalVar>();
-  const [category, setCategory] = useState<VariableEntity | undefined>();
+  const [selectedCategory, setSelectedCategory] = useState<
+    VariableEntity | undefined
+  >();
 
   const lookupCallback = useCallback(apiCore.lookup, []);
   useEffect(() => {
     const categoricalVariables: VariableEntity[] | undefined = query && [
-      ...(query.groupings || []),
-      ...(query.coVariables || []),
       ...(query.variables || [])
     ];
 
@@ -37,20 +37,31 @@ export default ({
 
     setCategories(vars);
     const first = (vars && vars.length && vars[0]) || undefined;
-    setCategory(first);
+    if (first) {
+      setSelectedCategory({ ...first });
+
+      const json = JSON.stringify({
+        name: first.code,
+        val: first.enumerations && first.enumerations[0].code
+      });
+      handleChangeCategoryParameter(code, json);
+
+    }
   }, [query, lookupCallback]);
 
   const handleChangeCategory = (event: any) => {
     event.preventDefault();
     const theVar =
-      categories && categories.find((v: any) => (v.code = event.target.value));
-    setCategory(theVar);
+      categories && categories.find((v: any) => v.code === event.target.value);
+    if (theVar) {
+      setSelectedCategory({ ...theVar });
+    }
   };
 
   const handleChangeValue = (event: any) => {
     event.preventDefault();
     const json = JSON.stringify({
-      name: category && category.code,
+      name: selectedCategory && selectedCategory.code,
       val: event.target.value
     });
     handleChangeCategoryParameter(code, json);
@@ -58,8 +69,9 @@ export default ({
 
   return (
     <>
+      {!categories && <p>Please, select a categorical variable</p>}
       {categories && categories.length > 0 && (
-        <div>
+        <>
           <FormControl
             componentClass="select"
             placeholder="select"
@@ -80,15 +92,15 @@ export default ({
             // ref={valueRef}
             onChange={handleChangeValue}
           >
-            {category &&
-              category.enumerations &&
-              category.enumerations.map((v: any) => (
+            {selectedCategory &&
+              selectedCategory.enumerations &&
+              selectedCategory.enumerations.map((v: any) => (
                 <option key={v.code} value={v.code}>
                   {v.label}
                 </option>
               ))}
           </FormControl>
-        </div>
+        </>
       )}
     </>
   );

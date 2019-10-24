@@ -14,7 +14,7 @@ export default ({
   reset = false,
   selectedSlug
 }: Dropdown): JSX.Element => {
-  const [title, setTitle] = useState(selectedSlug || 'undefined');
+  const [title, setTitle] = useState(selectedSlug || 'Select');
   useEffect(() => {
     if (selectedSlug) {
       const f = items && items.find(i => i.slug === selectedSlug);
@@ -27,17 +27,20 @@ export default ({
   return (
     <DropdownButton bsSize="small" id={'model-dropdown'} title={title}>
       {reset && (
-        <MenuItem
-          eventKey={'reset'}
-          key={'reset'}
-          // tslint:disable-next-line jsx-no-lambda
-          onSelect={() => {
-            setTitle('undefined');
-            handleSelect();
-          }}
-        >
-          <strong>Reset</strong>
-        </MenuItem>
+        <>
+          <MenuItem
+            eventKey={'reset'}
+            key={'reset'}
+            // tslint:disable-next-line jsx-no-lambda
+            onSelect={() => {
+              setTitle('undefined');
+              handleSelect();
+            }}
+          >
+            <strong>Reset</strong>
+          </MenuItem>
+          <MenuItem>---</MenuItem>
+        </>
       )}
 
       {items &&

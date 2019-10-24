@@ -10,14 +10,18 @@ export interface ModelProps {
   handleSelectNode: Function;
   d3Model: D3Model;
   zoom: Function;
+  buttonVariable: JSX.Element;
+  buttonCovariable: JSX.Element;
 }
 
 const Wrapper = styled.div`
   display: flex;
   height: 120px;
 
-  h5 {
-    font-weight: bold;
+  button {
+    margin-bottom: 4px;
+    flex: 1;
+    margin-right: 4px;
   }
 
   div {
@@ -49,7 +53,14 @@ const Wrapper = styled.div`
 export default (props: ModelProps) => {
   const variableRef = useRef(null);
   const covariableRef = useRef(null);
-  const { d3Model: model, handleUpdateD3Model, handleSelectNode, zoom } = props;
+  const {
+    d3Model: model,
+    handleUpdateD3Model,
+    handleSelectNode,
+    zoom,
+    buttonVariable,
+    buttonCovariable
+  } = props;
 
   const makeTree = (
     variables: HierarchyCircularNode[],
@@ -110,11 +121,11 @@ export default (props: ModelProps) => {
   return (
     <Wrapper>
       <div>
-        <h5>Variables</h5>
+        {buttonVariable}
         <div ref={variableRef} />
       </div>
       <div>
-        <h5>Covariables</h5>
+        {buttonCovariable}
         <div ref={covariableRef} />
       </div>
     </Wrapper>

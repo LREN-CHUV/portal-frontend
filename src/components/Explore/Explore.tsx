@@ -4,15 +4,12 @@ import styled from 'styled-components';
 import { APICore, APIModel } from '../API';
 import { VariableEntity } from '../API/Core';
 import { ModelResponse } from '../API/Model';
+import AvailableAlgorithms from '../Create/AvailableAlgorithms';
 import DropdownModel from '../UI/DropdownModel';
-import Modal from '../UI/Modal';
 import { D3Model, HierarchyCircularNode, ModelType } from './Container';
 import Histograms from './D3Histograms';
 import ModelView from './D3Model';
 import Search from './D3Search';
-import Header from './Header';
-import Formula from './Formula';
-import AvailableAlgorithms from '../Create/AvailableAlgorithms';
 
 export interface ExploreProps {
   apiCore: APICore;
@@ -58,10 +55,6 @@ export default (props: ExploreProps): JSX.Element => {
   const selectedPathology = model && model.query && model.query.pathology;
   const datasets = apiCore.datasetsForPathology(selectedPathology);
 
-  const handleSaveModel = (): void => {
-    apiModel.save({ model, title: 'title' });
-  };
-
   const PanelTitle = styled(Panel.Title)`
     display: flex;
     flex-direction: row;
@@ -70,7 +63,7 @@ export default (props: ExploreProps): JSX.Element => {
     margin: 0 16px 0 0;
   `;
 
-  const Buttons = styled.div`
+  const ModelTitle = styled.div`
     display: flex;
     align-items: center;
     justify-content: flex-start;
@@ -85,11 +78,6 @@ export default (props: ExploreProps): JSX.Element => {
     h5 {
       font-weight: bold;
       margin-right: 8px;
-    }
-
-    button {
-      flex: 1;
-      margin-right: 4px;
     }
   `;
 
@@ -200,7 +188,8 @@ export default (props: ExploreProps): JSX.Element => {
           <Panel>
             <Panel.Body>
               {/* <Formula parameters={d3Model} /> */}
-              <Buttons>
+              <ModelTitle>
+                <h5>Parameters</h5>
                 <DropdownModel
                   items={apiModel.state.models}
                   selectedSlug={
@@ -209,56 +198,58 @@ export default (props: ExploreProps): JSX.Element => {
                   reset={apiModel.state.model ? true : false}
                   handleSelect={handleSelectModel}
                 />
-
-                <h5>Add to parameters</h5>
-
-                <Button
-                  className="child"
-                  bsStyle={'success'}
-                  bsSize={'small'}
-                  disabled={!selectedNode}
-                  // tslint:disable-next-line jsx-no-lambda
-                  onClick={() =>
-                    handleUpdateD3Model(ModelType.VARIABLE, selectedNode)
-                  }
-                >
-                  {d3Model.variables &&
-                  selectedNode &&
-                  d3Model.variables.filter(c =>
-                    selectedNode.leaves().includes(c)
-                  ).length === selectedNode.leaves().length
-                    ? '-'
-                    : '+'}{' '}
-                  AS VARIABLE
-                </Button>
-                <Button
-                  className="child"
-                  bsStyle={'warning'}
-                  bsSize={'small'}
-                  disabled={!selectedNode}
-                  // tslint:disable-next-line jsx-no-lambda
-                  onClick={() =>
-                    handleUpdateD3Model(ModelType.COVARIABLE, selectedNode)
-                  }
-                >
-                  {d3Model.covariables &&
-                  selectedNode &&
-                  d3Model.covariables.filter(c =>
-                    selectedNode.leaves().includes(c)
-                  ).length === selectedNode.leaves().length
-                    ? '-'
-                    : '+'}{' '}
-                  AS COVARIABLE
-                </Button>
-              </Buttons>
-
+              </ModelTitle>
               <ModelView
                 d3Model={d3Model}
                 handleUpdateD3Model={handleUpdateD3Model}
                 handleSelectNode={handleSelectNode}
                 zoom={zoom}
+                buttonVariable={
+                  <Button
+                    className="child"
+                    bsStyle={'success'}
+                    bsSize={'small'}
+                    disabled={!selectedNode}
+                    // tslint:disable-next-line jsx-no-lambda
+                    onClick={() =>
+                      handleUpdateD3Model(ModelType.VARIABLE, selectedNode)
+                    }
+                  >
+                    {d3Model.variables &&
+                    selectedNode &&
+                    d3Model.variables.filter(c =>
+                      selectedNode.leaves().includes(c)
+                    ).length === selectedNode.leaves().length
+                      ? '-'
+                      : '+'}{' '}
+                    AS VARIABLE
+                  </Button>
+                }
+                buttonCovariable={
+                  <Button
+                    className="child"
+                    bsStyle={'warning'}
+                    bsSize={'small'}
+                    disabled={!selectedNode}
+                    // tslint:disable-next-line jsx-no-lambda
+                    onClick={() =>
+                      handleUpdateD3Model(ModelType.COVARIABLE, selectedNode)
+                    }
+                  >
+                    {d3Model.covariables &&
+                    selectedNode &&
+                    d3Model.covariables.filter(c =>
+                      selectedNode.leaves().includes(c)
+                    ).length === selectedNode.leaves().length
+                      ? '-'
+                      : '+'}{' '}
+                    AS COVARIABLE
+                  </Button>
+                }
               />
+              Available algorithms:{' '}
               <AvailableAlgorithms
+                layout={'inline'}
                 algorithms={apiCore.state.algorithms}
                 lookup={apiCore.lookup}
                 handleSelectMethod={() => {}}

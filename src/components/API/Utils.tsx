@@ -1,5 +1,4 @@
 import APICore, { AlgorithmParameter, VariableEntity } from './Core';
-// import { buildExaremeAlgorithmRequest } from './ExaremeAPIAdapter';
 import APIExperiment, {
   Engine,
   ExperimentPayload,
@@ -71,7 +70,6 @@ const createWorkflowPayload = async (
       ],
       model: modelSlug,
       name: experimentCode,
-      validations: [],
       engine: Engine.Workflow
     };
 
@@ -105,7 +103,6 @@ const createExaremePayload = (
     ],
     model: modelSlug,
     name: experimentCode,
-    validations: [],
     engine: Engine.Exareme
   };
 

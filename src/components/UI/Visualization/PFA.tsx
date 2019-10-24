@@ -9,7 +9,6 @@ import {
   KfoldValidationScore,
   ValidationScore
 } from '../../API/Experiment';
-import { SCORES } from '../../constants';
 import { round } from '../../utils';
 import { Highchart } from './';
 
@@ -41,7 +40,7 @@ const buildChart = (validation: KfoldValidationScore | ValidationScore) => {
       text: ''
     },
     xAxis: {
-      categories: Object.keys(validation).map(v => SCORES[v] && SCORES[v].label)
+      categories: Object.keys(validation).map(v => v)
     },
     yAxis: {
       title: {
@@ -56,8 +55,7 @@ const buildTableValue = (validation: KfoldValidationScore | ValidationScore) =>
     <ul className="pfa-table">
       {Object.keys(validation).map((key, k) => (
         <li key={k}>
-          <strong>{SCORES[key] && SCORES[key].label}</strong>:{' '}
-          {round(validation[key])}
+          <strong>{key}</strong>: {round(validation[key])}
         </li>
       ))}
     </ul>

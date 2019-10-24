@@ -3,7 +3,7 @@ import request from 'request-promise-native';
 import { backendURL } from '../API';
 import options from '../API/RequestHeaders';
 import { Algorithm, AlgorithmParameter } from './Core';
-import { hiddenParameters, stripModelParameters } from './ExaremeAPIAdapter';
+import { UI_HIDDEN_PARAMETERS } from '../constants'
 import { Engine, ExperimentResponse } from './Experiment';
 import { ModelResponse } from './Model';
 
@@ -154,7 +154,7 @@ const buildWorkflowAlgorithmList = (json: any): Algorithm[] => {
         label: j.inputs[k].label,
         defaults
       }),
-      visible: !hiddenParameters.includes(j.inputs[k].label)
+      visible: !UI_HIDDEN_PARAMETERS.includes(j.inputs[k].label)
     })),
     engine: Engine.Workflow,
     type: ['workflow'],
@@ -279,7 +279,7 @@ const buildWorkflowAlgorithmResponse = (
       }))
   }));
 
-  experimentResponse = stripModelParameters(experimentResponse);
+  // experimentResponse = stripModelParameters(experimentResponse);
   experimentResponse.engine = Engine.Exareme;
 
   const workflowResult: Response = workflowResults[historyId];

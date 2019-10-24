@@ -15,80 +15,45 @@ export enum MIME_TYPES {
   JSONRAW = 'application/raw+json'
 }
 
+const DEFAULT_OUTPUT = [
+  MIME_TYPES.ERROR,
+  MIME_TYPES.WARNING,
+  MIME_TYPES.USER_WARNING
+];
+
+// TODO: merge OUTPUT and ENABLED
 export const ALGORITHM_DEFAULT_OUTPUT = [
   {
     name: 'ANOVA',
-    types: [
-      MIME_TYPES.ERROR,
-      MIME_TYPES.WARNING,
-      MIME_TYPES.USER_WARNING,
-      MIME_TYPES.JSONDATA
-    ]
+    types: [...DEFAULT_OUTPUT, MIME_TYPES.JSONDATA]
   },
   {
     name: 'LINEAR_REGRESSION',
-    types: [
-      MIME_TYPES.ERROR,
-      MIME_TYPES.WARNING,
-      MIME_TYPES.USER_WARNING,
-      MIME_TYPES.JSONDATA
-    ]
+    types: [...DEFAULT_OUTPUT, MIME_TYPES.JSONDATA]
   },
   {
     name: 'LOGISTIC_REGRESSION',
-    types: [
-      MIME_TYPES.ERROR,
-      MIME_TYPES.WARNING,
-      MIME_TYPES.USER_WARNING,
-      MIME_TYPES.JSONDATA,
-      MIME_TYPES.HIGHCHARTS
-    ]
+    types: [...DEFAULT_OUTPUT, MIME_TYPES.JSONDATA, MIME_TYPES.HIGHCHARTS]
   },
   {
     name: 'HISTOGRAMS',
-    types: [
-      MIME_TYPES.ERROR,
-      MIME_TYPES.WARNING,
-      MIME_TYPES.USER_WARNING,
-      MIME_TYPES.HIGHCHARTS
-    ]
+    types: [...DEFAULT_OUTPUT, MIME_TYPES.HIGHCHARTS]
   },
   {
     name: 'TTEST_INDEPENDENT',
-    types: [
-      MIME_TYPES.ERROR,
-      MIME_TYPES.WARNING,
-      MIME_TYPES.USER_WARNING,
-      MIME_TYPES.JSONDATA
-    ]
+    types: [...DEFAULT_OUTPUT, MIME_TYPES.JSONDATA]
   },
   {
     name: 'TTEST_PAIRED',
-    types: [
-      MIME_TYPES.ERROR,
-      MIME_TYPES.WARNING,
-      MIME_TYPES.USER_WARNING,
-      MIME_TYPES.JSONDATA
-    ]
+    types: [...DEFAULT_OUTPUT, MIME_TYPES.JSONDATA]
   },
   {
     name: 'PEARSON_CORRELATION',
-    types: [
-      MIME_TYPES.ERROR,
-      MIME_TYPES.WARNING,
-      MIME_TYPES.USER_WARNING,
-      MIME_TYPES.JSONDATA,
-      MIME_TYPES.HIGHCHARTS
-    ]
+    types: [...DEFAULT_OUTPUT, MIME_TYPES.JSONDATA, MIME_TYPES.HIGHCHARTS]
   },
   {
     name: 'ID3',
-    types: [
-      MIME_TYPES.ERROR,
-      MIME_TYPES.WARNING,
-      MIME_TYPES.USER_WARNING,
-      MIME_TYPES.JSONDATA
-    ]
+    types: [...DEFAULT_OUTPUT, MIME_TYPES.JSONDATA]
   }
 ];
 
@@ -105,108 +70,12 @@ export const ENABLED_ALGORITHMS = [
   // 'TTEST_PAIRED'
 ];
 
-interface ILabel {
-  code: string;
-  label: string;
-}
-
-interface ISCORES {
-  accuracy: ILabel;
-  confusionMatrix: ILabel;
-  explainedVariance: ILabel;
-  f1score: ILabel;
-  falsePositiveRate: ILabel;
-  mae: ILabel;
-  mse: ILabel;
-  precision: ILabel;
-  recall: ILabel;
-  rmse: ILabel;
-  rsquared: ILabel;
-  type: ILabel;
-  [key: string]: any;
-}
-
-// regression && classification scores labels
-const accuracy: ILabel = { code: 'Accuracy', label: 'Accuracy' };
-const f1score: ILabel = {
-  code: 'Weighted F1-score',
-  label: 'Weighted F1-score'
-};
-const falsePositiveRate: ILabel = {
-  code: 'Weighted false positive rate',
-  label: 'Weighted false positive rate'
-};
-const precision: ILabel = {
-  code: 'Weighted precision',
-  label: 'Weighted precision'
-};
-const recall: ILabel = { code: 'Weighted recall', label: 'Weighted recall' };
-const confusionMatrix: ILabel = {
-  code: 'Confusion matrix',
-  label: 'Confusion matrix'
-};
-
-const explainedVariance: ILabel = {
-  code: 'Explained variance',
-  label: 'Explained variance'
-};
-const mae: ILabel = { code: 'MAE', label: 'Mean absolute error' };
-const mse: ILabel = { code: 'MSE', label: 'Mean square error' };
-const rsquared: ILabel = {
-  code: 'R-squared',
-  label: 'Coefficient of determination (R²)'
-};
-const rmse: ILabel = { code: 'RMSE', label: 'Root mean square error' };
-const type: ILabel = { code: 'type', label: 'Explained variance' };
-
-export const SCORES: ISCORES = {
-  accuracy,
-  confusionMatrix,
-  explainedVariance,
-  f1score,
-  falsePositiveRate,
-  mae,
-  mse,
-  precision,
-  recall,
-  rmse,
-  rsquared,
-  type
-};
-
-interface ILabelPlus extends ILabel {
-  order: number;
-}
-
-const f: ILabelPlus = { code: 'F', label: 'F', order: 3 };
-const meansq: ILabelPlus = { code: 'mean_sq', label: 'mean-sq', order: 2 };
-const prf: ILabelPlus = { code: 'PR(>F)', label: 'PR(>F)', order: 4 };
-const sumsq: ILabelPlus = { code: 'sum_sq', label: 'sum-sq', order: 1 };
-const df: ILabelPlus = { code: 'df', label: 'df', order: 0 };
-
-const coef: ILabelPlus = { code: 'coef', label: 'coef', order: 0 };
-const pvalues: ILabelPlus = { code: 'p_values', label: 'p-value', order: 3 };
-const stderr: ILabelPlus = {
-  code: 'std_err',
-  label: 'std-err',
-  order: 2
-};
-const tvalues: ILabelPlus = { code: 't_values', label: 't-value', order: 2 };
-
-export const globalParameters = {
-  kfold: {
-    k: 3
-  }
-};
-
-export const LABELS: ILabelPlus[] = [
-  coef,
-  df,
-  f,
-  meansq,
-  prf,
-  pvalues,
-  stderr,
-  sumsq,
-  tvalues
+const independents = ['X', 'column1', 'x', 'descriptive_attributes'];
+const dependents = ['Y', 'column2', 'y', 'target_attributes'];
+export const UI_HIDDEN_PARAMETERS = [
+  ...dependents,
+  ...independents,
+  'dataset',
+  'filter',
+  'pathology'
 ];

@@ -12,7 +12,7 @@ import { ModelResponse, Query } from '../API/Model';
 import { AppConfig, InstanceMode } from '../App/App';
 import { IAlert } from '../UI/Alert';
 import Model from '../UI/Model';
-import Validation from '../UI/Validation';
+import DatasetsForm from '../UI/DatasetsForm';
 import Content from './Content';
 import ContentDeprecated from './Deprecated/Content';
 import Filter from './Filter';
@@ -235,8 +235,7 @@ const Container = ({
         <div className="sidebar">
           <Panel className="datasets">
             <Panel.Body>
-              <Validation
-                isPredictiveMethod={false}
+              <DatasetsForm
                 datasets={apiCore.datasetsForPathology(
                   model && model.query && model.query.pathology
                 )}

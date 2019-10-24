@@ -9,17 +9,15 @@ import APIAdapter from './APIAdapter';
 import { MIME_TYPES } from '../constants';
 
 export interface ExperimentPayload {
-  algorithms: [Algorithm];
+  algorithms: Algorithm[];
   model: string;
   name: string;
-  validations: any;
   engine?: Engine;
 }
 
 export enum Engine {
   Exareme,
-  Workflow,
-  Woken
+  Workflow
 }
 
 export interface ExperimentResponse {

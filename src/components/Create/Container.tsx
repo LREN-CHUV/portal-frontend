@@ -1,28 +1,19 @@
-import '../Experiment.css';
-
 import * as React from 'react';
 import { Panel, Tab, Tabs } from 'react-bootstrap';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
-
 import { APICore, APIExperiment, APIModel } from '../API';
 import { Algorithm, AlgorithmParameter } from '../API/Core';
-import {
-  Engine,
-  ExperimentPayload,
-  ExperimentResponse
-} from '../API/Experiment';
+import { ExperimentPayload, ExperimentResponse } from '../API/Experiment';
 import { ModelResponse, Query } from '../API/Model';
-import { buildWorkflowAlgorithmRequest } from '../API/WorkflowAPIAdapter';
-import { AppConfig, InstanceMode } from '../App/App';
-import { globalParameters } from '../constants';
+import { AppConfig } from '../App/App';
+import '../Experiment.css';
 import { Alert, IAlert } from '../UI/Alert';
+import DatasetsForm from '../UI/DatasetsForm';
 import Model from '../UI/Model';
-import Validation from '../UI/Validation';
 import AvailableAlgorithms from './AvailableAlgorithms';
 import ExperimentCreateHeader from './Header';
 import Help from './Help';
 import Parameters from './Parameters';
-import Datasets from '../UI/Datasets';
 
 interface Props extends RouteComponentProps<any> {
   apiExperiment: APIExperiment;
@@ -32,21 +23,17 @@ interface Props extends RouteComponentProps<any> {
 }
 
 interface State {
-  parameters?: [AlgorithmParameter];
-  method?: Algorithm;
+  parameters?: AlgorithmParameter[];
+  algorithm?: Algorithm;
   alert: IAlert;
-  kfold: number;
 }
 
 class Container extends React.Component<Props, State> {
   public state!: State; // TODO: double check init https://mariusschulz.com/blog/typescript-2-7-strict-property-initialization
 
   public render(): JSX.Element {
-    const { apiCore, apiModel, apiExperiment, appConfig } = this.props;
+    const { apiCore, apiModel, apiExperiment } = this.props;
     const alert = this.state && this.state.alert;
-    const method = this.state && this.state.method;
-    const isLocal =
-      (appConfig && appConfig.mode === InstanceMode.Local) || false;
     const query = apiModel.state.model && apiModel.state.model.query;
 
     return (
@@ -55,7 +42,7 @@ class Container extends React.Component<Props, State> {
           <ExperimentCreateHeader
             model={apiModel.state.model}
             experiments={apiExperiment.state.experiments}
-            method={this.state && this.state.method}
+            method={this.state && this.state.algorithm}
             handleGoBackToReview={this.handleGoBackToReview}
             handleSelectExperiment={this.handleSelectExperiment}
             handleSaveAndRunExperiment={this.handleSaveAndRunExperiment}
@@ -63,7 +50,17 @@ class Container extends React.Component<Props, State> {
         </div>
         <div className="content">
           <div className="sidebar">
-            <Datasets model={apiModel.state.model} />
+            <Panel className="datasets">
+              <Panel.Body>
+                <DatasetsForm
+                  datasets={apiCore.datasetsForPathology(
+                    query && query.pathology
+                  )}
+                  query={query}
+                  handleUpdateQuery={this.handleUpdateQuery}
+                />
+              </Panel.Body>
+            </Panel>
             <Model
               model={apiModel.state.model}
               selectedSlug={apiModel.state.model && apiModel.state.model.slug}
@@ -86,28 +83,14 @@ class Container extends React.Component<Props, State> {
                   defaultActiveKey={1}
                   id="uncontrolled-create-experiment-tab"
                 >
-                  <Tab eventKey={1} title="Method">
+                  <Tab eventKey={1} title="Algorithm">
                     <Parameters
-                      method={this.state && this.state.method}
+                      algorithm={this.state && this.state.algorithm}
                       parameters={this.state && this.state.parameters}
                       handleChangeParameters={this.handleChangeParameters}
                       query={apiModel.state.model && apiModel.state.model.query}
                       apiCore={apiCore}
                     />
-
-                    <fieldset style={{ padding: '8px' }}>
-                      <Validation
-                        kfold={this.state && this.state.kfold}
-                        handleChangeKFold={this.handleChangeKFold}
-                        isLocal={isLocal}
-                        isPredictiveMethod={this.isPredictiveMethod(method)}
-                        datasets={apiCore.datasetsForPathology(
-                          query && query.pathology
-                        )}
-                        query={query}
-                        handleUpdateQuery={this.handleUpdateQuery}
-                      />
-                    </fieldset>
                   </Tab>
                   <Tab eventKey={2} title="About running experiments">
                     <Help />
@@ -119,13 +102,13 @@ class Container extends React.Component<Props, State> {
           <div className="sidebar2">
             <Panel>
               <Panel.Title>
-                <h3>Available Methods</h3>
+                <h3>Available Algorithms</h3>
               </Panel.Title>
               <Panel.Body>
                 <AvailableAlgorithms
                   algorithms={apiCore.state.algorithms}
                   lookup={apiCore.lookup}
-                  handleSelectMethod={this.handleSelectMethod}
+                  handleSelectMethod={this.handleSelectAlgorithm}
                   model={apiModel.state.model}
                 />
               </Panel.Body>
@@ -135,12 +118,6 @@ class Container extends React.Component<Props, State> {
       </div>
     );
   }
-
-  // FIXME: better algorithm parameterization
-  private isPredictiveMethod = (method: Algorithm | undefined) =>
-    (method && method.type && method.type[0] === 'predictive_model') ||
-    (method && method.code === 'kmeans') ||
-    false;
 
   private handleSelectModel = async (model?: ModelResponse): Promise<any> => {
     if (model) {
@@ -152,14 +129,10 @@ class Container extends React.Component<Props, State> {
     }
   };
 
-  private handleSelectMethod = (method: Algorithm): void => {
-    // const kfold = this.isPredictiveMethod(method)
-    //   ? globalParameters.kfold.k
-    //   : 0;
+  private handleSelectAlgorithm = (algorithm: Algorithm): void => {
     this.setState({
-      //   kfold,
-      method
-      //   parameters: method && method.parameters
+      algorithm: algorithm,
+      parameters: algorithm && algorithm.parameters
     });
   };
 
@@ -172,11 +145,7 @@ class Container extends React.Component<Props, State> {
     }
   };
 
-  private handleChangeKFold = (kfold: number) => {
-    this.setState({ kfold });
-  };
-
-  private handleChangeParameters = (parameters: [AlgorithmParameter]) => {
+  private handleChangeParameters = (parameters: AlgorithmParameter[]) => {
     this.setState({ parameters });
   };
 
@@ -210,7 +179,6 @@ class Container extends React.Component<Props, State> {
       });
       return;
     }
-    const { parameters } = this.state;
 
     const model = apiModel.state.model;
     if (!model) {
@@ -223,69 +191,34 @@ class Container extends React.Component<Props, State> {
       });
       return;
     }
-
-    const selectedMethod = this.state && this.state.method;
     await apiModel.update({ model });
-
-    const validation =
-      model &&
-      model.query &&
-      model.query.validationDatasets &&
-      model.query.validationDatasets.length
-        ? true
-        : false;
-
-    const validations =
-      this.state.kfold > 0
-        ? [
-            {
-              code: 'kfold',
-              name: 'validation',
-              parameters: [
-                {
-                  code: 'k',
-                  value: this.state.kfold
-                }
-              ]
-            }
-          ]
-        : [];
     if (!model.slug) {
       this.setState({ alert: { message: 'Model was not saved' } });
       return;
     }
-
-    if (!selectedMethod) {
-      this.setState({ alert: { message: 'Select a method' } });
+    const selectedAlgorithm = this.state && this.state.algorithm;
+    if (!selectedAlgorithm) {
+      this.setState({ alert: { message: 'Select an algorithm' } });
       return;
     }
 
-    const params = parameters
-      ? parameters.map((p: any) => ({
-          ...p,
-          value: p.value || p.default_value
-        }))
-      : [];
-
-    const requestParameters = params;
-    // selectedMethod.source === Engine.Exareme
-    //   ? buildExaremeAlgorithmRequest(model, params)
-    //   : // : selectedMethod.source === Engine.Workflow
-    //     // ? buildWorkflowAlgorithmRequest(model, selectedMethod, params)
-    //     params;
+    const { parameters } = this.state;
+    if (!parameters) {
+      this.setState({ alert: { message: 'Select an algorithm' } });
+      return;
+    }
 
     const experiment: ExperimentPayload = {
       algorithms: [
         {
-          code: selectedMethod.code,
-          name: selectedMethod.code,
-          parameters: requestParameters
+          code: selectedAlgorithm.code,
+          name: selectedAlgorithm.code,
+          parameters
         }
       ],
-      engine: selectedMethod.source,
+      engine: selectedAlgorithm.source,
       model: model.slug,
-      name: experimentName,
-      validations
+      name: experimentName
     };
 
     await apiExperiment.create({ experiment });
