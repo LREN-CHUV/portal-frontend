@@ -17,6 +17,7 @@
   border: 1px lightblue solid;
   margin: 2px 0 0 -16px;
   border-radius: 4px;
+  cursor: pointer;
 }
 
 .shortcuts .d3-link-results a.selected {
