@@ -106,10 +106,6 @@ const AvailableAlgorithms = ({
       }))) ||
     [];
 
-  const types = Array.from(
-    new Set(availableAlgorithms.map(f => f.type).flat(1))
-  );
-
   const variablesHelpMessage = (algorithm: Algorithm): JSX.Element => {
     const message: JSX.Element[] = [];
 
@@ -161,71 +157,37 @@ const AvailableAlgorithms = ({
     return <>{message}</>;
   };
 
+  const LayoutElement = layout === 'inline' ? styled.span`` : styled.div``;
+
   return (
     <>
-      {layout !== 'inline' &&
-        types.map(type => (
-          <div className="method" key={type}>
-            <h4>{type}</h4>
-            {availableAlgorithms
-              .filter(a => a.type && a.type === type)
-              .map(algorithm => (
-                <div className="method" key={algorithm.code}>
-                  <OverlayTrigger
-                    placement="left"
-                    overlay={
-                      <Popover id={`tooltip-${algorithm.code}`}>
-                        <p>{algorithm.desc}</p>
-                        {variablesHelpMessage(algorithm)}
-                      </Popover>
-                    }
-                  >
-                    <Button
-                      key={algorithm.code}
-                      bsStyle="link"
-                      // ts lint:disable-next-line jsx-no-lambda
-                      onClick={() => handleSelectMethod(algorithm)}
-                      style={{
-                        color: algorithm.enabled ? '#03a9f4' : 'gray',
-                        padding: 0,
-                        textTransform: 'none'
-                      }}
-                    >
-                      {algorithm.name}
-                    </Button>
-                  </OverlayTrigger>
-                </div>
-              ))}
-          </div>
-        ))}
-      {layout === 'inline' && (
-        <InlineAlgorithms>
-          {availableAlgorithms.map(algorithm => (
-            <span className="method" key={algorithm.name}>
-              <OverlayTrigger
-                placement="left"
-                overlay={
-                  <Popover id={`tooltip-${algorithm.name}`}>
-                    <p>{algorithm.desc}</p>
-                    {variablesHelpMessage(algorithm)}
-                  </Popover>
-                }
-              >
-                <var
-                  key={algorithm.code}
-                  style={{
-                    color: algorithm.enabled ? '#449d44' : 'gray',
-                    padding: 0,
-                    textTransform: 'none'
-                  }}
-                >
-                  {algorithm.name}
-                </var>
-              </OverlayTrigger>
-            </span>
-          ))}
-        </InlineAlgorithms>
-      )}
+      {availableAlgorithms.map(algorithm => (
+        <LayoutElement className="method" key={algorithm.name}>
+          <OverlayTrigger
+            placement="left"
+            overlay={
+              <Popover id={`tooltip-${algorithm.name}`}>
+                <p>{algorithm.desc}</p>
+                {variablesHelpMessage(algorithm)}
+              </Popover>
+            }
+          >
+            <Button
+              key={algorithm.name}
+              bsStyle="link"
+              // ts lint:disable-next-line jsx-no-lambda
+              onClick={() => handleSelectMethod(algorithm)}
+              style={{
+                color: algorithm.enabled ? '#03a9f4' : 'gray',
+                padding: 0,
+                textTransform: 'none'
+              }}
+            >
+              {algorithm.name}
+            </Button>
+          </OverlayTrigger>
+        </LayoutElement>
+      ))}
     </>
   );
 };
