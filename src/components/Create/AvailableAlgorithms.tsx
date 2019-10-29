@@ -8,16 +8,6 @@ interface AvailableAlgorithm extends Algorithm {
   enabled: boolean;
 }
 
-const InlineAlgorithms = styled.div`
-  var::after {
-    content: ', ';
-  }
-
-  var::last-child::after {
-    content: '';
-  }
-`;
-
 const AvailableAlgorithms = ({
   algorithms,
   lookup,
@@ -157,26 +147,70 @@ const AvailableAlgorithms = ({
     return <>{message}</>;
   };
 
-  const LayoutElement = layout === 'inline' ? styled.span`` : styled.div``;
+  const Container = styled.div`
+    var::after {
+      content: ', ';
+    }
+
+    var::last-child::after {
+      content: '';
+    }
+
+    p {
+      margin: 0;
+      padding: 0;
+      border: 1px solid transparent;
+    }
+  `;
 
   return (
-    <>
+    <Container>
       {availableAlgorithms.map(algorithm => (
-        <LayoutElement className="method" key={algorithm.name}>
-          <OverlayTrigger
-            placement="left"
-            overlay={
-              <Popover id={`tooltip-${algorithm.name}`}>
-                <p>{algorithm.desc}</p>
-                {variablesHelpMessage(algorithm)}
-              </Popover>
-            }
-          >
-            <Button
+        <OverlayTrigger
+          key={algorithm.name}
+          placement="left"
+          rootClose={false}
+          overlay={
+            <Popover id={`tooltip-${algorithm.name}`}>
+              <p>{algorithm.desc}</p>
+              {variablesHelpMessage(algorithm)}
+            </Popover>
+          }
+        >
+          {layout !== 'inline' ? (
+            <div>
+              {algorithm.enabled && (
+                <Button
+                  key={algorithm.name}
+                  bsStyle="link"
+                  // ts lint:disable-next-line jsx-no-lambda
+                  onClick={(): void => handleSelectMethod(algorithm)}
+                  disabled={!algorithm.enabled}
+                  style={{
+                    color: algorithm.enabled ? '#03a9f4' : 'gray',
+                    padding: 0,
+                    textTransform: 'none'
+                  }}
+                >
+                  {algorithm.name}
+                </Button>
+              )}
+              {!algorithm.enabled && (
+                <p
+                  key={algorithm.name}
+                  style={{
+                    color: algorithm.enabled ? '#03a9f4' : 'gray',
+                    padding: 0,
+                    textTransform: 'none'
+                  }}
+                >
+                  {algorithm.name}
+                </p>
+              )}
+            </div>
+          ) : (
+            <var
               key={algorithm.name}
-              bsStyle="link"
-              // ts lint:disable-next-line jsx-no-lambda
-              onClick={() => handleSelectMethod(algorithm)}
               style={{
                 color: algorithm.enabled ? '#03a9f4' : 'gray',
                 padding: 0,
@@ -184,11 +218,11 @@ const AvailableAlgorithms = ({
               }}
             >
               {algorithm.name}
-            </Button>
-          </OverlayTrigger>
-        </LayoutElement>
+            </var>
+          )}
+        </OverlayTrigger>
       ))}
-    </>
+    </Container>
   );
 };
 export default AvailableAlgorithms;
