@@ -24,33 +24,29 @@ const IFrameContainer = styled.div`
 export default React.memo(({ appConfig }: Props) => {
   const divRef = useRef<HTMLIFrameElement>(null);
   const [error, setError] = useState<string | null>(null);
-  const [token, setToken] = useState();
-  const URL_APACHE = appConfig.galaxyApacheUrl || '';
+  const [authorization, setAuthorization] = useState();
+  const [context, setContext] = useState();
 
   useEffect(() => {
     const fetchToken = async (): Promise<void> => {
-      const response = await fetch(
-        `http://localhost:8080/services/galaxy/token`
-      );
+      const response = await fetch(`http://localhost:8080/services/galaxy`);
       const data = await response.json();
-      const token = data.response;
-
-      setToken(token);
+      setAuthorization(data.authorization);
+      setContext(data.context);
     };
     fetchToken();
   }, []);
 
   useEffect(() => {
-    if (token) {
-      const Authorization = `Basic ${token}`;
-      fetch(URL_APACHE, {
+    if (authorization) {
+      fetch(context, {
         headers: new Headers({
-          Authorization
+          Authorization: authorization
         })
       })
         .then(() => {
           if (divRef && divRef.current) {
-            divRef.current.src = URL_APACHE;
+            divRef.current.src = context;
           }
         })
         .catch(error => {
@@ -58,12 +54,14 @@ export default React.memo(({ appConfig }: Props) => {
           setError(error.message);
         });
     }
-  }, token);
+  }, [authorization, context]);
 
   return (
     <IFrameContainer>
       {error && <Error message={error} />}
-      {token && <iframe title="Galaxy Workflow" ref={divRef} />}
+      {authorization && context && (
+        <iframe title="Galaxy Workflow" ref={divRef} />
+      )}
     </IFrameContainer>
   );
 });

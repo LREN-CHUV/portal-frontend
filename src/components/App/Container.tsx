@@ -60,9 +60,7 @@ class AppContainer extends React.Component<any, State> {
       const appConfig: AppConfig = {
         instanceName: 'MIP DEV',
         mode: InstanceMode.Federation,
-        version: 'alpha',
-        galaxyAPIUrl: '',
-        galaxyApacheUrl: '/nativeGalaxy'
+        version: 'alpha'
       };
 
       this.setState({ appConfig });

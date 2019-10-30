@@ -29,8 +29,6 @@ export interface AppConfig {
   instanceName?: string;
   mode?: InstanceMode;
   ga?: string;
-  galaxyAPIUrl?: string;
-  galaxyApacheUrl?: string;
 }
 interface Props {
   appConfig: AppConfig;
