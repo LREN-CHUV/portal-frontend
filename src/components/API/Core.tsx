@@ -106,6 +106,12 @@ export interface Article {
   title?: string;
 }
 
+export interface GalaxyConfig {
+  authorization?: string;
+  context?: string;
+  error?: string;
+}
+
 export interface State {
   error?: string;
   loading?: boolean;
@@ -116,6 +122,7 @@ export interface State {
   articles?: Article[];
   stats?: Stats;
   variables?: VariableEntity[];
+  galaxy?: GalaxyConfig;
 }
 
 class Core extends Container<State> {
@@ -380,6 +387,26 @@ class Core extends Container<State> {
     } catch (error) {
       return await this.setState({
         error: error.message
+      });
+    }
+  };
+
+  public fetchGalaxyConfiguration = async (): Promise<void> => {
+    try {
+      const data = await request.get(`${this.backendURL}/galaxy`, this.options);
+      const json = await JSON.parse(data);
+      if (json.error) {
+        return await this.setState({
+          galaxy: { error: json.error }
+        });
+      }
+
+      return await this.setState({
+        galaxy: json
+      });
+    } catch (error) {
+      return await this.setState({
+        galaxy: { error: error.message }
       });
     }
   };

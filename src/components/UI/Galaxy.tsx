@@ -1,12 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
-import { AppConfig } from '../App/App';
+import { APICore } from '../API/';
+import { GalaxyConfig } from '../API/Core';
 import Error from './Error';
 
 interface Props {
-  appConfig: AppConfig;
-  token?: string;
+  apiCore: APICore;
 }
 
 const IFrameContainer = styled.div`
@@ -21,47 +21,52 @@ const IFrameContainer = styled.div`
   }
 `;
 
-export default React.memo(({ appConfig }: Props) => {
+export default React.memo(({ apiCore }: Props) => {
   const divRef = useRef<HTMLIFrameElement>(null);
   const [error, setError] = useState<string | null>(null);
-  const [authorization, setAuthorization] = useState();
-  const [context, setContext] = useState();
+  const [config, setConfig] = useState<GalaxyConfig>();
 
   useEffect(() => {
-    const fetchToken = async (): Promise<void> => {
-      const response = await fetch(`http://localhost:8080/services/galaxy`);
-      const data = await response.json();
-      setAuthorization(data.authorization);
-      setContext(data.context);
+    const fetchConfig = async (): Promise<void> => {
+      await apiCore.fetchGalaxyConfiguration();
+      const config = apiCore.state.galaxy;
+      if (config) {
+        if (config.error) {
+          setError(config.error);
+        }
+
+        setConfig(apiCore.state.galaxy);
+      }
     };
-    fetchToken();
+    fetchConfig();
   }, []);
 
   useEffect(() => {
-    if (authorization) {
-      fetch(context, {
-        headers: new Headers({
-          Authorization: authorization
+    if (config) {
+      const { authorization, context } = config;
+      if (authorization && context) {
+        fetch(context, {
+          headers: new Headers({
+            Authorization: authorization
+          })
         })
-      })
-        .then(() => {
-          if (divRef && divRef.current) {
-            divRef.current.src = context;
-          }
-        })
-        .catch(error => {
-          console.log(error);
-          setError(error.message);
-        });
+          .then(() => {
+            if (divRef && divRef.current) {
+              divRef.current.src = context;
+            }
+          })
+          .catch(error => {
+            console.log(error);
+            setError(error.message);
+          });
+      }
     }
-  }, [authorization, context]);
+  }, [config]);
 
   return (
     <IFrameContainer>
       {error && <Error message={error} />}
-      {authorization && context && (
-        <iframe title="Galaxy Workflow" ref={divRef} />
-      )}
+      {<iframe title="Galaxy Workflow" ref={divRef} />}
     </IFrameContainer>
   );
 });

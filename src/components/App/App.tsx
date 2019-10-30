@@ -158,7 +158,7 @@ const App = ({
           />
           <Route
             path="/galaxy"
-            render={(): JSX.Element => <Galaxy appConfig={appConfig} />}
+            render={(): JSX.Element => <Galaxy apiCore={apiCore} />}
           />
 
           <Route
