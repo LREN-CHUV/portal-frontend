@@ -82,6 +82,7 @@ const App = ({
               `/experiment/${experiment.modelDefinitionId}/${experiment.uuid}`
             );
           }}
+          isFederated={appConfig.mode === InstanceMode.Federation}
         />
       </header>
       <Main>
