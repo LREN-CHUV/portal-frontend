@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 import { AppConfig } from '../App/App';
@@ -21,31 +21,49 @@ const IFrameContainer = styled.div`
   }
 `;
 
-export default React.memo(
-  ({ appConfig, token = 'Basic YWRtaW46cEBzc3cwcmQ=' }: Props) => {
-    const divRef = useRef<HTMLIFrameElement>(null);
-    const [error, setError] = useState<string | null>(null);
+export default React.memo(({ appConfig }: Props) => {
+  const divRef = useRef<HTMLIFrameElement>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [token, setToken] = useState();
+  const URL_APACHE = appConfig.galaxyApacheUrl || '';
 
-    const URL_APACHE = appConfig.galaxyApacheUrl || '';
-    fetch(URL_APACHE, {
-      headers: new Headers({
-        Authorization: `${token}`
-      })
-    })
-      .then(() => {
-        if (divRef && divRef.current) {
-          divRef.current.src = URL_APACHE;
-        }
-      })
-      .catch(error => {
-        setError(error.message);
-      });
+  useEffect(() => {
+    const fetchToken = async (): Promise<void> => {
+      const response = await fetch(
+        `http://localhost:8080/services/galaxy/token`
+      );
+      const data = await response.json();
+      const token = data.response;
 
-    return (
-      <IFrameContainer>
-        {error && <Error message={error} />}
-        {!error && <iframe title="Galaxy Workflow" ref={divRef} />}
-      </IFrameContainer>
-    );
-  }
-);
+      setToken(token);
+    };
+    fetchToken();
+  }, []);
+
+  useEffect(() => {
+    if (token) {
+      const Authorization = `Basic ${token}`;
+      fetch(URL_APACHE, {
+        headers: new Headers({
+          Authorization
+        })
+      })
+        .then(() => {
+          if (divRef && divRef.current) {
+            divRef.current.src = URL_APACHE;
+          }
+        })
+        .catch(error => {
+          console.log(error);
+          setError(error.message);
+        });
+    }
+  }, token);
+
+  return (
+    <IFrameContainer>
+      {error && <Error message={error} />}
+      {token && <iframe title="Galaxy Workflow" ref={divRef} />}
+    </IFrameContainer>
+  );
+});
