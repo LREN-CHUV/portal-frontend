@@ -50,8 +50,7 @@ export default React.memo(({ apiCore }: Props) => {
             Authorization: authorization
           })
         })
-          .then(response => response.blob())
-          .then(data => {
+          .then(() => {
             if (divRef && divRef.current) {
               divRef.current.src = context;
             }
@@ -67,7 +66,7 @@ export default React.memo(({ apiCore }: Props) => {
   return (
     <IFrameContainer>
       {error && <Error message={error} />}
-      {<iframe title="Galaxy Workflow" ref={divRef} />}
+      <iframe title="Galaxy Workflow" ref={divRef} />
     </IFrameContainer>
   );
 });
