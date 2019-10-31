@@ -50,7 +50,8 @@ export default React.memo(({ apiCore }: Props) => {
             Authorization: authorization
           })
         })
-          .then(() => {
+          .then(response => response.blob())
+          .then(data => {
             if (divRef && divRef.current) {
               divRef.current.src = context;
             }
