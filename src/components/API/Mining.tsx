@@ -346,7 +346,6 @@ class Mining extends Container<MiningState> {
         method: 'POST',
         uri: `${this.backendURL}/mining/exareme-stats`
       });
-
       this.requests.push(r);
       const data = await r;
       const jsonString = await JSON.parse(data);
@@ -361,7 +360,6 @@ class Mining extends Container<MiningState> {
       return { error: undefined, data: json };
     } catch (error) {
       console.log(error);
-
       return { error, data: undefined };
     }
   };

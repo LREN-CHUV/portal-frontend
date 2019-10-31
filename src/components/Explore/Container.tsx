@@ -358,11 +358,10 @@ export default ({
   const handleGoToAnalysis = async (): Promise<void> => {
     const { history } = props;
     const nextModel = convertD3ModelToModel(d3Model, apiModel.state.model);
-
+    apiMining.abortMiningRequests();
+    
     await apiModel.setModel(nextModel);
     history.push(`/review`);
-
-    apiMining.abortMiningRequests();
   };
 
   const nextProps = {
