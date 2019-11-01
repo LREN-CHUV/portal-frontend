@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { APICore } from '../API/';
 import { GalaxyConfig } from '../API/Core';
 import Error from './Error';
+import { Base64 } from 'js-base64';
 
 interface Props {
   apiCore: APICore;
@@ -45,20 +46,13 @@ export default React.memo(({ apiCore }: Props) => {
     if (config) {
       const { authorization, context } = config;
       if (authorization && context) {
-        fetch(context, {
-          headers: new Headers({
-            Authorization: authorization
-          })
-        })
-          .then(() => {
-            if (divRef && divRef.current) {
-              divRef.current.src = context;
-            }
-          })
-          .catch(error => {
-            console.log(error);
-            setError(error.message);
-          });
+        const req = new XMLHttpRequest();
+        const [user, password] = Base64.decode(authorization).split(':');
+        req.open('POST', context, false, user, password);
+        req.send(null);
+        if (divRef && divRef.current) {
+          divRef.current.src = context;
+        }
       }
     }
   }, [config]);
