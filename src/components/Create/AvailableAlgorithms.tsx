@@ -174,7 +174,9 @@ const AvailableAlgorithms = ({
           overlay={
             <Popover id={`tooltip-${algorithm.name}`}>
               <p>{algorithm.desc}</p>
-              {variablesHelpMessage(algorithm)}
+              {algorithm.engine === Engine.Workflow
+                ? ''
+                : variablesHelpMessage(algorithm)}
             </Popover>
           }
         >

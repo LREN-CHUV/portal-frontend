@@ -15,25 +15,6 @@ interface Response {
   data: any | undefined;
 }
 
-const algorithms = JSON.parse(
-  localStorage.getItem('workflows_algorithms') || '[]'
-);
-const findParameter = (acode: string, pcode: string) => {
-  const algorithm = algorithms && algorithms.find((a: any) => a.code === acode);
-
-  if (algorithm) {
-    const parameter = algorithm.parameters.find((p: any) => p.code === pcode);
-    return parameter ? parameter.label : pcode;
-  }
-  return pcode;
-};
-
-const findName = (acode: string) => {
-  const algorithm = algorithms && algorithms.find((a: any) => a.code === acode);
-
-  return algorithm ? algorithm.label : acode;
-};
-
 const workflowStatuses: Status = {};
 const workflowResults: Status = {};
 
@@ -149,14 +130,43 @@ const buildWorkflowAlgorithmList = (json: any): Algorithm[] => {
 const buildWorkflowAlgorithmResponse = (
   historyId: string,
   experimentResponse: ExperimentResponse
-) => {
+): ExperimentResponse => {
+  const algorithms: Algorithm[] = JSON.parse(
+    localStorage.getItem('workflows_algorithms') || '[]'
+  );
+
+  const findName = (algorithmCode: string): string => {
+    const algorithm =
+      algorithms && algorithms.find(a => a.code === algorithmCode);
+
+    return algorithm ? algorithm.name : algorithmCode;
+  };
+
+  const findParameter = (
+    algorithmCode: string,
+    parameterCode: string
+  ): string => {
+    const algorithm =
+      algorithms && algorithms.find(a => a.code === algorithmCode);
+
+    if (algorithm) {
+      const parameter = (algorithm.parameters as AlgorithmParameter[]).find(
+        p => p.uuid === parameterCode
+      );
+
+      return parameter ? parameter.name : parameterCode;
+    }
+
+    return parameterCode;
+  };
+
   // Retrieve parameters names
   experimentResponse.algorithms = experimentResponse.algorithms.map(a => ({
     ...a,
     name: findName(a.code),
     parameters:
       a.parameters &&
-      (a.parameters as AlgorithmParameter[]).map((p: any) => ({
+      (a.parameters as any).map((p: any) => ({
         ...p,
         code: findParameter(a.code, p.code)
       }))
