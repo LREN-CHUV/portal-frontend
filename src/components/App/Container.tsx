@@ -75,9 +75,7 @@ class AppContainer extends React.Component<any, State> {
         this.apiUser.profile({ username }),
         this.apiExperiment.all(),
         this.apiCore.fetchPathologies(),
-        this.apiCore.algorithms(
-          this.state.appConfig.mode === InstanceMode.Local
-        ),
+        this.apiCore.algorithms(),
         this.apiCore.articles(),
         this.apiModel.all()
       ]);

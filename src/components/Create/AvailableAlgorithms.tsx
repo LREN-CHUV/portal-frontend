@@ -4,6 +4,7 @@ import { Button, OverlayTrigger, Popover } from 'react-bootstrap';
 import { Algorithm, VariableEntity, AlgorithmParameter } from '../API/Core';
 import { ModelResponse } from '../API/Model';
 import styled from 'styled-components';
+import { Engine } from '../API/Experiment';
 interface AvailableAlgorithm extends Algorithm {
   enabled: boolean;
 }
@@ -86,13 +87,13 @@ const AvailableAlgorithms = ({
     (algorithms &&
       algorithms.map(algorithm => ({
         ...algorithm,
-        enabled: algorithmEnabled(
-          algorithm.parameters as AlgorithmParameter[],
-          {
-            x: modelCovariables,
-            y: modelVariable
-          }
-        )
+        enabled:
+          algorithm.engine === Engine.Workflow
+            ? true
+            : algorithmEnabled(algorithm.parameters as AlgorithmParameter[], {
+                x: modelCovariables,
+                y: modelVariable
+              })
       }))) ||
     [];
 

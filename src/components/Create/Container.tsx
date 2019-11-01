@@ -1,16 +1,22 @@
+import '../Experiment.css';
+
 import * as React from 'react';
 import { Panel, Tab, Tabs } from 'react-bootstrap';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
+
 import { APICore, APIExperiment, APIModel } from '../API';
 import {
   Algorithm,
   AlgorithmParameter,
   AlgorithmParameterRequest
 } from '../API/Core';
-import { ExperimentPayload, ExperimentResponse } from '../API/Experiment';
+import {
+  Engine,
+  ExperimentPayload,
+  ExperimentResponse
+} from '../API/Experiment';
 import { ModelResponse, Query } from '../API/Model';
 import { AppConfig } from '../App/App';
-import '../Experiment.css';
 import { Alert, IAlert } from '../UI/Alert';
 import DatasetsForm from '../UI/DatasetsForm';
 import Model from '../UI/Model';
@@ -212,6 +218,7 @@ class Container extends React.Component<Props, State> {
       return;
     }
 
+    const isWorkflow = selectedAlgorithm.engine === Engine.Workflow;
     const nextParameters: AlgorithmParameterRequest[] = parameters.map(p => {
       let value: string = p.value;
       const query = model && model.query;
@@ -260,11 +267,10 @@ class Container extends React.Component<Props, State> {
       }
 
       return {
-        code: p.name,
+        code: isWorkflow ? p.uuid || p.name : p.name,
         value: value || p.defaultValue
       };
     });
-
     const experiment: ExperimentPayload = {
       algorithms: [
         {
@@ -273,7 +279,7 @@ class Container extends React.Component<Props, State> {
           parameters: nextParameters
         }
       ],
-      engine: selectedAlgorithm.source,
+      engine: selectedAlgorithm.engine,
       model: model.slug,
       name: experimentName,
       validations: []

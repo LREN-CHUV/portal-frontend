@@ -21,7 +21,7 @@ describe('Integration Test Core API', () => {
   });
 
   it('get methods', async () => {
-    await apiCore.algorithms(true);
+    await apiCore.algorithms();
     const result = apiCore.state.algorithms;
     const error = apiCore.state.error;
     expect(error).toBeFalsy();

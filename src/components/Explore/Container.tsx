@@ -359,7 +359,7 @@ export default ({
     const { history } = props;
     const nextModel = convertD3ModelToModel(d3Model, apiModel.state.model);
     apiMining.abortMiningRequests();
-    
+
     await apiModel.setModel(nextModel);
     history.push(`/review`);
   };

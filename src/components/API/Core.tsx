@@ -39,7 +39,7 @@ export interface Algorithm {
   desc?: string;
   parameters: AlgorithmParameter[] | AlgorithmParameterRequest[];
   type?: string;
-  source?: Engine;
+  engine?: Engine;
 }
 
 export interface AlgorithmResult {
@@ -68,6 +68,7 @@ export interface AlgorithmConstraint {
 
 export interface AlgorithmParameter {
   name: string;
+  uuid?: string;
   defaultValue: string;
   desc: string;
   type: string;
@@ -287,7 +288,7 @@ class Core extends Container<State> {
     }
   };
 
-  public algorithms = async (isLocal: boolean): Promise<void> => {
+  public algorithms = async (): Promise<void> => {
     const exaremeAlgorithms = await this.exaremeAlgorithms();
     this.setState(state => ({
       ...state,
@@ -298,18 +299,15 @@ class Core extends Container<State> {
       error: undefined
     }));
 
-    const workflows = await this.workflows(isLocal);
+    const workflows = await this.workflows();
     this.setState(state => ({
       ...state,
       algorithms: [
         ...(state.algorithms || []),
         ...((workflows && workflows.data) || [])
       ],
-      error: undefined
+      error: workflows.error ? workflows.error : undefined
     }));
-
-    // FIXME: oh my god, that escalated quickly
-    localStorage.setItem('algorithms', JSON.stringify(this.state.algorithms));
 
     return Promise.resolve();
   };
@@ -411,11 +409,7 @@ class Core extends Container<State> {
     }
   };
 
-  private workflows = async (isLocal: boolean): Promise<any> => {
-    if (isLocal) {
-      return { error: undefined, data: [] };
-    }
-
+  private workflows = async (): Promise<any> => {
     try {
       const data = await request.get(
         `${this.backendURL}/methods/workflows`,
@@ -456,7 +450,7 @@ class Core extends Container<State> {
 
       const extraParametersData = data.map((algorithm: Algorithm) => ({
         ...algorithm,
-        source: Engine.Exareme,
+        engine: Engine.Exareme,
         parameters: [
           ...(algorithm.parameters as AlgorithmParameter[]).map(
             (p: AlgorithmParameter) => ({

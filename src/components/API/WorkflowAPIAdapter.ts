@@ -1,11 +1,10 @@
 import request from 'request-promise-native';
 
 import { backendURL } from '../API';
+import { Algorithm, AlgorithmParameter } from '../API/Core';
 import options from '../API/RequestHeaders';
-import { Algorithm, AlgorithmParameter } from './Core';
 import { UI_HIDDEN_PARAMETERS } from '../constants';
 import { Engine, ExperimentResponse } from './Experiment';
-import { ModelResponse } from './Model';
 
 interface Status {
   [key: string]: Response;
@@ -16,7 +15,9 @@ interface Response {
   data: any | undefined;
 }
 
-const algorithms = JSON.parse(localStorage.getItem('algorithms') || '[]');
+const algorithms = JSON.parse(
+  localStorage.getItem('workflows_algorithms') || '[]'
+);
 const findParameter = (acode: string, pcode: string) => {
   const algorithm = algorithms && algorithms.find((a: any) => a.code === acode);
 
@@ -107,25 +108,6 @@ const buildWorkflowAlgorithmList = (json: any): Algorithm[] => {
     testSize: 0.2
   };
 
-  /* eslint-disable */
-  // const constraints = {
-  //   covariables: {
-  //     min_count: 1
-  //   },
-  //   groupings: {
-  //     max_count: 0,
-  //     min_count: 0
-  //   },
-  //   mixed: true,
-  //   variable: {
-  //     binominal: true,
-  //     integer: false,
-  //     polynominal: true,
-  //     real: false
-  //   }
-  // };
-  /*eslint-enable */
-
   const defaultValueFor = ({
     label,
     defaults
@@ -136,131 +118,32 @@ const buildWorkflowAlgorithmList = (json: any): Algorithm[] => {
     return defaults[label] ? defaults[label] : '';
   };
 
-  const algorithms = json.map((j: any) => ({
+  const algorithms: Algorithm[] = json.map((j: any) => ({
     code: j.id,
-    label: j.name,
-    // constraints,
+    name: j.name,
     parameters: Object.keys(j.inputs).map((k: any) => ({
-      code: j.inputs[k].uuid,
+      uuid: j.inputs[k].uuid,
       /* eslint-disable-next-line */
       default_value: defaultValueFor({
         label: j.inputs[k].label,
         defaults
       }),
       description: '',
-      label: j.inputs[k].label,
+      name: j.inputs[k].label,
       type: 'text',
-      value: defaultValueFor({
+      defaultValue: defaultValueFor({
         label: j.inputs[k].label,
         defaults
       }),
       visible: !UI_HIDDEN_PARAMETERS.includes(j.inputs[k].label)
     })),
-    engine: Engine.Workflow,
-    type: ['workflow'],
-    validation: true
+    engine: Engine.Workflow
   }));
 
+  // FIXME: oh my god, that escalated quickly
+  localStorage.setItem('workflows_algorithms', JSON.stringify(algorithms));
+
   return algorithms;
-};
-
-const buildWorkflowAlgorithmRequest = (
-  model: ModelResponse,
-  selectedMethod: Algorithm,
-  newParams: AlgorithmParameter[]
-) => {
-  const params: any[] = [];
-
-  // if (model.query.variables) {
-  //   const variableKey =
-  //     selectedMethod &&
-  //     selectedMethod.parameters.find((p: any) => p.label === 'y').code;
-  //   params.push({
-  //     code: variableKey,
-  //     value: model.query.variables.map(v => v.code).toString()
-  //   });
-  // }
-
-  // if (model.query.coVariables || model.query.groupings) {
-  //   const covariableKey = selectedMethod.parameters.find(
-  //     (p: any) => p.label === 'x'
-  //   ).code;
-
-  //   const coVariables =
-  //     model.query.coVariables &&
-  //     model.query.coVariables.map(v => v.code).toString();
-  //   const groupings =
-  //     model.query.groupings &&
-  //     model.query.groupings.map(v => v.code).toString();
-  //   const value = coVariables
-  //     ? groupings
-  //       ? `${coVariables},${groupings}`
-  //       : `${coVariables}`
-  //     : groupings;
-  //   params.push({
-  //     code: covariableKey,
-  //     value
-  //   });
-  // }
-
-  // if (model.query.trainingDatasets) {
-  //   const datasetKey = selectedMethod.parameters.find(
-  //     (p: any) => p.label === 'dataset'
-  //   ).code;
-  //   params.push({
-  //     code: datasetKey,
-  //     value: model.query.trainingDatasets.map(v => v.code).toString()
-  //   });
-  // }
-
-  // if (model.query.pathology) {
-  //   const datasetKey = selectedMethod.parameters.find(
-  //     (p: any) => p.label === 'pathology'
-  //   ).code;
-  //   params.push({
-  //     code: datasetKey,
-  //     value: model.query.pathology
-  //   });
-  // }
-
-  // // kfold
-  // const kfoldKey = selectedMethod.parameters.find(
-  //   (p: any) => p.label === 'kfold'
-  // );
-  // if (kfoldKey) {
-  //   const kFoldParam = newParams.find((p: any) => p.code === kfoldKey.code);
-  //   params.push({
-  //     code: kfoldKey.code,
-  //     value: (kFoldParam && kFoldParam.value) || '3'
-  //   });
-  // }
-
-  // // alpha
-  // const alphaKey = selectedMethod.parameters.find(
-  //   (p: any) => p.label === 'alpha'
-  // );
-  // if (alphaKey) {
-  //   const alphaParam = newParams.find((p: any) => p.code === alphaKey.code);
-  //   params.push({
-  //     code: alphaKey.code,
-  //     value: (alphaParam && alphaParam.value) || '0.1'
-  //   });
-  // }
-
-  // // others
-  // const leftOvers = selectedMethod.parameters.filter(
-  //   (p: any) => !params.map((p: any) => p.code).includes(p.code)
-  // );
-  // if (leftOvers) {
-  //   leftOvers.forEach((l: any) => {
-  //     params.push({
-  //       code: l.code,
-  //       value: l.value
-  //     });
-  //   });
-  // }
-
-  return params;
 };
 
 const buildWorkflowAlgorithmResponse = (
@@ -367,8 +250,4 @@ const buildWorkflowAlgorithmResponse = (
   return experimentResponse;
 };
 
-export {
-  buildWorkflowAlgorithmList,
-  buildWorkflowAlgorithmRequest,
-  buildWorkflowAlgorithmResponse
-};
+export { buildWorkflowAlgorithmList, buildWorkflowAlgorithmResponse };

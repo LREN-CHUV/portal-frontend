@@ -1,14 +1,9 @@
-import APICore, {
-  AlgorithmParameter,
-  AlgorithmParameterRequest,
-  VariableEntity
-} from './Core';
+import APICore, { AlgorithmParameter, VariableEntity } from './Core';
 import APIExperiment, {
   Engine,
   ExperimentPayload,
   State as ExperimentState
 } from './Experiment';
-import { buildWorkflowAlgorithmRequest } from './WorkflowAPIAdapter';
 import APIModel, { ModelResponse, ModelState } from './Model';
 import config from './RequestHeaders';
 
@@ -53,23 +48,17 @@ const createWorkflowPayload = async (
   parameters: AlgorithmParameter[],
   modelSlug: string
 ): Promise<ExperimentPayload | void> => {
-  await apiCore.algorithms(false);
+  await apiCore.algorithms();
   const algorithms = apiCore.state.algorithms || [];
   const selectedAlgorithm = algorithms.find(a => a.code === experimentCode);
 
   if (selectedAlgorithm) {
-    const requestParameters = buildWorkflowAlgorithmRequest(
-      model(datasets),
-      selectedAlgorithm,
-      parameters
-    );
-
     const payload: ExperimentPayload = {
       algorithms: [
         {
           code: experimentCode,
           name: experimentCode,
-          parameters: requestParameters
+          parameters
         }
       ],
       model: modelSlug,
