@@ -82,6 +82,38 @@ const fetchResultDetailBody = async (
   }
 };
 
+// Used to fetch errors :-o
+const fetchResultsDetails = async (
+  historyId: string,
+  okId: string
+): Promise<Response> => {
+  try {
+    const data = await request.get(
+      `${backendURL}/experiments/workflow/resultsdetails/${historyId}/content/${okId}`,
+      options as RequestInit
+    );
+    const json = await JSON.parse(data);
+
+    if (!json) {
+      return { error: 'An unhandled error occured', data: undefined };
+    }
+
+    const errorString = json.peek;
+    if (errorString) {
+      const results1 = JSON.parse(errorString);
+      const results = results1.result;
+      const result = results.find((_: any, i: number) => i === 0);
+
+      return { error: result.data, data: undefined };
+    }
+
+    return { error: undefined, data: json };
+  } catch (error) {
+    console.log(error);
+    return { error, data: undefined };
+  }
+};
+
 const buildWorkflowAlgorithmList = (json: any): Algorithm[] => {
   const defaults = {
     kfold: 3,
@@ -212,15 +244,11 @@ const buildWorkflowAlgorithmResponse = (
 
   if (workflowStatus.data) {
     if (workflowStatus.data.state === 'error') {
-      fetchResults(historyId).then(result => {
-        const content = result.data.filter((d: any) => d.state === 'error');
-        const contentId = content && content.length > 0 && content[0].id;
-
-        console.log('error: fetchResultDetail', contentId);
-        fetchResultDetailBody(historyId, contentId).then(result2 => {
-          workflowResults[historyId] = result2;
-          buildWorkflowAlgorithmResponse(historyId, experimentResponse);
-        });
+      const okId = workflowStatus.data.state_ids.ok[0];
+      fetchResultsDetails(historyId, okId).then(result => {
+        console.log(result);
+        workflowResults[historyId] = result;
+        buildWorkflowAlgorithmResponse(historyId, experimentResponse);
       });
 
       return experimentResponse;
