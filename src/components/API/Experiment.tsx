@@ -75,7 +75,7 @@ class Experiment extends Container<State> {
     this.baseUrl = `${backendURL}/experiments`;
   }
 
-  public one = async ({ uuid }: IUUID) => {
+  public one = async ({ uuid }: IUUID): Promise<void> => {
     try {
       const data = await request.get(`${this.baseUrl}/${uuid}`, this.options);
       const json = await JSON.parse(data);
@@ -97,7 +97,7 @@ class Experiment extends Container<State> {
     }
   };
 
-  public all = async () => {
+  public all = async (): Promise<void> => {
     try {
       const data = await request.get(`${this.baseUrl}?mine=true`, this.options);
       const json = await JSON.parse(data);
@@ -118,7 +118,11 @@ class Experiment extends Container<State> {
     }
   };
 
-  public create = async ({ experiment }: { experiment: ExperimentPayload }) => {
+  public create = async ({
+    experiment
+  }: {
+    experiment: ExperimentPayload;
+  }): Promise<void> => {
     const engine = experiment.engine;
     const url =
       engine === Engine.Exareme
@@ -127,7 +131,7 @@ class Experiment extends Container<State> {
         ? `${this.baseUrl}/workflow`
         : `${this.baseUrl}`;
 
-    console.log(url, experiment);
+    // console.log(url, experiment);
     try {
       const data = await request({
         body: JSON.stringify(experiment),
@@ -152,16 +156,19 @@ class Experiment extends Container<State> {
     }
   };
 
-  public markAsViewed = async ({ uuid }: IUUID) =>
+  public markAsViewed = async ({ uuid }: IUUID): Promise<void> =>
     this.markExperiment(uuid, 'markAsViewed');
 
-  public markAsShared = async ({ uuid }: IUUID) =>
+  public markAsShared = async ({ uuid }: IUUID): Promise<void> =>
     this.markExperiment(uuid, 'markAsShared');
 
-  public markAsUnshared = async ({ uuid }: IUUID) =>
+  public markAsUnshared = async ({ uuid }: IUUID): Promise<void> =>
     this.markExperiment(uuid, 'markAsUnshared');
 
-  private markExperiment = async (uuid: string, action: string) => {
+  private markExperiment = async (
+    uuid: string,
+    action: string
+  ): Promise<void> => {
     try {
       const data = await request.get(
         `${this.baseUrl}/${uuid}/${action}`,

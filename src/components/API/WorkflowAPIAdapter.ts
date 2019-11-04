@@ -32,7 +32,7 @@ const fetchStatus = async (historyId: string): Promise<Response> => {
 
     return { error: undefined, data: json };
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     return { error, data: undefined };
   }
 };
@@ -51,7 +51,7 @@ const fetchResults = async (historyId: string): Promise<Response> => {
 
     return { error: undefined, data: json };
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     return { error, data: undefined };
   }
 };
@@ -77,7 +77,7 @@ const fetchResultDetailBody = async (
 
     return { error: undefined, data: json };
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     return { error, data: undefined };
   }
 };
@@ -109,7 +109,7 @@ const fetchResultsDetails = async (
 
     return { error: undefined, data: json };
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     return { error, data: undefined };
   }
 };
@@ -228,7 +228,7 @@ const buildWorkflowAlgorithmResponse = (
   }
 
   if (!workflowStatus) {
-    console.log('!workflowStatus fetchStatus', historyId);
+    // console.log('!workflowStatus fetchStatus', historyId);
     fetchStatus(historyId).then(result => {
       workflowStatuses[historyId] = result;
       buildWorkflowAlgorithmResponse(historyId, experimentResponse);
@@ -244,36 +244,40 @@ const buildWorkflowAlgorithmResponse = (
 
   if (workflowStatus.data) {
     if (workflowStatus.data.state === 'error') {
-      const okId = workflowStatus.data.state_ids.ok[0];
-      fetchResultsDetails(historyId, okId).then(result => {
-        console.log(result);
-        workflowResults[historyId] = result;
-        buildWorkflowAlgorithmResponse(historyId, experimentResponse);
-      });
+      const okId =
+        (workflowStatus.data.state_ids.ok &&
+          workflowStatus.data.state_ids.ok.length > 0 &&
+          workflowStatus.data.state_ids.ok[0]) ||
+        null;
+      if (okId) {
+        fetchResultsDetails(historyId, okId).then(result => {
+          workflowResults[historyId] = result;
+          buildWorkflowAlgorithmResponse(historyId, experimentResponse);
+        });
+      }
 
       return experimentResponse;
     }
 
     if (workflowStatus.data.state === 'running') {
-      console.log('running: fetchStatus', historyId);
+      // console.log('running: fetchStatus', historyId);
       fetchStatus(historyId).then(result => {
         workflowStatuses[historyId] = result;
-        // buildWorkflowAlgorithmResponse(historyId, experimentResponse);
       });
 
       return experimentResponse;
     }
 
     if (workflowStatus.data.state === 'ok') {
-      console.log('ok', historyId);
+      // console.log('ok', historyId);
       const workflowResult1: Response = workflowResults[historyId];
       if (!workflowResult1) {
-        console.log('fetchResults', historyId);
+        // console.log('fetchResults', historyId);
         fetchResults(historyId).then(result => {
           const content = result.data.filter((d: any) => d.visible);
           const contentId = content.pop().id;
 
-          console.log('fetchResultDetail', historyId);
+          // console.log('fetchResultDetail', historyId);
           fetchResultDetailBody(historyId, contentId).then(result2 => {
             workflowResults[historyId] = result2;
             buildWorkflowAlgorithmResponse(historyId, experimentResponse);
