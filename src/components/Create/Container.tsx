@@ -274,7 +274,10 @@ class Container extends React.Component<Props, State> {
     const experiment: ExperimentPayload = {
       algorithms: [
         {
-          code: selectedAlgorithm.name,
+          code:
+            selectedAlgorithm.engine === Engine.Exareme
+              ? selectedAlgorithm.name
+              : selectedAlgorithm.code,
           name: selectedAlgorithm.name,
           parameters: nextParameters
         }
