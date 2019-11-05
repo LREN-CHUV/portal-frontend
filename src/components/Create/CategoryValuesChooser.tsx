@@ -26,9 +26,9 @@ export default ({
   const lookupCallback = useCallback(apiCore.lookup, []);
   useEffect(() => {
     const categoricalVariables: VariableEntity[] | undefined = query && [
-      ...(query.variables || [])
+      ...(query.coVariables || []),
+      ...(query.groupings || [])
     ];
-
     const vars =
       categoricalVariables &&
       categoricalVariables
