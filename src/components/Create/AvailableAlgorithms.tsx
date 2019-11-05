@@ -142,8 +142,8 @@ const AvailableAlgorithms = ({
       }
     };
 
-    helpFor('x', 'Covariable (independant)');
     helpFor('y', 'Variable (dependant)');
+    helpFor('x', 'Covariable (independant)');
 
     return <>{message}</>;
   };
