@@ -53,7 +53,7 @@ export const ALGORITHM_DEFAULT_OUTPUT = [
   },
   {
     name: 'ID3',
-    types: [...DEFAULT_OUTPUT, MIME_TYPES.JSONDATA]
+    types: [...DEFAULT_OUTPUT, MIME_TYPES.JSONDATA, MIME_TYPES.JSON]
   }
 ];
 

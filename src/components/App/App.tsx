@@ -19,7 +19,7 @@ import NotFound from '../UI/NotFound';
 import TOS from '../UI/TOS';
 import User from '../User/Container';
 import { history } from '../utils';
-
+import Dendogram from '../UI/Visualization/Dendogram';
 export enum InstanceMode {
   Local,
   Federation
@@ -92,13 +92,14 @@ const App = ({
             exact={true}
             // tslint:disable-next-line jsx-no-lambda
             render={(props): JSX.Element => (
-              <Home
-                apiCore={apiCore}
-                apiModel={apiModel}
-                apiExperiment={apiExperiment}
-                apiUser={apiUser}
-                {...props}
-              />
+              // <Home
+              //   apiCore={apiCore}
+              //   apiModel={apiModel}
+              //   apiExperiment={apiExperiment}
+              //   apiUser={apiUser}
+              //   {...props}
+              // />
+              <Dendogram />
             )}
           />
           <Route
