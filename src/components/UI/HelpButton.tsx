@@ -49,12 +49,12 @@ export default () => {
         >
           <Glyphicon glyph="film" /> MIP introduction (video)
         </MenuItem>
-        <div>
+        <li>
           <Glyphicon glyph="envelope" /> Email us at{' '}
           <a href="mailto://support@humanbrainproject.eu">
             support@humanbrainproject.eu
           </a>
-        </div>
+        </li>
         <Helpdesk />
       </DropdownButton>
     </MainBox>
