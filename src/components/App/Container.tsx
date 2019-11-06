@@ -59,7 +59,7 @@ class AppContainer extends React.Component<any, State> {
     } catch (e) {
       const appConfig: AppConfig = {
         instanceName: 'MIP DEV',
-        mode: InstanceMode.Federation,
+        mode: InstanceMode.Local,
         version: 'alpha'
       };
 
