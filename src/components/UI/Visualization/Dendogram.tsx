@@ -3,6 +3,9 @@ import React, { useRef, useEffect } from 'react';
 import styled from 'styled-components';
 
 const SVGContainer = styled.svg`
+  width: 1000px;
+  height: 400px;
+
   .node {
     cursor: pointer;
   }
@@ -71,9 +74,9 @@ export default (): JSX.Element => {
     if (!svgRef.current) {
       return;
     }
-    const margin = { top: 10, right: 10, bottom: 10, left: 10 };
-    const width = 200 - margin.left - margin.right;
-    const height = 100 - margin.top - margin.bottom;
+    const margin = { top: 10, right: 100, bottom: 10, left: 100 };
+    const width = 1000 - margin.left - margin.right;
+    const height = 300 - margin.top - margin.bottom;
 
     // declares a tree layout and assigns the size
     const treemap = d3.tree().size([height, width]);
@@ -88,44 +91,43 @@ export default (): JSX.Element => {
     // appends a 'group' element to 'svg'
     // moves the 'group' element to the top left margin
     const svg = d3
-        .select(svgRef.current)
-        .append('svg')
-        .attr('width', width + margin.left + margin.right)
-        .attr('height', height + margin.top + margin.bottom),
-      g = svg
-        .append('g')
-        .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+      .select(svgRef.current)
+      .append('svg')
+      .attr('width', width + margin.left + margin.right)
+      .attr('height', height + margin.top + margin.bottom);
+
+    const g = svg
+      .append('g')
+      .attr('transform', `translate(${margin.left},${margin.top})`);
 
     // adds the links between the nodes
-    var link = g
+    const link = g
       .selectAll('.link')
       .data(nodes.descendants().slice(1))
       .enter()
       .append('path')
       .attr('class', 'link')
-      .attr('d', function(d: any) {
-        return (
-          'M' +
-          d.y +
-          ',' +
-          d.x +
-          'C' +
-          (d.y + d.parent.y) / 2 +
-          ',' +
-          d.x +
-          ' ' +
-          (d.y + d.parent.y) / 2 +
-          ',' +
-          d.parent.x +
-          ' ' +
-          d.parent.y +
-          ',' +
-          d.parent.x
-        );
+      .attr(
+        'd',
+        (d: any) =>
+          `M ${d.y}, ${d.x} C ${(d.y + d.parent.y) / 2}, ${d.x} ${(d.y +
+            d.parent.y) /
+            2}, ${d.parent.x} ${d.parent.y}, ${d.parent.x}`
+      );
+
+    const edge = g
+      .selectAll('.edge')
+      .data(nodes.descendants().slice(1))
+      .enter()
+      .append('text')
+      .attr('class', 'edge')
+      .attr('transform', (d: any) => `translate(${d.y - 120},${d.x})`)
+      .text(function(d: any) {
+        return d.data.edge;
       });
 
     // adds each node as a group
-    var node = g
+    const node = g
       .selectAll('.node')
       .data(nodes.descendants())
       .enter()
@@ -133,26 +135,16 @@ export default (): JSX.Element => {
       .attr('class', function(d: any) {
         return 'node' + (d.children ? ' node--internal' : ' node--leaf');
       })
-      .attr('transform', function(d: any) {
-        return 'translate(' + d.y + ',' + d.x + ')';
-      });
+      .attr('transform', (d: any) => `translate(${d.y},${d.x})`);
 
-    // adds the circle to the node
     node.append('circle').attr('r', 10);
 
-    // adds the text to the node
     node
       .append('text')
       .attr('dy', '.35em')
-      .attr('x', function(d: any) {
-        return d.children ? -13 : 13;
-      })
-      .style('text-anchor', function(d: any) {
-        return d.children ? 'end' : 'start';
-      })
-      .text(function(d: any) {
-        return d.data.colname || d.data.leafval;
-      });
+      .attr('x', (d: any) => (d.children ? -13 : 13))
+      .style('text-anchor', (d: any) => (d.children ? 'end' : 'start'))
+      .text((d: any) => d.data.colname || d.data.leafval);
   }, [svgRef]);
 
   return <SVGContainer ref={svgRef} />;
