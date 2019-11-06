@@ -92,14 +92,13 @@ const App = ({
             exact={true}
             // tslint:disable-next-line jsx-no-lambda
             render={(props): JSX.Element => (
-              // <Home
-              //   apiCore={apiCore}
-              //   apiModel={apiModel}
-              //   apiExperiment={apiExperiment}
-              //   apiUser={apiUser}
-              //   {...props}
-              // />
-              <Dendogram />
+              <Home
+                apiCore={apiCore}
+                apiModel={apiModel}
+                apiExperiment={apiExperiment}
+                apiUser={apiUser}
+                {...props}
+              />
             )}
           />
           <Route
