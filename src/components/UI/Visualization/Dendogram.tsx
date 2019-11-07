@@ -65,12 +65,10 @@ const data = {
   colname: 'agegroup'
 };
 
-/* tslint:disable */
 export default (): JSX.Element => {
   const svgRef = useRef(null);
 
   useEffect(() => {
-    // set the dimensions and margins of the diagram
     if (!svgRef.current) {
       return;
     }
@@ -78,13 +76,9 @@ export default (): JSX.Element => {
     const width = 1000 - margin.left - margin.right;
     const height = 300 - margin.top - margin.bottom;
 
-    // declares a tree layout and assigns the size
     const treemap = d3.tree().size([height, width]);
 
-    //  assigns the data to a hierarchy using parent-child relationships
     let nodes: any = d3.hierarchy(data, (d: any) => d.childnodes);
-
-    // maps the node data to the tree layout
     nodes = treemap(nodes);
 
     // append the svg obgect to the body of the page
