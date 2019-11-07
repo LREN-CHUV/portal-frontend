@@ -7,6 +7,9 @@ import Panel from '../UI/Panel';
 const Param = styled.p`
   margin: 0 0 8px 0;
   overflow: wrap;
+  width: 200px;
+  word-wrap: break-word;
+  display: inline-block;
 `;
 
 const Algorithms = ({ experiment }: { experiment?: ExperimentResponse }) => {

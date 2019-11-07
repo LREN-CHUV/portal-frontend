@@ -19,7 +19,6 @@ import NotFound from '../UI/NotFound';
 import TOS from '../UI/TOS';
 import User from '../User/Container';
 import { history } from '../utils';
-import Dendogram from '../UI/Visualization/Dendogram';
 export enum InstanceMode {
   Local,
   Federation
