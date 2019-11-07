@@ -208,47 +208,6 @@ class Mining extends Container<MiningState> {
     });
   };
 
-  public histograms = async ({
-    payload
-  }: {
-    payload: {
-      datasets: VariableEntity[];
-      variables: VariableEntity[];
-    };
-  }): Promise<any> => {
-    await this.setState({
-      histograms: { loading: true, error: undefined, data: undefined }
-    });
-
-    const nextPayload = {
-      ...payload,
-      algorithm: {
-        code: 'histograms',
-        name: 'Histograms',
-        parameters: [],
-        validation: false
-      },
-      covariables: [],
-      filters: '',
-      grouping: [
-        { code: 'dataset' },
-        { code: 'gender' },
-        { code: 'agegroup' },
-        { code: 'alzheimerbroadcategory' }
-      ]
-    };
-    const response = await this.fetchOne({ payload: nextPayload });
-    if (response.error) {
-      return await this.setState({
-        histograms: { loading: false, error: response.error, data: undefined }
-      });
-    }
-
-    return await this.setState({
-      histograms: { loading: false, error: undefined, data: response.data }
-    });
-  };
-
   // FIXME: cache doesn't work for exareme.
   public descriptiveStatisticsByDataset = async ({
     payload

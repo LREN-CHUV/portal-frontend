@@ -7,10 +7,10 @@ import { RouteComponentProps } from 'react-router-dom';
 import { APICore, APIMining, APIModel } from '../API';
 import { VariableEntity } from '../API/Core';
 import { ModelResponse, Query } from '../API/Model';
-import { AppConfig, InstanceMode } from '../App/App';
-import { d3Hierarchy, VariableDatum } from './d3Hierarchy';
-import CirclePack from './D3CirclePackLayer';
+import { AppConfig } from '../App/App';
 import Modal from '../UI/Modal';
+import CirclePack from './D3CirclePackLayer';
+import { d3Hierarchy, VariableDatum } from './d3Hierarchy';
 
 const diameter = 800;
 const padding = 1.5;
@@ -168,20 +168,11 @@ export default ({
     const datasets =
       (model && model.query && model.query.trainingDatasets) || [];
     if (selectedNode && selectedNode.data.isVariable) {
-      if (appConfig.mode === InstanceMode.Local) {
-        apiMining.histograms({
-          payload: {
-            datasets: datasets.map(d => ({ code: d.code })),
-            variables: [{ code: selectedNode.data.code }]
-          }
-        });
-      } else {
-        apiMining.exaremeHistograms({
-          datasets: datasets,
-          x: selectedNode.data,
-          pathology: (model && model.query && model.query.pathology) || ''
-        });
-      }
+      apiMining.exaremeHistograms({
+        datasets: datasets,
+        x: selectedNode.data,
+        pathology: (model && model.query && model.query.pathology) || ''
+      });
     }
   }, [
     selectedNode,
