@@ -1,28 +1,37 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { FormControl } from 'react-bootstrap';
+import styled from 'styled-components';
+
 import { APICore } from '../API';
-import { VariableEntity } from '../API/Core';
+import { Variable, VariableEntity } from '../API/Core';
 import { Query } from '../API/Model';
 
 type LocalVar = VariableEntity[] | undefined;
+interface JsonParam {
+  [name: string]: string | undefined;
+}
+
 interface Props {
   apiCore: APICore;
+  parameterName: string;
   query?: Query;
-  code: string;
+  notblank?: boolean;
   handleChangeCategoryParameter: (code: string, value: string) => void;
 }
+
+const ControlBox = styled.div`
+  padding-top: 16px;
+`;
 
 export default ({
   apiCore,
   query,
-  code,
+  parameterName,
+  notblank = false,
   handleChangeCategoryParameter
 }: Props): JSX.Element => {
   const [categories, setCategories] = useState<LocalVar>();
-  const [selectedCategory, setSelectedCategory] = useState<
-    VariableEntity | undefined
-  >();
-
+  const [referenceValues, setReferencesValues] = useState<JsonParam>();
   const lookupCallback = useCallback(apiCore.lookup, []);
   useEffect(() => {
     const categoricalVariables: VariableEntity[] | undefined = query && [
@@ -36,71 +45,60 @@ export default ({
         .filter(v => v.type === 'polynominal' || v.type === 'binominal');
 
     setCategories(vars);
-    const first = (vars && vars.length && vars[0]) || undefined;
-    if (first) {
-      setSelectedCategory({ ...first });
-
-      const json = JSON.stringify({
-        name: first.code,
-        val: first.enumerations && first.enumerations[0].code
-      });
-      handleChangeCategoryParameter(code, json);
-    }
   }, [query, lookupCallback]);
 
-  const handleChangeCategory = (event: any) => {
+  const handleChangeValue = (
+    event: React.FormEvent<FormControl>,
+    name: string
+  ): void => {
     event.preventDefault();
-    const theVar =
-      categories && categories.find((v: any) => v.code === event.target.value);
-    if (theVar) {
-      setSelectedCategory({ ...theVar });
-    }
-  };
 
-  const handleChangeValue = (event: any) => {
-    event.preventDefault();
-    const json = JSON.stringify({
-      name: selectedCategory && selectedCategory.code,
-      val: event.target.value
-    });
-    handleChangeCategoryParameter(code, json);
+    const value = (event.target as HTMLInputElement).value;
+    const params: JsonParam = {
+      ...referenceValues,
+      [name]: value !== 'select' ? value : undefined
+    };
+    setReferencesValues(params);
+
+    const validKeys =
+      params &&
+      Object.keys(params).filter(k => {
+        return params[k] !== undefined;
+      });
+    const jsonString = validKeys.map(k => ({ name: k, val: params[k] }));
+    handleChangeCategoryParameter(parameterName, JSON.stringify(jsonString));
   };
 
   return (
     <>
       {!categories && <p>Please, select a categorical variable</p>}
-      {categories && categories.length > 0 && (
-        <>
-          <FormControl
-            componentClass="select"
-            placeholder="select"
-            id="parameter-var-chooser"
-            onChange={handleChangeCategory}
-          >
-            {/* ref={categoryRef} */}
-            {categories.map(v => (
-              <option key={v.code} value={v.code}>
-                {v.label}
+      {categories &&
+        categories.map(category => (
+          <ControlBox key={category.code}>
+            <p>
+              <strong>{category.label}</strong>
+            </p>
+            <FormControl
+              componentClass="select"
+              placeholder="select"
+              id="parameter-category-chooser"
+              onChange={(event): void => {
+                handleChangeValue(event, category.code);
+              }}
+            >
+              <option value={'select'}>
+                Select a level ({notblank ? 'mandatory' : 'optional'})
               </option>
-            ))}
-          </FormControl>
-          <FormControl
-            componentClass="select"
-            placeholder="select"
-            id="parameter-category-chooser"
-            // ref={valueRef}
-            onChange={handleChangeValue}
-          >
-            {selectedCategory &&
-              selectedCategory.enumerations &&
-              selectedCategory.enumerations.map((v: any) => (
-                <option key={v.code} value={v.code}>
-                  {v.label}
-                </option>
-              ))}
-          </FormControl>
-        </>
-      )}
+              {category &&
+                category.enumerations &&
+                category.enumerations.map((v: Variable) => (
+                  <option key={v.code} value={v.code}>
+                    {v.label}
+                  </option>
+                ))}
+            </FormControl>
+          </ControlBox>
+        ))}
     </>
   );
 };

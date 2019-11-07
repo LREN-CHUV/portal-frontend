@@ -213,7 +213,8 @@ const Parameters = ({
                         <CategoryChooser
                           apiCore={apiCore}
                           query={query}
-                          code={parameter.name}
+                          parameterName={parameter.name}
+                          notblank={parameter.valueNotBlank}
                           handleChangeCategoryParameter={
                             handleChangeCategoryParameter
                           }
