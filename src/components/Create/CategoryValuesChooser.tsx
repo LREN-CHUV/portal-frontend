@@ -45,6 +45,8 @@ export default ({
         .filter(v => v.type === 'polynominal' || v.type === 'binominal');
 
     setCategories(vars);
+
+    handleChangeCategoryParameter(parameterName, JSON.stringify([]));
   }, [query, lookupCallback]);
 
   const handleChangeValue = (
