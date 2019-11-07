@@ -448,16 +448,57 @@ class Core extends Container<State> {
         ENABLED_ALGORITHMS.includes(algorithm.name)
       );
 
+      // FIXME: Algorithms defnition in Exareme will contains those extra parameters.
       const extraParametersData = data.map((algorithm: Algorithm) => ({
         ...algorithm,
         engine: Engine.Exareme,
         parameters: [
           ...(algorithm.parameters as AlgorithmParameter[]).map(
-            (p: AlgorithmParameter) => ({
-              ...p,
-              value: '',
-              visible: !UI_HIDDEN_PARAMETERS.includes(p.name)
-            })
+            (p: AlgorithmParameter) => {
+              const visible = !UI_HIDDEN_PARAMETERS.includes(p.name);
+
+              if (p.name === 'encodingparameter') {
+                return {
+                  ...p,
+                  enumeration: ['dummycoding', 'sumscoding', 'simplecoding'],
+                  visible
+                };
+              }
+
+              if (p.name === 'hypothesis') {
+                return {
+                  ...p,
+                  enumeration: ['different', 'greaterthan', 'lessthan'],
+                  visible
+                };
+              }
+
+              if (
+                p.name === 'effectsize' ||
+                p.name === 'ci' ||
+                p.name === 'meandiff'
+              ) {
+                return {
+                  ...p,
+                  enumeration: ['1', '0'],
+                  visible
+                };
+              }
+
+              if (p.name === 'sstype') {
+                return {
+                  ...p,
+                  enumeration: ['1', '2', '3'],
+                  visible
+                };
+              }
+
+              return {
+                ...p,
+                value: '',
+                visible
+              };
+            }
           ),
           ...(algorithm.name === 'ANOVA' ||
           algorithm.name === 'LINEAR_REGRESSION'
