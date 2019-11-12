@@ -19,11 +19,10 @@ This is a minimal setup to do frontend development in this project:
 
 ### Run the Backend
 
-- Checkout the master branch of the [backend web-analytics-demo](https://github.com/HBPMedical/web-analytics-demo) project.
-- If you are an HBP partner, you might want to use the `research_datasets` branch, which requires an authorization. You can ask for an access at support@humanbrainproject.eu . Once you're authorized, follow the [documentation](https://github.com/HBPMedical/web-analytics-demo/tree/research_datasets) about how to login to the private gitlab docker registry to get the datasets.
+- Checkout the master branch of the [mip-deployment-infrastructure](https://github.com/HBPMedical/mip-deployment-infrastructure) project, and follow the setup instructions.
 - Create a new line in `/etc/hosts`, so the backend will be accessible through http://frontend/services
   - `sudo sh -c 'echo 127.0.1.1 frontend >> /etc/hosts'`
-- Launch `./run.sh`. You will have the MIP backend running on your computer at http://frontend
+- Launch `./run.sh`. You will have the MIP frontend running on your computer at http://frontend
 
 ### React
 
@@ -37,7 +36,7 @@ You can find the most recent version of the Create React App guide [here](https:
   - `echo REACT_APP_BACKEND_URL = \"http://frontend\" | tee .env`
 - `yarn install`
 - `yarn watch`
-- Browse to [http://localhost:3000/v3/review](http://localhost:3000/v3/review)
+- Browse to [http://localhost:3000](http://localhost:3000)
 
 ## Tests
 
@@ -49,7 +48,7 @@ You can generate models and experiments by running the tests:
 
 ### Test live installations
 
-You can use the mip-fontend test suite against any live installation, either locally
+You can use the mip-frontend test suite against any live installation, either locally
 
 ```
 echo REACT_APP_BACKEND_URL = "https://qa.mip.chuv.ch" | tee .env &&
@@ -77,10 +76,7 @@ docker run -it \
 Samples tests queries
 
 ```
-hbpmip/portal-frontend-tests test local
-hbpmip/portal-frontend-tests test federated
-hbpmip/portal-frontend-tests test woken
-hbpmip/portal-frontend-tests test exareme
+hbpmip/portal-frontend-tests test
 ```
 
 Tests run with Jest, see [the jest cli doc](https://jestjs.io/docs/en/cli) for more details
@@ -92,14 +88,6 @@ Run: `./build.sh`
 ## Publish on Docker Hub
 
 Run: `./publish.sh`
-
-## Execution
-
-See [Docker Readme](docker/README.md) for details about how to run the MIP frontend packaged as a Docker image.
-
-See [Web Analytics starter](https://github.com/HBPMedical/web-analytics-demo) to deploy MIP Web portal and its analytics stack for development.
-
-See [MIP Microservices Infrastructure](https://github.com/HBPMedical/mip-microservices-infrastructure) for the production deployment of the MIP platform
 
 ## License
 

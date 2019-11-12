@@ -1,6 +1,25 @@
 # Changelog
 
-### React migration
+### 5.1.11 - 12.11.2019
+
+- Galaxy Workflow Engine embedded in Federation Mode
+- Workflow error handling for Galaxy based algorithms
+- Algorithm widgets
+  - factorial/additive
+  - levels selection for categorical variables
+- Removed Woken calls
+- Using Exareme for
+  - descriptive statistics
+  - histograms
+  - algorithms
+    - LOGISTIC_REGRESSION
+    - TTEST_INDEPENDENT
+    - ID3
+    - PEARSON_CORRELATION
+    - LINEAR_REGRESSION
+    - ANOVA
+    - Naive Bayes with cross validation
+- Removed unused visjs library
 
 ### 5.0.0 - 08.10.2019
 
