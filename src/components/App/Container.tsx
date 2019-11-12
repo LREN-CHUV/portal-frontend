@@ -41,10 +41,11 @@ class AppContainer extends React.Component<any, State> {
     // }
 
     // Conf written by dockerize
+    let appConfig: AppConfig;
     const response = await fetch(`${webURL}/static/config.json`);
     try {
       const config = await response.json();
-      const appConfig = {
+      appConfig = {
         ...config,
         mode:
           config.mode === 'federation'
@@ -57,7 +58,7 @@ class AppContainer extends React.Component<any, State> {
         ReactGA.initialize(appConfig.ga);
       }
     } catch (e) {
-      const appConfig: AppConfig = {
+      appConfig = {
         instanceName: 'MIP DEV',
         mode: InstanceMode.Local,
         version: 'alpha'
@@ -75,7 +76,9 @@ class AppContainer extends React.Component<any, State> {
         this.apiUser.profile({ username }),
         this.apiExperiment.all(),
         this.apiCore.fetchPathologies(),
-        this.apiCore.algorithms(),
+        this.apiCore.algorithms(
+          (appConfig && appConfig.mode) || InstanceMode.Local
+        ),
         this.apiCore.articles(),
         this.apiModel.all()
       ]);

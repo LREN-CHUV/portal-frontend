@@ -4,6 +4,7 @@ import { backendURL } from '../API';
 import { ENABLED_ALGORITHMS, UI_HIDDEN_PARAMETERS } from '../constants';
 import { Engine } from './Experiment';
 import { buildWorkflowAlgorithmList } from './WorkflowAPIAdapter';
+import { InstanceMode } from '../App/App';
 
 export interface Variable {
   code: string;
@@ -288,7 +289,7 @@ class Core extends Container<State> {
     }
   };
 
-  public algorithms = async (): Promise<void> => {
+  public algorithms = async (mode: InstanceMode): Promise<void> => {
     const exaremeAlgorithms = await this.exaremeAlgorithms();
     this.setState(state => ({
       ...state,
@@ -299,15 +300,17 @@ class Core extends Container<State> {
       error: undefined
     }));
 
-    const workflows = await this.workflows();
-    this.setState(state => ({
-      ...state,
-      algorithms: [
-        ...(state.algorithms || []),
-        ...((workflows && workflows.data) || [])
-      ],
-      error: workflows.error ? workflows.error : undefined
-    }));
+    if (mode === InstanceMode.Federation) {
+      const workflows = await this.workflows();
+      this.setState(state => ({
+        ...state,
+        algorithms: [
+          ...(state.algorithms || []),
+          ...((workflows && workflows.data) || [])
+        ],
+        error: workflows.error ? workflows.error : undefined
+      }));
+    }
 
     return Promise.resolve();
   };

@@ -6,6 +6,7 @@ import APIExperiment, {
 } from './Experiment';
 import APIModel, { ModelResponse, ModelState } from './Model';
 import config from './RequestHeaders';
+import { InstanceMode } from '../App/App';
 
 const apiModel = new APIModel(config);
 const apiExperiment = new APIExperiment(config);
@@ -48,7 +49,7 @@ const createWorkflowPayload = async (
   parameters: AlgorithmParameter[],
   modelSlug: string
 ): Promise<ExperimentPayload | void> => {
-  await apiCore.algorithms();
+  await apiCore.algorithms(InstanceMode.Local);
   const algorithms = apiCore.state.algorithms || [];
   const selectedAlgorithm = algorithms.find(a => a.code === experimentCode);
 
