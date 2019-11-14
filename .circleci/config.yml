@@ -4,8 +4,6 @@ jobs:
     docker:
       - image: circleci/buildpack-deps:xenial
     steps:
-      - setup_remote_docker:
-          docker_layer_caching: true
       - checkout
       - run:
           name: 'Build frontend'
@@ -45,4 +43,3 @@ workflows:
   build_and_test:
     jobs:
       - build
-      - test
