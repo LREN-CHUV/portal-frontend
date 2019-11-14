@@ -2,27 +2,11 @@
 
 set -e
 
-get_script_dir () {
-     SOURCE="${BASH_SOURCE[0]}"
-
-     while [ -h "$SOURCE" ]; do
-          DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
-          SOURCE="$( readlink "$SOURCE" )"
-          [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
-     done
-     cd -P "$( dirname "$SOURCE" )"
-     pwd
-}
-
-WORKSPACE=$(get_script_dir)
-
 if groups $USER | grep &>/dev/null '\bdocker\b'; then
   DOCKER="docker"
 else
   DOCKER="sudo docker"
 fi
-
- if which node > /dev/null
 
 # git porcelain ? All changes must be commited
 echo
@@ -42,47 +26,52 @@ yarn lint
 # yarn test - tests must pass !
 echo
 echo "Running tests"
-#yarn test
+yarn test
 
 PACKAGE_VERSION=$(node -p -e "require('./package.json').version")
 
 echo
 echo "Increment version number (see semver.org)"
-echo "Current version: " $PACKAGE_VERSION 
-echo 
+echo "Current version: " $PACKAGE_VERSION
+echo
 echo "  1) major"
 echo "  2) minor"
 echo "  3) patch"
 
 read n
 case $n in
-  1) VERSION="major";;
-  2) VERSION="minor";;
-  3) VERSION="patch";;
-  *) echo "invalid option, exiting..."; exit 1;;
+1) VERSION="major" ;;
+2) VERSION="minor" ;;
+3) VERSION="patch" ;;
+*)
+  echo "invalid option, exiting..."
+  exit 1
+  ;;
 esac
 
-NEXT_VERSION=$(npm --no-git-tag-version version $VERSION);
+NEXT_VERSION=$(npm --no-git-tag-version version $VERSION)
 INCREMENTED_VERSION=$(echo $NEXT_VERSION | cut -c 2-)
 
 echo "Incremented version ($VERSION): " $INCREMENTED_VERSION
 echo
-# Build 
+
+# Build
 echo "Build the project..."
 git tag $INCREMENTED_VERSION
 ./build.sh
 
 echo
 echo "Git commit & push"
-git commit -a -m "Bumped version to $INCREMENTED_VERSION" 
+git commit -a -m "Bumped version to $INCREMENTED_VERSION"
 git push
 git push --tags
 
 echo
 echo "Push on dockerhub"
 BUILD_DATE=$(date --iso-8601=seconds) \
-  VCS_REF=$INCREMENTED_VERSION \
-  VERSION=$INCREMENTED_VERSION \
-  WORKSPACE=$WORKSPACE \
-  $DOCKER push portal-frontend:$INCREMENTED_VERSION
+VCS_REF=$INCREMENTED_VERSION \
+VERSION=$INCREMENTED_VERSION \
+WORKSPACE=$WORKSPACE \
+  $DOCKER push hbpmip/portal-frontend hbpmip/portal-frontend:$INCREMENTED_VERSION
 
+$DOCKER push hbpmip/portal-frontend:latest
