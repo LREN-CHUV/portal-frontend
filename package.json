@@ -42,7 +42,8 @@
     "build": "react-scripts --max_old_space_size=5048 build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "lint:fix": "eslint './src/**/*.{ts,tsx}' --fix"
+    "lint:fix": "eslint './src/**/*.{ts,tsx}' --fix",
+    "lint": "eslint './src/**/*.{ts,tsx}'"
   },
   "husky": {
     "hooks": {
