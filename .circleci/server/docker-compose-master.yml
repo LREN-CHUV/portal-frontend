@@ -1,0 +1,159 @@
+version: '3.2'
+
+networks:
+  net-local:
+    external:
+      name: mip-local
+
+services:
+  exareme-keystore:
+    image: progrium/consul
+    command:
+      - -server
+      - -bootstrap
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+      placement:
+        constraints:
+          - node.role == manager # Ensures we only start on manager nodes
+          - node.labels.name == ${FEDERATION_NODE}
+    networks:
+      - 'net-local' # Connect the docker container to the global network
+    ports:
+      - '8500:8500'
+
+  exareme-master:
+    image: ${EXAREME_IMAGE}
+    environment:
+      - CONSULURL=${EXAREME_KEYSTORE}
+      - MASTER_FLAG=${FEDERATION_ROLE}
+      - NODE_NAME=${FEDERATION_NODE}
+      - DOCKER_DATA_FOLDER=${DOCKER_DATA_FOLDER}
+      - DOCKER_METADATA_FOLDER=${DOCKER_DATA_FOLDER}
+      - EXAREME_ACTIVE_WORKERS_PATH=active_workers
+      - EXAREME_MASTER_PATH=master
+      - DATASETS=datasets
+    depends_on:
+      - exareme-keystore
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+      placement:
+        constraints:
+          - node.role == manager # Ensures we only start on manager nodes
+          - node.labels.name == ${FEDERATION_NODE}
+    ports:
+      - target: 9090 # So that we can access the Exareme REST API / interface
+        published: 9090
+        protocol: tcp
+        mode: host
+    networks:
+      - 'net-local' # Connect the docker container to the global network
+    volumes:
+      - ${LOCAL_DATA_FOLDER}:${DOCKER_DATA_FOLDER}
+
+  db:
+    image: postgres:11.3-alpine
+    # volumes:
+    #   - "/var/run/postgres/postgres.sock:/var/run/postgres/postgres.sock"
+    #   - "dbdata:/var/lib/postgresql/data"
+    ports:
+      - '5432:5432'
+    hostname: db
+    environment:
+      POSTGRES_PASSWORD: test
+
+  wait_dbs:
+    image: 'waisbrot/wait'
+    restart: 'no'
+    environment:
+      TARGETS: 'db:5432'
+      TIMEOUT: 60
+    depends_on:
+      - db
+
+  create_dbs:
+    image: 'hbpmip/create-databases:1.1.0'
+    restart: 'no'
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_ADMIN_USER: postgres
+      DB_ADMIN_PASSWORD: test
+      DB4: portal
+      USER4: portal
+      PASSWORD4: portalpwd
+    depends_on:
+      - db
+
+  portalbackend:
+    image: hbpmip/portal-backend:5.0.4
+    restart: 'no'
+    ports:
+      - '8080:8080'
+      - '8089:8089'
+    environment:
+      PORTAL_DB_URL: jdbc:postgresql://db:5432/portal
+      PORTAL_DB_SERVER: db:5432
+      PORTAL_DB_USER: portal
+      PORTAL_DB_PASSWORD: portalpwd
+      CONTEXT_PATH: /services
+      AUTHENTICATION: 0
+      CLIENT_ID: 3ee62745-4080-4928-b5e7-acd15c042552
+      CLIENT_SECRET: SaNJbC2YFHPhPM_nGMyQo4jyAh3x1LI4si0hBCpOYLZO2IQ448ob5AzSoG8r8uW9QwU3T5JimL-tGiJ1b7tmAA
+      FRONTEND_LOGIN_URL: ${FRONTEND_URL}/services/login/hbp
+      FRONTEND_AFTER_LOGIN_URL: ${FRONTEND_URL}/
+      FRONTEND_AFTER_LOGOUT_URL: ${FRONTEND_URL}/services/login/hbp
+      EXAREME_URL: http://155.105.200.235:9090
+      GALAXY_CONTEXT: nativeGalaxy/workflows/list
+      GALAXY_USERNAME: admin
+      GALAXY_PASSWORD: password
+      WORKFLOW_URL: http://88.197.53.100:8091/Galaxy_Middleware_API-1.0.0-SNAPSHOT/api
+      JWT_SECRET: 'secret'
+      LOGGING_LEVEL_WEB: INFO
+      LOGGING_LEVEL_HIBERNATE: INFO
+      SESSION_TIMEOUT: 2592000
+      RELEASE_STAGE: 'testing'
+      DATACENTER_LOCATION: '$HOST'
+      CONTAINER_ORCHESTRATION: 'docker-compose'
+    depends_on:
+      - db
+    volumes:
+      - ./data:/opt/portal/api
+
+  wait_portal_backend:
+    image: 'waisbrot/wait'
+    restart: 'no'
+    environment:
+      TARGETS: 'portalbackend:8080'
+      TIMEOUT: 60
+    depends_on:
+      - portalbackend
+  # frontend:
+  #   image: hbpmip/portal-frontend:5.1.11
+  #   depends_on:
+  #     - portalbackend
+  #   ports:
+  #     - "80:80"
+  #   environment:
+  #     WORKER_PROCESSES: 1
+  #     ERROR_LOG_LEVEL: warn
+  #     PORTAL_VIRTUAL_HOST: frontend
+  #     PORTAL_BACKEND_SERVER: portalbackend:8080
+  #     PORTAL_BACKEND_CONTEXT: services
+  #     MODE: local
+  #     INSTANCE_NAME: "MIP 5.0.0"
+  #     VERSION: "5.0.0"
+  #     TRACKER_ID: UA-80660232-5
+  #     GALAXY_URL: "http://88.197.53.10:8090/nativeGalaxy"
+# volumes:
+#   dbdata:
+#     driver: local
+
