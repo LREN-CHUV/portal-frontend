@@ -13,6 +13,7 @@ get_script_dir () {
      pwd
 }
 
+
 if groups $USER | grep &>/dev/null '\bdocker\b'; then
   DOCKER="docker"
 else
@@ -20,7 +21,7 @@ else
 fi
 
 BUILD_DATE=$(date --iso-8601=seconds) \
-  VCS_REF=$(git describe --tags --dirty) \
-  VERSION=$(git describe --tags --dirty) \
+  VCS_REF=$(git describe --tags) \
+  VERSION=$(git describe --tags) \
   WORKSPACE=$(get_script_dir) \
-  $DOCKER build -t hbpmip/portal-frontend .
+  $DOCKER build -t hbpmip/portal-frontend:$(git describe --tags) .
