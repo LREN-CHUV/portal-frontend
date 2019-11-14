@@ -17,7 +17,7 @@ jobs:
       - image: circleci/buildpack-deps:xenial
     steps:
       - setup_remote_docker:
-          docker_layer_caching: true
+          docker_layer_caching: false
       - checkout
       - run:
           name: Setup Environment Variables
@@ -26,9 +26,7 @@ jobs:
       - run:
           name: 'Pull & install backend'
           command: |
-            git clone https://github.com/HBPMedical/web-analytics-demo.git
-            cp .circleci/server/* web-analytics-demo/
-            cd web-analytics-demo
+            cd server
             ./ci.sh
       - run:
           name: 'Build frontend'
@@ -38,10 +36,11 @@ jobs:
       - run:
           name: 'Test frontend'
           command: |
-            docker run -e CI=true --network=webanalyticsstarter_default frontend:latest yarn test woken
+            docker run -e CI=true --network=mip-local frontend:latest yarn test
 
 workflows:
   version: 2
   build_and_test:
     jobs:
       - build
+      - test
