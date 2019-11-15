@@ -136,23 +136,24 @@ services:
       TIMEOUT: 60
     depends_on:
       - portalbackend
-  # frontend:
-  #   image: hbpmip/portal-frontend:5.1.11
-  #   depends_on:
-  #     - portalbackend
-  #   ports:
-  #     - "80:80"
-  #   environment:
-  #     WORKER_PROCESSES: 1
-  #     ERROR_LOG_LEVEL: warn
-  #     PORTAL_VIRTUAL_HOST: frontend
-  #     PORTAL_BACKEND_SERVER: portalbackend:8080
-  #     PORTAL_BACKEND_CONTEXT: services
-  #     MODE: local
-  #     INSTANCE_NAME: "MIP 5.0.0"
-  #     VERSION: "5.0.0"
-  #     TRACKER_ID: UA-80660232-5
-  #     GALAXY_URL: "http://88.197.53.10:8090/nativeGalaxy"
+
+  frontend:
+    image: hbpmip/portal-frontend:5.1.11
+    depends_on:
+      - portalbackend
+    ports:
+      - '80:80'
+    environment:
+      WORKER_PROCESSES: 1
+      ERROR_LOG_LEVEL: warn
+      PORTAL_VIRTUAL_HOST: frontend
+      PORTAL_BACKEND_SERVER: portalbackend:8080
+      PORTAL_BACKEND_CONTEXT: services
+      MODE: local
+      INSTANCE_NAME: 'MIP 5.0.0'
+      VERSION: '5.0.0'
+      TRACKER_ID: UA-80660232-5
+      GALAXY_URL: 'http://88.197.53.10:8090/nativeGalaxy'
 # volumes:
 #   dbdata:
 #     driver: local
