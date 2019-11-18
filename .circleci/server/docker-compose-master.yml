@@ -20,7 +20,6 @@ services:
       placement:
         constraints:
           - node.role == manager # Ensures we only start on manager nodes
-          - node.labels.name == ${FEDERATION_NODE}
     networks:
       - 'net-local' # Connect the docker container to the global network
     ports:
@@ -48,12 +47,8 @@ services:
       placement:
         constraints:
           - node.role == manager # Ensures we only start on manager nodes
-          - node.labels.name == ${FEDERATION_NODE}
     ports:
-      - target: 9090 # So that we can access the Exareme REST API / interface
-        published: 9090
-        protocol: tcp
-        mode: host
+      - '9090:9090'
     networks:
       - 'net-local' # Connect the docker container to the global network
     volumes:
@@ -61,9 +56,6 @@ services:
 
   db:
     image: postgres:11.3-alpine
-    # volumes:
-    #   - "/var/run/postgres/postgres.sock:/var/run/postgres/postgres.sock"
-    #   - "dbdata:/var/lib/postgresql/data"
     ports:
       - '5432:5432'
     hostname: db
@@ -105,13 +97,13 @@ services:
       PORTAL_DB_USER: portal
       PORTAL_DB_PASSWORD: portalpwd
       CONTEXT_PATH: /services
+      EXAREME_URL: http://${FEDERATION_NODE}:9090
       AUTHENTICATION: 0
       CLIENT_ID: 3ee62745-4080-4928-b5e7-acd15c042552
       CLIENT_SECRET: SaNJbC2YFHPhPM_nGMyQo4jyAh3x1LI4si0hBCpOYLZO2IQ448ob5AzSoG8r8uW9QwU3T5JimL-tGiJ1b7tmAA
       FRONTEND_LOGIN_URL: ${FRONTEND_URL}/services/login/hbp
       FRONTEND_AFTER_LOGIN_URL: ${FRONTEND_URL}/
       FRONTEND_AFTER_LOGOUT_URL: ${FRONTEND_URL}/services/login/hbp
-      EXAREME_URL: http://155.105.200.235:9090
       GALAXY_CONTEXT: nativeGalaxy/workflows/list
       GALAXY_USERNAME: admin
       GALAXY_PASSWORD: password
@@ -153,8 +145,4 @@ services:
       INSTANCE_NAME: 'MIP 5.0.0'
       VERSION: '5.0.0'
       TRACKER_ID: UA-80660232-5
-      GALAXY_URL: 'http://88.197.53.10:8090/nativeGalaxy'
-# volumes:
-#   dbdata:
-#     driver: local
-
+      GALAXY_URL: http://127.0.0.1:8090/nativeGalaxy

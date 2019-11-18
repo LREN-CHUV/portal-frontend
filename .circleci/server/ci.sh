@@ -13,56 +13,35 @@ set -o errexit  ## set -e : exit the script if any statement returns a non-true 
 
 # This script is used for publish and continuous integration.
 
-#!/usr/bin/env bash
-# Key-Value Store
-EXAREME_KEYSTORE="exareme-keystore:8500"
-
 # Docker internal folder for the Exareme data
 DOCKER_DATA_FOLDER="/root/exareme/data/"
-
 FEDERATION_ROLE="master"
-
 LOCAL_DATA_FOLDER="./data/"
-imageName="hbpmip/exareme"
-tag="v21.2.0"
-ADDR=$(wget http://ipinfo.io/ip -qO -)
+IMAGE="hbpmip/exareme"
+TAG="v21.2.0"
+
+#Get hostname of node
+HOSTNAME=$(hostname)
+EXAREME_KEYSTORE="${HOSTNAME}_exareme-keystore:8500"
 
 if [[ $(docker info | grep Swarm | grep inactive*) != '' ]]; then
   echo -e "\nInitialize Swarm.."
-  docker swarm init --advertise-addr=$ADDR
+  docker swarm init
 else
   echo -e "\nLeaving previous Swarm.."
+  docker stack rm ${HOSTNAME}
   docker swarm leave -f
   sleep 1
   echo -e "\nInitialize Swarm.."
-  docker swarm init --advertise-addr=$ADDR
+  docker swarm init
 fi
 
 if [[ $(docker network ls | grep mip-local) == '' ]]; then
   echo -e "\nInitialize Network"
-  docker network create \
-    --driver=overlay --opt encrypted --subnet=10.20.30.0/24 --ip-range=10.20.30.0/24 --gateway=10.20.30.254 mip-local
+  docker network create --driver=overlay --subnet=10.20.30.0/24 mip-local
 fi
 
-#Get hostname of node
-name=$(hostname)
-echo "name: $name"
-echo "ADDR: $ADDR"
-
-echo -e "\nUpdate label name for Swarm node "$name
-docker node update --label-add name=${name} ${name}
-echo -e "\n"
-
-#Remove services if already existed
-if [[ $(docker service ls | grep ${name}"_exareme-keystore") != '' ]]; then
-  docker service rm ${name}"_exareme-keystore"
-fi
-
-if [[ $(docker service ls | grep ${name}"_exareme-master") != '' ]]; then
-  docker service rm ${name}"_exareme-master"
-fi
-
-env FEDERATION_NODE=${name} FEDERATION_ROLE=${FEDERATION_ROLE} EXAREME_IMAGE=${imageName}":"${tag} \
+env FEDERATION_NODE=${HOSTNAME} FEDERATION_ROLE=${FEDERATION_ROLE} EXAREME_IMAGE=${IMAGE}":"${TAG} \
   EXAREME_KEYSTORE=${EXAREME_KEYSTORE} DOCKER_DATA_FOLDER=${DOCKER_DATA_FOLDER} \
   LOCAL_DATA_FOLDER=${LOCAL_DATA_FOLDER} \
-  docker stack deploy -c docker-compose-master.yml ${name}
+  docker stack deploy -c docker-compose-master.yml ${HOSTNAME}
