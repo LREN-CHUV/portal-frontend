@@ -44,7 +44,7 @@ interface Props extends RouteComponentProps<{}> {
 export default ({ ...props }: Props): JSX.Element => {
   const { apiCore, apiModel, apiExperiment, apiUser, history } = props;
   const articles = apiCore.state && apiCore.state.articles;
-  const user = apiUser.state && apiUser.state.user;
+  const user = apiUser && apiUser.state && apiUser.state.user;
   const experiments = apiExperiment.state && apiExperiment.state.experiments;
 
   useEffect(() => {
@@ -55,7 +55,7 @@ export default ({ ...props }: Props): JSX.Element => {
     ) {
       history.push('/tos');
     }
-  }, [apiUser.state]);
+  }, [apiUser && apiUser.state]);
 
   const handleSelectArticle = (id: string): void => {
     history.push(`/articles/${id}`);

@@ -1,309 +1,142 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Test App components App snapshot renders correctly 1`] = `
-<div
-  className="App"
->
+Array [
   <header>
-    <header
-      className="navbar navbar-default navbar-fixed-top "
-      id="topnav"
+    <nav
+      className="sc-caSCKo cVuEGt"
     >
       <div
-        className="container-fluid"
+        className="sc-gisBJw fiTKEE"
+      >
+        <a
+          aria-current="page"
+          className="sc-TOsTZ kyDZvb active"
+          href="/"
+          onClick={[Function]}
+          style={Object {}}
+        >
+          <div
+            title="Human Brain Project"
+          />
+        </a>
+        <a
+          aria-current="page"
+          className="sc-TOsTZ kyDZvb active"
+          href="/"
+          onClick={[Function]}
+          style={Object {}}
+        >
+          MIP
+        </a>
+      </div>
+      <div
+        className="sc-kjoXOD buxSZn"
       >
         <div
-          className="logo-area"
+          className="sc-kgAjT cFmpHj"
         >
           <a
             aria-current={null}
-            className="navbar-brand"
-            href="/home"
+            className="sc-TOsTZ sc-cJSrbW hWnQzc"
+            href="/explore"
             onClick={[Function]}
           >
-            Human Brain Project
+            Variables
+          </a>
+          <span>
+             &gt; 
+          </span>
+          <a
+            aria-current={null}
+            className="sc-TOsTZ sc-cJSrbW hWnQzc"
+            href="/review"
+            onClick={[Function]}
+          >
+            Analysis
+          </a>
+          <span>
+             &gt; 
+          </span>
+          <a
+            aria-current={null}
+            className="sc-TOsTZ sc-cJSrbW hWnQzc"
+            href="/experiment"
+            onClick={[Function]}
+          >
+            Experiment
           </a>
         </div>
         <div
-          className="app-instance-name"
+          className="dropdown btn-group btn-group-link"
         >
-          <h2>
-            MIP
-          </h2>
-        </div>
-        <ul
-          className="nav navbar-nav toolbar pull-right"
-        >
-          <li
-            className="toolbar-icon-bg hidden-xs"
+          <button
+            aria-expanded={false}
+            aria-haspopup={true}
+            className="sc-gZMcBi gZrnBJ dropdown-toggle btn btn-link"
+            disabled={false}
+            id="experiment-dropdown"
+            onClick={[Function]}
+            onKeyDown={[Function]}
+            role="button"
+            type="button"
           >
-            <a
-              aria-current={null}
-              href="/explore"
-              onClick={[Function]}
-              title="Epidemiological Exploration "
-            >
-              <span
-                className="icon-bg"
-              >
-                <i>
-                  EE
-                </i>
-              </span>
-            </a>
-          </li>
-          <li
-            className="toolbar-icon-bg hidden-xs"
-          >
-            <a
-              aria-current={null}
-              href="/review"
-              onClick={[Function]}
-              title="Interactive Analysis"
-            >
-              <span
-                className="icon-bg"
-              >
-                <i>
-                  IA
-                </i>
-              </span>
-            </a>
-          </li>
-          <li
-            className="toolbar-icon-bg hidden-xs bsd"
-          >
+            My Experiments
+             
             <span
-              title="Biological Signature of Diseases"
-            >
-              <div
-                className="dropdown btn-group btn-group-default"
-              >
-                <button
-                  aria-expanded={false}
-                  aria-haspopup={true}
-                  className="dropdown-toggle btn btn-default"
-                  disabled={false}
-                  id="experiment-dropdown"
-                  onClick={[Function]}
-                  onKeyDown={[Function]}
-                  role="button"
-                  type="button"
-                >
-                  BSD
-                </button>
-                <ul
-                  aria-labelledby="experiment-dropdown"
-                  className="dropdown-menu"
-                  role="menu"
-                >
-                  <div
-                    onKeyDown={[Function]}
-                    onSelect={[Function]}
-                    style={
-                      Object {
-                        "margin": "8px",
-                      }
-                    }
-                  >
-                    <span>
-                      <p>
-                        You have no running experiments.
-                      </p>
-                      <p>
-                        You can start one by selecting a model and configuring an experiment on it.
-                      </p>
-                    </span>
-                  </div>
-                </ul>
-              </div>
-            </span>
-          </li>
-          <li
-            className="uib-dropdown toolbar-icon-bg"
-          >
-            <a
-              aria-current={null}
-              href="/profile"
-              onClick={[Function]}
-              title="Profile"
-            >
-              <img
-                alt="anonymous"
-                className="img-circle"
-                src="default_user.png"
-              />
-            </a>
-            <ul
-              className="dropdown-menu userinfo arrow"
-            >
-              <li>
-                <a
-                  href="/profile"
-                  ui-sref="profile"
-                >
-                  <i
-                    className="ti ti-user"
-                  />
-                  <span>
-                    Profile
-                  </span>
-                </a>
-              </li>
-              <li
-                className="divider"
-              />
-              <li>
-                <a
-                  href="/login/logout"
-                  id="logout-link"
-                  ng-click="logout()"
-                >
-                  <i
-                    className="ti ti-shift-right"
-                  />
-                  <span>
-                    Sign out
-                  </span>
-                </a>
-              </li>
-            </ul>
-          </li>
-          <li
-            className="toolbar-icon-bg hidden-xs help"
+              className="caret"
+            />
+          </button>
+          <ul
+            aria-labelledby="experiment-dropdown"
+            className="dropdown-menu"
+            role="menu"
           >
             <div
-              className="sc-brqgnP hzzHZ"
+              onKeyDown={[Function]}
+              onSelect={[Function]}
+              style={
+                Object {
+                  "margin": "8px",
+                }
+              }
             >
-              <div
-                className="dropdown btn-group btn-group-default"
-              >
-                <button
-                  aria-expanded={false}
-                  aria-haspopup={true}
-                  className="dropdown-toggle btn btn-default"
-                  disabled={false}
-                  id="help-dropdown"
-                  onClick={[Function]}
-                  onKeyDown={[Function]}
-                  role="button"
-                  type="button"
-                >
-                  help
-                   
-                  <span
-                    className="caret"
-                  />
-                </button>
-                <ul
-                  aria-labelledby="help-dropdown"
-                  className="dropdown-menu"
-                  role="menu"
-                >
-                  <li
-                    className=""
-                    role="presentation"
-                  >
-                    <a
-                      href="#"
-                      onClick={[Function]}
-                      onKeyDown={[Function]}
-                      role="menuitem"
-                      tabIndex="-1"
-                    >
-                      <span
-                        className="glyphicon-book glyph"
-                      />
-                       MIP Documentation
-                    </a>
-                  </li>
-                  <li
-                    className=""
-                    role="presentation"
-                  >
-                    <a
-                      href="#"
-                      onClick={[Function]}
-                      onKeyDown={[Function]}
-                      role="menuitem"
-                      tabIndex="-1"
-                    >
-                      <span
-                        className="glyphicon-film glyph"
-                      />
-                       MIP introduction (video)
-                    </a>
-                  </li>
-                  <div
-                    onKeyDown={[Function]}
-                    onSelect={[Function]}
-                  >
-                    <span
-                      className="glyphicon-envelope glyph"
-                    />
-                     Email us at
-                     
-                    <a
-                      href="mailto://support@humanbrainproject.eu"
-                    >
-                      support@humanbrainproject.eu
-                    </a>
-                  </div>
-                  <div>
-                    <div
-                      id="feedback-form"
-                    />
-                  </div>
-                </ul>
-              </div>
+              <p>
+                You have no running experiments on this model.
+              </p>
             </div>
-          </li>
-          <li
-            className="toolbar-trigger toolbar-icon-bg"
-          >
-            <a
-              href="/hbpapps"
-              title="App"
-              ui-sref="hbpapps"
-            >
-              <span
-                className="icon-bg"
-              >
-                <i
-                  className="ti ti-layout-grid3-alt "
-                  style={
-                    Object {
-                      "fontFamily": "themify",
-                      "fontWeight": "normal",
-                    }
-                  }
-                />
-              </span>
-            </a>
-          </li>
-        </ul>
+          </ul>
+        </div>
+        <a
+          aria-current={null}
+          className="sc-TOsTZ kyDZvb"
+          href="/articles"
+          onClick={[Function]}
+        >
+          Articles
+        </a>
       </div>
-    </header>
-  </header>
-  <section
-    className="main-content sc-fMiknA eEoNzf"
-  >
-    <div
-      className="sc-jAaTju qNdbr"
-    >
       <div
-        className="sc-jDwBTQ cdxgNu"
+        className="sc-kjoXOD sc-cHGsZl cCkvvc"
       >
+        <a
+          aria-current={null}
+          className="sc-TOsTZ kyDZvb"
+          href="/profile"
+          onClick={[Function]}
+        >
+          Profile
+        </a>
         <div
-          className="sc-brqgnP hzzHZ"
+          className="sc-fAjcbJ bYMVbI"
         >
           <div
-            className="dropdown btn-group btn-group-default"
+            className="dropdown btn-group btn-group-link"
           >
             <button
               aria-expanded={false}
               aria-haspopup={true}
-              className="dropdown-toggle btn btn-default"
+              className="dropdown-toggle btn btn-link"
               disabled={false}
               id="help-dropdown"
               onClick={[Function]}
@@ -311,7 +144,7 @@ exports[`Test App components App snapshot renders correctly 1`] = `
               role="button"
               type="button"
             >
-              help
+              Help
                
               <span
                 className="caret"
@@ -334,7 +167,7 @@ exports[`Test App components App snapshot renders correctly 1`] = `
                   tabIndex="-1"
                 >
                   <span
-                    className="glyphicon-book glyph"
+                    className="glyphicon glyphicon-book"
                   />
                    MIP Documentation
                 </a>
@@ -351,17 +184,17 @@ exports[`Test App components App snapshot renders correctly 1`] = `
                   tabIndex="-1"
                 >
                   <span
-                    className="glyphicon-film glyph"
+                    className="glyphicon glyphicon-film"
                   />
                    MIP introduction (video)
                 </a>
               </li>
-              <div
+              <li
                 onKeyDown={[Function]}
                 onSelect={[Function]}
               >
                 <span
-                  className="glyphicon-envelope glyph"
+                  className="glyphicon glyphicon-envelope"
                 />
                  Email us at
                  
@@ -370,7 +203,7 @@ exports[`Test App components App snapshot renders correctly 1`] = `
                 >
                   support@humanbrainproject.eu
                 </a>
-              </div>
+              </li>
               <div>
                 <div
                   id="feedback-form"
@@ -379,111 +212,355 @@ exports[`Test App components App snapshot renders correctly 1`] = `
             </ul>
           </div>
         </div>
-        <button
-          className="btn btn-default"
-          disabled={false}
-          onClick={[Function]}
-          type="submit"
-        >
-          Login
-        </button>
       </div>
-      <img
-        alt="HBP logo"
-        src="hbp_logo_320.png"
-        title="Human Brain Project"
-      />
-      <h1>
-        THE MEDICAL INFORMATICS PLATFORM
-      </h1>
-      <div
-        className="sc-gPEVay ftfKKm"
-      >
-        <section>
-          <p>
-            Thousands of brain images and terabytes of invaluable associated medical data are produced every day at a gigantic pace around the world. The Medical Informatics Platform (MIP) aims to federate this information and provide the tools to the experts to effectively analyse it and advance more rapidly in understanding the neurological and psychiatric diseases. This will in turn allow identifying the biological changes associated and open real possibilities for early diagnosis and personalised medicine.
-          </p>
-          <p>
-            The MIP provides methods to analyse federated data from hospitals, research centres and biobanks. Clinical scientists can develop, share and release results of their research. The MIP aims to bring together people across professional and scientific fields encourages them to actively contribute to the design and development of the services which the MIP provides.
-          </p>
-        </section>
-        <div>
-          <section>
-            <h3>
-              The MIP has three main goals:
-            </h3>
-            <ul>
-              <li>
-                Build the tools to federate clinical data, currently inaccessible outside hospital and research archives;
-              </li>
-              <li>
-                Recruit hospitals to contribute to and benefit by using the platform;
-              </li>
-              <li>
-                Develop tools for extracting biological signatures of diseases from multi-level data.
-              </li>
-            </ul>
-          </section>
-          <section>
-            <h3>
-              You can use the MIP
-            </h3>
-            <ul>
-              <li>
-                as a clinician, for objective diagnoses and treatment of brain disease;
-              </li>
-              <li>
-                as a neuroscientist, for the application and testing of new models and methods;
-              </li>
-              <li>
-                as a pharmaceutical or biotech company, for disease target discovery.
-              </li>
-            </ul>
-          </section>
-        </div>
-      </div>
-    </div>
-  </section>
-  <footer
-    id="footer"
+    </nav>
+  </header>,
+  <main
+    className="sc-jqCOkK fTaisH"
   >
-    <div
-      className="clearfix container-fluid"
+    <section
+      className="sc-brqgnP SqPLV"
     >
       <div
-        className="row"
+        className="sc-eNQAEJ eKcjzt"
       >
-        <ul
-          className="list-unstyled list-inline col-md-6"
-        >
-          <li>
-            <h6
-              className="copyright"
-            >
-              © 2015-2019
-               
-              <a
-                href="https://www.humanbrainproject.eu/en/"
-                title="The Human Brain Project Website"
-              >
-                Human Brain Project
-              </a>
-              . All right reserved
-            </h6>
-          </li>
-        </ul>
         <div
-          className="col-md-6 text-right"
+          className="sc-hMqMXs bOWneM"
+          style={
+            Object {
+              "backgroundColor": "rgba(222, 147, 109, 0.4)",
+            }
+          }
         >
-          
-          Mode:
-           
-          Federation
+          <div
+            className="sc-kEYyzF bCvrJY"
+          >
+            <h1
+              className="sc-kkGfuU cdhBpL"
+            >
+              users
+            </h1>
+            <div
+              className="sc-iAyFgw fKYtUm"
+            >
+              <svg
+                fill="currentColor"
+                height="1em"
+                stroke="currentColor"
+                strokeWidth="0"
+                style={
+                  Object {
+                    "color": undefined,
+                  }
+                }
+                viewBox="0 0 640 512"
+                width="1em"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M96 224c35.3 0 64-28.7 64-64s-28.7-64-64-64-64 28.7-64 64 28.7 64 64 64zm448 0c35.3 0 64-28.7 64-64s-28.7-64-64-64-64 28.7-64 64 28.7 64 64 64zm32 32h-64c-17.6 0-33.5 7.1-45.1 18.6 40.3 22.1 68.9 62 75.1 109.4h66c17.7 0 32-14.3 32-32v-32c0-35.3-28.7-64-64-64zm-256 0c61.9 0 112-50.1 112-112S381.9 32 320 32 208 82.1 208 144s50.1 112 112 112zm76.8 32h-8.3c-20.8 10-43.9 16-68.5 16s-47.6-6-68.5-16h-8.3C179.6 288 128 339.6 128 403.2V432c0 26.5 21.5 48 48 48h288c26.5 0 48-21.5 48-48v-28.8c0-63.6-51.6-115.2-115.2-115.2zm-223.7-13.4C161.5 263.1 145.6 256 128 256H64c-35.3 0-64 28.7-64 64v32c0 17.7 14.3 32 32 32h65.9c6.3-47.4 34.9-87.3 75.2-109.4z"
+                />
+              </svg>
+            </div>
+          </div>
+          <div
+            className="sc-hSdWYo boHBjZ"
+          >
+            <h2
+              className="sc-eHgmQL kSKHbG"
+            >
+              0
+            </h2>
+            <p
+              className="sc-cvbbAY jPEANq"
+            >
+              Scientists registered on the platform
+            </p>
+          </div>
+        </div>
+        <div
+          className="sc-hMqMXs bOWneM"
+          style={
+            Object {
+              "backgroundColor": "rgba(59,139,144,.25)",
+            }
+          }
+        >
+          <div
+            className="sc-kEYyzF bCvrJY"
+          >
+            <h1
+              className="sc-kkGfuU cdhBpL"
+            >
+              articles
+            </h1>
+            <div
+              className="sc-iAyFgw fKYtUm"
+            >
+              <svg
+                fill="currentColor"
+                height="1em"
+                stroke="currentColor"
+                strokeWidth="0"
+                style={
+                  Object {
+                    "color": undefined,
+                  }
+                }
+                viewBox="0 0 576 512"
+                width="1em"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M402.6 83.2l90.2 90.2c3.8 3.8 3.8 10 0 13.8L274.4 405.6l-92.8 10.3c-12.4 1.4-22.9-9.1-21.5-21.5l10.3-92.8L388.8 83.2c3.8-3.8 10-3.8 13.8 0zm162-22.9l-48.8-48.8c-15.2-15.2-39.9-15.2-55.2 0l-35.4 35.4c-3.8 3.8-3.8 10 0 13.8l90.2 90.2c3.8 3.8 10 3.8 13.8 0l35.4-35.4c15.2-15.3 15.2-40 0-55.2zM384 346.2V448H64V128h229.8c3.2 0 6.2-1.3 8.5-3.5l40-40c7.6-7.6 2.2-20.5-8.5-20.5H48C21.5 64 0 85.5 0 112v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V306.2c0-10.7-12.9-16-20.5-8.5l-40 40c-2.2 2.3-3.5 5.3-3.5 8.5z"
+                />
+              </svg>
+            </div>
+          </div>
+          <div
+            className="sc-hSdWYo boHBjZ"
+          >
+            <h2
+              className="sc-eHgmQL kSKHbG"
+            >
+              0
+            </h2>
+            <p
+              className="sc-cvbbAY jPEANq"
+            >
+              Articles written on the platform
+            </p>
+          </div>
+        </div>
+        <div
+          className="sc-hMqMXs bOWneM"
+          style={
+            Object {
+              "backgroundColor": "rgba(158,158,158,.25)",
+            }
+          }
+        >
+          <div
+            className="sc-kEYyzF bCvrJY"
+          >
+            <h1
+              className="sc-kkGfuU cdhBpL"
+            >
+              variables
+            </h1>
+            <div
+              className="sc-iAyFgw fKYtUm"
+            >
+              <svg
+                fill="currentColor"
+                height="1em"
+                stroke="currentColor"
+                strokeWidth="0"
+                style={
+                  Object {
+                    "color": undefined,
+                  }
+                }
+                viewBox="0 0 448 512"
+                width="1em"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M413.03 256c40.13-54.89 41.51-98.62 25.14-128-10.91-19.52-40.54-50.73-116.33-41.88C300.36 34.89 267.64 0 224 0s-76.36 34.89-97.84 86.12C50.43 77.34 20.73 108.48 9.83 128c-16.38 29.4-15 73.09 25.14 128-40.13 54.89-41.51 98.62-25.14 128 29.21 52.34 101.68 43.58 116.33 41.88C147.63 477.1 180.36 512 224 512s76.37-34.9 97.84-86.12c14.64 1.7 87.11 10.46 116.33-41.88 16.38-29.4 15-73.09-25.14-128zM63.38 352c-4.03-7.21-.19-24.8 14.95-48.29 6.96 6.53 14.2 12.89 21.87 19.18 1.71 13.71 4 27.08 6.76 40.08-24.56.89-39.89-4.37-43.58-10.97zm36.82-162.88c-7.66 6.29-14.9 12.65-21.87 19.18-15.13-23.5-18.97-41.09-14.95-48.3 3.41-6.14 16.39-11.47 37.92-11.47 1.71 0 3.87.3 5.69.37a472.191 472.191 0 0 0-6.79 40.22zM224 64c9.47 0 22.2 13.52 33.86 37.26-11.19 3.7-22.44 8-33.86 12.86-11.42-4.86-22.67-9.16-33.86-12.86C201.8 77.52 214.53 64 224 64zm0 384c-9.47 0-22.2-13.52-33.86-37.26 11.19-3.7 22.44-8 33.86-12.86 11.42 4.86 22.67 9.16 33.86 12.86C246.2 434.48 233.47 448 224 448zm62.5-157.33c-26.7 19.08-46.14 29.33-62.5 37.48-16.35-8.14-35.8-18.41-62.5-37.48-1.99-27.79-1.99-41.54 0-69.33 26.67-19.05 46.13-29.32 62.5-37.48 16.39 8.17 35.86 18.44 62.5 37.48 1.98 27.78 1.99 41.53 0 69.33zM384.62 352c-3.67 6.62-19 11.82-43.58 10.95 2.76-13 5.05-26.37 6.76-40.06 7.66-6.29 14.9-12.65 21.87-19.18 15.13 23.49 18.97 41.08 14.95 48.29zm-14.95-143.71c-6.96-6.53-14.2-12.89-21.87-19.18a473.535 473.535 0 0 0-6.79-40.22c1.82-.07 3.97-.37 5.69-.37 21.52 0 34.51 5.34 37.92 11.47 4.02 7.22.18 24.81-14.95 48.3zM224 224c-17.67 0-32 14.33-32 32s14.33 32 32 32 32-14.33 32-32-14.33-32-32-32z"
+                />
+              </svg>
+            </div>
+          </div>
+          <div
+            className="sc-hSdWYo boHBjZ"
+          >
+            <h2
+              className="sc-eHgmQL kSKHbG"
+            >
+              0
+            </h2>
+            <p
+              className="sc-cvbbAY jPEANq"
+            >
+              Records in database
+            </p>
+          </div>
+        </div>
+        <div
+          className="sc-hMqMXs bOWneM"
+          style={
+            Object {
+              "backgroundColor": "rgba(0,0,0,.5)",
+            }
+          }
+        >
+          <div
+            className="sc-kEYyzF bCvrJY"
+          >
+            <h1
+              className="sc-kkGfuU cdhBpL"
+            />
+            <div
+              className="sc-iAyFgw fKYtUm"
+            >
+              <svg
+                fill="currentColor"
+                height="1em"
+                stroke="currentColor"
+                strokeWidth="0"
+                style={
+                  Object {
+                    "color": undefined,
+                  }
+                }
+                viewBox="0 0 640 512"
+                width="1em"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M96 224c35.3 0 64-28.7 64-64s-28.7-64-64-64-64 28.7-64 64 28.7 64 64 64zm448 0c35.3 0 64-28.7 64-64s-28.7-64-64-64-64 28.7-64 64 28.7 64 64 64zm32 32h-64c-17.6 0-33.5 7.1-45.1 18.6 40.3 22.1 68.9 62 75.1 109.4h66c17.7 0 32-14.3 32-32v-32c0-35.3-28.7-64-64-64zm-256 0c61.9 0 112-50.1 112-112S381.9 32 320 32 208 82.1 208 144s50.1 112 112 112zm76.8 32h-8.3c-20.8 10-43.9 16-68.5 16s-47.6-6-68.5-16h-8.3C179.6 288 128 339.6 128 403.2V432c0 26.5 21.5 48 48 48h288c26.5 0 48-21.5 48-48v-28.8c0-63.6-51.6-115.2-115.2-115.2zm-223.7-13.4C161.5 263.1 145.6 256 128 256H64c-35.3 0-64 28.7-64 64v32c0 17.7 14.3 32 32 32h65.9c6.3-47.4 34.9-87.3 75.2-109.4z"
+                />
+              </svg>
+            </div>
+          </div>
+          <div
+            className="sc-hSdWYo boHBjZ"
+          >
+            <h2
+              className="sc-eHgmQL kSKHbG"
+            >
+              Write
+            </h2>
+            <p
+              className="sc-cvbbAY jPEANq"
+            >
+              an article
+            </p>
+            <button
+              className="sc-jWBwVP dBluaG btn btn-link"
+              disabled={false}
+              onClick={[Function]}
+              style={
+                Object {
+                  "backgroundColor": "rgba(0,0,0,0)",
+                }
+              }
+              type="button"
+            >
+              <div
+                className="sc-iAyFgw fJcruz"
+                size={16}
+              >
+                <svg
+                  fill="currentColor"
+                  height="1em"
+                  stroke="currentColor"
+                  strokeWidth="0"
+                  style={
+                    Object {
+                      "color": undefined,
+                    }
+                  }
+                  viewBox="0 0 512 512"
+                  width="1em"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm144 276c0 6.6-5.4 12-12 12h-92v92c0 6.6-5.4 12-12 12h-56c-6.6 0-12-5.4-12-12v-92h-92c-6.6 0-12-5.4-12-12v-56c0-6.6 5.4-12 12-12h92v-92c0-6.6 5.4-12 12-12h56c6.6 0 12 5.4 12 12v92h92c6.6 0 12 5.4 12 12v56z"
+                  />
+                </svg>
+              </div>
+            </button>
+          </div>
         </div>
       </div>
+      <div
+        className="sc-cMljjf fOzmrg"
+      >
+        <div>
+          <div
+            className="panel panel-default"
+          >
+            <div
+              className="panel-title"
+            >
+              <h3
+                className="sc-jDwBTQ htjiuF"
+              >
+                My experiments
+              </h3>
+            </div>
+            <div
+              className="sc-gPEVay bjbvAe panel-body"
+            />
+          </div>
+        </div>
+        <div>
+          <div
+            className="panel panel-default"
+          >
+            <div
+              className="panel-title"
+            >
+              <h3
+                className="sc-jDwBTQ htjiuF"
+              >
+                Recent Articles
+              </h3>
+            </div>
+            <div
+              className="sc-gPEVay bjbvAe panel-body"
+            />
+          </div>
+          <div
+            className="panel panel-default"
+          >
+            <div
+              className="panel-title"
+            >
+              <h3
+                className="sc-jDwBTQ htjiuF"
+              >
+                Shared experiments
+              </h3>
+            </div>
+            <div
+              className="sc-gPEVay bjbvAe panel-body"
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>,
+  <footer>
+    <div
+      className="sc-dVhcbM iOlzcD"
+    >
+      <span>
+        <div
+          title="CHUV Lausanne"
+        />
+        <h6>
+          © 2015-2019
+           
+          <a
+            href="https://www.humanbrainproject.eu/en/"
+            title="The Human Brain Project Website"
+          >
+            Human Brain Project
+          </a>
+          . All right reserved
+        </h6>
+      </span>
+      <h6>
+        
+        Mode:
+         
+        Federation
+      </h6>
     </div>
-  </footer>
-</div>
+  </footer>,
+]
 `;
 
 exports[`Test App components AppContainer snapshot renders correctly 1`] = `

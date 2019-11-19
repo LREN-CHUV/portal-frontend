@@ -87,5 +87,17 @@ describe('Integration Test for experiment API', () => {
     });
     expect(experimentState.error).toBeFalsy();
     expect(experimentState.experiment).toBeTruthy();
+
+    const props = { experimentState };
+    const wrapper = mount(<Result {...props} />);
+    expect(wrapper.find('.error')).toHaveLength(0);
+    expect(wrapper.find('.loading')).toHaveLength(0);
+    expect(wrapper.find('.result')).toHaveLength(2);
+    expect(
+      wrapper
+        .find('div.result table tbody tr td')
+        .at(2)
+        .text()
+    ).toEqual('+80y');
   });
 });

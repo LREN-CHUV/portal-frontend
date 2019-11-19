@@ -102,12 +102,21 @@ describe('Integration Test for experiment API', () => {
     expect(wrapper.find('.error')).toHaveLength(0);
     expect(wrapper.find('.loading')).toHaveLength(0);
     expect(wrapper.find('.result')).toHaveLength(2);
-
     expect(
       wrapper
-        .find('.result h5')
+        .find('div.result table tbody tr td')
+        .at(1)
         .first()
         .text()
-    ).toEqual('COEFFICIENTS');
+    ).toEqual('0.937');
+    expect(
+      wrapper
+        .find('div.result')
+        .at(1)
+        .find('table tbody tr td')
+        .at(1)
+        .first()
+        .text()
+    ).toEqual('-1.455');
   });
 });

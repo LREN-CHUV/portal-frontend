@@ -97,5 +97,11 @@ describe('Integration Test for experiment API', () => {
     expect(wrapper.find('.error')).toHaveLength(0);
     expect(wrapper.find('.loading')).toHaveLength(0);
     expect(wrapper.find('.result')).toHaveLength(1);
+    expect(
+      wrapper
+        .find('div.result table tbody tr td')
+        .at(1)
+        .text()
+    ).toEqual('39.302');
   });
 });
