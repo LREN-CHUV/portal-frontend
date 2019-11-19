@@ -1,6 +1,7 @@
 import APIModel from '../../Model';
 import APICore from '../../Core';
 import config from '../../RequestHeaders';
+import { getDatasets } from '../../Utils';
 
 describe('Integration Test Model API', () => {
   const apiModel = new APIModel(config);
@@ -8,10 +9,7 @@ describe('Integration Test Model API', () => {
 
   beforeAll(async () => {
     const apiCore = new APICore(config);
-    await apiCore.datasets();
-    datasets = apiCore.state.datasets;
-    const error = apiCore.state.error;
-    expect(error).toBeFalsy();
+    datasets = await getDatasets();
     expect(datasets).toBeTruthy();
 
     model = {
@@ -21,7 +19,8 @@ describe('Integration Test Model API', () => {
         testingDatasets: [],
         filters:
           '{"condition":"AND","rules":[{"id":"subjectageyears","field":"subjectageyears","type":"integer","input":"number","operator":"greater","value":"65"}],"valid":true}',
-        trainingDatasets: datasets.map(d => ({ code: d.code })),
+        trainingDatasets:
+          (datasets && datasets.map(d => ({ code: d.code }))) || [],
         validationDatasets: [],
         variables: [{ code: 'lefthippocampus' }]
       }
