@@ -21,6 +21,7 @@ fi
 # yarn lint - code must not have errors (warnings are ok)
 echo
 echo "Linting code"
+# TODO: use docker run --rm node yarn
 yarn lint
 
 # yarn test - tests must pass !
