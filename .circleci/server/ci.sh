@@ -12,17 +12,17 @@ set -o errtrace # trace ERR through 'time command' and other functions
 set -o errexit  ## set -e : exit the script if any statement returns a non-true return value
 
 # This script is used for publish and continuous integration.
+HOSTNAME=$(hostname)
 
-# Docker internal folder for the Exareme data
+FRONTEND_URL="${HOSTNAME}"
+EXAREME_IMAGE="hbpmip/exareme:v21.2.0"
+FRONTEND_IMAGE="hbpmip/portal-frontend:5.1.11"
+BACKEND_IMAGE="hbpmip/portal-backend:5.0.4"
+EXAREME_KEYSTORE="${HOSTNAME}_exareme-keystore:8500"
+
 DOCKER_DATA_FOLDER="/root/exareme/data/"
 FEDERATION_ROLE="master"
 LOCAL_DATA_FOLDER="./data/"
-IMAGE="hbpmip/exareme"
-TAG="v21.2.0"
-
-#Get hostname of node
-HOSTNAME=$(hostname)
-EXAREME_KEYSTORE="${HOSTNAME}_exareme-keystore:8500"
 
 if [[ $(docker info | grep Swarm | grep inactive*) != '' ]]; then
   echo -e "\nInitialize Swarm.."
@@ -41,7 +41,10 @@ if [[ $(docker network ls | grep mip-local) == '' ]]; then
   docker network create --driver=overlay --subnet=10.20.30.0/24 mip-local
 fi
 
-env FEDERATION_NODE=${HOSTNAME} FEDERATION_ROLE=${FEDERATION_ROLE} EXAREME_IMAGE=${IMAGE}":"${TAG} \
+env FEDERATION_NODE=${HOSTNAME} FEDERATION_ROLE=${FEDERATION_ROLE} EXAREME_IMAGE=${EXAREME_IMAGE} \
   EXAREME_KEYSTORE=${EXAREME_KEYSTORE} DOCKER_DATA_FOLDER=${DOCKER_DATA_FOLDER} \
   LOCAL_DATA_FOLDER=${LOCAL_DATA_FOLDER} \
+  FRONTEND_IMAGE=${FRONTEND_IMAGE} \
+  BACKEND_IMAGE=${BACKEND_IMAGE} \
+  FRONTEND_URL=${FRONTEND_URL} \
   docker stack deploy -c docker-compose-master.yml ${HOSTNAME}

@@ -62,15 +62,6 @@ services:
     environment:
       POSTGRES_PASSWORD: test
 
-  wait_dbs:
-    image: 'waisbrot/wait'
-    restart: 'no'
-    environment:
-      TARGETS: 'db:5432'
-      TIMEOUT: 60
-    depends_on:
-      - db
-
   create_dbs:
     image: 'hbpmip/create-databases:1.1.0'
     restart: 'no'
@@ -84,13 +75,18 @@ services:
       PASSWORD4: portalpwd
     depends_on:
       - db
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
 
   portalbackend:
-    image: hbpmip/portal-backend:5.0.4
+    image: ${BACKEND_IMAGE}
     restart: 'no'
     ports:
       - '8080:8080'
-      - '8089:8089'
     environment:
       PORTAL_DB_URL: jdbc:postgresql://db:5432/portal
       PORTAL_DB_SERVER: db:5432
@@ -99,38 +95,18 @@ services:
       CONTEXT_PATH: /services
       EXAREME_URL: http://${FEDERATION_NODE}:9090
       AUTHENTICATION: 0
-      CLIENT_ID: 3ee62745-4080-4928-b5e7-acd15c042552
-      CLIENT_SECRET: SaNJbC2YFHPhPM_nGMyQo4jyAh3x1LI4si0hBCpOYLZO2IQ448ob5AzSoG8r8uW9QwU3T5JimL-tGiJ1b7tmAA
       FRONTEND_LOGIN_URL: ${FRONTEND_URL}/services/login/hbp
       FRONTEND_AFTER_LOGIN_URL: ${FRONTEND_URL}/
       FRONTEND_AFTER_LOGOUT_URL: ${FRONTEND_URL}/services/login/hbp
-      GALAXY_CONTEXT: nativeGalaxy/workflows/list
-      GALAXY_USERNAME: admin
-      GALAXY_PASSWORD: password
-      WORKFLOW_URL: http://88.197.53.100:8091/Galaxy_Middleware_API-1.0.0-SNAPSHOT/api
-      JWT_SECRET: 'secret'
-      LOGGING_LEVEL_WEB: INFO
-      LOGGING_LEVEL_HIBERNATE: INFO
       SESSION_TIMEOUT: 2592000
       RELEASE_STAGE: 'testing'
-      DATACENTER_LOCATION: '$HOST'
-      CONTAINER_ORCHESTRATION: 'docker-compose'
     depends_on:
       - db
     volumes:
       - ./data:/opt/portal/api
 
-  wait_portal_backend:
-    image: 'waisbrot/wait'
-    restart: 'no'
-    environment:
-      TARGETS: 'portalbackend:8080'
-      TIMEOUT: 60
-    depends_on:
-      - portalbackend
-
   frontend:
-    image: hbpmip/portal-frontend:5.1.11
+    image: ${FRONTEND_IMAGE}
     depends_on:
       - portalbackend
     ports:
