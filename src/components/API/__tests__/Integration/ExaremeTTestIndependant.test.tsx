@@ -19,7 +19,7 @@ const experimentCode = 'TTEST_INDEPENDENT';
 const parameters: any = [
   {
     code: 'xlevels',
-    value: 'AD,MCI'
+    value: 'M,F'
   },
   {
     code: 'hypothesis',
@@ -54,7 +54,7 @@ const model: any = (datasets: VariableEntity[]) => ({
     validationDatasets: [],
     coVariables: [
       {
-        code: 'alzheimerbroadcategory'
+        code: 'gender'
       }
     ]
   }
@@ -113,5 +113,11 @@ describe('Integration Test for experiment API', () => {
     expect(wrapper.find('.error')).toHaveLength(0);
     expect(wrapper.find('.loading')).toHaveLength(0);
     expect(wrapper.find('div.result')).toHaveLength(1);
+    expect(
+      wrapper
+        .find('div.result table tbody tr td')
+        .at(1)
+        .text()
+    ).toEqual('18.469');
   });
 });
