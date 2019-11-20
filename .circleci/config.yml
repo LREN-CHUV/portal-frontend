@@ -33,10 +33,10 @@ jobs:
           command: |
             cd
             docker build -t frontend:test -f Dockerfile-test .
-      # - run:
-      #     name: 'Test frontend'
-      #     command: |
-      #       REACT_APP_BACKEND_URL=localhost docker run -e CI=true frontend:test yarn test
+      - run:
+          name: 'Test frontend'
+          command: |
+            docker run -e CI=true -e BACKEND_URL=127.0.0.1:8080 frontend:test yarn test
 
 workflows:
   version: 2
