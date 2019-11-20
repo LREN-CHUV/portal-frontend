@@ -31,7 +31,7 @@ jobs:
       - run:
           name: 'Build frontend'
           command: |
-            cd
+            cd ~/project # cd $CIRCLE_WORKING_DIRECTORY
             docker build -t frontend:test -f Dockerfile-test .
       - run:
           name: 'Test frontend'
