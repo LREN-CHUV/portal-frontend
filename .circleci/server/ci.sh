@@ -38,7 +38,7 @@ fi
 
 if [[ $(docker network ls | grep mip-local) == '' ]]; then
   echo -e "\nInitialize Network"
-  docker network create --driver=overlay --subnet=10.20.30.0/24 mip-local
+  docker network create --driver=overlay --attachable --subnet=10.20.30.0/24 mip-local
 fi
 
 env FEDERATION_NODE=${HOSTNAME} FEDERATION_ROLE=${FEDERATION_ROLE} EXAREME_IMAGE=${EXAREME_IMAGE} \
