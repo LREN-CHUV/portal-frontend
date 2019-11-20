@@ -31,12 +31,12 @@ jobs:
       - run:
           name: 'Build frontend'
           command: |
-            echo REACT_APP_BACKEND_URL=\"http://portalbackend:8080\" | tee -a .env
-            docker build -t frontend:latest .
-      - run:
-          name: 'Test frontend'
-          command: |
-            docker run -e CI=true --network=mip-local frontend:latest yarn test
+            cd
+            docker build -t frontend:test -f Dockerfile-test .
+      # - run:
+      #     name: 'Test frontend'
+      #     command: |
+      #       REACT_APP_BACKEND_URL=localhost docker run -e CI=true frontend:test yarn test
 
 workflows:
   version: 2

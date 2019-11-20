@@ -1,5 +1,10 @@
 # Changelog
 
+### 19.11.2019
+
+- CircleCI script
+- Tests updated
+
 ### 5.1.11 - 12.11.2019
 
 - Galaxy Workflow Engine embedded in Federation Mode
@@ -9,7 +14,7 @@
   - levels selection for categorical variables
 - Removed Woken calls
 - Using Exareme for
-  - descriptive statistics
+  - descriptive statisticsd
   - histograms
   - algorithms
     - LOGISTIC_REGRESSION
