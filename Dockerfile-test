@@ -1,11 +1,11 @@
 FROM node:latest
 
-WORKDIR /frontend
+WORKDIR /app
 
-COPY yarn.lock  /frontend
-COPY package.json  /frontend
+COPY yarn.lock  /app
+COPY package.json  /app
 
-ENV PATH=$PATH:/frontend/node_modules/.bin
+ENV PATH=$PATH:/app/node_modules/.bin
 RUN yarn
 
 WORKDIR /app
