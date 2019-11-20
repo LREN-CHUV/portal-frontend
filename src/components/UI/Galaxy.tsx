@@ -40,7 +40,7 @@ export default React.memo(({ apiCore }: Props) => {
       }
     };
     fetchConfig();
-  }, []);
+  }, [apiCore]);
 
   useEffect(() => {
     if (config) {
