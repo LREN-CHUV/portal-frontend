@@ -36,7 +36,7 @@ jobs:
       - run:
           name: 'Test frontend'
           command: |
-            docker run -e CI=true -e BACKEND_URL=127.0.0.1:8080 frontend:test yarn test
+            docker run -e CI=true -e BACKEND_URL=$(hostname):8080 frontend:test yarn test
 
 workflows:
   version: 2
