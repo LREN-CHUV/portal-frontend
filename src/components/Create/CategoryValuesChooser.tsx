@@ -47,7 +47,7 @@ export default ({
     setCategories(vars);
 
     handleChangeCategoryParameter(parameterName, JSON.stringify([]));
-  }, [query, lookupCallback]);
+  }, [query, lookupCallback, handleChangeCategoryParameter, parameterName]);
 
   const handleChangeValue = (
     event: React.FormEvent<FormControl>,

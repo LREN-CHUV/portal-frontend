@@ -73,7 +73,7 @@ export default ({
       };
       apiModel.setModel(newModel);
     }
-  }, [apiCore.state.pathologies, apiModel]);
+  }, [apiCore, apiCore.state.pathologies, apiModel]);
 
   // Switch datasets, variables, models based on selected pathology
   useEffect(() => {
@@ -174,12 +174,7 @@ export default ({
         pathology: (model && model.query && model.query.pathology) || ''
       });
     }
-  }, [
-    selectedNode,
-    apiModel.state.model && apiModel.state.model.query.trainingDatasets,
-    apiMining,
-    appConfig.mode
-  ]);
+  }, [selectedNode, apiMining, appConfig.mode, apiModel.state.model]);
 
   const handleSelectDataset = (dataset: VariableEntity): void => {
     const model = apiModel.state.model;
