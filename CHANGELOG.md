@@ -80,7 +80,7 @@
 
 ### 3.0.2 - 08.05.2019
 
-- Fixed Mime type bug due to Mime type bug on on Woken see https://jira.chuv.ch/browse/HBPLD-256?filter=-6
+- Fixed Mime type bug due to Mime type bug on on [Woken see](https://jira.chuv.ch/browse/HBPLD-256?filter=-6)
 - Fixed config.mode for federation
 - Removed Heatmaply (Too heavy ~7 mo)
 

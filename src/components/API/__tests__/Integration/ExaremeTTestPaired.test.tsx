@@ -41,16 +41,28 @@ const parameters: any = [
 ];
 const model: any = (datasets: VariableEntity[]) => ({
   query: {
-    pathology: 'dementia', // FIXME: should by dynamic
-    coVariables: [{ code: 'righthippocampus' }, { code: 'lefthippocampus' }],
+    // FIXME: should by dynamic
+    coVariables: [
+      {
+        code: 'righthippocampus'
+      },
+      {
+        code: 'lefthippocampus'
+      }
+    ],
     filters: '',
     groupings: [],
+    pathology: 'dementia',
     testingDatasets: [],
     trainingDatasets: datasets.map(d => ({
       code: d.code
     })),
     validationDatasets: [],
-    variables: [{ code: 'lefthippocampus' }]
+    variables: [
+      {
+        code: 'lefthippocampus'
+      }
+    ]
   }
 });
 

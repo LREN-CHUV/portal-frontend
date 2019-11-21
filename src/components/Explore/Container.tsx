@@ -265,9 +265,10 @@ export default ({
           }
         : {
             ...d3Model,
-            variables: node.leaves(),
             covariables:
-              d3Model.covariables && d3Model.covariables.filter(c => c !== node)
+              d3Model.covariables &&
+              d3Model.covariables.filter(c => c !== node),
+            variables: node.leaves()
           };
 
       setD3Model(nextModel);

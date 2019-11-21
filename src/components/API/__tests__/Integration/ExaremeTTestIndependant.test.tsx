@@ -42,19 +42,24 @@ const parameters: any = [
 const datasets = [{ code: 'adni' }];
 const model: any = (datasets: VariableEntity[]) => ({
   query: {
-    pathology: 'dementia', // FIXME: should by dynamic
-    variables: [{ code: 'righthippocampus' }],
+    coVariables: [
+      {
+        code: 'gender'
+      }
+    ],
     filters:
       '{"condition":"AND","rules":[{"id":"alzheimerbroadcategory","field":"alzheimerbroadcategory","type":"string","input":"select","operator":"not_equal","value":"CN"},{"id":"alzheimerbroadcategory","field":"alzheimerbroadcategory","type":"string","input":"select","operator":"not_equal","value":"Other"}],"valid":true}',
     groupings: [],
+    pathology: 'dementia',
     testingDatasets: [],
     trainingDatasets: datasets.map(d => ({
       code: d.code
     })),
     validationDatasets: [],
-    coVariables: [
+    // FIXME: should by dynamic
+    variables: [
       {
-        code: 'gender'
+        code: 'righthippocampus'
       }
     ]
   }

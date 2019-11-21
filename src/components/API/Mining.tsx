@@ -129,8 +129,8 @@ class Mining extends Container<MiningState> {
       return await this.setState({
         histograms: {
           data: undefined,
-          warning: 'Please select a dataset',
-          loading: false
+          loading: false,
+          warning: 'Please select a dataset'
         }
       });
     }
