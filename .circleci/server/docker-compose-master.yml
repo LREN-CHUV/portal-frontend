@@ -6,53 +6,53 @@ networks:
       name: mip-local
 
 services:
-  exareme-keystore:
-    image: progrium/consul
-    command:
-      - -server
-      - -bootstrap
-    deploy:
-      restart_policy:
-        condition: on-failure
-        delay: 5s
-        max_attempts: 3
-        window: 120s
-      placement:
-        constraints:
-          - node.role == manager # Ensures we only start on manager nodes
-    networks:
-      - 'net-local' # Connect the docker container to the global network
-    ports:
-      - '8500:8500'
+  # exareme-keystore:
+  #   image: progrium/consul
+  #   command:
+  #     - -server
+  #     - -bootstrap
+  #   deploy:
+  #     restart_policy:
+  #       condition: on-failure
+  #       delay: 5s
+  #       max_attempts: 3
+  #       window: 120s
+  #     placement:
+  #       constraints:
+  #         - node.role == manager # Ensures we only start on manager nodes
+  #   networks:
+  #     - 'net-local' # Connect the docker container to the global network
+  #   ports:
+  #     - '8500:8500'
 
-  exareme-master:
-    image: ${EXAREME_IMAGE}
-    environment:
-      - CONSULURL=${EXAREME_KEYSTORE}
-      - MASTER_FLAG=${FEDERATION_ROLE}
-      - NODE_NAME=${FEDERATION_NODE}
-      - DOCKER_DATA_FOLDER=${DOCKER_DATA_FOLDER}
-      - DOCKER_METADATA_FOLDER=${DOCKER_DATA_FOLDER}
-      - EXAREME_ACTIVE_WORKERS_PATH=active_workers
-      - EXAREME_MASTER_PATH=master
-      - DATASETS=datasets
-    depends_on:
-      - exareme-keystore
-    deploy:
-      restart_policy:
-        condition: on-failure
-        delay: 5s
-        max_attempts: 3
-        window: 120s
-      placement:
-        constraints:
-          - node.role == manager # Ensures we only start on manager nodes
-    ports:
-      - '9090:9090'
-    networks:
-      - 'net-local' # Connect the docker container to the global network
-    volumes:
-      - ${LOCAL_DATA_FOLDER}:${DOCKER_DATA_FOLDER}
+  # exareme-master:
+  #   image: ${EXAREME_IMAGE}
+  #   environment:
+  #     - CONSULURL=${EXAREME_KEYSTORE}
+  #     - MASTER_FLAG=${FEDERATION_ROLE}
+  #     - NODE_NAME=${FEDERATION_NODE}
+  #     - DOCKER_DATA_FOLDER=${DOCKER_DATA_FOLDER}
+  #     - DOCKER_METADATA_FOLDER=${DOCKER_DATA_FOLDER}
+  #     - EXAREME_ACTIVE_WORKERS_PATH=active_workers
+  #     - EXAREME_MASTER_PATH=master
+  #     - DATASETS=datasets
+  #   depends_on:
+  #     - exareme-keystore
+  #   deploy:
+  #     restart_policy:
+  #       condition: on-failure
+  #       delay: 5s
+  #       max_attempts: 3
+  #       window: 120s
+  #     placement:
+  #       constraints:
+  #         - node.role == manager # Ensures we only start on manager nodes
+  #   ports:
+  #     - '9090:9090'
+  #   networks:
+  #     - 'net-local' # Connect the docker container to the global network
+  #   volumes:
+  #     - ${LOCAL_DATA_FOLDER}:${DOCKER_DATA_FOLDER}
 
   db:
     image: postgres:11.3-alpine
