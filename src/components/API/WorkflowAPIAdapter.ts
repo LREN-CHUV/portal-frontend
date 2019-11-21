@@ -116,8 +116,8 @@ const fetchResultsDetails = async (
 
 const buildWorkflowAlgorithmList = (json: any): Algorithm[] => {
   const defaults = {
-    kfold: 3,
     alpha: 0.1,
+    kfold: 3,
     testSize: 0.2
   };
 
@@ -133,9 +133,11 @@ const buildWorkflowAlgorithmList = (json: any): Algorithm[] => {
 
   const algorithms: Algorithm[] = json.map((j: any) => ({
     code: j.id,
+    engine: Engine.Workflow,
     name: j.name,
     parameters: Object.keys(j.inputs).map((k: any) => ({
       uuid: j.inputs[k].uuid,
+
       /* eslint-disable-next-line */
       default_value: defaultValueFor({
         label: j.inputs[k].label,
@@ -149,8 +151,7 @@ const buildWorkflowAlgorithmList = (json: any): Algorithm[] => {
         defaults
       }),
       visible: !UI_HIDDEN_PARAMETERS.includes(j.inputs[k].label)
-    })),
-    engine: Engine.Workflow
+    }))
   }));
 
   // FIXME: oh my god, that escalated quickly

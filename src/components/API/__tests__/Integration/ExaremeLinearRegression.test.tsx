@@ -27,7 +27,7 @@ const parameters = [
 
 const model: any = (datasets: VariableEntity[]) => ({
   query: {
-    pathology: 'dementia', // FIXME: should by dynamic
+    // FIXME: should by dynamic
     coVariables: [
       {
         code: 'leftpcuprecuneus'
@@ -36,6 +36,7 @@ const model: any = (datasets: VariableEntity[]) => ({
     filters:
       '{"condition":"AND","rules":[{"id":"subjectageyears","field":"subjectageyears","type":"integer","input":"number","operator":"greater","value":"65"}],"valid":true}',
     groupings: [],
+    pathology: 'dementia',
     testingDatasets: [],
     trainingDatasets: datasets.map(d => ({
       code: d.code
@@ -83,7 +84,7 @@ describe('Integration Test for experiment API', () => {
     const { error, experiment } = await createExperiment({
       experiment: payload
     });
-    
+
     expect(error).toBeFalsy();
     expect(experiment).toBeTruthy();
 

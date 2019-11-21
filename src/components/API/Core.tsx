@@ -207,8 +207,8 @@ class Core extends Container<State> {
 
       return await this.setState({
         error: undefined,
-        pathologyJSON: json,
-        pathologies: pathologies
+        pathologies: pathologies,
+        pathologyJSON: json
       });
     } catch (error) {
       return await this.setState({

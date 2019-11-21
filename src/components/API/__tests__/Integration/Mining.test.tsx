@@ -6,14 +6,24 @@ import { createModel } from '../../Utils';
 const modelSlug = `model-${Math.round(Math.random() * 10000)}`;
 const buildModel: any = (datasets: VariableEntity[]) => ({
   query: {
-    coVariables: [{ code: 'alzheimerbroadcategory' }],
-    groupings: [],
-    testingDatasets: [],
+    coVariables: [
+      {
+        code: 'alzheimerbroadcategory'
+      }
+    ],
     filters:
       '{"condition":"AND","rules":[{"id":"subjectageyears","field":"subjectageyears","type":"integer","input":"number","operator":"greater","value":"65"}],"valid":true}',
-    trainingDatasets: datasets.map(d => ({ code: d.code })),
+    groupings: [],
+    testingDatasets: [],
+    trainingDatasets: datasets.map(d => ({
+      code: d.code
+    })),
     validationDatasets: [],
-    variables: [{ code: 'lefthippocampus' }]
+    variables: [
+      {
+        code: 'lefthippocampus'
+      }
+    ]
   }
 });
 

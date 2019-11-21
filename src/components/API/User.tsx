@@ -61,10 +61,10 @@ class UserContainer extends Container<State> {
 
       const user: User =
         (details && {
-          fullname: details.name,
-          username: details.preferred_username,
           email: details.email,
-          groups: details.groups
+          fullname: details.name,
+          groups: details.groups,
+          username: details.preferred_username
         }) ||
         {};
 
@@ -120,10 +120,10 @@ class UserContainer extends Container<State> {
       };
 
       return await this.setState({
-        error: undefined,
         agreeNDA: json.agreeNDA,
-        user: nextUser,
-        loading: false
+        error: undefined,
+        loading: false,
+        user: nextUser
       });
     } catch (error) {
       return await this.setState({
