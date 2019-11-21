@@ -24,27 +24,27 @@ DOCKER_DATA_FOLDER="/root/exareme/data/"
 FEDERATION_ROLE="master"
 LOCAL_DATA_FOLDER="./data/"
 
-if [[ $(docker info | grep Swarm | grep inactive*) != '' ]]; then
-  echo -e "\nInitialize Swarm.."
-  docker swarm init
-else
-  echo -e "\nLeaving previous Swarm.."
-  docker stack rm ${HOSTNAME}
-  docker swarm leave -f
-  sleep 1
-  echo -e "\nInitialize Swarm.."
-  docker swarm init
+
+if [[ $(docker info | grep Swarm | grep inactive) == '' ]]; then
+    echo -e "\nLeaving previous Swarm.."
+    docker stack rm ${HOSTNAME}
+    docker swarm leave -f
+    sleep 1
 fi
+
+echo -e "\nInitialize Swarm.."
+docker swarm init --advertise-addr "$(hostname -I | awk '{print $1}')"
+
 
 if [[ $(docker network ls | grep mip-local) == '' ]]; then
-  echo -e "\nInitialize Network"
-  docker network create --driver=overlay --attachable --subnet=10.20.30.0/24 mip-local
+    echo -e "\nInitialize Network"
+    docker network create --driver=overlay --attachable --subnet=10.20.30.0/24 mip-local
 fi
 
-env FEDERATION_NODE=${HOSTNAME} FEDERATION_ROLE=${FEDERATION_ROLE} EXAREME_IMAGE=${EXAREME_IMAGE} \
-  EXAREME_KEYSTORE=${EXAREME_KEYSTORE} DOCKER_DATA_FOLDER=${DOCKER_DATA_FOLDER} \
-  LOCAL_DATA_FOLDER=${LOCAL_DATA_FOLDER} \
-  FRONTEND_IMAGE=${FRONTEND_IMAGE} \
-  BACKEND_IMAGE=${BACKEND_IMAGE} \
-  FRONTEND_URL=${FRONTEND_URL} \
-  docker stack deploy -c docker-compose-master.yml ${HOSTNAME}
+env HOSTNAME=${HOSTNAME} FEDERATION_ROLE=${FEDERATION_ROLE} EXAREME_IMAGE=${EXAREME_IMAGE} \
+EXAREME_KEYSTORE=${EXAREME_KEYSTORE} DOCKER_DATA_FOLDER=${DOCKER_DATA_FOLDER} \
+LOCAL_DATA_FOLDER=${LOCAL_DATA_FOLDER} \
+FRONTEND_IMAGE=${FRONTEND_IMAGE} \
+BACKEND_IMAGE=${BACKEND_IMAGE} \
+FRONTEND_URL=${FRONTEND_URL} \
+docker stack deploy -c docker-compose-master.yml ${HOSTNAME}
