@@ -9,7 +9,7 @@ services:
   exareme-keystore:
     image: progrium/consul
     command:
-       - -server
+      - -server
       - -bootstrap
     deploy:
       restart_policy:
