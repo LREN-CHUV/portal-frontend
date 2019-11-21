@@ -1,7 +1,5 @@
-import $ from 'jquery';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
-
 import { D3Model } from './Container';
 
 interface Props {
@@ -31,7 +29,7 @@ export default ({ parameters }: { parameters: D3Model }) => {
   const [rightTerms, setRightTerms] = useState<Term[]>();
   const [formula, setFormula] = useState('');
 
-  const craftFormula = () => {
+  const craftFormula = useCallback(() => {
     const left = leftTerms
       ? leftTerms
           .map(t => `${t.factor}`)
@@ -46,7 +44,7 @@ export default ({ parameters }: { parameters: D3Model }) => {
       : '';
 
     setFormula(`${left} ~ ${right}`);
-  };
+  }, [leftTerms, rightTerms]);
 
   useEffect(() => {
     if (parameters) {
@@ -74,7 +72,7 @@ export default ({ parameters }: { parameters: D3Model }) => {
 
       craftFormula();
     }
-  }, [parameters]);
+  }, [craftFormula, parameters]);
 
   const onFormulaChange = (event: any) => {
     const textFormula = event.target.value;

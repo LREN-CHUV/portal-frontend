@@ -55,7 +55,12 @@ export default ({ ...props }: Props): JSX.Element => {
     ) {
       history.push('/tos');
     }
-  }, [apiUser.state.agreeNDA, apiUser.state.authenticated, apiUser.state.loading, history]);
+  }, [
+    apiUser.state.agreeNDA,
+    apiUser.state.authenticated,
+    apiUser.state.loading,
+    history
+  ]);
 
   const handleSelectArticle = (id: string): void => {
     history.push(`/articles/${id}`);

@@ -200,7 +200,7 @@ const Table = ({
       ]
     : [];
 
-  return rows && rows.length > 0 && (columns && columns.length > 0) ? (
+  return rows && rows.length > 0 && columns && columns.length > 0 ? (
     <DataTable value={rows}>{columns}</DataTable>
   ) : (
     <Loader />
