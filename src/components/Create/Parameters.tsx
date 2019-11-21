@@ -1,19 +1,12 @@
-import React, { useState, useCallback, useEffect } from 'react';
-import { VariableEntity } from '../API/Core';
-import {
-  Col,
-  Form,
-  FormControl,
-  FormGroup,
-  HelpBlock as Help,
-  Row
-} from 'react-bootstrap';
-import { APICore } from '../API';
-import { Algorithm, AlgorithmParameter } from '../API/Core';
-import { Query } from '../API/Model';
-import CategoryChooser from './CategoryValuesChooser';
+import React, { useCallback, useEffect, useState } from 'react';
+import { Col, Form, FormControl, FormGroup, HelpBlock as Help, Row } from 'react-bootstrap';
 import Select from 'react-select';
 import styled from 'styled-components';
+
+import { APICore } from '../API';
+import { Algorithm, AlgorithmParameter, VariableEntity } from '../API/Core';
+import { Query } from '../API/Model';
+import CategoryChooser from './CategoryValuesChooser';
 
 type LocalVar = { value: string; label: string }[] | undefined;
 
