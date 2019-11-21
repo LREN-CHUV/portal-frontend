@@ -104,21 +104,20 @@ services:
       - db
     volumes:
       - ./data:/opt/portal/api
-
-  frontend:
-    image: ${FRONTEND_IMAGE}
-    depends_on:
-      - portalbackend
-    ports:
-      - '80:80'
-    environment:
-      WORKER_PROCESSES: 1
-      ERROR_LOG_LEVEL: warn
-      PORTAL_VIRTUAL_HOST: frontend
-      PORTAL_BACKEND_SERVER: portalbackend:8080
-      PORTAL_BACKEND_CONTEXT: services
-      MODE: local
-      INSTANCE_NAME: 'MIP 5.0.0'
-      VERSION: '5.0.0'
-      TRACKER_ID: UA-80660232-5
-      GALAXY_URL: http://127.0.0.1:8090/nativeGalaxy
+  # frontend:
+  #   image: ${FRONTEND_IMAGE}
+  #   depends_on:
+  #     - portalbackend
+  #   ports:
+  #     - '80:80'
+  #   environment:
+  #     WORKER_PROCESSES: 1
+  #     ERROR_LOG_LEVEL: warn
+  #     PORTAL_VIRTUAL_HOST: frontend
+  #     PORTAL_BACKEND_SERVER: ${FEDERATION_NODE}_portalbackend:8080
+  #     PORTAL_BACKEND_CONTEXT: services
+  #     MODE: local
+  #     INSTANCE_NAME: 'MIP 5.0.0'
+  #     VERSION: '5.0.0'
+  #     TRACKER_ID: UA-80660232-5
+  #     GALAXY_URL: http://127.0.0.1:8090/nativeGalaxy
