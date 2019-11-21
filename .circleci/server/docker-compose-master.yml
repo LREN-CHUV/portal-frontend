@@ -6,59 +6,59 @@ networks:
       name: mip-local
 
 services:
-  # exareme-keystore:
-  #   image: progrium/consul
-  #   command:
-  #     - -server
-  #     - -bootstrap
-  #   deploy:
-  #     restart_policy:
-  #       condition: on-failure
-  #       delay: 5s
-  #       max_attempts: 3
-  #       window: 120s
-  #     placement:
-  #       constraints:
-  #         - node.role == manager # Ensures we only start on manager nodes
-  #   networks:
-  #     - 'net-local' # Connect the docker container to the global network
-  #   ports:
-  #     - '8500:8500'
+  exareme-keystore:
+    image: progrium/consul
+    command:
+       - -server
+      - -bootstrap
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+      placement:
+        constraints:
+          - node.role == manager # Ensures we only start on manager nodes
+    networks:
+      - 'net-local' # Connect the docker container to the global network
+    ports:
+      - '8500:8500'
 
-  # exareme-master:
-  #   image: ${EXAREME_IMAGE}
-  #   environment:
-  #     - CONSULURL=${EXAREME_KEYSTORE}
-  #     - MASTER_FLAG=${FEDERATION_ROLE}
-  #     - NODE_NAME=${FEDERATION_NODE}
-  #     - DOCKER_DATA_FOLDER=${DOCKER_DATA_FOLDER}
-  #     - DOCKER_METADATA_FOLDER=${DOCKER_DATA_FOLDER}
-  #     - EXAREME_ACTIVE_WORKERS_PATH=active_workers
-  #     - EXAREME_MASTER_PATH=master
-  #     - DATASETS=datasets
-  #   depends_on:
-  #     - exareme-keystore
-  #   deploy:
-  #     restart_policy:
-  #       condition: on-failure
-  #       delay: 5s
-  #       max_attempts: 3
-  #       window: 120s
-  #     placement:
-  #       constraints:
-  #         - node.role == manager # Ensures we only start on manager nodes
-  #   ports:
-  #     - '9090:9090'
-  #   networks:
-  #     - 'net-local' # Connect the docker container to the global network
-  #   volumes:
-  #     - ${LOCAL_DATA_FOLDER}:${DOCKER_DATA_FOLDER}
+  exareme-master:
+    image: ${EXAREME_IMAGE}
+    environment:
+      - CONSULURL=${EXAREME_KEYSTORE}
+      - MASTER_FLAG=${FEDERATION_ROLE}
+      - NODE_NAME=${HOSTNAME}
+      - DOCKER_DATA_FOLDER=${DOCKER_DATA_FOLDER}
+      - DOCKER_METADATA_FOLDER=${DOCKER_DATA_FOLDER}
+      - EXAREME_ACTIVE_WORKERS_PATH=active_workers
+      - EXAREME_MASTER_PATH=master
+      - DATASETS=datasets
+    depends_on:
+      - exareme-keystore
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+      placement:
+        constraints:
+          - node.role == manager # Ensures we only start on manager nodes
+    ports:
+      - '9090:9090'
+    networks:
+      - 'net-local' # Connect the docker container to the global network
+    volumes:
+      - ${LOCAL_DATA_FOLDER}:${DOCKER_DATA_FOLDER}
 
   db:
     image: postgres:11.3-alpine
     ports:
       - '5432:5432'
-    hostname: ${FEDERATION_NODE}
+    hostname: ${HOSTNAME}
     environment:
       POSTGRES_PASSWORD: test
 
@@ -66,7 +66,7 @@ services:
     image: 'hbpmip/create-databases:1.1.0'
     restart: 'no'
     environment:
-      DB_HOST: ${FEDERATION_NODE}_db
+      DB_HOST: ${HOSTNAME}_db
       DB_PORT: 5432
       DB_ADMIN_USER: postgres
       DB_ADMIN_PASSWORD: test
@@ -74,7 +74,7 @@ services:
       USER4: portal
       PASSWORD4: portalpwd
     depends_on:
-      - ${FEDERATION_NODE}
+      - ${HOSTNAME}
     deploy:
       restart_policy:
         condition: on-failure
@@ -93,12 +93,12 @@ services:
     ports:
       - '8080:8080'
     environment:
-      PORTAL_DB_URL: jdbc:postgresql://${FEDERATION_NODE}_db:5432/portal
-      PORTAL_DB_SERVER: ${FEDERATION_NODE}_db:5432
+      PORTAL_DB_URL: jdbc:postgresql://${HOSTNAME}_db:5432/portal
+      PORTAL_DB_SERVER: ${HOSTNAME}_db:5432
       PORTAL_DB_USER: portal
       PORTAL_DB_PASSWORD: portalpwd
       CONTEXT_PATH: /services
-      EXAREME_URL: http://${FEDERATION_NODE}:9090
+      EXAREME_URL: http://${HOSTNAME}:9090
       AUTHENTICATION: 0
       FRONTEND_LOGIN_URL: ${FRONTEND_URL}/services/login/hbp
       FRONTEND_AFTER_LOGIN_URL: ${FRONTEND_URL}/
@@ -121,8 +121,8 @@ services:
     environment:
       WORKER_PROCESSES: 1
       ERROR_LOG_LEVEL: debug
-      PORTAL_VIRTUAL_HOST: frontend
-      PORTAL_BACKEND_SERVER: ${FEDERATION_NODE}_portalbackend:8080
+      PORTAL_VIRTUAL_HOST: ${HOSTNAME}
+      PORTAL_BACKEND_SERVER: ${HOSTNAME}:8080
       PORTAL_BACKEND_CONTEXT: services
       MODE: local
       INSTANCE_NAME: 'MIP 5.0.0'
