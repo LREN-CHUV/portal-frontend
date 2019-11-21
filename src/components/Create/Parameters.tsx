@@ -1,5 +1,12 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Col, Form, FormControl, FormGroup, HelpBlock as Help, Row } from 'react-bootstrap';
+import {
+  Col,
+  Form,
+  FormControl,
+  FormGroup,
+  HelpBlock as Help,
+  Row
+} from 'react-bootstrap';
 import Select from 'react-select';
 import styled from 'styled-components';
 

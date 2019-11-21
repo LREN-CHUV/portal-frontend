@@ -35,7 +35,7 @@ const findVariableData = (code: string, data: any) => {
 
   if (theData) {
     const variableData = theData.find(
-      (r: any) => r.group && (r.group[0] === 'all' && r.index === code)
+      (r: any) => r.group && r.group[0] === 'all' && r.index === code
     );
 
     return variableData;
@@ -194,7 +194,7 @@ const Table = ({ minings, selectedDatasets, query, lookup }: Props) => {
       ]
     : [];
 
-  return rows && rows.length > 0 && (columns && columns.length > 0) ? (
+  return rows && rows.length > 0 && columns && columns.length > 0 ? (
     <DataTable value={rows}>{columns}</DataTable>
   ) : (
     <Loader />
