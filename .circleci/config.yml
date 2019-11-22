@@ -30,13 +30,23 @@ jobs:
             ./ci.sh
       - run:
           name: 'Build frontend'
-          command: |
-            cd ~/project # cd $CIRCLE_WORKING_DIRECTORY
-            docker build -t frontend:test -f Dockerfile-test .
+          command: >-
+            if groups $USER | grep &>/dev/null '\bdocker\b'; then
+              DOCKER="docker"
+            else
+              DOCKER="sudo docker"
+            fi;
+            cd ~/project; # cd $CIRCLE_WORKING_DIRECTORY
+            $DOCKER build -t frontend:test -f Dockerfile-test .
       - run:
           name: 'Test frontend'
-          command: |
-            docker run -e CI=true -e --network=mip-local -e BACKEND_URL="${hostname_}http://portalbackend:8080" frontend:test yarn test
+          command: >-
+            if groups $USER | grep &>/dev/null '\bdocker\b'; then
+              DOCKER="docker"
+            else
+              DOCKER="sudo docker"
+            fi;
+            $DOCKER run -e CI=true -e --network=mip-local -e BACKEND_URL=http://"$(hostname)"_portalbackend:8080 frontend:test yarn test
 
 workflows:
   version: 2
