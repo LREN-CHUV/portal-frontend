@@ -31,7 +31,7 @@ jobs:
       - run:
           name: 'Build frontend'
           command: >-
-            if groups $USER | grep &>/dev/null '\bdocker\b'; then
+            if [ groups $USER | grep &>/dev/null '\bdocker\b' ] || [ $CIRCLECI = true ]; then
               DOCKER="docker"
             else
               DOCKER="sudo docker"
@@ -41,7 +41,7 @@ jobs:
       - run:
           name: 'Test frontend'
           command: >-
-            if groups $USER | grep &>/dev/null '\bdocker\b'; then
+            if [ groups $USER | grep &>/dev/null '\bdocker\b' ] || [ $CIRCLECI = true ]; then
               DOCKER="docker"
             else
               DOCKER="sudo docker"
