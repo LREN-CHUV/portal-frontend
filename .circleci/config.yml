@@ -20,33 +20,19 @@ jobs:
           docker_layer_caching: false
       - checkout
       - run:
-          name: Setup Environment Variables
-          command: |
-            echo 'export HOST="CircleCI"' >> $BASH_ENV
-      - run:
           name: 'Pull & install backend'
           command: |
             cd ./.circleci/server
             ./ci.sh
       - run:
           name: 'Build frontend'
-          command: >-
-            if [ groups $USER | grep &>/dev/null '\bdocker\b' ] || [ $CIRCLECI = true ]; then
-              DOCKER="docker"
-            else
-              DOCKER="sudo docker"
-            fi;
+          command: |
             cd ~/project; # cd $CIRCLE_WORKING_DIRECTORY
-            $DOCKER build -t frontend:test -f Dockerfile-test .
+            docker build -t frontend:test -f Dockerfile-test .
       - run:
           name: 'Test frontend'
-          command: >-
-            if [ groups $USER | grep &>/dev/null '\bdocker\b' ] || [ $CIRCLECI = true ]; then
-              DOCKER="docker"
-            else
-              DOCKER="sudo docker"
-            fi;
-            $DOCKER run -e CI=true -e --network=mip-local -e BACKEND_URL=http://"$(hostname)"_portalbackend:8080 frontend:test yarn test
+          command: |
+            docker run -e --network=mip-local -e BACKEND_URL=http://"$(hostname)"_portalbackend:8080 frontend:test yarn test
 
 workflows:
   version: 2
