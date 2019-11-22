@@ -29,25 +29,25 @@ DOCKER_DATA_FOLDER="/root/exareme/data/"
 FEDERATION_ROLE="master"
 LOCAL_DATA_FOLDER="./data/"
 
-if [ groups $USER | grep &>/dev/null '\bdocker\b' ] || [ $CIRCLECI = true ]; then
-  DOCKER="docker"
-else
-  DOCKER="sudo docker"
-fi
+# if [ $CIRCLECI = true ]; then
+#   DOCKER="sudo docker"
+# else
+#   DOCKER="docker"
+# fi
 
-if [[ $($DOCKER info | grep Swarm | grep inactive) == '' ]]; then
+if [[ $(docker info | grep Swarm | grep inactive) == '' ]]; then
   echo -e "\nLeaving previous Swarm.."
-  $DOCKER stack rm ${HOSTNAME}
-  $DOCKER swarm leave -f
+  docker stack rm ${HOSTNAME}
+  docker swarm leave -f
   sleep 1
 fi
 
 echo -e "\nInitialize Swarm.."
-$DOCKER swarm init --advertise-addr "$(hostname -I | awk '{print $1}')"
+docker swarm init --advertise-addr "$(hostname -I | awk '{print $1}')"
 
-if [[ $($DOCKER network ls | grep mip-local) == '' ]]; then
+if [[ $(docker network ls | grep mip-local) == '' ]]; then
   echo -e "\nInitialize Network"
-  $DOCKER network create --driver=overlay --attachable --subnet=10.20.30.0/24 mip-local
+  docker network create --driver=overlay --attachable --subnet=10.20.30.0/24 mip-local
 fi
 
 env HOSTNAME=${HOSTNAME} \
@@ -59,4 +59,4 @@ env HOSTNAME=${HOSTNAME} \
   FRONTEND_IMAGE=${FRONTEND_IMAGE} \
   BACKEND_IMAGE=${BACKEND_IMAGE} \
   FRONTEND_URL=${FRONTEND_URL} \
-  $DOCKER stack deploy -c docker-compose-master.yml ${HOSTNAME}
+  docker stack deploy -c docker-compose-master.yml ${HOSTNAME}
