@@ -38,9 +38,7 @@ docker swarm init --advertise-addr "$(hostname -I | awk '{print $1}')"
 
 if [[ $(docker network ls | grep mip-local) == '' ]]; then
     echo -e "\nInitialize Network"
-    docker network create --driver=overlay --attachable --subnet=10.20.30.0/24 mip-local
-fi
-
+    docker network create --driv"$FRONTEND_IMAGE"
 env HOSTNAME=${HOSTNAME} FEDERATION_ROLE=${FEDERATION_ROLE} EXAREME_IMAGE=${EXAREME_IMAGE} \
 EXAREME_KEYSTORE=${EXAREME_KEYSTORE} DOCKER_DATA_FOLDER=${DOCKER_DATA_FOLDER} \
 LOCAL_DATA_FOLDER=${LOCAL_DATA_FOLDER} \

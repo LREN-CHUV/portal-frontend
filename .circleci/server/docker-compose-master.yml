@@ -83,7 +83,7 @@ services:
         window: 120s
 
   portalbackend:
-    image: ${BACKEND_IMAGE}
+    image: 'hbpmip/portal-backend:5.0.4'
     deploy:
       restart_policy:
         condition: on-failure
@@ -113,7 +113,7 @@ services:
       - ./data:/opt/portal/api
 
   frontend:
-    image: ${FRONTEND_IMAGE}
+    image: 'hbpmip/portal-frontend:5.1.11'
     depends_on:
       - portalbackend
     ports:
