@@ -29,7 +29,7 @@ DOCKER_DATA_FOLDER="/root/exareme/data/"
 FEDERATION_ROLE="master"
 LOCAL_DATA_FOLDER="./data/"
 
-if groups $USER | grep &>/dev/null '\bdocker\b'; then
+if [ groups $USER | grep &>/dev/null '\bdocker\b' ] || [ $CIRCLECI = true ]; then
   DOCKER="docker"
 else
   DOCKER="sudo docker"
