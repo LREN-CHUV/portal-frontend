@@ -32,7 +32,8 @@ jobs:
       - run:
           name: 'Test frontend'
           command: |
-            docker run -e --network=mip-local -e BACKEND_URL=http://"$(hostname)"_portalbackend:8080 frontend:test yarn test
+            sleep 1m;
+            docker run -e --network=mip-local -e BACKEND_URL=http://"$(hostname)" frontend:test yarn test
 
 workflows:
   version: 2
