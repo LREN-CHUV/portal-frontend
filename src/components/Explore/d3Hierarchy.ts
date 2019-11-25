@@ -21,7 +21,7 @@ const hierarchyTransform = (node: any): VariableDatum | undefined =>
               code: v.code,
               description: v.description,
               isVariable: true,
-              label: v.label,
+              label: v.label || v.code,
               type: v.type
             }))) ||
             [])
