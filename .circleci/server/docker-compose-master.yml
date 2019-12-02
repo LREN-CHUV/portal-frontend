@@ -65,7 +65,6 @@ services:
 
   create_dbs:
     image: 'hbpmip/create-databases:1.1.0'
-    restart: 'no'
     environment:
       DB_HOST: ${HOSTNAME}_db
       DB_PORT: 5432
@@ -75,7 +74,7 @@ services:
       USER4: portal
       PASSWORD4: portalpwd
     depends_on:
-      - ${HOSTNAME}
+      - db
     deploy:
       restart_policy:
         condition: on-failure
@@ -97,8 +96,8 @@ services:
     networks:
       - 'net-local'
     environment:
-      PORTAL_DB_URL: jdbc:postgresql://${HOSTNAME}_db:5432/portal
-      PORTAL_DB_SERVER: ${HOSTNAME}_db:5432
+      PORTAL_DB_URL: jdbc:postgresql://${HOSTNAME}:5432/portal
+      PORTAL_DB_SERVER: ${HOSTNAME}:5432
       PORTAL_DB_USER: portal
       PORTAL_DB_PASSWORD: portalpwd
       CONTEXT_PATH: /services
@@ -127,7 +126,7 @@ services:
       WORKER_PROCESSES: 1
       ERROR_LOG_LEVEL: debug
       PORTAL_VIRTUAL_HOST: ${HOSTNAME}
-      PORTAL_BACKEND_SERVER: ${HOSTNAME}:8080
+      PORTAL_BACKEND_SERVER: ${HOSTNAME}
       PORTAL_BACKEND_CONTEXT: services
       MODE: local
       INSTANCE_NAME: 'MIP 5.0.0'
