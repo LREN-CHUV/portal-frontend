@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/buildpack-deps:xenial
+      - image: circleci/buildpack-deps:bionic
     steps:
       - setup_remote_docker:
           docker_layer_caching: false
@@ -14,7 +14,7 @@ jobs:
 
   test:
     docker:
-      - image: circleci/buildpack-deps:xenial
+      - image: circleci/buildpack-deps:bionic
     steps:
       - setup_remote_docker:
           docker_layer_caching: false
@@ -32,8 +32,13 @@ jobs:
       - run:
           name: 'Test frontend'
           command: |
-            sleep 1m;
-            docker run -e --network=mip-local -e BACKEND_URL=http://"$(hostname)" frontend:test yarn test --ci --watchAll
+            curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+            echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+            sudo apt update
+            sudo apt install yarn
+            echo REACT_APP_BACKEND_URL = \"http://$(hostname)\" | tee .env
+            yarn install
+            yarn test --ci --watchAll
 
 workflows:
   version: 2
