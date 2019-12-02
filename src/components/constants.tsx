@@ -54,6 +54,10 @@ export const ALGORITHM_DEFAULT_OUTPUT = [
   {
     name: 'ID3',
     types: [...DEFAULT_OUTPUT, MIME_TYPES.JSONDATA, MIME_TYPES.JSON]
+  },
+  {
+    name: 'KMEANS',
+    types: [...DEFAULT_OUTPUT, MIME_TYPES.JSONDATA, MIME_TYPES.HIGHCHARTS]
   }
 ];
 
@@ -61,13 +65,14 @@ export const ENABLED_ALGORITHMS = [
   'LOGISTIC_REGRESSION',
   'ANOVA',
   // 'NAIVE_BAYES_TRAINING_STANDALONE',
-  // 'KMEANS',
+  'KMEANS',
   'PEARSON_CORRELATION',
   'ID3',
   // 'HISTOGRAMS',
   'LINEAR_REGRESSION',
   'TTEST_INDEPENDENT'
-  // 'TTEST_PAIRED'
+  // 'TTEST_PAIRED',
+  // 'TTEST_ONESAMPLE'
 ];
 
 const independents = ['X', 'column1', 'x', 'descriptive_attributes'];
