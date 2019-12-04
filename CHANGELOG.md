@@ -1,8 +1,12 @@
 # Changelog
 
-### 19.11.2019
+### 12.04.2019
 
-- CircleCI script
+- Logout button in Profile, call GET /logout
+- Dropdown for Histograms
+- Replace label by code if not exists in metadata
+- KMeans integration + tests
+- CircleCI script, not working, as their docker service logs doesn't produce outputs on CircleCI and local CircleCI doesn't have the same implementation
 - Tests updated
 
 ### 5.1.11 - 12.11.2019
