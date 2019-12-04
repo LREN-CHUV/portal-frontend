@@ -1,18 +1,22 @@
 import * as d3 from 'd3';
-import React, { useRef } from 'react';
-import { Tab, Tabs } from 'react-bootstrap';
+import React, { useEffect, useRef, useState } from 'react';
+import { DropdownButton, MenuItem, Tab, Tabs } from 'react-bootstrap';
 import styled from 'styled-components';
 
-import { MiningResponseShape } from '../API/Mining';
+import { VariableEntity } from '../API/Core';
+import { HistogramVariable, MiningResponseShape } from '../API/Mining';
 import Loading from '../UI/Loader';
 import Highchart from '../UI/Visualization/Highchart';
 import { HierarchyCircularNode } from './Container';
 import renderLifeCycle from './renderLifeCycle';
+import { APIMining } from '../API';
 
 interface Props {
+  apiMining: APIMining;
   handleSelectedNode: (node: HierarchyCircularNode) => void;
   histograms: MiningResponseShape;
   selectedNode?: HierarchyCircularNode;
+  independantsVariables: VariableEntity[] | undefined;
   zoom: Function;
 }
 
@@ -50,9 +54,63 @@ const Breadcrumb = styled.span`
   }
 `;
 
+const DropDown = styled(DropdownButton)`
+  margin: 0;
+  padding: 0;
+`;
+
 export default (props: Props): JSX.Element => {
   const divRef = useRef(null);
-  const { handleSelectedNode, histograms, selectedNode, zoom } = props;
+  const [choosenVariables, setChoosenVariables] = useState<HistogramVariable>();
+  const [selectedTab, setSelectedTab] = useState(0);
+  const {
+    apiMining,
+    handleSelectedNode,
+    histograms,
+    independantsVariables,
+    selectedNode,
+    zoom
+  } = props;
+
+  useEffect(() => {
+    if (choosenVariables) {
+      localStorage.setItem(
+        'choosenHistogramVariables',
+        JSON.stringify(choosenVariables)
+      );
+    }
+  }, [choosenVariables]);
+
+  useEffect(() => {
+    const choosenHistogramVariablesString = localStorage.getItem(
+      'choosenHistogramVariables'
+    );
+
+    if (choosenHistogramVariablesString) {
+      const choosenHistogramVariables = JSON.parse(
+        choosenHistogramVariablesString
+      );
+      setChoosenVariables(choosenHistogramVariables);
+    }
+  }, []);
+
+  const handleChooseVariable = (
+    index: number,
+    variable: VariableEntity
+  ): void => {
+    setChoosenVariables(
+      choosenVariables
+        ? { ...choosenVariables, [index]: variable }
+        : { [index]: variable }
+    );
+    apiMining.refetchAlgorithms();
+  };
+
+  const handleSelectTab = (event: any): void => {
+    setTimeout(() => {
+      setSelectedTab(event);
+    }, 300);
+  };
 
   renderLifeCycle({
     updateRender: () => {
@@ -146,25 +204,72 @@ export default (props: Props): JSX.Element => {
           </div>
         )}
 
-        {selectedNode &&
-          !selectedNode.children &&
-          histograms &&
-          histograms.data && (
-            <Tabs defaultActiveKey={0} id="uncontrolled-histogram-tabs">
-              {histograms.data &&
-                histograms.data.map((d: any, i: number) => (
-                  <Tab
-                    eventKey={i}
-                    title={`${d.label.replace('Histogram - ', '')}`}
-                    key={i}
-                  >
-                    <Highchart
-                      options={(d.highchart && d.highchart.data) || d}
-                    />
-                  </Tab>
-                ))}
-            </Tabs>
-          )}
+        {selectedNode && !selectedNode.children && (
+          <Tabs
+            defaultActiveKey={0}
+            onSelect={handleSelectTab}
+            id="uncontrolled-histogram-tabs"
+          >
+            {[0, 1, 2, 3].map((k, i) => {
+              return i === 0 ? (
+                <Tab
+                  eventKey={i}
+                  title={`${selectedNode && selectedNode.data.label}`}
+                  key={i}
+                >
+                  {histograms &&
+                    histograms.data &&
+                    histograms.data.length > 0 && (
+                      <Highchart options={histograms.data[0].highchart.data} />
+                    )}
+                </Tab>
+              ) : (
+                <Tab
+                  eventKey={i}
+                  title={
+                    i === selectedTab ? (
+                      <DropDown
+                        noCaret={false}
+                        bsStyle="link"
+                        disabled={i !== selectedTab}
+                        id={`independant-dropdown-${i}`}
+                        title={
+                          (choosenVariables &&
+                            choosenVariables[i] &&
+                            choosenVariables[i].label) ||
+                          'Choose'
+                        }
+                      >
+                        {independantsVariables &&
+                          independantsVariables.map((v: VariableEntity) => (
+                            <MenuItem
+                              key={v.code}
+                              onSelect={(): void => handleChooseVariable(i, v)}
+                            >
+                              {v.label}
+                            </MenuItem>
+                          ))}
+                      </DropDown>
+                    ) : (
+                      (choosenVariables &&
+                        choosenVariables[i] &&
+                        choosenVariables[i].label) ||
+                      'Choose'
+                    )
+                  }
+                  key={i}
+                >
+                  {histograms &&
+                    histograms.data &&
+                    histograms.data.length > i &&
+                    histograms.data[i].highchart && (
+                      <Highchart options={histograms.data[i].highchart.data} />
+                    )}
+                </Tab>
+              );
+            })}
+          </Tabs>
+        )}
       </Histogram>
     </>
   );

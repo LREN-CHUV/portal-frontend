@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Button, Checkbox, Glyphicon, Panel } from 'react-bootstrap';
 import styled from 'styled-components';
-import { APICore, APIModel } from '../API';
+import { APICore, APIModel, APIMining } from '../API';
 import { VariableEntity } from '../API/Core';
 import { ModelResponse } from '../API/Model';
 import AvailableAlgorithms from '../Create/AvailableAlgorithms';
@@ -14,6 +14,7 @@ import Search from './D3Search';
 export interface ExploreProps {
   apiCore: APICore;
   apiModel: APIModel;
+  apiMining: APIMining;
   children?: any;
   selectedNode: HierarchyCircularNode | undefined;
   layout: HierarchyCircularNode;
@@ -35,6 +36,7 @@ export default (props: ExploreProps): JSX.Element => {
   const {
     apiCore,
     apiModel,
+    apiMining,
     children,
     layout,
     selectedNode,
@@ -115,6 +117,9 @@ export default (props: ExploreProps): JSX.Element => {
     width: 320px;
   `;
 
+  const independantsVariables = apiCore
+    .variablesForPathology(selectedPathology)
+    .filter((v: any) => v.isCategorical);
   return (
     <>
       <div style={style}>
@@ -261,7 +266,9 @@ export default (props: ExploreProps): JSX.Element => {
           <Panel className="statistics">
             <Panel.Body>
               <Histograms
+                apiMining={apiMining}
                 histograms={histograms}
+                independantsVariables={independantsVariables}
                 selectedNode={selectedNode}
                 handleSelectedNode={handleSelectNode}
                 zoom={zoom}

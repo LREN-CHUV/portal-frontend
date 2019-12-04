@@ -3,7 +3,7 @@ import './CirclePack.css';
 import * as d3 from 'd3';
 import React, { useCallback, useEffect, useRef } from 'react';
 
-import { APICore, APIModel } from '../API';
+import { APICore, APIModel, APIMining } from '../API';
 import { VariableEntity } from '../API/Core';
 import { ModelResponse } from '../API/Model';
 import { D3Model, HierarchyCircularNode, ModelType } from './Container';
@@ -20,6 +20,7 @@ const depth = (n: HierarchyCircularNode): number =>
 export interface Props {
   apiCore: APICore;
   apiModel: APIModel;
+  apiMining: APIMining;
   selectedNode: HierarchyCircularNode | undefined;
   layout: HierarchyCircularNode;
   histograms?: any;

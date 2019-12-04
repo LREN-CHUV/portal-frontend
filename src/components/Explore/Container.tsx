@@ -174,7 +174,13 @@ export default ({
         pathology: (model && model.query && model.query.pathology) || ''
       });
     }
-  }, [selectedNode, apiMining, appConfig.mode, apiModel.state.model]);
+  }, [
+    selectedNode,
+    apiMining,
+    appConfig.mode,
+    apiModel.state.model,
+    apiMining.state.refetchAlgorithms
+  ]);
 
   const handleSelectDataset = (dataset: VariableEntity): void => {
     const model = apiModel.state.model;
@@ -354,6 +360,7 @@ export default ({
   const nextProps = {
     apiCore,
     apiModel,
+    apiMining,
     handleGoToAnalysis,
     handleSelectDataset,
     handleSelectModel,
