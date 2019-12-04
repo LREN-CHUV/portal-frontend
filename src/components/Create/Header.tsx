@@ -49,7 +49,7 @@ export default class Header extends React.Component<Props, State> {
                   (e: any) => e.modelDefinitionId === model.slug
                 )
               }
-              style="info"
+              style={'info'}
               title="RELATED EXPERIMENTS"
               handleSelect={handleSelectExperiment}
               handleCreateNewExperiment={null}
@@ -69,15 +69,26 @@ export default class Header extends React.Component<Props, State> {
             <Button
               onClick={this.handleSaveAndRunExperiment}
               title={
-                method === undefined
+                method === undefined || method === null
                   ? 'Please choose a method on the right'
                   : experimentName === ''
                   ? 'Please enter a title for your experiment'
+                  : model === undefined ||
+                    model.query.trainingDatasets === undefined ||
+                    model.query.trainingDatasets.length <= 0
+                  ? 'Please select a dataset'
                   : ''
               }
               bsStyle="info"
               type="submit"
-              disabled={method === undefined || experimentName === ''}
+              disabled={
+                method === undefined ||
+                method === null ||
+                experimentName === '' ||
+                model === undefined ||
+                model.query.trainingDatasets === undefined ||
+                model.query.trainingDatasets.length <= 0
+              }
             >
               Run Experiment <Glyphicon glyph="chevron-right" />
             </Button>
