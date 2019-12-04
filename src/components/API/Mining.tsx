@@ -39,11 +39,16 @@ export interface MiningPayload {
   pathology?: string;
 }
 
+export interface HistogramVariable {
+  [key: string]: VariableEntity;
+}
+
 export interface MiningState {
   error?: string;
   summaryStatistics?: MiningResponseShape[];
   heatmaps?: MiningResponseShape[];
   histograms?: MiningResponseShape;
+  refetchAlgorithms?: number;
 }
 
 //
@@ -116,6 +121,10 @@ class Mining extends Container<MiningState> {
     }
   };
 
+  public refetchAlgorithms = () => {
+    this.setState({ refetchAlgorithms: Math.random() });
+  };
+
   public exaremeHistograms = async ({
     x,
     datasets,
@@ -158,11 +167,19 @@ class Mining extends Container<MiningState> {
       }
     ];
 
+    const choosenHistogramVariablesString = localStorage.getItem(
+      'choosenHistogramVariables'
+    );
+
+    const choosenHistogramVariables: HistogramVariable = choosenHistogramVariablesString
+      ? JSON.parse(choosenHistogramVariablesString)
+      : {};
+
     const dependentsVariables = [
       '',
-      'gender',
-      'agegroup',
-      'alzheimerbroadcategory'
+      ...Object.values(choosenHistogramVariables).map(
+        (v: VariableEntity) => v.code
+      )
     ].filter(v => x.code !== v);
 
     const type = x.type || 'real';
