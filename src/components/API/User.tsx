@@ -42,6 +42,14 @@ class UserContainer extends Container<State> {
     return data;
   };
 
+  public logout = async (): Promise<void> => {
+    const logoutURL = `${this.backendURL}/logout`;
+    const data = await request.get(logoutURL, this.options);
+    window.location.href = '/';
+
+    return data;
+  };
+
   public user = async (): Promise<void> => {
     console.log('Check user authorization');
     try {

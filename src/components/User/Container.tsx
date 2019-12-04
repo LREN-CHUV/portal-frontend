@@ -1,5 +1,5 @@
 import React from 'react';
-import { Panel } from 'react-bootstrap';
+import { Button, Panel } from 'react-bootstrap';
 import { RouteComponentProps } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -9,7 +9,7 @@ import Header from './Header';
 
 const Heading = styled(Panel.Heading)`
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-between;
   align-items: center;
   border: 0px none transparent;
 `;
@@ -60,7 +60,17 @@ export default ({ apiUser }: Props): JSX.Element => {
           <h3>{user && user.username}</h3>
         </Panel>
         <Panel>
-          <Heading>Infos</Heading>
+          <Heading>
+            <h2>Infos</h2>
+            <Button
+              bsStyle={'warning'}
+              onClick={() => {
+                apiUser.logout();
+              }}
+            >
+              Logout
+            </Button>
+          </Heading>
           <Panel.Body>
             <div className="form-group">
               <label className="control-label">Username:</label>
