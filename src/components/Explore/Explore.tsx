@@ -117,9 +117,13 @@ export default (props: ExploreProps): JSX.Element => {
     width: 320px;
   `;
 
-  const independantsVariables = apiCore
-    .variablesForPathology(selectedPathology)
-    .filter((v: any) => v.isCategorical);
+  const variablesForPathology = apiCore.variablesForPathology(
+    selectedPathology
+  );
+  const independantsVariables =
+    variablesForPathology &&
+    variablesForPathology.filter((v: any) => v.isCategorical);
+
   return (
     <>
       <div style={style}>

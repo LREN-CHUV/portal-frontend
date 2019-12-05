@@ -2,6 +2,7 @@
 
 ### 12.04.2019
 
+- Prevent user to perform an experiment without any selected dataset
 - Logout button in Profile, call GET /logout
 - Dropdown for Histograms
 - Replace label by code if not exists in metadata
