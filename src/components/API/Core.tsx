@@ -79,6 +79,8 @@ export interface AlgorithmParameter {
   value: string;
   valueNotBlank: boolean;
   valueMultiple: boolean;
+  valueMin?: number;
+  valueMax?: number;
   valueType: string;
   visible?: boolean;
   enumeration?: string[];
@@ -460,41 +462,41 @@ class Core extends Container<State> {
             (p: AlgorithmParameter) => {
               const visible = !UI_HIDDEN_PARAMETERS.includes(p.name);
 
-              if (p.name === 'encodingparameter') {
-                return {
-                  ...p,
-                  enumeration: ['dummycoding', 'sumscoding', 'simplecoding'],
-                  visible
-                };
-              }
+              // if (p.name === 'encodingparameter') {
+              //   return {
+              //     ...p,
+              //     enumeration: ['dummycoding', 'sumscoding', 'simplecoding'],
+              //     visible
+              //   };
+              // }
 
-              if (p.name === 'hypothesis') {
-                return {
-                  ...p,
-                  enumeration: ['different', 'greaterthan', 'lessthan'],
-                  visible
-                };
-              }
+              // if (p.name === 'hypothesis') {
+              //   return {
+              //     ...p,
+              //     enumeration: ['different', 'greaterthan', 'lessthan'],
+              //     visible
+              //   };
+              // }
 
-              if (
-                p.name === 'effectsize' ||
-                p.name === 'ci' ||
-                p.name === 'meandiff'
-              ) {
-                return {
-                  ...p,
-                  enumeration: ['1', '0'],
-                  visible
-                };
-              }
+              // if (
+              //   p.name === 'effectsize' ||
+              //   p.name === 'ci' ||
+              //   p.name === 'meandiff'
+              // ) {
+              //   return {
+              //     ...p,
+              //     enumeration: ['1', '0'],
+              //     visible
+              //   };
+              // }
 
-              if (p.name === 'sstype') {
-                return {
-                  ...p,
-                  enumeration: ['1', '2', '3'],
-                  visible
-                };
-              }
+              // if (p.name === 'sstype') {
+              //   return {
+              //     ...p,
+              //     enumeration: ['1', '2', '3'],
+              //     visible
+              //   };
+              // }
 
               return {
                 ...p,
@@ -503,17 +505,17 @@ class Core extends Container<State> {
               };
             }
           ),
-          ...(algorithm.name === 'ANOVA' ||
-          algorithm.name === 'LINEAR_REGRESSION'
-            ? [
-                {
-                  name: 'design',
-                  enumeration: ['factorial', 'additive'],
-                  defaultValue: 'factorial',
-                  desc: 'Operator for the variables'
-                }
-              ]
-            : [])
+          // ...(algorithm.name === 'ANOVA' ||
+          // algorithm.name === 'LINEAR_REGRESSION'
+          //   ? [
+          //       {
+          //         name: 'design',
+          //         enumeration: ['factorial', 'additive'],
+          //         defaultValue: 'factorial',
+          //         desc: 'Operator for the variables'
+          //       }
+          //     ]
+          //   : [])
         ]
       }));
 
