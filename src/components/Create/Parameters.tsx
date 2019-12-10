@@ -75,12 +75,22 @@ const Parameters = ({
 
     const notBlank = parameter.valueNotBlank;
     const valueType = parameter.valueType;
+    const valueMin = parameter.valueMin;
+    const valueMax = parameter.valueMax;
 
     if (notBlank && !value) {
       return 'error';
     }
 
     if (valueType === 'integer' && isNaN(parseInt(value))) {
+      return 'error';
+    }
+
+    if (valueMin && parseInt(value) < valueMin) {
+      return 'error';
+    }
+
+    if (valueMax && parseInt(value) > valueMax) {
       return 'error';
     }
 
@@ -147,7 +157,7 @@ const Parameters = ({
               const type =
                 parameter &&
                 parameter.valueType &&
-                numberTypes.includes(parameter.type)
+                numberTypes.includes(parameter.valueType)
                   ? 'number'
                   : 'text';
 
@@ -228,6 +238,14 @@ const Parameters = ({
                         )}
                         {parameter && parameter.valueType === 'integer' && (
                           <var>Integer</var>
+                        )}
+
+                        {parameter && parameter.valueMin && (
+                          <var>min {parameter.valueMin}</var>
+                        )}
+
+                        {parameter && parameter.valueMax && (
+                          <var>max {parameter.valueMax}</var>
                         )}
                       </HelpBlock>
                     </Col>
