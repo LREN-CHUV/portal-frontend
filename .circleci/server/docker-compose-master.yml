@@ -1,4 +1,4 @@
-version: '3.7'
+version: '3.2'
 
 networks:
   net-local:
@@ -20,6 +20,7 @@ services:
       placement:
         constraints:
           - node.role == manager # Ensures we only start on manager nodes
+          # - node.labels.name == ${HOSTNAME}
     networks:
       - 'net-local' # Connect the docker container to the global network
     ports:
@@ -27,7 +28,7 @@ services:
 
   exareme-master:
     # image: ${EXAREME_IMAGE}
-    image: 'hbpmip/exareme:v21.2.0'
+    image: 'hbpmip/exareme:dev_v2'
     environment:
       - CONSULURL=${EXAREME_KEYSTORE}
       - MASTER_FLAG=${FEDERATION_ROLE}
@@ -36,7 +37,7 @@ services:
       - DOCKER_METADATA_FOLDER=${DOCKER_DATA_FOLDER}
       - EXAREME_ACTIVE_WORKERS_PATH=active_workers
       - EXAREME_MASTER_PATH=master
-      - DATASETS=datasets
+      - DATA=data
     depends_on:
       - exareme-keystore
     deploy:
@@ -48,8 +49,12 @@ services:
       placement:
         constraints:
           - node.role == manager # Ensures we only start on manager nodes
+          # - node.labels.name == ${HOSTNAME}
     ports:
-      - '9090:9090'
+      - target: 9090 # So that we can access the Exareme REST API / interface
+        published: 9090
+        protocol: tcp
+        mode: host
     networks:
       - 'net-local' # Connect the docker container to the global network
     volumes:
@@ -85,6 +90,7 @@ services:
   portalbackend:
     # image: ${BACKEND_IMAGE}
     image: 'hbpmip/portal-backend:5.0.4'
+    # image: kkech/portal_backend:latest
     deploy:
       restart_policy:
         condition: on-failure
