@@ -161,6 +161,10 @@ const Parameters = ({
                   ? 'number'
                   : 'text';
 
+              if (parameter.defaultValue) {
+                parameter.value = parameter.defaultValue;
+              }
+
               return (
                 <FormGroup
                   validationState={getValidationState(parameter)}
@@ -178,7 +182,7 @@ const Parameters = ({
                   <Row>
                     <Col sm={6}>{parameter.name}</Col>
                     <Col sm={6}>
-                      {!parameter.enumeration &&
+                      {!parameter.valueEnumerations &&
                         parameter.name !== 'referencevalues' &&
                         parameter.name !== 'xlevels' && (
                           <FormControl
@@ -191,8 +195,8 @@ const Parameters = ({
                           />
                         )}
 
-                      {parameter.enumeration &&
-                        parameter.enumeration.length > 0 && (
+                      {parameter.valueEnumerations &&
+                        parameter.valueEnumerations.length > 0 && (
                           <FormControl
                             componentClass="select"
                             placeholder="select"
@@ -202,7 +206,7 @@ const Parameters = ({
                               handleChangeParameter(event, parameter.name)
                             }
                           >
-                            {parameter.enumeration.map((v: string) => (
+                            {parameter.valueEnumerations.map((v: string) => (
                               <option key={v} value={v}>
                                 {v}
                               </option>
@@ -234,19 +238,23 @@ const Parameters = ({
                       <FormControl.Feedback />
                       <HelpBlock>
                         {parameter && parameter.valueNotBlank && (
-                          <var>Not blank</var>
+                          <var>required</var>
                         )}
                         {parameter && parameter.valueType === 'integer' && (
-                          <var>Integer</var>
+                          <var>type integer</var>
                         )}
 
-                        {parameter && parameter.valueMin && (
-                          <var>min {parameter.valueMin}</var>
-                        )}
+                        {parameter !== undefined &&
+                          parameter.valueMin !== undefined &&
+                          !isNaN(parameter.valueMin) && (
+                            <var>min value: {parameter.valueMin}</var>
+                          )}
 
-                        {parameter && parameter.valueMax && (
-                          <var>max {parameter.valueMax}</var>
-                        )}
+                        {parameter !== undefined &&
+                          parameter.valueMax !== undefined &&
+                          !isNaN(parameter.valueMax) && (
+                            <var>max value: {parameter.valueMax}</var>
+                          )}
                       </HelpBlock>
                     </Col>
                   </Row>
