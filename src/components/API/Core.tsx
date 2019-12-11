@@ -83,7 +83,7 @@ export interface AlgorithmParameter {
   valueMax?: number;
   valueType: string;
   visible?: boolean;
-  enumeration?: string[];
+  valueEnumerations?: string[];
 }
 
 export interface AlgorithmParameterRequest {
@@ -504,7 +504,7 @@ class Core extends Container<State> {
                 visible
               };
             }
-          ),
+          )
           // ...(algorithm.name === 'ANOVA' ||
           // algorithm.name === 'LINEAR_REGRESSION'
           //   ? [
