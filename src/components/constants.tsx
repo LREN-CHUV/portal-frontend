@@ -62,22 +62,26 @@ export const ALGORITHM_DEFAULT_OUTPUT = [
   {
     name: 'NAIVE_BAYES_TRAINING_STANDALONE',
     types: [...DEFAULT_OUTPUT, MIME_TYPES.JSONDATA]
+  },
+  {
+    name: 'TTEST_ONESAMPLE',
+    types: [...DEFAULT_OUTPUT, MIME_TYPES.JSONDATA]
   }
 ];
 
 export const ENABLED_ALGORITHMS = [
-  'LOGISTIC_REGRESSION',
-  'ANOVA',
-  // 'NAIVE_BAYES_TRAINING_STANDALONE',
-  'KMEANS',
-  'PEARSON_CORRELATION',
-  'ID3',
-  // 'HISTOGRAMS',
-  'LINEAR_REGRESSION',
-  'TTEST_INDEPENDENT'
-  // 'TTEST_PAIRED',
-  // 'TTEST_ONESAMPLE'
-];
+         'LOGISTIC_REGRESSION',
+         'ANOVA',
+         // 'NAIVE_BAYES_TRAINING_STANDALONE', 2019/12/13 output to be fixed
+         'KMEANS',
+         'PEARSON_CORRELATION',
+         'ID3',
+         // 'HISTOGRAMS',
+         'LINEAR_REGRESSION',
+         'TTEST_INDEPENDENT',
+         // 'TTEST_PAIRED', 2019/12/13 input to be fixed
+         'TTEST_ONESAMPLE'
+       ];
 
 const independents = ['X', 'column1', 'x', 'descriptive_attributes'];
 const dependents = ['Y', 'column2', 'y', 'target_attributes'];
