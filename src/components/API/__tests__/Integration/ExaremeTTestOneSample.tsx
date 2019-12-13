@@ -15,8 +15,12 @@ import {
 // config
 
 const modelSlug = `ttest-p-${Math.round(Math.random() * 10000)}`;
-const experimentCode = 'TTEST_PAIRED';
+const experimentCode = 'TTEST_ONESAMPLE';
 const parameters: any = [
+  {
+    code: 'testvalue',
+    value: 3.0
+  },
   {
     code: 'hypothesis',
     value: 'different'
@@ -33,23 +37,12 @@ const parameters: any = [
     code: 'meandiff',
     value: '1'
   },
-  {
-    code: 'sediff',
-    value: '1'
-  },
   { code: 'pathology', value: 'dementia' }
 ];
 const model: any = (datasets: VariableEntity[]) => ({
   query: {
     // FIXME: should by dynamic
-    coVariables: [
-      {
-        code: 'righthippocampus'
-      },
-      {
-        code: 'lefthippocampus'
-      }
-    ],
+    coVariables: [],
     filters: '',
     groupings: [],
     pathology: 'dementia',
@@ -60,6 +53,9 @@ const model: any = (datasets: VariableEntity[]) => ({
     validationDatasets: [],
     variables: [
       {
+        code: 'righthippocampus'
+      },
+      {
         code: 'lefthippocampus'
       }
     ]
@@ -68,7 +64,7 @@ const model: any = (datasets: VariableEntity[]) => ({
 
 // Test
 
-describe.skip('Integration Test for experiment API', () => {
+describe('Integration Test for experiment API', () => {
   let datasets: VariableEntity[] | undefined;
 
   beforeAll(async () => {
@@ -120,5 +116,11 @@ describe.skip('Integration Test for experiment API', () => {
     expect(wrapper.find('.error')).toHaveLength(0);
     expect(wrapper.find('.loading')).toHaveLength(0);
     expect(wrapper.find('div.result')).toHaveLength(1);
+    expect(
+      wrapper
+        .find('div.result table tbody tr td')
+        .at(1)
+        .text()
+    ).toEqual('-0.752');
   });
 });

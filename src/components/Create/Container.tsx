@@ -245,6 +245,21 @@ class Container extends React.Component<Props, State> {
         }
 
         if (p.name === 'y') {
+          // TEST_PAIRED 
+          // const isVector = selectedAlgorithm.name === 'TTEST_PAIRED';
+          // value = isVector
+          //   ? (query.variables &&
+          //       query.variables.reduce(
+          //         (vectors: string, v, i) =>
+          //           (i + 1) % 2 === 0
+          //             ? `${vectors}${v.code},`
+          //             : `${vectors}${v.code}-`,
+          //         ''
+          //       )) ||
+          //     ''
+          //   : (query.variables &&
+          //       query.variables.map(v => v.code).toString()) ||
+          //     '';
           value =
             (query.variables && query.variables.map(v => v.code).toString()) ||
             '';
