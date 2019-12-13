@@ -23,7 +23,9 @@ const Algorithms = ({ experiment }: { experiment?: ExperimentResponse }) => {
           <>
             {algorithms.map((algorithm: any, j: number) => (
               <div key={`name-${algorithm.code}-${j}`}>
-                <strong>{algorithm.name}</strong>
+                <Param>
+                  <strong>{algorithm.name}</strong>
+                </Param>
                 {algorithm.parameters &&
                   algorithm.parameters.filter(
                     (p: any) => !UI_HIDDEN_PARAMETERS.includes(p.code)

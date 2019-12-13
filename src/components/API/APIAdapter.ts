@@ -135,7 +135,14 @@ class APIAdapter {
         return nextResult3;
       }
 
-      return experimentResponse;
+      return {
+        ...experimentResponse,
+        error: `Sorry. The algorithm output was of an unexpected format. Parsing failed. ${JSON.stringify(
+          resultParsed,
+          null,
+          2
+        )}`
+      };
     } catch (e) {
       console.log(e);
       return {

@@ -58,6 +58,10 @@ export const ALGORITHM_DEFAULT_OUTPUT = [
   {
     name: 'KMEANS',
     types: [...DEFAULT_OUTPUT, MIME_TYPES.JSONDATA, MIME_TYPES.HIGHCHARTS]
+  },
+  {
+    name: 'NAIVE_BAYES_TRAINING_STANDALONE',
+    types: [...DEFAULT_OUTPUT, MIME_TYPES.JSONDATA]
   }
 ];
 
