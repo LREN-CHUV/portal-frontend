@@ -26,7 +26,7 @@ export default ({
         {result.type === MIME_TYPES.HIGHCHARTS && (
           <Highchart options={result.data} />
         )}
-        {/* {result.type === MIME_TYPES.JSON && <Dendogram />} */}
+        {result.type === MIME_TYPES.JSON && <Dendogram data={result.data} />}
       </>
     );
 

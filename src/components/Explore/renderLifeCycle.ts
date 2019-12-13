@@ -12,7 +12,7 @@ export default ({
   firstRender,
   updateRender,
   lastRender
-}: RenderLifecycleArgs) => {
+}: RenderLifecycleArgs): void => {
   const isFirstRender = useRef(true);
 
   useLayoutEffect(() => {
