@@ -245,7 +245,7 @@ class Container extends React.Component<Props, State> {
         }
 
         if (p.name === 'y') {
-          // TEST_PAIRED 
+          // TEST_PAIRED
           // const isVector = selectedAlgorithm.name === 'TTEST_PAIRED';
           // value = isVector
           //   ? (query.variables &&

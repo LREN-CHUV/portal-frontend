@@ -1,6 +1,13 @@
 # Changelog
 
-### 12.04.2019
+### 13.12.2019
+
+- ID3 tree view visualisation (dendogram)
+- TTEST_ONESAMPLE integrated
+- Better tooltip on algorithms
+- Default parameters and enum from Exareme integrated
+
+### 04.12.2019
 
 - Prevent user to perform an experiment without any selected dataset
 - Logout button in Profile, call GET /logout
