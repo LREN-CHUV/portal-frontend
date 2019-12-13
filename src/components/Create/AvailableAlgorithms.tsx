@@ -105,6 +105,20 @@ const AvailableAlgorithms = ({
         p => p.name === axis
       );
       if (variable) {
+        if (variable.desc) {
+          message.push(
+            <p key={`${algorithm.name}-${axis}-desc`}>
+              <strong>{term}</strong>: {variable.desc}
+            </p>
+          );
+        } else {
+          message.push(
+            <p key={`${algorithm.name}-${axis}-desc`}>
+              <strong>{term}</strong>
+            </p>
+          );
+        }
+
         const isCategorical =
           variable.columnValuesIsCategorical === ''
             ? undefined
@@ -122,19 +136,19 @@ const AvailableAlgorithms = ({
         if (isCategorical) {
           message.push(
             <p key={`${algorithm.name}-${axis}-1`}>
-              {term} should be multinominal{multipleconstraint}
+              - hint: should be multinominal{multipleconstraint}
             </p>
           );
         } else if (isCategorical === false) {
           message.push(
             <p key={`${algorithm.name}-${axis}-2`}>
-              {term} should be continous{multipleconstraint}
+              - hint: should be continous{multipleconstraint}
             </p>
           );
         } else if (!isCategorical) {
           message.push(
             <p key={`${algorithm.name}-${axis}-3`}>
-              {term} can be either multinominal or continuous
+              - hint: can be either multinominal or continuous
               {multipleconstraint}
             </p>
           );
@@ -173,6 +187,7 @@ const AvailableAlgorithms = ({
           rootClose={false}
           overlay={
             <Popover id={`tooltip-${algorithm.name}`}>
+              <h4>{algorithm.name}</h4>
               <p>{algorithm.desc}</p>
               {algorithm.engine === Engine.Workflow
                 ? ''
