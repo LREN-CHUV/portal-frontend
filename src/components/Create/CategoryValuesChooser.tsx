@@ -33,6 +33,11 @@ export default ({
   const [categories, setCategories] = useState<LocalVar>();
   const [referenceValues, setReferencesValues] = useState<JsonParam>();
   const lookupCallback = useCallback(apiCore.lookup, []);
+  const handleChangeCategoryParameterCallback = useCallback(
+    handleChangeCategoryParameter,
+    []
+  );
+
   useEffect(() => {
     const categoricalVariables: VariableEntity[] | undefined = query && [
       ...(query.coVariables || []),
@@ -46,8 +51,13 @@ export default ({
 
     setCategories(vars);
 
-    handleChangeCategoryParameter(parameterName, JSON.stringify([]));
-  }, [query, lookupCallback, handleChangeCategoryParameter, parameterName]);
+    handleChangeCategoryParameterCallback(parameterName, JSON.stringify([]));
+  }, [
+    query,
+    lookupCallback,
+    handleChangeCategoryParameterCallback,
+    parameterName
+  ]);
 
   const handleChangeValue = (
     event: React.FormEvent<FormControl>,
@@ -83,7 +93,7 @@ export default ({
             <FormControl
               componentClass="select"
               placeholder="select"
-              id="parameter-category-chooser"
+              id={`parameter-category-chooser-${category.code}`}
               onChange={(event): void => {
                 handleChangeValue(event, category.code);
               }}

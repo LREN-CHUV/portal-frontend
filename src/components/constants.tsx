@@ -94,5 +94,5 @@ export const UI_HIDDEN_PARAMETERS = [
   ...independents,
   'dataset',
   'filter',
-  'pathology',
+  'pathology'
 ];

@@ -471,7 +471,7 @@ class Core extends Container<State> {
 
               return {
                 ...p,
-                value: '',
+                value: visible ? p.value : '',
                 defaultValue: p.value,
                 placeholder: p.defaultValue,
                 visible
@@ -486,6 +486,7 @@ class Core extends Container<State> {
                   name: 'design',
                   valueEnumerations: ['factorial', 'additive'],
                   defaultValue: 'factorial',
+                  value: 'factorial',
                   desc: 'Operator for the variables'
                 }
               ]

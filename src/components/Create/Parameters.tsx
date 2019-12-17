@@ -161,10 +161,6 @@ const Parameters = ({
                   ? 'number'
                   : 'text';
 
-              if (parameter.defaultValue) {
-                parameter.value = parameter.defaultValue;
-              }
-
               return (
                 <FormGroup
                   validationState={getValidationState(parameter)}
