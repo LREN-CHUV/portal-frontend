@@ -42,14 +42,7 @@ const parameters: any = [
 const model: any = (datasets: VariableEntity[]) => ({
   query: {
     // FIXME: should by dynamic
-    coVariables: [
-      {
-        code: 'righthippocampus'
-      },
-      {
-        code: 'lefthippocampus'
-      }
-    ],
+    coVariables: [],
     filters: '',
     groupings: [],
     pathology: 'dementia',
@@ -61,6 +54,9 @@ const model: any = (datasets: VariableEntity[]) => ({
     variables: [
       {
         code: 'lefthippocampus'
+      },
+      {
+        code: 'righthippocampus'
       }
     ]
   }
@@ -68,7 +64,7 @@ const model: any = (datasets: VariableEntity[]) => ({
 
 // Test
 
-describe.skip('Integration Test for experiment API', () => {
+describe('Integration Test for experiment API', () => {
   let datasets: VariableEntity[] | undefined;
 
   beforeAll(async () => {
@@ -120,5 +116,11 @@ describe.skip('Integration Test for experiment API', () => {
     expect(wrapper.find('.error')).toHaveLength(0);
     expect(wrapper.find('.loading')).toHaveLength(0);
     expect(wrapper.find('div.result')).toHaveLength(1);
+    expect(
+      wrapper
+        .find('div.result table tbody tr td')
+        .at(1)
+        .text()
+    ).toEqual('-36.115');
   });
 });

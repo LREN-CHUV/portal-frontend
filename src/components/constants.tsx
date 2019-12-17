@@ -83,7 +83,7 @@ export const ENABLED_ALGORITHMS = [
   // 'HISTOGRAMS',
   'LINEAR_REGRESSION',
   'TTEST_INDEPENDENT',
-  // 'TTEST_PAIRED', 2019/12/13 input to be fixed
+  'TTEST_PAIRED',
   'TTEST_ONESAMPLE'
 ];
 
@@ -94,5 +94,5 @@ export const UI_HIDDEN_PARAMETERS = [
   ...independents,
   'dataset',
   'filter',
-  'pathology'
+  'pathology',
 ];

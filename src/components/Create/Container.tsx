@@ -246,23 +246,27 @@ class Container extends React.Component<Props, State> {
 
         if (p.name === 'y') {
           // TEST_PAIRED
-          // const isVector = selectedAlgorithm.name === 'TTEST_PAIRED';
-          // value = isVector
-          //   ? (query.variables &&
-          //       query.variables.reduce(
-          //         (vectors: string, v, i) =>
-          //           (i + 1) % 2 === 0
-          //             ? `${vectors}${v.code},`
-          //             : `${vectors}${v.code}-`,
-          //         ''
-          //       )) ||
-          //     ''
-          //   : (query.variables &&
-          //       query.variables.map(v => v.code).toString()) ||
-          //     '';
-          value =
-            (query.variables && query.variables.map(v => v.code).toString()) ||
-            '';
+          // TODO: this will be replaced by the formula field and should be removed when it occurs
+          const isVector = selectedAlgorithm.name === 'TTEST_PAIRED';
+          const varCount = (query.variables && query.variables.length) || 0;
+          value = isVector
+            ? (query.variables &&
+                query.variables // outputs: a1-a2,b1-b2, c1-a1
+                  .reduce(
+                    (vectors: string, v, i) =>
+                      (i + 1) % 2 === 0
+                        ? `${vectors}${v.code},`
+                        : varCount === i + 1
+                        ? `${vectors}${v.code}-${query.variables &&
+                            query.variables[0].code}`
+                        : `${vectors}${v.code}-`,
+                    ''
+                  )
+                  .replace(/,$/, '')) ||
+              ''
+            : (query.variables &&
+                query.variables.map(v => v.code).toString()) ||
+              '';
         }
 
         if (p.name === 'dataset') {
