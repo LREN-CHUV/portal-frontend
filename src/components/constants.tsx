@@ -66,6 +66,10 @@ export const ALGORITHM_DEFAULT_OUTPUT = [
   {
     name: 'TTEST_ONESAMPLE',
     types: [...DEFAULT_OUTPUT, MIME_TYPES.JSONDATA]
+  },
+  {
+    name: 'MULTIPLE_HISTOGRAMS',
+    types: [...DEFAULT_OUTPUT, MIME_TYPES.HIGHCHARTS]
   }
 ];
 
