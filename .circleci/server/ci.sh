@@ -19,7 +19,7 @@ FRONTEND_URL="${HOSTNAME}"
 # WARNING: substitution for image doesn't work on CircleCI
 # because of https://docs.docker.com/compose/compose-file/#variable-substitution
 
-EXAREME_IMAGE="hbpmip/exareme:dev_v2"
+EXAREME_IMAGE="hbpmip/exareme:dev_v3"
 FRONTEND_IMAGE="hbpmip/portal-frontend:5.1.11"
 BACKEND_IMAGE="hbpmip/portal-backend:5.0.4"
 
@@ -51,12 +51,12 @@ if [[ $(docker network ls | grep mip-local) == '' ]]; then
 fi
 
 env HOSTNAME=${HOSTNAME} \
-FEDERATION_ROLE=${FEDERATION_ROLE} \
-EXAREME_IMAGE=${EXAREME_IMAGE} \
-EXAREME_KEYSTORE=${EXAREME_KEYSTORE} \
-DOCKER_DATA_FOLDER=${DOCKER_DATA_FOLDER} \
-LOCAL_DATA_FOLDER=${LOCAL_DATA_FOLDER} \
-FRONTEND_IMAGE=${FRONTEND_IMAGE} \
-BACKEND_IMAGE=${BACKEND_IMAGE} \
-FRONTEND_URL=${FRONTEND_URL} \
-docker stack deploy -c docker-compose-master.yml ${HOSTNAME}
+    FEDERATION_ROLE=${FEDERATION_ROLE} \
+    EXAREME_IMAGE=${EXAREME_IMAGE} \
+    EXAREME_KEYSTORE=${EXAREME_KEYSTORE} \
+    DOCKER_DATA_FOLDER=${DOCKER_DATA_FOLDER} \
+    LOCAL_DATA_FOLDER=${LOCAL_DATA_FOLDER} \
+    FRONTEND_IMAGE=${FRONTEND_IMAGE} \
+    BACKEND_IMAGE=${BACKEND_IMAGE} \
+    FRONTEND_URL=${FRONTEND_URL} \
+    docker stack deploy -c docker-compose-master.yml ${HOSTNAME}
