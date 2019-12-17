@@ -71,6 +71,7 @@ export interface AlgorithmParameter {
   name: string;
   uuid?: string;
   defaultValue: string;
+  placeholder: string;
   desc: string;
   type: string;
   columnValuesSQLType: string;
@@ -462,60 +463,33 @@ class Core extends Container<State> {
             (p: AlgorithmParameter) => {
               const visible = !UI_HIDDEN_PARAMETERS.includes(p.name);
 
-              // if (p.name === 'encodingparameter') {
-              //   return {
-              //     ...p,
-              //     enumeration: ['dummycoding', 'sumscoding', 'simplecoding'],
-              //     visible
-              //   };
-              // }
-
-              // if (p.name === 'hypothesis') {
-              //   return {
-              //     ...p,
-              //     enumeration: ['different', 'greaterthan', 'lessthan'],
-              //     visible
-              //   };
-              // }
-
-              // if (
-              //   p.name === 'effectsize' ||
-              //   p.name === 'ci' ||
-              //   p.name === 'meandiff'
-              // ) {
-              //   return {
-              //     ...p,
-              //     enumeration: ['1', '0'],
-              //     visible
-              //   };
-              // }
-
-              // if (p.name === 'sstype') {
-              //   return {
-              //     ...p,
-              //     enumeration: ['1', '2', '3'],
-              //     visible
-              //   };
-              // }
+              // Semantic adjustements:
+              // For historical reason, exareme serves a "value" as a "defaultValue".
+              // doesn't work for x,y,dataset and pathology. So we blank our "value", and
+              // assign the default on the fly, if the user didn't provide it's own value
+              // Exareme's "defaultValue" in an other hand is a placeholder, a recommendation
 
               return {
                 ...p,
                 value: '',
+                defaultValue: p.value,
+                placeholder: p.defaultValue,
                 visible
               };
             }
-          )
-          // ...(algorithm.name === 'ANOVA' ||
-          // algorithm.name === 'LINEAR_REGRESSION'
-          //   ? [
-          //       {
-          //         name: 'design',
-          //         enumeration: ['factorial', 'additive'],
-          //         defaultValue: 'factorial',
-          //         desc: 'Operator for the variables'
-          //       }
-          //     ]
-          //   : [])
+          ),
+          // TODO: delete this once we have the formula
+          ...(algorithm.name === 'ANOVA' ||
+          algorithm.name === 'LINEAR_REGRESSION'
+            ? [
+                {
+                  name: 'design',
+                  valueEnumerations: ['factorial', 'additive'],
+                  defaultValue: 'factorial',
+                  desc: 'Operator for the variables'
+                }
+              ]
+            : [])
         ]
       }));
 

@@ -188,6 +188,7 @@ const Parameters = ({
                           <FormControl
                             type={type}
                             defaultValue={parameter.defaultValue}
+                            placeholder={parameter.placeholder}
                             // tslint:disable-next-line jsx-no-lambda
                             onChange={event =>
                               handleChangeParameter(event, parameter.name)
@@ -199,8 +200,8 @@ const Parameters = ({
                         parameter.valueEnumerations.length > 0 && (
                           <FormControl
                             componentClass="select"
-                            placeholder="select"
                             defaultValue={parameter.defaultValue}
+                            placeholder={parameter.placeholder}
                             // tslint:disable-next-line jsx-no-lambda
                             onChange={event =>
                               handleChangeParameter(event, parameter.name)

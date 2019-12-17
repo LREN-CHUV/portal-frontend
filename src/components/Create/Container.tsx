@@ -283,7 +283,7 @@ class Container extends React.Component<Props, State> {
 
       return {
         code: isWorkflow ? p.uuid || p.name : p.name,
-        value: value || p.defaultValue
+        value
       };
     });
     const experiment: ExperimentPayload = {
