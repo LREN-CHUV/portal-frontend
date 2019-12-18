@@ -2,6 +2,8 @@
 
 ### 13.12.2019
 
+- NaiveBayes integrated
+- TTEST_PAIRED integrated
 - ID3 tree view visualisation (dendogram)
 - TTEST_ONESAMPLE integrated
 - Better tooltip on algorithms
