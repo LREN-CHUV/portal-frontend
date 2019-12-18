@@ -2,6 +2,7 @@
 
 ### 13.12.2019
 
+- Multiple Histogram integrated
 - NaiveBayes integrated
 - TTEST_PAIRED integrated
 - ID3 tree view visualisation (dendogram)
