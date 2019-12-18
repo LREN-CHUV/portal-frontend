@@ -20,8 +20,8 @@ FRONTEND_URL="${HOSTNAME}"
 # because of https://docs.docker.com/compose/compose-file/#variable-substitution
 
 EXAREME_IMAGE="hbpmip/exareme:dev_v3"
-FRONTEND_IMAGE="hbpmip/portal-frontend:5.1.11"
-BACKEND_IMAGE="hbpmip/portal-backend:5.0.4"
+FRONTEND_IMAGE="hbpmip/portal-frontend:5.1.12"
+BACKEND_IMAGE="hbpmip/portal-backend:5.0.5"
 
 EXAREME_KEYSTORE="${HOSTNAME}_exareme-keystore:8500"
 
