@@ -90,42 +90,42 @@ class Mining extends Container<MiningState> {
     }
   };
 
-  public oneHistogram = async (parameters: Parameter[]): Promise<Response> => {
-    try {
-      const r = request({
-        body: JSON.stringify(parameters),
-        headers: {
-          ...this.options.headers,
-          'Content-Type': 'application/json;charset=UTF-8'
-        },
-        method: 'POST',
-        uri: `${this.backendURL}/mining/exareme`
-      });
+  // public oneHistogram = async (parameters: Parameter[]): Promise<Response> => {
+  //   try {
+  //     const r = request({
+  //       body: JSON.stringify(parameters),
+  //       headers: {
+  //         ...this.options.headers,
+  //         'Content-Type': 'application/json;charset=UTF-8'
+  //       },
+  //       method: 'POST',
+  //       uri: `${this.backendURL}/mining/exareme`
+  //     });
 
-      this.requests.push(r);
-      const data = await r;
-      const jsonString = await JSON.parse(data);
+  //     this.requests.push(r);
+  //     const data = await r;
+  //     const jsonString = await JSON.parse(data);
 
-      // FIXME: in exareme, or backend API ? return type should be json
-      const json = await JSON.parse(jsonString);
+  //     // FIXME: in exareme, or backend API ? return type should be json
+  //     const json = await JSON.parse(jsonString);
 
-      if (json && json.error) {
-        return { error: json.error, data: undefined };
-      }
+  //     if (json && json.error) {
+  //       return { error: json.error, data: undefined };
+  //     }
 
-      return { error: undefined, data: json };
-    } catch (error) {
-      console.log(error);
+  //     return { error: undefined, data: json };
+  //   } catch (error) {
+  //     console.log(error);
 
-      return { error, data: undefined };
-    }
-  };
+  //     return { error, data: undefined };
+  //   }
+  // };
 
   public refetchAlgorithms = () => {
     this.setState({ refetchAlgorithms: Math.random() });
   };
 
-  public exaremeHistograms = async ({
+  public multipleHistograms = async ({
     x,
     datasets,
     pathology
@@ -175,55 +175,86 @@ class Mining extends Container<MiningState> {
       ? JSON.parse(choosenHistogramVariablesString)
       : {};
 
-    const dependentsVariables = [
-      '',
-      ...Object.values(choosenHistogramVariables).map(
-        (v: VariableEntity) => v.code
-      )
-    ].filter(v => x.code !== v);
+    const dependentsVariables = Object.values(choosenHistogramVariables)
+      .map((v: VariableEntity) => v.code)
+      .filter(v => x.code !== v);
 
     const type = x.type || 'real';
     if (type !== 'polynominal' && type !== 'binominal') {
       parameters.push({
         name: 'bins',
-        value: '20'
+        value: JSON.stringify({ [x.code]: 35 })
       });
     }
 
-    const nextParameters = dependentsVariables.map(v => [
-      ...parameters,
-      { name: 'y', value: v }
-    ]);
+    parameters.push({
+      name: 'y',
+      value: dependentsVariables.toString()
+    });
 
     this.abortMiningRequests();
+    console.log(parameters);
+    try {
+      const r = request({
+        body: JSON.stringify(parameters),
+        headers: {
+          ...this.options.headers,
+          'Content-Type': 'application/json;charset=UTF-8'
+        },
+        method: 'POST',
+        uri: `${this.backendURL}/mining/exareme/MULTIPLE_HISTOGRAMS`
+      });
 
-    const promises = await Promise.all(nextParameters.map(this.oneHistogram));
+      this.requests.push(r);
+      const data = await r;
+      const jsonString = await JSON.parse(data);
 
-    if (promises.map(p => p.error).some(p => p !== undefined)) {
-      return this.setState({
+      // FIXME: in exareme, or backend API ? return type should be json
+      const json = await JSON.parse(jsonString);
+      console.log(json);
+      this.setState({
         histograms: {
-          data: undefined,
-          error: promises.map(p =>
-            typeof p.error === 'object' ? p.error && p.error.message : p.error
-          )[0],
+          data: json.result.map((p: any) => ({
+            highchart: p
+            // label: i === 0 ? x.label : dependentsVariables[i]
+          })),
+          error: undefined,
           loading: false
         }
       });
-    }
 
-    this.setState({
-      histograms: {
-        data: promises.map((p, i) => ({
-          highchart: p.data.result.find(
-            (d: any) => d.type === MIME_TYPES.HIGHCHARTS
-          ),
-          label: i === 0 ? x.label : dependentsVariables[i]
-        })),
-        error: undefined,
-        loading: false
-      }
-    });
+      console.log(json);
+    } catch (error) {
+      console.log(error);
+    }
   };
+  //   const promises = await Promise.all(nextParameters.map(this.oneHistogram));
+
+  //   if (promises.map(p => p.error).some(p => p !== undefined)) {
+  //     return this.setState({
+  //       histograms: {
+  //         data: undefined,
+  //         error: promises.map(p =>
+  //           typeof p.error === 'object' ? p.error && p.error.message : p.error
+  //         )[0],
+  //         loading: false
+  //       }
+  //     });
+  //   }
+
+  //   this.setState({
+  //     histograms: {
+  //       data: promises.map((p, i) => ({
+  //         highchart: p.data.result.find(
+  //           (d: any) => d.type === MIME_TYPES.HIGHCHARTS
+  //         ),
+  //         label: i === 0 ? x.label : dependentsVariables[i]
+  //       })),
+  //       error: undefined,
+  //       loading: false
+  //     }
+  //   });
+  // };
 
   // FIXME: cache doesn't work for exareme.
   public descriptiveStatisticsByDataset = async ({
