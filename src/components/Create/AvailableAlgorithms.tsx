@@ -178,21 +178,13 @@ const AvailableAlgorithms = ({
     }
   `;
 
-  const ButtonLongMethodName = styled(Button)`
-    margin: 0 0 8px 0;
-    overflow: wrap;
-    width: 220px;
-    word-wrap: break-word;
-    display: inline-block;
-  `;
-
-  const PLongMethodName = styled.p`
-    margin: 0 0 8px 0;
-    overflow: wrap;
-    width: 220px;
-    word-wrap: break-word;
-    display: inline-block;
-  `;
+  // const PLongMethodName = styled.p`
+  //   margin: 0 0 8px 0;
+  //   overflow: wrap;
+  //   width: 220px;
+  //   word-wrap: break-word;
+  //   display: inline-block;
+  // `;
 
   return (
     <Container>
@@ -214,7 +206,7 @@ const AvailableAlgorithms = ({
           {layout !== 'inline' ? (
             <div>
               {algorithm.enabled && (
-                <ButtonLongMethodName
+                <Button
                   key={algorithm.name}
                   bsStyle="link"
                   // ts lint:disable-next-line jsx-no-lambda
@@ -227,10 +219,10 @@ const AvailableAlgorithms = ({
                   }}
                 >
                   {algorithm.name}
-                </ButtonLongMethodName>
+                </Button>
               )}
               {!algorithm.enabled && (
-                <PLongMethodName
+                <p
                   key={algorithm.name}
                   style={{
                     color: algorithm.enabled ? '#03a9f4' : 'gray',
@@ -239,7 +231,7 @@ const AvailableAlgorithms = ({
                   }}
                 >
                   {algorithm.name}
-                </PLongMethodName>
+                </p>
               )}
             </div>
           ) : (

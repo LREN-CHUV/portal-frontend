@@ -168,7 +168,7 @@ export default ({
     const datasets =
       (model && model.query && model.query.trainingDatasets) || [];
     if (selectedNode && selectedNode.data.isVariable) {
-      apiMining.exaremeHistograms({
+      apiMining.multipleHistograms({
         datasets: datasets,
         x: selectedNode.data,
         pathology: (model && model.query && model.query.pathology) || ''
