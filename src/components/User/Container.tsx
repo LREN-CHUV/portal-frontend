@@ -64,7 +64,7 @@ export default ({ apiUser }: Props): JSX.Element => {
             <h2>Infos</h2>
             <Button
               bsStyle={'warning'}
-              onClick={() => {
+              onClick={(): void => {
                 apiUser.logout();
               }}
             >
