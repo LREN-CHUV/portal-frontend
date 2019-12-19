@@ -91,6 +91,11 @@ export default (props: Props): JSX.Element => {
         choosenHistogramVariablesString
       );
       setChoosenVariables(choosenHistogramVariables);
+    } else {
+      setChoosenVariables({
+        1: { code: 'gender', label: 'Gender' },
+        2: { code: 'agegroup', label: 'Age Group' }
+      });
     }
   }, []);
 
