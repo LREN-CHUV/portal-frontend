@@ -162,7 +162,7 @@ class Mining extends Container<MiningState> {
     });
 
     this.abortMiningRequests();
-    console.log(parameters);
+
     try {
       const r = request({
         body: JSON.stringify(parameters),
@@ -191,7 +191,6 @@ class Mining extends Container<MiningState> {
         }
       });
 
-      console.log(json);
     } catch (error) {
       console.log(error);
     }
