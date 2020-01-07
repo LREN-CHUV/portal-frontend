@@ -32,7 +32,7 @@ interface ITableRow {
 
 const findVariableData = (code: string, data: any) => {
   if (data) {
-    const variableData = data.find((r: any) => r.Label && r.Label === code);
+    const variableData = data.find((r: any) => r && r.Label && r.Label === code);
 
     return variableData;
   }
