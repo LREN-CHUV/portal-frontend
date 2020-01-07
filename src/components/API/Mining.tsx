@@ -190,7 +190,6 @@ class Mining extends Container<MiningState> {
           loading: false
         }
       });
-
     } catch (error) {
       console.log(error);
     }
