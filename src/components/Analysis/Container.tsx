@@ -39,8 +39,6 @@ const Container = ({
     apiModel.state.model && apiModel.state.model.query.trainingDatasets;
   const queryfilters = apiModel.state.model && apiModel.state.model.query.filters;
 
-  console.log("trainingDatasets")
-
   React.useEffect(() => {
     const query = apiModel.state.model && apiModel.state.model.query;
     const datasets = query && query.trainingDatasets;
@@ -218,7 +216,7 @@ const Container = ({
 
   const { fields, filters } = makeFilters({ apiCore, apiModel });
   const model = apiModel.state.model;
-console.log('trainingDatasets');
+
   return (
     <div className="Model Review">
       <div className="header">
