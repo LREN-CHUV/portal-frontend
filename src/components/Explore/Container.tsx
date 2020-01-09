@@ -163,6 +163,8 @@ export default ({
   }, [apiModel.state, d3Layout]);
 
   // Load Histograms for selected variable
+  const trainingDatasets =
+    apiModel.state.model && apiModel.state.model.query.trainingDatasets;
   useEffect(() => {
     const model = apiModel.state.model;
     const datasets =
@@ -179,7 +181,8 @@ export default ({
     apiMining,
     appConfig.mode,
     apiModel.state.model,
-    apiMining.state.refetchAlgorithms
+    apiMining.state.refetchAlgorithms,
+    trainingDatasets
   ]);
 
   const handleSelectDataset = (dataset: VariableEntity): void => {
