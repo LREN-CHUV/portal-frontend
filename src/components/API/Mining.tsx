@@ -3,7 +3,6 @@ import stringHash from 'string-hash';
 import { Container } from 'unstated';
 
 import { backendURL } from '../API';
-import { MIME_TYPES } from '../constants';
 import { VariableDatum } from '../Explore/d3Hierarchy';
 import { Algorithm, Parameter, VariableEntity } from './Core';
 
