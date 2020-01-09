@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Panel } from 'react-bootstrap';
 import styled from 'styled-components';
 
-import { Engine, Result, State } from '../API/Experiment';
+import { Result, State } from '../API/Experiment';
 import RenderResult from './RenderResult';
 
 const Body = styled(Panel.Body)`

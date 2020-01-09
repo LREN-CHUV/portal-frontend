@@ -2,7 +2,7 @@ import moment from 'moment';
 import React, { useState } from 'react';
 import { Button, Panel } from 'react-bootstrap';
 import styled from 'styled-components';
-import { Engine, ExperimentResponse, Result } from '../API/Experiment';
+import { ExperimentResponse, Result } from '../API/Experiment';
 import { ModelResponse } from '../API/Model';
 import RenderResult from '../Result/RenderResult';
 

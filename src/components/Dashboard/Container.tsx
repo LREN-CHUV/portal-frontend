@@ -16,16 +16,6 @@ const ContentLayout = styled.div`
   grid-column-gap: 8px;
 `;
 
-const PanelContainer = styled(Panel)`
-  h2 {
-    font-size: 16px;
-    font-weight: bold;
-  }
-  padding: 1em;
-  margin: 0 0 1em 0;
-  background-color: #d3d3d399;
-`;
-
 const Title = styled.h3`
   margin: 16px 0;
 `;

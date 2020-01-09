@@ -54,7 +54,8 @@ export default ({
                 (e: any) => e.modelDefinitionId === experiment.modelDefinitionId
               )
             }
-            style="info"
+            /* eslint-disable-next-line */
+            style={'info'}
             title="RELATED EXPERIMENTS"
             handleSelect={handleSelectExperiment}
             handleCreateNewExperiment={handleCreateNewExperiment}

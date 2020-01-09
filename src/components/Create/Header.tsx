@@ -49,6 +49,7 @@ export default class Header extends React.Component<Props, State> {
                   (e: any) => e.modelDefinitionId === model.slug
                 )
               }
+              /* eslint-disable-next-line */
               style={'info'}
               title="RELATED EXPERIMENTS"
               handleSelect={handleSelectExperiment}

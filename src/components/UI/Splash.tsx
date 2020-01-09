@@ -3,7 +3,7 @@ import { Button } from 'react-bootstrap';
 import styled from 'styled-components';
 
 import HBPLogo from '../../images/hbp_logo_320.png';
-import { APIUser, backendURL } from '../API';
+import { backendURL } from '../API';
 import HelpButton from './HelpButton';
 
 const MainBox = styled.div`

@@ -1,18 +1,20 @@
+import '../Model.css';
+import './Review.css';
+
 import * as React from 'react';
 import { Panel } from 'react-bootstrap';
 import { RouteComponentProps } from 'react-router-dom';
+
 import { APICore, APIMining, APIModel } from '../API';
 import { VariableEntity } from '../API/Core';
 import { MiningPayload } from '../API/Mining';
 import { ModelResponse, Query } from '../API/Model';
-import '../Model.css';
 import { IAlert } from '../UI/Alert';
 import DatasetsForm from '../UI/DatasetsForm';
 import Model from '../UI/Model';
 import Content from './Content';
 import Filter from './Filter';
 import ExperimentReviewHeader from './Header';
-import './Review.css';
 
 interface Props extends RouteComponentProps {
   apiModel: APIModel;
@@ -33,6 +35,12 @@ const Container = ({
 }: Props): JSX.Element => {
   const { history } = props;
 
+  const trainingDatasets =
+    apiModel.state.model && apiModel.state.model.query.trainingDatasets;
+  const queryfilters = apiModel.state.model && apiModel.state.model.query.filters;
+
+  console.log("trainingDatasets")
+
   React.useEffect(() => {
     const query = apiModel.state.model && apiModel.state.model.query;
     const datasets = query && query.trainingDatasets;
@@ -51,13 +59,7 @@ const Container = ({
         payload
       });
     }
-  }, [
-    apiModel.state.model,
-    // eslint:eslint-disable-next-line react-hooks/exhaustive-deps
-    apiModel.state.model && apiModel.state.model.query.trainingDatasets,
-    apiModel.state.model && apiModel.state.model.query.filters,
-    apiMining
-  ]);
+  }, [apiModel.state.model, trainingDatasets, queryfilters, apiMining]);
 
   const handleSaveModel = async ({
     title
@@ -216,7 +218,7 @@ const Container = ({
 
   const { fields, filters } = makeFilters({ apiCore, apiModel });
   const model = apiModel.state.model;
-
+console.log('trainingDatasets');
   return (
     <div className="Model Review">
       <div className="header">

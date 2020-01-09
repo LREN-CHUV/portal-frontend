@@ -128,6 +128,7 @@ export default ({
         </Group>
         <Dropdown
           items={experiments}
+          /* eslint-disable-next-line */
           style="link"
           title="My Experiments"
           handleSelect={handleSelect}
