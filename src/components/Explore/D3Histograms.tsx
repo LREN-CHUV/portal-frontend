@@ -121,14 +121,14 @@ export default (props: Props): JSX.Element => {
     updateRender: () => {
       if (selectedNode) {
         d3.select(divRef.current)
-          .selectAll('a')
+          .selectAll('p')
           .remove();
 
         d3.select(divRef.current)
-          .selectAll('a')
+          .selectAll('p')
           .data(breadcrumb(selectedNode).reverse())
           .enter()
-          .append('a')
+          .append('p')
           .text(d => d.data.label)
           .on('click', d => {
             handleSelectedNode(d);

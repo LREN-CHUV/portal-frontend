@@ -37,7 +37,8 @@ const Container = ({
 
   const trainingDatasets =
     apiModel.state.model && apiModel.state.model.query.trainingDatasets;
-  const queryfilters = apiModel.state.model && apiModel.state.model.query.filters;
+  const queryfilters =
+    apiModel.state.model && apiModel.state.model.query.filters;
 
   React.useEffect(() => {
     const query = apiModel.state.model && apiModel.state.model.query;
