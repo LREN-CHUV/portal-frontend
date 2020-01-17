@@ -484,9 +484,9 @@ class Core extends Container<State> {
             ? [
                 {
                   name: 'design',
-                  valueEnumerations: ['factorial', 'additive'],
-                  defaultValue: 'factorial',
-                  value: 'factorial',
+                  valueEnumerations: ['none', 'factorial', 'additive'],
+                  defaultValue: 'none',
+                  value: 'none',
                   desc: 'Operator for the variables'
                 }
               ]
