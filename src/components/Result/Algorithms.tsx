@@ -24,7 +24,7 @@ const Algorithms = ({ experiment }: { experiment?: ExperimentResponse }) => {
             {algorithms.map((algorithm: any, j: number) => (
               <div key={`name-${algorithm.code}-${j}`}>
                 <Param>
-                  <strong>{algorithm.name}</strong>
+                  <strong>{algorithm.label || algorithm.name}</strong>
                 </Param>
                 {algorithm.parameters &&
                   algorithm.parameters.filter(
