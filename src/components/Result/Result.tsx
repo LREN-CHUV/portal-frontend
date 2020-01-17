@@ -22,7 +22,10 @@ export default ({
   const loading = !results && !error;
   const algorithms = experiment && experiment.algorithms;
   const algorithmName =
-    (algorithms && algorithms.length > 0 && algorithms[0].name) || '';
+    (algorithms &&
+      algorithms.length > 0 &&
+      (algorithms[0].label || algorithms[0].name)) ||
+    '';
 
   return (
     <Panel>

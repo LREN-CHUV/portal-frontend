@@ -218,7 +218,7 @@ const AvailableAlgorithms = ({
                     textTransform: 'none'
                   }}
                 >
-                  {algorithm.name}
+                  {algorithm.label || algorithm.name}
                 </Button>
               )}
               {!algorithm.enabled && (
@@ -230,7 +230,7 @@ const AvailableAlgorithms = ({
                     textTransform: 'none'
                   }}
                 >
-                  {algorithm.name}
+                  {algorithm.label}
                 </p>
               )}
             </div>
@@ -243,7 +243,7 @@ const AvailableAlgorithms = ({
                 textTransform: 'none'
               }}
             >
-              {algorithm.name}
+              {algorithm.label || algorithm.name}
             </var>
           )}
         </OverlayTrigger>

@@ -37,6 +37,7 @@ interface Hierarchy {
 export interface Algorithm {
   code: string;
   name: string;
+  label?: string;
   desc?: string;
   parameters: AlgorithmParameter[] | AlgorithmParameterRequest[];
   type?: string;
