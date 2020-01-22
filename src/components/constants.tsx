@@ -70,6 +70,10 @@ export const ALGORITHM_DEFAULT_OUTPUT = [
   {
     name: 'MULTIPLE_HISTOGRAMS',
     types: [...DEFAULT_OUTPUT, MIME_TYPES.HIGHCHARTS]
+  },
+  {
+    name: 'PCA',
+    types: [...DEFAULT_OUTPUT, MIME_TYPES.JSONDATA]
   }
 ];
 
@@ -84,7 +88,8 @@ export const ENABLED_ALGORITHMS = [
   'LINEAR_REGRESSION',
   'TTEST_INDEPENDENT',
   'TTEST_PAIRED',
-  'TTEST_ONESAMPLE'
+  'TTEST_ONESAMPLE',
+  'PCA'
 ];
 
 const independents = ['X', 'column1', 'x', 'descriptive_attributes'];
