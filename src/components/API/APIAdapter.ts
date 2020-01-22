@@ -112,7 +112,7 @@ class APIAdapter {
       }
 
       if (p) {
-        const isExareme = p.every((r: any) => r.data && r.type);
+        const isExareme = p.every((r: any) => r.type);
         if (isExareme) {
           const algorithmName = experimentResponse.algorithms[0].name;
           const response = {
