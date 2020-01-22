@@ -94,11 +94,11 @@ class Mining extends Container<MiningState> {
   };
 
   public multipleHistograms = async ({
-    x,
+    y,
     datasets,
     pathology
   }: {
-    x: VariableDatum;
+    y: VariableDatum;
     datasets: VariableEntity[];
     pathology: string;
   }): Promise<void> => {
@@ -126,8 +126,8 @@ class Mining extends Container<MiningState> {
         value: datasets.map(d => d.code).toString()
       },
       {
-        name: 'x',
-        value: x.code
+        name: 'y',
+        value: y.code
       },
       {
         name: 'pathology',
@@ -145,18 +145,18 @@ class Mining extends Container<MiningState> {
 
     const dependentsVariables = Object.values(choosenHistogramVariables)
       .map((v: VariableEntity) => v.code)
-      .filter(v => x.code !== v);
+      .filter(v => y.code !== v);
 
-    const type = x.type || 'real';
+    const type = y.type || 'real';
     if (type !== 'polynominal' && type !== 'binominal') {
       parameters.push({
         name: 'bins',
-        value: JSON.stringify({ [x.code]: 20 })
+        value: JSON.stringify({ [y.code]: 20 })
       });
     }
 
     parameters.push({
-      name: 'y',
+      name: 'x',
       value: dependentsVariables.toString()
     });
 
