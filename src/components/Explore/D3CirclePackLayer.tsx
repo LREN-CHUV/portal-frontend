@@ -235,7 +235,7 @@ export default ({ layout, ...props }: Props) => {
       .style('fill-opacity', d => (d.parent === layout ? 1 : 0))
       .style('display', d => (d.parent === layout ? 'inline' : 'none'))
       .text(d =>
-        d.data.label.length > maxLength
+        d.data && d.data.label && d.data.label.length > maxLength
           ? d.data.label
               .split(' ')
               .reduce(
