@@ -28,7 +28,7 @@ const hierarchyTransform = (node: any): VariableDatum | undefined =>
         ],
         code: node.code,
         description: node.description,
-        label: node.label,
+        label: node.label || node.code,
         type: node.type
       }
     : undefined;
@@ -38,7 +38,7 @@ export const d3Hierarchy = (hierarchy: any): HierarchyNode | undefined => {
   const hierarchyNode = root
     ? d3
         .hierarchy(root)
-        .sum((d: any) => d.label.length)
+        .sum((d: any) => d.label && d.label.length)
         .sort((a: any, b: any) => b.value - a.value)
     : undefined;
 
