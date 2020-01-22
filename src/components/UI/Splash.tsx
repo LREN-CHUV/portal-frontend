@@ -89,6 +89,11 @@ const Columns = styled.div`
   }
 `;
 
+const Logo = styled.img`
+  width: 320px;
+  height: 320px;
+`;
+
 export default (): JSX.Element => {
   const handleLoginPress = (): void => {
     window.location.href = `${backendURL}/login/hbp`;
@@ -104,7 +109,7 @@ export default (): JSX.Element => {
           Login
         </Button>
       </ActionBar>
-      <img alt="HBP logo" title={'Human Brain Project'} src={HBPLogo} />
+      <Logo alt="HBP logo" title={'Human Brain Project'} src={HBPLogo} />
       <h2>Human Brain Project</h2>
       <h1>THE MEDICAL INFORMATICS PLATFORM</h1>
 
