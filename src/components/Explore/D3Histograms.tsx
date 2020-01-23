@@ -40,17 +40,15 @@ const Overview = styled.div`
 `;
 
 const Breadcrumb = styled.span`
-  a:after {
+  p:after {
     content: ' > ';
   }
-  a:last-child:after {
+  p:last-child:after {
     content: '';
   }
-  a:after {
-    content: ' | ';
-  }
-  a:last-child:after {
-    content: '';
+  p {
+    color: #007ad9;
+    display: inline;
   }
 `;
 
