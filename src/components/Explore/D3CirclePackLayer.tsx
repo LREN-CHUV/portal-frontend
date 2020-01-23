@@ -197,7 +197,10 @@ export default ({ layout, ...props }: Props) => {
       .style('height', 'auto')
       .style('cursor', 'pointer')
       .style('border-radius', '4px')
-      .on('click', () => zoomCallback(layout));
+      .on('click', () => {
+        d3.event.stopPropagation();
+        zoomCallback(layout);
+      });
 
     svg
       .append('g')
