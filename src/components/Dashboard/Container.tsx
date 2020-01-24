@@ -74,7 +74,7 @@ export default ({ ...props }: Props): JSX.Element => {
 
   return (
     <Layout>
-      <Infos stats={apiCore.state.stats} handleNewArticle={handleNewArticle} />
+      <Infos apiCore={apiCore} handleNewArticle={handleNewArticle} />
       <ContentLayout>
         <div>
           <Panel>
