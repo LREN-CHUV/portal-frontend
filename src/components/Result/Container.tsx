@@ -53,11 +53,15 @@ class Experiment extends React.Component<Props> {
       await apiModel.one(slug);
     }
 
+    const { apiExperiment } = this.props;
     if (uuid !== previousUUID) {
-      const { apiExperiment } = this.props;
       await apiExperiment.one({ uuid });
-      if (!apiExperiment.loaded) {
+      if (!apiExperiment.loaded()) {
         this.pollFetchExperiment(uuid);
+      }
+    } else {
+      if (apiExperiment.loaded()) {
+        clearInterval(this.intervalId);
       }
     }
   }
