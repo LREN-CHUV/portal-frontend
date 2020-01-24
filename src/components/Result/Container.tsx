@@ -43,9 +43,15 @@ class Experiment extends React.Component<Props> {
     if (!params) {
       return;
     }
-    const { uuid } = params;
+    const { uuid, slug } = params;
     const previousParams = this.urlParams(prevProps);
     const previousUUID = previousParams && previousParams.uuid;
+    const previousSlug = previousParams && previousParams.slug;
+
+    if (slug !== previousSlug) {
+      const { apiModel } = this.props;
+      await apiModel.one(slug);
+    }
 
     if (uuid !== previousUUID) {
       const { apiExperiment } = this.props;
