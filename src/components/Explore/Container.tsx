@@ -56,6 +56,7 @@ export default ({
   // D3Model is used to expose D3 data and interact with the D3 Layout.
   const [d3Model, setD3Model] = useState<D3Model>(initialD3Model);
   const [d3Layout, setD3Layout] = useState<HierarchyCircularNode>();
+  const [formulaString, setFormulaString] = useState<string>('');
 
   const [showPathologySwitchWarning, setShowPathologySwitchWarning] = useState(
     false
@@ -356,7 +357,11 @@ export default ({
     const nextModel = convertD3ModelToModel(d3Model, apiModel.state.model);
     apiMining.abortMiningRequests();
 
-    await apiModel.setModel(nextModel);
+    const model = {
+      ...nextModel,
+      query: { ...nextModel.query, formulaString }
+    };
+    await apiModel.setModel(model);
     history.push(`/review`);
   };
 
@@ -371,7 +376,8 @@ export default ({
     handleSelectPathology,
     handleUpdateD3Model,
     histograms: apiMining.state.histograms,
-    selectedNode
+    selectedNode,
+    setFormulaString
   };
 
   return (

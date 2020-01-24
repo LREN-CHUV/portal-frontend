@@ -32,6 +32,7 @@ export interface ExploreProps {
   handleSelectModel: (model?: ModelResponse) => void;
   handleGoToAnalysis: any; // FIXME Promise<void>
   zoom: (circleNode: HierarchyCircularNode) => void;
+  setFormulaString: (f: string) => void;
 }
 
 export default (props: ExploreProps): JSX.Element => {
@@ -50,7 +51,8 @@ export default (props: ExploreProps): JSX.Element => {
     handleUpdateD3Model,
     handleSelectModel,
     handleGoToAnalysis,
-    zoom
+    zoom,
+    setFormulaString
   } = props;
 
   const model = apiModel.state.model;
@@ -262,20 +264,23 @@ export default (props: ExploreProps): JSX.Element => {
                       </Button>
                     }
                   />
-                  Available algorithms:{' '}
-                  <AvailableAlgorithms
-                    layout={'inline'}
-                    algorithms={apiCore.state.algorithms}
-                    lookup={apiCore.lookup}
-                    handleSelectMethod={() => {}}
-                    model={apiModel.state.model}
-                  />
-                  <Formula parameters={d3Model} />
                 </Tab>
                 <Tab eventKey={1} title={'Formula'} key={1}>
-                  {/* <Formula parameters={d3Model} /> */}
+                  <Formula
+                    parameters={d3Model}
+                    handleUpdateD3Model={handleUpdateD3Model}
+                    setFormulaString={setFormulaString}
+                  />
                 </Tab>
               </Tabs>
+              Available algorithms:{' '}
+              <AvailableAlgorithms
+                layout={'inline'}
+                algorithms={apiCore.state.algorithms}
+                lookup={apiCore.lookup}
+                handleSelectMethod={() => {}}
+                model={apiModel.state.model}
+              />
             </Panel.Body>
           </Panel>
 

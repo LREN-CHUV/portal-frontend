@@ -1,6 +1,7 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { D3Model } from './Container';
+
+import { D3Model, HierarchyCircularNode, ModelType } from './Container';
 
 interface Props {
   Terms: any;
@@ -29,7 +30,18 @@ interface Formula {
   rightTerm: Term[];
 }
 
-export default ({ parameters }: { parameters: D3Model }) => {
+export default ({
+  parameters,
+  handleUpdateD3Model,
+  setFormulaString
+}: {
+  parameters: D3Model;
+  handleUpdateD3Model: (
+    model?: ModelType,
+    node?: HierarchyCircularNode
+  ) => void;
+  setFormulaString: (f: string) => void;
+}): JSX.Element => {
   const [formula, setFormula] = useState<Formula>({
     leftTerm: [],
     rightTerm: []
@@ -76,44 +88,94 @@ export default ({ parameters }: { parameters: D3Model }) => {
     }
   }, [parameters, setFormula]);
 
+  // Cast edited text formula to Formula type
+  // Update the current model
   const handleValidate = () => {
+    if (editedFormula === '') {
+      return;
+    }
+
     const variables =
       parameters.variables && parameters.variables.map(c => c.data.code);
     const covariables =
       parameters.covariables && parameters.covariables.map(c => c.data.code);
     const [leftStringTerms, rightStringTerms] = editedFormula.split('~');
 
-    const lbits = [
-      '+', // first term dummy operator
-      ...leftStringTerms
-        .split(' ')
-        .map(c => c.trim())
-        .filter(c => c !== '')
-    ];
+    // filter left terms => ['+', 'y1', ...]
+    const lterms =
+      (leftStringTerms && [
+        '+', // first term dummy operator
+        ...leftStringTerms
+          .split(' ')
+          .map(c => c.trim())
+          .filter(c => c !== '')
+      ]) ||
+      [];
 
-    const leftTerm: Term[] = lbits
+    // => [{ operator: '+', factor: 'y1'}, ...]
+    const leftTerm: Term[] = lterms
       .reduce(
         (acc: Term[], cur, i) =>
-          i % 2 === 0 ? [...acc, { operator: cur, factor: lbits[i + 1] }] : acc,
+          i % 2 === 0
+            ? [
+                ...acc,
+                {
+                  operator: cur,
+                  factor: lterms[i + 1]
+                }
+              ]
+            : acc,
         []
       )
+      // validate against selected variables
       .filter(c => variables && variables.includes(c.factor));
 
-    const rbits = [
-      '+', // first term dummy operator
-      ...rightStringTerms
-        .split(' ')
-        .map(c => c.trim())
-        .filter(c => c !== '')
-    ];
+    const rterms =
+      (rightStringTerms && [
+        '+', // first term dummy operator
+        ...rightStringTerms
+          .split(' ')
+          .map(c => c.trim())
+          .filter(c => c !== '')
+      ]) ||
+      [];
 
-    const rightTerm: Term[] = rbits
+    const rightTerm: Term[] = rterms
       .reduce(
         (acc: Term[], cur, i) =>
-          i % 2 === 0 ? [...acc, { operator: cur, factor: rbits[i + 1] }] : acc,
+          i % 2 === 0
+            ? [
+                ...acc,
+                {
+                  operator: cur,
+                  factor: rterms[i + 1]
+                }
+              ]
+            : acc,
         []
       )
       .filter(c => covariables && covariables.includes(c.factor));
+
+    // update model by sending removed values
+    const nextSelectedVariables =
+      parameters.variables &&
+      parameters.variables.filter(
+        v => !leftTerm.map(t => t.factor).includes(v.data.code)
+      );
+    nextSelectedVariables &&
+      nextSelectedVariables.forEach(v =>
+        handleUpdateD3Model(ModelType.VARIABLE, v)
+      );
+
+    const nextSelectedCovariables =
+      parameters.covariables &&
+      parameters.covariables.filter(
+        v => !rightTerm.map(t => t.factor).includes(v.data.code)
+      );
+    nextSelectedCovariables &&
+      nextSelectedCovariables.forEach(v =>
+        handleUpdateD3Model(ModelType.COVARIABLE, v)
+      );
 
     setEditedFormula('');
     setFormula({ leftTerm, rightTerm });
@@ -132,13 +194,9 @@ export default ({ parameters }: { parameters: D3Model }) => {
       .map((l, i) => (i === 0 ? l.factor : `${l.operator} ${l.factor}`))
       .join(' ');
 
-    return `${leftTerm} ~ ${rightTerm}`;
-  };
-
-  const onFormulaChange = (event: any) => {
-    const textFormula: string = event.target.value;
-    console.log(textFormula);
-    setEditedFormula(textFormula);
+    const formulaString = `${leftTerm} ~ ${rightTerm}`;
+    setFormulaString(formulaString);
+    return formulaString;
   };
 
   return (
@@ -146,19 +204,11 @@ export default ({ parameters }: { parameters: D3Model }) => {
       <Formula
         id="formula-element"
         value={formulaToString()}
-        onChange={onFormulaChange}
+        onChange={(event: React.FormEvent<HTMLTextAreaElement>): void =>
+          setEditedFormula(event.currentTarget.value)
+        }
+        onBlur={handleValidate}
       />
-      <button
-        disabled={editedFormula !== ''}
-        onClick={(): void => {
-          setEditedFormula('');
-        }}
-      >
-        Reset
-      </button>
-      <button disabled={editedFormula === ''} onClick={handleValidate}>
-        Validate
-      </button>
     </>
   );
 };
