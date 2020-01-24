@@ -42,36 +42,39 @@ export default ({ parameters }: { parameters: D3Model }) => {
       const covariables = parameters.covariables;
 
       // addMissing, filter duplicates
-      const leftTerm = [
-        ...((variables &&
-          variables.map(v =>
-            formula.leftTerm.map(t => t.factor).includes(v.data.code)
-              ? formula.leftTerm.find(t => t.factor === v.data.code)!
-              : { factor: v.data.code, operator: '+' }
-          )) ||
-          [])
-      ].filter(
-        t => variables && variables.map(v => v.data.code).includes(t.factor)
-      );
+      setFormula(prevFormula => {
+        const leftTerm = [
+          ...((variables &&
+            variables.map(v =>
+              prevFormula.leftTerm.map(t => t.factor).includes(v.data.code)
+                ? prevFormula.leftTerm.find(t => t.factor === v.data.code)!
+                : { factor: v.data.code, operator: '+' }
+            )) ||
+            [])
+        ].filter(
+          t => variables && variables.map(v => v.data.code).includes(t.factor)
+        );
 
-      const rightTerm = [
-        ...((covariables &&
-          covariables.map(v =>
-            formula.rightTerm.map(t => t.factor).includes(v.data.code)
-              ? formula.rightTerm.find(t => t.factor === v.data.code)!
-              : { factor: v.data.code, operator: '+' }
-          )) ||
-          [])
-      ].filter(
-        t => covariables && covariables.map(v => v.data.code).includes(t.factor)
-      );
+        const rightTerm = [
+          ...((covariables &&
+            covariables.map(v =>
+              prevFormula.rightTerm.map(t => t.factor).includes(v.data.code)
+                ? prevFormula.rightTerm.find(t => t.factor === v.data.code)!
+                : { factor: v.data.code, operator: '+' }
+            )) ||
+            [])
+        ].filter(
+          t =>
+            covariables && covariables.map(v => v.data.code).includes(t.factor)
+        );
 
-      setFormula({
-        leftTerm,
-        rightTerm
+        return {
+          leftTerm,
+          rightTerm
+        };
       });
     }
-  }, [parameters]);
+  }, [parameters, setFormula]);
 
   const handleValidate = () => {
     const variables =
