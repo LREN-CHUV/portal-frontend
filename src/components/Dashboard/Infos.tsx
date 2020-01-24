@@ -2,7 +2,7 @@ import React from 'react';
 import { Button } from 'react-bootstrap';
 import { FaAtom, FaEdit, FaPlusCircle, FaUsers } from 'react-icons/fa';
 import styled from 'styled-components';
-
+import { APICore } from '../API';
 import { Stats } from '../API/Core';
 
 const Infos = styled.div`
@@ -84,11 +84,11 @@ const Plus = styled(Button)`
 `;
 
 interface Props {
-  stats?: Stats;
+  apiCore: APICore;
   handleNewArticle: () => void;
 }
 
-export default ({ stats, handleNewArticle }: Props): JSX.Element => (
+export default ({ apiCore, handleNewArticle }: Props): JSX.Element => (
   <Infos>
     <Panel style={{ backgroundColor: 'rgba(222, 147, 109, 0.4)' }}>
       <PanelTitle>
@@ -98,7 +98,12 @@ export default ({ stats, handleNewArticle }: Props): JSX.Element => (
         </Icon>
       </PanelTitle>
       <PanelBody>
-        <Count>{(stats && stats.users) || 0}</Count>
+        <Count>
+          {(apiCore.state &&
+            apiCore.state.stats &&
+            apiCore.state.stats.users) ||
+            0}
+        </Count>
         <Summary>Scientists registered on the platform</Summary>
       </PanelBody>
     </Panel>
@@ -111,7 +116,12 @@ export default ({ stats, handleNewArticle }: Props): JSX.Element => (
         </Icon>
       </PanelTitle>
       <PanelBody>
-        <Count>{(stats && stats.articles) || 0}</Count>
+        <Count>
+          {(apiCore.state &&
+            apiCore.state.stats &&
+            apiCore.state.stats.articles) ||
+            0}
+        </Count>
         <Summary>Articles written on the platform</Summary>
       </PanelBody>
     </Panel>
@@ -124,7 +134,12 @@ export default ({ stats, handleNewArticle }: Props): JSX.Element => (
         </Icon>
       </PanelTitle>
       <PanelBody>
-        <Count>{(stats && stats.variables) || 0}</Count>
+        <Count>
+          {(apiCore.state &&
+            apiCore.state.variables &&
+            apiCore.state.variables.length) ||
+            0}
+        </Count>
         <Summary>Records in database</Summary>
       </PanelBody>
     </Panel>
