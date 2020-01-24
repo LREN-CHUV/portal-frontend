@@ -23,9 +23,10 @@ export default ({
           <Warning message={result.data} />
         )}
         {result.type === MIME_TYPES.JSONDATA && <JSONData data={result.data} />}
-        {result.type === MIME_TYPES.HIGHCHARTS && (
-          <Highchart options={result.data} />
-        )}
+        {result.type === MIME_TYPES.HIGHCHARTS &&
+          !/empty/.test(
+            result.data && result.data.subtitle && result.data.subtitle.text
+          ) && <Highchart options={result.data} />}
         {result.type === MIME_TYPES.JSON && <Dendogram data={result.data} />}
       </>
     );
