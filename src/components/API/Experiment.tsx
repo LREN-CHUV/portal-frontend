@@ -60,12 +60,6 @@ export interface State {
 class Experiment extends Container<State> {
   public state: State = {};
 
-  public loaded =
-    this.state &&
-    this.state.experiment !== undefined &&
-    this.state.experiment.results !== undefined &&
-    this.state.experiment.error !== undefined;
-
   private options: request.Options;
   private baseUrl: string;
 
@@ -74,6 +68,10 @@ class Experiment extends Container<State> {
     this.options = config.options;
     this.baseUrl = `${backendURL}/experiments`;
   }
+
+  public loaded = (): boolean =>
+    this.state.experiment !== undefined &&
+    this.state.experiment.results !== undefined;
 
   public one = async ({ uuid }: IUUID): Promise<void> => {
     try {
