@@ -49,7 +49,9 @@ const Breadcrumb = styled.span`
   p {
     color: #007ad9;
     display: inline;
+    cursor: pointer;
   }
+
 `;
 
 const DropDown = styled(DropdownButton)`
