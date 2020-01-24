@@ -31,9 +31,10 @@ export interface Props {
   handleUpdateD3Model: (type?: ModelType, node?: HierarchyCircularNode) => void;
   handleSelectModel: (d3Model?: ModelResponse) => void;
   handleGoToAnalysis: Function;
+  setFormulaString: (f: string) => void;
 }
 
-export default ({ layout, ...props }: Props) => {
+export default ({ layout, ...props }: Props): JSX.Element => {
   const svgRef = useRef(null);
   const view = useRef<IView>([diameter / 2, diameter / 2, diameter]);
   const focus = useRef(layout);

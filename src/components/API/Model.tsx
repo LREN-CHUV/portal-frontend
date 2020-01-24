@@ -41,6 +41,7 @@ export interface Query {
   testingDatasets?: VariableEntity[];
   validationDatasets?: VariableEntity[];
   [key: string]: any;
+  formulaString?: string;
 }
 
 class Model extends Container<ModelState> {
