@@ -19,8 +19,8 @@ FRONTEND_URL="${HOSTNAME}"
 # WARNING: substitution for image doesn't work on CircleCI
 # because of https://docs.docker.com/compose/compose-file/#variable-substitution
 
-EXAREME_IMAGE="hbpmip/exareme:dev_v8"
-FRONTEND_IMAGE="hbpmip/portal-frontend:5.1.13"
+EXAREME_IMAGE="hbpmip/exareme:dev_v8.1"
+FRONTEND_IMAGE="hbpmip/portal-frontend:5.1.12"
 BACKEND_IMAGE="hbpmip/portal-backend:5.0.5"
 
 EXAREME_KEYSTORE="${HOSTNAME}_exareme-keystore:8500"
@@ -44,6 +44,11 @@ fi
 
 echo -e "\nInitialize Swarm.."
 docker swarm init --advertise-addr "$(hostname -I | awk '{print $1}')"
+
+if [[ $(docker network ls | grep mip-local) == '' ]]; then
+    echo -e "\nInitialize Network"
+    docker network create --driver=overlay --attachable --subnet=10.20.30.0/24 mip-local
+fi
 
 env HOSTNAME=${HOSTNAME} \
     FEDERATION_ROLE=${FEDERATION_ROLE} \

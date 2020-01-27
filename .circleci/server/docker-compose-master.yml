@@ -1,5 +1,10 @@
 version: '3.2'
 
+networks:
+  net-local:
+    external:
+      name: mip-local
+
 services:
   exareme-keystore:
     image: progrium/consul
@@ -15,13 +20,14 @@ services:
       placement:
         constraints:
           - node.role == manager # Ensures we only start on manager nodes
+          # - node.labels.name == ${HOSTNAME}
+    networks:
+      - 'net-local' # Connect the docker container to the global network
     ports:
       - '8500:8500'
 
   exareme-master:
     image: ${EXAREME_IMAGE}
-    ports:
-      - '9090:9090'
     environment:
       - CONSULURL=${EXAREME_KEYSTORE}
       - MASTER_FLAG=${FEDERATION_ROLE}
@@ -42,7 +48,14 @@ services:
       placement:
         constraints:
           - node.role == manager # Ensures we only start on manager nodes
-
+          # - node.labels.name == ${HOSTNAME}
+    ports:
+      - target: 9090 # So that we can access the Exareme REST API / interface
+        published: 9090
+        protocol: tcp
+        mode: host
+    networks:
+      - 'net-local' # Connect the docker container to the global network
     volumes:
       - ${LOCAL_DATA_FOLDER}:${DOCKER_DATA_FOLDER}
 
@@ -83,7 +96,8 @@ services:
         window: 120s
     ports:
       - '8080:8080'
-
+    networks:
+      - 'net-local'
     environment:
       PORTAL_DB_URL: jdbc:postgresql://${HOSTNAME}:5432/portal
       PORTAL_DB_SERVER: ${HOSTNAME}:5432
