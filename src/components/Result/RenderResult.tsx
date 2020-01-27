@@ -34,11 +34,34 @@ export default ({
   return (
     <>
       {results &&
-        results.map((result: any, i: number) => (
-          <div className="result" key={i}>
-            {renderResult(result)}
-          </div>
-        ))}
+        results.map(
+          (result: any, i: number) =>
+            result &&
+            !/empty/.test(
+              result.data && result.data.subtitle && result.data.subtitle.text
+            ) && (
+              <div className="result" key={i}>
+                {result.type === MIME_TYPES.ERROR && (
+                  <Error message={result.data} />
+                )}
+                {result.type === MIME_TYPES.WARNING && (
+                  <Warning message={result.data} />
+                )}
+                {result.type === MIME_TYPES.USER_WARNING && (
+                  <Warning message={result.data} />
+                )}
+                {result.type === MIME_TYPES.JSONDATA && (
+                  <JSONData data={result.data} />
+                )}
+                {result.type === MIME_TYPES.HIGHCHARTS && (
+                  <Highchart options={result.data} />
+                )}
+                {result.type === MIME_TYPES.JSON && (
+                  <Dendogram data={result.data} />
+                )}
+              </div>
+            )
+        )}
     </>
   );
 };

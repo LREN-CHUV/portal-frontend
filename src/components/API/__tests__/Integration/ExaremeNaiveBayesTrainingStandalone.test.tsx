@@ -28,9 +28,8 @@ const model: any = (datasets: VariableEntity[]) => ({
   query: {
     // FIXME: should by dynamic
     coVariables: [
-      {
-        code: 'leftacgganteriorcingulategyrus'
-      }
+      { code: 'leftacgganteriorcingulategyrus' },
+      { code: 'lefthippocampus' }
     ],
     filters: '',
     groupings: [],
@@ -55,7 +54,7 @@ describe('Integration Test for experiment API', () => {
 
   beforeAll(async () => {
     datasets = await getDatasets();
-    datasets = datasets && datasets.filter((_, i) => i === 0)
+    datasets = datasets && datasets.filter((_, i) => i === 0);
     expect(datasets).toBeTruthy();
 
     const mstate = await createModel({
