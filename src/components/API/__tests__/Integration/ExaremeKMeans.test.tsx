@@ -97,7 +97,7 @@ describe('Integration Test for experiment API', () => {
     const wrapper = mount(<Result {...props} />);
     expect(wrapper.find('.error')).toHaveLength(0);
     expect(wrapper.find('.loading')).toHaveLength(0);
-    expect(wrapper.find('.result')).toHaveLength(3);
+    expect(wrapper.find('.result')).toHaveLength(2);
     expect(
       wrapper
         .find('div.result table tbody tr td')

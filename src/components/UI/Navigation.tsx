@@ -103,6 +103,13 @@ const GroupLink = styled(Link)`
   margin: 0 8px 0 0;
 `;
 
+const DropdownWrapper = styled.div`
+  .dropdown-menu {
+    overflow-y: auto;
+    height: 400px;
+  }
+`;
+
 export default ({
   name,
   experiments,
@@ -126,14 +133,16 @@ export default ({
           <span> &gt; </span>
           <GroupLink to="/experiment">Experiment</GroupLink>
         </Group>
-        <Dropdown
-          items={experiments}
-          /* eslint-disable-next-line */
-          style="link"
-          title="My Experiments"
-          handleSelect={handleSelect}
-          handleCreateNewExperiment={null}
-        />
+        <DropdownWrapper>
+          <Dropdown
+            items={experiments}
+            /* eslint-disable-next-line */
+            style="link"
+            title="My Experiments"
+            handleSelect={handleSelect}
+            handleCreateNewExperiment={null}
+          />
+        </DropdownWrapper>
         {isFederated && <Link to="/galaxy">Workflow</Link>}
         <Link to="/articles">Articles</Link>
       </Links>
