@@ -31,7 +31,7 @@ class Experiment extends React.Component<Props> {
     const { apiExperiment, apiModel } = this.props;
 
     await apiExperiment.one({ uuid });
-    if (!apiExperiment.loaded) {
+    if (!apiExperiment.loaded()) {
       this.pollFetchExperiment(uuid);
     }
 
@@ -148,7 +148,7 @@ class Experiment extends React.Component<Props> {
     const { apiExperiment } = this.props;
     this.intervalId = setInterval(async () => {
       await apiExperiment.one({ uuid });
-      if (apiExperiment.loaded) {
+      if (apiExperiment.loaded()) {
         clearInterval(this.intervalId);
       }
     }, 10 * 1000);
