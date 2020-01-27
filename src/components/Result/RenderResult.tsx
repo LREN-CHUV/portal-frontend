@@ -37,6 +37,7 @@ export default ({
         results.map(
           (result: any, i: number) =>
             result &&
+            result.data &&
             !/empty/.test(
               result.data && result.data.subtitle && result.data.subtitle.text
             ) && (
