@@ -200,71 +200,68 @@ export default (props: ExploreProps): JSX.Element => {
           </Panel>
           <Panel>
             <Panel.Body>
-              <Tabs defaultActiveKey={0} id="uncontrolled-formula-tabs">
-                <Tab eventKey={0} title={'Parameters'} key={0}>
-                  <ModelTitle>
-                    <h5>Parameters</h5>
-                    <DropdownModel
-                      items={apiModel.state.models}
-                      selectedSlug={
-                        apiModel.state.model && apiModel.state.model.slug
-                      }
-                      reset={apiModel.state.model ? true : false}
-                      handleSelect={handleSelectModel}
-                    />
-                  </ModelTitle>
-                  <ModelView
-                    d3Model={d3Model}
-                    handleUpdateD3Model={handleUpdateD3Model}
-                    handleSelectNode={handleSelectNode}
-                    zoom={zoom}
-                    buttonVariable={
-                      <Button
-                        className="child"
-                        bsStyle={'success'}
-                        bsSize={'small'}
-                        disabled={!selectedNode}
-                        // tslint:disable-next-line jsx-no-lambda
-                        onClick={() =>
-                          handleUpdateD3Model(ModelType.VARIABLE, selectedNode)
-                        }
-                      >
-                        {d3Model.variables &&
-                        selectedNode &&
-                        d3Model.variables.filter(c =>
-                          selectedNode.leaves().includes(c)
-                        ).length === selectedNode.leaves().length
-                          ? '-'
-                          : '+'}{' '}
-                        AS VARIABLE
-                      </Button>
+              {/* <Tabs defaultActiveKey={0} id="uncontrolled-formula-tabs">
+                <Tab eventKey={0} title={'Parameters'} key={0}> */}
+              <ModelTitle>
+                <h5>Parameters</h5>
+                <DropdownModel
+                  items={apiModel.state.models}
+                  selectedSlug={
+                    apiModel.state.model && apiModel.state.model.slug
+                  }
+                  reset={apiModel.state.model ? true : false}
+                  handleSelect={handleSelectModel}
+                />
+              </ModelTitle>
+              <ModelView
+                d3Model={d3Model}
+                handleUpdateD3Model={handleUpdateD3Model}
+                handleSelectNode={handleSelectNode}
+                zoom={zoom}
+                buttonVariable={
+                  <Button
+                    className="child"
+                    bsStyle={'success'}
+                    bsSize={'small'}
+                    disabled={!selectedNode}
+                    // tslint:disable-next-line jsx-no-lambda
+                    onClick={() =>
+                      handleUpdateD3Model(ModelType.VARIABLE, selectedNode)
                     }
-                    buttonCovariable={
-                      <Button
-                        className="child"
-                        bsStyle={'warning'}
-                        bsSize={'small'}
-                        disabled={!selectedNode}
-                        // tslint:disable-next-line jsx-no-lambda
-                        onClick={() =>
-                          handleUpdateD3Model(
-                            ModelType.COVARIABLE,
-                            selectedNode
-                          )
-                        }
-                      >
-                        {d3Model.covariables &&
-                        selectedNode &&
-                        d3Model.covariables.filter(c =>
-                          selectedNode.leaves().includes(c)
-                        ).length === selectedNode.leaves().length
-                          ? '-'
-                          : '+'}{' '}
-                        AS COVARIABLE
-                      </Button>
+                  >
+                    {d3Model.variables &&
+                    selectedNode &&
+                    d3Model.variables.filter(c =>
+                      selectedNode.leaves().includes(c)
+                    ).length === selectedNode.leaves().length
+                      ? '-'
+                      : '+'}{' '}
+                    AS VARIABLE
+                  </Button>
+                }
+                buttonCovariable={
+                  <Button
+                    className="child"
+                    bsStyle={'warning'}
+                    bsSize={'small'}
+                    disabled={!selectedNode}
+                    // tslint:disable-next-line jsx-no-lambda
+                    onClick={() =>
+                      handleUpdateD3Model(ModelType.COVARIABLE, selectedNode)
                     }
-                  />
-                </Tab>
+                  >
+                    {d3Model.covariables &&
+                    selectedNode &&
+                    d3Model.covariables.filter(c =>
+                      selectedNode.leaves().includes(c)
+                    ).length === selectedNode.leaves().length
+                      ? '-'
+                      : '+'}{' '}
+                    AS COVARIABLE
+                  </Button>
+                }
+              />
+              {/* </Tab>
                 <Tab eventKey={1} title={'Formula'} key={1}>
                   <Formula
                     parameters={d3Model}
@@ -272,7 +269,7 @@ export default (props: ExploreProps): JSX.Element => {
                     setFormulaString={setFormulaString}
                   />
                 </Tab>
-              </Tabs>
+              </Tabs> */}
               Available algorithms:{' '}
               <AvailableAlgorithms
                 layout={'inline'}
