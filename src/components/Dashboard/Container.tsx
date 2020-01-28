@@ -103,7 +103,7 @@ export default ({ ...props }: Props): JSX.Element => {
               />
             </Body>
           </Panel>
-          <Panel>
+          {/* <Panel>
             <Panel.Title>
               <Title>Shared experiments</Title>
             </Panel.Title>
@@ -137,7 +137,7 @@ export default ({ ...props }: Props): JSX.Element => {
                 }
               />
             </Body>
-          </Panel>
+          </Panel> */}
         </div>
       </ContentLayout>
     </Layout>
