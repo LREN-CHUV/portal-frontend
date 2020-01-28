@@ -86,7 +86,8 @@ export default ({ data }: { data: TabularDataResource }) => {
     if (
       field.name === 'p-value' ||
       field.name === 'p' ||
-      field.name === 'prvalue'
+      field.name === 'prvalue' ||
+      field.name === 'p_value'
     ) {
       return value < 0.001
         ? `${roundValue} (***)`
