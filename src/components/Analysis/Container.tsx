@@ -15,6 +15,7 @@ import Model from '../UI/Model';
 import Content from './Content';
 import Filter from './Filter';
 import ExperimentReviewHeader from './Header';
+import { variablesFilter } from '../constants';
 
 interface Props extends RouteComponentProps {
   apiModel: APIModel;
@@ -174,7 +175,7 @@ const Container = ({
     };
 
     const keys = ['variables', 'coVariables', 'groupings', 'filtersFromParams'];
-    const allVariables: string[] = [];
+    let allVariables: string[] = [];
     if (query) {
       keys.forEach((key: string) => {
         const rows = query[key];
@@ -186,9 +187,7 @@ const Container = ({
       });
     }
 
-    // backward compatibility
-    allVariables.push('subjectageyears');
-    allVariables.push('gender');
+    allVariables = [...allVariables, ...variablesFilter];
 
     // add filter variables
     const extractVariablesFromFilter = (filter: any) =>
