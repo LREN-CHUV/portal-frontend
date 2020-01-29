@@ -100,5 +100,6 @@ export const UI_HIDDEN_PARAMETERS = [
   'dataset',
   'filter',
   'pathology',
-  'centers'
+  'centers',
+  'formula'
 ];
