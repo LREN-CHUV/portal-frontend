@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Button, Checkbox, Glyphicon, Panel } from 'react-bootstrap';
 import styled from 'styled-components';
-import { APICore, APIModel, APIMining } from '../API';
+import { APICore, APIMining, APIModel } from '../API';
 import { VariableEntity } from '../API/Core';
 import { ModelResponse } from '../API/Model';
 import AvailableAlgorithms from '../Create/AvailableAlgorithms';
@@ -10,8 +10,66 @@ import { D3Model, HierarchyCircularNode, ModelType } from './Container';
 import Histograms from './D3Histograms';
 import ModelView from './D3Model';
 import Search from './D3Search';
-import Formula from './Formula';
-import { Tab, Tabs } from 'react-bootstrap';
+
+const TitleBox = styled(Panel.Title)`
+  display: flex;
+  padding: 0.4em;
+  margin-bottom: 4px;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #eee;
+`;
+
+const SearchBox = styled.div`
+  width: 320px;
+`;
+
+const PanelTitle = styled(Panel.Title)`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 16px 0 0;
+`;
+
+const ModelTitle = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin: 0 0 8px 0;
+  padding: 2px;
+  border-bottom: 1px solid lightgray;
+
+  div:first-child {
+    flex: 1;
+  }
+
+  h5 {
+    font-weight: bold;
+    margin-right: 8px;
+  }
+`;
+
+const style = {
+  display: 'flex',
+  justifyContent: 'space-between'
+};
+
+const PathologyBox = styled.div`
+  margin-top: 4px;
+  font-size: 14px;
+  label {
+    margin-left: 16px;
+    font-weight: normal;
+  }
+`;
+
+const DatasetsBox = styled.div`
+  margin: 8px;
+  padding: 1em;
+  background-color: #eeeeee99;
+  position: absolute;
+`;
 
 export interface ExploreProps {
   apiCore: APICore;
@@ -60,66 +118,6 @@ export default (props: ExploreProps): JSX.Element => {
     (model && model.query && model.query.trainingDatasets) || [];
   const selectedPathology = model && model.query && model.query.pathology;
   const datasets = apiCore.datasetsForPathology(selectedPathology);
-
-  const PanelTitle = styled(Panel.Title)`
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    margin: 0 16px 0 0;
-  `;
-
-  const ModelTitle = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    margin: 0 0 8px 0;
-    padding: 2px;
-    border-bottom: 1px solid lightgray;
-
-    div:first-child {
-      flex: 1;
-    }
-
-    h5 {
-      font-weight: bold;
-      margin-right: 8px;
-    }
-  `;
-
-  const style = {
-    display: 'flex',
-    justifyContent: 'space-between'
-  };
-
-  const TitleBox = styled(Panel.Title)`
-    display: flex;
-    padding: 0.4em;
-    margin-bottom: 4px;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #eee;
-  `;
-
-  const PathologyBox = styled.div`
-    margin-top: 4px;
-    font-size: 14px;
-    label {
-      margin-left: 16px;
-      font-weight: normal;
-    }
-  `;
-
-  const DatasetsBox = styled.div`
-    margin: 8px;
-    padding: 1em;
-    background-color: #eeeeee99;
-    position: absolute;
-  `;
-
-  const SearchBox = styled.div`
-    width: 320px;
-  `;
 
   const variablesForPathology = apiCore.variablesForPathology(
     selectedPathology
