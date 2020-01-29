@@ -181,7 +181,6 @@ const Table = ({
       ...(query.groupings || [])
     ].map(v => lookup(v.code));
 
-  // console.log(variables);
   const rows = computeMinings({
     minings,
     selectedDatasets,
@@ -204,6 +203,8 @@ const Table = ({
 
   return rows && rows.length > 0 && columns && columns.length > 0 ? (
     <DataTable value={rows}>{columns}</DataTable>
+  ) : variables && variables.length === 0 ? (
+    <p>Please select a model or some variables from the previous screen</p>
   ) : (
     <Loader />
   );
