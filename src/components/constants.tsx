@@ -103,3 +103,12 @@ export const UI_HIDDEN_PARAMETERS = [
   'centers',
   'formula'
 ];
+
+// backward compatibility
+export const variablesFilter = [
+  'subjectageyears',
+  'gender',
+  'DIAG_etiology_1',
+  'DIAG_stade',
+  'BNAbroadCategory'
+];
