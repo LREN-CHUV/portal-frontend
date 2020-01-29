@@ -110,7 +110,7 @@ export default (props: ExploreProps): JSX.Element => {
     handleSelectModel,
     handleGoToAnalysis,
     zoom,
-    setFormulaString
+    // setFormulaString
   } = props;
 
   const model = apiModel.state.model;

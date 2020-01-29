@@ -3,7 +3,6 @@ import { Button } from 'react-bootstrap';
 import { FaAtom, FaEdit, FaPlusCircle, FaUsers } from 'react-icons/fa';
 import styled from 'styled-components';
 import { APICore } from '../API';
-import { Stats } from '../API/Core';
 
 const Infos = styled.div`
   display: flex;
