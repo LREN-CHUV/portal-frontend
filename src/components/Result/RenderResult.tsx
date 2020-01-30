@@ -12,7 +12,6 @@ export default ({
 }: {
   results: Result[] | undefined;
 }): JSX.Element => {
-
   return (
     <>
       {results &&

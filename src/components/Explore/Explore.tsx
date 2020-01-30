@@ -109,7 +109,7 @@ export default (props: ExploreProps): JSX.Element => {
     handleUpdateD3Model,
     handleSelectModel,
     handleGoToAnalysis,
-    zoom,
+    zoom
     // setFormulaString
   } = props;
 
