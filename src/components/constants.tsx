@@ -110,5 +110,5 @@ export const variablesFilter = [
   'gender',
   'DIAG_etiology_1',
   'DIAG_stade',
-  'BNAbroadCategory'
+  'bnabroadcategory'
 ];
