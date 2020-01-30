@@ -19,8 +19,8 @@ FRONTEND_URL="${HOSTNAME}"
 # WARNING: substitution for image doesn't work on CircleCI
 # because of https://docs.docker.com/compose/compose-file/#variable-substitution
 
-EXAREME_IMAGE="hbpmip/exareme:dev_v8.1"
-FRONTEND_IMAGE="hbpmip/portal-frontend:5.1.12"
+EXAREME_IMAGE="hbpmip/exareme:dev_v9.2"
+FRONTEND_IMAGE="hbpmip/portal-frontend:5.1.17"
 BACKEND_IMAGE="hbpmip/portal-backend:5.0.5"
 
 EXAREME_KEYSTORE="${HOSTNAME}_exareme-keystore:8500"
