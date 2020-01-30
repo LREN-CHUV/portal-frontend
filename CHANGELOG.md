@@ -1,5 +1,11 @@
 # Changelog
 
+### 5.1.18 - 30.01.2020
+
+- Added more static filters for dementia
+- Bug fixes
+- PCA integrated
+
 ### 13.12.2019
 
 - Multiple Histogram integrated
