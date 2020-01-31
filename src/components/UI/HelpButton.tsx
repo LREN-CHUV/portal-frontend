@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { DropdownButton, Glyphicon, MenuItem } from 'react-bootstrap';
 import styled from 'styled-components';
+import { NavLink } from 'react-router-dom';
 
 import Helpdesk from './Helpdesk';
 
@@ -25,7 +26,13 @@ const MainBox = styled.div`
   }
 `;
 
-export default () => {
+const Link = styled(NavLink)`
+  font-size: 14px;
+  margin: 0 16px 0 0;
+  color: #000;
+`;
+
+export default ({ showTraining }: { showTraining?: boolean }): JSX.Element => {
   return (
     <MainBox>
       <DropdownButton
@@ -42,13 +49,13 @@ export default () => {
         >
           <Glyphicon glyph="book" /> MIP Documentation
         </MenuItem>
-        <MenuItem // tslint:disable-next-line jsx-no-lambda
-          onSelect={() => {
-            window.open('https://www.youtube.com/watch?v=MNWExzouMJw');
-          }}
-        >
-          <Glyphicon glyph="film" /> MIP introduction (video)
-        </MenuItem>
+        {showTraining && (
+          <li>
+            <Link to="/training">
+              <Glyphicon glyph="film" /> MIP Training
+            </Link>
+          </li>
+        )}
         <li>
           <Glyphicon glyph="envelope" /> Email us at{' '}
           <a href="mailto://support@humanbrainproject.eu">

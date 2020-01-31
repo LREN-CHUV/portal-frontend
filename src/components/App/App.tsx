@@ -3,14 +3,16 @@ import 'bootstrap/dist/css/bootstrap.css';
 import * as React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import styled, { createGlobalStyle } from 'styled-components';
-import { ExperimentResponse } from '../API/Experiment';
+
 import backgroundImage from '../../images/body-bg.jpg';
 import ExperimentReview from '../Analysis/Container';
 import { APICore, APIExperiment, APIMining, APIModel, APIUser } from '../API';
+import { ExperimentResponse } from '../API/Experiment';
 import Article from '../Article/Container';
 import ExperimentCreate from '../Create/Container';
 import Home from '../Dashboard/Container';
 import Explore from '../Explore/Container';
+import Help from '../Help/Help';
 import ExperimentResult from '../Result/Container';
 import Footer from '../UI/Footer';
 import Galaxy from '../UI/Galaxy';
@@ -19,6 +21,7 @@ import NotFound from '../UI/NotFound';
 import TOS from '../UI/TOS';
 import User from '../User/Container';
 import { history } from '../utils';
+
 export enum InstanceMode {
   Local,
   Federation
@@ -174,6 +177,12 @@ const App = ({
             render={(props): JSX.Element => (
               <User apiUser={apiUser} {...props} />
             )}
+          />
+
+          <Route
+            path="/training"
+            // tslint:disable-next-line jsx-no-lambda
+            render={(props): JSX.Element => <Help />}
           />
 
           <Route component={NotFound} />
