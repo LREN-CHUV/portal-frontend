@@ -148,7 +148,7 @@ export default ({
       </Links>
       <RightLinks>
         <Link to="/profile">Profile</Link>
-        <HelpButton />
+        <HelpButton showTraining={true} />
       </RightLinks>
     </NavBar>
   );
