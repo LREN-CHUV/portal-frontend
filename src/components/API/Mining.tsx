@@ -89,6 +89,33 @@ class Mining extends Container<MiningState> {
     }
   };
 
+  public setGroupingForPathology = (
+    choosenVariables: HistogramVariable
+  ): void => {
+    localStorage.setItem(
+      'choosenHistogramVariables',
+      JSON.stringify(choosenVariables)
+    );
+  };
+
+  public groupingForPathology = (): HistogramVariable => {
+    const choosenHistogramVariablesString = localStorage.getItem(
+      'choosenHistogramVariables'
+    );
+
+    if (choosenHistogramVariablesString) {
+      const choosenHistogramVariables = JSON.parse(
+        choosenHistogramVariablesString
+      );
+      return choosenHistogramVariables;
+    } else {
+      return {
+        1: { code: 'gender', label: 'Gender' },
+        2: { code: 'agegroup', label: 'Age Group' }
+      };
+    }
+  }
+
   public refetchAlgorithms = () => {
     this.setState({ refetchAlgorithms: Math.random() });
   };
@@ -179,6 +206,22 @@ class Mining extends Container<MiningState> {
 
       // FIXME: in exareme, or backend API ? return type should be json
       const json = await JSON.parse(jsonString);
+
+      const error = json.result.find(
+        (d: any) =>
+          d.type === 'text/plain+warning' || d.type === 'text/plain+error'
+      );
+
+      if (error) {
+        return this.setState({
+          histograms: {
+            data: undefined,
+            error: error.data,
+            loading: false
+          }
+        });
+      }
+
       this.setState({
         histograms: {
           data: json.result.map((p: any) => ({
