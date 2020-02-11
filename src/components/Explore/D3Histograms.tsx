@@ -3,13 +3,13 @@ import React, { useEffect, useRef, useState } from 'react';
 import { DropdownButton, MenuItem, Tab, Tabs } from 'react-bootstrap';
 import styled from 'styled-components';
 
+import { APIMining } from '../API';
 import { VariableEntity } from '../API/Core';
 import { HistogramVariable, MiningResponseShape } from '../API/Mining';
 import Loading from '../UI/Loader';
 import Highchart from '../UI/Visualization/Highchart';
 import { HierarchyCircularNode } from './Container';
 import renderLifeCycle from './renderLifeCycle';
-import { APIMining } from '../API';
 
 interface Props {
   apiMining: APIMining;
@@ -73,30 +73,17 @@ export default (props: Props): JSX.Element => {
 
   useEffect(() => {
     if (choosenVariables) {
-      localStorage.setItem(
-        'choosenHistogramVariables',
-        JSON.stringify(choosenVariables)
-      );
+      apiMining.setGroupingForPathology(choosenVariables);
     }
-  }, [choosenVariables]);
+  }, [choosenVariables, apiMining]);
 
   useEffect(() => {
-    const choosenHistogramVariablesString = localStorage.getItem(
-      'choosenHistogramVariables'
-    );
+    const choosenHistogramVariables = apiMining.groupingForPathology();
 
-    if (choosenHistogramVariablesString) {
-      const choosenHistogramVariables = JSON.parse(
-        choosenHistogramVariablesString
-      );
+    if (choosenHistogramVariables) {
       setChoosenVariables(choosenHistogramVariables);
-    } else {
-      setChoosenVariables({
-        1: { code: 'gender', label: 'Gender' },
-        2: { code: 'agegroup', label: 'Age Group' }
-      });
     }
-  }, []);
+  }, [apiMining]);
 
   const handleChooseVariable = (
     index: number,
