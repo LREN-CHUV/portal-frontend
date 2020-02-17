@@ -154,7 +154,7 @@ export default ({ apiCore, ...props }: Props) => {
                 </Submit>
                 <h1>{currentArticle && currentArticle.title}</h1>
                 <h3>{currentArticle && currentArticle.abstract}</h3>
-                <div>
+                <div style={{ minHeight: '50vh' }}>
                   {currentArticle &&
                     currentArticle.content &&
                     draftStateToHTML(currentArticle.content)}

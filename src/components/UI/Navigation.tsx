@@ -144,7 +144,7 @@ export default ({
           />
         </DropdownWrapper>
         {isFederated && <Link to="/galaxy">Workflow</Link>}
-        <Link to="/articles">Articles</Link>
+        {/* <Link to="/articles">Articles</Link> */}
       </Links>
       <RightLinks>
         <Link to="/profile">Profile</Link>

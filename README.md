@@ -91,7 +91,7 @@ Run: `./publish.sh`
 
 ## License
 
-Copyright © 2016-2019 LREN CHUV
+Copyright © 2016-2020 LREN CHUV
 
 Licensed under the GNU Affero General Public License, Version 3.0 (the "License");
 you may not use this file except in compliance with the License.
