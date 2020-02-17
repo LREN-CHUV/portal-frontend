@@ -133,14 +133,16 @@ class AppContainer extends React.Component<any, State> {
                     }}
                   />
                   {!loading && !authenticated && <Splash />}
-                  <App
-                    appConfig={this.state.appConfig}
-                    apiExperiment={apiExperiment}
-                    apiCore={apiCore}
-                    apiModel={apiModel}
-                    apiMining={apiMining}
-                    apiUser={apiUser}
-                  />
+                  {!loading && authenticated && (
+                    <App
+                      appConfig={this.state.appConfig}
+                      apiExperiment={apiExperiment}
+                      apiCore={apiCore}
+                      apiModel={apiModel}
+                      apiMining={apiMining}
+                      apiUser={apiUser}
+                    />
+                  )}
                 </>
               );
             }}

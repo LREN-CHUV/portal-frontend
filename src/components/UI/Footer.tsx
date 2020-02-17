@@ -36,12 +36,12 @@ export default ({ appConfig }: { appConfig: AppConfig }): JSX.Element => (
     <span>
       <div title="CHUV Lausanne"></div>
       <h6>
-        © 2015-2019{' '}
+        © 2015-2020{' '}
         <a
           href="https://www.humanbrainproject.eu/en/"
           title="The Human Brain Project Website"
         >
-          Human Brain Project
+          Human Brain Project{' '}
         </a>
         . All right reserved
       </h6>

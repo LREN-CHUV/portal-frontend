@@ -43,10 +43,9 @@ interface Props {
 
 const GlobalStyles = createGlobalStyle`
   body {
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Open Sans', sans-serif !important;
     background: url(${backgroundImage}) top center no-repeat fixed #f5f5f5;
     background-size: 100% auto;
-    overflow-y: scroll
   }
 
   .panel {
@@ -56,12 +55,12 @@ const GlobalStyles = createGlobalStyle`
     border-radius: 4px;
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
   }
-}
 `;
 
 const Main = styled.main`
-  margin: 52px 0 32px 0;
-  padding: 0 48px 0px 48px;
+  margin: 0;
+  padding: 52px 8px;
+  min-height: 100vh;
 `;
 
 const App = ({
@@ -90,28 +89,8 @@ const App = ({
       <Main>
         <Switch>
           <Route
-            path="/"
+            path={['/', '/explore']}
             exact={true}
-            // tslint:disable-next-line jsx-no-lambda
-            render={(props): JSX.Element => (
-              <Home
-                apiCore={apiCore}
-                apiModel={apiModel}
-                apiExperiment={apiExperiment}
-                apiUser={apiUser}
-                {...props}
-              />
-            )}
-          />
-          <Route
-            path="/tos"
-            // tslint:disable-next-line jsx-no-lambda
-            render={(props): JSX.Element => (
-              <TOS apiUser={apiUser} {...props} />
-            )}
-          />
-          <Route
-            path="/explore"
             // tslint:disable-next-line jsx-no-lambda
             render={(props): JSX.Element => (
               <Explore
@@ -123,6 +102,14 @@ const App = ({
               />
             )}
           />
+          <Route
+            path="/tos"
+            // tslint:disable-next-line jsx-no-lambda
+            render={(props): JSX.Element => (
+              <TOS apiUser={apiUser} {...props} />
+            )}
+          />
+
           <Route
             path="/review"
             // tslint:disable-next-line jsx-no-lambda
