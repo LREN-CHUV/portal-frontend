@@ -187,7 +187,7 @@ export default (props: ExploreProps): JSX.Element => {
             </Panel.Body>
           </Panel>
         </div>
-        <div style={{ flex: 1 }}>
+        <div style={{ flex: 1, maxWidth: '800px' }}>
           <Panel className="statistics">
             <PanelTitle>
               <h3>{selectedNode && selectedNode.data.label}</h3>

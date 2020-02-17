@@ -114,7 +114,7 @@ class Mining extends Container<MiningState> {
         2: { code: 'agegroup', label: 'Age Group' }
       };
     }
-  }
+  };
 
   public refetchAlgorithms = () => {
     this.setState({ refetchAlgorithms: Math.random() });
