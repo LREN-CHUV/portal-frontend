@@ -218,7 +218,6 @@ class Container extends React.Component<Props, State> {
       return;
     }
 
-    const isWorkflow = selectedAlgorithm.engine === Engine.Workflow;
     const nextParameters: AlgorithmParameterRequest[] = parameters.map(p => {
       let value: string = p.value;
       const query = model && model.query;
@@ -286,25 +285,20 @@ class Container extends React.Component<Props, State> {
       }
 
       return {
-        code: isWorkflow ? p.uuid || p.name : p.name,
+        name: p.name,
         value
       };
     });
     const experiment: ExperimentPayload = {
       algorithms: [
         {
-          code:
-            selectedAlgorithm.engine === Engine.Exareme
-              ? selectedAlgorithm.name
-              : selectedAlgorithm.code,
           name: selectedAlgorithm.name,
-          parameters: nextParameters
+          parameters: nextParameters,
+          type: selectedAlgorithm.type
         }
       ],
-      engine: selectedAlgorithm.engine,
       model: model.slug,
       name: experimentName,
-      validations: []
     };
 
     await apiExperiment.create({ experiment });

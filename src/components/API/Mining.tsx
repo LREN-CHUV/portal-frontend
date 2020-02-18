@@ -390,7 +390,7 @@ class Mining extends Container<MiningState> {
             code: 'statisticsSummary',
             name: 'statisticsSummary',
             parameters: [],
-            validation: false
+            type: 'python_multiple_local_global'
           },
           ...payload,
           datasets: [q.dataset]

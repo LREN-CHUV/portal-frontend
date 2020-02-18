@@ -139,10 +139,6 @@ const buildWorkflowAlgorithmList = (json: any): Algorithm[] => {
       uuid: j.inputs[k].uuid,
 
       /* eslint-disable-next-line */
-      default_value: defaultValueFor({
-        label: j.inputs[k].label,
-        defaults
-      }),
       description: '',
       name: j.inputs[k].label,
       type: 'text',
@@ -150,12 +146,13 @@ const buildWorkflowAlgorithmList = (json: any): Algorithm[] => {
         label: j.inputs[k].label,
         defaults
       }),
+      value: defaultValueFor({
+        label: j.inputs[k].label,
+        defaults
+      }),
       visible: !UI_HIDDEN_PARAMETERS.includes(j.inputs[k].label)
     }))
   }));
-
-  // FIXME: oh my god, that escalated quickly
-  localStorage.setItem('workflows_algorithms', JSON.stringify(algorithms));
 
   return algorithms;
 };
@@ -170,7 +167,7 @@ const buildWorkflowAlgorithmResponse = (
 
   const findName = (algorithmCode: string): string => {
     const algorithm =
-      algorithms && algorithms.find(a => a.code === algorithmCode);
+      algorithms && algorithms.find(a => a.name === algorithmCode);
 
     return algorithm ? algorithm.name : algorithmCode;
   };
@@ -180,11 +177,11 @@ const buildWorkflowAlgorithmResponse = (
     parameterCode: string
   ): string => {
     const algorithm =
-      algorithms && algorithms.find(a => a.code === algorithmCode);
+      algorithms && algorithms.find(a => a.name === algorithmCode);
 
     if (algorithm) {
       const parameter = (algorithm.parameters as AlgorithmParameter[]).find(
-        p => p.uuid === parameterCode
+        p => p.name === parameterCode
       );
 
       return parameter ? parameter.name : parameterCode;
@@ -196,12 +193,12 @@ const buildWorkflowAlgorithmResponse = (
   // Retrieve parameters names
   experimentResponse.algorithms = experimentResponse.algorithms.map(a => ({
     ...a,
-    name: findName(a.code),
+    name: findName(a.name),
     parameters:
       a.parameters &&
       (a.parameters as any).map((p: any) => ({
         ...p,
-        code: findParameter(a.code, p.code)
+        code: findParameter(a.name, p.code)
       }))
   }));
 
@@ -219,9 +216,13 @@ const buildWorkflowAlgorithmResponse = (
       };
     }
 
-    const results = workflowResult.data
-      .filter((d: any) => d.result.length > 0)
-      .map((d: any) => d.result[0]);
+    const results =
+      (workflowResult &&
+        workflowResult.data &&
+        workflowResult.data
+          .filter((d: any) => d.result.length > 0)
+          .map((d: any) => d.result[0])) ||
+      [];
 
     experimentResponse.results = results;
 

@@ -87,13 +87,13 @@ const AvailableAlgorithms = ({
     (algorithms &&
       algorithms.map(algorithm => ({
         ...algorithm,
-        enabled:
-          algorithm.engine === Engine.Workflow
-            ? true
-            : algorithmEnabled(algorithm.parameters as AlgorithmParameter[], {
-                x: modelCovariables,
-                y: modelVariable
-              })
+        enabled: algorithmEnabled(
+          algorithm.parameters as AlgorithmParameter[],
+          {
+            x: modelCovariables,
+            y: modelVariable
+          }
+        )
       }))) ||
     [];
 
@@ -197,9 +197,7 @@ const AvailableAlgorithms = ({
             <Popover id={`tooltip-${algorithm.name}`}>
               <h4>{algorithm.name}</h4>
               <p>{algorithm.desc}</p>
-              {algorithm.engine === Engine.Workflow
-                ? ''
-                : variablesHelpMessage(algorithm)}
+              {variablesHelpMessage(algorithm)}
             </Popover>
           }
         >

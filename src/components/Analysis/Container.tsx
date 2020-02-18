@@ -40,10 +40,15 @@ const Container = ({
     apiModel.state.model && apiModel.state.model.query.trainingDatasets;
   const queryfilters =
     apiModel.state.model && apiModel.state.model.query.filters;
+  const [shouldReload, setShouldReload] = React.useState(true);
 
   React.useEffect(() => {
     const query = apiModel.state.model && apiModel.state.model.query;
     const datasets = query && query.trainingDatasets;
+
+    if (!shouldReload) {
+      return;
+    }
 
     if (datasets && query) {
       const payload: MiningPayload = {
@@ -55,9 +60,7 @@ const Container = ({
         pathology: query.pathology ? query.pathology : ''
       };
 
-      apiMining.descriptiveStatisticsByDataset({
-        payload
-      });
+      apiMining.descriptiveStatisticsByDataset({ payload });
     }
   }, [apiModel.state.model, trainingDatasets, queryfilters, apiMining]);
 
@@ -66,8 +69,9 @@ const Container = ({
   }: {
     title: string;
   }): Promise<void> => {
+    setShouldReload(false);
     const model = apiModel.state.model;
-    await apiModel.save({ model, title });
+    apiModel.save({ model, title }).then(() => setShouldReload(true))
   };
 
   const handleRunExperiment = async (): Promise<void> => {
