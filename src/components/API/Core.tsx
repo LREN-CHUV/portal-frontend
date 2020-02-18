@@ -408,7 +408,7 @@ class Core extends Container<State> {
   }> => {
     try {
       const response = await request.get(
-        `${this.backendURL}/algorithms/`,
+        `${this.backendURL}/algorithms`,
         this.options
       );
       const json = await JSON.parse(response);
