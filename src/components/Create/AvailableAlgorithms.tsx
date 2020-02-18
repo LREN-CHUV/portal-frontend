@@ -1,13 +1,28 @@
 import * as React from 'react';
 import { Button, OverlayTrigger, Popover } from 'react-bootstrap';
-
-import { Algorithm, VariableEntity, AlgorithmParameter } from '../API/Core';
-import { ModelResponse } from '../API/Model';
 import styled from 'styled-components';
-import { Engine } from '../API/Experiment';
+import { Algorithm, AlgorithmParameter, VariableEntity } from '../API/Core';
+import { ModelResponse } from '../API/Model';
+
 interface AvailableAlgorithm extends Algorithm {
   enabled: boolean;
 }
+
+const Container = styled.div`
+  var::after {
+    content: ', ';
+  }
+
+  var::last-child::after {
+    content: '';
+  }
+
+  p {
+    margin: 0;
+    padding: 0;
+    border: 1px solid transparent;
+  }
+`;
 
 const AvailableAlgorithms = ({
   algorithms,
@@ -161,30 +176,6 @@ const AvailableAlgorithms = ({
 
     return <>{message}</>;
   };
-
-  const Container = styled.div`
-    var::after {
-      content: ', ';
-    }
-
-    var::last-child::after {
-      content: '';
-    }
-
-    p {
-      margin: 0;
-      padding: 0;
-      border: 1px solid transparent;
-    }
-  `;
-
-  // const PLongMethodName = styled.p`
-  //   margin: 0 0 8px 0;
-  //   overflow: wrap;
-  //   width: 220px;
-  //   word-wrap: break-word;
-  //   display: inline-block;
-  // `;
 
   return (
     <Container>
