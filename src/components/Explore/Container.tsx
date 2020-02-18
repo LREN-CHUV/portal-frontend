@@ -9,7 +9,6 @@ import Modal from '../UI/Modal';
 import CirclePack from './D3CirclePackLayer';
 import { d3Hierarchy, VariableDatum } from './d3Hierarchy';
 
-
 const diameter = 800;
 const padding = 1.5;
 
