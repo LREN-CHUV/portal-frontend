@@ -221,7 +221,9 @@ export default (props: ExploreProps): JSX.Element => {
                     className="child"
                     bsStyle={'success'}
                     bsSize={'small'}
-                    disabled={!selectedNode}
+                    disabled={
+                      !selectedNode || selectedNode.data.code === 'root'
+                    }
                     // tslint:disable-next-line jsx-no-lambda
                     onClick={() =>
                       handleUpdateD3Model(ModelType.VARIABLE, selectedNode)
@@ -242,7 +244,9 @@ export default (props: ExploreProps): JSX.Element => {
                     className="child"
                     bsStyle={'warning'}
                     bsSize={'small'}
-                    disabled={!selectedNode}
+                    disabled={
+                      !selectedNode || selectedNode.data.code === 'root'
+                    }
                     // tslint:disable-next-line jsx-no-lambda
                     onClick={() =>
                       handleUpdateD3Model(ModelType.COVARIABLE, selectedNode)
