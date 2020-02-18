@@ -71,7 +71,7 @@ const Container = ({
   }): Promise<void> => {
     setShouldReload(false);
     const model = apiModel.state.model;
-    apiModel.save({ model, title }).then(() => setShouldReload(true))
+    apiModel.save({ model, title }).then(() => setShouldReload(true));
   };
 
   const handleRunExperiment = async (): Promise<void> => {
