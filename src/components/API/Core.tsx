@@ -35,13 +35,11 @@ interface Hierarchy {
 }
 
 export interface Algorithm {
-  code: string;
   name: string;
   label?: string;
   desc?: string;
   parameters: AlgorithmParameter[] | AlgorithmParameterRequest[];
-  type?: string;
-  engine?: Engine;
+  type: string;
 }
 
 export interface AlgorithmResult {
@@ -70,7 +68,7 @@ export interface AlgorithmConstraint {
 
 export interface AlgorithmParameter {
   name: string;
-  uuid?: string;
+  label?: string;
   defaultValue: string;
   placeholder: string;
   desc: string;
@@ -89,7 +87,7 @@ export interface AlgorithmParameter {
 }
 
 export interface AlgorithmParameterRequest {
-  code: string;
+  name: string;
   value: string;
 }
 
@@ -294,7 +292,7 @@ class Core extends Container<State> {
   };
 
   public algorithms = async (mode: InstanceMode): Promise<void> => {
-    const exaremeAlgorithms = await this.exaremeAlgorithms();
+    const exaremeAlgorithms = await this.fetchAlgorithms();
     this.setState(state => ({
       ...state,
       algorithms: [
@@ -303,18 +301,6 @@ class Core extends Container<State> {
       ],
       error: undefined
     }));
-
-    if (mode === InstanceMode.Federation) {
-      const workflows = await this.workflows();
-      this.setState(state => ({
-        ...state,
-        algorithms: [
-          ...(state.algorithms || []),
-          ...((workflows && workflows.data) || [])
-        ],
-        error: workflows.error ? workflows.error : undefined
-      }));
-    }
 
     return Promise.resolve();
   };
@@ -416,33 +402,13 @@ class Core extends Container<State> {
     }
   };
 
-  private workflows = async (): Promise<any> => {
-    try {
-      const data = await request.get(
-        `${this.backendURL}/methods/workflows`,
-        this.options
-      );
-      const json = await JSON.parse(data);
-
-      if (json.error) {
-        return { error: json.error, data: undefined };
-      }
-
-      const workflowAlgorithms = buildWorkflowAlgorithmList(json);
-
-      return { error: undefined, data: workflowAlgorithms };
-    } catch (error) {
-      return { error, data: undefined };
-    }
-  };
-
-  private exaremeAlgorithms = async (): Promise<{
+  private fetchAlgorithms = async (): Promise<{
     error: string | undefined;
     data: Algorithm[] | undefined;
   }> => {
     try {
       const response = await request.get(
-        `${this.backendURL}/methods/exareme`,
+        `${this.backendURL}/algorithms/`,
         this.options
       );
       const json = await JSON.parse(response);
@@ -470,13 +436,25 @@ class Core extends Container<State> {
               // assign the default on the fly, if the user didn't provide it's own value
               // Exareme's "defaultValue" in an other hand is a placeholder, a recommendation
 
-              return {
+              const parameter = {
                 ...p,
                 value: visible ? p.value : '',
                 defaultValue: p.value,
                 placeholder: p.defaultValue,
                 visible
               };
+
+              if (parameter.name === 'standardize') {
+                return {
+                  name: 'standardize',
+                  valueEnumerations: ['false', 'true'],
+                  defaultValue: 'false',
+                  value: 'false',
+                  desc: 'Standardize'
+                };
+              }
+
+              return parameter;
             }
           ),
           // TODO: delete this once we have the formula

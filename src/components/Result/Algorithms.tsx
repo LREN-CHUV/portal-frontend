@@ -22,7 +22,7 @@ const Algorithms = ({ experiment }: { experiment?: ExperimentResponse }) => {
         body={
           <>
             {algorithms.map((algorithm: any, j: number) => (
-              <div key={`name-${algorithm.code}-${j}`}>
+              <div key={`name-${algorithm.name}-${j}`}>
                 <Param>
                   <strong>{algorithm.label || algorithm.name}</strong>
                 </Param>
@@ -33,10 +33,10 @@ const Algorithms = ({ experiment }: { experiment?: ExperimentResponse }) => {
                 {algorithm.parameters &&
                   algorithm.parameters.length > 0 &&
                   algorithm.parameters
-                    .filter((p: any) => !UI_HIDDEN_PARAMETERS.includes(p.code))
+                    .filter((p: any) => !UI_HIDDEN_PARAMETERS.includes(p.name))
                     .map((m: any, i: number) => (
-                      <Param key={`parameters-${algorithm.code}-${i}`}>
-                        {m.code}: {m.value}
+                      <Param key={`parameters-${algorithm.name}-${i}`}>
+                        {m.label || m.name}: {m.value}
                       </Param>
                     ))}
               </div>

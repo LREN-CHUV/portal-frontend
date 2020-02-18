@@ -1,9 +1,6 @@
-// import './Explore.css';
-
 import * as d3 from 'd3';
 import React, { useEffect, useState } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
-
 import { APICore, APIMining, APIModel } from '../API';
 import { VariableEntity } from '../API/Core';
 import { ModelResponse, Query } from '../API/Model';
@@ -11,6 +8,7 @@ import { AppConfig } from '../App/App';
 import Modal from '../UI/Modal';
 import CirclePack from './D3CirclePackLayer';
 import { d3Hierarchy, VariableDatum } from './d3Hierarchy';
+
 
 const diameter = 800;
 const padding = 1.5;

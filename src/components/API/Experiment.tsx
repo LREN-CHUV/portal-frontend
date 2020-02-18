@@ -12,8 +12,6 @@ export interface ExperimentPayload {
   algorithms: Algorithm[];
   model: string;
   name: string;
-  engine?: Engine;
-  validations: any[]; // FIXME: deprecated
 }
 
 export enum Engine {
@@ -121,15 +119,8 @@ class Experiment extends Container<State> {
   }: {
     experiment: ExperimentPayload;
   }): Promise<void> => {
-    const engine = experiment.engine;
-    const url =
-      engine === Engine.Exareme
-        ? `${this.baseUrl}/exareme`
-        : engine === Engine.Workflow
-        ? `${this.baseUrl}/workflow`
-        : `${this.baseUrl}`;
+    const url = `${this.baseUrl}/runAlgorithm`;
 
-    // console.log(url, experiment);
     try {
       const data = await request({
         body: JSON.stringify(experiment),

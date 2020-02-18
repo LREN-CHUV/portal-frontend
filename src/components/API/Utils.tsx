@@ -51,21 +51,19 @@ const createWorkflowPayload = async (
 ): Promise<ExperimentPayload | void> => {
   await apiCore.algorithms(InstanceMode.Local);
   const algorithms = apiCore.state.algorithms || [];
-  const selectedAlgorithm = algorithms.find(a => a.code === experimentCode);
+  const selectedAlgorithm = algorithms.find(a => a.name === experimentCode);
 
   if (selectedAlgorithm) {
     const payload: ExperimentPayload = {
       algorithms: [
         {
-          code: experimentCode,
           name: experimentCode,
+          type: 'not yet implemented',
           parameters
         }
       ],
-      engine: Engine.Workflow,
       model: modelSlug,
-      name: experimentCode,
-      validations: []
+      name: experimentCode
     };
 
     return payload;
