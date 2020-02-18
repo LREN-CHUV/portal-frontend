@@ -1,22 +1,16 @@
-import '../Experiment.css';
-
 import * as React from 'react';
 import { Panel, Tab, Tabs } from 'react-bootstrap';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
-
 import { APICore, APIExperiment, APIModel } from '../API';
 import {
   Algorithm,
   AlgorithmParameter,
   AlgorithmParameterRequest
 } from '../API/Core';
-import {
-  Engine,
-  ExperimentPayload,
-  ExperimentResponse
-} from '../API/Experiment';
+import { ExperimentPayload, ExperimentResponse } from '../API/Experiment';
 import { ModelResponse, Query } from '../API/Model';
 import { AppConfig } from '../App/App';
+import '../Experiment.css';
 import { Alert, IAlert } from '../UI/Alert';
 import DatasetsForm from '../UI/DatasetsForm';
 import Model from '../UI/Model';
@@ -298,7 +292,7 @@ class Container extends React.Component<Props, State> {
         }
       ],
       model: model.slug,
-      name: experimentName,
+      name: experimentName
     };
 
     await apiExperiment.create({ experiment });

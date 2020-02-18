@@ -9,7 +9,6 @@ import Modal from '../UI/Modal';
 import CirclePack from './D3CirclePackLayer';
 import { d3Hierarchy, VariableDatum } from './d3Hierarchy';
 
-
 const diameter = 800;
 const padding = 1.5;
 
@@ -171,7 +170,7 @@ export default ({
     if (selectedNode && selectedNode.data.isVariable) {
       apiMining.multipleHistograms({
         datasets: datasets,
-        y: selectedNode.data,
+        x: selectedNode.data,
         pathology: (model && model.query && model.query.pathology) || ''
       });
     }

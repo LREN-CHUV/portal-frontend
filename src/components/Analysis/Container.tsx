@@ -62,7 +62,13 @@ const Container = ({
 
       apiMining.descriptiveStatisticsByDataset({ payload });
     }
-  }, [apiModel.state.model, trainingDatasets, queryfilters, apiMining]);
+  }, [
+    apiModel.state.model,
+    trainingDatasets,
+    queryfilters,
+    apiMining,
+    shouldReload
+  ]);
 
   const handleSaveModel = async ({
     title
