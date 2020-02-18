@@ -1,16 +1,13 @@
 import 'bootstrap/dist/css/bootstrap.css';
-
 import * as React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import styled, { createGlobalStyle } from 'styled-components';
-
 import backgroundImage from '../../images/body-bg.jpg';
 import ExperimentReview from '../Analysis/Container';
 import { APICore, APIExperiment, APIMining, APIModel, APIUser } from '../API';
 import { ExperimentResponse } from '../API/Experiment';
 import Article from '../Article/Container';
 import ExperimentCreate from '../Create/Container';
-import Home from '../Dashboard/Container';
 import Explore from '../Explore/Container';
 import Help from '../Help/Help';
 import ExperimentResult from '../Result/Container';
