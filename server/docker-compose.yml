@@ -113,7 +113,7 @@ services:
       DATACENTER_LOCATION: '$HOST'
       CONTAINER_ORCHESTRATION: 'docker-compose'
 
-      EXAREME_URL: exareme-master:9090
+      EXAREME_URL: mip_local-exareme-master:9090
 
       GALAXY_URL: 'http://88.197.53.106:8090/nativeGalaxy'
       GALAXY_CONTEXT: nativeGalaxy/workflows/list
