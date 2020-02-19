@@ -197,7 +197,7 @@ class Mining extends Container<MiningState> {
           'Content-Type': 'application/json;charset=UTF-8'
         },
         method: 'POST',
-        uri: `${this.backendURL}/mining/exareme/MULTIPLE_HISTOGRAMS`
+        uri: `${this.backendURL}/mining/histograms`
       });
 
       this.requests.push(r);
@@ -332,7 +332,7 @@ class Mining extends Container<MiningState> {
           'Content-Type': 'application/json;charset=UTF-8'
         },
         method: 'POST',
-        uri: `${this.backendURL}/mining/exareme-stats`
+        uri: `${this.backendURL}/mining/descriptive_stats`
       });
       this.requests.push(r);
       const data = await r;
