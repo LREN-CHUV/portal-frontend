@@ -77,7 +77,7 @@ const Container = ({
   }): Promise<void> => {
     setShouldReload(false);
     const model = apiModel.state.model;
-    apiModel.save({ model, title }).then(() => setShouldReload(true));
+    apiModel.save({ model, title });
   };
 
   const handleRunExperiment = async (): Promise<void> => {
@@ -97,6 +97,7 @@ const Container = ({
     const model = apiModel.state.model;
     if (model) {
       model.query = query;
+      setShouldReload(true);
       await apiModel.setModel(model);
     }
   };
@@ -105,12 +106,14 @@ const Container = ({
     const model = apiModel.state.model;
     if (model) {
       model.query.filters = (filters && JSON.stringify(filters)) || '';
+      setShouldReload(true);
       await apiModel.setModel(model);
     }
   };
 
   const handleSelectModel = async (model?: ModelResponse): Promise<void> => {
     if (model) {
+      setShouldReload(true);
       await apiModel.setModel(model);
     }
   };
