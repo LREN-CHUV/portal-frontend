@@ -140,7 +140,7 @@ const Parameters = ({
       {algorithm && (
         <div>
           <h4>
-            <strong>{algorithm.name}</strong>
+            <strong>{algorithm.label}</strong>
           </h4>
           <p>{algorithm.desc}</p>
         </div>
@@ -176,7 +176,7 @@ const Parameters = ({
                     <Col sm={12}>{parameter.desc}</Col>
                   </Row>
                   <Row>
-                    <Col sm={6}>{parameter.name}</Col>
+                    <Col sm={6}>{parameter.label}</Col>
                     <Col sm={6}>
                       {!parameter.valueEnumerations &&
                         parameter.name !== 'referencevalues' &&

@@ -156,7 +156,7 @@ class Container extends React.Component<Props, State> {
   private handleSelectExperiment = async (
     experiment: ExperimentResponse
   ): Promise<any> => {
-    const { modelDefinitionId, uuid } = experiment;
+    const { modelSlug: modelDefinitionId, uuid } = experiment;
     const { apiExperiment, history } = this.props;
     history.push(`/experiment/${modelDefinitionId}/${uuid}`);
 
@@ -217,7 +217,7 @@ class Container extends React.Component<Props, State> {
       const query = model && model.query;
 
       if (query) {
-        if (p.name === 'x') {
+        if (p.name === 'x' || p.label === 'x') {
           let covariablesArray =
             (query.coVariables && query.coVariables.map(v => v.code)) || [];
           covariablesArray = query.groupings
@@ -237,7 +237,7 @@ class Container extends React.Component<Props, State> {
           }
         }
 
-        if (p.name === 'y') {
+        if (p.name === 'y' || p.label === 'y') {
           // TEST_PAIRED
           // TODO: this will be replaced by the formula field and should be removed when it occurs
           const isVector = selectedAlgorithm.name === 'TTEST_PAIRED';
@@ -262,18 +262,18 @@ class Container extends React.Component<Props, State> {
               '';
         }
 
-        if (p.name === 'dataset') {
+        if (p.name === 'dataset' || p.label === 'dataset') {
           value =
             (query.trainingDatasets &&
               query.trainingDatasets.map(v => v.code).toString()) ||
             '';
         }
 
-        if (p.name === 'pathology') {
+        if (p.name === 'pathology' || p.label === 'pathology') {
           value = (query.pathology && query.pathology.toString()) || '';
         }
 
-        if (p.name === 'filter') {
+        if (p.name === 'filter' || p.label === 'filter') {
           value = (query.filters && query.filters) || '';
         }
       }

@@ -115,7 +115,7 @@ class Experiment extends React.Component<Props> {
   private handleSelectExperiment = async (
     experiment: ExperimentResponse
   ): Promise<void> => {
-    const { modelDefinitionId, uuid } = experiment;
+    const { modelSlug: modelDefinitionId, uuid } = experiment;
     const { history, apiExperiment } = this.props;
     history.push(`/experiment/${modelDefinitionId}/${uuid}`);
     await apiExperiment.markAsViewed({ uuid });

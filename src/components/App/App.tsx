@@ -19,14 +19,9 @@ import TOS from '../UI/TOS';
 import User from '../User/Container';
 import { history } from '../utils';
 
-export enum InstanceMode {
-  Local,
-  Federation
-}
 export interface AppConfig {
   version?: string;
   instanceName?: string;
-  mode?: InstanceMode;
   ga?: string;
 }
 interface Props {
@@ -77,10 +72,9 @@ const App = ({
           experiments={apiExperiment.state.experiments}
           handleSelect={(experiment: ExperimentResponse): void => {
             history.push(
-              `/experiment/${experiment.modelDefinitionId}/${experiment.uuid}`
+              `/experiment/${experiment.modelSlug}/${experiment.uuid}`
             );
           }}
-          isFederated={appConfig.mode === InstanceMode.Federation}
         />
       </header>
       <Main>

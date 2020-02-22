@@ -2,9 +2,6 @@ import request from 'request-promise-native';
 import { Container } from 'unstated';
 import { backendURL } from '../API';
 import { ENABLED_ALGORITHMS, UI_HIDDEN_PARAMETERS } from '../constants';
-import { Engine } from './Experiment';
-import { buildWorkflowAlgorithmList } from './WorkflowAPIAdapter';
-import { InstanceMode } from '../App/App';
 
 export interface Variable {
   code: string;
@@ -24,7 +21,7 @@ interface Pathology {
   code: string;
   label: string;
   datasets: VariableEntity[];
-  hierarchy: Hierarchy;
+  metadataHierarchy: Hierarchy;
 }
 
 interface Hierarchy {
@@ -175,7 +172,7 @@ class Core extends Container<State> {
           }
         };
 
-        pathologyJSON.map(p => dummyAccumulator(p.hierarchy));
+        pathologyJSON.map(p => dummyAccumulator(p.metadataHierarchy));
         this.setState({ variables });
 
         const originalVar =
@@ -232,12 +229,14 @@ class Core extends Container<State> {
     return undefined;
   };
 
-  public hierarchyForPathology = (code: string | undefined) => {
+  public hierarchyForPathology = (
+    code: string | undefined
+  ): Hierarchy | undefined => {
     const pathologyJSON = this.state.pathologyJSON;
     if (code && pathologyJSON) {
       const pathology = pathologyJSON.find(p => p.code === code);
 
-      return pathology && pathology.hierarchy;
+      return pathology && pathology.metadataHierarchy;
     }
 
     return undefined;
@@ -262,8 +261,9 @@ class Core extends Container<State> {
       };
 
       if (pathology) {
-        dummyAccumulator(pathology.hierarchy);
+        dummyAccumulator(pathology.metadataHierarchy);
       }
+
       return variables;
     }
 
@@ -291,7 +291,7 @@ class Core extends Container<State> {
     }
   };
 
-  public algorithms = async (mode: InstanceMode): Promise<void> => {
+  public algorithms = async (): Promise<void> => {
     const exaremeAlgorithms = await this.fetchAlgorithms();
     this.setState(state => ({
       ...state,
@@ -402,6 +402,20 @@ class Core extends Container<State> {
     }
   };
 
+  private defaultValueFor = ({
+    label,
+    defaults = {
+      alpha: 0.1,
+      kfold: 3,
+      testSize: 0.2
+    }
+  }: {
+    label: string;
+    defaults?: any;
+  }): string => {
+    return defaults[label] ? defaults[label] : '';
+  };
+
   private fetchAlgorithms = async (): Promise<{
     error: string | undefined;
     data: Algorithm[] | undefined;
@@ -424,11 +438,13 @@ class Core extends Container<State> {
       // FIXME: Algorithms defnition in Exareme will contains those extra parameters.
       const extraParametersData = data.map((algorithm: Algorithm) => ({
         ...algorithm,
-        engine: Engine.Exareme,
         parameters: [
           ...(algorithm.parameters as AlgorithmParameter[]).map(
             (p: AlgorithmParameter) => {
-              const visible = !UI_HIDDEN_PARAMETERS.includes(p.name);
+              const visible = !(
+                UI_HIDDEN_PARAMETERS.includes(p.name) ||
+                UI_HIDDEN_PARAMETERS.includes(p.label || '')
+              );
 
               // Semantic adjustements:
               // For historical reason, exareme serves a "value" as a "defaultValue".
@@ -473,7 +489,30 @@ class Core extends Container<State> {
         ]
       }));
 
-      return { error: undefined, data: extraParametersData };
+      const workflowParametersData = extraParametersData.map(
+        (algorithm: Algorithm) => {
+          if (algorithm.type === 'workflow') {
+            return {
+              ...algorithm,
+              parameters: (algorithm.parameters as AlgorithmParameter[]).map(
+                parameter => ({
+                  ...parameter,
+                  defaultValue: this.defaultValueFor({
+                    label: parameter.label || ''
+                  }),
+                  value: this.defaultValueFor({
+                    label: parameter.label || ''
+                  })
+                })
+              )
+            };
+          }
+
+          return algorithm;
+        }
+      );
+
+      return { error: undefined, data: workflowParametersData };
     } catch (error) {
       console.log(error);
       return { error, data: undefined };

@@ -22,7 +22,7 @@ export default ({
   handleCreateNewExperiment
 }: Props): JSX.Element => {
   const name = experiment && experiment.name;
-  const modelDefinitionId = experiment && experiment.modelDefinitionId;
+  const modelDefinitionId = experiment && experiment.modelSlug;
   const shared = experiment && experiment.shared;
 
   return (
@@ -51,7 +51,7 @@ export default ({
               experiment &&
               experiments &&
               experiments.filter(
-                (e: any) => e.modelDefinitionId === experiment.modelDefinitionId
+                (e: any) => e.modelDefinitionId === experiment.modelSlug
               )
             }
             /* eslint-disable-next-line */

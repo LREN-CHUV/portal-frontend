@@ -1,12 +1,12 @@
 import * as React from 'react';
-import { AppConfig, InstanceMode } from '../App/App';
+import { AppConfig } from '../App/App';
 import styled from 'styled-components';
 import ChuvLogo from '../../images/logo_chuv.png';
 
 const FooterBox = styled.div`
   display: flex;
   justify-content: space-between;
-  align-items; center;
+  align-items: center;
   padding: 0 16px;
   background: #000000cc;
   color: white;
@@ -22,13 +22,6 @@ const FooterBox = styled.div`
     height: 31px;
     margin-right: 16px;
   }
-
-  position:fixed;
-   left:0px;
-   bottom:0px;
-   height:30px;
-   width:100%;
-
 `;
 
 export default ({ appConfig }: { appConfig: AppConfig }): JSX.Element => (
@@ -48,8 +41,7 @@ export default ({ appConfig }: { appConfig: AppConfig }): JSX.Element => (
     </span>
     <h6>
       {appConfig.version}
-      {appConfig.version ? ' | ' : ''}Mode:{' '}
-      {appConfig.mode === InstanceMode.Local ? 'Local' : 'Federation'}
+      {appConfig.version ? ' | ' : ''}
     </h6>
   </FooterBox>
 );
