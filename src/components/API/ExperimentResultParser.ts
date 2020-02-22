@@ -1,6 +1,5 @@
 import { ALGORITHM_DEFAULT_OUTPUT, MIME_TYPES } from '../constants';
-import { Engine, ExperimentResponse, Result } from './Experiment';
-import { buildWorkflowAlgorithmResponse } from './WorkflowAPIAdapter';
+import { ExperimentResponse, Result } from './Experiment';
 
 export const defaultResults = (name: string, results: Result[]): Result[] => {
   const config =
@@ -10,6 +9,7 @@ export const defaultResults = (name: string, results: Result[]): Result[] => {
     r => config && config.types.includes(r.type)
   );
 
+  console.log(nextResults);
   return nextResults;
 };
 
@@ -35,18 +35,17 @@ class APIAdapter {
 
       return new Date(d);
     })();
-    const modelDefinitionId = experiment.model ? experiment.model.slug : null;
+    const modelSlug = experiment.model ? experiment.model.slug : null;
 
     let experimentResponse: ExperimentResponse = {
       algorithms,
       created,
-      modelDefinition: experiment.model ? experiment.model.query : undefined,
-      modelDefinitionId,
+      modelQuery: experiment.model && experiment.model,
+      modelSlug,
       name: experiment.name,
       resultsViewed: experiment.resultsViewed,
       shared: experiment.shared,
-      uuid: experiment.uuid,
-      validations: experiment.validations
+      uuid: experiment.uuid
     };
 
     experimentResponse.user = experiment.createdBy
@@ -57,11 +56,11 @@ class APIAdapter {
       : undefined;
 
     // Errors
-    if (!modelDefinitionId) {
+    if (!modelSlug) {
       experimentResponse = {
         ...experimentResponse,
         error: 'No model defined',
-        modelDefinitionId: 'undefined'
+        modelSlug: 'undefined'
       };
 
       return experimentResponse;
@@ -93,46 +92,31 @@ class APIAdapter {
     // Branch backend responses based on data shape
     try {
       const resultParsed = parse(experiment.result);
-      const p =
+      const flattenedResults =
         resultParsed && resultParsed.length > 0 && resultParsed[0].result;
-      const e =
+      const errorResults =
         resultParsed && resultParsed.length > 0 && resultParsed[0].error;
 
-      if (e) {
+      if (errorResults) {
         return {
           ...experimentResponse,
-          engine: Engine.Exareme,
           results: [
             {
               type: MIME_TYPES.ERROR,
-              data: e
+              data: errorResults
             }
           ]
         };
       }
 
-      if (p) {
-        const isExareme = p.every((r: any) => r.type);
-        if (isExareme) {
-          const algorithmName = experimentResponse.algorithms[0].name;
-          const response = {
-            ...experimentResponse,
-            engine: Engine.Exareme,
-            results: defaultResults(algorithmName, p)
-          };
+      if (flattenedResults) {
+        const algorithmName = experimentResponse.algorithms[0].name;
+        const response = {
+          ...experimentResponse,
+          results: defaultResults(algorithmName, flattenedResults)
+        };
 
-          return response;
-        }
-      }
-
-      const isWorkflow = resultParsed.find((r: any) => r.historyId);
-      if (isWorkflow) {
-        const nextResult3 = buildWorkflowAlgorithmResponse(
-          isWorkflow.historyId,
-          experimentResponse
-        );
-
-        return nextResult3;
+        return response;
       }
 
       return {

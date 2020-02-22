@@ -186,7 +186,7 @@ const AvailableAlgorithms = ({
           rootClose={false}
           overlay={
             <Popover id={`tooltip-${algorithm.name}`}>
-              <h4>{algorithm.name}</h4>
+              <h4>{algorithm.label}</h4>
               <p>{algorithm.desc}</p>
               {variablesHelpMessage(algorithm)}
             </Popover>

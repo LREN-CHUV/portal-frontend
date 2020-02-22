@@ -43,7 +43,6 @@ export default ({
   apiCore,
   apiMining,
   apiModel,
-  appConfig,
   ...props
 }: Props): JSX.Element => {
   const [selectedNode, setSelectedNode] = useState<
@@ -177,7 +176,6 @@ export default ({
   }, [
     selectedNode,
     apiMining,
-    appConfig.mode,
     apiModel.state.model,
     apiMining.state.refetchAlgorithms,
     trainingDatasets

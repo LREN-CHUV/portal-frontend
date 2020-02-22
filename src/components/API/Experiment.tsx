@@ -5,7 +5,7 @@ import { backendURL } from '../API';
 import { Algorithm } from '../API/Core';
 import { Query } from '../API/Model';
 import { User } from '../API/User';
-import APIAdapter from './APIAdapter';
+import ExperimentResultParser from './ExperimentResultParser';
 import { MIME_TYPES } from '../constants';
 
 export interface ExperimentPayload {
@@ -14,35 +14,23 @@ export interface ExperimentPayload {
   name: string;
 }
 
-export enum Engine {
-  Exareme,
-  Workflow
-}
-
 export interface ExperimentResponse {
   created: Date;
   error?: string;
   name: string;
   resultsViewed: boolean;
   uuid: string;
-  modelDefinitionId: string;
+  modelSlug: string;
   results?: Result[] | Node[];
   user?: User;
   algorithms: Algorithm[];
-  modelDefinition?: Query;
-  validations?: any;
+  modelQuery?: Query;
   shared: boolean;
-  engine?: Engine;
 }
 
 export interface Result {
   type: MIME_TYPES;
   data: any;
-}
-
-export interface ConfusionMatrix {
-  labels: string[];
-  values: number[][];
 }
 
 interface IUUID {
@@ -80,7 +68,7 @@ class Experiment extends Container<State> {
           error: json.error
         });
       }
-      const experiment = APIAdapter.parse(json);
+      const experiment = ExperimentResultParser.parse(json);
 
       return await this.setState({
         error: undefined,
@@ -105,7 +93,9 @@ class Experiment extends Container<State> {
 
       return await this.setState({
         error: undefined,
-        experiments: json.map((j: ExperimentResponse) => APIAdapter.parse(j))
+        experiments: json.map((j: ExperimentResponse) =>
+          ExperimentResultParser.parse(j)
+        )
       });
     } catch (error) {
       return await this.setState({
@@ -132,7 +122,7 @@ class Experiment extends Container<State> {
         uri: url
       });
       const json = await JSON.parse(data);
-      const result = APIAdapter.parse(json);
+      const result = ExperimentResultParser.parse(json);
 
       return await this.setState({
         error: undefined,
@@ -169,7 +159,7 @@ class Experiment extends Container<State> {
           error: json.error
         });
       }
-      const experiment = APIAdapter.parse(json);
+      const experiment = ExperimentResultParser.parse(json);
       return await this.setState({
         error: undefined,
         experiment
