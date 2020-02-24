@@ -72,7 +72,6 @@ export default ({
         })
         .map((experiment, i: number) => {
           let experimentState;
-
           experimentState = experiment.error
             ? 'exclamation-sign'
             : !experiment.results

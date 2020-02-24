@@ -1,4 +1,8 @@
-import { ALGORITHM_DEFAULT_OUTPUT, MIME_TYPES } from '../constants';
+import {
+  ALGORITHM_DEFAULT_OUTPUT,
+  MIME_TYPES,
+  ERRORS_OUTPUT
+} from '../constants';
 import {
   ExperimentResponse,
   ExperimentResponseRaw,
@@ -95,21 +99,6 @@ class APIAdapter {
           []
         );
 
-      const errorResults =
-        resultParsed && resultParsed.length > 0 && resultParsed[0].error;
-
-      if (errorResults) {
-        return {
-          ...experimentResponse,
-          results: [
-            {
-              type: MIME_TYPES.ERROR,
-              data: errorResults
-            }
-          ]
-        };
-      }
-
       if (flattenedResults) {
         const algorithmName = experimentResponse.algorithms[0].name;
         const config =
@@ -119,6 +108,25 @@ class APIAdapter {
         const nextResults = flattenedResults.filter(
           (r: Result) => config && config.types.includes(r.type)
         );
+
+        const errorResults = flattenedResults.filter((r: Result) =>
+          ERRORS_OUTPUT.includes(r.type)
+        );
+
+        if (errorResults.length > 0) {
+          const error =
+            errorResults && errorResults.length > 0 && errorResults[0].data;
+          return {
+            ...experimentResponse,
+            error
+            // results: [
+            //   {
+            //     type: MIME_TYPES.ERROR,
+            //     data: error
+            //   }
+            // ]
+          };
+        }
 
         const response = {
           ...experimentResponse,

@@ -132,6 +132,7 @@ export default ({ name, experiments, handleSelect }: Props): JSX.Element => {
             items={experiments}
             /* eslint-disable-next-line */
             style="link"
+            type={'models'}
             title="My Experiments"
             handleSelect={handleSelect}
             handleCreateNewExperiment={null}
