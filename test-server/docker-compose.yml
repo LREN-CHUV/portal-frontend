@@ -12,7 +12,7 @@ services:
       - backend
 
   exareme_master:
-    image: hbpmip/exareme:dev_v11.0
+    image: hbpmip/exareme:dev_v11.1
     environment:
       - CONSULURL=exareme_keystore:8500
       - MASTER_FLAG=master
@@ -31,7 +31,7 @@ services:
       - ./data:/root/exareme/data/
     networks:
       - backend
-  
+
   galaxy:
     image: hbpmip/galaxy:v1.3
     environment:
