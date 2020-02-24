@@ -16,7 +16,7 @@ export interface ExperimentPayload {
 
 export interface ExperimentResponse {
   created: Date;
-  error?: string;
+  error?: string | boolean;
   name: string;
   resultsViewed: boolean;
   uuid: string;
