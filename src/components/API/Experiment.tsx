@@ -28,6 +28,14 @@ export interface ExperimentResponse {
   shared: boolean;
 }
 
+export interface ExperimentResponseRaw extends ExperimentResponse {
+  algorithms: any;
+  model: { slug: string };
+  createdBy: { fullname: string; username: string };
+  hasServerError: boolean;
+  result: string;
+}
+
 export interface Result {
   type: MIME_TYPES;
   data: any;
@@ -93,7 +101,7 @@ class Experiment extends Container<State> {
 
       return await this.setState({
         error: undefined,
-        experiments: json.map((j: ExperimentResponse) =>
+        experiments: json.map((j: ExperimentResponseRaw) =>
           ExperimentResultParser.parse(j)
         )
       });

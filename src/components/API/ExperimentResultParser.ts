@@ -1,19 +1,11 @@
 import { ALGORITHM_DEFAULT_OUTPUT, MIME_TYPES } from '../constants';
-import { ExperimentResponse, Result } from './Experiment';
+import {
+  ExperimentResponse,
+  ExperimentResponseRaw,
+  Result
+} from './Experiment';
 
-export const defaultResults = (name: string, results: Result[]): Result[] => {
-  const config =
-    ALGORITHM_DEFAULT_OUTPUT.find(a => a.name === name) || undefined;
-
-  const nextResults = results.filter(
-    r => config && config.types.includes(r.type)
-  );
-
-  console.log(nextResults);
-  return nextResults;
-};
-
-const parse = (value: any) => {
+const parse = (value: string): any => {
   try {
     const json = JSON.parse(value);
     return json;
@@ -23,11 +15,13 @@ const parse = (value: any) => {
 };
 
 class APIAdapter {
-  public static parse = (experiment: any): ExperimentResponse => {
+  public static parse = (
+    experiment: ExperimentResponseRaw
+  ): ExperimentResponse => {
     // FIXME: Formats are differents in the API for experiment, experimentList and runExperiment,
     // apply specific parsing to some terms
     const algorithms = parse(experiment.algorithms);
-    const created = (() => {
+    const created = ((): Date => {
       const d = Date.parse(experiment.created + ' GMT');
       if (isNaN(d)) {
         return new Date(experiment.created);
@@ -35,12 +29,12 @@ class APIAdapter {
 
       return new Date(d);
     })();
-    const modelSlug = experiment.model ? experiment.model.slug : null;
+    const modelSlug = experiment.model ? experiment.model.slug : '';
 
     let experimentResponse: ExperimentResponse = {
       algorithms,
       created,
-      modelQuery: experiment.model && experiment.model,
+      modelQuery: experiment.model,
       modelSlug,
       name: experiment.name,
       resultsViewed: experiment.resultsViewed,
@@ -89,11 +83,18 @@ class APIAdapter {
       return experimentResponse;
     }
 
-    // Branch backend responses based on data shape
     try {
       const resultParsed = parse(experiment.result);
       const flattenedResults =
-        resultParsed && resultParsed.length > 0 && resultParsed[0].result;
+        resultParsed &&
+        resultParsed.reduce(
+          (acc: Result[], item: { result: Result[] }) => [
+            ...acc,
+            ...item.result
+          ],
+          []
+        );
+
       const errorResults =
         resultParsed && resultParsed.length > 0 && resultParsed[0].error;
 
@@ -111,9 +112,17 @@ class APIAdapter {
 
       if (flattenedResults) {
         const algorithmName = experimentResponse.algorithms[0].name;
+        const config =
+          ALGORITHM_DEFAULT_OUTPUT.find(a => a.name === algorithmName) ||
+          undefined;
+
+        const nextResults = flattenedResults.filter(
+          (r: Result) => config && config.types.includes(r.type)
+        );
+
         const response = {
           ...experimentResponse,
-          results: defaultResults(algorithmName, flattenedResults)
+          results: nextResults
         };
 
         return response;
