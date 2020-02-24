@@ -109,22 +109,6 @@ describe('Integration Test for experiment API', () => {
     const wrapper = mount(<Result {...props} />);
     expect(wrapper.find('.error')).toHaveLength(0);
     expect(wrapper.find('.loading')).toHaveLength(0);
-    expect(wrapper.find('.result')).toHaveLength(2);
-    // expect(
-    //   wrapper
-    //     .find('div.result table tbody tr td')
-    //     .at(1)
-    //     .first()
-    //     .text()
-    // ).toEqual('0.937');
-    // expect(
-    //   wrapper
-    //     .find('div.result')
-    //     .at(1)
-    //     .find('table tbody tr td')
-    //     .at(1)
-    //     .first()
-    //     .text()
-    // ).toEqual('-1.455');
+    expect(wrapper.find('.result')).toHaveLength(3);
   });
 });
