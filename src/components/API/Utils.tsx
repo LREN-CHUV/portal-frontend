@@ -1,12 +1,10 @@
 import APICore, { AlgorithmParameter, VariableEntity } from './Core';
 import APIExperiment, {
-  Engine,
   ExperimentPayload,
   State as ExperimentState
 } from './Experiment';
 import APIModel, { ModelResponse, ModelState } from './Model';
 import config from './RequestHeaders';
-import { InstanceMode } from '../App/App';
 
 const apiModel = new APIModel(config);
 const apiExperiment = new APIExperiment(config);
@@ -49,7 +47,7 @@ const createWorkflowPayload = async (
   parameters: AlgorithmParameter[],
   modelSlug: string
 ): Promise<ExperimentPayload | void> => {
-  await apiCore.algorithms(InstanceMode.Local);
+  await apiCore.algorithms();
   const algorithms = apiCore.state.algorithms || [];
   const selectedAlgorithm = algorithms.find(a => a.name === experimentCode);
 
@@ -77,14 +75,15 @@ const createExaremePayload = (
   datasets: VariableEntity[],
   experimentCode: string,
   parameters: AlgorithmParameter[],
-  modelSlug: string
+  modelSlug: string,
+  type: string
 ): any => {
   const query = model(datasets).query;
   const isVector = experimentCode === 'TTEST_PAIRED';
   const varCount = (query.variables && query.variables.length) || 0;
   const nextParameters = [
     {
-      code: 'y',
+      name: 'y',
       value: isVector
         ? (query.variables &&
             query.variables // outputs: a1-a2,b1-b2, c1-a1
@@ -103,18 +102,18 @@ const createExaremePayload = (
         : (query.variables && query.variables.map(v => v.code).toString()) || ''
     },
     {
-      code: 'dataset',
+      name: 'dataset',
       value:
         (query.trainingDatasets &&
           query.trainingDatasets.map(v => v.code).toString()) ||
         ''
     },
     {
-      code: 'pathology',
+      name: 'pathology',
       value: (query.pathology && query.pathology.toString()) || ''
     },
     {
-      code: 'filter',
+      name: 'filter',
       value: (query.filters && query.filters) || ''
     }
   ];
@@ -131,7 +130,7 @@ const createExaremePayload = (
         ? covariablesArray.toString().replace(/,/g, '+')
         : covariablesArray.toString();
 
-    nextParameters.push({ code: 'x', value });
+    nextParameters.push({ name: 'x', value });
   }
 
   const payload: any = {
@@ -139,13 +138,12 @@ const createExaremePayload = (
       {
         code: experimentCode,
         name: experimentCode,
-        parameters: [...parameters, ...nextParameters]
+        parameters: [...parameters, ...nextParameters],
+        type
       }
     ],
-    engine: Engine.Exareme,
     model: modelSlug,
-    name: experimentCode,
-    validations: []
+    name: experimentCode
   };
 
   return payload;

@@ -17,11 +17,11 @@ import {
 const modelSlug = `anova-${Math.round(Math.random() * 10000)}`;
 const experimentCode = 'ANOVA';
 const parameters = [
-  { code: 'bins', value: '40' },
-  { code: 'iterations_max_number', value: 20 },
-  { code: 'sstype', value: 2 },
-  { code: 'outputformat', value: 'pfa' },
-  { code: 'pathology', value: 'dementia' }
+  { name: 'bins', value: '40' },
+  { name: 'iterations_max_number', value: 20 },
+  { name: 'sstype', value: 2 },
+  { name: 'outputformat', value: 'pfa' },
+  { name: 'pathology', value: 'dementia' }
 ];
 
 const model: any = (datasets: VariableEntity[]) => ({
@@ -72,7 +72,8 @@ describe('Integration Test for experiment API', () => {
       datasets,
       experimentCode,
       parameters,
-      modelSlug
+      modelSlug,
+      'iterative'
     );
 
     const { error, experiment } = await createExperiment({
