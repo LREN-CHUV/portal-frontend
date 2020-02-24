@@ -18,10 +18,10 @@ const modelSlug = `linear-${Math.round(Math.random() * 10000)}`;
 const experimentCode = 'NAIVE_BAYES_TRAINING_STANDALONE';
 const parameters = [
   {
-    code: 'alpha',
+    name: 'alpha',
     value: '0'
   },
-  { code: 'pathology', value: 'dementia' }
+  { name: 'pathology', value: 'dementia' }
 ];
 
 const model: any = (datasets: VariableEntity[]) => ({
@@ -77,8 +77,10 @@ describe('Integration Test for experiment API', () => {
       datasets,
       experimentCode,
       parameters,
-      modelSlug
+      modelSlug,
+      "multiple_local_global"
     );
+    console.log(JSON.stringify(payload));
     const { error, experiment } = await createExperiment({
       experiment: payload
     });
