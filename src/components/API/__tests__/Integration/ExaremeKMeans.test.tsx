@@ -17,10 +17,10 @@ import {
 const modelSlug = `anova-${Math.round(Math.random() * 10000)}`;
 const experimentCode = 'KMEANS';
 const parameters = [
-  { code: 'k', value: '4' },
-  { code: 'e', value: 1 },
-  { code: 'iterations_max_number', value: 1000 },
-  { code: 'pathology', value: 'dementia' }
+  { name: 'k', value: '4' },
+  { name: 'e', value: 1 },
+  { name: 'iterations_max_number', value: 1000 },
+  { name: 'pathology', value: 'dementia' }
 ];
 
 const model: any = (datasets: VariableEntity[]) => ({
@@ -73,7 +73,8 @@ describe('Integration Test for experiment API', () => {
       datasets,
       experimentCode,
       parameters,
-      modelSlug
+      modelSlug,
+      'iterative'
     );
 
     const { error, experiment } = await createExperiment({
@@ -103,6 +104,6 @@ describe('Integration Test for experiment API', () => {
         .find('div.result table tbody tr td')
         .at(1)
         .text()
-    ).toEqual('4.123');
+    ).toEqual('3.850');
   });
 });

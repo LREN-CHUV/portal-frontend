@@ -17,24 +17,22 @@ import {
 const modelSlug = `ttest-i-${Math.round(Math.random() * 10000)}`;
 const experimentCode = 'TTEST_INDEPENDENT';
 const parameters: any = [
+  { name: 'xlevels', value: 'M,F' },
+  { name: 'testvalue', value: '3.0' },
   {
-    code: 'xlevels',
-    value: 'M,F'
-  },
-  {
-    code: 'hypothesis',
+    name: 'hypothesis',
     value: 'greaterthan'
   },
   {
-    code: 'effectsize',
+    name: 'effectsize',
     value: '1'
   },
   {
-    code: 'ci',
+    name: 'ci',
     value: '1'
   },
   {
-    code: 'meandiff',
+    name: 'meandiff',
     value: '1'
   },
   { code: 'pathology', value: 'dementia' }
@@ -47,8 +45,7 @@ const model: any = (datasets: VariableEntity[]) => ({
         code: 'gender'
       }
     ],
-    filters:
-      '{"condition":"AND","rules":[{"id":"alzheimerbroadcategory","field":"alzheimerbroadcategory","type":"string","input":"select","operator":"not_equal","value":"CN"},{"id":"alzheimerbroadcategory","field":"alzheimerbroadcategory","type":"string","input":"select","operator":"not_equal","value":"Other"}],"valid":true}',
+    filters: '',
     groupings: [],
     pathology: 'dementia',
     testingDatasets: [],
@@ -59,7 +56,25 @@ const model: any = (datasets: VariableEntity[]) => ({
     // FIXME: should by dynamic
     variables: [
       {
-        code: 'righthippocampus'
+        code: 'rightpcggposteriorcingulategyrus'
+      },
+      {
+        code: 'leftpcggposteriorcingulategyrus'
+      },
+      {
+        code: 'rightacgganteriorcingulategyrus'
+      },
+      {
+        code: 'leftacgganteriorcingulategyrus'
+      },
+      {
+        code: 'rightmcggmiddlecingulategyrus'
+      },
+      {
+        code: 'leftmcggmiddlecingulategyrus'
+      },
+      {
+        code: 'rightphgparahippocampalgyrus'
       }
     ]
   }
@@ -94,7 +109,8 @@ describe('Integration Test for experiment API', () => {
       datasets,
       experimentCode,
       parameters,
-      modelSlug
+      modelSlug,
+      'multiple_local_global'
     );
     const { error, experiment } = await createExperiment({
       experiment: payload
@@ -123,6 +139,6 @@ describe('Integration Test for experiment API', () => {
         .find('div.result table tbody tr td')
         .at(1)
         .text()
-    ).toEqual('18.469');
+    ).toEqual('22.512');
   });
 });

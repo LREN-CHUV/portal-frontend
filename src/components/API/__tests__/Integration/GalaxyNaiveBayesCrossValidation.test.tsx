@@ -14,31 +14,39 @@ import {
 
 // config
 
-const modelSlug = `histograms-${Math.round(Math.random() * 10000)}`;
-const experimentCode = 'MULTIPLE_HISTOGRAMS';
+const modelSlug = `naivebayes-${Math.round(Math.random() * 10000)}`;
+const experimentCode = 'f2db41e1fa331b3e'; // Naive Bayes with Cross Validation
 const parameters = [
+  { name: 'd8ded1b9-5e2a-4c55-9a9d-60d74ec940a2', value: '0' },
+  { name: '59093696-f570-4549-806d-15c55f468a4d', value: '3' },
+  { name: 'dd7c6242-1b48-4bcd-8b21-ca9fb6bda7f5', value: 'dementia' },
+  { name: 'a9a57dff-1f53-4936-9f1d-cefd1a1f209b', value: 'adni' },
   {
-    name: 'bins',
-    value: '{ "lefthippocampus" : 35 }'
+    name: '5f04f970-86d8-49be-a4ff-ccba18f8fee4',
+    value: 'leftacgganteriorcingulategyrus,lefthippocampus'
   },
-  { name: 'pathology', value: 'dementia' }
+  {
+    name: 'fb380ae5-2923-4dde-a811-75fcc84914d7',
+    value: 'alzheimerbroadcategory'
+  }
 ];
 
 const model: any = (datasets: VariableEntity[]) => ({
   query: {
-    pathology: 'dementia', // FIXME: should by dynamic
-    coVariables: [{ code: 'lefthippocampus' }],
+    // FIXME: should by dynamic
+    coVariables: [
+      { code: 'leftacgganteriorcingulategyrus' },
+      { code: 'lefthippocampus' }
+    ],
     filters: '',
     groupings: [],
+    pathology: 'dementia',
     testingDatasets: [],
     trainingDatasets: datasets.map(d => ({
       code: d.code
     })),
     validationDatasets: [],
     variables: [
-      {
-        code: 'gender'
-      },
       {
         code: 'alzheimerbroadcategory'
       }
@@ -53,6 +61,7 @@ describe('Integration Test for experiment API', () => {
 
   beforeAll(async () => {
     datasets = await getDatasets();
+    datasets = datasets && datasets.filter((_, i) => i === 0);
     expect(datasets).toBeTruthy();
 
     const mstate = await createModel({
@@ -76,8 +85,9 @@ describe('Integration Test for experiment API', () => {
       experimentCode,
       parameters,
       modelSlug,
-      'python_multiple_local_global'
+      'workflow'
     );
+    console.log(JSON.stringify(payload));
     const { error, experiment } = await createExperiment({
       experiment: payload
     });
@@ -99,6 +109,22 @@ describe('Integration Test for experiment API', () => {
     const wrapper = mount(<Result {...props} />);
     expect(wrapper.find('.error')).toHaveLength(0);
     expect(wrapper.find('.loading')).toHaveLength(0);
-    expect(wrapper.find('.result')).toHaveLength(3);
+    expect(wrapper.find('.result')).toHaveLength(2);
+    // expect(
+    //   wrapper
+    //     .find('div.result table tbody tr td')
+    //     .at(1)
+    //     .first()
+    //     .text()
+    // ).toEqual('0.937');
+    // expect(
+    //   wrapper
+    //     .find('div.result')
+    //     .at(1)
+    //     .find('table tbody tr td')
+    //     .at(1)
+    //     .first()
+    //     .text()
+    // ).toEqual('-1.455');
   });
 });

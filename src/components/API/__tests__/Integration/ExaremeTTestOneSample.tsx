@@ -18,23 +18,23 @@ const modelSlug = `ttest-p-${Math.round(Math.random() * 10000)}`;
 const experimentCode = 'TTEST_ONESAMPLE';
 const parameters: any = [
   {
-    code: 'testvalue',
+    name: 'testvalue',
     value: 3.0
   },
   {
-    code: 'hypothesis',
+    name: 'hypothesis',
     value: 'different'
   },
   {
-    code: 'effectsize',
+    name: 'effectsize',
     value: '1'
   },
   {
-    code: 'ci',
+    name: 'ci',
     value: '1'
   },
   {
-    code: 'meandiff',
+    name: 'meandiff',
     value: '1'
   },
   { code: 'pathology', value: 'dementia' }
@@ -92,7 +92,8 @@ describe('Integration Test for experiment API', () => {
       datasets,
       experimentCode,
       parameters,
-      modelSlug
+      modelSlug,
+      'local_global'
     );
     const { error, experiment } = await createExperiment({
       experiment: payload
@@ -121,6 +122,6 @@ describe('Integration Test for experiment API', () => {
         .find('div.result table tbody tr td')
         .at(1)
         .text()
-    ).toEqual('-0.752');
+    ).toEqual('-6.386');
   });
 });

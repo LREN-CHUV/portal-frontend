@@ -17,15 +17,15 @@ import {
 const modelSlug = `pca-${Math.round(Math.random() * 10000)}`;
 const experimentCode = 'PCA';
 const parameters = [
-  { code: 'no_intercept', value: 'true' },
-  { code: 'coding', value: 'null' },
-  { code: 'pathology', value: 'dementia' }
+  { name: 'standardize', value: 'false' },
+  { name: 'coding', value: 'null' },
+  { name: 'pathology', value: 'dementia' }
 ];
 
 const model: any = (datasets: VariableEntity[]) => ({
   query: {
     pathology: 'dementia', // FIXME: should by dynamic
-    coVariables: [
+    variables: [
       {
         code: 'lefthippocampus'
       },
@@ -43,7 +43,7 @@ const model: any = (datasets: VariableEntity[]) => ({
       code: d.code
     })),
     validationDatasets: [],
-    variables: []
+    coVariables: []
   }
 });
 
@@ -76,7 +76,8 @@ describe('Integration Test for experiment API', () => {
       datasets,
       experimentCode,
       parameters,
-      modelSlug
+      modelSlug,
+      'python_multiple_local_global'
     );
 
     const { error, experiment } = await createExperiment({

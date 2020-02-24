@@ -18,11 +18,11 @@ const modelSlug = `linear-${Math.round(Math.random() * 10000)}`;
 const experimentCode = 'LINEAR_REGRESSION';
 const parameters = [
   {
-    code: 'referencevalues',
+    name: 'referencevalues',
     value: '[{"name":"alzheimerbroadcategory","val":"Other"}]'
   },
-  { code: 'encodingparameter', value: 'dummycoding' },
-  { code: 'pathology', value: 'dementia' }
+  { name: 'encodingparameter', value: 'dummycoding' },
+  { name: 'pathology', value: 'dementia' }
 ];
 
 const model: any = (datasets: VariableEntity[]) => ({
@@ -79,7 +79,8 @@ describe('Integration Test for experiment API', () => {
       datasets,
       experimentCode,
       parameters,
-      modelSlug
+      modelSlug,
+      'multiple_local_global'
     );
     const { error, experiment } = await createExperiment({
       experiment: payload
@@ -109,7 +110,7 @@ describe('Integration Test for experiment API', () => {
         .at(1)
         .first()
         .text()
-    ).toEqual('0.937');
+    ).toEqual('1.080');
     expect(
       wrapper
         .find('div.result')
@@ -118,6 +119,6 @@ describe('Integration Test for experiment API', () => {
         .at(1)
         .first()
         .text()
-    ).toEqual('-1.455');
+    ).toEqual('-0.942');
   });
 });

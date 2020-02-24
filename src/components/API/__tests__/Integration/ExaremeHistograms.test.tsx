@@ -17,8 +17,8 @@ import {
 const modelSlug = `histograms-${Math.round(Math.random() * 10000)}`;
 const experimentCode = 'HISTOGRAMS';
 const parameters = [
-  { code: 'bins', value: '40' },
-  { code: 'pathology', value: 'dementia' }
+  { name: 'bins', value: '40' },
+  { name: 'pathology', value: 'dementia' }
 ];
 
 const model: any = (datasets: VariableEntity[]) => ({
@@ -42,7 +42,7 @@ const model: any = (datasets: VariableEntity[]) => ({
 
 // Test
 
-describe.skip('Integration Test for experiment API', () => {
+describe('Integration Test for experiment API', () => {
   let datasets: VariableEntity[] | undefined;
 
   beforeAll(async () => {
@@ -69,7 +69,8 @@ describe.skip('Integration Test for experiment API', () => {
       datasets,
       experimentCode,
       parameters,
-      modelSlug
+      modelSlug,
+      'multiple_local_global'
     );
     const { error, experiment } = await createExperiment({
       experiment: payload
