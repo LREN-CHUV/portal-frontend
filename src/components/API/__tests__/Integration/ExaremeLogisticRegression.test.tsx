@@ -16,7 +16,7 @@ import {
 
 const modelSlug = `logistic-${Math.round(Math.random() * 10000)}`;
 const experimentCode = 'LOGISTIC_REGRESSION';
-const parameters: any = [{ code: 'pathology', value: 'dementia' }];
+const parameters: any = [{ name: 'pathology', value: 'dementia' }];
 
 const model: any = (datasets: VariableEntity[]) => ({
   query: {
@@ -66,7 +66,8 @@ describe('Integration Test for experiment API', () => {
       datasets,
       experimentCode,
       parameters,
-      modelSlug
+      modelSlug,
+      'python_iterative'
     );
     const { error, experiment } = await createExperiment({
       experiment: payload

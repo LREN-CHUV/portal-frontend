@@ -17,8 +17,8 @@ import {
 const modelSlug = `id3-${Math.round(Math.random() * 10000)}`;
 const experimentCode = 'ID3';
 const parameters = [
-  { code: 'iterations_max_number', value: 20 },
-  { code: 'pathology', value: 'dementia' }
+  { name: 'iterations_max_number', value: 20 },
+  { name: 'pathology', value: 'dementia' }
 ];
 
 const model: any = () => ({
@@ -67,7 +67,8 @@ describe('Integration Test for experiment API', () => {
       datasets,
       experimentCode,
       parameters,
-      modelSlug
+      modelSlug,
+      'iterative'
     );
     const { error, experiment } = await createExperiment({
       experiment: payload

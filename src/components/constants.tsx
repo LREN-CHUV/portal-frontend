@@ -74,6 +74,14 @@ export const ALGORITHM_DEFAULT_OUTPUT = [
   {
     name: 'PCA',
     types: [...DEFAULT_OUTPUT, MIME_TYPES.JSONDATA, MIME_TYPES.HIGHCHARTS]
+  },
+  {
+    name: 'f597429621d6eb2b', // Workflow Naive Bayes with Hold Out Validation
+    types: [...DEFAULT_OUTPUT, MIME_TYPES.HIGHCHARTS]
+  },
+  {
+    name: 'f2db41e1fa331b3e', // Naive Bayes with Cross Validation
+    types: [...DEFAULT_OUTPUT, MIME_TYPES.HIGHCHARTS]
   }
 ];
 
@@ -89,7 +97,9 @@ export const ENABLED_ALGORITHMS = [
   'TTEST_INDEPENDENT',
   'TTEST_PAIRED',
   'TTEST_ONESAMPLE',
-  'PCA'
+  'PCA',
+  'f597429621d6eb2b',
+  'f2db41e1fa331b3e'
 ];
 
 const independents = ['X', 'column1', 'x', 'descriptive_attributes'];
