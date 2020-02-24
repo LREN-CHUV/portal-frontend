@@ -34,7 +34,7 @@ const AvailableAlgorithms = ({
   algorithms: Algorithm[] | undefined;
   layout?: string;
   lookup: (code: string) => VariableEntity;
-  handleSelectMethod: (method: Algorithm) => void;
+  handleSelectMethod?: (method: Algorithm) => void;
   model: ModelResponse | undefined;
 }): JSX.Element => {
   const query = model && model.query;
@@ -133,41 +133,6 @@ const AvailableAlgorithms = ({
             </p>
           );
         }
-
-        const isCategorical =
-          variable.columnValuesIsCategorical === ''
-            ? undefined
-            : variable.columnValuesIsCategorical === 'true'
-            ? true
-            : false;
-
-        let multipleconstraint = '';
-        if (!variable.valueMultiple) {
-          multipleconstraint = ', one var max';
-        } else {
-          multipleconstraint = ', multiple vars';
-        }
-
-        if (isCategorical) {
-          message.push(
-            <p key={`${algorithm.name}-${axis}-1`}>
-              - hint: should be multinominal{multipleconstraint}
-            </p>
-          );
-        } else if (isCategorical === false) {
-          message.push(
-            <p key={`${algorithm.name}-${axis}-2`}>
-              - hint: should be continous{multipleconstraint}
-            </p>
-          );
-        } else if (!isCategorical) {
-          message.push(
-            <p key={`${algorithm.name}-${axis}-3`}>
-              - hint: can be either multinominal or continuous
-              {multipleconstraint}
-            </p>
-          );
-        }
       }
     };
 
@@ -199,7 +164,9 @@ const AvailableAlgorithms = ({
                   key={algorithm.name}
                   bsStyle="link"
                   // ts lint:disable-next-line jsx-no-lambda
-                  onClick={(): void => handleSelectMethod(algorithm)}
+                  onClick={(): void =>
+                    handleSelectMethod && handleSelectMethod(algorithm)
+                  }
                   disabled={!algorithm.enabled}
                   style={{
                     color: algorithm.enabled ? '#03a9f4' : 'gray',
