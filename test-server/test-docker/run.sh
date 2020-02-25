@@ -1,10 +1,7 @@
 #!/usr/bin/env bash
 set -eo pipefail
 
-echo REACT_APP_AUTHORIZATION="$AUTHORIZATION" | tee .env
-echo REACT_APP_BACKEND_URL="$BACKEND_URL" | tee -a .env.
-echo REACT_APP_TOKEN="$TOKEN" | tee -a .env
-echo REACT_APP_JSESSIONID="$JSESSIONID" | tee -a .env
+echo REACT_APP_BACKEND_URL="$BACKEND_URL" | tee .env
 
 case $1 in
 watch)
@@ -16,7 +13,8 @@ build)
     yarn build
     ;;
 test)
-    yarn citest
+    te
+    yarn test
     ;;
 *)
     exec "$@"
