@@ -72,7 +72,7 @@ describe('Integration Test for experiment API', () => {
       model,
       datasets,
       experimentName,
-      experimentLabel
+      experimentLabel,
       parameters,
       modelSlug,
       'iterative'
