@@ -40,11 +40,11 @@ export default ({
             by {experiment && experiment.user && experiment.user.username}
           </h5>
         </div>
-        <div className="item">
+        {/* <div className="item">
           <Button bsStyle={'info'} onClick={handleShareExperiment}>
             {shared ? 'UNSHARE EXPERIMENT' : 'SHARE EXPERIMENT'}
           </Button>
-        </div>
+        </div> */}
         <div className="item">
           <Dropdown
             items={
