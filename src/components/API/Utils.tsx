@@ -75,17 +75,19 @@ const createWorkflowPayload = async (
 const createExaremePayload = (
   model: (datasets: VariableEntity[]) => ModelResponse,
   datasets: VariableEntity[],
-  experimentCode: string,
+  experimentName: string,
+  experimentLabel: string,
   parameters: AlgorithmParameter[],
   modelSlug: string,
   type: string
 ): any => {
   const query = model(datasets).query;
-  const isVector = experimentCode === 'TTEST_PAIRED';
+  const isVector = experimentName === 'TTEST_PAIRED';
   const varCount = (query.variables && query.variables.length) || 0;
   const nextParameters = [
     {
       name: 'y',
+      label: 'y',
       value: isVector
         ? (query.variables &&
             query.variables // outputs: a1-a2,b1-b2, c1-a1
@@ -105,6 +107,7 @@ const createExaremePayload = (
     },
     {
       name: 'dataset',
+      label: 'dataset',
       value:
         (query.trainingDatasets &&
           query.trainingDatasets.map(v => v.code).toString()) ||
@@ -112,10 +115,12 @@ const createExaremePayload = (
     },
     {
       name: 'pathology',
+      label: 'pathology',
       value: (query.pathology && query.pathology.toString()) || ''
     },
     {
       name: 'filter',
+      label: 'filter',
       value: (query.filters && query.filters) || ''
     }
   ];
@@ -128,24 +133,25 @@ const createExaremePayload = (
 
   if (covariablesArray.length > 0) {
     const value =
-      experimentCode === 'LINEAR_REGRESSION' || experimentCode === 'ANOVA'
+      experimentName === 'LINEAR_REGRESSION' || experimentName === 'ANOVA'
         ? covariablesArray.toString().replace(/,/g, '+')
         : covariablesArray.toString();
 
-    nextParameters.push({ name: 'x', value });
+    nextParameters.push({ name: 'x', label: 'x', value });
   }
 
-  const payload: any = {
+  const payload: ExperimentPayload = {
     algorithms: [
       {
-        code: experimentCode,
-        name: experimentCode,
+        name: experimentName,
+        label: experimentLabel,
         parameters: [...parameters, ...nextParameters],
         type
       }
     ],
     model: modelSlug,
-    name: experimentCode
+    label: experimentLabel,
+    name: experimentName
   };
 
   return payload;

@@ -15,14 +15,20 @@ import {
 // config
 
 const modelSlug = `linear-${Math.round(Math.random() * 10000)}`;
-const experimentCode = 'LINEAR_REGRESSION';
+const experimentName = 'LINEAR_REGRESSION';
+const experimentLabel = 'Linear Regression'
 const parameters = [
   {
     name: 'referencevalues',
+    label: 'referencevalues',
     value: '[{"name":"alzheimerbroadcategory","val":"Other"}]'
   },
-  { name: 'encodingparameter', value: 'dummycoding' },
-  { name: 'pathology', value: 'dementia' }
+  {
+    name: 'encodingparameter',
+    label: 'encodingparameter',
+    value: 'dummycoding'
+  },
+  { name: 'pathology', label: 'pathology', value: 'dementia' }
 ];
 
 const model: any = (datasets: VariableEntity[]) => ({
@@ -70,14 +76,15 @@ describe('Integration Test for experiment API', () => {
     return datasets !== undefined && mstate.model !== undefined;
   });
 
-  it(`create ${experimentCode}`, async () => {
+  it(`create ${experimentName}`, async () => {
     if (!datasets) {
       throw new Error('datasets not defined');
     }
     const payload: ExperimentPayload = createExaremePayload(
       model,
       datasets,
-      experimentCode,
+      experimentName,
+      experimentLabel,
       parameters,
       modelSlug,
       'multiple_local_global'
