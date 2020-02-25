@@ -15,13 +15,14 @@ import {
 // config
 
 const modelSlug = `pearson-${Math.round(Math.random() * 10000)}`;
-const experimentCode = 'PEARSON_CORRELATION';
+const experimentName = 'PEARSON_CORRELATION';
+const experimentLabel = 'Pearson Correlation';
 const parameters = [
-  { name: 'bins', value: '40' },
-  { name: 'iterations_max_number', value: 20 },
-  { name: 'sstype', value: 2 },
-  { name: 'outputformat', value: 'pfa' },
-  { name: 'pathology', value: 'dementia' }
+  { name: 'bins', value: '40', label: 'bins' },
+  { name: 'iterations_max_number', value: 20, label: 'iterations_max_number' },
+  { name: 'sstype', value: 2, label: 'sstype' },
+  { name: 'outputformat', value: 'pfa', label: 'outputformat' },
+  { name: 'pathology', value: 'dementia', label: 'pathology' }
 ];
 
 const model: any = (datasets: VariableEntity[]) => ({
@@ -68,14 +69,15 @@ describe('Integration Test for experiment API', () => {
     return datasets !== undefined && mstate.model !== undefined;
   });
 
-  it(`create ${experimentCode}`, async () => {
+  it(`create ${experimentName}`, async () => {
     if (!datasets) {
       throw new Error('datasets not defined');
     }
     const payload: ExperimentPayload = createExaremePayload(
       model,
       datasets,
-      experimentCode,
+      experimentName,
+      experimentLabel,
       parameters,
       modelSlug,
       'python_local_global'

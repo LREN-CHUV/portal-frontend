@@ -15,29 +15,39 @@ import {
 // config
 
 const modelSlug = `ttest-p-${Math.round(Math.random() * 10000)}`;
-const experimentCode = 'TTEST_ONESAMPLE';
+const experimentName = 'TTEST_ONESAMPLE';
+const experimentLabel = 'T-Test One-Sample ';
 const parameters: any = [
   {
     name: 'testvalue',
-    value: 3.0
+    value: 3.0,
+    label: 'testvalue'
   },
   {
     name: 'hypothesis',
-    value: 'different'
+    value: 'different',
+    label: 'hypothesis'
   },
   {
     name: 'effectsize',
-    value: '1'
+    value: '1',
+    label: 'effectsize'
   },
   {
     name: 'ci',
-    value: '1'
+    value: '1',
+    label: 'ci'
   },
   {
     name: 'meandiff',
-    value: '1'
+    value: '1',
+    label: 'meandiff'
   },
-  { code: 'pathology', value: 'dementia' }
+  { 
+    name: 'pathology', 
+    value: 'dementia',
+    label: 'pathology'
+  }
 ];
 const model: any = (datasets: VariableEntity[]) => ({
   query: {
@@ -83,14 +93,15 @@ describe('Integration Test for experiment API', () => {
     return datasets !== undefined && mstate.model !== undefined;
   });
 
-  it(`create ${experimentCode}`, async () => {
+  it(`create ${experimentName}`, async () => {
     if (!datasets) {
       throw new Error('datasets not defined');
     }
     const payload: ExperimentPayload = createExaremePayload(
       model,
       datasets,
-      experimentCode,
+      experimentName,
+      experimentLabel,
       parameters,
       modelSlug,
       'local_global'

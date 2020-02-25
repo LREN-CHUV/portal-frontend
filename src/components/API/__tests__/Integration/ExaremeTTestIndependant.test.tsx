@@ -15,27 +15,36 @@ import {
 // config
 
 const modelSlug = `ttest-i-${Math.round(Math.random() * 10000)}`;
-const experimentCode = 'TTEST_INDEPENDENT';
+const experimentName = 'TTEST_INDEPENDENT';
+const experimentLabel = 'T-Test Independent';
 const parameters: any = [
-  { name: 'xlevels', value: 'M,F' },
-  { name: 'testvalue', value: '3.0' },
+  { name: 'xlevels', value: 'M,F', label: 'xlevels' },
+  { name: 'testvalue', value: '3.0', label: 'testvalue' },
   {
     name: 'hypothesis',
-    value: 'greaterthan'
+    value: 'greaterthan',
+    label: 'hypothesis'
   },
   {
     name: 'effectsize',
-    value: '1'
+    value: '1',
+    label: 'effectsize'
   },
   {
     name: 'ci',
-    value: '1'
+    value: '1',
+    label: 'ci'
   },
   {
     name: 'meandiff',
-    value: '1'
+    value: '1',
+    label: 'meandiff'
   },
-  { code: 'pathology', value: 'dementia' }
+  { 
+    name: 'pathology', 
+    value: 'dementia', 
+    label: 'pathology' 
+  }
 ];
 const datasets = [{ code: 'adni' }];
 const model: any = (datasets: VariableEntity[]) => ({
@@ -100,14 +109,15 @@ describe('Integration Test for experiment API', () => {
     return datasets !== undefined && mstate.model !== undefined;
   });
 
-  it(`create ${experimentCode}`, async () => {
+  it(`create ${experimentName}`, async () => {
     if (!datasets) {
       throw new Error('datasets not defined');
     }
     const payload: ExperimentPayload = createExaremePayload(
       model,
       datasets,
-      experimentCode,
+      experimentName,
+      experimentLabel,
       parameters,
       modelSlug,
       'multiple_local_global'
