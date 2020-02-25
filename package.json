@@ -67,6 +67,7 @@
     "watch": "react-scripts start",
     "build": "react-scripts --max_old_space_size=5048 build",
     "test": "react-scripts test",
+    "citest": "react-scripts test --watchAll --forceExit",
     "eject": "react-scripts eject",
     "lint:fix": "eslint './src/**/*.{ts,tsx}' --fix",
     "lint": "eslint './src/**/*.{ts,tsx}'"

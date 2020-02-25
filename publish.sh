@@ -74,5 +74,4 @@ VCS_REF=$INCREMENTED_VERSION \
 VERSION=$INCREMENTED_VERSION \
 WORKSPACE=$WORKSPACE \
   $DOCKER push hbpmip/portal-frontend hbpmip/portal-frontend:$INCREMENTED_VERSION
-
 $DOCKER push hbpmip/portal-frontend:latest
