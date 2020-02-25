@@ -1,6 +1,6 @@
 import moment from 'moment'; // FIXME: change lib, too heavy
 import * as React from 'react';
-import { Button, Panel } from 'react-bootstrap';
+import { Panel } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 import { ExperimentResponse } from '../API/Experiment';
