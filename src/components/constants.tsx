@@ -78,7 +78,7 @@ export const ENABLED_ALGORITHMS = [
     types: [...ERRORS_OUTPUT, MIME_TYPES.JSONDATA]
   },
   {
-    enabled: true,
+    enabled: false,
     label: 'Multiple Histograms',
     types: [...ERRORS_OUTPUT, MIME_TYPES.HIGHCHARTS]
   },

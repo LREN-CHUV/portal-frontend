@@ -15,13 +15,19 @@ import {
 // config
 
 const modelSlug = `linear-${Math.round(Math.random() * 10000)}`;
-const experimentCode = 'NAIVE_BAYES_TRAINING_STANDALONE';
+const experimentName = 'NAIVE_BAYES_TRAINING_STANDALONE';
+const experimentLabel = 'Naive Bayes Training';
 const parameters = [
   {
     name: 'alpha',
-    value: '0'
+    value: '0',
+    label: 'alpha'
   },
-  { name: 'pathology', value: 'dementia' }
+  { 
+    name: 'pathology', 
+    value: 'dementia', 
+    label: 'pathology' 
+  }
 ];
 
 const model: any = (datasets: VariableEntity[]) => ({
@@ -68,14 +74,15 @@ describe('Integration Test for experiment API', () => {
     return datasets !== undefined && mstate.model !== undefined;
   });
 
-  it(`create ${experimentCode}`, async () => {
+  it(`create ${experimentName}`, async () => {
     if (!datasets) {
       throw new Error('datasets not defined');
     }
     const payload: ExperimentPayload = createExaremePayload(
       model,
       datasets,
-      experimentCode,
+      experimentName,
+      experimentLabel,
       parameters,
       modelSlug,
       "multiple_local_global"

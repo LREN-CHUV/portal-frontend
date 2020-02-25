@@ -15,11 +15,12 @@ import {
 // config
 
 const modelSlug = `pca-${Math.round(Math.random() * 10000)}`;
-const experimentCode = 'PCA';
+const experimentName = 'PCA';
+const experimentLabel = 'PCA';
 const parameters = [
-  { name: 'standardize', value: 'false' },
-  { name: 'coding', value: 'null' },
-  { name: 'pathology', value: 'dementia' }
+  { name: 'standardize', value: 'false', label: 'standardize' },
+  { name: 'coding', value: 'null', label: 'coding' },
+  { name: 'pathology', value: 'dementia', label: 'pathology' }
 ];
 
 const model: any = (datasets: VariableEntity[]) => ({
@@ -67,14 +68,15 @@ describe('Integration Test for experiment API', () => {
     return datasets !== undefined && mstate.model !== undefined;
   });
 
-  it(`create ${experimentCode}`, async () => {
+  it(`create ${experimentName}`, async () => {
     if (!datasets) {
       throw new Error('datasets not defined');
     }
     const payload: ExperimentPayload = createExaremePayload(
       model,
       datasets,
-      experimentCode,
+      experimentName,
+      experimentLabel,
       parameters,
       modelSlug,
       'python_multiple_local_global'
