@@ -138,7 +138,7 @@ export default ({ name, experiments, handleSelect }: Props): JSX.Element => {
             handleCreateNewExperiment={null}
           />
         </DropdownWrapper>
-        {/* <Link to="/articles">Articles</Link> */}
+        <Link to="/galaxy">Workflow</Link>
       </Links>
       <RightLinks>
         <Link to="/profile">Profile</Link>
