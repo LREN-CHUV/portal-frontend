@@ -21,9 +21,9 @@ export default ({
   handleShareExperiment,
   handleCreateNewExperiment
 }: Props): JSX.Element => {
-  const name = experiment && experiment.name;
+  const name =
+    experiment && experiment.algorithms.find((a, i) => i === 0)?.label;
   const modelDefinitionId = experiment && experiment.modelSlug;
-  const shared = experiment && experiment.shared;
 
   return (
     <Panel>
@@ -40,11 +40,6 @@ export default ({
             by {experiment && experiment.user && experiment.user.username}
           </h5>
         </div>
-        {/* <div className="item">
-          <Button bsStyle={'info'} onClick={handleShareExperiment}>
-            {shared ? 'UNSHARE EXPERIMENT' : 'SHARE EXPERIMENT'}
-          </Button>
-        </div> */}
         <div className="item">
           <Dropdown
             items={
