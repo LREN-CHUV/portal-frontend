@@ -217,7 +217,7 @@ class Container extends React.Component<Props, State> {
       const query = model && model.query;
 
       if (query) {
-        if (p.name === 'x' || p.label === 'x') {
+        if (p.label === 'x') {
           let covariablesArray =
             (query.coVariables && query.coVariables.map(v => v.code)) || [];
           covariablesArray = query.groupings
@@ -237,7 +237,7 @@ class Container extends React.Component<Props, State> {
           }
         }
 
-        if (p.name === 'y' || p.label === 'y') {
+        if (p.label === 'y') {
           // TEST_PAIRED
           // TODO: this will be replaced by the formula field and should be removed when it occurs
           const isVector = selectedAlgorithm.name === 'TTEST_PAIRED';
@@ -262,36 +262,39 @@ class Container extends React.Component<Props, State> {
               '';
         }
 
-        if (p.name === 'dataset' || p.label === 'dataset') {
+        if (p.label === 'dataset') {
           value =
             (query.trainingDatasets &&
               query.trainingDatasets.map(v => v.code).toString()) ||
             '';
         }
 
-        if (p.name === 'pathology' || p.label === 'pathology') {
+        if (p.label === 'pathology') {
           value = (query.pathology && query.pathology.toString()) || '';
         }
 
-        if (p.name === 'filter' || p.label === 'filter') {
+        if (p.label === 'filter') {
           value = (query.filters && query.filters) || '';
         }
       }
 
       return {
         name: p.name,
+        label: p.label,
         value
       };
     });
     const experiment: ExperimentPayload = {
       algorithms: [
         {
+          label: selectedAlgorithm.label,
           name: selectedAlgorithm.name,
           parameters: nextParameters,
           type: selectedAlgorithm.type
         }
       ],
       model: model.slug,
+      label: selectedAlgorithm.label,
       name: experimentName
     };
 
