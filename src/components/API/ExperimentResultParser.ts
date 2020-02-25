@@ -115,12 +115,6 @@ class APIAdapter {
           return {
             ...experimentResponse,
             error
-            // results: [
-            //   {
-            //     type: MIME_TYPES.ERROR,
-            //     data: error
-            //   }
-            // ]
           };
         }
 
