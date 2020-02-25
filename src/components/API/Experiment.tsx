@@ -12,6 +12,7 @@ export interface ExperimentPayload {
   algorithms: Algorithm[];
   model: string;
   name: string;
+  label: string;
 }
 
 export interface ExperimentResponse {

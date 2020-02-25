@@ -21,85 +21,92 @@ export const ERRORS_OUTPUT = [
   MIME_TYPES.USER_WARNING
 ];
 
-// TODO: merge OUTPUT and ENABLED
-export const ALGORITHM_DEFAULT_OUTPUT = [
+export const ENABLED_ALGORITHMS = [
   {
-    name: 'ANOVA',
+    enabled: true,
+    label: 'ANOVA',
     types: [...ERRORS_OUTPUT, MIME_TYPES.JSONDATA]
   },
   {
-    name: 'LINEAR_REGRESSION',
+    enabled: true,
+    label: 'Linear Regression',
     types: [...ERRORS_OUTPUT, MIME_TYPES.JSONDATA]
   },
   {
-    name: 'LOGISTIC_REGRESSION',
+    enabled: true,
+    label: 'Logistic Regression',
     types: [...ERRORS_OUTPUT, MIME_TYPES.JSONDATA, MIME_TYPES.HIGHCHARTS]
   },
   {
-    name: 'HISTOGRAMS',
+    enabled: false,
+    label: 'Histograms',
     types: [...ERRORS_OUTPUT, MIME_TYPES.HIGHCHARTS]
   },
   {
-    name: 'TTEST_INDEPENDENT',
+    enabled: true,
+    label: 'T-Test Independent',
     types: [...ERRORS_OUTPUT, MIME_TYPES.JSONDATA]
   },
   {
-    name: 'TTEST_PAIRED',
+    enabled: true,
+    label: 'T-Test Paired',
     types: [...ERRORS_OUTPUT, MIME_TYPES.JSONDATA]
   },
   {
-    name: 'PEARSON_CORRELATION',
+    enabled: true,
+    label: 'Pearson Correlation',
     types: [...ERRORS_OUTPUT, MIME_TYPES.JSONDATA, MIME_TYPES.HIGHCHARTS]
   },
   {
-    name: 'ID3',
+    enabled: true,
+    label: 'ID3',
     types: [...ERRORS_OUTPUT, MIME_TYPES.JSONDATA, MIME_TYPES.JSON]
   },
   {
-    name: 'KMEANS',
+    enabled: true,
+    label: 'k-Means Clustering',
     types: [...ERRORS_OUTPUT, MIME_TYPES.JSONDATA, MIME_TYPES.HIGHCHARTS]
   },
   {
-    name: 'NAIVE_BAYES_TRAINING_STANDALONE',
+    enabled: true,
+    label: 'Naive Bayes Training',
     types: [...ERRORS_OUTPUT, MIME_TYPES.JSONDATA, MIME_TYPES.HIGHCHARTS]
   },
   {
-    name: 'TTEST_ONESAMPLE',
+    enabled: true,
+    label: 'T-Test One-Sample ',
     types: [...ERRORS_OUTPUT, MIME_TYPES.JSONDATA]
   },
   {
-    name: 'MULTIPLE_HISTOGRAMS',
+    enabled: true,
+    label: 'Multiple Histograms',
     types: [...ERRORS_OUTPUT, MIME_TYPES.HIGHCHARTS]
   },
   {
-    name: 'PCA',
+    enabled: true,
+    label: 'Principal Components analysis',
     types: [...ERRORS_OUTPUT, MIME_TYPES.JSONDATA, MIME_TYPES.HIGHCHARTS]
   },
   {
-    name: 'f597429621d6eb2b', // Workflow Naive Bayes with Hold Out Validation
+    enabled: true,
+    label: 'Workflow Naive Bayes with Hold Out Validation',
     types: [...ERRORS_OUTPUT, MIME_TYPES.HIGHCHARTS]
   },
   {
-    name: 'f2db41e1fa331b3e', // Naive Bayes with Cross Validation
+    enabled: true,
+    label: 'Naive Bayes with Cross Validation',
     types: [...ERRORS_OUTPUT, MIME_TYPES.HIGHCHARTS]
+  },
+  {
+    enabled: true,
+    label: 'Calibration Belt',
+    types: [...ERRORS_OUTPUT]
+  },
+  {
+    enabled: true,
+    label: 'CART',
+    types: [...ERRORS_OUTPUT]
   }
-];
-
-export const ENABLED_ALGORITHMS = [
-  'LOGISTIC_REGRESSION',
-  'ANOVA',
-  'NAIVE_BAYES_TRAINING_STANDALONE',
-  'KMEANS',
-  'PEARSON_CORRELATION',
-  'ID3',
-  // 'HISTOGRAMS',
-  'LINEAR_REGRESSION',
-  'TTEST_INDEPENDENT',
-  'TTEST_PAIRED',
-  'TTEST_ONESAMPLE',
-  'PCA',
-  'f597429621d6eb2b',
-  'f2db41e1fa331b3e'
 ];
 
 const independents = ['X', 'column1', 'x', 'descriptive_attributes'];

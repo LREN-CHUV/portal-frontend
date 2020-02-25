@@ -1,8 +1,4 @@
-import {
-  ALGORITHM_DEFAULT_OUTPUT,
-  MIME_TYPES,
-  ERRORS_OUTPUT
-} from '../constants';
+import { ENABLED_ALGORITHMS, ERRORS_OUTPUT } from '../constants';
 import {
   ExperimentResponse,
   ExperimentResponseRaw,
@@ -100,10 +96,9 @@ class APIAdapter {
         );
 
       if (flattenedResults) {
-        const algorithmName = experimentResponse.algorithms[0].name;
+        const algorithmLabel = experimentResponse.algorithms[0].label;
         const config =
-          ALGORITHM_DEFAULT_OUTPUT.find(a => a.name === algorithmName) ||
-          undefined;
+          ENABLED_ALGORITHMS.find(a => a.label === algorithmLabel) || undefined;
 
         const nextResults = flattenedResults.filter(
           (r: Result) => config && config.types.includes(r.type)

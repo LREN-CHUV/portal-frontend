@@ -33,7 +33,7 @@ interface Hierarchy {
 
 export interface Algorithm {
   name: string;
-  label?: string;
+  label: string;
   desc?: string;
   parameters: AlgorithmParameter[] | AlgorithmParameterRequest[];
   type: string;
@@ -41,6 +41,7 @@ export interface Algorithm {
 
 export interface AlgorithmResult {
   name: string;
+  label: string;
   mime: string;
   data: any[];
   error?: string;
@@ -65,7 +66,7 @@ export interface AlgorithmConstraint {
 
 export interface AlgorithmParameter {
   name: string;
-  label?: string;
+  label: string;
   defaultValue: string;
   placeholder: string;
   desc: string;
@@ -85,10 +86,12 @@ export interface AlgorithmParameter {
 
 export interface AlgorithmParameterRequest {
   name: string;
+  label: string;
   value: string;
 }
 
 export interface Parameter {
+  label: string;
   name: string;
   value: any;
 }
@@ -431,9 +434,17 @@ class Core extends Container<State> {
         return { error: json.error, data: undefined };
       }
 
-      const data = json.filter((algorithm: Algorithm) =>
-        ENABLED_ALGORITHMS.includes(algorithm.name)
-      );
+      const data = json
+        .filter(
+          (algorithm: Algorithm) =>
+            ENABLED_ALGORITHMS.find(a => algorithm.label === a.label)?.enabled
+        )
+        .sort((x: Algorithm, y: Algorithm) => {
+          const a = x.label;
+          const b = y.label;
+
+          return a > b ? 1 : a < b ? -1 : 0;
+        });
 
       // FIXME: Algorithms defnition in Exareme will contains those extra parameters.
       const extraParametersData = data.map((algorithm: Algorithm) => ({
@@ -441,10 +452,7 @@ class Core extends Container<State> {
         parameters: [
           ...(algorithm.parameters as AlgorithmParameter[]).map(
             (p: AlgorithmParameter) => {
-              const visible = !(
-                UI_HIDDEN_PARAMETERS.includes(p.name) ||
-                UI_HIDDEN_PARAMETERS.includes(p.label || '')
-              );
+              const visible = !UI_HIDDEN_PARAMETERS.includes(p.label || '');
 
               // Semantic adjustements:
               // For historical reason, exareme serves a "value" as a "defaultValue".
@@ -463,6 +471,7 @@ class Core extends Container<State> {
               if (parameter.name === 'standardize') {
                 return {
                   name: 'standardize',
+                  label: 'standardize',
                   valueEnumerations: ['false', 'true'],
                   defaultValue: 'false',
                   value: 'false',
@@ -479,6 +488,7 @@ class Core extends Container<State> {
             ? [
                 {
                   name: 'design',
+                  label: 'design',
                   valueEnumerations: ['none', 'factorial', 'additive'],
                   defaultValue: 'none',
                   value: 'none',

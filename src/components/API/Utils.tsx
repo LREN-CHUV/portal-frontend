@@ -56,11 +56,13 @@ const createWorkflowPayload = async (
       algorithms: [
         {
           name: experimentCode,
+          label: selectedAlgorithm.label,
           type: 'not yet implemented',
           parameters
         }
       ],
       model: modelSlug,
+      label: selectedAlgorithm.label,
       name: experimentCode
     };
 

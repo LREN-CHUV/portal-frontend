@@ -150,14 +150,17 @@ class Mining extends Container<MiningState> {
     const parameters: Parameter[] = [
       {
         name: 'dataset',
+        label: 'dataset',
         value: datasets.map(d => d.code).toString()
       },
       {
         name: 'x',
+        label: 'x',
         value: x.code
       },
       {
         name: 'pathology',
+        label: 'pathology',
         value: pathology
       }
     ];
@@ -178,12 +181,14 @@ class Mining extends Container<MiningState> {
     if (type !== 'polynominal' && type !== 'binominal') {
       parameters.push({
         name: 'bins',
+        label: 'bins',
         value: JSON.stringify({ [x.code]: 20 })
       });
     }
 
     parameters.push({
       name: 'y',
+      label: 'y',
       value: dependentsVariables.toString()
     });
 
@@ -274,10 +279,12 @@ class Mining extends Container<MiningState> {
         const parameters: Parameter[] = [
           {
             name: 'dataset',
+            label: 'dataset',
             value: q.dataset.code
           },
           {
             name: 'x',
+            label: 'x',
             value: [
               ...payload.variables,
               ...payload.covariables,
@@ -288,10 +295,12 @@ class Mining extends Container<MiningState> {
           },
           {
             name: 'filter',
+            label: 'filter',
             value: payload.filters
           },
           {
             name: 'pathology',
+            label: 'pathology',
             value: payload.pathology
           }
         ];
@@ -389,6 +398,7 @@ class Mining extends Container<MiningState> {
           algorithm: {
             code: 'statisticsSummary',
             name: 'statisticsSummary',
+            label: 'Descriptive Statistics',
             parameters: [],
             type: 'python_multiple_local_global'
           },
