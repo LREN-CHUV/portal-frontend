@@ -111,6 +111,7 @@ class APIAdapter {
         if (errorResults.length > 0) {
           const error =
             errorResults && errorResults.length > 0 && errorResults[0].data;
+
           return {
             ...experimentResponse,
             error

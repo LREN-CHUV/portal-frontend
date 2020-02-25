@@ -84,6 +84,7 @@ const createExaremePayload = (
   const query = model(datasets).query;
   const isVector = experimentName === 'TTEST_PAIRED';
   const varCount = (query.variables && query.variables.length) || 0;
+  const isWorkflow = type === 'workflow';
   const nextParameters = [
     {
       name: 'y',
@@ -140,12 +141,16 @@ const createExaremePayload = (
     nextParameters.push({ name: 'x', label: 'x', value });
   }
 
+  const params = isWorkflow
+    ? [...parameters]
+    : [...parameters, ...nextParameters];
+
   const payload: ExperimentPayload = {
     algorithms: [
       {
         name: experimentName,
         label: experimentLabel,
-        parameters: [...parameters, ...nextParameters],
+        parameters: params,
         type
       }
     ],

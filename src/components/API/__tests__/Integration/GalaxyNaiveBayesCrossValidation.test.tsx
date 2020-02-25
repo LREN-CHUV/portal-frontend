@@ -15,19 +15,43 @@ import {
 // config
 
 const modelSlug = `naivebayes-${Math.round(Math.random() * 10000)}`;
-const experimentCode = 'f2db41e1fa331b3e'; // Naive Bayes with Cross Validation
+const experimentName = 'f2db41e1fa331b3e';
+const experimentLabel = 'Naive Bayes with Cross Validation';
 const parameters = [
-  { name: 'd8ded1b9-5e2a-4c55-9a9d-60d74ec940a2', value: '0' },
-  { name: '59093696-f570-4549-806d-15c55f468a4d', value: '3' },
-  { name: 'dd7c6242-1b48-4bcd-8b21-ca9fb6bda7f5', value: 'dementia' },
-  { name: 'a9a57dff-1f53-4936-9f1d-cefd1a1f209b', value: 'adni' },
+  {
+    name: 'd8ded1b9-5e2a-4c55-9a9d-60d74ec940a2',
+    value: '0',
+    label: 'alpha'
+  },
+  {
+    name: '59093696-f570-4549-806d-15c55f468a4d',
+    value: '3',
+    label: 'kfold'
+  },
+  {
+    name: 'dd7c6242-1b48-4bcd-8b21-ca9fb6bda7f5',
+    value: 'dementia',
+    label: 'pathology'
+  },
+  {
+    name: 'a9a57dff-1f53-4936-9f1d-cefd1a1f209b',
+    value: 'adni',
+    label: 'dataset'
+  },
   {
     name: '5f04f970-86d8-49be-a4ff-ccba18f8fee4',
-    value: 'leftacgganteriorcingulategyrus,lefthippocampus'
+    value: 'leftacgganteriorcingulategyrus,lefthippocampus',
+    label: 'x'
   },
   {
     name: 'fb380ae5-2923-4dde-a811-75fcc84914d7',
-    value: 'alzheimerbroadcategory'
+    value: 'alzheimerbroadcategory',
+    label: 'y'
+  },
+  {
+    name: '0f6fb62f-238c-404e-b636-230bd0b60207',
+    value: '',
+    label: 'filter'
   }
 ];
 
@@ -75,14 +99,15 @@ describe('Integration Test for experiment API', () => {
     return datasets !== undefined && mstate.model !== undefined;
   });
 
-  it(`create ${experimentCode}`, async () => {
+  it(`create ${experimentName}`, async () => {
     if (!datasets) {
       throw new Error('datasets not defined');
     }
     const payload: ExperimentPayload = createExaremePayload(
       model,
       datasets,
-      experimentCode,
+      experimentName,
+      experimentLabel,
       parameters,
       modelSlug,
       'workflow'
