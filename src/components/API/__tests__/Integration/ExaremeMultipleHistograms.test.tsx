@@ -79,7 +79,7 @@ describe('Integration Test for experiment API', () => {
       model,
       datasets,
       experimentName,
-      experimentLabel
+      experimentLabel,
       parameters,
       modelSlug,
       'python_multiple_local_global'
