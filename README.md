@@ -19,10 +19,15 @@ This is a minimal setup to do frontend development in this project:
 
 ### Run the Backend
 
-- Checkout the master branch of the [mip-deployment-infrastructure](https://github.com/HBPMedical/mip-deployment-infrastructure) project, and follow the setup instructions.
-- Launch `./run.sh`. You will have the MIP frontend running on your computer at http://localhost
+## Either with the MIP deployment package
 
-### React
+- Checkout the master branch of the [mip-deployment](https://github.com/HBPMedical/mip-deployment) project, and follow the setup instructions.
+
+## or by running the tests
+
+- `./run-test.sh`
+
+### Frontend development with React
 
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
@@ -30,10 +35,8 @@ You can find the most recent version of the Create React App guide [here](https:
 
 - Install [nodejs](https://nodejs.org)
 - Install [yarn](https://yarnpkg.com/en/)
-- create a `.env` file
-  - `echo REACT_APP_BACKEND_URL = \"http://frontend\" | tee .env`
-- `yarn install`
-- `yarn watch`
+- Run: `yarn install`
+- Run: `yarn watch`
 - Browse to [http://localhost:3000](http://localhost:3000)
 
 ## Tests
@@ -42,7 +45,7 @@ You can find the most recent version of the Create React App guide [here](https:
 
 You can generate models and experiments by running the tests:
 
-- `./run-test.sh` or with a regex `./run-test.sh anova`
+- `./run-test.sh` or with a regex `./run-test.sh test anova`
 
 Tests run with Jest, see [the jest cli doc](https://jestjs.io/docs/en/cli) for more details
 

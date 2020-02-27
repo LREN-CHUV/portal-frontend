@@ -1,5 +1,17 @@
 # Changelog
 
+### 5.2.0 - 27.02.2020
+
+- New API for Galaxy integration
+- Dockerized tests - (run-test.sh)
+- Calibration Belt integration
+- Removed hint on algorithm hover
+- Histogram fixes
+- Removed local/federated mode
+- Added training videos in help
+- Bug fixes
+- UI improvements
+
 ### 5.1.18 - 30.01.2020
 
 - Added more static filters for dementia
