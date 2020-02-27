@@ -13,7 +13,6 @@ build)
     yarn build
     ;;
 test)
-    te
     yarn test
     ;;
 *)
