@@ -1,18 +1,16 @@
-import APICore, { AlgorithmParameter, VariableEntity } from './Core';
+import APICore, { AlgorithmParameter, VariableEntity } from '../Core';
 import APIExperiment, {
   ExperimentPayload,
   State as ExperimentState
-} from './Experiment';
-import APIModel, { ModelResponse, ModelState } from './Model';
-import config from './RequestHeaders';
+} from '../Experiment';
+import APIModel, { ModelResponse, ModelState } from '../Model';
+import config from '../RequestHeaders';
 
 const apiModel = new APIModel(config);
 const apiExperiment = new APIExperiment(config);
 const apiCore = new APICore(config);
 
-const TIMEOUT_DURATION = 60 * 2;
-
-// Tests utils
+const TIMEOUT_DURATION = 60 * 5;
 
 const RESEARCH_DATASETS = ['adni', 'ppmi', 'edsd'];
 
@@ -29,6 +27,16 @@ const getDatasets = async (
     : datasets;
 };
 
+describe('Utils test', () => {
+  const apiCore = new APICore(config);
+
+  it('get datasets', async () => {
+    const result = await getDatasets()
+    expect(result).toBeTruthy();
+    expect(result).toHaveLength(3);
+  });
+});
+
 const createModel = async ({
   modelSlug,
   model
@@ -37,7 +45,7 @@ const createModel = async ({
   model: any;
 }): Promise<ModelState> => {
   await apiModel.save({ model, title: modelSlug });
-  await new Promise(resolve => setTimeout(resolve, 500));
+  await new Promise(resolve => setTimeout(resolve, 1500));
   return apiModel.state;
 };
 
