@@ -100,10 +100,10 @@ export const ENABLED_ALGORITHMS = [
   {
     enabled: true,
     label: 'Calibration Belt',
-    types: [...ERRORS_OUTPUT]
+    types: [...ERRORS_OUTPUT, MIME_TYPES.HIGHCHARTS]
   },
   {
-    enabled: true,
+    enabled: false,
     label: 'CART',
     types: [...ERRORS_OUTPUT]
   }

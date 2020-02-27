@@ -39,6 +39,7 @@ class APIAdapter {
       name: experiment.name,
       resultsViewed: experiment.resultsViewed,
       shared: experiment.shared,
+      hasServerError: experiment.hasServerError,
       uuid: experiment.uuid
     };
 
@@ -63,7 +64,8 @@ class APIAdapter {
     if (experiment.hasServerError) {
       experimentResponse = {
         ...experimentResponse,
-        error: `${experiment.result}`
+        error:
+          'There was an error running your experiment, please contact the system administrator.'
       };
 
       return experimentResponse;
