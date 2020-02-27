@@ -27,13 +27,13 @@ export interface ExperimentResponse {
   algorithms: Algorithm[];
   modelQuery?: Query;
   shared: boolean;
+  hasServerError: boolean;
 }
 
 export interface ExperimentResponseRaw extends ExperimentResponse {
   algorithms: any;
   model: { slug: string };
   createdBy: { fullname: string; username: string };
-  hasServerError: boolean;
   result: string;
 }
 
