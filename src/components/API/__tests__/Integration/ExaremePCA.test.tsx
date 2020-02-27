@@ -16,7 +16,7 @@ import {
 
 const modelSlug = `pca-${Math.round(Math.random() * 10000)}`;
 const experimentName = 'PCA';
-const experimentLabel = 'PCA';
+const experimentLabel = 'Principal Components analysis';
 const parameters = [
   { name: 'standardize', value: 'false', label: 'standardize' },
   { name: 'coding', value: 'null', label: 'coding' },
@@ -109,6 +109,6 @@ describe('Integration Test for experiment API', () => {
         .find('div.result table tbody tr td')
         .at(1)
         .text()
-    ).toEqual('0.083');
+    ).toEqual('0.061');
   });
 });
