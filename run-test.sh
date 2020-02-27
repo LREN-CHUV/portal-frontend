@@ -3,23 +3,35 @@
 run_test() {
     docker build -f ./test-server/test-docker/Dockerfile . -t hbpmip/portal-frontend:testing
 
-    echo -e "Stop running containers"
-    docker stop $(docker ps -q)
+    echo -e "Stop and restart containers [y/n]? "
+    read answer
+    if [ "$answer" = "y" ]; then
+        echo
+        echo -e "Stop running containers"
+        docker stop $(docker ps -q)
 
-    echo -e "Start MIP"
-    cd ./test-server
-    ./run.sh
+        echo
+        echo -e "Start MIP for testing"
+        cd ./test-server
+        ./run.sh
 
-    echo -e "Waiting 1m for containers to be up"
-    sleep 1m
+        echo
+        echo -e "Waiting 1m for containers to be up"
+        sleep 1m
+    fi
 
+    echo
     echo -e "Run tests in test container"
-    docker run --rm -it -e BACKEND_URL=http://172.17.0.1:8080 hbpmip/portal-frontend:testing yarn ci-test
+    COMMAND="docker run --rm -it -e BACKEND_URL=http://172.17.0.1:8080 hbpmip/portal-frontend:testing yarn"
+    case $1 in
+    test)
+        $COMMAND test $2
+        ;;
+    *)
+        $COMMAND ci-test
+        ;;
+    esac
+
 }
 
-echo -e "Run test [y/n]? "
-echo -e "This will STOP all your RUNNING containers"
-read answer
-if [ "$answer" = "y" ]; then
-    run_test
-fi
+run_test $@

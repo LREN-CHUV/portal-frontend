@@ -42,7 +42,7 @@ You can find the most recent version of the Create React App guide [here](https:
 
 You can generate models and experiments by running the tests:
 
-- `./run-test.sh`
+- `./run-test.sh` or with a regex `./run-test.sh anova`
 
 Tests run with Jest, see [the jest cli doc](https://jestjs.io/docs/en/cli) for more details
 
