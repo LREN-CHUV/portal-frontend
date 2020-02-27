@@ -16,8 +16,8 @@ run_test() {
         ./run.sh
 
         echo
-        echo -e "Waiting 1m for containers to be up"
-        sleep 1m
+        echo -e "Waiting 2m for containers to be up"
+        sleep 2m
     fi
 
     echo
