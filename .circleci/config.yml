@@ -21,7 +21,7 @@ jobs:
       - run:
           name: 'Test frontend'
           command: |
-            ./run-test.sh
+            ./ci-test.sh
 workflows:
   version: 2
   build_and_test:
