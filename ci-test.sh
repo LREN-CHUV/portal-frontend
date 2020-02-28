@@ -18,7 +18,7 @@ run_test() {
 
     echo
     echo -e "Run tests in test container"
-    docker run --rm -it -e BACKEND_URL=http://172.17.0.1:8080 hbpmip/portal-frontend:testing yarn ci-test
+    docker run --rm -it -e BACKEND_URL="http://$(ip address show docker0 | awk '/inet.*docker0$/ {print $2}' | cut -d/ -f1):8080" hbpmip/portal-frontend:testing yarn ci-test
 
 }
 
