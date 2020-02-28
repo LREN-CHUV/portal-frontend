@@ -73,5 +73,5 @@ BUILD_DATE=$(date --iso-8601=seconds) \
 VCS_REF=$INCREMENTED_VERSION \
 VERSION=$INCREMENTED_VERSION \
 WORKSPACE=$WORKSPACE \
-  $DOCKER push hbpmip/portal-frontend:$INCREMENTED_VERSION
-$DOCKER push hbpmip/portal-frontend:latest
+  docker push hbpmip/portal-frontend:$INCREMENTED_VERSION
+docker push hbpmip/portal-frontend:latest
