@@ -2,12 +2,6 @@
 
 set -e
 
-if groups $USER | grep &>/dev/null '\bdocker\b'; then
-  DOCKER="docker"
-else
-  DOCKER="sudo docker"
-fi
-
 # git porcelain ? All changes must be commited
 echo
 echo "Testing for uncommited files"
