@@ -2,7 +2,7 @@
 
 set -o pipefail # trace ERR through pipes
 set -o errtrace # trace ERR through 'time command' and other functions
-set -o errexit  ## set -e : exit the script if any statement returns a non-true return value
+# set -o errexit  ## set -e : exit the script if any statement returns a non-true return value
 
 run_test() {
     docker build -f ./test-server/test-docker/Dockerfile . -t hbpmip/portal-frontend:testing
