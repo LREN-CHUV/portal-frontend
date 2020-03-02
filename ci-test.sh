@@ -7,6 +7,12 @@ set -o errexit  ## set -e : exit the script if any statement returns a non-true 
 run_test() {
     docker build -f ./test-server/test-docker/Dockerfile . -t hbpmip/portal-frontend:testing
 
+    if [ ! -d "logs" ]; then
+        sudo mkdir logs
+    fi
+
+    sudo chmod a+rwx logs
+
     echo
     echo -e "Start MIP for testing"
     cd ./test-server
