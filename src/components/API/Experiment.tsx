@@ -70,6 +70,20 @@ class Experiment extends Container<State> {
 
   public one = async ({ uuid }: IUUID): Promise<void> => {
     try {
+      // mark status and refresh the list
+      if (
+        this.state.experiments?.find(e => e.uuid === uuid)?.resultsViewed ===
+        false
+      ) {
+        await request.get(`${this.baseUrl}/${uuid}/markAsViewed`, this.options);
+        await this.setState(previousState => ({
+          experiments: previousState.experiments?.map(e => ({
+            ...e,
+            resultsViewed: e.uuid === uuid ? true : e.resultsViewed
+          }))
+        }));
+      }
+
       const data = await request.get(`${this.baseUrl}/${uuid}`, this.options);
       const json = await JSON.parse(data);
       if (json.error) {
