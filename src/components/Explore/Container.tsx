@@ -169,7 +169,7 @@ export default ({
     if (selectedNode && selectedNode.data.isVariable) {
       apiMining.multipleHistograms({
         datasets: datasets,
-        x: selectedNode.data,
+        y: selectedNode.data,
         pathology: (model && model.query && model.query.pathology) || ''
       });
     }
