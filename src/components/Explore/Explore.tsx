@@ -158,9 +158,7 @@ export default (props: ExploreProps): JSX.Element => {
               </PathologiesBox>
               <DatasetsBox>
                 <LargeDatasetSelect
-                  datasets={apiCore.datasetsForPathology(
-                    model && model.query && model.query.pathology
-                  )}
+                  datasets={datasets}
                   handleSelectDataset={handleSelectDataset}
                   selectedDatasets={selectedDatasets}
                 ></LargeDatasetSelect>
