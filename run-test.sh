@@ -25,13 +25,19 @@ run_test() {
     fi
 
     echo
-    echo -e "Run tests in test container"
+
     COMMAND="docker run --rm -it -e BACKEND_URL=http://172.17.0.1:8080 hbpmip/portal-frontend:testing yarn"
     case $1 in
     test)
+        echo -e "Run tests in test container"
         $COMMAND test $2
         ;;
+    raw)
+        echo -e "No tests to run"
+        ;;
+
     *)
+        echo -e "Run tests in test container"
         $COMMAND ci-test
         ;;
     esac

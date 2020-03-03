@@ -49,6 +49,15 @@ You can generate models and experiments by running the tests:
 
 Tests run with Jest, see [the jest cli doc](https://jestjs.io/docs/en/cli) for more details
 
+### Turn on authentication
+
+- Change the AUTHENTICATION flag from 0 to 1 in test-docker/docker-compose.yml
+- `docker exec -it $(docker ps | grep jboss/keycloak | awk '{print $1}') bash`
+- `cd /opt/jboss/keycloak/bin`
+- `./kcadm.sh config credentials --server http://88.197.53.10:8095/auth --realm master --user admin`
+- use password Pa55w0rd
+- `./kcadm.sh update realms/MIP -s sslRequired=NONE`
+
 ## Build (produce a local docker container)
 
 Run: `./build.sh`

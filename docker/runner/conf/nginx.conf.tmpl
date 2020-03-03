@@ -118,9 +118,6 @@ http {
 	    proxy_pass {{.Env.KEYCLOAK_LOGIN_URL}}; 
 	}
 
-	
-
-	
 {{ if .Env.PORTAL_BACKEND_SERVER }}
       location /services {
         proxy_pass http://portal-backend/{{ default .Env.PORTAL_BACKEND_CONTEXT "services" }};
