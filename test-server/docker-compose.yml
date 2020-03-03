@@ -79,7 +79,7 @@ services:
       PORTAL_DB_USER: portal
       PORTAL_DB_PASSWORD: portalpwd
       CONTEXT_PATH: /services
-      AUTHENTICATION: 0
+      AUTHENTICATION: 1
       CLIENT_ID: medical-informatics-platform
       CLIENT_SECRET: dae83a6b-c769-4186-8383-f0984c6edf05
       FRONTEND_LOGIN_URL: http://127.0.0.1/services/login/hbp
@@ -117,7 +117,7 @@ services:
       - frontend
 
   frontend:
-    image: hbpmip/portal-frontend:dev_5.2.3
+    image: hbpmip/portal-frontend:dev_5.2.4
     depends_on:
       - portalbackend
     ports:
@@ -132,12 +132,17 @@ services:
       VERSION: 'Frontend: dev_5.2.3, Backend: dev_v6.0.1, Exareme: dev_v13, Galaxy: v1.3.1'
       TRACKER_ID: UA-80660232-5
       GALAXY_URL: 'http://galaxy/nativeGalaxy'
+      KEYCLOAK_AUTH_URL: "http://127.0.0.1/auth/"
+      KEYCLOAK_LOGIN_URL: "http://127.0.0.1/auth/realms/MIP/protocol/openid-connect/auth"
     networks:
       - frontend
       - backend
 
   keycloak_db:
     image: postgres
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+    environment:
     environment:
       POSTGRES_DB: keycloak
       POSTGRES_USER: keycloak
@@ -150,6 +155,8 @@ services:
 
   keycloak:
     image: jboss/keycloak
+    command:
+      -Djboss.http.port=8095
     volumes:
       - ./config/certs:/etc/x509/https
       - ./config/keycloak.json:/tmp/mip.json
