@@ -10,6 +10,8 @@ fi
 
 sudo chmod a+rwx logs
 
+export DOMAIN_NAME=$(hostname -I | awk '{print $1}')
+
 echo -e "\nRemoving previous services..."
 docker-compose --project-name mip down
 

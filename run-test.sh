@@ -30,15 +30,14 @@ run_test() {
     case $1 in
     test)
         echo -e "Run tests in test container"
+        $COMMAND ci-test
+        ;;
+    regex)
+        echo -e "Run $2 test in test container"
         $COMMAND test $2
         ;;
-    raw)
-        echo -e "No tests to run"
-        ;;
-
     *)
-        echo -e "Run tests in test container"
-        $COMMAND ci-test
+        echo -e "Done"
         ;;
     esac
 
