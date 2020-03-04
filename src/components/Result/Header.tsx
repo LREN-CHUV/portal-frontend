@@ -1,6 +1,6 @@
 import moment from 'moment'; // FIXME: change lib, too heavy
 import * as React from 'react';
-import { Button, Panel } from 'react-bootstrap';
+import { Panel } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 import { ExperimentResponse } from '../API/Experiment';
@@ -21,9 +21,9 @@ export default ({
   handleShareExperiment,
   handleCreateNewExperiment
 }: Props): JSX.Element => {
-  const name = experiment && experiment.name;
-  const modelDefinitionId = experiment && experiment.modelDefinitionId;
-  const shared = experiment && experiment.shared;
+  const name =
+    experiment && experiment.algorithms.find((a, i) => i === 0)?.label;
+  const modelDefinitionId = experiment && experiment.modelSlug;
 
   return (
     <Panel>
@@ -41,17 +41,12 @@ export default ({
           </h5>
         </div>
         <div className="item">
-          <Button bsStyle={'info'} onClick={handleShareExperiment}>
-            {shared ? 'UNSHARE EXPERIMENT' : 'SHARE EXPERIMENT'}
-          </Button>
-        </div>
-        <div className="item">
           <Dropdown
             items={
               experiment &&
               experiments &&
               experiments.filter(
-                (e: any) => e.modelDefinitionId === experiment.modelDefinitionId
+                (e: any) => e.modelDefinitionId === experiment.modelSlug
               )
             }
             /* eslint-disable-next-line */

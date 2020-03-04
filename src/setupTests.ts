@@ -8,6 +8,6 @@ if (typeof window.URL.createObjectURL === 'undefined') {
   Object.defineProperty(window.URL, 'createObjectURL', { value: noOp });
 }
 
-jasmine.DEFAULT_TIMEOUT_INTERVAL = 2 * 60 * 1000;
+jasmine.DEFAULT_TIMEOUT_INTERVAL = 5 * 60 * 1000;
 
 configure({ adapter: new Adapter() });

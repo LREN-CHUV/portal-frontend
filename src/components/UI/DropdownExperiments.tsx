@@ -72,15 +72,15 @@ export default ({
         })
         .map((experiment, i: number) => {
           let experimentState;
-
           experimentState = experiment.error
             ? 'exclamation-sign'
             : !experiment.results
             ? 'transfer'
-            : 'eye-open';
-          experimentState += ' ready';
-          // FIXME: various colors for states
-          // experimentState += experiment.resultsViewed ? ' viewed' : ' ready';
+            : experiment.resultsViewed
+            ? 'eye-open'
+            : 'eye-close';
+
+          experimentState += experiment.resultsViewed ? ' viewed' : ' ready';
 
           return (
             <Link

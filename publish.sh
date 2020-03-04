@@ -2,12 +2,6 @@
 
 set -e
 
-if groups $USER | grep &>/dev/null '\bdocker\b'; then
-  DOCKER="docker"
-else
-  DOCKER="sudo docker"
-fi
-
 # git porcelain ? All changes must be commited
 echo
 echo "Testing for uncommited files"
@@ -27,7 +21,7 @@ yarn lint
 # yarn test - tests must pass !
 echo
 echo "Running tests"
-yarn test
+yarn ci-test
 
 PACKAGE_VERSION=$(node -p -e "require('./package.json').version")
 
@@ -73,6 +67,5 @@ BUILD_DATE=$(date --iso-8601=seconds) \
 VCS_REF=$INCREMENTED_VERSION \
 VERSION=$INCREMENTED_VERSION \
 WORKSPACE=$WORKSPACE \
-  $DOCKER push hbpmip/portal-frontend hbpmip/portal-frontend:$INCREMENTED_VERSION
-
-$DOCKER push hbpmip/portal-frontend:latest
+  docker push hbpmip/portal-frontend:$INCREMENTED_VERSION
+docker push hbpmip/portal-frontend:latest

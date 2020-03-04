@@ -10,7 +10,6 @@ interface Props {
   name?: string;
   experiments?: ExperimentResponse[];
   handleSelect: (experiment: ExperimentResponse) => void;
-  isFederated: boolean;
 }
 
 const NavBar = styled.nav`
@@ -110,12 +109,7 @@ const DropdownWrapper = styled.div`
   }
 `;
 
-export default ({
-  name,
-  experiments,
-  handleSelect,
-  isFederated = false
-}: Props): JSX.Element => {
+export default ({ name, experiments, handleSelect }: Props): JSX.Element => {
   const instanceName = name || 'MIP';
   return (
     <NavBar>
@@ -138,13 +132,13 @@ export default ({
             items={experiments}
             /* eslint-disable-next-line */
             style="link"
+            type={'models'}
             title="My Experiments"
             handleSelect={handleSelect}
             handleCreateNewExperiment={null}
           />
         </DropdownWrapper>
-        {isFederated && <Link to="/galaxy">Workflow</Link>}
-        {/* <Link to="/articles">Articles</Link> */}
+        <Link to="/galaxy">Workflow</Link>
       </Links>
       <RightLinks>
         <Link to="/profile">Profile</Link>

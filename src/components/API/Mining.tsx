@@ -150,14 +150,17 @@ class Mining extends Container<MiningState> {
     const parameters: Parameter[] = [
       {
         name: 'dataset',
+        label: 'dataset',
         value: datasets.map(d => d.code).toString()
       },
       {
         name: 'y',
+        label: 'y',
         value: y.code
       },
       {
         name: 'pathology',
+        label: 'pathology',
         value: pathology
       }
     ];
@@ -170,7 +173,7 @@ class Mining extends Container<MiningState> {
       ? JSON.parse(choosenHistogramVariablesString)
       : {};
 
-    const dependentsVariables = Object.values(choosenHistogramVariables)
+    const yVariables = Object.values(choosenHistogramVariables)
       .map((v: VariableEntity) => v.code)
       .filter(v => y.code !== v);
 
@@ -178,13 +181,15 @@ class Mining extends Container<MiningState> {
     if (type !== 'polynominal' && type !== 'binominal') {
       parameters.push({
         name: 'bins',
+        label: 'bins',
         value: JSON.stringify({ [y.code]: 20 })
       });
     }
 
     parameters.push({
       name: 'x',
-      value: dependentsVariables.toString()
+      label: 'x',
+      value: yVariables.toString()
     });
 
     this.abortMiningRequests();
@@ -197,7 +202,7 @@ class Mining extends Container<MiningState> {
           'Content-Type': 'application/json;charset=UTF-8'
         },
         method: 'POST',
-        uri: `${this.backendURL}/mining/exareme/MULTIPLE_HISTOGRAMS`
+        uri: `${this.backendURL}/mining/histograms`
       });
 
       this.requests.push(r);
@@ -274,10 +279,12 @@ class Mining extends Container<MiningState> {
         const parameters: Parameter[] = [
           {
             name: 'dataset',
+            label: 'dataset',
             value: q.dataset.code
           },
           {
             name: 'x',
+            label: 'x',
             value: [
               ...payload.variables,
               ...payload.covariables,
@@ -288,10 +295,12 @@ class Mining extends Container<MiningState> {
           },
           {
             name: 'filter',
+            label: 'filter',
             value: payload.filters
           },
           {
             name: 'pathology',
+            label: 'pathology',
             value: payload.pathology
           }
         ];
@@ -332,7 +341,7 @@ class Mining extends Container<MiningState> {
           'Content-Type': 'application/json;charset=UTF-8'
         },
         method: 'POST',
-        uri: `${this.backendURL}/mining/exareme-stats`
+        uri: `${this.backendURL}/mining/descriptive_stats`
       });
       this.requests.push(r);
       const data = await r;
@@ -389,8 +398,9 @@ class Mining extends Container<MiningState> {
           algorithm: {
             code: 'statisticsSummary',
             name: 'statisticsSummary',
+            label: 'Descriptive Statistics',
             parameters: [],
-            validation: false
+            type: 'python_multiple_local_global'
           },
           ...payload,
           datasets: [q.dataset]

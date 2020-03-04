@@ -10,17 +10,22 @@ import {
   createModel,
   getDatasets,
   waitForResult
-} from '../../Utils';
+} from '../Utils';
 
 // config
 
 const modelSlug = `anova-${Math.round(Math.random() * 10000)}`;
-const experimentCode = 'KMEANS';
+const experimentName = 'KMEANS';
+const experimentLabel = 'k-Means Clustering';
 const parameters = [
-  { code: 'k', value: '4' },
-  { code: 'e', value: 1 },
-  { code: 'iterations_max_number', value: 1000 },
-  { code: 'pathology', value: 'dementia' }
+  { name: 'k', value: '4', label: 'k' },
+  { name: 'e', value: 1, label: 'e' },
+  {
+    name: 'iterations_max_number',
+    value: 1000,
+    label: 'iterations_max_number'
+  },
+  { name: 'pathology', value: 'dementia', label: 'pathology' }
 ];
 
 const model: any = (datasets: VariableEntity[]) => ({
@@ -64,16 +69,18 @@ describe('Integration Test for experiment API', () => {
     return datasets !== undefined && mstate.model !== undefined;
   });
 
-  it(`create ${experimentCode}`, async () => {
+  it(`create ${experimentName}`, async () => {
     if (!datasets) {
       throw new Error('datasets not defined');
     }
     const payload: ExperimentPayload = createExaremePayload(
       model,
       datasets,
-      experimentCode,
+      experimentName,
+      experimentLabel,
       parameters,
-      modelSlug
+      modelSlug,
+      'iterative'
     );
 
     const { error, experiment } = await createExperiment({
@@ -103,6 +110,6 @@ describe('Integration Test for experiment API', () => {
         .find('div.result table tbody tr td')
         .at(1)
         .text()
-    ).toEqual('4.123');
+    ).toEqual('5.111');
   });
 });

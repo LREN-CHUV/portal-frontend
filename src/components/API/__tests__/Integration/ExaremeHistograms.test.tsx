@@ -10,15 +10,16 @@ import {
   createModel,
   getDatasets,
   waitForResult
-} from '../../Utils';
+} from '../Utils';
 
 // config
 
 const modelSlug = `histograms-${Math.round(Math.random() * 10000)}`;
-const experimentCode = 'HISTOGRAMS';
+const experimentName = 'HISTOGRAMS';
+const experimentLabel = 'Histograms';
 const parameters = [
-  { code: 'bins', value: '40' },
-  { code: 'pathology', value: 'dementia' }
+  { name: 'bins', value: '40', label: 'bins' },
+  { name: 'pathology', value: 'dementia', label: 'pathology' }
 ];
 
 const model: any = (datasets: VariableEntity[]) => ({
@@ -42,7 +43,7 @@ const model: any = (datasets: VariableEntity[]) => ({
 
 // Test
 
-describe.skip('Integration Test for experiment API', () => {
+describe('Integration Test for experiment API', () => {
   let datasets: VariableEntity[] | undefined;
 
   beforeAll(async () => {
@@ -60,16 +61,18 @@ describe.skip('Integration Test for experiment API', () => {
     return datasets !== undefined && mstate.model !== undefined;
   });
 
-  it(`create ${experimentCode}`, async () => {
+  it(`create ${experimentName}`, async () => {
     if (!datasets) {
       throw new Error('datasets not defined');
     }
     const payload: ExperimentPayload = createExaremePayload(
       model,
       datasets,
-      experimentCode,
+      experimentName,
+      experimentLabel,
       parameters,
-      modelSlug
+      modelSlug,
+      'multiple_local_global'
     );
     const { error, experiment } = await createExperiment({
       experiment: payload

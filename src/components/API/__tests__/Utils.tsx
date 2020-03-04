@@ -1,20 +1,16 @@
-import APICore, { AlgorithmParameter, VariableEntity } from './Core';
+import APICore, { AlgorithmParameter, VariableEntity } from '../Core';
 import APIExperiment, {
-  Engine,
   ExperimentPayload,
   State as ExperimentState
-} from './Experiment';
-import APIModel, { ModelResponse, ModelState } from './Model';
-import config from './RequestHeaders';
-import { InstanceMode } from '../App/App';
+} from '../Experiment';
+import APIModel, { ModelResponse, ModelState } from '../Model';
+import config from '../RequestHeaders';
 
 const apiModel = new APIModel(config);
 const apiExperiment = new APIExperiment(config);
 const apiCore = new APICore(config);
 
-const TIMEOUT_DURATION = 60 * 2;
-
-// Tests utils
+const TIMEOUT_DURATION = 60 * 5;
 
 const RESEARCH_DATASETS = ['adni', 'ppmi', 'edsd'];
 
@@ -31,6 +27,16 @@ const getDatasets = async (
     : datasets;
 };
 
+describe('Utils test', () => {
+  const apiCore = new APICore(config);
+
+  it('get datasets', async () => {
+    const result = await getDatasets()
+    expect(result).toBeTruthy();
+    expect(result).toHaveLength(3);
+  });
+});
+
 const createModel = async ({
   modelSlug,
   model
@@ -39,6 +45,7 @@ const createModel = async ({
   model: any;
 }): Promise<ModelState> => {
   await apiModel.save({ model, title: modelSlug });
+  await new Promise(resolve => setTimeout(resolve, 1500));
   return apiModel.state;
 };
 
@@ -49,23 +56,23 @@ const createWorkflowPayload = async (
   parameters: AlgorithmParameter[],
   modelSlug: string
 ): Promise<ExperimentPayload | void> => {
-  await apiCore.algorithms(InstanceMode.Local);
+  await apiCore.algorithms();
   const algorithms = apiCore.state.algorithms || [];
-  const selectedAlgorithm = algorithms.find(a => a.code === experimentCode);
+  const selectedAlgorithm = algorithms.find(a => a.name === experimentCode);
 
   if (selectedAlgorithm) {
     const payload: ExperimentPayload = {
       algorithms: [
         {
-          code: experimentCode,
           name: experimentCode,
+          label: selectedAlgorithm.label,
+          type: 'not yet implemented',
           parameters
         }
       ],
-      engine: Engine.Workflow,
       model: modelSlug,
-      name: experimentCode,
-      validations: []
+      label: selectedAlgorithm.label,
+      name: experimentCode
     };
 
     return payload;
@@ -77,16 +84,20 @@ const createWorkflowPayload = async (
 const createExaremePayload = (
   model: (datasets: VariableEntity[]) => ModelResponse,
   datasets: VariableEntity[],
-  experimentCode: string,
+  experimentName: string,
+  experimentLabel: string,
   parameters: AlgorithmParameter[],
-  modelSlug: string
+  modelSlug: string,
+  type: string
 ): any => {
   const query = model(datasets).query;
-  const isVector = experimentCode === 'TTEST_PAIRED';
+  const isVector = experimentName === 'TTEST_PAIRED';
   const varCount = (query.variables && query.variables.length) || 0;
+  const isWorkflow = type === 'workflow';
   const nextParameters = [
     {
-      code: 'y',
+      name: 'y',
+      label: 'y',
       value: isVector
         ? (query.variables &&
             query.variables // outputs: a1-a2,b1-b2, c1-a1
@@ -105,18 +116,21 @@ const createExaremePayload = (
         : (query.variables && query.variables.map(v => v.code).toString()) || ''
     },
     {
-      code: 'dataset',
+      name: 'dataset',
+      label: 'dataset',
       value:
         (query.trainingDatasets &&
           query.trainingDatasets.map(v => v.code).toString()) ||
         ''
     },
     {
-      code: 'pathology',
+      name: 'pathology',
+      label: 'pathology',
       value: (query.pathology && query.pathology.toString()) || ''
     },
     {
-      code: 'filter',
+      name: 'filter',
+      label: 'filter',
       value: (query.filters && query.filters) || ''
     }
   ];
@@ -129,25 +143,29 @@ const createExaremePayload = (
 
   if (covariablesArray.length > 0) {
     const value =
-      experimentCode === 'LINEAR_REGRESSION' || experimentCode === 'ANOVA'
+      experimentName === 'LINEAR_REGRESSION' || experimentName === 'ANOVA'
         ? covariablesArray.toString().replace(/,/g, '+')
         : covariablesArray.toString();
 
-    nextParameters.push({ code: 'x', value });
+    nextParameters.push({ name: 'x', label: 'x', value });
   }
 
-  const payload: any = {
+  const params = isWorkflow
+    ? [...parameters]
+    : [...parameters, ...nextParameters];
+
+  const payload: ExperimentPayload = {
     algorithms: [
       {
-        code: experimentCode,
-        name: experimentCode,
-        parameters: [...parameters, ...nextParameters]
+        name: experimentName,
+        label: experimentLabel,
+        parameters: params,
+        type
       }
     ],
-    engine: Engine.Exareme,
     model: modelSlug,
-    name: experimentCode,
-    validations: []
+    label: experimentLabel,
+    name: experimentName
   };
 
   return payload;
@@ -159,6 +177,8 @@ const createExperiment = async ({
   experiment: ExperimentPayload;
 }): Promise<ExperimentState> => {
   await apiExperiment.create({ experiment });
+  await new Promise(resolve => setTimeout(resolve, 1000));
+
   return apiExperiment.state;
 };
 

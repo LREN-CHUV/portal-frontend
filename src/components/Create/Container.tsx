@@ -1,22 +1,16 @@
-import '../Experiment.css';
-
 import * as React from 'react';
 import { Panel, Tab, Tabs } from 'react-bootstrap';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
-
 import { APICore, APIExperiment, APIModel } from '../API';
 import {
   Algorithm,
   AlgorithmParameter,
   AlgorithmParameterRequest
 } from '../API/Core';
-import {
-  Engine,
-  ExperimentPayload,
-  ExperimentResponse
-} from '../API/Experiment';
+import { ExperimentPayload, ExperimentResponse } from '../API/Experiment';
 import { ModelResponse, Query } from '../API/Model';
 import { AppConfig } from '../App/App';
+import '../Experiment.css';
 import { Alert, IAlert } from '../UI/Alert';
 import DatasetsForm from '../UI/DatasetsForm';
 import Model from '../UI/Model';
@@ -162,7 +156,7 @@ class Container extends React.Component<Props, State> {
   private handleSelectExperiment = async (
     experiment: ExperimentResponse
   ): Promise<any> => {
-    const { modelDefinitionId, uuid } = experiment;
+    const { modelSlug: modelDefinitionId, uuid } = experiment;
     const { apiExperiment, history } = this.props;
     history.push(`/experiment/${modelDefinitionId}/${uuid}`);
 
@@ -218,13 +212,12 @@ class Container extends React.Component<Props, State> {
       return;
     }
 
-    const isWorkflow = selectedAlgorithm.engine === Engine.Workflow;
     const nextParameters: AlgorithmParameterRequest[] = parameters.map(p => {
       let value: string = p.value;
       const query = model && model.query;
 
       if (query) {
-        if (p.name === 'x') {
+        if (p.label === 'x') {
           let covariablesArray =
             (query.coVariables && query.coVariables.map(v => v.code)) || [];
           covariablesArray = query.groupings
@@ -244,7 +237,7 @@ class Container extends React.Component<Props, State> {
           }
         }
 
-        if (p.name === 'y') {
+        if (p.label === 'y') {
           // TEST_PAIRED
           // TODO: this will be replaced by the formula field and should be removed when it occurs
           const isVector = selectedAlgorithm.name === 'TTEST_PAIRED';
@@ -269,42 +262,40 @@ class Container extends React.Component<Props, State> {
               '';
         }
 
-        if (p.name === 'dataset') {
+        if (p.label === 'dataset') {
           value =
             (query.trainingDatasets &&
               query.trainingDatasets.map(v => v.code).toString()) ||
             '';
         }
 
-        if (p.name === 'pathology') {
+        if (p.label === 'pathology') {
           value = (query.pathology && query.pathology.toString()) || '';
         }
 
-        if (p.name === 'filter') {
+        if (p.label === 'filter') {
           value = (query.filters && query.filters) || '';
         }
       }
 
       return {
-        code: isWorkflow ? p.uuid || p.name : p.name,
+        name: p.name,
+        label: p.label,
         value
       };
     });
     const experiment: ExperimentPayload = {
       algorithms: [
         {
-          code:
-            selectedAlgorithm.engine === Engine.Exareme
-              ? selectedAlgorithm.name
-              : selectedAlgorithm.code,
+          label: selectedAlgorithm.label,
           name: selectedAlgorithm.name,
-          parameters: nextParameters
+          parameters: nextParameters,
+          type: selectedAlgorithm.type
         }
       ],
-      engine: selectedAlgorithm.engine,
       model: model.slug,
-      name: experimentName,
-      validations: []
+      label: selectedAlgorithm.label,
+      name: experimentName
     };
 
     await apiExperiment.create({ experiment });
