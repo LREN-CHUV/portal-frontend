@@ -82,9 +82,9 @@ services:
       AUTHENTICATION: 1
       CLIENT_ID: medical-informatics-platform
       CLIENT_SECRET: dae83a6b-c769-4186-8383-f0984c6edf05
-      FRONTEND_LOGIN_URL: http://127.0.0.1/services/login/hbp
-      FRONTEND_AFTER_LOGIN_URL: http://127.0.0.1/
-      FRONTEND_AFTER_LOGOUT_URL: http://127.0.0.1/services/login/hbp
+      FRONTEND_LOGIN_URL: http://88.197.53.10/services/login/hbp
+      FRONTEND_AFTER_LOGIN_URL: http://88.197.53.10/
+      FRONTEND_AFTER_LOGOUT_URL: http://88.197.53.10/services/login/hbp
       LOGGING_LEVEL_WEB: INFO
       LOGGING_LEVEL_HIBERNATE: INFO
       SESSION_TIMEOUT: 2592000
@@ -100,11 +100,11 @@ services:
       GALAXY_USERNAME: admin
       GALAXY_PASSWORD: password
 
-      KEYCLOAK_URL: '127.0.0.1'
-      AUTH_URI: 'http://127.0.0.1:8095/auth/realms/MIP/protocol/openid-connect/auth'
-      USER_INFO_URI: 'http://127.0.0.1:8095/auth/realms/MIP/protocol/openid-connect/userinfo'
-      TOKEN_URI: 'http://127.0.0.1:8095/auth/realms/MIP/protocol/openid-connect/token'
-      LOGOUT_URI: 'http://127.0.0.1:8095/auth/realms/MIP/protocol/openid-connect/logout'
+      KEYCLOAK_URL: '88.197.53.10'
+      AUTH_URI: 'http://88.197.53.10/keycloaklogin'
+      USER_INFO_URI: 'http://88.197.53.10/auth/realms/MIP/protocol/openid-connect/userinfo'
+      TOKEN_URI: 'http://88.197.53.10/auth/realms/MIP/protocol/openid-connect/token'
+      LOGOUT_URI: 'http://88.197.53.10/auth/realms/MIP/protocol/openid-connect/logout'
 
     depends_on:
       - create_dbs
@@ -132,8 +132,8 @@ services:
       VERSION: 'Frontend: dev_5.2.4, Backend: dev_v6.0.1, Exareme: dev_v13, Galaxy: v1.3.1'
       TRACKER_ID: UA-80660232-5
       GALAXY_URL: 'http://galaxy/nativeGalaxy'
-      KEYCLOAK_AUTH_URL: "http://127.0.0.1/auth/"
-      KEYCLOAK_LOGIN_URL: "http://127.0.0.1/auth/realms/MIP/protocol/openid-connect/auth"
+      KEYCLOAK_AUTH_URL: "http://88.197.53.10:8095/auth/"
+      KEYCLOAK_LOGIN_URL: "http://88.197.53.10:8095/auth/realms/MIP/protocol/openid-connect/auth"
     networks:
       - frontend
       - backend
