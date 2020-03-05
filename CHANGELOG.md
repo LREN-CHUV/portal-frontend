@@ -1,5 +1,13 @@
 # Changelog
 
+###
+
+- Changed TBI CDEs Mortality to Categorical type
+- hbpmip/exareme:dev_v14.2
+- Calibration Belt dynamic variables integration
+- Added Annotation module for Highcharts
+- Reverted x<->y for multiple histograms
+
 ### 5.2.0 - 27.02.2020
 
 - New API for Galaxy integration
