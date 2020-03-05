@@ -3049,9 +3049,19 @@
           "code": "Mortality",
           "label": "Six Month Mortality",
           "methodology": "creactive",
-          "sql_type": "integer",
-          "type": "integer",
-          "isCategorical": false
+          "sql_type": "text",
+          "type": "polynominal",
+          "isCategorical": true,
+          "enumerations": [
+            {
+              "code": "0",
+              "label": "Dead"
+            },
+            {
+              "code": "1",
+              "label": "Alive"
+            }
+          ]
         },
         {
           "code": "dataset",

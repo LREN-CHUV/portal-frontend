@@ -14,53 +14,28 @@ import {
 
 // config
 
-const modelSlug = `calibration-belt-${Math.round(Math.random() * 10000)}`;
-const experimentName = 'CALIBRATION_BELT';
-const experimentLabel = 'Calibration Belt';
+const modelSlug = `cart-${Math.round(Math.random() * 10000)}`;
+const experimentName = 'CART';
+const experimentLabel = 'CART';
 const parameters = [
-  {
-    name: 'devel',
-    label: 'devel',
-    value: 'external'
-  },
-  {
-    name: 'max_deg',
-    label: 'max_deg',
-    value: '4'
-  },
-  {
-    name: 'confLevels',
-    label: 'confLevels',
-    value: '0.80, 0.95'
-  },
-  {
-    name: 'thres',
-    label: 'thres',
-    value: '0.95'
-  },
-  {
-    name: 'num_points',
-    label: 'num_points',
-    value: '200'
-  }
+  { name: 'max_depth', value: '3', label: 'max_depth' },
+  { name: 'pathology', value: 'dementia', label: 'pathology' }
 ];
 
 const model: any = (datasets: VariableEntity[]) => ({
   query: {
-    pathology: 'tbi', // FIXME: should by dynamic
-    coVariables: [
-      {
-        code: 'impact_prob_core_mortality'
-      }
-    ],
+    pathology: 'dementia', // FIXME: should by dynamic
+    coVariables: [{ code: 'lefthippocampus' }, { code: 'righthippocampus' }],
     filters: '',
     groupings: [],
     testingDatasets: [],
-    trainingDatasets: datasets,
+    trainingDatasets: datasets.map(d => ({
+      code: d.code
+    })),
     validationDatasets: [],
     variables: [
       {
-        code: 'Mortality'
+        code: 'alzheimerbroadcategory'
       }
     ]
   }
@@ -69,9 +44,12 @@ const model: any = (datasets: VariableEntity[]) => ({
 // Test
 
 describe('Integration Test for experiment API', () => {
-  let datasets: VariableEntity[] | undefined = [{ code: 'demo1' }];
+  let datasets: VariableEntity[] | undefined;
 
   beforeAll(async () => {
+    datasets = await getDatasets();
+    expect(datasets).toBeTruthy();
+
     const mstate = await createModel({
       model: model(datasets),
       modelSlug
@@ -80,10 +58,13 @@ describe('Integration Test for experiment API', () => {
     expect(mstate.error).toBeFalsy();
     expect(mstate.model).toBeTruthy();
 
-    return;
+    return datasets !== undefined && mstate.model !== undefined;
   });
 
   it(`create ${experimentName}`, async () => {
+    if (!datasets) {
+      throw new Error('datasets not defined');
+    }
     const payload: ExperimentPayload = createExaremePayload(
       model,
       datasets,
@@ -91,7 +72,7 @@ describe('Integration Test for experiment API', () => {
       experimentLabel,
       parameters,
       modelSlug,
-      'python_iterative'
+      'iterative'
     );
 
     const { error, experiment } = await createExperiment({
@@ -116,11 +97,11 @@ describe('Integration Test for experiment API', () => {
     expect(wrapper.find('.error')).toHaveLength(0);
     expect(wrapper.find('.loading')).toHaveLength(0);
     expect(wrapper.find('.result')).toHaveLength(1);
-  //   expect(
-  //     wrapper
-  //       .find('div.result table tbody tr td')
-  //       .at(1)
-  //       .text()
-  //   ).toEqual('34.673');
+    // expect(
+    //   wrapper
+    //     .find('div.result table tbody tr td')
+    //     .at(1)
+    //     .text()
+    // ).toEqual('34.673');
   });
 });
