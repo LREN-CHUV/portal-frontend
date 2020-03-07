@@ -342,7 +342,12 @@ export default ({
   const handleOKSwitchPathology = (): void => {
     setShowPathologySwitchWarning(false);
     if (apiCore.state.pathologies) {
-      const newModel = { query: { pathology: nextPathologyCode } };
+      const newModel: ModelResponse = {
+        query: {
+          pathology: nextPathologyCode,
+          trainingDatasets: apiCore.datasetsForPathology(nextPathologyCode)
+        }
+      };
       apiModel.setModel(newModel);
     }
   };
