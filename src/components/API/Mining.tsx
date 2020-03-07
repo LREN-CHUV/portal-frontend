@@ -3,6 +3,7 @@ import stringHash from 'string-hash';
 import { Container } from 'unstated';
 
 import { backendURL } from '../API';
+import { HISTOGRAMS_STORAGE_KEY } from '../constants';
 import { VariableDatum } from '../Explore/d3Hierarchy';
 import { Algorithm, Parameter, VariableEntity } from './Core';
 
@@ -90,30 +91,24 @@ class Mining extends Container<MiningState> {
   };
 
   public setGroupingForPathology = (
+    pathology: string,
     choosenVariables: HistogramVariable
   ): void => {
+    const existing = this.choosenHistogramVariables();
+
     localStorage.setItem(
-      'choosenHistogramVariables',
-      JSON.stringify(choosenVariables)
+      HISTOGRAMS_STORAGE_KEY,
+      JSON.stringify({
+        ...existing,
+        [pathology]: choosenVariables
+      })
     );
   };
 
-  public groupingForPathology = (): HistogramVariable => {
-    const choosenHistogramVariablesString = localStorage.getItem(
-      'choosenHistogramVariables'
-    );
+  public groupingForPathology = (pathology: string): HistogramVariable => {
+    const existing = this.choosenHistogramVariables()[pathology] || {};
 
-    if (choosenHistogramVariablesString) {
-      const choosenHistogramVariables = JSON.parse(
-        choosenHistogramVariablesString
-      );
-      return choosenHistogramVariables;
-    } else {
-      return {
-        1: { code: 'gender', label: 'Gender' },
-        2: { code: 'agegroup', label: 'Age Group' }
-      };
-    }
+    return existing;
   };
 
   public refetchAlgorithms = () => {
@@ -165,15 +160,15 @@ class Mining extends Container<MiningState> {
       }
     ];
 
-    const choosenHistogramVariablesString = localStorage.getItem(
-      'choosenHistogramVariables'
+    const choosenHistogramVariablesByPathologyString = localStorage.getItem(
+      'choosenHistogramVariablesByPathology'
     );
 
-    const choosenHistogramVariables: HistogramVariable = choosenHistogramVariablesString
-      ? JSON.parse(choosenHistogramVariablesString)
+    const choosenHistogramVariablesByPathology: HistogramVariable = choosenHistogramVariablesByPathologyString
+      ? JSON.parse(choosenHistogramVariablesByPathologyString)
       : {};
 
-    const yVariables = Object.values(choosenHistogramVariables)
+    const yVariables = Object.values(choosenHistogramVariablesByPathology)
       .map((v: VariableEntity) => v.code)
       .filter(v => y.code !== v);
 
@@ -452,6 +447,20 @@ class Mining extends Container<MiningState> {
         error: error.message
       };
     }
+  };
+
+  private choosenHistogramVariables = (): {
+    [key: string]: HistogramVariable;
+  } => {
+    const choosenHistogramVariablesByPathologyString = localStorage.getItem(
+      HISTOGRAMS_STORAGE_KEY
+    );
+
+    const existing = choosenHistogramVariablesByPathologyString
+      ? JSON.parse(choosenHistogramVariablesByPathologyString)
+      : {};
+
+    return existing;
   };
 }
 

@@ -15,6 +15,8 @@ export enum MIME_TYPES {
   JSONRAW = 'application/raw+json'
 }
 
+export const HISTOGRAMS_STORAGE_KEY = 'mipChoosenHistogramsVars';
+
 export const ERRORS_OUTPUT = [
   MIME_TYPES.ERROR,
   MIME_TYPES.WARNING,

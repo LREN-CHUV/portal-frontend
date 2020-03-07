@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import { APIMining } from '../API';
 import { VariableEntity } from '../API/Core';
 import { HistogramVariable, MiningResponseShape } from '../API/Mining';
+import { ModelResponse } from '../API/Model';
 import Loading from '../UI/Loader';
 import Highchart from '../UI/Visualization/Highchart';
 import { HierarchyCircularNode } from './Container';
@@ -18,6 +19,7 @@ interface Props {
   selectedNode?: HierarchyCircularNode;
   independantsVariables: VariableEntity[] | undefined;
   zoom: Function;
+  model: ModelResponse | undefined;
 }
 
 const breadcrumb = (
@@ -68,22 +70,31 @@ export default (props: Props): JSX.Element => {
     histograms,
     independantsVariables,
     selectedNode,
-    zoom
+    zoom,
+    model
   } = props;
 
   useEffect(() => {
     if (choosenVariables) {
-      apiMining.setGroupingForPathology(choosenVariables);
+      const pathology = model?.query?.pathology;
+      if (pathology) {
+        apiMining.setGroupingForPathology(pathology, choosenVariables);
+      }
     }
-  }, [choosenVariables, apiMining]);
+  }, [choosenVariables, apiMining, model]);
 
   useEffect(() => {
-    const choosenHistogramVariables = apiMining.groupingForPathology();
+    const pathology = model?.query?.pathology;
+    if (pathology) {
+      const choosenHistogramVariablesByPathology = apiMining.groupingForPathology(
+        pathology
+      );
 
-    if (choosenHistogramVariables) {
-      setChoosenVariables(choosenHistogramVariables);
+      if (choosenHistogramVariablesByPathology) {
+        setChoosenVariables(choosenHistogramVariablesByPathology);
+      }
     }
-  }, [apiMining]);
+  }, [apiMining, model]);
 
   const handleChooseVariable = (
     index: number,

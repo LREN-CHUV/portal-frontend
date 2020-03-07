@@ -280,6 +280,7 @@ export default (props: ExploreProps): JSX.Element => {
                 selectedNode={selectedNode}
                 handleSelectedNode={handleSelectNode}
                 zoom={zoom}
+                model={model}
               />
             </Panel.Body>
           </Panel>
