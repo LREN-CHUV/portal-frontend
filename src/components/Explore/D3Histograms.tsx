@@ -218,11 +218,11 @@ export default (props: Props): JSX.Element => {
                 <Tab
                   eventKey={i}
                   title={
-                    i === selectedTab ? (
+                    i === selectedTab ||
+                    !(choosenVariables && choosenVariables[i]) ? (
                       <DropDown
                         noCaret={false}
                         bsStyle="link"
-                        disabled={i !== selectedTab}
                         id={`independant-dropdown-${i}`}
                         title={
                           (choosenVariables &&
