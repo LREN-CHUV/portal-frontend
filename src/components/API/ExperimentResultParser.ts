@@ -1,4 +1,4 @@
-import { ENABLED_ALGORITHMS, ERRORS_OUTPUT } from '../constants';
+import { ENABLED_ALGORITHMS, ERRORS_OUTPUT, MIME_TYPES } from '../constants';
 import {
   ExperimentResponse,
   ExperimentResponseRaw,
@@ -120,9 +120,18 @@ class APIAdapter {
           };
         }
 
+        // FIXME
+        const finalResults =
+          algorithmLabel === 'CART'
+            ? nextResults.map((r: Result) => ({
+                ...r,
+                type: MIME_TYPES.JSONBTREE
+              }))
+            : nextResults;
+
         const response = {
           ...experimentResponse,
-          results: nextResults
+          results: finalResults
         };
 
         return response;

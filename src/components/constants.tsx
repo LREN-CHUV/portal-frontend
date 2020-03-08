@@ -5,14 +5,11 @@ export enum MIME_TYPES {
   USER_WARNING = 'text/plain+user_error',
   HIGHCHARTS = 'application/vnd.highcharts+json',
   JSON = 'application/json',
-  MIP_PFA = 'application/vnd.hbp.mip.experiment.pfa+json',
-  MIP_COMPOUND = 'application/vnd.hbp.mip.compound+json',
+  JSONBTREE = 'application/binary-tree+json',
   PFA = 'application/pfa+json',
-  PLOTLY = 'application/vnd.plotly.v1+json',
   JSONDATA = 'application/vnd.dataresource+json',
   HTML = 'text/html',
-  TEXT = 'text/plain',
-  JSONRAW = 'application/raw+json'
+  TEXT = 'text/plain'
 }
 
 export const HISTOGRAMS_STORAGE_KEY = 'mipChoosenHistogramsVars';
@@ -105,9 +102,9 @@ export const ENABLED_ALGORITHMS = [
     types: [...ERRORS_OUTPUT, MIME_TYPES.HIGHCHARTS]
   },
   {
-    enabled: false,
+    enabled: true,
     label: 'CART',
-    types: [...ERRORS_OUTPUT]
+    types: [...ERRORS_OUTPUT, MIME_TYPES.JSON]
   }
 ];
 

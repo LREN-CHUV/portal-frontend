@@ -59,7 +59,7 @@ export default ({ data }: { data: any }): JSX.Element => {
       const height = 300 - margin.top - margin.bottom;
 
       const treemap = d3.tree().size([height, width]);
-
+      console.log(nextData);
       let nodes: any = d3.hierarchy(nextData, (d: any) => d.childnodes);
       nodes = treemap(nodes);
 
