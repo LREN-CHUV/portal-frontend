@@ -5,14 +5,14 @@ import styled from 'styled-components';
 import { round } from '../../utils';
 
 const nodeRectSize = { width: 160, height: 80 };
-const svgSize = { width: 1800, height: 1000, margin: 100, vmargin: 10 };
+const svgSize = { width: 800, height: 1000, margin: 100, vmargin: 10 };
 
-const SVGContainer = styled.svg`
-  width: 1800px;
-  height: 1000px;
+const SVGContainer = styled.div`
+  width: 100%;
+  height: 100%;
 
   .node {
-    cursor: default;
+    cursor: grab;
   }
 
   .node:hover {
@@ -36,17 +36,22 @@ const SVGContainer = styled.svg`
   }
 `;
 
-interface TreeNode {
-  right: TreeNode | string;
-  left: TreeNode | string;
-}
-
 interface Nodes {
   childnodes?: Nodes[];
-  info: NodeInfo;
+  info: NodeData;
 }
 
-interface NodeInfo {
+interface TreeNode extends Partial<NodeData> {
+  right: TreeNode | string;
+  left: TreeNode | string;
+  colName: string;
+  threshold: number;
+  gain: number;
+  samplesPerClass: object;
+  class: string;
+}
+
+interface NodeData {
   variable: string;
   criterion: string;
   samples: string;
@@ -60,46 +65,41 @@ const makeNodes = (data: TreeNode): Nodes[] => {
       ...(data.left !== 'None' && {
         childnodes: makeNodes(data.left as TreeNode)
       }),
-      info: makeNodeInfo(data)
+      info: makeNodeData(data)
     },
     {
       ...(data.right !== 'None' && {
         childnodes: makeNodes(data.right as TreeNode)
       }),
-      info: makeNodeInfo(data)
+      info: makeNodeData(data)
     }
   ];
 
   return childnodes;
 };
 
-const makeNodeInfo = (data: any): NodeInfo => {
-  const info = {
-    variable: `${data.colName} <= ${round(data.threshold, 3)}`,
-    criterion: `${data.criterion} = ${round(data.gain, 3)}`,
-    samples: `samples = ${data.samples}`,
-    value: `value = [${Object.values(data.samplesPerClass).toString()}]`,
-    class: `class = ${data.class.replace('u', '')}`
-  };
-
-  return info;
-};
+const makeNodeData = (data: TreeNode): NodeData => ({
+  variable: `${data.colName} <= ${round(data.threshold, 3)}`,
+  criterion: `${data.criterion} = ${round(data.gain, 3)}`,
+  samples: `samples = ${data.samples}`,
+  value: `value = [${Object.values(data.samplesPerClass).toString()}]`,
+  class: `class = ${data.class.replace('u', '')}`
+});
 
 export default ({ data }: { data: TreeNode }): JSX.Element => {
   const svgRef = useRef(null);
+  const isFirstRender = useRef(false);
 
-  React.useEffect(() => {
-    if (!svgRef.current) {
+  React.useLayoutEffect(() => {
+    if (!svgRef.current || !data || isFirstRender.current) {
       return;
     }
 
-    if (!data) {
-      return;
-    }
+    isFirstRender.current = true;
 
     const nextData = {
       childnodes: makeNodes(data),
-      info: makeNodeInfo(data)
+      info: makeNodeData(data)
     };
 
     const width = svgSize.width;
@@ -107,26 +107,23 @@ export default ({ data }: { data: TreeNode }): JSX.Element => {
 
     const treemap = d3
       .tree()
-      .size([width, height])
       .separation(() => 1.2)
-      .nodeSize([nodeRectSize.width, nodeRectSize.height + 40]);
+      .nodeSize([nodeRectSize.width, nodeRectSize.height * 2]);
 
     const root = d3.hierarchy(nextData, (d: any) => d.childnodes);
     const nodes = treemap(root);
 
-    // append the svg object to the body of the page
-    // appends a 'group' element to 'svg'
-    // moves the 'group' element to the top left margin
     const svg = d3
       .select(svgRef.current)
-      .append('svg')
-      .attr('width', width)
-      .attr('height', height)
-      // .call(
-      //   d3.zoom().on('zoom', function() {
-      //     svg.attr('transform', d3.event.transform);
-      //   })
-      // );
+      .append<Element>('svg')
+      .attr('preserveAspectRatio', 'xMinYMin meet')
+      .attr('viewBox', `0 0 ${width} ${height}`)
+      .call(
+        d3
+          .zoom()
+          .scaleExtent([0, 10])
+          .on('zoom', () => g.attr('transform', d3.event.transform))
+      );
 
     const g = svg
       .append('g')
@@ -190,9 +187,9 @@ export default ({ data }: { data: TreeNode }): JSX.Element => {
   }, [data]);
 
   return (
-    <div style={{ overflow: 'auto' }}>
+    <div>
       <SVGContainer ref={svgRef} />
-      {/* <pre>{data && JSON.stringify(data, null, 4)}</pre> */}
+      <pre>{data && JSON.stringify(data, null, 4)}</pre>
     </div>
   );
 };
