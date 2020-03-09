@@ -74,7 +74,7 @@ class Experiment extends React.Component<Props> {
     const { apiExperiment, apiModel, apiCore } = this.props;
     return (
       <div className="Experiment Result">
-        {/* <div className="header">
+        <div className="header">
           <ExperimentResultHeader
             experiment={apiExperiment.state.experiment}
             experiments={apiExperiment.state.experiments}
@@ -88,10 +88,10 @@ class Experiment extends React.Component<Props> {
             <Datasets model={apiModel.state.model} />
             <Model model={apiModel.state.model} lookup={apiCore.lookup} />
             <Algorithms experiment={apiExperiment.state.experiment} />
-          </div> */}
-        <div className="results">
-          <ExperimentResult experimentState={apiExperiment.state} />
-          {/* </div> */}
+          </div>
+          <div className="results">
+            <ExperimentResult experimentState={apiExperiment.state} />
+          </div>
         </div>
       </div>
     );
