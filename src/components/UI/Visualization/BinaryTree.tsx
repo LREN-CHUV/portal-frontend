@@ -38,7 +38,7 @@ const SVGContainer = styled.div`
 
 interface Nodes {
   childnodes?: Nodes[];
-  info: NodeData;
+  info?: NodeData;
 }
 
 interface TreeNode extends Partial<NodeData> {
@@ -59,20 +59,24 @@ interface NodeData {
   class: string;
 }
 
-const makeNodes = (data: TreeNode): Nodes[] => {
+const makeNodes = (data: TreeNode): Nodes[] | object => {
+  if (data.left === 'None' && data.right === 'None') {
+    return {};
+  }
+
   const childnodes = [
-    {
-      ...(data.left !== 'None' && {
-        childnodes: makeNodes(data.left as TreeNode)
-      }),
-      info: makeNodeData(data)
-    },
-    {
-      ...(data.right !== 'None' && {
-        childnodes: makeNodes(data.right as TreeNode)
-      }),
-      info: makeNodeData(data)
-    }
+    data.left !== 'None'
+      ? {
+          childnodes: makeNodes(data.left as TreeNode),
+          info: makeNodeData(data.left as TreeNode)
+        }
+      : {},
+    data.right !== 'None'
+      ? {
+          childnodes: makeNodes(data.right as TreeNode),
+          info: makeNodeData(data.right as TreeNode)
+        }
+      : {}
   ];
 
   return childnodes;
@@ -101,6 +105,8 @@ export default ({ data }: { data: TreeNode }): JSX.Element => {
       childnodes: makeNodes(data),
       info: makeNodeData(data)
     };
+
+    console.log(nextData);
 
     const width = svgSize.width;
     const height = svgSize.height;
@@ -167,23 +173,23 @@ export default ({ data }: { data: TreeNode }): JSX.Element => {
       .attr('x', x)
       .attr('y', y)
       .style('text-anchor', (d: any) => 'start')
-      .text((d: any) => d.data.info.variable)
+      .text((d: any) => d.data.info?.variable)
       .append('tspan')
       .attr('x', x)
       .attr('y', y + 12)
-      .text((d: any) => d.data.info.criterion)
+      .text((d: any) => d.data.info?.criterion)
       .append('tspan')
       .attr('x', x)
       .attr('y', y + 24)
-      .text((d: any) => d.data.info.samples)
+      .text((d: any) => d.data.info?.samples)
       .append('tspan')
       .attr('x', x)
       .attr('y', y + 36)
-      .text((d: any) => d.data.info.value)
+      .text((d: any) => d.data.info?.value)
       .append('tspan')
       .attr('x', x)
       .attr('y', y + 50)
-      .text((d: any) => d.data.info.class);
+      .text((d: any) => d.data.info?.class);
   }, [data]);
 
   return (
