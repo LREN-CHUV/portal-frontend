@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { round } from '../../utils';
 
 const nodeRectSize = { width: 240, height: 80 };
-const fixedSize = { w: 800, h: 600 };
+const fixedSize = { w: 800, h: 1000 };
 
 const SVGContainer = styled.div`
   width: 100%;
@@ -34,20 +34,16 @@ const SVGContainer = styled.div`
     stroke: #ccc;
     stroke-width: 2px;
   }
-
-  .hidden {
-    display: none;
-  }
 `;
 
-interface Nodes {
-  childnodes?: Nodes[];
+interface Node {
+  children?: Node[];
   info?: NodeData;
 }
 
-interface TreeNode extends Partial<NodeData> {
-  right: TreeNode | string;
-  left: TreeNode | string;
+interface JSONNode extends Partial<NodeData> {
+  right: JSONNode | string;
+  left: JSONNode | string;
   colName: string;
   threshold: number;
   gain: number;
@@ -56,6 +52,7 @@ interface TreeNode extends Partial<NodeData> {
 }
 
 interface NodeData {
+  isRight: string;
   variable: string;
   criterion: string;
   samples: string;
@@ -67,47 +64,46 @@ interface NodeAttribute {
   data: { info?: NodeData };
 }
 
-const makeNodes = (data: TreeNode): Nodes[] | object => {
-  if (data.left === 'None' && data.right === 'None') {
-    return {};
+type HierarchyPointNode = d3.HierarchyPointNode<Node>;
+
+// parsing JSON
+const makeNodes = (data: JSONNode): Node[] | undefined => {
+  if (data.colName === 'None') {
+    return undefined;
   }
 
-  const childnodes = [
-    data.right !== 'None'
-      ? {
-          childnodes: makeNodes(data.right as TreeNode),
-          info: makeNodeData(data.right as TreeNode, false)
-        }
-      : {},
-    data.left !== 'None'
-      ? {
-          childnodes: makeNodes(data.left as TreeNode),
-          info: makeNodeData(data.left as TreeNode, true)
-        }
-      : {}
+  const hasLeft = data.left !== undefined && data.left !== 'None';
+  const hasRight = data.right !== undefined && data.right !== 'None';
+
+  if (!hasLeft && !hasRight) {
+    return undefined;
+  }
+
+  const children = [
+    {
+      children: hasLeft ? makeNodes(data.left as JSONNode) : undefined,
+      info: hasLeft ? makeNodeData(data.left as JSONNode, false) : undefined
+    },
+    {
+      children: hasRight ? makeNodes(data.right as JSONNode) : undefined,
+      info: hasRight ? makeNodeData(data.right as JSONNode, true) : undefined
+    }
   ];
 
-  return childnodes;
+  return children;
 };
 
-const makeNodeData = (data: TreeNode, isRight: boolean): NodeData | object =>
-  data.colName !== 'None'
-    ? {
-        right: isRight ? 'True' : 'False',
-        variable: `${data.colName} <= ${round(data.threshold, 3)}`,
-        criterion: `${data.criterion} = ${round(data.gain, 3)}`,
-        samples: `samples = ${data.samples}`,
-        value: `value = [${Object.values(data.samplesPerClass).toString()}]`,
-        class: `class = ${data.class.replace('u', '')}`
-      }
-    : {};
+const makeNodeData = (data: JSONNode, isRight: boolean): NodeData => ({
+  isRight: isRight ? 'True' : 'False',
+  variable: `${data.colName} <= ${round(data.threshold, 3)}`,
+  criterion: `${data.criterion} = ${round(data.gain, 3)}`,
+  samples: `samples = ${data.samples}`,
+  value: `value = [${Object.values(data.samplesPerClass).toString()}]`,
+  class: `class = ${data.class.replace('u', '')}`
+});
 
-const nodeExists = (d: NodeAttribute): boolean =>
-  Object.keys(d.data).length > 0 && Object.keys(d.data?.info || {}).length > 0;
-
-export default ({ data }: { data: TreeNode }): JSX.Element => {
+export default ({ data }: { data: JSONNode }): JSX.Element => {
   const svgRef = useRef(null);
-  const isFirstRender = useRef(false);
   const [, setLocalData] = React.useState(data);
 
   React.useLayoutEffect(() => {
@@ -115,19 +111,14 @@ export default ({ data }: { data: TreeNode }): JSX.Element => {
       return;
     }
 
-    const firstRender = (): void => {
-      const nextData = {
-        childnodes: makeNodes(data),
-        info: makeNodeData(data, true)
-      };
-
+    const firstRender = (treeNode: Node): void => {
       const treemap = d3
         .tree()
         .separation(() => 1.2)
         .nodeSize([nodeRectSize.width, nodeRectSize.height * 2]);
 
-      const root = d3.hierarchy(nextData, (d: any) => d.childnodes);
-      const nodes = treemap(root);
+      const root = d3.hierarchy(treeNode);
+      const nodes = treemap(root) as HierarchyPointNode;
 
       const svg = d3
         .select(svgRef.current)
@@ -145,7 +136,7 @@ export default ({ data }: { data: TreeNode }): JSX.Element => {
         .append('svg:g')
         .attr(
           'transform',
-          `translate(${fixedSize.w / 2},${nodeRectSize.height}) scale(0.5)`
+          `translate(${fixedSize.w / 2},${nodeRectSize.height / 2}) scale(0.5)`
         );
 
       const g = svg.append('g');
@@ -155,10 +146,11 @@ export default ({ data }: { data: TreeNode }): JSX.Element => {
         .data(nodes.descendants().slice(1))
         .enter()
         .append('path')
-        .attr('class', (d: any) => (nodeExists(d) ? 'link' : 'hidden'))
+        .attr('class', 'link')
         .attr(
           'd',
-          (d: any) =>
+          (d: HierarchyPointNode) =>
+            d?.parent &&
             `M ${d.x}, ${d.y} C ${d.x}, ${(d.y + d.parent.y) / 2} ${
               d.parent.x
             }, ${(d.y + d.parent.y) / 2} ${d.parent.x}, ${d.parent.y}`
@@ -171,11 +163,12 @@ export default ({ data }: { data: TreeNode }): JSX.Element => {
         .append('text')
         .attr(
           'transform',
-          (d: any) =>
+          (d: HierarchyPointNode) =>
+            d?.parent &&
             `translate(${(d.parent.x + d.x) / 2},${(d.parent.y + d.y) / 2})`
         )
         .style('text-anchor', 'middle')
-        .text((d: any) => d.data.info?.right);
+        .text((d: HierarchyPointNode) => d?.data.info?.isRight || '');
 
       // adds each node as a group
       const node = g
@@ -183,8 +176,11 @@ export default ({ data }: { data: TreeNode }): JSX.Element => {
         .data(nodes.descendants())
         .enter()
         .append('g')
-        .attr('class', (d: any) => (nodeExists(d) ? 'node' : 'hidden'))
-        .attr('transform', (d: any) => `translate(${d.x},${d.y})`);
+        .attr('class', 'node')
+        .attr(
+          'transform',
+          (d: HierarchyPointNode) => d && `translate(${d.x},${d.y})`
+        );
 
       node
         .append('rect')
@@ -200,48 +196,51 @@ export default ({ data }: { data: TreeNode }): JSX.Element => {
         .append('text')
         .attr('x', x)
         .attr('y', y)
-        .style('text-anchor', (d: any) => 'start')
-        .text((d: any) => d.data.info?.variable)
+        .style('text-anchor', 'start')
+        .text((d: HierarchyPointNode) => d?.data.info?.variable || '')
         .append('tspan')
         .attr('x', x)
         .attr('y', y + 12)
-        .text((d: any) => d.data.info?.criterion)
+        .text((d: HierarchyPointNode) => d?.data.info?.criterion || '')
         .append('tspan')
         .attr('x', x)
         .attr('y', y + 24)
-        .text((d: any) => d.data.info?.samples)
+        .text((d: HierarchyPointNode) => d?.data.info?.samples || '')
         .append('tspan')
         .attr('x', x)
         .attr('y', y + 36)
-        .text((d: any) => d.data.info?.value)
+        .text((d: HierarchyPointNode) => d?.data.info?.value || '')
         .append('tspan')
         .attr('x', x)
         .attr('y', y + 50)
-        .text((d: any) => d.data.info?.class);
+        .text((d: HierarchyPointNode) => d?.data.info?.class || '');
     };
 
-    const updateRender = (): void => {
+    const updateRender = (treeData: Node): void => {
       d3.select(svgRef.current)
         .selectAll('svg')
         .remove();
 
-      firstRender();
+      firstRender(treeData);
     };
 
     // update or render
     setLocalData(previousData => {
+      const treeNode: Node = {
+        children: makeNodes(data),
+        info: makeNodeData(data, true)
+      };
+
       if (previousData !== data) {
-        updateRender();
+        updateRender(treeNode);
+
+        return data;
+      } else {
+        firstRender(treeNode);
 
         return previousData;
-      } else {
-        firstRender();
-        return data;
       }
     });
-
-    isFirstRender.current = true;
-    updateRender();
   }, [data]);
 
   return (
