@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import { round } from '../../utils';
 
-const nodeRectSize = { width: 160, height: 80 };
+const nodeRectSize = { width: 240, height: 80 };
 const fixedSize = { w: 800, h: 600 };
 
 const SVGContainer = styled.div`
@@ -34,6 +34,10 @@ const SVGContainer = styled.div`
     stroke: #ccc;
     stroke-width: 2px;
   }
+
+  .hidden {
+    display: none;
+  }
 `;
 
 interface Nodes {
@@ -59,22 +63,26 @@ interface NodeData {
   class: string;
 }
 
+interface NodeAttribute {
+  data: { info?: NodeData };
+}
+
 const makeNodes = (data: TreeNode): Nodes[] | object => {
   if (data.left === 'None' && data.right === 'None') {
     return {};
   }
 
   const childnodes = [
-    data.left !== 'None'
-      ? {
-          childnodes: makeNodes(data.left as TreeNode),
-          info: makeNodeData(data.left as TreeNode)
-        }
-      : {},
     data.right !== 'None'
       ? {
           childnodes: makeNodes(data.right as TreeNode),
-          info: makeNodeData(data.right as TreeNode)
+          info: makeNodeData(data.right as TreeNode, false)
+        }
+      : {},
+    data.left !== 'None'
+      ? {
+          childnodes: makeNodes(data.left as TreeNode),
+          info: makeNodeData(data.left as TreeNode, true)
         }
       : {}
   ];
@@ -82,13 +90,20 @@ const makeNodes = (data: TreeNode): Nodes[] | object => {
   return childnodes;
 };
 
-const makeNodeData = (data: TreeNode): NodeData => ({
-  variable: `${data.colName} <= ${round(data.threshold, 3)}`,
-  criterion: `${data.criterion} = ${round(data.gain, 3)}`,
-  samples: `samples = ${data.samples}`,
-  value: `value = [${Object.values(data.samplesPerClass).toString()}]`,
-  class: `class = ${data.class.replace('u', '')}`
-});
+const makeNodeData = (data: TreeNode, isRight: boolean): NodeData | object =>
+  data.colName !== 'None'
+    ? {
+        right: isRight ? 'True' : 'False',
+        variable: `${data.colName} <= ${round(data.threshold, 3)}`,
+        criterion: `${data.criterion} = ${round(data.gain, 3)}`,
+        samples: `samples = ${data.samples}`,
+        value: `value = [${Object.values(data.samplesPerClass).toString()}]`,
+        class: `class = ${data.class.replace('u', '')}`
+      }
+    : {};
+
+const nodeExists = (d: NodeAttribute): boolean =>
+  Object.keys(d.data).length > 0 && Object.keys(d.data?.info || {}).length > 0;
 
 export default ({ data }: { data: TreeNode }): JSX.Element => {
   const svgRef = useRef(null);
@@ -103,7 +118,7 @@ export default ({ data }: { data: TreeNode }): JSX.Element => {
     const firstRender = (): void => {
       const nextData = {
         childnodes: makeNodes(data),
-        info: makeNodeData(data)
+        info: makeNodeData(data, true)
       };
 
       const treemap = d3
@@ -140,7 +155,7 @@ export default ({ data }: { data: TreeNode }): JSX.Element => {
         .data(nodes.descendants().slice(1))
         .enter()
         .append('path')
-        .attr('class', 'link')
+        .attr('class', (d: any) => (nodeExists(d) ? 'link' : 'hidden'))
         .attr(
           'd',
           (d: any) =>
@@ -149,13 +164,26 @@ export default ({ data }: { data: TreeNode }): JSX.Element => {
             }, ${(d.y + d.parent.y) / 2} ${d.parent.x}, ${d.parent.y}`
         );
 
+      // add labels on edges
+      g.selectAll('.label')
+        .data(nodes.descendants().slice(1))
+        .enter()
+        .append('text')
+        .attr(
+          'transform',
+          (d: any) =>
+            `translate(${(d.parent.x + d.x) / 2},${(d.parent.y + d.y) / 2})`
+        )
+        .style('text-anchor', 'middle')
+        .text((d: any) => d.data.info?.right);
+
       // adds each node as a group
       const node = g
         .selectAll('.node')
         .data(nodes.descendants())
         .enter()
         .append('g')
-        .attr('class', 'node')
+        .attr('class', (d: any) => (nodeExists(d) ? 'node' : 'hidden'))
         .attr('transform', (d: any) => `translate(${d.x},${d.y})`);
 
       node
