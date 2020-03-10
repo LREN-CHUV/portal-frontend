@@ -6,6 +6,7 @@ import { backendURL } from '../API';
 import { HISTOGRAMS_STORAGE_KEY } from '../constants';
 import { VariableDatum } from '../Explore/d3Hierarchy';
 import { Algorithm, Parameter, VariableEntity } from './Core';
+import { ERRORS_OUTPUT } from '../constants';
 
 interface Response {
   error: string | any | undefined;
@@ -160,15 +161,11 @@ class Mining extends Container<MiningState> {
       }
     ];
 
-    const choosenHistogramVariablesByPathologyString = localStorage.getItem(
-      'choosenHistogramVariablesByPathology'
+    const choosenHistogramVariablesByPathology = this.groupingForPathology(
+      pathology
     );
 
-    const choosenHistogramVariablesByPathology: HistogramVariable = choosenHistogramVariablesByPathologyString
-      ? JSON.parse(choosenHistogramVariablesByPathologyString)
-      : {};
-
-    const yVariables = Object.values(choosenHistogramVariablesByPathology)
+    const xVariables = Object.values(choosenHistogramVariablesByPathology)
       .map((v: VariableEntity) => v.code)
       .filter(v => y.code !== v);
 
@@ -181,11 +178,13 @@ class Mining extends Container<MiningState> {
       });
     }
 
-    parameters.push({
-      name: 'x',
-      label: 'x',
-      value: yVariables.toString()
-    });
+    if (xVariables.length > 0) {
+      parameters.push({
+        name: 'x',
+        label: 'x',
+        value: xVariables.toString()
+      });
+    }
 
     this.abortMiningRequests();
 
@@ -207,9 +206,8 @@ class Mining extends Container<MiningState> {
       // FIXME: in exareme, or backend API ? return type should be json
       const json = await JSON.parse(jsonString);
 
-      const error = json.result.find(
-        (d: any) =>
-          d.type === 'text/plain+warning' || d.type === 'text/plain+error'
+      const error = json.result.find((d: any) =>
+        ERRORS_OUTPUT.includes(d.type)
       );
 
       if (error) {
