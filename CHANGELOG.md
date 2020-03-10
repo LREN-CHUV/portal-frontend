@@ -1,7 +1,11 @@
 # Changelog
 
-###
+### dev_5.2.4 - 10.03.2020
 
+- Cart algorithm integrated
+- Updated Typescript & d3.js librairies
+- Histogram grouping variables fixes
+- Annotation module for Highchart
 - Changed TBI CDEs Mortality to Categorical type
 - hbpmip/exareme:dev_v14.2
 - Calibration Belt dynamic variables integration
