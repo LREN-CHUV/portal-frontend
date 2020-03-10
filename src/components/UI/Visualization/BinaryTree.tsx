@@ -68,25 +68,32 @@ type HierarchyPointNode = d3.HierarchyPointNode<Node>;
 
 // parsing JSON
 const makeNodes = (data: JSONNode): Node[] | undefined => {
-  if (data.colName === 'None') {
-    return undefined;
-  }
-
-  const hasLeft = data.left !== undefined && data.left !== 'None';
-  const hasRight = data.right !== undefined && data.right !== 'None';
+  const hasLeft =
+    data.left !== undefined &&
+    data.left !== 'None' &&
+    (data.left as JSONNode).colName !== 'None';
+  const hasRight =
+    data.right !== undefined &&
+    data.right !== 'None' &&
+    (data.right as JSONNode).colName !== 'None';
 
   if (!hasLeft && !hasRight) {
     return undefined;
   }
 
+  // Keep both object, existing or not, as placeholders for right|left
   const children = [
     {
-      children: hasLeft ? makeNodes(data.left as JSONNode) : undefined,
-      info: hasLeft ? makeNodeData(data.left as JSONNode, false) : undefined
+      ...(hasLeft && {
+        children: makeNodes(data.left as JSONNode),
+        info: makeNodeData(data.left as JSONNode, false)
+      })
     },
     {
-      children: hasRight ? makeNodes(data.right as JSONNode) : undefined,
-      info: hasRight ? makeNodeData(data.right as JSONNode, true) : undefined
+      ...(hasRight && {
+        children: makeNodes(data.right as JSONNode),
+        info: makeNodeData(data.right as JSONNode, true)
+      })
     }
   ];
 
@@ -146,7 +153,10 @@ export default ({ data }: { data: JSONNode }): JSX.Element => {
         .data(nodes.descendants().slice(1))
         .enter()
         .append('path')
-        .attr('class', 'link')
+        .attr(
+          'class',
+          (d: HierarchyPointNode) => (d?.data?.info && 'link') || 'hidden'
+        )
         .attr(
           'd',
           (d: HierarchyPointNode) =>
@@ -176,7 +186,10 @@ export default ({ data }: { data: JSONNode }): JSX.Element => {
         .data(nodes.descendants())
         .enter()
         .append('g')
-        .attr('class', 'node')
+        .attr(
+          'class',
+          (d: HierarchyPointNode) => (d?.data?.info && 'node') || 'hidden'
+        )
         .attr(
           'transform',
           (d: HierarchyPointNode) => d && `translate(${d.x},${d.y})`
