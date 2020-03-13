@@ -30,7 +30,7 @@ const Boxplot = ({ miningState }: Props) => {
             (r: any) =>
               r.group &&
               r.count !== 0 &&
-              r.type !== 'polynominal' &&
+              r.type !== 'multinominal' &&
               r.type !== 'binominal' &&
               (r.group[0] === 'all' || r.group[0] !== 'all')
           )
