@@ -213,7 +213,7 @@ export default ({
         (aD3Model.covariables &&
           aD3Model.covariables
             .filter(
-              v => v.data.type !== 'polynominal' && v.data.type !== 'binominal'
+              v => v.data.type !== 'multinominal' && v.data.type !== 'binominal'
             )
             .map(v => ({ code: v.data.code }))) ||
         [],
@@ -222,7 +222,7 @@ export default ({
         (aD3Model.covariables &&
           aD3Model.covariables
             .filter(
-              v => v.data.type === 'polynominal' || v.data.type === 'binominal'
+              v => v.data.type === 'multinominal' || v.data.type === 'binominal'
             )
             .map(v => ({ code: v.data.code }))) ||
         [],

@@ -171,7 +171,7 @@ class Mining extends Container<MiningState> {
       .filter(v => y.code !== v);
 
     const type = y.type || 'real';
-    if (type !== 'polynominal' && type !== 'binominal') {
+    if (type !== 'multinominal' && type !== 'binominal') {
       parameters.push({
         name: 'bins',
         label: 'bins',

@@ -47,7 +47,7 @@ export default ({
       categoricalVariables &&
       categoricalVariables
         .map(v => lookupCallback(v.code))
-        .filter(v => v.type === 'polynominal' || v.type === 'binominal');
+        .filter(v => v.type === 'multinominal' || v.type === 'binominal');
 
     setCategories(vars);
 

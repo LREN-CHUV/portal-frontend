@@ -1,5 +1,9 @@
 # Changelog
 
+###
+
+- polynominal => multinominal change
+
 ### dev_5.2.7 - 13.03.2020
 
 - Reworked Histogram variables
