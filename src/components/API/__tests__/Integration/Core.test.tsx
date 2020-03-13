@@ -1,6 +1,5 @@
 import APICore from '../../Core';
 import config from '../../RequestHeaders';
-import { InstanceMode } from '../../../App/App';
 
 describe('Integration Test Core API', () => {
   const apiCore = new APICore(config);
@@ -21,7 +20,7 @@ describe('Integration Test Core API', () => {
     };
     const result = apiCore.variablesForPathology(pathology.code);
     expect(result).toBeTruthy();
-    expect(result).toHaveLength(171);
+    expect(result).toHaveLength(213);
   });
 
   it('get datasets', async () => {
@@ -31,11 +30,11 @@ describe('Integration Test Core API', () => {
     };
     const result = apiCore.datasetsForPathology(pathology.code);
     expect(result).toBeTruthy();
-    expect(result).toHaveLength(4);
+    expect(result).toHaveLength(5);
   });
 
   it('get algorithms', async () => {
-    await apiCore.algorithms(InstanceMode.Local);
+    await apiCore.algorithms();
     const result = apiCore.state.algorithms;
     const error = apiCore.state.error;
     expect(error).toBeFalsy();
@@ -50,6 +49,6 @@ describe('Integration Test Core API', () => {
       code: 'dementia'
     };
     const result = apiCore.hierarchyForPathology(pathology.code);
-    expect(result.code).toBeTruthy();
+    expect(result && result.code).toBeTruthy();
   });
 });

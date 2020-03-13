@@ -90,19 +90,21 @@ export default ({ ...props }: Props): JSX.Element => {
             </Body>
           </Panel>
         </div>
-        <div>
-          <Panel>
-            <Panel.Title>
-              <Title>Recent Articles</Title>
-            </Panel.Title>
-            <Body>
-              <Articles
-                articles={articles}
-                handleSelectArticle={handleSelectArticle}
-              />
-            </Body>
-          </Panel>
-          {/* <Panel>
+        {articles && articles.length > 0 && (
+          <div>
+            <Panel>
+              <Panel.Title>
+                <Title>Recent Articles</Title>
+              </Panel.Title>
+              <Body>
+                <Articles
+                  articles={articles}
+                  handleSelectArticle={handleSelectArticle}
+                />
+              </Body>
+            </Panel>
+
+            {/* <Panel>
             <Panel.Title>
               <Title>Shared experiments</Title>
             </Panel.Title>
@@ -137,7 +139,8 @@ export default ({ ...props }: Props): JSX.Element => {
               />
             </Body>
           </Panel> */}
-        </div>
+          </div>
+        )}
       </ContentLayout>
     </Layout>
   );

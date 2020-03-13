@@ -1,8 +1,7 @@
 import * as React from 'react';
 import ReactGA from 'react-ga';
-import { Router, Route } from 'react-router-dom';
+import { Route, Router } from 'react-router-dom';
 import { Provider, Subscribe } from 'unstated';
-
 // import UNSTATED from 'unstated-debug';
 import {
   APICore,
@@ -13,7 +12,7 @@ import {
   webURL
 } from '../API'; // as interfaces
 import config from '../API/RequestHeaders';
-import App, { AppConfig, InstanceMode } from '../App/App';
+import App, { AppConfig } from '../App/App';
 import Splash from '../UI/Splash';
 import { history } from '../utils';
 
@@ -34,7 +33,7 @@ class AppContainer extends React.Component<any, State> {
   private intervalId: any; // FIXME: NodeJS.Timer | undefined;
 
   public async componentDidMount(): Promise<
-    [void, void, void, void, void, void, void] | void
+    [void, void, void, void, void, void] | void
   > {
     // if (process.env.NODE_ENV === 'production') {
     this.intervalId = setInterval(() => this.apiExperiment.all(), 10 * 1000);
@@ -45,13 +44,7 @@ class AppContainer extends React.Component<any, State> {
     const response = await fetch(`${webURL}/static/config.json`);
     try {
       const config = await response.json();
-      appConfig = {
-        ...config,
-        mode:
-          config.mode === 'federation'
-            ? InstanceMode.Federation
-            : InstanceMode.Local
-      };
+      appConfig = { ...config };
       this.setState({ appConfig });
 
       if (appConfig.ga) {
@@ -60,7 +53,6 @@ class AppContainer extends React.Component<any, State> {
     } catch (e) {
       appConfig = {
         instanceName: 'MIP DEV',
-        mode: InstanceMode.Local,
         version: 'alpha'
       };
 
@@ -76,10 +68,7 @@ class AppContainer extends React.Component<any, State> {
         this.apiUser.profile({ username }),
         this.apiExperiment.all(),
         this.apiCore.fetchPathologies(),
-        this.apiCore.algorithms(
-          (appConfig && appConfig.mode) || InstanceMode.Local
-        ),
-        this.apiCore.articles(),
+        this.apiCore.algorithms(),
         this.apiCore.stats(),
         this.apiModel.all()
       ]);
@@ -133,14 +122,16 @@ class AppContainer extends React.Component<any, State> {
                     }}
                   />
                   {!loading && !authenticated && <Splash />}
-                  <App
-                    appConfig={this.state.appConfig}
-                    apiExperiment={apiExperiment}
-                    apiCore={apiCore}
-                    apiModel={apiModel}
-                    apiMining={apiMining}
-                    apiUser={apiUser}
-                  />
+                  {!loading && authenticated && (
+                    <App
+                      appConfig={this.state.appConfig}
+                      apiExperiment={apiExperiment}
+                      apiCore={apiCore}
+                      apiModel={apiModel}
+                      apiMining={apiMining}
+                      apiUser={apiUser}
+                    />
+                  )}
                 </>
               );
             }}

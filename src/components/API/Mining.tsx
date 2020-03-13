@@ -3,8 +3,10 @@ import stringHash from 'string-hash';
 import { Container } from 'unstated';
 
 import { backendURL } from '../API';
+import { HISTOGRAMS_STORAGE_KEY } from '../constants';
 import { VariableDatum } from '../Explore/d3Hierarchy';
 import { Algorithm, Parameter, VariableEntity } from './Core';
+import { ERRORS_OUTPUT } from '../constants';
 
 interface Response {
   error: string | any | undefined;
@@ -89,10 +91,32 @@ class Mining extends Container<MiningState> {
     }
   };
 
-  public refetchAlgorithms = () => {
-    this.setState({ refetchAlgorithms: Math.random() });
+  public setGroupingForPathology = (
+    pathology: string,
+    choosenVariables: HistogramVariable
+  ): void => {
+    const existing = this.choosenHistogramVariables();
+
+    localStorage.setItem(
+      HISTOGRAMS_STORAGE_KEY,
+      JSON.stringify({
+        ...existing,
+        [pathology]: choosenVariables
+      })
+    );
   };
 
+  public groupingForPathology = (pathology: string): HistogramVariable => {
+    const existing = this.choosenHistogramVariables()[pathology] || {};
+
+    return existing;
+  };
+
+  // TODO use context
+  // used to trigger a fetch when local
+  public refetchAlgorithms = (): void => {
+    this.setState({ refetchAlgorithms: Math.random() });
+  };
   public multipleHistograms = async ({
     y,
     datasets,
@@ -123,27 +147,26 @@ class Mining extends Container<MiningState> {
     const parameters: Parameter[] = [
       {
         name: 'dataset',
+        label: 'dataset',
         value: datasets.map(d => d.code).toString()
       },
       {
         name: 'y',
+        label: 'y',
         value: y.code
       },
       {
         name: 'pathology',
+        label: 'pathology',
         value: pathology
       }
     ];
 
-    const choosenHistogramVariablesString = localStorage.getItem(
-      'choosenHistogramVariables'
+    const choosenHistogramVariablesByPathology = this.groupingForPathology(
+      pathology
     );
 
-    const choosenHistogramVariables: HistogramVariable = choosenHistogramVariablesString
-      ? JSON.parse(choosenHistogramVariablesString)
-      : {};
-
-    const dependentsVariables = Object.values(choosenHistogramVariables)
+    const xVariables = Object.values(choosenHistogramVariablesByPathology)
       .map((v: VariableEntity) => v.code)
       .filter(v => y.code !== v);
 
@@ -151,14 +174,18 @@ class Mining extends Container<MiningState> {
     if (type !== 'polynominal' && type !== 'binominal') {
       parameters.push({
         name: 'bins',
+        label: 'bins',
         value: JSON.stringify({ [y.code]: 20 })
       });
     }
 
-    parameters.push({
-      name: 'x',
-      value: dependentsVariables.toString()
-    });
+    if (xVariables.length > 0) {
+      parameters.push({
+        name: 'x',
+        label: 'x',
+        value: xVariables.toString()
+      });
+    }
 
     this.abortMiningRequests();
 
@@ -170,7 +197,7 @@ class Mining extends Container<MiningState> {
           'Content-Type': 'application/json;charset=UTF-8'
         },
         method: 'POST',
-        uri: `${this.backendURL}/mining/exareme/MULTIPLE_HISTOGRAMS`
+        uri: `${this.backendURL}/mining/histograms`
       });
 
       this.requests.push(r);
@@ -179,6 +206,21 @@ class Mining extends Container<MiningState> {
 
       // FIXME: in exareme, or backend API ? return type should be json
       const json = await JSON.parse(jsonString);
+
+      const error = json.result.find((d: any) =>
+        ERRORS_OUTPUT.includes(d.type)
+      );
+
+      if (error) {
+        return this.setState({
+          histograms: {
+            data: undefined,
+            error: error.data,
+            loading: false
+          }
+        });
+      }
+
       this.setState({
         histograms: {
           data: json.result.map((p: any) => ({
@@ -231,10 +273,12 @@ class Mining extends Container<MiningState> {
         const parameters: Parameter[] = [
           {
             name: 'dataset',
+            label: 'dataset',
             value: q.dataset.code
           },
           {
             name: 'x',
+            label: 'x',
             value: [
               ...payload.variables,
               ...payload.covariables,
@@ -245,10 +289,12 @@ class Mining extends Container<MiningState> {
           },
           {
             name: 'filter',
+            label: 'filter',
             value: payload.filters
           },
           {
             name: 'pathology',
+            label: 'pathology',
             value: payload.pathology
           }
         ];
@@ -289,7 +335,7 @@ class Mining extends Container<MiningState> {
           'Content-Type': 'application/json;charset=UTF-8'
         },
         method: 'POST',
-        uri: `${this.backendURL}/mining/exareme-stats`
+        uri: `${this.backendURL}/mining/descriptive_stats`
       });
       this.requests.push(r);
       const data = await r;
@@ -346,8 +392,9 @@ class Mining extends Container<MiningState> {
           algorithm: {
             code: 'statisticsSummary',
             name: 'statisticsSummary',
+            label: 'Descriptive Statistics',
             parameters: [],
-            validation: false
+            type: 'python_multiple_local_global'
           },
           ...payload,
           datasets: [q.dataset]
@@ -399,6 +446,20 @@ class Mining extends Container<MiningState> {
         error: error.message
       };
     }
+  };
+
+  private choosenHistogramVariables = (): {
+    [key: string]: HistogramVariable;
+  } => {
+    const choosenHistogramVariablesByPathologyString = localStorage.getItem(
+      HISTOGRAMS_STORAGE_KEY
+    );
+
+    const existing = choosenHistogramVariablesByPathologyString
+      ? JSON.parse(choosenHistogramVariablesByPathologyString)
+      : {};
+
+    return existing;
   };
 }
 

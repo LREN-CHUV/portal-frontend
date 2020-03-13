@@ -6,6 +6,7 @@ import HCMore from 'highcharts/highcharts-more';
 import Exporting from 'highcharts/modules/exporting.js';
 import Heatmap from 'highcharts/modules/heatmap.js';
 import SeriesLabel from 'highcharts/modules/series-label.js';
+import Annotations from 'highcharts/modules/annotations';
 import * as React from 'react';
 
 HCMore(Highcharts);
@@ -13,6 +14,7 @@ Heatmap(Highcharts);
 highcharts3d(Highcharts);
 Exporting(Highcharts);
 SeriesLabel(Highcharts);
+Annotations(Highcharts);
 
 export default ({
   options

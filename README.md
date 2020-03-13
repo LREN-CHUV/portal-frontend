@@ -19,12 +19,15 @@ This is a minimal setup to do frontend development in this project:
 
 ### Run the Backend
 
-- Checkout the master branch of the [mip-deployment-infrastructure](https://github.com/HBPMedical/mip-deployment-infrastructure) project, and follow the setup instructions.
-- Create a new line in `/etc/hosts`, so the backend will be accessible through http://frontend/services
-  - `sudo sh -c 'echo 127.0.1.1 frontend >> /etc/hosts'`
-- Launch `./run.sh`. You will have the MIP frontend running on your computer at http://frontend
+## Either with the MIP deployment package
 
-### React
+- Checkout the master branch of the [mip-deployment](https://github.com/HBPMedical/mip-deployment) project, and follow the setup instructions.
+
+## or by running the tests
+
+- `./run-test.sh`
+
+### Frontend development with React
 
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
@@ -32,10 +35,8 @@ You can find the most recent version of the Create React App guide [here](https:
 
 - Install [nodejs](https://nodejs.org)
 - Install [yarn](https://yarnpkg.com/en/)
-- create a `.env` file
-  - `echo REACT_APP_BACKEND_URL = \"http://frontend\" | tee .env`
-- `yarn install`
-- `yarn watch`
+- Run: `yarn install`
+- Run: `yarn watch`
 - Browse to [http://localhost:3000](http://localhost:3000)
 
 ## Tests
@@ -44,42 +45,18 @@ You can find the most recent version of the Create React App guide [here](https:
 
 You can generate models and experiments by running the tests:
 
-- `yarn test`
-
-### Test live installations
-
-You can use the mip-frontend test suite against any live installation, either locally
-
-```
-echo REACT_APP_BACKEND_URL = "https://qa.mip.chuv.ch" | tee .env &&
-echo REACT_APP_TOKEN = "xxx" | tee -a .env &&
-echo REACT_APP_JSESSIONID = "xxx" | tee -a .env &&
-echo REACT_APP_AUTHORIZATION = "xxx" | tee -a .env
-yarn test
-```
-
-or as a standalone docker
-
-```
-docker build . -f Dockerfile-test -t hbpmip/portal-frontend-tests
-```
-
-```
-docker run -it \
--e BACKEND_URL="https://qa.mip.chuv.ch" \
--e TOKEN="c900a5c9-452e-4514-b8a8-c5dda02d03b6" \
--e JSESSIONID="2B5967D0870A33E2A55F5C9B641518FB" \
--e AUTHORIZATION="Basic c2dhMXJldmlld2VyczpIQlBzZ2Ex" \
---rm hbpmip/portal-frontend-tests:latest
-```
-
-Samples tests queries
-
-```
-hbpmip/portal-frontend-tests test
-```
+- `./run-test.sh` or with a regex `./run-test.sh test anova`
 
 Tests run with Jest, see [the jest cli doc](https://jestjs.io/docs/en/cli) for more details
+
+### Turn on authentication
+
+- Change the AUTHENTICATION flag from 0 to 1 in test-docker/docker-compose.yml
+- `docker exec -it $(docker ps | grep jboss/keycloak | awk '{print $1}') bash`
+- `cd /opt/jboss/keycloak/bin`
+- `./kcadm.sh config credentials --server http://88.197.53.10:8095/auth --realm master --user admin`
+- use password Pa55w0rd
+- `./kcadm.sh update realms/MIP -s sslRequired=NONE`
 
 ## Build (produce a local docker container)
 
@@ -91,7 +68,7 @@ Run: `./publish.sh`
 
 ## License
 
-Copyright © 2016-2019 LREN CHUV
+Copyright © 2016-2020 LREN CHUV
 
 Licensed under the GNU Affero General Public License, Version 3.0 (the "License");
 you may not use this file except in compliance with the License.

@@ -1,23 +1,26 @@
-import { mount, shallow } from 'enzyme';
+import { mount } from 'enzyme';
 import * as React from 'react';
+
 import Result from '../../../Result/Result';
-import { AlgorithmParameter, VariableEntity } from '../../Core';
-import { ExperimentPayload, Engine } from '../../Experiment';
+import { VariableEntity } from '../../Core';
+import { ExperimentPayload } from '../../Experiment';
 import {
-  createWorkflowPayload,
+  createExaremePayload,
   createExperiment,
   createModel,
   getDatasets,
   waitForResult
-} from '../../Utils';
-
-import { buildWorkflowAlgorithmResponse } from '../../WorkflowAPIAdapter'
+} from '../Utils';
 
 // config
 
-const modelSlug = `workflow-nb-${Math.round(Math.random() * 10000)}`;
-const experimentCode = 'f2db41e1fa331b3e';
-const parameters: AlgorithmParameter[] = [{ code: 'pathology', value: 'dementia' }];
+const modelSlug = `cart-${Math.round(Math.random() * 10000)}`;
+const experimentName = 'CART';
+const experimentLabel = 'CART';
+const parameters = [
+  { name: 'max_depth', value: '3', label: 'max_depth' },
+  { name: 'pathology', value: 'dementia', label: 'pathology' }
+];
 
 const model: any = (datasets: VariableEntity[]) => ({
   query: {
@@ -30,13 +33,17 @@ const model: any = (datasets: VariableEntity[]) => ({
       code: d.code
     })),
     validationDatasets: [],
-    variables: [{ code: 'alzheimerbroadcategory' }]
+    variables: [
+      {
+        code: 'alzheimerbroadcategory'
+      }
+    ]
   }
 });
 
 // Test
 
-describe.skip('Integration Test for experiment API', () => {
+describe('Integration Test for experiment API', () => {
   let datasets: VariableEntity[] | undefined;
 
   beforeAll(async () => {
@@ -54,16 +61,18 @@ describe.skip('Integration Test for experiment API', () => {
     return datasets !== undefined && mstate.model !== undefined;
   });
 
-  it(`create ${experimentCode}`, async () => {
+  it(`create ${experimentName}`, async () => {
     if (!datasets) {
       throw new Error('datasets not defined');
     }
-    const payload: ExperimentPayload = await createWorkflowPayload(
+    const payload: ExperimentPayload = createExaremePayload(
       model,
       datasets,
-      experimentCode,
+      experimentName,
+      experimentLabel,
       parameters,
-      modelSlug
+      modelSlug,
+      'iterative'
     );
 
     const { error, experiment } = await createExperiment({
@@ -83,20 +92,16 @@ describe.skip('Integration Test for experiment API', () => {
     expect(experimentState.error).toBeFalsy();
     expect(experimentState.experiment).toBeTruthy();
 
-    console.log(experimentState)
-    // const props = { experimentState };
-
-    // let wrapper: any = shallow(<Result {...props} />);
-    // expect(wrapper.find('.error')).toHaveLength(0);
-    // expect(wrapper.find('.loading')).toHaveLength(0);
-    // // expect(wrapper.find('.result')).toHaveLength(2);
-
-    // // Ensure Highchart is loading by catching error
-    // // Annoying highcharts Type error due to embbedding visualisation in algorithms output
-    // // FIXME: Exareme output as data
-
-    // expect(() => {
-    //   wrapper = mount(<Result {...props} />);
-    // }).toThrow(TypeError);
+    const props = { experimentState };
+    const wrapper = mount(<Result {...props} />);
+    expect(wrapper.find('.error')).toHaveLength(0);
+    expect(wrapper.find('.loading')).toHaveLength(0);
+    expect(wrapper.find('.result')).toHaveLength(1);
+    // expect(
+    //   wrapper
+    //     .find('div.result table tbody tr td')
+    //     .at(1)
+    //     .text()
+    // ).toEqual('34.673');
   });
 });

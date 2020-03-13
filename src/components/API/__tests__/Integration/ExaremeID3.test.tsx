@@ -10,15 +10,16 @@ import {
   createModel,
   getDatasets,
   waitForResult
-} from '../../Utils';
+} from '../Utils';
 
 // config
 
 const modelSlug = `id3-${Math.round(Math.random() * 10000)}`;
-const experimentCode = 'ID3';
+const experimentName = 'ID3';
+const experimentLabel = 'ID3';
 const parameters = [
-  { code: 'iterations_max_number', value: 20 },
-  { code: 'pathology', value: 'dementia' }
+  { name: 'iterations_max_number', value: 20, label: 'iterations_max_number' },
+  { name: 'pathology', value: 'dementia', label: 'pathology' }
 ];
 
 const model: any = () => ({
@@ -58,16 +59,18 @@ describe('Integration Test for experiment API', () => {
     return datasets !== undefined && mstate.model !== undefined;
   });
 
-  it(`create ${experimentCode}`, async () => {
+  it(`create ${experimentName}`, async () => {
     if (!datasets) {
       throw new Error('datasets not defined');
     }
     const payload: ExperimentPayload = createExaremePayload(
       model,
       datasets,
-      experimentCode,
+      experimentName,
+      experimentLabel,
       parameters,
-      modelSlug
+      modelSlug,
+      'iterative'
     );
     const { error, experiment } = await createExperiment({
       experiment: payload

@@ -10,18 +10,19 @@ import {
   createModel,
   getDatasets,
   waitForResult
-} from '../../Utils';
+} from '../Utils';
 
 // config
 
 const modelSlug = `anova-${Math.round(Math.random() * 10000)}`;
-const experimentCode = 'ANOVA';
+const experimentName = 'ANOVA';
+const experimentLabel = 'ANOVA';
 const parameters = [
-  { code: 'bins', value: '40' },
-  { code: 'iterations_max_number', value: 20 },
-  { code: 'sstype', value: 2 },
-  { code: 'outputformat', value: 'pfa' },
-  { code: 'pathology', value: 'dementia' }
+  { name: 'bins', value: '40', label: 'bins' },
+  { name: 'iterations_max_number', value: 20, label: 'iterations_max_number' },
+  { name: 'sstype', value: 2, label: 'sstype' },
+  { name: 'outputformat', value: 'pfa', label: 'name' },
+  { name: 'pathology', value: 'dementia', label: 'pathology' }
 ];
 
 const model: any = (datasets: VariableEntity[]) => ({
@@ -63,16 +64,18 @@ describe('Integration Test for experiment API', () => {
     return datasets !== undefined && mstate.model !== undefined;
   });
 
-  it(`create ${experimentCode}`, async () => {
+  it(`create ${experimentName}`, async () => {
     if (!datasets) {
       throw new Error('datasets not defined');
     }
     const payload: ExperimentPayload = createExaremePayload(
       model,
       datasets,
-      experimentCode,
+      experimentName,
+      experimentLabel,
       parameters,
-      modelSlug
+      modelSlug,
+      'iterative'
     );
 
     const { error, experiment } = await createExperiment({
@@ -102,6 +105,6 @@ describe('Integration Test for experiment API', () => {
         .find('div.result table tbody tr td')
         .at(1)
         .text()
-    ).toEqual('39.302');
+    ).toEqual('34.673');
   });
 });

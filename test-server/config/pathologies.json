@@ -2,7 +2,7 @@
   {
     "code": "dementia",
     "label": "Dementia",
-    "hierarchy": {
+    "metadataHierarchy": {
       "variables": [],
       "code": "root",
       "groups": [
@@ -2568,7 +2568,7 @@
   {
     "code": "tbi",
     "label": "Traumatic brain injury",
-    "hierarchy": {
+    "metadataHierarchy": {
       "code": "tbi",
       "groups": [],
       "label": "Traumatic Βrain Ιnjury",
@@ -3049,9 +3049,19 @@
           "code": "Mortality",
           "label": "Six Month Mortality",
           "methodology": "creactive",
-          "sql_type": "integer",
-          "type": "integer",
-          "isCategorical": false
+          "sql_type": "text",
+          "type": "polynominal",
+          "isCategorical": true,
+          "enumerations": [
+            {
+              "code": "0",
+              "label": "Deceased"
+            },
+            {
+              "code": "1",
+              "label": "Alive"
+            }
+          ]
         },
         {
           "code": "dataset",

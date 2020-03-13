@@ -15,7 +15,7 @@ const IFrameContainer = styled.div`
   height: 100%;
 
   iframe {
-    width: calc(100% - 96px);
+    width: calc(100% - 16px);
     height: calc(100% - 88px);
     border: 0;
     position: fixed;

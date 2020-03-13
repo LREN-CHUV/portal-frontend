@@ -1,9 +1,6 @@
-// import './Explore.css';
-
 import * as d3 from 'd3';
 import React, { useEffect, useState } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
-
 import { APICore, APIMining, APIModel } from '../API';
 import { VariableEntity } from '../API/Core';
 import { ModelResponse, Query } from '../API/Model';
@@ -46,7 +43,6 @@ export default ({
   apiCore,
   apiMining,
   apiModel,
-  appConfig,
   ...props
 }: Props): JSX.Element => {
   const [selectedNode, setSelectedNode] = useState<
@@ -180,7 +176,6 @@ export default ({
   }, [
     selectedNode,
     apiMining,
-    appConfig.mode,
     apiModel.state.model,
     apiMining.state.refetchAlgorithms,
     trainingDatasets
@@ -346,8 +341,14 @@ export default ({
 
   const handleOKSwitchPathology = (): void => {
     setShowPathologySwitchWarning(false);
+    setSelectedNode(undefined);
     if (apiCore.state.pathologies) {
-      const newModel = { query: { pathology: nextPathologyCode } };
+      const newModel: ModelResponse = {
+        query: {
+          pathology: nextPathologyCode,
+          trainingDatasets: apiCore.datasetsForPathology(nextPathologyCode)
+        }
+      };
       apiModel.setModel(newModel);
     }
   };

@@ -10,34 +10,41 @@ import {
   createModel,
   getDatasets,
   waitForResult
-} from '../../Utils';
+} from '../Utils';
 
 // config
 
 const modelSlug = `ttest-i-${Math.round(Math.random() * 10000)}`;
-const experimentCode = 'TTEST_INDEPENDENT';
+const experimentName = 'TTEST_INDEPENDENT';
+const experimentLabel = 'T-Test Independent';
 const parameters: any = [
+  { name: 'xlevels', value: 'M,F', label: 'xlevels' },
+  { name: 'testvalue', value: '3.0', label: 'testvalue' },
   {
-    code: 'xlevels',
-    value: 'M,F'
+    name: 'hypothesis',
+    value: 'greaterthan',
+    label: 'hypothesis'
   },
   {
-    code: 'hypothesis',
-    value: 'greaterthan'
+    name: 'effectsize',
+    value: '1',
+    label: 'effectsize'
   },
   {
-    code: 'effectsize',
-    value: '1'
+    name: 'ci',
+    value: '1',
+    label: 'ci'
   },
   {
-    code: 'ci',
-    value: '1'
+    name: 'meandiff',
+    value: '1',
+    label: 'meandiff'
   },
-  {
-    code: 'meandiff',
-    value: '1'
-  },
-  { code: 'pathology', value: 'dementia' }
+  { 
+    name: 'pathology', 
+    value: 'dementia', 
+    label: 'pathology' 
+  }
 ];
 const datasets = [{ code: 'adni' }];
 const model: any = (datasets: VariableEntity[]) => ({
@@ -47,8 +54,7 @@ const model: any = (datasets: VariableEntity[]) => ({
         code: 'gender'
       }
     ],
-    filters:
-      '{"condition":"AND","rules":[{"id":"alzheimerbroadcategory","field":"alzheimerbroadcategory","type":"string","input":"select","operator":"not_equal","value":"CN"},{"id":"alzheimerbroadcategory","field":"alzheimerbroadcategory","type":"string","input":"select","operator":"not_equal","value":"Other"}],"valid":true}',
+    filters: '',
     groupings: [],
     pathology: 'dementia',
     testingDatasets: [],
@@ -59,7 +65,25 @@ const model: any = (datasets: VariableEntity[]) => ({
     // FIXME: should by dynamic
     variables: [
       {
-        code: 'righthippocampus'
+        code: 'rightpcggposteriorcingulategyrus'
+      },
+      {
+        code: 'leftpcggposteriorcingulategyrus'
+      },
+      {
+        code: 'rightacgganteriorcingulategyrus'
+      },
+      {
+        code: 'leftacgganteriorcingulategyrus'
+      },
+      {
+        code: 'rightmcggmiddlecingulategyrus'
+      },
+      {
+        code: 'leftmcggmiddlecingulategyrus'
+      },
+      {
+        code: 'rightphgparahippocampalgyrus'
       }
     ]
   }
@@ -85,16 +109,18 @@ describe('Integration Test for experiment API', () => {
     return datasets !== undefined && mstate.model !== undefined;
   });
 
-  it(`create ${experimentCode}`, async () => {
+  it(`create ${experimentName}`, async () => {
     if (!datasets) {
       throw new Error('datasets not defined');
     }
     const payload: ExperimentPayload = createExaremePayload(
       model,
       datasets,
-      experimentCode,
+      experimentName,
+      experimentLabel,
       parameters,
-      modelSlug
+      modelSlug,
+      'multiple_local_global'
     );
     const { error, experiment } = await createExperiment({
       experiment: payload
@@ -123,6 +149,6 @@ describe('Integration Test for experiment API', () => {
         .find('div.result table tbody tr td')
         .at(1)
         .text()
-    ).toEqual('18.469');
+    ).toEqual('22.512');
   });
 });

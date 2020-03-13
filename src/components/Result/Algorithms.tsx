@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { ExperimentResponse } from '../API/Experiment';
 import { UI_HIDDEN_PARAMETERS } from '../constants';
 import Panel from '../UI/Panel';
+import { Algorithm } from '../API/Core';
 
 const Param = styled.p`
   margin: 0 0 8px 0;
@@ -12,7 +13,11 @@ const Param = styled.p`
   display: inline-block;
 `;
 
-const Algorithms = ({ experiment }: { experiment?: ExperimentResponse }) => {
+const Algorithms = ({
+  experiment
+}: {
+  experiment?: ExperimentResponse;
+}): JSX.Element | null => {
   const algorithms = experiment && experiment.algorithms;
 
   return (
@@ -21,22 +26,22 @@ const Algorithms = ({ experiment }: { experiment?: ExperimentResponse }) => {
         title="Algorithm"
         body={
           <>
-            {algorithms.map((algorithm: any, j: number) => (
-              <div key={`name-${algorithm.code}-${j}`}>
+            {algorithms.map((algorithm: Algorithm, j: number) => (
+              <div key={`name-${algorithm.name}-${j}`}>
                 <Param>
                   <strong>{algorithm.label || algorithm.name}</strong>
                 </Param>
                 {algorithm.parameters &&
                   algorithm.parameters.filter(
-                    (p: any) => !UI_HIDDEN_PARAMETERS.includes(p.code)
+                    (p: any) => !UI_HIDDEN_PARAMETERS.includes(p.label)
                   ).length > 0 && <h4>Parameters</h4>}
                 {algorithm.parameters &&
                   algorithm.parameters.length > 0 &&
                   algorithm.parameters
-                    .filter((p: any) => !UI_HIDDEN_PARAMETERS.includes(p.code))
+                    .filter((p: any) => !UI_HIDDEN_PARAMETERS.includes(p.label))
                     .map((m: any, i: number) => (
-                      <Param key={`parameters-${algorithm.code}-${i}`}>
-                        {m.code}: {m.value}
+                      <Param key={`parameters-${algorithm.name}-${i}`}>
+                        {m.label}: {m.value}
                       </Param>
                     ))}
               </div>
