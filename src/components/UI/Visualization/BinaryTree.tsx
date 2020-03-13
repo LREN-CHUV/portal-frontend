@@ -46,7 +46,7 @@ interface JSONNode extends Partial<NodeData> {
   left: JSONNode | string;
   colName: string;
   threshold: number;
-  gain: number;
+  gain: number | string;
   samplesPerClass: object;
   class: string;
 }
@@ -68,14 +68,8 @@ type HierarchyPointNode = d3.HierarchyPointNode<Node>;
 
 // parsing JSON
 const makeNodes = (data: JSONNode): Node[] | undefined => {
-  const hasLeft =
-    data.left !== undefined &&
-    data.left !== 'None' &&
-    (data.left as JSONNode).colName !== 'None';
-  const hasRight =
-    data.right !== undefined &&
-    data.right !== 'None' &&
-    (data.right as JSONNode).colName !== 'None';
+  const hasLeft = data.left !== undefined && data.left !== 'None';
+  const hasRight = data.right !== undefined && data.right !== 'None';
 
   if (!hasLeft && !hasRight) {
     return undefined;
@@ -102,8 +96,14 @@ const makeNodes = (data: JSONNode): Node[] | undefined => {
 
 const makeNodeData = (data: JSONNode, isRight: boolean): NodeData => ({
   isRight: isRight ? 'True' : 'False',
-  variable: `${data.colName} <= ${round(data.threshold, 3)}`,
-  criterion: `${data.criterion} = ${round(data.gain, 3)}`,
+  variable:
+    (data.colName !== 'None' &&
+      `${data.colName} <= ${round(data.threshold, 3)}`) ||
+    '',
+  criterion:
+    (data.gain !== 'None' &&
+      `${data.criterion} = ${round(data.gain as number, 3)}`) ||
+    '',
   samples: `samples = ${data.samples}`,
   value: `value = [${Object.values(data.samplesPerClass).toString()}]`,
   class: `class = ${data.class.replace('u', '')}`
