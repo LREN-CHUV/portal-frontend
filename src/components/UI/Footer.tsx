@@ -39,9 +39,6 @@ export default ({ appConfig }: { appConfig: AppConfig }): JSX.Element => (
         . All right reserved
       </h6>
     </span>
-    <h6>
-      {appConfig.version}
-      {appConfig.version ? ' | ' : ''}
-    </h6>
+    <h6>{appConfig.version}</h6>
   </FooterBox>
 );
