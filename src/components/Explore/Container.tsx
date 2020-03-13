@@ -341,6 +341,7 @@ export default ({
 
   const handleOKSwitchPathology = (): void => {
     setShowPathologySwitchWarning(false);
+    setSelectedNode(undefined);
     if (apiCore.state.pathologies) {
       const newModel: ModelResponse = {
         query: {

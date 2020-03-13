@@ -112,10 +112,11 @@ class Mining extends Container<MiningState> {
     return existing;
   };
 
-  public refetchAlgorithms = () => {
+  // TODO use context
+  // used to trigger a fetch when local
+  public refetchAlgorithms = (): void => {
     this.setState({ refetchAlgorithms: Math.random() });
   };
-
   public multipleHistograms = async ({
     y,
     datasets,

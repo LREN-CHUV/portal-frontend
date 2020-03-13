@@ -74,14 +74,15 @@ export default (props: Props): JSX.Element => {
     model
   } = props;
 
-  useEffect(() => {
-    if (choosenVariables) {
-      const pathology = model?.query?.pathology;
-      if (pathology) {
-        apiMining.setGroupingForPathology(pathology, choosenVariables);
-      }
-    }
-  }, [choosenVariables, apiMining, model]);
+  // useEffect(() => {
+  //   if (choosenVariables) {
+  //     const pathology = model?.query?.pathology;
+  //     if (pathology) {
+  //       console.log('write', pathology)
+  //       apiMining.setGroupingForPathology(pathology, choosenVariables);
+  //     }
+  //   }
+  // }, [choosenVariables, apiMining, model]);
 
   useEffect(() => {
     const pathology = model?.query?.pathology;
@@ -100,11 +101,14 @@ export default (props: Props): JSX.Element => {
     index: number,
     variable: VariableEntity
   ): void => {
-    setChoosenVariables(
-      choosenVariables
-        ? { ...choosenVariables, [index]: variable }
-        : { [index]: variable }
-    );
+    const nextChoosenVariables = choosenVariables
+      ? { ...choosenVariables, [index]: variable }
+      : { [index]: variable };
+    setChoosenVariables(nextChoosenVariables);
+    const pathology = model?.query?.pathology;
+    if (pathology && choosenVariables) {
+      apiMining.setGroupingForPathology(pathology, nextChoosenVariables);
+    }
     apiMining.refetchAlgorithms();
   };
 
