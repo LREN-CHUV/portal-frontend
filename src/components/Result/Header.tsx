@@ -21,8 +21,7 @@ export default ({
   handleShareExperiment,
   handleCreateNewExperiment
 }: Props): JSX.Element => {
-  const name =
-    experiment && experiment.algorithms.find((a, i) => i === 0)?.label;
+  const name = experiment && experiment.name;
   const modelDefinitionId = experiment && experiment.modelSlug;
 
   return (
@@ -30,7 +29,7 @@ export default ({
       <Panel.Body>
         <div className="item text">
           <h3>
-            Results of Experiment <strong>{name}</strong> on{' '}
+            Results of experiment <strong>{name}</strong> on{' '}
             <Link to={`/review`}>{modelDefinitionId}</Link>
           </h3>
           <h5 className="item">

@@ -4,6 +4,9 @@ set -o pipefail # trace ERR through pipes
 set -o errtrace # trace ERR through 'time command' and other functions
 # set -o errexit  ## set -e : exit the script if any statement returns a non-true return value
 
+# FIXME error checking context: 'can't stat ...postgres_data
+sudo rm -rf ./test-server/postgres_data
+
 run_test() {
     docker build -f ./test-server/test-docker/Dockerfile . -t hbpmip/portal-frontend:testing
 
