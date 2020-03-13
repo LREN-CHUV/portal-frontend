@@ -10,7 +10,7 @@ const apiModel = new APIModel(config);
 const apiExperiment = new APIExperiment(config);
 const apiCore = new APICore(config);
 
-const TIMEOUT_DURATION = 60 * 5;
+const TIMEOUT_DURATION = 60 * 10;
 
 const RESEARCH_DATASETS = ['adni', 'ppmi', 'edsd'];
 
