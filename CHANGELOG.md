@@ -1,5 +1,10 @@
 # Changelog
 
+### dev_5.2.7 - 13.03.2020
+
+- Reworked Histogram variables
+- Reworked Cart last node + center zoom
+
 ### dev_5.2.4 - 10.03.2020
 
 - Cart algorithm integrated
