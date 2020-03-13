@@ -109,6 +109,7 @@ const makeNodeData = (data: JSONNode, isRight: boolean): NodeData => ({
   class: `class = ${data.class.replace('u', '')}`
 });
 
+// TODO collapsible tree https://observablehq.com/@d3/collapsible-tree
 export default ({ data }: { data: JSONNode }): JSX.Element => {
   const svgRef = useRef(null);
   const [, setLocalData] = React.useState(data);
@@ -139,11 +140,6 @@ export default ({ data }: { data: JSONNode }): JSX.Element => {
             .zoom()
             .scaleExtent([0, 10])
             .on('zoom', () => g.attr('transform', d3.event.transform))
-        )
-        .append('svg:g')
-        .attr(
-          'transform',
-          `translate(${fixedSize.w / 2},${nodeRectSize.height / 2}) scale(0.5)`
         );
 
       const g = svg.append('g');
