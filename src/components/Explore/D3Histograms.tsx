@@ -3,13 +3,14 @@ import React, { useEffect, useRef, useState } from 'react';
 import { DropdownButton, MenuItem, Tab, Tabs } from 'react-bootstrap';
 import styled from 'styled-components';
 
+import { APIMining } from '../API';
 import { VariableEntity } from '../API/Core';
 import { HistogramVariable, MiningResponseShape } from '../API/Mining';
+import { ModelResponse } from '../API/Model';
 import Loading from '../UI/Loader';
 import Highchart from '../UI/Visualization/Highchart';
 import { HierarchyCircularNode } from './Container';
 import renderLifeCycle from './renderLifeCycle';
-import { APIMining } from '../API';
 
 interface Props {
   apiMining: APIMining;
@@ -18,6 +19,7 @@ interface Props {
   selectedNode?: HierarchyCircularNode;
   independantsVariables: VariableEntity[] | undefined;
   zoom: Function;
+  model: ModelResponse | undefined;
 }
 
 const breadcrumb = (
@@ -68,45 +70,45 @@ export default (props: Props): JSX.Element => {
     histograms,
     independantsVariables,
     selectedNode,
-    zoom
+    zoom,
+    model
   } = props;
 
-  useEffect(() => {
-    if (choosenVariables) {
-      localStorage.setItem(
-        'choosenHistogramVariables',
-        JSON.stringify(choosenVariables)
-      );
-    }
-  }, [choosenVariables]);
+  // useEffect(() => {
+  //   if (choosenVariables) {
+  //     const pathology = model?.query?.pathology;
+  //     if (pathology) {
+  //       console.log('write', pathology)
+  //       apiMining.setGroupingForPathology(pathology, choosenVariables);
+  //     }
+  //   }
+  // }, [choosenVariables, apiMining, model]);
 
   useEffect(() => {
-    const choosenHistogramVariablesString = localStorage.getItem(
-      'choosenHistogramVariables'
-    );
-
-    if (choosenHistogramVariablesString) {
-      const choosenHistogramVariables = JSON.parse(
-        choosenHistogramVariablesString
+    const pathology = model?.query?.pathology;
+    if (pathology) {
+      const choosenHistogramVariablesByPathology = apiMining.groupingForPathology(
+        pathology
       );
-      setChoosenVariables(choosenHistogramVariables);
-    } else {
-      setChoosenVariables({
-        1: { code: 'gender', label: 'Gender' },
-        2: { code: 'agegroup', label: 'Age Group' }
-      });
+
+      if (choosenHistogramVariablesByPathology) {
+        setChoosenVariables(choosenHistogramVariablesByPathology);
+      }
     }
-  }, []);
+  }, [apiMining, model]);
 
   const handleChooseVariable = (
     index: number,
     variable: VariableEntity
   ): void => {
-    setChoosenVariables(
-      choosenVariables
-        ? { ...choosenVariables, [index]: variable }
-        : { [index]: variable }
-    );
+    const nextChoosenVariables = choosenVariables
+      ? { ...choosenVariables, [index]: variable }
+      : { [index]: variable };
+    setChoosenVariables(nextChoosenVariables);
+    const pathology = model?.query?.pathology;
+    if (pathology && choosenVariables) {
+      apiMining.setGroupingForPathology(pathology, nextChoosenVariables);
+    }
     apiMining.refetchAlgorithms();
   };
 
@@ -231,11 +233,11 @@ export default (props: Props): JSX.Element => {
                 <Tab
                   eventKey={i}
                   title={
-                    i === selectedTab ? (
+                    i === selectedTab ||
+                    !(choosenVariables && choosenVariables[i]) ? (
                       <DropDown
                         noCaret={false}
                         bsStyle="link"
-                        disabled={i !== selectedTab}
                         id={`independant-dropdown-${i}`}
                         title={
                           (choosenVariables &&

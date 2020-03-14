@@ -10,34 +10,44 @@ import {
   createModel,
   getDatasets,
   waitForResult
-} from '../../Utils';
+} from '../Utils';
 
 // config
 
 const modelSlug = `ttest-p-${Math.round(Math.random() * 10000)}`;
-const experimentCode = 'TTEST_PAIRED';
+const experimentName = 'TTEST_PAIRED';
+const experimentLabel = 'T-Test Paired';
 const parameters: any = [
   {
-    code: 'hypothesis',
-    value: 'different'
+    name: 'hypothesis',
+    value: 'different',
+    label: 'hypothesis'
   },
   {
-    code: 'effectsize',
-    value: '1'
+    name: 'effectsize',
+    value: '1',
+    label: 'effectsize'
   },
   {
-    code: 'ci',
-    value: '1'
+    name: 'ci',
+    value: '1',
+    label: 'ci'
   },
   {
-    code: 'meandiff',
-    value: '1'
+    name: 'meandiff',
+    value: '1',
+    label: 'meandiff'
   },
   {
-    code: 'sediff',
-    value: '1'
+    name: 'sediff',
+    value: '1',
+    label: 'sediff'
   },
-  { code: 'pathology', value: 'dementia' }
+  {
+    name: 'pathology',
+    value: 'dementia',
+    label: 'pathology'
+  }
 ];
 const model: any = (datasets: VariableEntity[]) => ({
   query: {
@@ -83,16 +93,18 @@ describe('Integration Test for experiment API', () => {
     return datasets !== undefined && mstate.model !== undefined;
   });
 
-  it(`create ${experimentCode}`, async () => {
+  it(`create ${experimentName}`, async () => {
     if (!datasets) {
       throw new Error('datasets not defined');
     }
     const payload: ExperimentPayload = createExaremePayload(
       model,
       datasets,
-      experimentCode,
+      experimentName,
+      experimentLabel,
       parameters,
-      modelSlug
+      modelSlug,
+      'local_global'
     );
     const { error, experiment } = await createExperiment({
       experiment: payload
@@ -121,6 +133,6 @@ describe('Integration Test for experiment API', () => {
         .find('div.result table tbody tr td')
         .at(1)
         .text()
-    ).toEqual('-36.115');
+    ).toEqual('-46.167');
   });
 });

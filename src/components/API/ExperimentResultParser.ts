@@ -1,19 +1,11 @@
-import { ALGORITHM_DEFAULT_OUTPUT, MIME_TYPES } from '../constants';
-import { Engine, ExperimentResponse, Result } from './Experiment';
-import { buildWorkflowAlgorithmResponse } from './WorkflowAPIAdapter';
+import { ENABLED_ALGORITHMS, ERRORS_OUTPUT, MIME_TYPES } from '../constants';
+import {
+  ExperimentResponse,
+  ExperimentResponseRaw,
+  Result
+} from './Experiment';
 
-export const defaultResults = (name: string, results: Result[]): Result[] => {
-  const config =
-    ALGORITHM_DEFAULT_OUTPUT.find(a => a.name === name) || undefined;
-
-  const nextResults = results.filter(
-    r => config && config.types.includes(r.type)
-  );
-
-  return nextResults;
-};
-
-const parse = (value: any) => {
+const parse = (value: string): any => {
   try {
     const json = JSON.parse(value);
     return json;
@@ -23,11 +15,13 @@ const parse = (value: any) => {
 };
 
 class APIAdapter {
-  public static parse = (experiment: any): ExperimentResponse => {
+  public static parse = (
+    experiment: ExperimentResponseRaw
+  ): ExperimentResponse => {
     // FIXME: Formats are differents in the API for experiment, experimentList and runExperiment,
     // apply specific parsing to some terms
     const algorithms = parse(experiment.algorithms);
-    const created = (() => {
+    const created = ((): Date => {
       const d = Date.parse(experiment.created + ' GMT');
       if (isNaN(d)) {
         return new Date(experiment.created);
@@ -35,18 +29,18 @@ class APIAdapter {
 
       return new Date(d);
     })();
-    const modelDefinitionId = experiment.model ? experiment.model.slug : null;
+    const modelSlug = experiment.model ? experiment.model.slug : '';
 
     let experimentResponse: ExperimentResponse = {
       algorithms,
       created,
-      modelDefinition: experiment.model ? experiment.model.query : undefined,
-      modelDefinitionId,
+      modelQuery: experiment.model,
+      modelSlug,
       name: experiment.name,
       resultsViewed: experiment.resultsViewed,
       shared: experiment.shared,
-      uuid: experiment.uuid,
-      validations: experiment.validations
+      hasServerError: experiment.hasServerError,
+      uuid: experiment.uuid
     };
 
     experimentResponse.user = experiment.createdBy
@@ -57,11 +51,11 @@ class APIAdapter {
       : undefined;
 
     // Errors
-    if (!modelDefinitionId) {
+    if (!modelSlug) {
       experimentResponse = {
         ...experimentResponse,
         error: 'No model defined',
-        modelDefinitionId: 'undefined'
+        modelSlug: 'undefined'
       };
 
       return experimentResponse;
@@ -70,7 +64,8 @@ class APIAdapter {
     if (experiment.hasServerError) {
       experimentResponse = {
         ...experimentResponse,
-        error: `${experiment.result}`
+        error:
+          'There was an error running your experiment, please contact the system administrator.'
       };
 
       return experimentResponse;
@@ -90,49 +85,56 @@ class APIAdapter {
       return experimentResponse;
     }
 
-    // Branch backend responses based on data shape
     try {
       const resultParsed = parse(experiment.result);
-      const p =
-        resultParsed && resultParsed.length > 0 && resultParsed[0].result;
-      const e =
-        resultParsed && resultParsed.length > 0 && resultParsed[0].error;
-
-      if (e) {
-        return {
-          ...experimentResponse,
-          engine: Engine.Exareme,
-          results: [
-            {
-              type: MIME_TYPES.ERROR,
-              data: e
-            }
-          ]
-        };
-      }
-
-      if (p) {
-        const isExareme = p.every((r: any) => r.type);
-        if (isExareme) {
-          const algorithmName = experimentResponse.algorithms[0].name;
-          const response = {
-            ...experimentResponse,
-            engine: Engine.Exareme,
-            results: defaultResults(algorithmName, p)
-          };
-
-          return response;
-        }
-      }
-
-      const isWorkflow = resultParsed.find((r: any) => r.historyId);
-      if (isWorkflow) {
-        const nextResult3 = buildWorkflowAlgorithmResponse(
-          isWorkflow.historyId,
-          experimentResponse
+      const flattenedResults =
+        resultParsed &&
+        resultParsed.reduce(
+          (acc: Result[], item: { result: Result[] }) => [
+            ...acc,
+            ...item.result
+          ],
+          []
         );
 
-        return nextResult3;
+      if (flattenedResults) {
+        const algorithmLabel = experimentResponse.algorithms[0].label;
+        const config =
+          ENABLED_ALGORITHMS.find(a => a.label === algorithmLabel) || undefined;
+
+        const nextResults = flattenedResults.filter(
+          (r: Result) => config && config.types.includes(r.type)
+        );
+
+        const errorResults = flattenedResults.filter((r: Result) =>
+          ERRORS_OUTPUT.includes(r.type)
+        );
+
+        if (errorResults.length > 0) {
+          const error =
+            errorResults && errorResults.length > 0 && errorResults[0].data;
+
+          return {
+            ...experimentResponse,
+            error
+          };
+        }
+
+        // FIXME
+        const finalResults =
+          algorithmLabel === 'CART'
+            ? nextResults.map((r: Result) => ({
+                ...r,
+                type: MIME_TYPES.JSONBTREE
+              }))
+            : nextResults;
+
+        const response = {
+          ...experimentResponse,
+          results: finalResults
+        };
+
+        return response;
       }
 
       return {

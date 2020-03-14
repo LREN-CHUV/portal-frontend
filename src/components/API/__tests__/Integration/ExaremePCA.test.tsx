@@ -10,22 +10,23 @@ import {
   createModel,
   getDatasets,
   waitForResult
-} from '../../Utils';
+} from '../Utils';
 
 // config
 
 const modelSlug = `pca-${Math.round(Math.random() * 10000)}`;
-const experimentCode = 'PCA';
+const experimentName = 'PCA';
+const experimentLabel = 'Principal Components analysis';
 const parameters = [
-  { code: 'no_intercept', value: 'true' },
-  { code: 'coding', value: 'null' },
-  { code: 'pathology', value: 'dementia' }
+  { name: 'standardize', value: 'false', label: 'standardize' },
+  { name: 'coding', value: 'null', label: 'coding' },
+  { name: 'pathology', value: 'dementia', label: 'pathology' }
 ];
 
 const model: any = (datasets: VariableEntity[]) => ({
   query: {
     pathology: 'dementia', // FIXME: should by dynamic
-    coVariables: [
+    variables: [
       {
         code: 'lefthippocampus'
       },
@@ -43,7 +44,7 @@ const model: any = (datasets: VariableEntity[]) => ({
       code: d.code
     })),
     validationDatasets: [],
-    variables: []
+    coVariables: []
   }
 });
 
@@ -67,16 +68,18 @@ describe('Integration Test for experiment API', () => {
     return datasets !== undefined && mstate.model !== undefined;
   });
 
-  it(`create ${experimentCode}`, async () => {
+  it(`create ${experimentName}`, async () => {
     if (!datasets) {
       throw new Error('datasets not defined');
     }
     const payload: ExperimentPayload = createExaremePayload(
       model,
       datasets,
-      experimentCode,
+      experimentName,
+      experimentLabel,
       parameters,
-      modelSlug
+      modelSlug,
+      'python_multiple_local_global'
     );
 
     const { error, experiment } = await createExperiment({
@@ -106,6 +109,6 @@ describe('Integration Test for experiment API', () => {
         .find('div.result table tbody tr td')
         .at(1)
         .text()
-    ).toEqual('0.083');
+    ).toEqual('0.061');
   });
 });

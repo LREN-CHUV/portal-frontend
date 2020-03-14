@@ -64,7 +64,7 @@ export default ({ models, experiments, history }: Props): JSX.Element => {
           const myExperiments =
             experiments &&
             experiments.filter(
-              (e: ExperimentResponse) => model.slug === e.modelDefinitionId
+              (e: ExperimentResponse) => model.slug === e.modelSlug
             );
 
           return (

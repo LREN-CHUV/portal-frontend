@@ -1,6 +1,7 @@
 import * as React from 'react';
-import { Button, Checkbox, Glyphicon, Panel } from 'react-bootstrap';
+import { Button, Glyphicon, Panel } from 'react-bootstrap';
 import styled from 'styled-components';
+
 import { APICore, APIMining, APIModel } from '../API';
 import { VariableEntity } from '../API/Core';
 import { ModelResponse } from '../API/Model';
@@ -10,18 +11,39 @@ import { D3Model, HierarchyCircularNode, ModelType } from './Container';
 import Histograms from './D3Histograms';
 import ModelView from './D3Model';
 import Search from './D3Search';
+import LargeDatasetSelect from './LargeDatasetSelect';
 
-const TitleBox = styled(Panel.Title)`
+const DataSelectionBox = styled(Panel.Title)`
   display: flex;
   padding: 0.4em;
   margin-bottom: 4px;
   justify-content: space-between;
-  align-items: center;
+  align-items: start;
   background-color: #eee;
 `;
 
+const PathologiesBox = styled.div`
+  margin-top: 4px;
+  font-size: 14px;
+  flex: 0 1 1;
+`;
+
+const DatasetsBox = styled.div`
+  margin-top: 4px;
+  font-size: 14px;
+  margin-left: 8px;
+  flex: 0 1 1;
+`;
+
+const Select = styled.select`
+  padding: 6px 12px 4px 12px;
+`;
+
 const SearchBox = styled.div`
-  width: 320px;
+  margin-top: 4px;
+  margin-left: 8px;
+  flex: 2;
+  /* width: 320px; */
 `;
 
 const PanelTitle = styled(Panel.Title)`
@@ -29,7 +51,7 @@ const PanelTitle = styled(Panel.Title)`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  margin: 0 16px 0 0;
+  margin: 0 8px 0 0;
 `;
 
 const ModelTitle = styled.div`
@@ -54,22 +76,6 @@ const style = {
   display: 'flex',
   justifyContent: 'space-between'
 };
-
-const PathologyBox = styled.div`
-  margin-top: 4px;
-  font-size: 14px;
-  label {
-    margin-left: 16px;
-    font-weight: normal;
-  }
-`;
-
-const DatasetsBox = styled.div`
-  margin: 8px;
-  padding: 1em;
-  background-color: #eeeeee99;
-  position: absolute;
-`;
 
 export interface ExploreProps {
   apiCore: APICore;
@@ -131,27 +137,32 @@ export default (props: ExploreProps): JSX.Element => {
       <div style={style}>
         <div style={{ flex: 1, marginRight: '8px' }}>
           <Panel>
-            <TitleBox>
-              <PathologyBox>
+            <DataSelectionBox>
+              <PathologiesBox>
                 {apiCore.state.pathologies &&
-                  apiCore.state.pathologies.length > 1 &&
-                  apiCore.state.pathologies.map(g => (
-                    <label key={g.code}>
-                      <input
-                        type="radio"
-                        id={g.code}
-                        name={g.label}
-                        value={g.code}
-                        checked={selectedPathology === g.code}
-                        // tslint:disable jsx-no-lambda
-                        onChange={(e): void => {
-                          handleSelectPathology(e.target.value);
-                        }}
-                      />{' '}
-                      {g.label}
-                    </label>
-                  ))}
-              </PathologyBox>
+                  apiCore.state.pathologies.length > 1 && (
+                    <Select
+                      className={'btn btn-default'}
+                      onChange={(e): void => {
+                        handleSelectPathology(e.target.value);
+                      }}
+                      value={selectedPathology}
+                    >
+                      {apiCore.state.pathologies.map(g => (
+                        <option key={g.code} value={g.code}>
+                          {g.label}
+                        </option>
+                      ))}
+                    </Select>
+                  )}
+              </PathologiesBox>
+              <DatasetsBox>
+                <LargeDatasetSelect
+                  datasets={datasets}
+                  handleSelectDataset={handleSelectDataset}
+                  selectedDatasets={selectedDatasets}
+                ></LargeDatasetSelect>
+              </DatasetsBox>
               <SearchBox>
                 <Search
                   hierarchy={layout}
@@ -159,35 +170,13 @@ export default (props: ExploreProps): JSX.Element => {
                   handleSelectNode={handleSelectNode}
                 />
               </SearchBox>
-            </TitleBox>
-            <DatasetsBox>
-              <p>
-                <b>Datasets</b>
-              </p>
-              {datasets &&
-                datasets.map((dataset: any) => (
-                  <div key={dataset.code}>
-                    <Checkbox
-                      inline={true}
-                      // tslint:disable-next-line jsx-no-lambda
-                      onChange={() => {
-                        handleSelectDataset(dataset);
-                      }}
-                      checked={selectedDatasets
-                        .map(s => s.code)
-                        .includes(dataset.code)}
-                    >
-                      {dataset.label}
-                    </Checkbox>
-                  </div>
-                ))}
-            </DatasetsBox>
+            </DataSelectionBox>
             <Panel.Body style={{ margin: 0, padding: 0 }}>
               {children}
             </Panel.Body>
           </Panel>
         </div>
-        <div style={{ flex: 1 }}>
+        <div style={{ flex: 1, maxWidth: '800px' }}>
           <Panel className="statistics">
             <PanelTitle>
               <h3>{selectedNode && selectedNode.data.label}</h3>
@@ -221,7 +210,9 @@ export default (props: ExploreProps): JSX.Element => {
                     className="child"
                     bsStyle={'success'}
                     bsSize={'small'}
-                    disabled={!selectedNode}
+                    disabled={
+                      !selectedNode || selectedNode.data.code === 'root'
+                    }
                     // tslint:disable-next-line jsx-no-lambda
                     onClick={() =>
                       handleUpdateD3Model(ModelType.VARIABLE, selectedNode)
@@ -242,7 +233,9 @@ export default (props: ExploreProps): JSX.Element => {
                     className="child"
                     bsStyle={'warning'}
                     bsSize={'small'}
-                    disabled={!selectedNode}
+                    disabled={
+                      !selectedNode || selectedNode.data.code === 'root'
+                    }
                     // tslint:disable-next-line jsx-no-lambda
                     onClick={() =>
                       handleUpdateD3Model(ModelType.COVARIABLE, selectedNode)
@@ -273,7 +266,6 @@ export default (props: ExploreProps): JSX.Element => {
                 layout={'inline'}
                 algorithms={apiCore.state.algorithms}
                 lookup={apiCore.lookup}
-                handleSelectMethod={() => {}}
                 model={apiModel.state.model}
               />
             </Panel.Body>
@@ -288,6 +280,7 @@ export default (props: ExploreProps): JSX.Element => {
                 selectedNode={selectedNode}
                 handleSelectedNode={handleSelectNode}
                 zoom={zoom}
+                model={model}
               />
             </Panel.Body>
           </Panel>

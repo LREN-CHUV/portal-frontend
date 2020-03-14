@@ -10,13 +10,16 @@ import {
   createModel,
   getDatasets,
   waitForResult
-} from '../../Utils';
+} from '../Utils';
 
 // config
 
 const modelSlug = `logistic-${Math.round(Math.random() * 10000)}`;
-const experimentCode = 'LOGISTIC_REGRESSION';
-const parameters: any = [{ code: 'pathology', value: 'dementia' }];
+const experimentName = 'LOGISTIC_REGRESSION';
+const experimentLabel = 'Logistic Regression';
+const parameters: any = [
+  { name: 'pathology', value: 'dementia', label: 'pathology' }
+];
 
 const model: any = (datasets: VariableEntity[]) => ({
   query: {
@@ -57,16 +60,18 @@ describe('Integration Test for experiment API', () => {
     return datasets !== undefined && mstate.model !== undefined;
   });
 
-  it(`create ${experimentCode}`, async () => {
+  it(`create ${experimentName}`, async () => {
     if (!datasets) {
       throw new Error('datasets not defined');
     }
     const payload: ExperimentPayload = createExaremePayload(
       model,
       datasets,
-      experimentCode,
+      experimentName,
+      experimentLabel,
       parameters,
-      modelSlug
+      modelSlug,
+      'python_iterative'
     );
     const { error, experiment } = await createExperiment({
       experiment: payload

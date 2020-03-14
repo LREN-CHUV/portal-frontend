@@ -1,13 +1,28 @@
 import * as React from 'react';
 import { Button, OverlayTrigger, Popover } from 'react-bootstrap';
-
-import { Algorithm, VariableEntity, AlgorithmParameter } from '../API/Core';
-import { ModelResponse } from '../API/Model';
 import styled from 'styled-components';
-import { Engine } from '../API/Experiment';
+import { Algorithm, AlgorithmParameter, VariableEntity } from '../API/Core';
+import { ModelResponse } from '../API/Model';
+
 interface AvailableAlgorithm extends Algorithm {
   enabled: boolean;
 }
+
+const Container = styled.div`
+  var::after {
+    content: ', ';
+  }
+
+  var::last-child::after {
+    content: '';
+  }
+
+  p {
+    margin: 0;
+    padding: 0;
+    border: 1px solid transparent;
+  }
+`;
 
 const AvailableAlgorithms = ({
   algorithms,
@@ -19,7 +34,7 @@ const AvailableAlgorithms = ({
   algorithms: Algorithm[] | undefined;
   layout?: string;
   lookup: (code: string) => VariableEntity;
-  handleSelectMethod: (method: Algorithm) => void;
+  handleSelectMethod?: (method: Algorithm) => void;
   model: ModelResponse | undefined;
 }): JSX.Element => {
   const query = model && model.query;
@@ -87,13 +102,13 @@ const AvailableAlgorithms = ({
     (algorithms &&
       algorithms.map(algorithm => ({
         ...algorithm,
-        enabled:
-          algorithm.engine === Engine.Workflow
-            ? true
-            : algorithmEnabled(algorithm.parameters as AlgorithmParameter[], {
-                x: modelCovariables,
-                y: modelVariable
-              })
+        enabled: algorithmEnabled(
+          algorithm.parameters as AlgorithmParameter[],
+          {
+            x: modelCovariables,
+            y: modelVariable
+          }
+        )
       }))) ||
     [];
 
@@ -118,41 +133,6 @@ const AvailableAlgorithms = ({
             </p>
           );
         }
-
-        const isCategorical =
-          variable.columnValuesIsCategorical === ''
-            ? undefined
-            : variable.columnValuesIsCategorical === 'true'
-            ? true
-            : false;
-
-        let multipleconstraint = '';
-        if (!variable.valueMultiple) {
-          multipleconstraint = ', one var max';
-        } else {
-          multipleconstraint = ', multiple vars';
-        }
-
-        if (isCategorical) {
-          message.push(
-            <p key={`${algorithm.name}-${axis}-1`}>
-              - hint: should be multinominal{multipleconstraint}
-            </p>
-          );
-        } else if (isCategorical === false) {
-          message.push(
-            <p key={`${algorithm.name}-${axis}-2`}>
-              - hint: should be continous{multipleconstraint}
-            </p>
-          );
-        } else if (!isCategorical) {
-          message.push(
-            <p key={`${algorithm.name}-${axis}-3`}>
-              - hint: can be either multinominal or continuous
-              {multipleconstraint}
-            </p>
-          );
-        }
       }
     };
 
@@ -161,30 +141,6 @@ const AvailableAlgorithms = ({
 
     return <>{message}</>;
   };
-
-  const Container = styled.div`
-    var::after {
-      content: ', ';
-    }
-
-    var::last-child::after {
-      content: '';
-    }
-
-    p {
-      margin: 0;
-      padding: 0;
-      border: 1px solid transparent;
-    }
-  `;
-
-  // const PLongMethodName = styled.p`
-  //   margin: 0 0 8px 0;
-  //   overflow: wrap;
-  //   width: 220px;
-  //   word-wrap: break-word;
-  //   display: inline-block;
-  // `;
 
   return (
     <Container>
@@ -195,11 +151,9 @@ const AvailableAlgorithms = ({
           rootClose={false}
           overlay={
             <Popover id={`tooltip-${algorithm.name}`}>
-              <h4>{algorithm.name}</h4>
+              <h4>{algorithm.label}</h4>
               <p>{algorithm.desc}</p>
-              {algorithm.engine === Engine.Workflow
-                ? ''
-                : variablesHelpMessage(algorithm)}
+              {variablesHelpMessage(algorithm)}
             </Popover>
           }
         >
@@ -210,7 +164,9 @@ const AvailableAlgorithms = ({
                   key={algorithm.name}
                   bsStyle="link"
                   // ts lint:disable-next-line jsx-no-lambda
-                  onClick={(): void => handleSelectMethod(algorithm)}
+                  onClick={(): void =>
+                    handleSelectMethod && handleSelectMethod(algorithm)
+                  }
                   disabled={!algorithm.enabled}
                   style={{
                     color: algorithm.enabled ? '#03a9f4' : 'gray',

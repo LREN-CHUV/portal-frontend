@@ -5,46 +5,41 @@ import { backendURL } from '../API';
 import { Algorithm } from '../API/Core';
 import { Query } from '../API/Model';
 import { User } from '../API/User';
-import APIAdapter from './APIAdapter';
+import ExperimentResultParser from './ExperimentResultParser';
 import { MIME_TYPES } from '../constants';
 
 export interface ExperimentPayload {
   algorithms: Algorithm[];
   model: string;
   name: string;
-  engine?: Engine;
-  validations: any[]; // FIXME: deprecated
-}
-
-export enum Engine {
-  Exareme,
-  Workflow
+  label: string;
 }
 
 export interface ExperimentResponse {
   created: Date;
-  error?: string;
+  error?: string | boolean;
   name: string;
   resultsViewed: boolean;
   uuid: string;
-  modelDefinitionId: string;
+  modelSlug: string;
   results?: Result[] | Node[];
   user?: User;
   algorithms: Algorithm[];
-  modelDefinition?: Query;
-  validations?: any;
+  modelQuery?: Query;
   shared: boolean;
-  engine?: Engine;
+  hasServerError: boolean;
+}
+
+export interface ExperimentResponseRaw extends ExperimentResponse {
+  algorithms: any;
+  model: { slug: string };
+  createdBy: { fullname: string; username: string };
+  result: string;
 }
 
 export interface Result {
   type: MIME_TYPES;
   data: any;
-}
-
-export interface ConfusionMatrix {
-  labels: string[];
-  values: number[][];
 }
 
 interface IUUID {
@@ -75,6 +70,20 @@ class Experiment extends Container<State> {
 
   public one = async ({ uuid }: IUUID): Promise<void> => {
     try {
+      // mark status and refresh the list
+      if (
+        this.state.experiments?.find(e => e.uuid === uuid)?.resultsViewed ===
+        false
+      ) {
+        await request.get(`${this.baseUrl}/${uuid}/markAsViewed`, this.options);
+        await this.setState(previousState => ({
+          experiments: previousState.experiments?.map(e => ({
+            ...e,
+            resultsViewed: e.uuid === uuid ? true : e.resultsViewed
+          }))
+        }));
+      }
+
       const data = await request.get(`${this.baseUrl}/${uuid}`, this.options);
       const json = await JSON.parse(data);
       if (json.error) {
@@ -82,7 +91,7 @@ class Experiment extends Container<State> {
           error: json.error
         });
       }
-      const experiment = APIAdapter.parse(json);
+      const experiment = ExperimentResultParser.parse(json);
 
       return await this.setState({
         error: undefined,
@@ -107,7 +116,9 @@ class Experiment extends Container<State> {
 
       return await this.setState({
         error: undefined,
-        experiments: json.map((j: ExperimentResponse) => APIAdapter.parse(j))
+        experiments: json.map((j: ExperimentResponseRaw) =>
+          ExperimentResultParser.parse(j)
+        )
       });
     } catch (error) {
       return await this.setState({
@@ -121,15 +132,8 @@ class Experiment extends Container<State> {
   }: {
     experiment: ExperimentPayload;
   }): Promise<void> => {
-    const engine = experiment.engine;
-    const url =
-      engine === Engine.Exareme
-        ? `${this.baseUrl}/exareme`
-        : engine === Engine.Workflow
-        ? `${this.baseUrl}/workflow`
-        : `${this.baseUrl}`;
+    const url = `${this.baseUrl}/runAlgorithm`;
 
-    // console.log(url, experiment);
     try {
       const data = await request({
         body: JSON.stringify(experiment),
@@ -141,7 +145,7 @@ class Experiment extends Container<State> {
         uri: url
       });
       const json = await JSON.parse(data);
-      const result = APIAdapter.parse(json);
+      const result = ExperimentResultParser.parse(json);
 
       return await this.setState({
         error: undefined,
@@ -178,7 +182,7 @@ class Experiment extends Container<State> {
           error: json.error
         });
       }
-      const experiment = APIAdapter.parse(json);
+      const experiment = ExperimentResultParser.parse(json);
       return await this.setState({
         error: undefined,
         experiment

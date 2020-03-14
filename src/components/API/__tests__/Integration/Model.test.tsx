@@ -1,7 +1,7 @@
 import APIModel from '../../Model';
 import APICore from '../../Core';
 import config from '../../RequestHeaders';
-import { getDatasets } from '../../Utils';
+import { getDatasets } from '../Utils';
 
 describe('Integration Test Model API', () => {
   const apiModel = new APIModel(config);

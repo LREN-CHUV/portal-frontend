@@ -102,17 +102,22 @@ const computeMinings = ({
   const rows: ITableRow[] = [];
   variables.forEach(variable => {
     const isPolynominal =
-      variable.type === 'polynominal' || variable.type === 'binominal';
+      variable.type === 'multinominal' || variable.type === 'binominal';
     const row: ITableRow = {};
     let polynominalRows: ITableRow[] = [];
 
-    // set labels, Variables + polynominal categories rows
+    // set labels, Variables + multinominal categories rows
     if (isPolynominal && variable.enumerations) {
       row.variable = variable.label;
       polynominalRows = variable.enumerations.reduce(
         (acc: any[], val: any) => [
           ...acc,
-          { category: { code: val.code, label: val.label } }
+          {
+            category: {
+              code: val.code,
+              label: val.label
+            }
+          }
         ],
         []
       );

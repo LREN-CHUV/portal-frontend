@@ -57,7 +57,7 @@ const Parameters = ({
       categoricalVariables &&
       categoricalVariables
         .map(v => lookupCallback(v.code))
-        .filter(v => v.type === 'polynominal' || v.type === 'binominal');
+        .filter(v => v.type === 'multinominal' || v.type === 'binominal');
 
     const first = (vars && vars.length && vars[0]) || undefined;
     if (first && first.enumerations) {
@@ -140,7 +140,7 @@ const Parameters = ({
       {algorithm && (
         <div>
           <h4>
-            <strong>{algorithm.name}</strong>
+            <strong>{algorithm.label}</strong>
           </h4>
           <p>{algorithm.desc}</p>
         </div>
@@ -176,7 +176,7 @@ const Parameters = ({
                     <Col sm={12}>{parameter.desc}</Col>
                   </Row>
                   <Row>
-                    <Col sm={6}>{parameter.name}</Col>
+                    <Col sm={6}>{parameter.label}</Col>
                     <Col sm={6}>
                       {!parameter.valueEnumerations &&
                         parameter.name !== 'referencevalues' &&

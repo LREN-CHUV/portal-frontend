@@ -75,9 +75,7 @@ export default ({
         experiments.map(experiment => {
           const model =
             models &&
-            models.find(
-              (m: ModelResponse) => m.slug === experiment.modelDefinitionId
-            );
+            models.find((m: ModelResponse) => m.slug === experiment.modelSlug);
 
           const results = experiment && experiment.results;
 
@@ -99,7 +97,7 @@ export default ({
                     bsSize="small"
                     // tslint:disable-next-line jsx-no-lambda
                     onClick={(): void =>
-                      handleNewExperiment(experiment.modelDefinitionId)
+                      handleNewExperiment(experiment.modelSlug)
                     }
                   >
                     New experiment
@@ -109,7 +107,7 @@ export default ({
                     // tslint:disable-next-line jsx-no-lambda
                     onClick={(): void =>
                       handleSelectExperiment(
-                        experiment.modelDefinitionId,
+                        experiment.modelSlug,
                         experiment.uuid
                       )
                     }
