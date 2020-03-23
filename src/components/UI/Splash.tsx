@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button } from 'react-bootstrap';
+import { Alert, Button } from 'react-bootstrap';
 import styled from 'styled-components';
 
 import HBPLogo from '../../images/hbp_logo_135.png';
@@ -52,6 +52,11 @@ const ActionBar = styled.div`
   padding: 16px;
 `;
 
+const AlertBox = styled(Alert)`
+  position: relative;
+  margin: 16px;
+`;
+
 const Columns = styled.div`
   display: flex;
   padding: 0 10%;
@@ -87,7 +92,11 @@ const Logo = styled.img`
   margin: 16px auto 32px auto;
 `;
 
-export default (): JSX.Element => {
+export default ({
+  forbidden
+}: {
+  forbidden: boolean | undefined;
+}): JSX.Element => {
   const handleLoginPress = (): void => {
     window.location.href = `${backendURL}/login/hbp`;
   };
@@ -103,6 +112,14 @@ export default (): JSX.Element => {
         </Button>
       </ActionBar>
       <main>
+        {forbidden && (
+          <AlertBox bsStyle="danger">
+            <strong>ACCESS DENIED</strong> You do not have the correct
+            authorization to enter the Medical Informatics Platform. Please
+            contact your administrator or search for support in the help menu
+            above.
+          </AlertBox>
+        )}
         <Logo alt="HBP logo" title={'Human Brain Project'} src={HBPLogo} />
         <h2>Human Brain Project</h2>
         <h1>THE MEDICAL INFORMATICS PLATFORM</h1>
