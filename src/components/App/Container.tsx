@@ -121,7 +121,9 @@ class AppContainer extends React.Component<any, State> {
                       return <div />;
                     }}
                   />
-                  {!loading && !authenticated && <Splash />}
+                  {!loading && !authenticated && (
+                    <Splash forbidden={this.apiUser.state.forbidden} />
+                  )}
                   {!loading && authenticated && (
                     <App
                       appConfig={this.state.appConfig}

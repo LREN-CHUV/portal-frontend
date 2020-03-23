@@ -13,6 +13,7 @@ export interface User {
 
 export interface State {
   error?: string;
+  forbidden?: boolean;
   user?: User;
   authenticated: boolean;
   agreeNDA: boolean;
@@ -93,6 +94,7 @@ class UserContainer extends Container<State> {
       return await this.setState({
         authenticated: false,
         error: error.message,
+        forbidden: error.statusCode === 403,
         loading: false
       });
     }
