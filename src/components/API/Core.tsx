@@ -468,7 +468,7 @@ class Core extends Container<State> {
                 visible
               };
 
-              if (parameter.name === 'standardize') {
+              if (parameter.label === 'standardize') {
                 return {
                   name: 'standardize',
                   label: 'standardize',

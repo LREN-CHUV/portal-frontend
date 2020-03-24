@@ -59,7 +59,7 @@ const AvailableAlgorithms = ({
       axis: string,
       variables: VariableEntity[]
     ): boolean => {
-      const definition = parameters.find(p => p.name === axis);
+      const definition = parameters.find(p => p.label === axis);
       if (definition) {
         const isCategorical =
           definition.columnValuesIsCategorical === ''
@@ -117,7 +117,7 @@ const AvailableAlgorithms = ({
 
     const helpFor = (axis: string, term: string): void => {
       const variable = (algorithm.parameters as AlgorithmParameter[]).find(
-        p => p.name === axis
+        p => p.label === axis
       );
       if (variable) {
         if (variable.desc) {

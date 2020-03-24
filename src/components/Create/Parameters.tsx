@@ -164,7 +164,7 @@ const Parameters = ({
               return (
                 <FormGroup
                   validationState={getValidationState(parameter)}
-                  key={parameter.name}
+                  key={parameter.label}
                   style={{
                     display:
                       parameter.visible === undefined || parameter.visible
@@ -179,15 +179,15 @@ const Parameters = ({
                     <Col sm={6}>{parameter.label}</Col>
                     <Col sm={6}>
                       {!parameter.valueEnumerations &&
-                        parameter.name !== 'referencevalues' &&
-                        parameter.name !== 'xlevels' && (
+                        parameter.label !== 'referencevalues' &&
+                        parameter.label !== 'xlevels' && (
                           <FormControl
                             type={type}
                             defaultValue={parameter.defaultValue}
                             placeholder={parameter.placeholder}
                             // tslint:disable-next-line jsx-no-lambda
                             onChange={event =>
-                              handleChangeParameter(event, parameter.name)
+                              handleChangeParameter(event, parameter.label)
                             }
                           />
                         )}
@@ -200,7 +200,7 @@ const Parameters = ({
                             placeholder={parameter.placeholder}
                             // tslint:disable-next-line jsx-no-lambda
                             onChange={event =>
-                              handleChangeParameter(event, parameter.name)
+                              handleChangeParameter(event, parameter.label)
                             }
                           >
                             {parameter.valueEnumerations.map((v: string) => (
@@ -211,7 +211,7 @@ const Parameters = ({
                           </FormControl>
                         )}
 
-                      {parameter.name === 'xlevels' && (
+                      {parameter.label === 'xlevels' && (
                         <Select
                           value={selectedOptions}
                           onChange={handleSelect}
@@ -220,11 +220,11 @@ const Parameters = ({
                         />
                       )}
 
-                      {parameter.name === 'referencevalues' && (
+                      {parameter.label === 'referencevalues' && (
                         <CategoryChooser
                           apiCore={apiCore}
                           query={query}
-                          parameterName={parameter.name}
+                          parameterName={parameter.label}
                           notblank={parameter.valueNotBlank}
                           handleChangeCategoryParameter={
                             handleChangeCategoryParameter
