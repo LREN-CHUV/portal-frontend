@@ -37,6 +37,10 @@ const DatasetsBox = styled.div`
 
 const Select = styled.select`
   padding: 6px 12px 4px 12px;
+
+  option {
+    background-color: white;
+  }
 `;
 
 const SearchBox = styled.div`
