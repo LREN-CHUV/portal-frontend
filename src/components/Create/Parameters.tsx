@@ -180,7 +180,9 @@ const Parameters = ({
                     <Col sm={6}>
                       {!parameter.valueEnumerations &&
                         parameter.label !== 'referencevalues' &&
-                        parameter.label !== 'xlevels' && (
+                        parameter.label !== 'xlevels' &&
+                        parameter.label !== 'Positive outcome' &&
+                        parameter.label !== 'Negative outcome' && (
                           <FormControl
                             type={type}
                             defaultValue={parameter.defaultValue}
@@ -230,6 +232,30 @@ const Parameters = ({
                             handleChangeCategoryParameter
                           }
                         />
+                      )}
+
+                      {(parameter.label === 'Positive outcome' ||
+                        parameter.label === 'Negative outcome') && (
+                        <FormControl
+                          componentClass="select"
+                          defaultValue={parameter.defaultValue}
+                          placeholder={parameter.placeholder}
+                          // tslint:disable-next-line jsx-no-lambda
+                          onChange={event =>
+                            handleChangeParameter(event, parameter.label)
+                          }
+                        >
+                          {apiCore
+                            .lookup(
+                              query?.variables?.find((v, i) => i === 0)?.code ||
+                                ''
+                            )
+                            ?.enumerations?.map((v: VariableEntity) => (
+                              <option key={v.code} value={v.code}>
+                                {v.label}
+                              </option>
+                            ))}
+                        </FormControl>
                       )}
 
                       <FormControl.Feedback />
