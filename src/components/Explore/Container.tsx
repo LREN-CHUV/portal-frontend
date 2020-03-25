@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 
 import { APICore, APIMining, APIModel } from '../API';
-import { VariableEntity } from '../API/Core';
 import { ModelResponse, Query } from '../API/Model';
 import { AppConfig } from '../App/App';
 import { LONGITUDINAL_DATASET_TYPE } from '../constants';
@@ -188,33 +187,6 @@ export default ({
     trainingDatasets
   ]);
 
-  const handleSelectDataset = (dataset: VariableEntity): void => {
-    const model = apiModel.state.model;
-    const trainingDatasets =
-      (model && model.query && model.query.trainingDatasets) || [];
-
-    const isLongitudinal = dataset.type === LONGITUDINAL_DATASET_TYPE;
-
-    const nextDatasets = trainingDatasets
-      .map(d => d.code)
-      .includes(dataset.code)
-      ? [...trainingDatasets.filter(d => d.code !== dataset.code)]
-      : isLongitudinal
-      ? [
-          ...trainingDatasets.filter(d => d.type === LONGITUDINAL_DATASET_TYPE),
-          dataset
-        ]
-      : [
-          ...trainingDatasets.filter(d => d.type !== LONGITUDINAL_DATASET_TYPE),
-          dataset
-        ];
-
-    if (model) {
-      model.query.trainingDatasets = nextDatasets;
-      apiModel.setModel(model);
-    }
-  };
-
   // Utility to convert  D3 model to variables
   const convertD3ModelToModel = (
     aD3Model: D3Model,
@@ -386,7 +358,6 @@ export default ({
     apiModel,
     apiMining,
     handleGoToAnalysis,
-    handleSelectDataset,
     handleSelectModel,
     handleSelectNode: setSelectedNode,
     handleSelectPathology,

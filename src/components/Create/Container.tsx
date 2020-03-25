@@ -1,6 +1,9 @@
+import '../Experiment.css';
+
 import * as React from 'react';
 import { Panel, Tab, Tabs } from 'react-bootstrap';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
+
 import { APICore, APIExperiment, APIModel } from '../API';
 import {
   Algorithm,
@@ -10,9 +13,8 @@ import {
 import { ExperimentPayload, ExperimentResponse } from '../API/Experiment';
 import { ModelResponse, Query } from '../API/Model';
 import { AppConfig } from '../App/App';
-import '../Experiment.css';
 import { Alert, IAlert } from '../UI/Alert';
-import DatasetsForm from '../UI/DatasetsForm';
+import LargeDatasetSelect from '../UI/LargeDatasetSelect';
 import Model from '../UI/Model';
 import AvailableAlgorithms from './AvailableAlgorithms';
 import ExperimentCreateHeader from './Header';
@@ -56,13 +58,16 @@ class Container extends React.Component<Props, State> {
           <div className="sidebar">
             <Panel className="datasets">
               <Panel.Body>
-                <DatasetsForm
+                <h5>
+                  <strong>Datasets</strong>
+                </h5>
+                <LargeDatasetSelect
                   datasets={apiCore.datasetsForPathology(
                     query && query.pathology
                   )}
-                  query={query}
-                  handleUpdateQuery={this.handleUpdateQuery}
-                />
+                  handleSelectDataset={apiModel.selectDataset}
+                  selectedDatasets={query?.trainingDatasets || []}
+                ></LargeDatasetSelect>
               </Panel.Body>
             </Panel>
             <Model

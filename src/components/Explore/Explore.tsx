@@ -3,15 +3,14 @@ import { Button, Glyphicon, Panel } from 'react-bootstrap';
 import styled from 'styled-components';
 
 import { APICore, APIMining, APIModel } from '../API';
-import { VariableEntity } from '../API/Core';
 import { ModelResponse } from '../API/Model';
 import AvailableAlgorithms from '../Create/AvailableAlgorithms';
 import DropdownModel from '../UI/DropdownModel';
+import LargeDatasetSelect from '../UI/LargeDatasetSelect';
 import { D3Model, HierarchyCircularNode, ModelType } from './Container';
 import Histograms from './D3Histograms';
 import ModelView from './D3Model';
 import Search from './D3Search';
-import LargeDatasetSelect from './LargeDatasetSelect';
 
 const DataSelectionBox = styled(Panel.Title)`
   display: flex;
@@ -90,7 +89,6 @@ export interface ExploreProps {
   layout: HierarchyCircularNode;
   histograms?: any;
   d3Model: D3Model;
-  handleSelectDataset: (e: VariableEntity) => void;
   handleSelectPathology: (code: string) => void;
   handleSelectNode: (node: HierarchyCircularNode) => void;
   handleUpdateD3Model: (
@@ -114,7 +112,6 @@ export default (props: ExploreProps): JSX.Element => {
     histograms,
     d3Model,
     handleSelectNode,
-    handleSelectDataset,
     handleSelectPathology,
     handleUpdateD3Model,
     handleSelectModel,
@@ -163,8 +160,9 @@ export default (props: ExploreProps): JSX.Element => {
               <DatasetsBox>
                 <LargeDatasetSelect
                   datasets={datasets}
-                  handleSelectDataset={handleSelectDataset}
+                  handleSelectDataset={apiModel.selectDataset}
                   selectedDatasets={selectedDatasets}
+                  isDropdown={true}
                 ></LargeDatasetSelect>
               </DatasetsBox>
               <SearchBox>

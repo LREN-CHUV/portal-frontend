@@ -9,9 +9,10 @@ interface Props {
   datasets?: VariableEntity[];
   handleSelectDataset: (e: VariableEntity) => void;
   selectedDatasets: VariableEntity[];
+  isDropdown?: boolean;
 }
 
-const Panel = styled.div`
+const DropDownPanel = styled.div`
   position: absolute;
   width: 320px;
   background-color: white;
@@ -39,12 +40,38 @@ const Panel = styled.div`
   }
 `;
 
+const Panel = styled.div`
+
+  label {
+    margin-right: 8px;
+  }
+
+  .checkbox {
+    position: absolute;
+    margin-top: 4px;
+    margin-left: -8px;
+  }
+
+  span {
+    display: block;
+  }
+
+  hr {
+    margin: 4px;
+  }
+
+  p {
+    margin-bottom: 0;
+  }
+`;
+
 export default ({
   datasets,
   handleSelectDataset,
-  selectedDatasets
+  selectedDatasets,
+  isDropdown = false
 }: Props): JSX.Element => {
-  const [visible, setVisible] = React.useState(false);
+  const [visible, setVisible] = React.useState(!isDropdown);
   const style = visible ? undefined : { display: 'none' };
 
   const ndatasets = datasets?.filter(d => d.type !== LONGITUDINAL_DATASET_TYPE);
@@ -65,23 +92,32 @@ export default ({
       </span>
     ));
 
+  const data = (
+    <>
+      {ndatasets && checkboxFor(ndatasets)}
+      {ldatasets && (
+        <>
+          <hr />
+          <p>
+            <b>Longitudinal datasets</b>
+          </p>
+        </>
+      )}
+      {ldatasets && checkboxFor(ldatasets)}
+    </>
+  );
+
   return (
     <>
-      <Button onClick={(): void => setVisible(!visible)}>
-        Datasets <span className="caret"></span>
-      </Button>
-      <Panel style={style}>
-        {ndatasets && checkboxFor(ndatasets)}
-        {ldatasets && (
-          <>
-            <hr />
-            <p>
-              <b>Longitudinal datasets</b>
-            </p>
-          </>
-        )}
-        {ldatasets && checkboxFor(ldatasets)}
-      </Panel>
+      {isDropdown && (
+        <>
+          <Button onClick={(): void => setVisible(!visible)}>
+            Datasets <span className="caret"></span>
+          </Button>
+          <DropDownPanel style={style}>{data}</DropDownPanel>
+        </>
+      )}
+      {!isDropdown && <Panel>{data}</Panel>}
     </>
   );
 };
