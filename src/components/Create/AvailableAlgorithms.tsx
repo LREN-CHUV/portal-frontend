@@ -3,6 +3,7 @@ import { Button, OverlayTrigger, Popover } from 'react-bootstrap';
 import styled from 'styled-components';
 import { Algorithm, AlgorithmParameter, VariableEntity } from '../API/Core';
 import { ModelResponse } from '../API/Model';
+import { LONGITUDINAL_DATASET_TYPE } from '../constants';
 
 interface AvailableAlgorithm extends Algorithm {
   enabled: boolean;
@@ -51,6 +52,11 @@ const AvailableAlgorithms = ({
       query.groupings.map(v => lookup(v.code))) ||
       [])
   ];
+  const isLongitudinalDataset =
+    query?.trainingDatasets
+      ?.map(d => d.type)
+      ?.includes(LONGITUDINAL_DATASET_TYPE) || false;
+
   const algorithmEnabled = (
     parameters: AlgorithmParameter[],
     { x, y }: { x: VariableEntity[]; y: VariableEntity[] }
@@ -99,18 +105,18 @@ const AvailableAlgorithms = ({
   };
 
   const availableAlgorithms: AvailableAlgorithm[] =
-    (algorithms &&
-      algorithms.map(algorithm => ({
-        ...algorithm,
-        enabled: algorithmEnabled(
-          algorithm.parameters as AlgorithmParameter[],
-          {
-            x: modelCovariables,
-            y: modelVariable
-          }
-        )
-      }))) ||
-    [];
+    algorithms?.map(algorithm => ({
+      ...algorithm,
+      enabled:
+        algorithmEnabled(algorithm.parameters as AlgorithmParameter[], {
+          x: modelCovariables,
+          y: modelVariable
+        }) &&
+        ((): boolean =>
+          isLongitudinalDataset
+            ? algorithm.datasetType === LONGITUDINAL_DATASET_TYPE
+            : algorithm.datasetType !== LONGITUDINAL_DATASET_TYPE)()
+    })) || [];
 
   const variablesHelpMessage = (algorithm: Algorithm): JSX.Element => {
     const message: JSX.Element[] = [];

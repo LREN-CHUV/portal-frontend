@@ -111,6 +111,7 @@ export const ENABLED_ALGORITHMS = [
   {
     enabled: true,
     label: 'Kaplan-Meier Estimator',
+    datasetType: LONGITUDINAL_DATASET_TYPE,
     types: [MIME_TYPES.HIGHCHARTS]
   }
 ].map(a => ({ ...a, types: [...ERRORS_OUTPUT, ...a.types] }));
