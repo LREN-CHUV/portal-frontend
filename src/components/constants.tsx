@@ -12,6 +12,8 @@ export enum MIME_TYPES {
   TEXT = 'text/plain'
 }
 
+export const LONGITUDINAL_DATASET_TYPE = 'longitudinal';
+
 export const HISTOGRAMS_STORAGE_KEY = 'mipChoosenHistogramsVars';
 
 export const ERRORS_OUTPUT = [
@@ -114,7 +116,7 @@ export const ENABLED_ALGORITHMS = [
 ].map(a => ({ ...a, types: [...ERRORS_OUTPUT, ...a.types] }));
 
 const independents = ['X', 'column1', 'x', 'descriptive_attributes'];
-const dependents = ['Y', 'column2', 'y', 'target_attributes'];
+const dependents = ['Y', 'column2', 'y', 'target_attributes', 'Event variable'];
 export const UI_HIDDEN_PARAMETERS = [
   ...dependents,
   ...independents,
