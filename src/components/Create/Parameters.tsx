@@ -97,9 +97,12 @@ const Parameters = ({
     return 'success';
   };
 
-  const handleChangeCategoryParameter = (name: string, value: string): void => {
+  const handleChangeCategoryParameter = (
+    label: string,
+    value: string
+  ): void => {
     if (parameters && parameters.length) {
-      const o = (element: any) => element.name === name;
+      const o = (element: any) => element.label === label;
       const index = parameters.findIndex(o);
       const parameter = parameters.find(o);
       if (parameter) {
@@ -110,10 +113,10 @@ const Parameters = ({
     }
   };
 
-  const handleChangeParameter = (event: any, name: string): void => {
+  const handleChangeParameter = (event: any, label: string): void => {
     event.preventDefault();
     const currentTarget = event.currentTarget as HTMLInputElement;
-    handleChangeCategoryParameter(name, currentTarget.value);
+    handleChangeCategoryParameter(label, currentTarget.value);
   };
 
   const handleSelect = (options: any): void => {
