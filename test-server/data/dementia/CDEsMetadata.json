@@ -23,7 +23,7 @@
           "label": "DESD-synthdata"
         },
         {
-          "code": "longitudinal",
+          "code": "fake_longitudinal",
           "label": "Longitudinal"
         }
       ],
