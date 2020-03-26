@@ -41,7 +41,6 @@ const DropDownPanel = styled.div`
 `;
 
 const Panel = styled.div`
-
   label {
     margin-right: 8px;
   }
@@ -95,7 +94,7 @@ export default ({
   const data = (
     <>
       {ndatasets && checkboxFor(ndatasets)}
-      {ldatasets && (
+      {ldatasets && ldatasets.length > 0 && (
         <>
           <hr />
           <p>
