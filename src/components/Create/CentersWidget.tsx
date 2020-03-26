@@ -15,8 +15,6 @@ export default ({
   parameterName,
   handleChangeCentersParameter
 }: Props): JSX.Element => {
-  const lookupCallback = useCallback(apiCore.lookup, []);
-
   const variables = (query && query.variables) || [];
 
   return (
