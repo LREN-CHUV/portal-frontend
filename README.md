@@ -45,18 +45,14 @@ You can find the most recent version of the Create React App guide [here](https:
 
 You can generate models and experiments by running the tests:
 
-- `./run-test.sh` or with a regex `./run-test.sh test anova`
+- `./run-test.sh` or with a regex `./run-test.sh regex anova`
 
 Tests run with Jest, see [the jest cli doc](https://jestjs.io/docs/en/cli) for more details
 
 ### Turn on authentication
 
 - Change the AUTHENTICATION flag from 0 to 1 in test-docker/docker-compose.yml
-- `docker exec -it $(docker ps | grep jboss/keycloak | awk '{print $1}') bash`
-- `cd /opt/jboss/keycloak/bin`
-- `./kcadm.sh config credentials --server http://88.197.53.10:8095/auth --realm master --user admin`
-- use password Pa55w0rd
-- `./kcadm.sh update realms/MIP -s sslRequired=NONE`
+- You can administer Keycloack from this address [http://localhost:3000/auth](http://localhost:3000)
 
 ## Build (produce a local docker container)
 
