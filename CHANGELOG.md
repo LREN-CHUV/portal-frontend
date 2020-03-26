@@ -1,5 +1,9 @@
 # Changelog
 
+## 6.1.1 - 26.03.2020
+
+- Longitudinal bug fix
+
 ## 6.1.0 - 26.03.2020
 
 - ROHAN Service link (Ontologies for Neurosciences)
