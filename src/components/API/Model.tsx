@@ -2,6 +2,7 @@ import request from 'request-promise-native';
 import { Container } from 'unstated';
 
 import { backendURL } from '../API';
+import { LONGITUDINAL_DATASET_TYPE } from '../constants';
 import { VariableEntity } from './Core';
 
 export interface ModelState {
@@ -60,6 +61,43 @@ class Model extends Container<ModelState> {
     return await this.setState({
       model
     });
+  };
+
+  // FIXME: longitudinal datasets should be tagged
+  public isDatasetLongitudinal = (
+    trainingDatasets: VariableEntity[] | undefined
+  ): boolean => {
+    const r = new RegExp(LONGITUDINAL_DATASET_TYPE);
+    const isLongitudinalDataset =
+      trainingDatasets?.find(d => r.test(d.code)) !== undefined || false;
+
+    return isLongitudinalDataset;
+  };
+
+  public selectDataset = (dataset: VariableEntity): void => {
+    const model = this.state.model;
+    const trainingDatasets =
+      (model && model.query && model.query.trainingDatasets) || [];
+    const isLongitudinal = this.isDatasetLongitudinal([dataset]);
+
+    const nextDatasets = trainingDatasets
+      .map(d => d.code)
+      .includes(dataset.code)
+      ? [...trainingDatasets.filter(d => d.code !== dataset.code)]
+      : isLongitudinal
+      ? [
+          ...trainingDatasets.filter(d => d.type === LONGITUDINAL_DATASET_TYPE),
+          dataset
+        ]
+      : [
+          ...trainingDatasets.filter(d => d.type !== LONGITUDINAL_DATASET_TYPE),
+          dataset
+        ];
+
+    if (model) {
+      model.query.trainingDatasets = nextDatasets;
+      this.setModel(model);
+    }
   };
 
   public one = async (slug?: string) => {

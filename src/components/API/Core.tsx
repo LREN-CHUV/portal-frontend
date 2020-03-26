@@ -37,6 +37,7 @@ export interface Algorithm {
   desc?: string;
   parameters: AlgorithmParameter[] | AlgorithmParameterRequest[];
   type: string;
+  datasetType?: string;
 }
 
 export interface AlgorithmResult {
@@ -439,6 +440,11 @@ class Core extends Container<State> {
           (algorithm: Algorithm) =>
             ENABLED_ALGORITHMS.find(a => algorithm.label === a.label)?.enabled
         )
+        .map((algorithm: Algorithm) => ({
+          ...algorithm,
+          datasetType: ENABLED_ALGORITHMS.find(a => algorithm.label === a.label)
+            ?.datasetType
+        }))
         .sort((x: Algorithm, y: Algorithm) => {
           const a = x.label;
           const b = y.label;
@@ -468,7 +474,7 @@ class Core extends Container<State> {
                 visible
               };
 
-              if (parameter.name === 'standardize') {
+              if (parameter.label === 'standardize') {
                 return {
                   name: 'standardize',
                   label: 'standardize',

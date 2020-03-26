@@ -8,14 +8,14 @@ import { RouteComponentProps } from 'react-router-dom';
 import { APICore, APIMining, APIModel } from '../API';
 import { VariableEntity } from '../API/Core';
 import { MiningPayload } from '../API/Mining';
-import { ModelResponse, Query } from '../API/Model';
+import { ModelResponse } from '../API/Model';
+import { variablesFilter } from '../constants';
 import { IAlert } from '../UI/Alert';
-import DatasetsForm from '../UI/DatasetsForm';
+import LargeDatasetSelect from '../UI/LargeDatasetSelect';
 import Model from '../UI/Model';
 import Content from './Content';
 import Filter from './Filter';
 import ExperimentReviewHeader from './Header';
-import { variablesFilter } from '../constants';
 
 interface Props extends RouteComponentProps {
   apiModel: APIModel;
@@ -91,15 +91,6 @@ const Container = ({
 
   const handleGoBackToExplore = (): void => {
     history.push(`/explore`);
-  };
-
-  const handleUpdateDatasets = async (query: Query): Promise<void> => {
-    const model = apiModel.state.model;
-    if (model) {
-      model.query = query;
-      setShouldReload(true);
-      await apiModel.setModel(model);
-    }
   };
 
   const handleUpdateFilter = async (filters: string): Promise<void> => {
@@ -229,6 +220,7 @@ const Container = ({
 
   const { fields, filters } = makeFilters({ apiCore, apiModel });
   const model = apiModel.state.model;
+  const query = model?.query;
 
   return (
     <div className="Model Review">
@@ -244,13 +236,16 @@ const Container = ({
         <div className="sidebar">
           <Panel className="datasets">
             <Panel.Body>
-              <DatasetsForm
+              <h5>
+                <strong>Datasets</strong>
+              </h5>
+              <LargeDatasetSelect
                 datasets={apiCore.datasetsForPathology(
-                  model && model.query && model.query.pathology
+                  query && query.pathology
                 )}
-                query={model && model.query}
-                handleUpdateQuery={handleUpdateDatasets}
-              />
+                handleSelectDataset={apiModel.selectDataset}
+                selectedDatasets={query?.trainingDatasets || []}
+              ></LargeDatasetSelect>
             </Panel.Body>
           </Panel>
           <Model

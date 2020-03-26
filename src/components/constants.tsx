@@ -12,6 +12,8 @@ export enum MIME_TYPES {
   TEXT = 'text/plain'
 }
 
+export const LONGITUDINAL_DATASET_TYPE = 'longitudinal';
+
 export const HISTOGRAMS_STORAGE_KEY = 'mipChoosenHistogramsVars';
 
 export const ERRORS_OUTPUT = [
@@ -24,92 +26,98 @@ export const ENABLED_ALGORITHMS = [
   {
     enabled: true,
     label: 'ANOVA',
-    types: [...ERRORS_OUTPUT, MIME_TYPES.JSONDATA]
+    types: [MIME_TYPES.JSONDATA]
   },
   {
     enabled: true,
     label: 'Linear Regression',
-    types: [...ERRORS_OUTPUT, MIME_TYPES.JSONDATA]
+    types: [MIME_TYPES.JSONDATA]
   },
   {
     enabled: true,
     label: 'Logistic Regression',
-    types: [...ERRORS_OUTPUT, MIME_TYPES.JSONDATA, MIME_TYPES.HIGHCHARTS]
+    types: [MIME_TYPES.JSONDATA, MIME_TYPES.HIGHCHARTS]
   },
   {
     enabled: false,
     label: 'Histograms',
-    types: [...ERRORS_OUTPUT, MIME_TYPES.HIGHCHARTS]
+    types: [MIME_TYPES.HIGHCHARTS]
   },
   {
     enabled: true,
     label: 'T-Test Independent',
-    types: [...ERRORS_OUTPUT, MIME_TYPES.JSONDATA]
+    types: [MIME_TYPES.JSONDATA]
   },
   {
     enabled: true,
     label: 'T-Test Paired',
-    types: [...ERRORS_OUTPUT, MIME_TYPES.JSONDATA]
+    types: [MIME_TYPES.JSONDATA]
   },
   {
     enabled: true,
     label: 'Pearson Correlation',
-    types: [...ERRORS_OUTPUT, MIME_TYPES.JSONDATA, MIME_TYPES.HIGHCHARTS]
+    types: [MIME_TYPES.JSONDATA, MIME_TYPES.HIGHCHARTS]
   },
   {
     enabled: true,
     label: 'ID3',
-    types: [...ERRORS_OUTPUT, MIME_TYPES.JSONDATA, MIME_TYPES.JSON]
+    types: [MIME_TYPES.JSONDATA, MIME_TYPES.JSON]
   },
   {
     enabled: true,
     label: 'k-Means Clustering',
-    types: [...ERRORS_OUTPUT, MIME_TYPES.JSONDATA, MIME_TYPES.HIGHCHARTS]
+    types: [MIME_TYPES.JSONDATA, MIME_TYPES.HIGHCHARTS]
   },
   {
     enabled: true,
     label: 'Naive Bayes Training',
-    types: [...ERRORS_OUTPUT, MIME_TYPES.JSONDATA, MIME_TYPES.HIGHCHARTS]
+    types: [MIME_TYPES.JSONDATA, MIME_TYPES.HIGHCHARTS]
   },
   {
     enabled: true,
     label: 'T-Test One-Sample ',
-    types: [...ERRORS_OUTPUT, MIME_TYPES.JSONDATA]
+    types: [MIME_TYPES.JSONDATA]
   },
   {
     enabled: false,
     label: 'Multiple Histograms',
-    types: [...ERRORS_OUTPUT, MIME_TYPES.HIGHCHARTS]
+    types: [MIME_TYPES.HIGHCHARTS]
   },
   {
     enabled: true,
     label: 'Principal Components analysis',
-    types: [...ERRORS_OUTPUT, MIME_TYPES.JSONDATA, MIME_TYPES.HIGHCHARTS]
+    types: [MIME_TYPES.JSONDATA, MIME_TYPES.HIGHCHARTS]
   },
   {
     enabled: true,
     label: 'Workflow Naive Bayes with Hold Out Validation',
-    types: [...ERRORS_OUTPUT, MIME_TYPES.HIGHCHARTS]
+    types: [MIME_TYPES.HIGHCHARTS]
   },
   {
     enabled: true,
     label: 'Naive Bayes with Cross Validation',
-    types: [...ERRORS_OUTPUT, MIME_TYPES.HIGHCHARTS]
+    types: [MIME_TYPES.HIGHCHARTS]
   },
   {
     enabled: true,
     label: 'Calibration Belt',
-    types: [...ERRORS_OUTPUT, MIME_TYPES.HIGHCHARTS]
+    types: [MIME_TYPES.HIGHCHARTS]
   },
   {
     enabled: true,
     label: 'CART',
-    types: [...ERRORS_OUTPUT, MIME_TYPES.JSON]
+    types: [MIME_TYPES.JSON]
+  },
+  {
+    enabled: true,
+    label: 'Kaplan-Meier Estimator',
+    datasetType: LONGITUDINAL_DATASET_TYPE,
+    types: [MIME_TYPES.HIGHCHARTS]
   }
-];
+].map(a => ({ ...a, types: [...ERRORS_OUTPUT, ...a.types] }));
 
 const independents = ['X', 'column1', 'x', 'descriptive_attributes'];
-const dependents = ['Y', 'column2', 'y', 'target_attributes'];
+const dependents = ['Y', 'column2', 'y', 'target_attributes', 'Event variable'];
 export const UI_HIDDEN_PARAMETERS = [
   ...dependents,
   ...independents,
@@ -128,3 +136,5 @@ export const variablesFilter = [
   'DIAG_stade',
   'bnabroadcategory'
 ];
+
+export const ONTOLOGY_URL = 'https://rohan.scai.fraunhofer.de/ols/index';

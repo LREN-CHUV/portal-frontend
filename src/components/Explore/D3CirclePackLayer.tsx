@@ -3,8 +3,7 @@ import './CirclePack.css';
 import * as d3 from 'd3';
 import React, { useCallback, useEffect, useRef } from 'react';
 
-import { APICore, APIModel, APIMining } from '../API';
-import { VariableEntity } from '../API/Core';
+import { APICore, APIMining, APIModel } from '../API';
 import { ModelResponse } from '../API/Model';
 import { D3Model, HierarchyCircularNode, ModelType } from './Container';
 import Explore from './Explore';
@@ -25,7 +24,6 @@ export interface Props {
   layout: HierarchyCircularNode;
   histograms?: any;
   d3Model: D3Model;
-  handleSelectDataset: (e: VariableEntity) => void;
   handleSelectPathology: (code: string) => void;
   handleSelectNode: (node: HierarchyCircularNode) => void;
   handleUpdateD3Model: (type?: ModelType, node?: HierarchyCircularNode) => void;

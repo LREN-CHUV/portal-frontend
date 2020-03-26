@@ -14,37 +14,41 @@ import {
 
 // config
 
-const modelSlug = `pca-${Math.round(Math.random() * 10000)}`;
-const experimentName = 'PCA';
-const experimentLabel = 'Principal Components analysis';
-const parameters = [
-  { name: 'standardize', value: 'false', label: 'standardize' },
-  { name: 'coding', value: 'null', label: 'coding' },
-  { name: 'pathology', value: 'dementia', label: 'pathology' }
+const modelSlug = `kaplan-meier-${Math.round(Math.random() * 10000)}`;
+const experimentName = 'KAPLAN_MEIER';
+const experimentLabel = 'Kaplan-Meier Estimator';
+const parameters: any = [
+  {
+    name: 'outcome_pos',
+    label: 'Positive outcome',
+    value: 'AD'
+  },
+  {
+    name: 'outcome_neg',
+    label: 'Negative outcome',
+    value: 'CN'
+  },
+  {
+    name: 'max_age',
+    label: 'Maximum age',
+    value: '100'
+  }
 ];
-
 const model: any = (datasets: VariableEntity[]) => ({
   query: {
-    pathology: 'dementia', // FIXME: should by dynamic
-    variables: [
-      {
-        code: 'lefthippocampus'
-      },
-      {
-        code: 'rightthalamusproper'
-      },
-      {
-        code: 'leftthalamusproper'
-      }
-    ],
+    // FIXME: should by dynamic
+    coVariables: [],
     filters: '',
     groupings: [],
+    pathology: 'dementia',
     testingDatasets: [],
-    trainingDatasets: datasets.map(d => ({
-      code: d.code
-    })),
+    trainingDatasets: [{ code: 'fake_longitudinal' }],
     validationDatasets: [],
-    coVariables: []
+    variables: [
+      {
+        code: 'alzheimerbroadcategory'
+      }
+    ]
   }
 });
 
@@ -55,6 +59,7 @@ describe('Integration Test for experiment API', () => {
 
   beforeAll(async () => {
     datasets = await getDatasets();
+    datasets = datasets && datasets.filter((_, i) => i === 0);
     expect(datasets).toBeTruthy();
 
     const mstate = await createModel({
@@ -79,9 +84,8 @@ describe('Integration Test for experiment API', () => {
       experimentLabel,
       parameters,
       modelSlug,
-      'python_multiple_local_global'
+      'python_local_global'
     );
-
     const { error, experiment } = await createExperiment({
       experiment: payload
     });
@@ -103,12 +107,6 @@ describe('Integration Test for experiment API', () => {
     const wrapper = mount(<Result {...props} />);
     expect(wrapper.find('.error')).toHaveLength(0);
     expect(wrapper.find('.loading')).toHaveLength(0);
-    expect(wrapper.find('.result')).toHaveLength(4);
-    expect(
-      wrapper
-        .find('div.result table tbody tr td')
-        .at(1)
-        .text()
-    ).toEqual('0.372');
+    expect(wrapper.find('.result')).toHaveLength(1);
   });
 });

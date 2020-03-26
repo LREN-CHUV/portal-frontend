@@ -1,10 +1,11 @@
 import * as d3 from 'd3';
 import React, { useEffect, useState } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
+
 import { APICore, APIMining, APIModel } from '../API';
-import { VariableEntity } from '../API/Core';
 import { ModelResponse, Query } from '../API/Model';
 import { AppConfig } from '../App/App';
+import { LONGITUDINAL_DATASET_TYPE } from '../constants';
 import Modal from '../UI/Modal';
 import CirclePack from './D3CirclePackLayer';
 import { d3Hierarchy, VariableDatum } from './d3Hierarchy';
@@ -66,7 +67,12 @@ export default ({
       const defaultPathology = apiCore.state.pathologies[0];
       const datasets = apiCore.datasetsForPathology(defaultPathology.code);
       const newModel = {
-        query: { pathology: defaultPathology.code, trainingDatasets: datasets }
+        query: {
+          pathology: defaultPathology.code,
+          trainingDatasets: datasets?.filter(
+            d => d.type !== LONGITUDINAL_DATASET_TYPE
+          )
+        }
       };
       apiModel.setModel(newModel);
     }
@@ -180,25 +186,6 @@ export default ({
     apiMining.state.refetchAlgorithms,
     trainingDatasets
   ]);
-
-  const handleSelectDataset = (dataset: VariableEntity): void => {
-    const model = apiModel.state.model;
-    const trainingDatasets =
-      (model && model.query && model.query.trainingDatasets) || [];
-
-    if (trainingDatasets) {
-      const nextDatasets = trainingDatasets
-        .map(d => d.code)
-        .includes(dataset.code)
-        ? [...trainingDatasets.filter(d => d.code !== dataset.code)]
-        : [...trainingDatasets, dataset];
-
-      if (model) {
-        model.query.trainingDatasets = nextDatasets;
-        apiModel.setModel(model);
-      }
-    }
-  };
 
   // Utility to convert  D3 model to variables
   const convertD3ModelToModel = (
@@ -371,7 +358,6 @@ export default ({
     apiModel,
     apiMining,
     handleGoToAnalysis,
-    handleSelectDataset,
     handleSelectModel,
     handleSelectNode: setSelectedNode,
     handleSelectPathology,

@@ -3,15 +3,15 @@ import { Button, Glyphicon, Panel } from 'react-bootstrap';
 import styled from 'styled-components';
 
 import { APICore, APIMining, APIModel } from '../API';
-import { VariableEntity } from '../API/Core';
 import { ModelResponse } from '../API/Model';
+import { ONTOLOGY_URL } from '../constants';
 import AvailableAlgorithms from '../Create/AvailableAlgorithms';
 import DropdownModel from '../UI/DropdownModel';
+import LargeDatasetSelect from '../UI/LargeDatasetSelect';
 import { D3Model, HierarchyCircularNode, ModelType } from './Container';
 import Histograms from './D3Histograms';
 import ModelView from './D3Model';
 import Search from './D3Search';
-import LargeDatasetSelect from './LargeDatasetSelect';
 
 const DataSelectionBox = styled(Panel.Title)`
   display: flex;
@@ -37,6 +37,10 @@ const DatasetsBox = styled.div`
 
 const Select = styled.select`
   padding: 6px 12px 4px 12px;
+
+  option {
+    background-color: white;
+  }
 `;
 
 const SearchBox = styled.div`
@@ -86,7 +90,6 @@ export interface ExploreProps {
   layout: HierarchyCircularNode;
   histograms?: any;
   d3Model: D3Model;
-  handleSelectDataset: (e: VariableEntity) => void;
   handleSelectPathology: (code: string) => void;
   handleSelectNode: (node: HierarchyCircularNode) => void;
   handleUpdateD3Model: (
@@ -110,7 +113,6 @@ export default (props: ExploreProps): JSX.Element => {
     histograms,
     d3Model,
     handleSelectNode,
-    handleSelectDataset,
     handleSelectPathology,
     handleUpdateD3Model,
     handleSelectModel,
@@ -159,8 +161,9 @@ export default (props: ExploreProps): JSX.Element => {
               <DatasetsBox>
                 <LargeDatasetSelect
                   datasets={datasets}
-                  handleSelectDataset={handleSelectDataset}
+                  handleSelectDataset={apiModel.selectDataset}
                   selectedDatasets={selectedDatasets}
+                  isDropdown={true}
                 ></LargeDatasetSelect>
               </DatasetsBox>
               <SearchBox>
@@ -199,6 +202,15 @@ export default (props: ExploreProps): JSX.Element => {
                   reset={apiModel.state.model ? true : false}
                   handleSelect={handleSelectModel}
                 />
+                <div style={{ marginLeft: 'auto' }}>
+                  <a
+                    href={`${ONTOLOGY_URL}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <b>Access to the latest ontology and terminology</b>
+                  </a>
+                </div>
               </ModelTitle>
               <ModelView
                 d3Model={d3Model}
@@ -266,7 +278,7 @@ export default (props: ExploreProps): JSX.Element => {
                 layout={'inline'}
                 algorithms={apiCore.state.algorithms}
                 lookup={apiCore.lookup}
-                model={apiModel.state.model}
+                apiModel={apiModel}
               />
             </Panel.Body>
           </Panel>
