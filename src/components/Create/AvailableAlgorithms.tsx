@@ -1,8 +1,9 @@
 import * as React from 'react';
 import { Button, OverlayTrigger, Popover } from 'react-bootstrap';
 import styled from 'styled-components';
+
+import { APIModel } from '../API';
 import { Algorithm, AlgorithmParameter, VariableEntity } from '../API/Core';
-import { ModelResponse } from '../API/Model';
 import { LONGITUDINAL_DATASET_TYPE } from '../constants';
 
 interface AvailableAlgorithm extends Algorithm {
@@ -30,15 +31,15 @@ const AvailableAlgorithms = ({
   lookup,
   layout = 'default',
   handleSelectMethod,
-  model
+  apiModel
 }: {
   algorithms: Algorithm[] | undefined;
   layout?: string;
   lookup: (code: string) => VariableEntity;
   handleSelectMethod?: (method: Algorithm) => void;
-  model: ModelResponse | undefined;
+  apiModel: APIModel;
 }): JSX.Element => {
-  const query = model && model.query;
+  const query = apiModel.state.model?.query;
   const modelVariable =
     (query && query.variables && query.variables.map(v => lookup(v.code))) ||
     [];
@@ -52,10 +53,10 @@ const AvailableAlgorithms = ({
       query.groupings.map(v => lookup(v.code))) ||
       [])
   ];
-  const isLongitudinalDataset =
+
+  const isLongitudinalDataset = apiModel.isDatasetLongitudinal(
     query?.trainingDatasets
-      ?.map(d => d.type)
-      ?.includes(LONGITUDINAL_DATASET_TYPE) || false;
+  );
 
   const algorithmEnabled = (
     parameters: AlgorithmParameter[],
@@ -104,6 +105,7 @@ const AvailableAlgorithms = ({
     return checkSelectedVariables('x', x) && checkSelectedVariables('y', y);
   };
 
+  // TODO: longitudinal datasets should be tagged
   const availableAlgorithms: AvailableAlgorithm[] =
     algorithms?.map(algorithm => ({
       ...algorithm,

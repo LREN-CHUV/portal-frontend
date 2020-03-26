@@ -63,12 +63,22 @@ class Model extends Container<ModelState> {
     });
   };
 
-  public selectDataset = (dataset: VariableEntity) => {
+  // FIXME: longitudinal datasets should be tagged
+  public isDatasetLongitudinal = (
+    trainingDatasets: VariableEntity[] | undefined
+  ): boolean => {
+    const r = new RegExp(LONGITUDINAL_DATASET_TYPE);
+    const isLongitudinalDataset =
+      trainingDatasets?.find(d => r.test(d.code)) !== undefined || false;
+
+    return isLongitudinalDataset;
+  };
+
+  public selectDataset = (dataset: VariableEntity): void => {
     const model = this.state.model;
     const trainingDatasets =
       (model && model.query && model.query.trainingDatasets) || [];
-
-    const isLongitudinal = dataset.type === LONGITUDINAL_DATASET_TYPE;
+    const isLongitudinal = this.isDatasetLongitudinal([dataset]);
 
     const nextDatasets = trainingDatasets
       .map(d => d.code)

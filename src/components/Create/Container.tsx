@@ -118,7 +118,7 @@ class Container extends React.Component<Props, State> {
                   algorithms={apiCore.state.algorithms}
                   lookup={apiCore.lookup}
                   handleSelectMethod={this.handleSelectAlgorithm}
-                  model={apiModel.state.model}
+                  apiModel={apiModel}
                 />
               </Panel.Body>
             </Panel>
@@ -230,7 +230,7 @@ class Container extends React.Component<Props, State> {
             : covariablesArray;
 
           if (covariablesArray.length > 0) {
-            const design = parameters.find(p => p.name === 'design');
+            const design = parameters.find(p => p.label === 'design');
             if (design) {
               value =
                 design.value === 'additive'
@@ -289,6 +289,7 @@ class Container extends React.Component<Props, State> {
         value
       };
     });
+
     const experiment: ExperimentPayload = {
       algorithms: [
         {

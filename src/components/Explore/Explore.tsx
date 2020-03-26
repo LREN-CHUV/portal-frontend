@@ -268,7 +268,7 @@ export default (props: ExploreProps): JSX.Element => {
                 layout={'inline'}
                 algorithms={apiCore.state.algorithms}
                 lookup={apiCore.lookup}
-                model={apiModel.state.model}
+                apiModel={apiModel}
               />
             </Panel.Body>
           </Panel>
