@@ -136,3 +136,5 @@ export const variablesFilter = [
   'DIAG_stade',
   'bnabroadcategory'
 ];
+
+export const ONTOLOGY_URL = 'https://rohan.scai.fraunhofer.de/ols/index';

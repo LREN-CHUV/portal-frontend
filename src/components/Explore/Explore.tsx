@@ -4,6 +4,7 @@ import styled from 'styled-components';
 
 import { APICore, APIMining, APIModel } from '../API';
 import { ModelResponse } from '../API/Model';
+import { ONTOLOGY_URL } from '../constants';
 import AvailableAlgorithms from '../Create/AvailableAlgorithms';
 import DropdownModel from '../UI/DropdownModel';
 import LargeDatasetSelect from '../UI/LargeDatasetSelect';
@@ -201,6 +202,15 @@ export default (props: ExploreProps): JSX.Element => {
                   reset={apiModel.state.model ? true : false}
                   handleSelect={handleSelectModel}
                 />
+                <div style={{ marginLeft: 'auto' }}>
+                  <a
+                    href={`${ONTOLOGY_URL}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <b>Access to the latest ontology and terminology</b>
+                  </a>
+                </div>
               </ModelTitle>
               <ModelView
                 d3Model={d3Model}
