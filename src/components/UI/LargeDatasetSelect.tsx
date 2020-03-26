@@ -73,8 +73,10 @@ export default ({
   const [visible, setVisible] = React.useState(!isDropdown);
   const style = visible ? undefined : { display: 'none' };
 
-  const ndatasets = datasets?.filter(d => d.type !== LONGITUDINAL_DATASET_TYPE);
-  const ldatasets = datasets?.filter(d => d.type === LONGITUDINAL_DATASET_TYPE);
+  // TODO: tag dataset as longitudinal
+  const r = new RegExp(LONGITUDINAL_DATASET_TYPE);
+  const ndatasets = datasets?.filter(d => !r.test(d.code));
+  const ldatasets = datasets?.filter(d => r.test(d.code));
 
   const checkboxFor = (sets: VariableEntity[]): JSX.Element[] =>
     sets.map(dataset => (
