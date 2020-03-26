@@ -1,7 +1,8 @@
 # Changelog
 
-## 26.03.2020
+## 6.1.0 - 26.03.2020
 
+- ROHAN Service link (Ontologies for Neurosciences)
 - Kaplan Meyer and longitudinal datasets integration
 - Exareme 20.0.0 integration
 
