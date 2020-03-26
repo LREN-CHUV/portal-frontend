@@ -1,5 +1,10 @@
 # Changelog
 
+## 26.03.2020
+
+- Kaplan Meyer and longitudinal datasets integration
+- Exareme 20.0.0 integration
+
 ## 6.0.1 - 23.03.2020
 
 - Added alert message for Keycloack Forbidden 403 response
