@@ -79,20 +79,16 @@ class Model extends Container<ModelState> {
     const trainingDatasets =
       (model && model.query && model.query.trainingDatasets) || [];
     const isLongitudinal = this.isDatasetLongitudinal([dataset]);
+    const r = new RegExp(LONGITUDINAL_DATASET_TYPE);
 
+    // TODO: tag dataset as longitudinal
     const nextDatasets = trainingDatasets
       .map(d => d.code)
       .includes(dataset.code)
       ? [...trainingDatasets.filter(d => d.code !== dataset.code)]
       : isLongitudinal
-      ? [
-          ...trainingDatasets.filter(d => d.type === LONGITUDINAL_DATASET_TYPE),
-          dataset
-        ]
-      : [
-          ...trainingDatasets.filter(d => d.type !== LONGITUDINAL_DATASET_TYPE),
-          dataset
-        ];
+      ? [...trainingDatasets.filter(d => r.test(d.code)), dataset]
+      : [...trainingDatasets.filter(d => !r.test(d.code)), dataset];
 
     if (model) {
       model.query.trainingDatasets = nextDatasets;
