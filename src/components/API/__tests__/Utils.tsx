@@ -12,7 +12,7 @@ const apiCore = new APICore(config);
 
 const TIMEOUT_DURATION = 60 * 10;
 
-const RESEARCH_DATASETS = ['adni', 'ppmi', 'edsd'];
+const RESEARCH_DATASETS = ['CHRU_Lille', 'clm', 'fbf'];
 
 const getDatasets = async (
   researchOnly = true,
