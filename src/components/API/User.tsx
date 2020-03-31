@@ -46,7 +46,6 @@ class UserContainer extends Container<State> {
   public logout = async (): Promise<void> => {
     const logoutURL = `${this.backendURL}/logout`;
     const data = await request.post(logoutURL, this.options);
-    window.location.href = '/';
 
     return data;
   };
