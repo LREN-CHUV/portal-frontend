@@ -494,8 +494,8 @@ class Core extends Container<State> {
             }
           ),
           // TODO: delete this once we have the formula
-          ...(algorithm.name === 'ANOVA' ||
-          algorithm.name === 'LINEAR_REGRESSION'
+          ...(algorithm.label === 'ANOVA' ||
+          algorithm.label === 'Linear Regression'
             ? [
                 {
                   name: 'design',

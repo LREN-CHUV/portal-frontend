@@ -16,8 +16,8 @@ import {
 // config
 
 const modelSlug = `ttest-p-${Math.round(Math.random() * 10000)}`;
-const experimentName = 'TTEST_ONESAMPLE';
-const algorithmId = 'T-Test One-Sample ';
+const algorithmId = 'TTEST_ONESAMPLE';
+const algorithmLabel = 'T-Test One-Sample ';
 const parameters: any = [
   {
     name: 'testvalue',
@@ -87,12 +87,12 @@ describe('Integration Test for experiment API', () => {
     return;
   });
 
-  it(`create ${experimentName}`, async () => {
+  it(`create ${algorithmId}`, async () => {
     const payload = await buildPayload(
       model,
       parameters as AlgorithmParameter[],
-      experimentName,
       algorithmId,
+      algorithmLabel,
       modelSlug
     );
 

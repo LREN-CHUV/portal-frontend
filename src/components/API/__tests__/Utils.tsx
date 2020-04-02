@@ -1,6 +1,6 @@
 import APICore, {
   AlgorithmParameter,
-  AlgorithmParameterRequest,
+  AlgorithmParameterRequest
 } from '../Core';
 import APIExperiment, {
   ExperimentPayload,
@@ -68,24 +68,38 @@ const createModel = async ({
 const buildPayload = async (
   model: ModelResponse,
   parameters: AlgorithmParameter[],
-  experimentName: string,
   algorithmId: string,
+  algorithmLabel: string,
   modelSlug: string
 ): Promise<ExperimentPayload> => {
   await apiCore.algorithms(true);
 
   const selectedAlgorithm = apiCore.state?.algorithms?.find(
-    a => (a.label = algorithmId)
+    a => a.label === algorithmLabel
   );
 
   if (!selectedAlgorithm) {
     throw new Error('No algorithm selected');
   }
 
-  const mergedParameters = [
-    ...(selectedAlgorithm.parameters as AlgorithmParameter[]),
-    ...parameters
-  ];
+  const existingParameters = parameters.map(p => p.label);
+  console.log(existingParameters);
+  const mergedParameters = (selectedAlgorithm.parameters as AlgorithmParameter[]).map(
+    a => {
+      // Galaxy workaround. Takes name as a param
+      const exist = existingParameters.includes(a.label);
+
+      return exist
+        ? (() => {
+            const param = parameters.find(p => p.label === a.label)!;
+            return {
+              ...param,
+              name: a.name
+            };
+          })()
+        : a;
+    }
+  );
 
   const nextParameters: AlgorithmParameterRequest[] = apiExperiment.makeParameters(
     model,
@@ -96,15 +110,15 @@ const buildPayload = async (
   const payload: ExperimentPayload = {
     algorithms: [
       {
-        name: experimentName,
-        label: algorithmId,
+        name: algorithmId,
+        label: algorithmLabel,
         parameters: nextParameters,
         type: selectedAlgorithm.type
       }
     ],
     model: modelSlug,
-    label: algorithmId,
-    name: experimentName
+    label: `${algorithmLabel}`,
+    name: `${algorithmLabel}-${Math.round(Math.random() * 100)}`
   };
 
   return payload;

@@ -16,8 +16,8 @@ import {
 // config
 
 const modelSlug = `linear-${Math.round(Math.random() * 10000)}`;
-const experimentName = 'LINEAR_REGRESSION';
-const algorithmId = 'Linear Regression';
+const algorithmId = 'LINEAR_REGRESSION';
+const algorithmLabel = 'Linear Regression';
 const parameters = [
   {
     name: 'referencevalues',
@@ -70,12 +70,12 @@ describe('Integration Test for experiment API', () => {
     return;
   });
 
-  it(`create ${experimentName}`, async () => {
+  it(`create ${algorithmId}`, async () => {
     const payload = await buildPayload(
       model,
       parameters as AlgorithmParameter[],
-      experimentName,
       algorithmId,
+      algorithmLabel,
       modelSlug
     );
 

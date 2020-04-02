@@ -16,8 +16,8 @@ import {
 // config
 
 const modelSlug = `logistic-${Math.round(Math.random() * 10000)}`;
-const experimentName = 'LOGISTIC_REGRESSION';
-const algorithmId = 'Logistic Regression';
+const algorithmId = 'LOGISTIC_REGRESSION';
+const algorithmLabel = 'Logistic Regression';
 const parameters: any = [
 ];
 
@@ -56,12 +56,12 @@ describe('Integration Test for experiment API', () => {
     return;
   });
 
-  it(`create ${experimentName}`, async () => {
+  it(`create ${algorithmId}`, async () => {
     const payload = await buildPayload(
       model,
       parameters as AlgorithmParameter[],
-      experimentName,
       algorithmId,
+      algorithmLabel,
       modelSlug
     );
 

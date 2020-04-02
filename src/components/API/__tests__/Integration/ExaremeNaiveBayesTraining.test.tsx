@@ -2,48 +2,44 @@ import { mount } from 'enzyme';
 import * as React from 'react';
 
 import Result from '../../../Result/Result';
-import { VariableEntity } from '../../Core';
-import { ExperimentPayload } from '../../Experiment';
+import { AlgorithmParameter } from '../../Core';
+import { ModelResponse } from '../../Model';
+
 import {
-  createExaremePayload,
+  buildPayload,
   createExperiment,
   createModel,
-  getDatasets,
+  TEST_PATHOLOGIES,
   waitForResult
 } from '../Utils';
 
 // config
 
-const modelSlug = `linear-${Math.round(Math.random() * 10000)}`;
-const experimentName = 'NAIVE_BAYES_TRAINING_STANDALONE';
-const experimentLabel = 'Naive Bayes Training';
+const modelSlug = `naivebayes-${Math.round(Math.random() * 10000)}`;
+const algorithmId = 'NAIVE_BAYES_TRAINING_STANDALONE';
+const algorithmLabel = 'Naive Bayes Training';
 const parameters = [
   {
     name: 'alpha',
-    value: '0',
+    value: '0.1',
     label: 'alpha'
-  },
-  { 
-    name: 'pathology', 
-    value: 'dementia', 
-    label: 'pathology' 
   }
 ];
 
-const model: any = (datasets: VariableEntity[]) => ({
+const model: ModelResponse = {
   query: {
-    // FIXME: should by dynamic
+    pathology: TEST_PATHOLOGIES.dementia.code,
     coVariables: [
       { code: 'leftacgganteriorcingulategyrus' },
       { code: 'lefthippocampus' }
     ],
     filters: '',
     groupings: [],
-    pathology: 'dementia',
     testingDatasets: [],
-    trainingDatasets: datasets.map(d => ({
-      code: d.code
-    })),
+    trainingDatasets: TEST_PATHOLOGIES.dementia.datasets.filter(
+      d => d.code === 'desd-synthdata'
+    ),
+
     validationDatasets: [],
     variables: [
       {
@@ -51,43 +47,33 @@ const model: any = (datasets: VariableEntity[]) => ({
       }
     ]
   }
-});
+};
 
 // Test
 
 describe('Integration Test for experiment API', () => {
-  let datasets: VariableEntity[] | undefined;
-
+ 
   beforeAll(async () => {
-    datasets = await getDatasets();
-    datasets = datasets && datasets.filter((_, i) => i === 0);
-    expect(datasets).toBeTruthy();
-
     const mstate = await createModel({
-      model: model(datasets),
+      model,
       modelSlug
     });
 
     expect(mstate.error).toBeFalsy();
     expect(mstate.model).toBeTruthy();
 
-    return datasets !== undefined && mstate.model !== undefined;
+    return;
   });
 
-  it(`create ${experimentName}`, async () => {
-    if (!datasets) {
-      throw new Error('datasets not defined');
-    }
-    const payload: ExperimentPayload = createExaremePayload(
+  it(`create ${algorithmId}`, async () => {
+    const payload = await buildPayload(
       model,
-      datasets,
-      experimentName,
-      experimentLabel,
-      parameters,
-      modelSlug,
-      "multiple_local_global"
+      parameters as AlgorithmParameter[],
+      algorithmId,
+      algorithmLabel,
+      modelSlug
     );
-    console.log(JSON.stringify(payload));
+    
     const { error, experiment } = await createExperiment({
       experiment: payload
     });

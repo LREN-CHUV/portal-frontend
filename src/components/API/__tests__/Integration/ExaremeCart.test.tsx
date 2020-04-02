@@ -16,8 +16,8 @@ import {
 // config
 
 const modelSlug = `cart-${Math.round(Math.random() * 10000)}`;
-const experimentName = 'CART';
 const algorithmId = 'CART';
+const algorithmLabel = 'CART';
 const parameters = [
   { name: 'max_depth', value: '3', label: 'max_depth' }
 ];
@@ -57,12 +57,12 @@ describe('Integration Test for experiment API', () => {
     return;
   });
 
-  it(`create ${experimentName}`, async () => {
+  it(`create ${algorithmId}`, async () => {
     const payload = await buildPayload(
       model,
       parameters as AlgorithmParameter[],
-      experimentName,
       algorithmId,
+      algorithmLabel,
       modelSlug
     );
 

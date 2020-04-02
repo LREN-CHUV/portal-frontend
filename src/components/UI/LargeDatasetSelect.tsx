@@ -60,7 +60,7 @@ const Panel = styled.div`
   }
 
   p {
-    margin-bottom: 0;
+    margin: 6px 0;
   }
 `;
 

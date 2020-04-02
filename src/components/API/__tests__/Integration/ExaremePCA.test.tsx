@@ -16,8 +16,8 @@ import {
 // config
 
 const modelSlug = `pca-${Math.round(Math.random() * 10000)}`;
-const experimentName = 'PCA';
-const algorithmId = 'Principal Components analysis';
+const algorithmId = 'PCA';
+const algorithmLabel = 'Principal Components analysis';
 const parameters = [
   { name: 'standardize', value: 'false', label: 'standardize' },
   { name: 'coding', value: 'null', label: 'coding' }
@@ -40,8 +40,9 @@ const model: ModelResponse = {
     filters: '',
     groupings: [],
     testingDatasets: [],
-    trainingDatasets: TEST_PATHOLOGIES.dementia.datasets.filter(d => d.code !== 'fake_longitudinal'),
-
+    trainingDatasets: TEST_PATHOLOGIES.dementia.datasets.filter(
+      d => d.code !== 'fake_longitudinal'
+    ),
     validationDatasets: [],
     coVariables: []
   }
@@ -50,7 +51,6 @@ const model: ModelResponse = {
 // Test
 
 describe('Integration Test for experiment API', () => {
-
   beforeAll(async () => {
     const mstate = await createModel({
       model,
@@ -63,12 +63,12 @@ describe('Integration Test for experiment API', () => {
     return;
   });
 
-  it(`create ${experimentName}`, async () => {
+  it(`create ${algorithmId}`, async () => {
     const payload = await buildPayload(
       model,
       parameters as AlgorithmParameter[],
-      experimentName,
       algorithmId,
+      algorithmLabel,
       modelSlug
     );
 

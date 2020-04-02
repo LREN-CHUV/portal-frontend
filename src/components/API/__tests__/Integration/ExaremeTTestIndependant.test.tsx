@@ -16,8 +16,8 @@ import {
 // config
 
 const modelSlug = `ttest-i-${Math.round(Math.random() * 10000)}`;
-const experimentName = 'TTEST_INDEPENDENT';
-const algorithmId = 'T-Test Independent';
+const algorithmId = 'TTEST_INDEPENDENT';
+const algorithmLabel = 'T-Test Independent';
 const parameters: any = [
   { name: 'xlevels', value: 'M,F', label: 'xlevels' },
   { name: 'testvalue', value: '3.0', label: 'testvalue' },
@@ -103,12 +103,12 @@ describe('Integration Test for experiment API', () => {
     return;
   });
 
-  it(`create ${experimentName}`, async () => {
+  it(`create ${algorithmId}`, async () => {
     const payload = await buildPayload(
       model,
       parameters as AlgorithmParameter[],
-      experimentName,
       algorithmId,
+      algorithmLabel,
       modelSlug
     );
 

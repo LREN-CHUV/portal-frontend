@@ -16,8 +16,8 @@ import {
 // config
 
 const modelSlug = `id3-${Math.round(Math.random() * 10000)}`;
-const experimentName = 'ID3';
 const algorithmId = 'ID3';
+const algorithmLabel = 'ID3';
 const parameters = [
   { name: 'iterations_max_number', value: 20, label: 'iterations_max_number' }
 ];
@@ -55,12 +55,12 @@ describe('Integration Test for experiment API', () => {
     return;
   });
 
-  it(`create ${experimentName}`, async () => {
+  it(`create ${algorithmId}`, async () => {
     const payload = await buildPayload(
       model,
       parameters as AlgorithmParameter[],
-      experimentName,
       algorithmId,
+      algorithmLabel,
       modelSlug
     );
 

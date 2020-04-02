@@ -16,8 +16,8 @@ import {
 // config
 
 const modelSlug = `kaplan-meier-${Math.round(Math.random() * 10000)}`;
-const experimentName = 'KAPLAN_MEIER';
-const algorithmId = 'Kaplan-Meier Estimator';
+const algorithmId = 'KAPLAN_MEIER';
+const algorithmLabel = 'Kaplan-Meier Estimator';
 const parameters: any = [
   {
     name: 'outcome_pos',
@@ -68,12 +68,12 @@ describe('Integration Test for experiment API', () => {
     return;
   });
 
-  it(`create ${experimentName}`, async () => {
+  it(`create ${algorithmId}`, async () => {
     const payload = await buildPayload(
       model,
       parameters as AlgorithmParameter[],
-      experimentName,
       algorithmId,
+      algorithmLabel,
       modelSlug
     );
     

@@ -10,7 +10,7 @@ describe('Integration Test Core API', () => {
     const error = apiCore.state.error;
     expect(error).toBeFalsy();
     expect(result).toBeTruthy();
-    expect(result).toHaveLength(2);
+    expect(result).toHaveLength(3);
   });
 
   it('get variables', async () => {
@@ -20,7 +20,7 @@ describe('Integration Test Core API', () => {
     };
     const result = apiCore.variablesForPathology(pathology.code);
     expect(result).toBeTruthy();
-    expect(result).toHaveLength(182);
+    expect(result).toHaveLength(184);
   });
 
   it('get datasets', async () => {
@@ -30,7 +30,7 @@ describe('Integration Test Core API', () => {
     };
     const result = apiCore.datasetsForPathology(pathology.code);
     expect(result).toBeTruthy();
-    expect(result).toHaveLength(5);
+    expect(result).toHaveLength(4);
   });
 
   it('get algorithms', async () => {

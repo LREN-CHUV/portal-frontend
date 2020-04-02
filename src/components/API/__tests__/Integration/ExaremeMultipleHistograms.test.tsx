@@ -15,8 +15,8 @@ import {
 // config
 
 const modelSlug = `histograms-${Math.round(Math.random() * 10000)}`;
-const experimentName = 'MULTIPLE_HISTOGRAMS';
-const algorithmId = 'Multiple Histograms';
+const algorithmId = 'MULTIPLE_HISTOGRAMS';
+const algorithmLabel = 'Multiple Histograms';
 
 const parameters: Partial<AlgorithmParameter>[] = [
   {
@@ -33,7 +33,9 @@ const model: ModelResponse = {
     filters: '',
     groupings: [],
     testingDatasets: [],
-    trainingDatasets: TEST_PATHOLOGIES.dementia.datasets,
+    trainingDatasets: TEST_PATHOLOGIES.dementia.datasets.filter(
+      d => d.code !== 'fake_longitudinal'
+    ),
     validationDatasets: [],
     coVariables: [
       {
@@ -61,12 +63,12 @@ describe('Integration Test for experiment API', () => {
     return mstate.model;
   });
 
-  it(`create ${experimentName}`, async () => {
+  it(`create ${algorithmId}`, async () => {
     const payload = await buildPayload(
       model,
       parameters as AlgorithmParameter[],
-      experimentName,
       algorithmId,
+      algorithmLabel,
       modelSlug
     );
 

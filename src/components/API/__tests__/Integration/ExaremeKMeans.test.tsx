@@ -16,8 +16,8 @@ import {
 // config
 
 const modelSlug = `anova-${Math.round(Math.random() * 10000)}`;
-const experimentName = 'KMEANS';
-const algorithmId = 'k-Means Clustering';
+const algorithmId = 'KMEANS';
+const algorithmLabel = 'k-Means Clustering';
 const parameters = [
   { name: 'k', value: '4', label: 'k' },
   { name: 'e', value: 1, label: 'e' },
@@ -63,12 +63,12 @@ describe('Integration Test for experiment API', () => {
     return;
   });
 
-  it(`create ${experimentName}`, async () => {
+  it(`create ${algorithmId}`, async () => {
     const payload = await buildPayload(
       model,
       parameters as AlgorithmParameter[],
-      experimentName,
       algorithmId,
+      algorithmLabel,
       modelSlug
     );
 

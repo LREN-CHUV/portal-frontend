@@ -16,8 +16,8 @@ import {
 // config
 
 const modelSlug = `ttest-p-${Math.round(Math.random() * 10000)}`;
-const experimentName = 'TTEST_PAIRED';
-const algorithmId = 'T-Test Paired';
+const algorithmId = 'TTEST_PAIRED';
+const algorithmLabel = 'T-Test Paired';
 const parameters: any = [
   {
     name: 'hypothesis',
@@ -62,12 +62,12 @@ describe('Integration Test for experiment API', () => {
     return;
   });
 
-  it(`create ${experimentName}`, async () => {
+  it(`create ${algorithmId}`, async () => {
     const payload = await buildPayload(
       model,
       parameters as AlgorithmParameter[],
-      experimentName,
       algorithmId,
+      algorithmLabel,
       modelSlug
     );
 

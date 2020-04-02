@@ -15,8 +15,8 @@ import {
 // config
 
 const modelSlug = `calibration-belt-${Math.round(Math.random() * 10000)}`;
-const experimentName = 'CALIBRATION_BELT';
-const algorithmId = 'Calibration Belt';
+const algorithmId = 'CALIBRATION_BELT';
+const algorithmLabel = 'Calibration Belt';
 const parameters = [
   {
     name: 'devel',
@@ -83,12 +83,12 @@ beforeAll(async () => {
   return;
 });
 
-it(`create ${experimentName}`, async () => {
+it(`create ${algorithmId}`, async () => {
   const payload = await buildPayload(
     model,
     parameters as AlgorithmParameter[],
-    experimentName,
     algorithmId,
+    algorithmLabel,
     modelSlug
   );
 

@@ -16,14 +16,9 @@ import {
 // config
 
 const modelSlug = `pearson-${Math.round(Math.random() * 10000)}`;
-const experimentName = 'PEARSON_CORRELATION';
-const algorithmId = 'Pearson Correlation';
-const parameters = [
-  { name: 'bins', value: '40', label: 'bins' },
-  { name: 'iterations_max_number', value: 20, label: 'iterations_max_number' },
-  { name: 'sstype', value: 2, label: 'sstype' },
-  { name: 'outputformat', value: 'pfa', label: 'outputformat' }
-];
+const algorithmId = 'PEARSON_CORRELATION';
+const algorithmLabel = 'Pearson Correlation';
+const parameters = [];
 
 const model: ModelResponse = {
   query: {
@@ -63,12 +58,12 @@ describe('Integration Test for experiment API', () => {
     return;
   });
 
-  it(`create ${experimentName}`, async () => {
+  it(`create ${algorithmId}`, async () => {
     const payload = await buildPayload(
       model,
       parameters as AlgorithmParameter[],
-      experimentName,
       algorithmId,
+      algorithmLabel,
       modelSlug
     );
 

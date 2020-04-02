@@ -16,8 +16,8 @@ import {
 // config
 
 const modelSlug = `anova-${Math.round(Math.random() * 10000)}`;
-const experimentName = 'ANOVA';
 const algorithmId = 'ANOVA';
+const algorithmLabel = 'ANOVA';
 const parameters = [
   { name: 'bins', value: '40', label: 'bins' },
   { name: 'iterations_max_number', value: 20, label: 'iterations_max_number' },
@@ -58,12 +58,12 @@ describe('Integration Test for experiment API', () => {
     return
   });
 
-  it(`create ${experimentName}`, async () => {
+  it(`create ${algorithmId}`, async () => {
     const payload = await buildPayload(
       model,
       parameters as AlgorithmParameter[],
-      experimentName,
       algorithmId,
+      algorithmLabel,
       modelSlug
     );
 

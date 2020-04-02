@@ -16,8 +16,8 @@ import {
 // config
 
 const modelSlug = `histograms-${Math.round(Math.random() * 10000)}`;
-const experimentName = 'HISTOGRAMS';
-const algorithmId = 'Histograms';
+const algorithmId = 'HISTOGRAMS';
+const algorithmLabel = 'Histograms';
 const parameters = [
   { name: 'bins', value: '40', label: 'bins' }
 ];
@@ -57,12 +57,12 @@ describe('Integration Test for experiment API', () => {
     return;
   });
 
-  it(`create ${experimentName}`, async () => {
+  it(`create ${algorithmId}`, async () => {
     const payload = await buildPayload(
       model,
       parameters as AlgorithmParameter[],
-      experimentName,
       algorithmId,
+      algorithmLabel,
       modelSlug
     );
 
