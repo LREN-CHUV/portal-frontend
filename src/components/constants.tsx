@@ -134,7 +134,9 @@ export const variablesFilter = [
   'gender',
   'DIAG_etiology_1',
   'DIAG_stade',
-  'bnabroadcategory'
+  'bnabroadcategory',
+  'amyloid42_status',
+  'p_tau_status'
 ];
 
 export const ONTOLOGY_URL = 'https://rohan.scai.fraunhofer.de/ols/index';
