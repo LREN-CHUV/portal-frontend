@@ -59,6 +59,10 @@ class Container extends React.Component<Props, State> {
             <Panel className="datasets">
               <Panel.Body>
                 <h5>
+                  <strong>Pathology</strong>
+                </h5>
+                <p>{query?.pathology}</p>
+                <h5>
                   <strong>Datasets</strong>
                 </h5>
                 <LargeDatasetSelect

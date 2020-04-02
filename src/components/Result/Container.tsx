@@ -7,6 +7,7 @@ import '../Experiment.css';
 import Model from '../UI/Model';
 import Algorithms from './Algorithms';
 import Datasets from '../UI/Datasets';
+import Panel from '../UI/Panel';
 
 interface RouteParams {
   uuid: string;
@@ -72,6 +73,7 @@ class Experiment extends React.Component<Props> {
 
   public render(): JSX.Element {
     const { apiExperiment, apiModel, apiCore } = this.props;
+    const model = apiModel?.state?.model;
     return (
       <div className="Experiment Result">
         <div className="header">
@@ -85,8 +87,12 @@ class Experiment extends React.Component<Props> {
         </div>
         <div className="content">
           <div className="sidebar">
-            <Datasets model={apiModel.state.model} />
-            <Model model={apiModel.state.model} lookup={apiCore.lookup} />
+            <Panel
+              title="Pathology"
+              body={<p>{model?.query?.pathology || ''}</p>}
+            />
+            <Datasets model={model} />
+            <Model model={model} lookup={apiCore.lookup} />
             <Algorithms experiment={apiExperiment.state.experiment} />
           </div>
           <div className="results">
