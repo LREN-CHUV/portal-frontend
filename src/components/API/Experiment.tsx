@@ -77,7 +77,6 @@ class Experiment extends Container<State> {
       let value: string = p.value;
       const query = model && model.query;
 
-      console.log(p.label);
       if (query) {
         if (p.label === 'x') {
           let covariablesArray =
@@ -88,8 +87,14 @@ class Experiment extends Container<State> {
 
           if (covariablesArray.length > 0) {
             const design = parameters.find(p => p.label === 'design');
-            // FIXME: a+b doesn't work for multiple histograms
-            if (design && selectedAlgorithm.label !== 'Multiple Histograms') {
+            // FIXME: a+b doesn't work for multiple histograms, cart
+            if (
+              design &&
+              selectedAlgorithm.label !== 'Multiple Histograms' &&
+              selectedAlgorithm.label !== 'CART' &&
+              selectedAlgorithm.label !== 'ID3' &&
+              selectedAlgorithm.label !== 'Naive Bayes Training'
+            ) {
               value =
                 design.value === 'additive'
                   ? covariablesArray.toString().replace(/,/g, '+')

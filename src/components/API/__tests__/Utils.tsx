@@ -87,7 +87,6 @@ const buildPayload = async (
     ...parameters
   ];
 
-  console.log(mergedParameters);
   const nextParameters: AlgorithmParameterRequest[] = apiExperiment.makeParameters(
     model,
     selectedAlgorithm,

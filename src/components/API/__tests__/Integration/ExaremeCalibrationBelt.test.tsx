@@ -2,13 +2,13 @@ import { mount } from 'enzyme';
 import * as React from 'react';
 
 import Result from '../../../Result/Result';
-import { VariableEntity } from '../../Core';
-import { ExperimentPayload } from '../../Experiment';
+import { AlgorithmParameter } from '../../Core';
+import { ModelResponse } from '../../Model';
 import {
-  createExaremePayload,
+  buildPayload,
   createExperiment,
   createModel,
-  getDatasets,
+  TEST_PATHOLOGIES,
   waitForResult
 } from '../Utils';
 
@@ -16,7 +16,7 @@ import {
 
 const modelSlug = `calibration-belt-${Math.round(Math.random() * 10000)}`;
 const experimentName = 'CALIBRATION_BELT';
-const experimentLabel = 'Calibration Belt';
+const algorithmId = 'Calibration Belt';
 const parameters = [
   {
     name: 'devel',
@@ -45,9 +45,9 @@ const parameters = [
   }
 ];
 
-const model: any = (datasets: VariableEntity[]) => ({
+const model: ModelResponse = {
   query: {
-    pathology: 'tbi', // FIXME: should by dynamic
+    pathology: TEST_PATHOLOGIES.tbi.code,
     coVariables: [
       {
         code: 'impact_prob_core_mortality'
@@ -56,7 +56,7 @@ const model: any = (datasets: VariableEntity[]) => ({
     filters: '',
     groupings: [],
     testingDatasets: [],
-    trainingDatasets: datasets,
+    trainingDatasets: TEST_PATHOLOGIES.tbi.datasets,
     validationDatasets: [],
     variables: [
       {
@@ -64,63 +64,61 @@ const model: any = (datasets: VariableEntity[]) => ({
       }
     ]
   }
-});
+};
 
 // Test
 
 describe('Integration Test for experiment API', () => {
-  let datasets: VariableEntity[] | undefined = [{ code: 'demo1' }];
 
-  beforeAll(async () => {
-    const mstate = await createModel({
-      model: model(datasets),
-      modelSlug
-    });
 
-    expect(mstate.error).toBeFalsy();
-    expect(mstate.model).toBeTruthy();
-
-    return;
+beforeAll(async () => {
+  const mstate = await createModel({
+    model,
+    modelSlug
   });
 
-  it(`create ${experimentName}`, async () => {
-    const payload: ExperimentPayload = createExaremePayload(
-      model,
-      datasets,
-      experimentName,
-      experimentLabel,
-      parameters,
-      modelSlug,
-      'python_iterative'
-    );
+  expect(mstate.error).toBeFalsy();
+  expect(mstate.model).toBeTruthy();
 
-    const { error, experiment } = await createExperiment({
-      experiment: payload
-    });
+  return;
+});
 
-    expect(error).toBeFalsy();
-    expect(experiment).toBeTruthy();
+it(`create ${experimentName}`, async () => {
+  const payload = await buildPayload(
+    model,
+    parameters as AlgorithmParameter[],
+    experimentName,
+    algorithmId,
+    modelSlug
+  );
 
-    const uuid = experiment && experiment.uuid;
-    expect(uuid).toBeTruthy();
-    if (!uuid) {
-      throw new Error('uuid not defined');
-    }
+  const { error, experiment } = await createExperiment({
+    experiment: payload
+  });
 
-    const experimentState = await waitForResult({ uuid });
-    expect(experimentState.error).toBeFalsy();
-    expect(experimentState.experiment).toBeTruthy();
+  expect(error).toBeFalsy();
+  expect(experiment).toBeTruthy();
 
-    const props = { experimentState };
-    const wrapper = mount(<Result {...props} />);
-    expect(wrapper.find('.error')).toHaveLength(0);
-    expect(wrapper.find('.loading')).toHaveLength(0);
-    expect(wrapper.find('.result')).toHaveLength(1);
+  const uuid = experiment && experiment.uuid;
+  expect(uuid).toBeTruthy();
+  if (!uuid) {
+    throw new Error('uuid not defined');
+  }
+
+  const experimentState = await waitForResult({ uuid });
+  expect(experimentState.error).toBeFalsy();
+  expect(experimentState.experiment).toBeTruthy();
+
+  const props = { experimentState };
+  const wrapper = mount(<Result {...props} />);
+  expect(wrapper.find('.error')).toHaveLength(0);
+  expect(wrapper.find('.loading')).toHaveLength(0);
+  expect(wrapper.find('.result')).toHaveLength(1);
   //   expect(
   //     wrapper
   //       .find('div.result table tbody tr td')
   //       .at(1)
   //       .text()
   //   ).toEqual('34.673');
-  });
+});
 });

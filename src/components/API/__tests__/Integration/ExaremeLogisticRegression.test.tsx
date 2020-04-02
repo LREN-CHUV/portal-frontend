@@ -1,14 +1,15 @@
-import { mount, shallow } from 'enzyme';
+import { shallow } from 'enzyme';
 import * as React from 'react';
 
 import Result from '../../../Result/Result';
-import { VariableEntity } from '../../Core';
-import { ExperimentPayload } from '../../Experiment';
+import { AlgorithmParameter } from '../../Core';
+import { ModelResponse } from '../../Model';
+
 import {
-  createExaremePayload,
+  buildPayload,
   createExperiment,
   createModel,
-  getDatasets,
+  TEST_PATHOLOGIES,
   waitForResult
 } from '../Utils';
 
@@ -16,21 +17,21 @@ import {
 
 const modelSlug = `logistic-${Math.round(Math.random() * 10000)}`;
 const experimentName = 'LOGISTIC_REGRESSION';
-const experimentLabel = 'Logistic Regression';
+const algorithmId = 'Logistic Regression';
 const parameters: any = [
-  { name: 'pathology', value: 'dementia', label: 'pathology' }
 ];
 
-const model: any = (datasets: VariableEntity[]) => ({
+const model: ModelResponse = {
   query: {
-    pathology: 'dementia', // FIXME: should by dynamic
+    pathology: TEST_PATHOLOGIES.dementia.code,
     coVariables: [{ code: 'lefthippocampus' }],
     filters: '',
     groupings: [],
     testingDatasets: [],
-    trainingDatasets: datasets.map(d => ({
-      code: d.code
-    })),
+    trainingDatasets: TEST_PATHOLOGIES.dementia.datasets.filter(
+      d => d.code !== 'fake_longitudinal'
+    ),
+
     validationDatasets: [],
     variables: [
       {
@@ -38,41 +39,32 @@ const model: any = (datasets: VariableEntity[]) => ({
       }
     ]
   }
-});
+};
 
 // Test
 
 describe('Integration Test for experiment API', () => {
-  let datasets: VariableEntity[] | undefined;
-
   beforeAll(async () => {
-    datasets = await getDatasets();
-    expect(datasets).toBeTruthy();
-
     const mstate = await createModel({
-      model: model(datasets),
+      model,
       modelSlug
     });
 
     expect(mstate.error).toBeFalsy();
     expect(mstate.model).toBeTruthy();
 
-    return datasets !== undefined && mstate.model !== undefined;
+    return;
   });
 
   it(`create ${experimentName}`, async () => {
-    if (!datasets) {
-      throw new Error('datasets not defined');
-    }
-    const payload: ExperimentPayload = createExaremePayload(
+    const payload = await buildPayload(
       model,
-      datasets,
+      parameters as AlgorithmParameter[],
       experimentName,
-      experimentLabel,
-      parameters,
-      modelSlug,
-      'python_iterative'
+      algorithmId,
+      modelSlug
     );
+
     const { error, experiment } = await createExperiment({
       experiment: payload
     });

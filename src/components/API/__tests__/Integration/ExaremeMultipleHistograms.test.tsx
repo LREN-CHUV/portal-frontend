@@ -28,7 +28,7 @@ const parameters: Partial<AlgorithmParameter>[] = [
 
 const model: ModelResponse = {
   query: {
-    pathology: 'dementia',
+    pathology: TEST_PATHOLOGIES.dementia.code,
     variables: [{ code: 'lefthippocampus' }],
     filters: '',
     groupings: [],
