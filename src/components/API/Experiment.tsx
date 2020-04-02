@@ -2,11 +2,15 @@ import request from 'request-promise-native';
 import { Container } from 'unstated';
 
 import { backendURL } from '../API';
-import { Algorithm } from '../API/Core';
-import { Query } from '../API/Model';
+import {
+  Algorithm,
+  AlgorithmParameter,
+  AlgorithmParameterRequest
+} from '../API/Core';
+import { ModelResponse, Query } from '../API/Model';
 import { User } from '../API/User';
-import ExperimentResultParser from './ExperimentResultParser';
 import { MIME_TYPES } from '../constants';
+import ExperimentResultParser from './ExperimentResultParser';
 
 export interface ExperimentPayload {
   algorithms: Algorithm[];
@@ -63,6 +67,86 @@ class Experiment extends Container<State> {
     this.options = config.options;
     this.baseUrl = `${backendURL}/experiments`;
   }
+
+  public makeParameters = (
+    model: ModelResponse,
+    selectedAlgorithm: Algorithm,
+    parameters: AlgorithmParameter[]
+  ): AlgorithmParameterRequest[] =>
+    parameters.map(p => {
+      let value: string = p.value;
+      const query = model && model.query;
+
+      console.log(p.label);
+      if (query) {
+        if (p.label === 'x') {
+          let covariablesArray =
+            (query.coVariables && query.coVariables.map(v => v.code)) || [];
+          covariablesArray = query.groupings
+            ? [...covariablesArray, ...query.groupings.map(v => v.code)]
+            : covariablesArray;
+
+          if (covariablesArray.length > 0) {
+            const design = parameters.find(p => p.label === 'design');
+            // FIXME: a+b doesn't work for multiple histograms
+            if (design && selectedAlgorithm.label !== 'Multiple Histograms') {
+              value =
+                design.value === 'additive'
+                  ? covariablesArray.toString().replace(/,/g, '+')
+                  : covariablesArray.toString().replace(/,/g, '*');
+            } else {
+              value = covariablesArray.toString();
+            }
+          }
+        }
+
+        if (p.label === 'y') {
+          // TEST_PAIRED
+          // TODO: this will be replaced by the formula field and should be removed when it occurs
+          const isVector = selectedAlgorithm.name === 'TTEST_PAIRED';
+          const varCount = (query.variables && query.variables.length) || 0;
+          value = isVector
+            ? (query.variables &&
+                query.variables // outputs: a1-a2,b1-b2, c1-a1
+                  .reduce(
+                    (vectors: string, v, i) =>
+                      (i + 1) % 2 === 0
+                        ? `${vectors}${v.code},`
+                        : varCount === i + 1
+                        ? `${vectors}${v.code}-${query.variables &&
+                            query.variables[0].code}`
+                        : `${vectors}${v.code}-`,
+                    ''
+                  )
+                  .replace(/,$/, '')) ||
+              ''
+            : (query.variables &&
+                query.variables.map(v => v.code).toString()) ||
+              '';
+        }
+
+        if (p.label === 'dataset') {
+          value =
+            (query.trainingDatasets &&
+              query.trainingDatasets.map(v => v.code).toString()) ||
+            '';
+        }
+
+        if (p.label === 'pathology') {
+          value = (query.pathology && query.pathology.toString()) || '';
+        }
+
+        if (p.label === 'filter') {
+          value = (query.filters && query.filters) || '';
+        }
+      }
+
+      return {
+        name: p.name,
+        label: p.label,
+        value
+      };
+    });
 
   public loaded = (): boolean =>
     this.state.experiment !== undefined &&

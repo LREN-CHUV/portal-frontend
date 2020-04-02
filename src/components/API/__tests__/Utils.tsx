@@ -1,4 +1,7 @@
-import APICore, { AlgorithmParameter, VariableEntity } from '../Core';
+import APICore, {
+  AlgorithmParameter,
+  AlgorithmParameterRequest,
+} from '../Core';
 import APIExperiment, {
   ExperimentPayload,
   State as ExperimentState
@@ -6,34 +9,47 @@ import APIExperiment, {
 import APIModel, { ModelResponse, ModelState } from '../Model';
 import config from '../RequestHeaders';
 
-const apiModel = new APIModel(config);
-const apiExperiment = new APIExperiment(config);
-const apiCore = new APICore(config);
-
 const TIMEOUT_DURATION = 60 * 10;
 
-const RESEARCH_DATASETS = ['CHRU_Lille', 'clm', 'fbf'];
-
-const getDatasets = async (
-  researchOnly = true,
-  code = 'dementia'
-): Promise<VariableEntity[] | undefined> => {
-  await apiCore.fetchPathologies();
-
-  const datasets = apiCore.datasetsForPathology(code);
-
-  return researchOnly
-    ? datasets && datasets.filter(d => RESEARCH_DATASETS.includes(d.code))
-    : datasets;
+const TEST_PATHOLOGIES = {
+  dementia: {
+    code: 'dementia',
+    datasets: [
+      {
+        code: 'desd-synthdata'
+      },
+      { code: 'edsd' },
+      { code: 'ppmi' },
+      { code: 'fake_longitudinal' }
+    ]
+  },
+  mentalhealth: {
+    code: 'mentalhealth',
+    datasets: [{ code: 'demo' }]
+  },
+  tbi: {
+    code: 'tbi',
+    datasets: [{ code: 'demo1' }]
+  }
 };
 
-describe('Utils test', () => {
-  const apiCore = new APICore(config);
+const apiCore = new APICore(config);
+const apiModel = new APIModel(config);
+const apiExperiment = new APIExperiment(config);
 
-  it('get datasets', async () => {
-    const result = await getDatasets()
+describe('Utils test', () => {
+  it('get pathologies', async () => {
+    await apiCore.fetchPathologies();
+    const result = apiCore.state.pathologies;
     expect(result).toBeTruthy();
     expect(result).toHaveLength(3);
+  });
+
+  it('get datasets', async () => {
+    await apiCore.fetchPathologies();
+    const result = apiCore.datasetsForPathology('dementia');
+    expect(result).toBeTruthy();
+    expect(result).toHaveLength(4);
   });
 });
 
@@ -49,122 +65,46 @@ const createModel = async ({
   return apiModel.state;
 };
 
-const createWorkflowPayload = async (
-  model: (datasets: VariableEntity[]) => ModelResponse,
-  datasets: VariableEntity[],
-  experimentCode: string,
+const buildPayload = async (
+  model: ModelResponse,
   parameters: AlgorithmParameter[],
+  experimentName: string,
+  algorithmId: string,
   modelSlug: string
-): Promise<ExperimentPayload | void> => {
-  await apiCore.algorithms();
-  const algorithms = apiCore.state.algorithms || [];
-  const selectedAlgorithm = algorithms.find(a => a.name === experimentCode);
+): Promise<ExperimentPayload> => {
+  await apiCore.algorithms(true);
 
-  if (selectedAlgorithm) {
-    const payload: ExperimentPayload = {
-      algorithms: [
-        {
-          name: experimentCode,
-          label: selectedAlgorithm.label,
-          type: 'not yet implemented',
-          parameters
-        }
-      ],
-      model: modelSlug,
-      label: selectedAlgorithm.label,
-      name: experimentCode
-    };
+  const selectedAlgorithm = apiCore.state?.algorithms?.find(
+    a => (a.label = algorithmId)
+  );
 
-    return payload;
+  if (!selectedAlgorithm) {
+    throw new Error('No algorithm selected');
   }
 
-  return;
-};
-
-const createExaremePayload = (
-  model: (datasets: VariableEntity[]) => ModelResponse,
-  datasets: VariableEntity[],
-  experimentName: string,
-  experimentLabel: string,
-  parameters: AlgorithmParameter[],
-  modelSlug: string,
-  type: string
-): any => {
-  const query = model(datasets).query;
-  const isVector = experimentName === 'TTEST_PAIRED';
-  const varCount = (query.variables && query.variables.length) || 0;
-  const isWorkflow = type === 'workflow';
-  const nextParameters = [
-    {
-      name: 'y',
-      label: 'y',
-      value: isVector
-        ? (query.variables &&
-            query.variables // outputs: a1-a2,b1-b2, c1-a1
-              .reduce(
-                (vectors: string, v, i) =>
-                  (i + 1) % 2 === 0
-                    ? `${vectors}${v.code},`
-                    : varCount === i + 1
-                    ? `${vectors}${v.code}-${query.variables &&
-                        query.variables[0].code}`
-                    : `${vectors}${v.code}-`,
-                ''
-              )
-              .replace(/,$/, '')) ||
-          ''
-        : (query.variables && query.variables.map(v => v.code).toString()) || ''
-    },
-    {
-      name: 'dataset',
-      label: 'dataset',
-      value:
-        (query.trainingDatasets &&
-          query.trainingDatasets.map(v => v.code).toString()) ||
-        ''
-    },
-    {
-      name: 'pathology',
-      label: 'pathology',
-      value: (query.pathology && query.pathology.toString()) || ''
-    },
-    {
-      name: 'filter',
-      label: 'filter',
-      value: (query.filters && query.filters) || ''
-    }
+  const mergedParameters = [
+    ...(selectedAlgorithm.parameters as AlgorithmParameter[]),
+    ...parameters
   ];
 
-  let covariablesArray =
-    (query.coVariables && query.coVariables.map(v => v.code)) || [];
-  covariablesArray = query.groupings
-    ? [...covariablesArray, ...query.groupings.map(v => v.code)]
-    : covariablesArray;
-
-  if (covariablesArray.length > 0) {
-    const value =
-      experimentName === 'LINEAR_REGRESSION' || experimentName === 'ANOVA'
-        ? covariablesArray.toString().replace(/,/g, '+')
-        : covariablesArray.toString();
-
-    nextParameters.push({ name: 'x', label: 'x', value });
-  }
-
-  const params = isWorkflow
-    ? [...parameters]
-    : [...parameters, ...nextParameters];
+  console.log(mergedParameters);
+  const nextParameters: AlgorithmParameterRequest[] = apiExperiment.makeParameters(
+    model,
+    selectedAlgorithm,
+    mergedParameters
+  );
 
   const payload: ExperimentPayload = {
     algorithms: [
       {
         name: experimentName,
-        label: experimentLabel,
-        parameters: params,
-        type
+        label: algorithmId,
+        parameters: nextParameters,
+        type: selectedAlgorithm.type
       }
     ],
     model: modelSlug,
-    label: experimentLabel,
+    label: algorithmId,
     name: experimentName
   };
 
@@ -215,11 +155,10 @@ const uid = (): string =>
   });
 
 export {
+  buildPayload,
   createExperiment,
   createModel,
-  createExaremePayload,
-  createWorkflowPayload,
-  getDatasets,
   uid,
-  waitForResult
+  waitForResult,
+  TEST_PATHOLOGIES
 };

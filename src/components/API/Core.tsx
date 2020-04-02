@@ -295,8 +295,8 @@ class Core extends Container<State> {
     }
   };
 
-  public algorithms = async (): Promise<void> => {
-    const exaremeAlgorithms = await this.fetchAlgorithms();
+  public algorithms = async (all = false): Promise<void> => {
+    const exaremeAlgorithms = await this.fetchAlgorithms(all);
     this.setState(state => ({
       ...state,
       algorithms: [
@@ -420,7 +420,9 @@ class Core extends Container<State> {
     return defaults[label] ? defaults[label] : '';
   };
 
-  private fetchAlgorithms = async (): Promise<{
+  private fetchAlgorithms = async (
+    all = false
+  ): Promise<{
     error: string | undefined;
     data: Algorithm[] | undefined;
   }> => {
@@ -435,11 +437,14 @@ class Core extends Container<State> {
         return { error: json.error, data: undefined };
       }
 
-      const data = json
-        .filter(
-          (algorithm: Algorithm) =>
-            ENABLED_ALGORITHMS.find(a => algorithm.label === a.label)?.enabled
-        )
+      const algorithms = all
+        ? json
+        : json.filter(
+            (algorithm: Algorithm) =>
+              ENABLED_ALGORITHMS.find(a => algorithm.label === a.label)?.enabled
+          );
+
+      const data = algorithms
         .map((algorithm: Algorithm) => ({
           ...algorithm,
           datasetType: ENABLED_ALGORITHMS.find(a => algorithm.label === a.label)

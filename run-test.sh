@@ -31,7 +31,7 @@ run_test() {
 
     echo
 
-    COMMAND="docker run --rm -it -e BACKEND_URL=http://127.0.0.1:8080 hbpmip/portal-frontend:testing yarn"
+    COMMAND="docker run --rm -it -e BACKEND_URL=http://172.17.0.1:8080 hbpmip/portal-frontend:testing yarn"
     case $1 in
     no)
         echo -e "Done"

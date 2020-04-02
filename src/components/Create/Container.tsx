@@ -11,7 +11,7 @@ import {
   AlgorithmParameterRequest
 } from '../API/Core';
 import { ExperimentPayload, ExperimentResponse } from '../API/Experiment';
-import { ModelResponse, Query } from '../API/Model';
+import { ModelResponse } from '../API/Model';
 import { AppConfig } from '../App/App';
 import { Alert, IAlert } from '../UI/Alert';
 import LargeDatasetSelect from '../UI/LargeDatasetSelect';
@@ -35,7 +35,7 @@ interface State {
 }
 
 class Container extends React.Component<Props, State> {
-  public state!: State; // TODO: double check init https://mariusschulz.com/blog/typescript-2-7-strict-property-initialization
+  public state!: State;
 
   public render(): JSX.Element {
     const { apiCore, apiModel, apiExperiment } = this.props;
@@ -128,7 +128,7 @@ class Container extends React.Component<Props, State> {
     );
   }
 
-  private handleSelectModel = async (model?: ModelResponse): Promise<any> => {
+  private handleSelectModel = async (model?: ModelResponse): Promise<void> => {
     if (model) {
       const { slug } = model;
       const { apiModel } = this.props;
@@ -145,22 +145,13 @@ class Container extends React.Component<Props, State> {
     });
   };
 
-  private handleUpdateQuery = (query: Query): void => {
-    const { apiModel } = this.props;
-    const model = apiModel.state.model;
-    if (model) {
-      model.query = query;
-      apiModel.setModel(model);
-    }
-  };
-
-  private handleChangeParameters = (parameters: AlgorithmParameter[]) => {
+  private handleChangeParameters = (parameters: AlgorithmParameter[]): void => {
     this.setState({ parameters });
   };
 
   private handleSelectExperiment = async (
     experiment: ExperimentResponse
-  ): Promise<any> => {
+  ): Promise<void> => {
     const { modelSlug: modelDefinitionId, uuid } = experiment;
     const { apiExperiment, history } = this.props;
     history.push(`/experiment/${modelDefinitionId}/${uuid}`);
@@ -175,7 +166,7 @@ class Container extends React.Component<Props, State> {
 
   private handleSaveAndRunExperiment = async (
     experimentName: string
-  ): Promise<any> => {
+  ): Promise<void> => {
     const { apiModel, apiExperiment, history } = this.props;
 
     if (!this.state) {
@@ -200,6 +191,7 @@ class Container extends React.Component<Props, State> {
       });
       return;
     }
+
     await apiModel.update({ model });
     if (!model.slug) {
       this.setState({ alert: { message: 'Model was not saved' } });
@@ -217,78 +209,11 @@ class Container extends React.Component<Props, State> {
       return;
     }
 
-    const nextParameters: AlgorithmParameterRequest[] = parameters.map(p => {
-      let value: string = p.value;
-      const query = model && model.query;
-
-      if (query) {
-        if (p.label === 'x') {
-          let covariablesArray =
-            (query.coVariables && query.coVariables.map(v => v.code)) || [];
-          covariablesArray = query.groupings
-            ? [...covariablesArray, ...query.groupings.map(v => v.code)]
-            : covariablesArray;
-
-          if (covariablesArray.length > 0) {
-            const design = parameters.find(p => p.label === 'design');
-            if (design) {
-              value =
-                design.value === 'additive'
-                  ? covariablesArray.toString().replace(/,/g, '+')
-                  : covariablesArray.toString().replace(/,/g, '*');
-            } else {
-              value = covariablesArray.toString();
-            }
-          }
-        }
-
-        if (p.label === 'y') {
-          // TEST_PAIRED
-          // TODO: this will be replaced by the formula field and should be removed when it occurs
-          const isVector = selectedAlgorithm.name === 'TTEST_PAIRED';
-          const varCount = (query.variables && query.variables.length) || 0;
-          value = isVector
-            ? (query.variables &&
-                query.variables // outputs: a1-a2,b1-b2, c1-a1
-                  .reduce(
-                    (vectors: string, v, i) =>
-                      (i + 1) % 2 === 0
-                        ? `${vectors}${v.code},`
-                        : varCount === i + 1
-                        ? `${vectors}${v.code}-${query.variables &&
-                            query.variables[0].code}`
-                        : `${vectors}${v.code}-`,
-                    ''
-                  )
-                  .replace(/,$/, '')) ||
-              ''
-            : (query.variables &&
-                query.variables.map(v => v.code).toString()) ||
-              '';
-        }
-
-        if (p.label === 'dataset') {
-          value =
-            (query.trainingDatasets &&
-              query.trainingDatasets.map(v => v.code).toString()) ||
-            '';
-        }
-
-        if (p.label === 'pathology') {
-          value = (query.pathology && query.pathology.toString()) || '';
-        }
-
-        if (p.label === 'filter') {
-          value = (query.filters && query.filters) || '';
-        }
-      }
-
-      return {
-        name: p.name,
-        label: p.label,
-        value
-      };
-    });
+    const nextParameters: AlgorithmParameterRequest[] = apiExperiment.makeParameters(
+      model,
+      selectedAlgorithm,
+      parameters
+    );
 
     const experiment: ExperimentPayload = {
       algorithms: [
