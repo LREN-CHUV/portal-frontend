@@ -87,7 +87,7 @@ class Experiment extends Container<State> {
 
           if (covariablesArray.length > 0) {
             const design = parameters.find(p => p.label === 'design');
-            // FIXME: a+b doesn't work for multiple histograms, cart
+            // FIXME: a+b doesn't work for those
             if (
               design &&
               selectedAlgorithm.label !== 'Multiple Histograms' &&
@@ -108,7 +108,7 @@ class Experiment extends Container<State> {
         if (p.label === 'y') {
           // TEST_PAIRED
           // TODO: this will be replaced by the formula field and should be removed when it occurs
-          const isVector = selectedAlgorithm.name === 'TTEST_PAIRED';
+          const isVector = selectedAlgorithm.label === 'T-Test Paired';
           const varCount = (query.variables && query.variables.length) || 0;
           value = isVector
             ? (query.variables &&
