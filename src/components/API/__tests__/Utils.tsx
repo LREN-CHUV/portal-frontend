@@ -83,7 +83,6 @@ const buildPayload = async (
   }
 
   const existingParameters = parameters.map(p => p.label);
-  console.log(existingParameters);
   const mergedParameters = (selectedAlgorithm.parameters as AlgorithmParameter[]).map(
     a => {
       // Galaxy workaround. Takes name as a param
