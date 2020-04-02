@@ -201,7 +201,11 @@ const Table = ({
           body={variableTemplate}
         />,
         ...selectedDatasets.map((mining: Variable) => (
-          <Column header={mining.code} field={mining.code} key={mining.code} />
+          <Column
+            header={mining.label || mining.code}
+            field={mining.code}
+            key={mining.code}
+          />
         ))
       ]
     : [];

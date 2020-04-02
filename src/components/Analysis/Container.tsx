@@ -221,6 +221,11 @@ const Container = ({
   const { fields, filters } = makeFilters({ apiCore, apiModel });
   const model = apiModel.state.model;
   const query = model?.query;
+  const datasets = apiCore.datasetsForPathology(query?.pathology);
+  const selectedDatasets = model?.query?.trainingDatasets?.map(d => ({
+    ...datasets?.find(v => v.code === d.code),
+    ...d
+  }));
 
   return (
     <div className="Model Review">
@@ -236,6 +241,10 @@ const Container = ({
         <div className="sidebar">
           <Panel className="datasets">
             <Panel.Body>
+              <h5>
+                <strong>Pathology</strong>
+              </h5>
+              <p>{query?.pathology}</p>
               <h5>
                 <strong>Datasets</strong>
               </h5>
@@ -260,9 +269,7 @@ const Container = ({
           <Content
             apiMining={apiMining}
             model={model}
-            selectedDatasets={
-              model && model.query && model.query.trainingDatasets
-            }
+            selectedDatasets={selectedDatasets}
             lookup={apiCore.lookup}
           >
             <Panel className="filters" defaultExpanded={false}>
