@@ -1,10 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { Alert } from 'react-bootstrap';
 import styled from 'styled-components';
+import { Base64 } from 'js-base64';
 
 import { APICore } from '../API/';
 import { GalaxyConfig } from '../API/Core';
-import Error from './Error';
-import { Base64 } from 'js-base64';
 
 interface Props {
   apiCore: APICore;
@@ -20,6 +20,11 @@ const IFrameContainer = styled.div`
     border: 0;
     position: fixed;
   }
+`;
+
+const AlertBox = styled(Alert)`
+  position: relative;
+  margin: 16px;
 `;
 
 export default React.memo(({ apiCore }: Props) => {
@@ -59,7 +64,12 @@ export default React.memo(({ apiCore }: Props) => {
 
   return (
     <IFrameContainer>
-      {error && <Error message={error} />}
+      {error && (
+        <AlertBox bsStyle="danger">
+          <strong>There was an error</strong>
+          {error}
+        </AlertBox>
+      )}
       <iframe title="Galaxy Workflow" ref={divRef} />
     </IFrameContainer>
   );
