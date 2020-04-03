@@ -1,5 +1,14 @@
 # Changelog
 
+## 6.1.2 - 04.03.2020
+
+- Added dataset, amyloid42_status, p_tau_status to filters
+- Error message for Galaxy
+- Pathology label on views
+- Dataset Labels for Analysis
+- Tests refactoring
+- mip-deployment stack added as a git submodule
+
 ## 6.1.1 - 26.03.2020
 
 - Longitudinal bug fix
