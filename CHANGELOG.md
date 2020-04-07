@@ -1,5 +1,10 @@
 # Changelog
 
+## 6.1.3 - 04.07.2020
+
+- Bug fix for enumerations without a label
+- Reworked filter comparison, fixes a refresh bug in filters
+
 ## 6.1.2 - 04.03.2020
 
 - Added dataset, amyloid42_status, p_tau_status to filters
