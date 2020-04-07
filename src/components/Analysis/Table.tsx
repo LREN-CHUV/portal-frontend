@@ -42,7 +42,7 @@ const findVariableData = (code: string, data: any) => {
   return;
 };
 
-const processPolynominalDataHeader = (code: string, data: any) => {
+const processMultinominalDataHeader = (code: string, data: any) => {
   const variableData = findVariableData(code, data);
   if (variableData) {
     return `${variableData.Count}`;
@@ -51,7 +51,7 @@ const processPolynominalDataHeader = (code: string, data: any) => {
   return;
 };
 
-const processPolynominalData = (
+const processMultinominalData = (
   code: string,
   categoryCode: string,
   data: any
@@ -99,13 +99,13 @@ const computeMinings = ({
 
   const rows: ITableRow[] = [];
   variables.forEach(variable => {
-    const isPolynominal =
+    const isMultinominal =
       variable.type === 'multinominal' || variable.type === 'binominal';
     const row: ITableRow = {};
     let polynominalRows: ITableRow[] = [];
 
     // set labels, Variables + multinominal categories rows
-    if (isPolynominal && variable.enumerations) {
+    if (isMultinominal && variable.enumerations) {
       row.variable = variable.label;
       polynominalRows = variable.enumerations.reduce(
         (acc: any[], val: any) => [
@@ -113,7 +113,7 @@ const computeMinings = ({
           {
             category: {
               code: val.code,
-              label: val.label
+              label: val.label || val.code
             }
           }
         ],
@@ -132,7 +132,7 @@ const computeMinings = ({
         const { error, data } = mining;
         if (!error && !data) {
           row[code] = 'loading...';
-          if (isPolynominal) {
+          if (isMultinominal) {
             polynominalRows = polynominalRows.map(r => ({
               ...r,
               [code]: 'loading...'
@@ -140,18 +140,18 @@ const computeMinings = ({
           }
         } else if (error) {
           row[code] = error;
-          if (isPolynominal) {
+          if (isMultinominal) {
             polynominalRows = polynominalRows.map(r => ({
               ...r,
               [code]: error
             }));
           }
         } else if (data) {
-          if (isPolynominal) {
-            row[code] = processPolynominalDataHeader(variable.code, data);
+          if (isMultinominal) {
+            row[code] = processMultinominalDataHeader(variable.code, data);
             polynominalRows = polynominalRows.map(r => ({
               ...r,
-              [code]: processPolynominalData(
+              [code]: processMultinominalData(
                 variable.code,
                 r.category!.code,
                 data

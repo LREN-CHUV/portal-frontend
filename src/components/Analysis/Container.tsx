@@ -136,13 +136,13 @@ const Container = ({
 
       const output: any = {
         id: code,
-        label: originalVar.label,
+        label: originalVar.label || originalVar.code,
         name: code
       };
 
       if (originalVar && originalVar.enumerations) {
         output.values = originalVar.enumerations.map((c: any) => ({
-          [c.code]: c.label
+          [c.code]: c.label || c.code
         }));
         output.input = 'select';
         output.operators = ['equal', 'not_equal', 'in', 'not_in'];
