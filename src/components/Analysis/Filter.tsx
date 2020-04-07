@@ -19,7 +19,7 @@ class Filter extends React.Component<Props, State> {
   protected queryBuilder = QueryBuilder; // prevents ts-lint to complain about ununused inport
   private ref: any;
 
-  public componentDidMount = () => {
+  public componentDidMount = (): void => {
     const { filters, rules } = this.props;
 
     if (!rules) {
@@ -31,19 +31,28 @@ class Filter extends React.Component<Props, State> {
     this.onRulesChanged();
   };
 
-  public UNSAFE_componentWillReceiveProps = (nextProps: any) => {
+  public componentDidUpdate = (nextProps: any): void => {
     if (this.state.rulesChanged) {
       return; // user is editing
     }
 
     const { filters: nextFilters, rules: nextRules } = nextProps;
-    // const { filters, rules } = this.props;
-    if (nextFilters) {
-      // FIXME: && nextFilters !== filters) {
+    const { filters, rules } = this.props;
+
+    if (
+      this.compareKeys(
+        filters.map((n: any) => n.id),
+        nextFilters.map((n: any) => n.id)
+      )
+    ) {
       this.ref.queryBuilder('destroy');
 
-      if (nextRules) {
-        // FIXME: && nextRules !== rules) {
+      if (
+        this.compareKeys(
+          rules.map((n: any) => n.id),
+          nextRules.map((n: any) => n.id)
+        )
+      ) {
         this.ref.queryBuilder({ filters: nextFilters, rules: nextRules });
         this.onRulesChanged();
 
@@ -56,11 +65,11 @@ class Filter extends React.Component<Props, State> {
     }
   };
 
-  public componentWillUnmount = () => {
+  public componentWillUnmount = (): void => {
     this.ref.queryBuilder('destroy');
   };
 
-  public handleSave = () => {
+  public handleSave = (): void => {
     this.setState({ loading: true, rulesChanged: false });
     const rules = this.ref.queryBuilder('getRules');
     const { handleChangeFilter } = this.props;
@@ -69,7 +78,7 @@ class Filter extends React.Component<Props, State> {
     });
   };
 
-  public render = () => {
+  public render = (): JSX.Element => {
     return (
       <div>
         <div id="query-builder" ref={this.createRef} />
@@ -86,13 +95,13 @@ class Filter extends React.Component<Props, State> {
     );
   };
 
-  private createRef = (ref: HTMLDivElement) => {
+  private createRef = (ref: HTMLDivElement): void => {
     if (!this.ref) {
       this.ref = $(ref) as any;
     }
   };
 
-  private onRulesChanged = () => {
+  private onRulesChanged = (): void => {
     this.ref.queryBuilder('on', 'rulesChanged', () => {
       this.setState({ rulesChanged: true });
     });
@@ -100,6 +109,9 @@ class Filter extends React.Component<Props, State> {
       this.setState({ rulesChanged: false });
     }, 100);
   };
+
+  private compareKeys = (keys: string[], nextKeys: string[]): boolean =>
+    JSON.stringify(keys) !== JSON.stringify(nextKeys);
 }
 
 export default Filter;
