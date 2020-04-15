@@ -123,6 +123,7 @@ export interface State {
   algorithms?: Algorithm[];
   pathologies?: VariableEntity[];
   pathologyJSON?: Pathology[];
+  pathologyError?: string;
   article?: Article;
   articles?: Article[];
   stats?: Stats;
@@ -208,9 +209,16 @@ class Core extends Container<State> {
         label: h.label
       }));
 
+      if (pathologies && pathologies.length === 0) {
+        return await this.setState({
+          pathologyError:
+            "You don't have access to any pathology. Please contact your administrator or search for support in the help menu above."
+        });
+      }
+
       return await this.setState({
         error: undefined,
-        pathologies: pathologies,
+        pathologies,
         pathologyJSON: json
       });
     } catch (error) {

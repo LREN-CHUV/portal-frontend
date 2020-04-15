@@ -1,6 +1,8 @@
 import * as d3 from 'd3';
 import React, { useEffect, useState } from 'react';
+import { Alert } from 'react-bootstrap';
 import { RouteComponentProps } from 'react-router-dom';
+import styled from 'styled-components';
 
 import { APICore, APIMining, APIModel } from '../API';
 import { ModelResponse, Query } from '../API/Model';
@@ -18,6 +20,11 @@ const initialD3Model = {
   filters: undefined,
   variables: undefined
 };
+
+const AlertBox = styled(Alert)`
+  position: relative;
+  margin: 16px;
+`;
 
 export type HierarchyCircularNode = d3.HierarchyCircularNode<VariableDatum>;
 
@@ -64,11 +71,13 @@ export default ({
   useEffect(() => {
     const model = apiModel.state.model;
     if (!model && apiCore.state.pathologies) {
-      const defaultPathology = apiCore.state.pathologies[0];
-      const datasets = apiCore.datasetsForPathology(defaultPathology.code);
+      const defaultPathology = apiCore.state.pathologies.find(
+        (_, i) => i === 0
+      );
+      const datasets = apiCore.datasetsForPathology(defaultPathology?.code);
       const newModel = {
         query: {
-          pathology: defaultPathology.code,
+          pathology: defaultPathology?.code,
           trainingDatasets: datasets?.filter(
             d => d.type !== LONGITUDINAL_DATASET_TYPE
           )
@@ -369,6 +378,11 @@ export default ({
 
   return (
     <section>
+      {apiCore.state.pathologyError && (
+        <AlertBox bsStyle="danger">
+          <strong>There was an error</strong> {apiCore.state.pathologyError}
+        </AlertBox>
+      )}
       {showPathologySwitchWarning && (
         <Modal
           title="Change Pathology ?"
@@ -377,6 +391,7 @@ export default ({
           handleOK={handleOKSwitchPathology}
         />
       )}
+
       {d3Layout && (
         <CirclePack layout={d3Layout} d3Model={d3Model} {...nextProps} />
       )}
