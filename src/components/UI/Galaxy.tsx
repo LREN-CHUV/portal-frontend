@@ -66,8 +66,7 @@ export default React.memo(({ apiCore }: Props) => {
     <IFrameContainer>
       {error && (
         <AlertBox bsStyle="danger">
-          <strong>There was an error</strong>
-          {error}
+          <strong>There was an error</strong> {error}
         </AlertBox>
       )}
       <iframe title="Galaxy Workflow" ref={divRef} />
