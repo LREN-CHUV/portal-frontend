@@ -69,3 +69,8 @@ VERSION=$INCREMENTED_VERSION \
 WORKSPACE=$WORKSPACE \
   docker push hbpmip/portal-frontend:$INCREMENTED_VERSION
 docker push hbpmip/portal-frontend:latest
+
+echo
+echo "Pushed"
+echo "hbpmip/portal-frontend:$INCREMENTED_VERSION"
+echo "hbpmip/portal-frontend:latest"
