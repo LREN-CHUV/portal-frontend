@@ -38,7 +38,7 @@ export default React.memo(({ apiCore }: Props) => {
       const config = apiCore.state.galaxy;
       if (config) {
         if (config.error) {
-          setError(config.error);
+          setError(config.error.message || 'Access denied');
         }
 
         setConfig(apiCore.state.galaxy);

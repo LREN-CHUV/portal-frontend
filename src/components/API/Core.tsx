@@ -1,5 +1,6 @@
 import request from 'request-promise-native';
 import { Container } from 'unstated';
+
 import { backendURL } from '../API';
 import { ENABLED_ALGORITHMS, UI_HIDDEN_PARAMETERS } from '../constants';
 
@@ -114,7 +115,7 @@ export interface Article {
 export interface GalaxyConfig {
   authorization?: string;
   context?: string;
-  error?: string;
+  error?: { error?: string; message: string };
 }
 
 export interface State {
@@ -212,7 +213,7 @@ class Core extends Container<State> {
       if (pathologies && pathologies.length === 0) {
         return await this.setState({
           pathologyError:
-            "You don't have access to any pathology. Please contact your administrator or search for support in the help menu above."
+            'You do not have access to any dataset. Please contact your administrator to request access.'
         });
       }
 
