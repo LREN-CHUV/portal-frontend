@@ -1,5 +1,9 @@
 # Changelog
 
+## 6.1.4 - 04.16.2020
+
+- Keycloak and Galaxy Error handling
+
 ## 6.1.3 - 04.07.2020
 
 - Bug fix for enumerations without a label
