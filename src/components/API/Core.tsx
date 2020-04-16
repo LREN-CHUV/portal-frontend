@@ -398,19 +398,20 @@ class Core extends Container<State> {
   public fetchGalaxyConfiguration = async (): Promise<void> => {
     try {
       const data = await request.get(`${this.backendURL}/galaxy`, this.options);
-      const json = await JSON.parse(data);
-      if (json.error) {
+      if (data.error) {
         return await this.setState({
-          galaxy: { error: json.error }
+          galaxy: { error: data }
         });
       }
+
+      const json = await JSON.parse(data);
 
       return await this.setState({
         galaxy: json
       });
     } catch (error) {
       return await this.setState({
-        galaxy: { error: error.message }
+        galaxy: { error: { message: error.message } }
       });
     }
   };
