@@ -10,7 +10,7 @@ RUN yarn
 
 WORKDIR /app
 COPY . /app
-COPY ./test-server/test-docker/run.sh /app/run.sh
+COPY ./test-server/run.sh /app/run.sh
 
 ENTRYPOINT ["/bin/bash", "./run.sh"]
 CMD ["test"]
