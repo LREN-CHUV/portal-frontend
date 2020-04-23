@@ -397,22 +397,26 @@ class Core extends Container<State> {
 
   public fetchGalaxyConfiguration = async (): Promise<void> => {
     try {
-      const data = await request.get(`${this.backendURL}/galaxy`, this.options);
-      if (data.error) {
-        return await this.setState({
-          galaxy: { error: data }
-        });
-      }
-
+      const data = await request.get(`${this.backendURL}/galaxy`, {
+        ...this.options,
+        resolveWithFullResponse: true
+      });
       const json = await JSON.parse(data);
 
       return await this.setState({
         galaxy: json
       });
-    } catch (error) {
-      return await this.setState({
-        galaxy: { error: { message: error.message } }
-      });
+    } catch (e) {
+      // FIXME: Need to change the request library, not handling error status code
+      try {
+        return await this.setState({
+          galaxy: { error: JSON.parse(e.error) }
+        });
+      } catch (e) {
+        return await this.setState({
+          galaxy: { error: { message: 'Unknow error' } }
+        });
+      }
     }
   };
 
