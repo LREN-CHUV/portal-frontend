@@ -224,7 +224,7 @@ class Core extends Container<State> {
       });
     } catch (error) {
       return await this.setState({
-        error: error.message
+        pathologyError: error.message
       });
     }
   };

@@ -65,9 +65,8 @@ export default ({ apiUser }: Props): JSX.Element => {
             <Button
               bsStyle={'warning'}
               onClick={(): void => {
-                apiUser.logout().then(() => {
-                  window.location.href = '/';
-                });
+                apiUser.logout();
+                window.location.href = '/';
               }}
             >
               Logout
