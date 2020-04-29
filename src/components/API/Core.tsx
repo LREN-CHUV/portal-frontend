@@ -398,8 +398,7 @@ class Core extends Container<State> {
   public fetchGalaxyConfiguration = async (): Promise<void> => {
     try {
       const data = await request.get(`${this.backendURL}/galaxy`, {
-        ...this.options,
-        resolveWithFullResponse: true
+        ...this.options
       });
       const json = await JSON.parse(data);
 
