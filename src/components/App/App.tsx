@@ -89,6 +89,7 @@ const App = ({
                 apiMining={apiMining}
                 apiModel={apiModel}
                 appConfig={appConfig}
+                apiUser={apiUser}
                 {...props}
               />
             )}

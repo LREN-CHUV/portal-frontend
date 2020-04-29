@@ -4,7 +4,7 @@ import { Alert } from 'react-bootstrap';
 import { RouteComponentProps } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { APICore, APIMining, APIModel } from '../API';
+import { APICore, APIMining, APIModel, APIUser } from '../API';
 import { ModelResponse, Query } from '../API/Model';
 import { AppConfig } from '../App/App';
 import { LONGITUDINAL_DATASET_TYPE } from '../constants';
@@ -45,12 +45,14 @@ interface Props extends RouteComponentProps {
   apiMining: APIMining;
   apiModel: APIModel;
   appConfig: AppConfig;
+  apiUser: APIUser;
 }
 
 export default ({
   apiCore,
   apiMining,
   apiModel,
+  apiUser,
   ...props
 }: Props): JSX.Element => {
   const [selectedNode, setSelectedNode] = useState<
@@ -61,11 +63,26 @@ export default ({
   const [d3Model, setD3Model] = useState<D3Model>(initialD3Model);
   const [d3Layout, setD3Layout] = useState<HierarchyCircularNode>();
   const [formulaString, setFormulaString] = useState<string>('');
-
   const [showPathologySwitchWarning, setShowPathologySwitchWarning] = useState(
     false
   );
   const [nextPathologyCode, setNextPathologyCode] = useState(''); // TODO: maybe there is a better way... like promise.then() ?
+  const { history } = props;
+
+  useEffect(() => {
+    if (
+      !apiUser.state.loading &&
+      apiUser.state.authenticated &&
+      !apiUser.state.agreeNDA
+    ) {
+      history.push('/tos');
+    }
+  }, [
+    apiUser.state.agreeNDA,
+    apiUser.state.authenticated,
+    apiUser.state.loading,
+    history
+  ]);
 
   // select default pathology at start
   useEffect(() => {
@@ -350,7 +367,6 @@ export default ({
   };
 
   const handleGoToAnalysis = async (): Promise<void> => {
-    const { history } = props;
     const nextModel = convertD3ModelToModel(d3Model, apiModel.state.model);
     apiMining.abortMiningRequests();
 
