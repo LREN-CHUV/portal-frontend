@@ -1,15 +1,20 @@
 # Changelog
 
-## 6.1.4 - 04.16.2020
+## 6.1.4.1 - 2020/04/30
+
+- Fixed Terms Of Service form for local instances.
+- Fixed Galaxy access
+
+## 6.1.4 - 2020/04/16
 
 - Keycloak and Galaxy Error handling
 
-## 6.1.3 - 04.07.2020
+## 6.1.3 - 2020/04/07
 
 - Bug fix for enumerations without a label
 - Reworked filter comparison, fixes a refresh bug in filters
 
-## 6.1.2 - 04.03.2020
+## 6.1.2 - 2020/04/03
 
 - Added dataset, amyloid42_status, p_tau_status to filters
 - Error message for Galaxy
@@ -18,21 +23,21 @@
 - Tests refactoring
 - mip-deployment stack added as a git submodule
 
-## 6.1.1 - 26.03.2020
+## 6.1.1 - 2020/03/26
 
 - Longitudinal bug fix
 
-## 6.1.0 - 26.03.2020
+## 6.1.0 - 2020/03/26
 
 - ROHAN Service link (Ontologies for Neurosciences)
 - Kaplan Meyer and longitudinal datasets integration
 - Exareme 20.0.0 integration
 
-## 6.0.1 - 23.03.2020
+## 6.0.1 - 2020/03/23
 
 - Added alert message for Keycloack Forbidden 403 response
 
-## 6.0.0 - 14.03.2020
+## 6.0.0 - 2020/03/14
 
 - polynominal => multinominal change
 
@@ -41,7 +46,7 @@
 - Reworked Histogram variables
 - Reworked Cart last node + center zoom
 
-## dev_5.2.4 - 10.03.2020
+## dev_5.2.4 - 2020/03/10
 
 - Cart algorithm integrated
 - Updated Typescript & d3.js librairies
@@ -53,7 +58,7 @@
 - Added Annotation module for Highcharts
 - Reverted x<->y for multiple histograms
 
-## 5.2.0 - 27.02.2020
+## 5.2.0 - 2020/02/27
 
 - New API for Galaxy integration
 - Dockerized tests - (run-test.sh)
@@ -65,13 +70,13 @@
 - Bug fixes
 - UI improvements
 
-## 5.1.18 - 30.01.2020
+## 5.1.18 - 2020/01/30
 
 - Added more static filters for dementia
 - Bug fixes
 - PCA integrated
 
-## 13.12.2019
+## 2019/12/13
 
 - Multiple Histogram integrated
 - NaiveBayes integrated
@@ -81,7 +86,7 @@
 - Better tooltip on algorithms
 - Default parameters and enum from Exareme integrated
 
-## 04.12.2019
+## 2019/04/12
 
 - Prevent user to perform an experiment without any selected dataset
 - Logout button in Profile, call GET /logout
@@ -91,7 +96,7 @@
 - CircleCI script, not working, as their docker service logs doesn't produce outputs on CircleCI and local CircleCI doesn't have the same implementation
 - Tests updated
 
-## 5.1.11 - 12.11.2019
+## 5.1.11 - 2019/11/12
 
 - Galaxy Workflow Engine embedded in Federation Mode
 - Workflow error handling for Galaxy based algorithms
@@ -112,7 +117,7 @@
     - Naive Bayes with cross validation
 - Removed unused visjs library
 
-## 5.0.0 - 08.10.2019
+## 5.0.0 - 2019/10/08
 
 - Navigation reworked
 - Explore layout redesigned
@@ -127,7 +132,7 @@
 - Switched React Linter from TSLint to ESLint
   - See [ESLint and Prettier in a TypeScript Project](https://dev.to/robertcoopercode/using-eslint-and-prettier-in-a-typescript-project-53jb)
 
-## 4.0.0 - 05.07.2019
+## 4.0.0 - 2019/07/05
 
 - Removed ID3 and Naive Bayes standalone ( => 5.0 )
 - Histograms:
@@ -136,7 +141,7 @@
   - Galaxy Workflow Error handling
   - Exareme histograms error handling
 
-## 4.0.0-beta.1 - 20.06.2019
+## 4.0.0-beta.1 - 2019/06/20
 
 - Galaxy Workflow POC
   - Naive Bayes
@@ -155,27 +160,27 @@
 - Homepage draft (/v3/home)
 - Types cleanup
 
-## 3.0.4 - 29.05.2019
+## 3.0.4 - 2019/05/29
 
 - Bug fixes
 
-## 3.0.3 - 10.05.2019
+## 3.0.3 - 2019/05/10
 
 - Enabled KNN
 - Filter tests by plateform in CI, do `yarn test woken` or `yarn test exareme`
 
-## 3.0.2 - 08.05.2019
+## 3.0.2 - 2019/05/08
 
 - Fixed Mime type bug due to Mime type bug on on [Woken see](https://jira.chuv.ch/browse/HBPLD-256?filter=-6)
 - Fixed config.mode for federation
 - Removed Heatmaply (Too heavy ~7 mo)
 
-## 3.0.1 - 08.05.2019
+## 3.0.1 - 2019/05/08
 
 - Test suite can now run as a standalone docker to test any live installation, see [/app/v3/README.md](./app/v3/README.md)
 - Fixed footer
 
-## 3.0.0 - 30.04.2019
+## 3.0.0 - 2019/04/30
 
 - Tag release, no changes
 
