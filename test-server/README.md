@@ -4,7 +4,7 @@
 
 ### Configured with pathologies/datasets for mip.humanbrainproject.com (2020/04/21)
 
-- Login to the mip http://148.187.98.92
+- Login to the [mip at https://mip.humanbrainproject.eu](https://mip.humanbrainproject.eu)
 - Get your Token and SessionId in the browser (Developer tools -> Application -> Cookies)
 - Reference the script below with correct parameters
 - You can launch the script with `yarn test`
