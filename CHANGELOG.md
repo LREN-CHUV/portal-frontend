@@ -1,5 +1,9 @@
 # Changelog
 
+## 6.2.0 - 2020/05/06
+
+- Fixed XSRF token parsing in cookie
+
 ## 6.1.4.1 - 2020/04/30
 
 - Fixed Terms Of Service form for local instances.
