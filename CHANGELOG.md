@@ -1,5 +1,9 @@
 # Changelog
 
+## 6.2.1 - 2020/05/07
+
+- Fixed XSRF regression
+
 ## 6.2.0 - 2020/05/06
 
 - Fixed XSRF token parsing in cookie
