@@ -20,7 +20,7 @@ const TEST_PATHOLOGIES = {
       },
       { code: 'edsd' },
       { code: 'ppmi' },
-      { code: 'fake_longitudinal' }
+      { code: 'alzheimer_fake_cohort' }
     ]
   },
   mentalhealth: {

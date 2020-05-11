@@ -12,7 +12,7 @@ export enum MIME_TYPES {
   TEXT = 'text/plain'
 }
 
-export const LONGITUDINAL_DATASET_TYPE = 'longitudinal';
+export const LONGITUDINAL_DATASET_TYPE = 'alzheimer_fake_cohort';
 
 export const HISTOGRAMS_STORAGE_KEY = 'mipChoosenHistogramsVars';
 

@@ -27,7 +27,7 @@ const parameters: any = [
   {
     name: 'outcome_neg',
     label: 'Negative outcome',
-    value: 'CN'
+    value: 'MCI'
   },
   {
     name: 'max_age',
@@ -38,11 +38,17 @@ const parameters: any = [
 const model: ModelResponse = {
   query: {
     pathology: TEST_PATHOLOGIES.dementia.code,
-    coVariables: [],
+    coVariables: [
+      {
+        code: 'apoe4'
+      }
+    ],
     filters: '',
     groupings: [],
     testingDatasets: [],
-    trainingDatasets: TEST_PATHOLOGIES.dementia.datasets.filter(d => d.code === 'fake_longitudinal'),
+    trainingDatasets: TEST_PATHOLOGIES.dementia.datasets.filter(
+      d => d.code === 'alzheimer_fake_cohort'
+    ),
     validationDatasets: [],
     variables: [
       {
