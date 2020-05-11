@@ -96,7 +96,7 @@ export default ({
         query: {
           pathology: defaultPathology?.code,
           trainingDatasets: datasets?.filter(
-            d => d.type !== LONGITUDINAL_DATASET_TYPE
+            d => d.code !== LONGITUDINAL_DATASET_TYPE
           )
         }
       };
