@@ -1,5 +1,9 @@
 # Changelog
 
+## 6.2.2 - 2020/05/07
+
+- Kaplan Meier new integration
+
 ## 6.2.1 - 2020/05/07
 
 - Fixed XSRF regression
