@@ -1,7 +1,9 @@
 import 'bootstrap/dist/css/bootstrap.css';
+
 import * as React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import styled, { createGlobalStyle } from 'styled-components';
+
 import backgroundImage from '../../images/body-bg.jpg';
 import ExperimentReview from '../Analysis/Container';
 import { APICore, APIExperiment, APIMining, APIModel, APIUser } from '../API';
@@ -11,6 +13,7 @@ import ExperimentCreate from '../Create/Container';
 import Explore from '../Explore/Container';
 import Help from '../Help/Help';
 import ExperimentResult from '../Result/Container';
+import DataCatalog from '../UI/DataCatalog';
 import Footer from '../UI/Footer';
 import Galaxy from '../UI/Galaxy';
 import Navigation from '../UI/Navigation';
@@ -23,6 +26,7 @@ export interface AppConfig {
   version?: string;
   instanceName?: string;
   ga?: string;
+  federation?: boolean;
 }
 interface Props {
   appConfig: AppConfig;
@@ -69,6 +73,7 @@ const App = ({
       <header>
         <Navigation
           name={appConfig.instanceName}
+          federation={appConfig.federation || false}
           experiments={apiExperiment.state.experiments}
           handleSelect={(experiment: ExperimentResponse): void => {
             history.push(
@@ -142,7 +147,7 @@ const App = ({
             path="/galaxy"
             render={(): JSX.Element => <Galaxy apiCore={apiCore} />}
           />
-
+          <Route path="/catalog" render={(): JSX.Element => <DataCatalog />} />
           <Route
             path={['/articles/:slug', '/articles']}
             // tslint:disable-next-line jsx-no-lambda

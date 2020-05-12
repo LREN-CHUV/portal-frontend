@@ -1,5 +1,6 @@
 {
     "version": "{{ default .Env.VERSION "DEV" }}",
     "instanceName": "{{ default .Env.INSTANCE_NAME "HBP MIP" }}",
-    "ga": "{{ default .Env.TRACKER_ID "UA-80660232-1" }}"
+    "ga": "{{ default .Env.TRACKER_ID "UA-80660232-1" }}",
+    "federation": "  {{ default .Env.DATACATALOGUE_SERVER 0 }}"
 }

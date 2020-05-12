@@ -53,7 +53,8 @@ class AppContainer extends React.Component<any, State> {
     } catch (e) {
       appConfig = {
         instanceName: 'MIP DEV',
-        version: 'alpha'
+        version: 'alpha',
+        federation: false
       };
 
       this.setState({ appConfig });

@@ -10,6 +10,7 @@ interface Props {
   name?: string;
   experiments?: ExperimentResponse[];
   handleSelect: (experiment: ExperimentResponse) => void;
+  federation: boolean;
 }
 
 const NavBar = styled.nav`
@@ -109,7 +110,12 @@ const DropdownWrapper = styled.div`
   }
 `;
 
-export default ({ name, experiments, handleSelect }: Props): JSX.Element => {
+export default ({
+  name,
+  federation,
+  experiments,
+  handleSelect
+}: Props): JSX.Element => {
   const instanceName = name || 'MIP';
   return (
     <NavBar>
@@ -139,6 +145,7 @@ export default ({ name, experiments, handleSelect }: Props): JSX.Element => {
           />
         </DropdownWrapper>
         <Link to="/galaxy">Workflow</Link>
+        {federation && <Link to="/catalog">Data Catalogue</Link>}
       </Links>
       <RightLinks>
         <Link to="/profile">Profile</Link>
