@@ -44,7 +44,10 @@ class AppContainer extends React.Component<any, State> {
     const response = await fetch(`${webURL}/static/config.json`);
     try {
       const config = await response.json();
-      appConfig = { ...config };
+      appConfig = {
+        ...config,
+        federation: config.federation === '0' ? false : true
+      };
       this.setState({ appConfig });
 
       if (appConfig.ga) {
