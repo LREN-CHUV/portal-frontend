@@ -40,8 +40,8 @@ done
 
 # CSVs and metadata validation
 echo -e "\nValidating if the CSVs match with the metadata..."
-rm -rf data/**/*.db                                             # Removing previous .db files
-python config/convert-csv-dataset-to-db.py -f data/ -t "master" # Running the database creation script
+rm -rf data/**/*.db                                      # Removing previous .db files
+config/convert-csv-dataset-to-db.py -f data/ -t "master" # Running the database creation script
 py_script=$?
 if [[ ${py_script} -ne 0 ]]; then
     echo -e "\nThe CSVs could not be parsed using the metadata. Exiting..." >&2
@@ -53,7 +53,7 @@ fi
 # Checking the PUBLIC_MIP_IP env variable
 # ./config/get_env_variable_IP.sh .IPs_env PUBLIC_MIP_IP
 
-# source ./.IPs_env # Load the env variables
+source ./.IPs_env # Load the env variables
 
 # cat ./.IPs_env >>.env
 echo PUBLIC_MIP_IP=127.0.0.1 >.env
@@ -91,23 +91,23 @@ fi
 # # If status code != 0 an error has occurred
 # while [[ ${docker_login_worked} -ne 0 ]]; do
 
-# 	# Wait for keycloak to start
-# 	sleep 20
+#     # Wait for keycloak to start
+#     sleep 20
 
-# 	# Login to the docker container
-# 	{
-# 		docker exec -it $(docker ps --filter name="mip_keycloak_1" -q) /opt/jboss/keycloak/bin/kcadm.sh config credentials --server http://keycloak:8095/auth --realm master --user admin --password Pa55w0rd
-# 	} &>/dev/null
-# 	# Get the status code from previous command
-# 	docker_login_worked=$?
+#     # Login to the docker container
+#     {
+#         docker exec -it $(docker ps --filter name="mip_keycloak_1" -q) /opt/jboss/keycloak/bin/kcadm.sh config credentials --server http://keycloak:8095/auth --realm master --user admin --password Pa55w0rd
+#     } &>/dev/null
+#     # Get the status code from previous command
+#     docker_login_worked=$?
 
-# 	# Try 5 times and then throw error
-# 	count=$(expr $count + 1)
-# 	if [[ ${count} -eq 5 ]]; then
-# 		echo -e "\nMIP is up and running on: http://${PUBLIC_MIP_IP} but  could not be configured properly. \nAs a result you can't access the administration console. You can retry by runnining ./config/configure_keycloak.sh" >&2
-# 		rm .env
-# 		exit 1
-# 	fi
+#     # Try 5 times and then throw error
+#     count=$(expr $count + 1)
+#     if [[ ${count} -eq 5 ]]; then
+#         echo -e "\nMIP is up and running on: http://${PUBLIC_MIP_IP} but  could not be configured properly. \nAs a result you can't access the administration console. You can retry by runnining ./config/keycloak/configure_keycloak.sh" >&2
+#         rm .env
+#         exit 1
+#     fi
 # done
 
 # Disable sslRequired on Keycloak
