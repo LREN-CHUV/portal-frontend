@@ -44,7 +44,13 @@ const computeResults = ({
 }): TableRow[] => {
   const computedRows: TableRow[] = [];
 
-  if (!summaryStatistics || !selectedDatasets || !variables) {
+  if (!variables || variables.length === 0) {
+    computedRows.push({ variable: 'Select some variables' });
+    return computedRows;
+  }
+
+  if (!selectedDatasets) {
+    computedRows.push({ variable: 'Select a dataset' });
     return computedRows;
   }
 
@@ -77,10 +83,12 @@ const computeResults = ({
     // fetch results by datasets
     selectedDatasets.forEach(dataset => {
       const datasetCode = dataset.code;
-      const mining = summaryStatistics.find(
-        (m: any) =>
-          m.data.name === datasetCode && m.data.data[0] === variable.code
-      );
+      const mining =
+        summaryStatistics &&
+        summaryStatistics.find(
+          (m: any) =>
+            m.data.name === datasetCode && m.data.data[0] === variable.code
+        );
 
       if (!mining) {
         row[datasetCode] = 'loading...';
@@ -132,6 +140,7 @@ const computeResults = ({
       }
     });
 
+    console.log(row);
     rows.push(row);
     polynominalRows.forEach(r => rows.push(r));
   });
@@ -177,13 +186,15 @@ const Table = ({
       ]
     : [];
 
-  return rows && rows.length > 0 && columns && columns.length > 0 ? (
-    <DataTable value={rows}>{columns}</DataTable>
-  ) : variables && variables.length === 0 ? (
-    <p>Please select a model or some variables from the previous screen</p>
-  ) : (
-    <Loader />
-  );
+  return <DataTable value={rows}>{columns}</DataTable>;
+
+  // return rows && rows.length > 0 && columns && columns.length > 0 ? (
+  //   <DataTable value={rows}>{columns}</DataTable>
+  // ) : variables && variables.length === 0 ? (
+  //   <p>Please select a model or some variables from the previous screen</p>
+  // ) : (
+  //   <Loader />
+  // );
 };
 
 export default Table;

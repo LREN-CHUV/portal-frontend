@@ -50,7 +50,7 @@ const Container = ({
       return;
     }
 
-    // apiMining.clfdear();
+    apiMining.clear();
 
     if (datasets && query) {
       const payload: MiningPayload = {

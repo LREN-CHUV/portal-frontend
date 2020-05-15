@@ -58,10 +58,7 @@ class Mining extends Container<MiningState> {
     return this.setState((prevState: any) => ({
       error: undefined,
       histograms: undefined,
-      summaryStatistics: {
-        ...prevState.summaryStatistics,
-        loading: true
-      }
+      summaryStatistics: undefined
     }));
   };
 
