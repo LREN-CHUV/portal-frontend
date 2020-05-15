@@ -40,7 +40,7 @@ const Content = ({
               )}
               {selectedDatasets && selectedDatasets.length > 0 && (
                 <Table
-                  minings={apiMining.state.summaryStatistics}
+                  summaryStatistics={apiMining.state.summaryStatistics}
                   selectedDatasets={selectedDatasets}
                   query={model && model.query}
                   lookup={lookup}

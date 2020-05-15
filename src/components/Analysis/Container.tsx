@@ -50,6 +50,8 @@ const Container = ({
       return;
     }
 
+    // apiMining.clfdear();
+
     if (datasets && query) {
       const payload: MiningPayload = {
         covariables: query.coVariables ? query.coVariables : [],
@@ -60,7 +62,7 @@ const Container = ({
         pathology: query.pathology ? query.pathology : ''
       };
 
-      apiMining.descriptiveStatisticsByDataset({ payload });
+      apiMining.descriptiveStatistics({ payload });
     }
   }, [
     apiModel.state.model,

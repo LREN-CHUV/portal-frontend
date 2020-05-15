@@ -5,78 +5,25 @@ import 'primereact/resources/primereact.min.css';
 import 'primereact/resources/themes/nova-light/theme.css';
 import * as React from 'react';
 import { Variable, VariableEntity } from '../API/Core';
-import { MiningResponseShape } from '../API/Mining';
+import { MiningResponse } from '../API/Mining';
 import { Query } from '../API/Model';
 import Loader from '../UI/Loader';
 import { round } from '../utils';
 import './Table.css';
+import { MIME_TYPES } from '../constants';
 
 interface Props {
-  minings?: MiningResponseShape[];
+  summaryStatistics?: MiningResponse[];
   selectedDatasets?: Variable[];
   query?: Query;
   lookup: (code: string) => VariableEntity;
 }
 
-interface IComputeMiningResult {
-  minings?: MiningResponseShape[];
-  selectedDatasets?: VariableEntity[];
-  variables?: VariableEntity[];
-}
-
-interface ITableRow {
+interface TableRow {
   variable?: string;
   category?: Variable;
   [key: string]: string | Variable | undefined;
 }
-
-const findVariableData = (code: string, data: any) => {
-  if (data) {
-    const variableData = data.find(
-      (r: any) => r && r.Label && r.Label === code
-    );
-
-    return variableData;
-  }
-
-  return;
-};
-
-const processMultinominalDataHeader = (code: string, data: any) => {
-  const variableData = findVariableData(code, data);
-  if (variableData) {
-    return `${variableData.Count}`;
-  }
-
-  return;
-};
-
-const processMultinominalData = (
-  code: string,
-  categoryCode: string,
-  data: any
-) => {
-  const variableData = findVariableData(code, data);
-  if (variableData) {
-    return variableData.Frequencies[categoryCode];
-  }
-
-  return;
-};
-
-const processContinuousData = (code: string, data: any) => {
-  const variableData = findVariableData(code, data);
-  if (variableData) {
-    const mean = round(variableData.Mean, 2);
-    const min = round(variableData.Min, 2);
-    const max = round(variableData.Max, 2);
-    const std = round(variableData['Std.Err.'], 2);
-
-    return mean ? `${mean} (${min}-${max}) - std: ${std}` : '-';
-  }
-
-  return;
-};
 
 const variableTemplate = (rowData: any, column: any) => (
   <span
@@ -86,23 +33,27 @@ const variableTemplate = (rowData: any, column: any) => (
   </span>
 );
 
-const computeMinings = ({
-  minings,
+const computeResults = ({
+  summaryStatistics,
   selectedDatasets,
   variables
-}: IComputeMiningResult): ITableRow[] => {
-  const computedRows: ITableRow[] = [];
+}: {
+  summaryStatistics?: MiningResponse[];
+  selectedDatasets?: VariableEntity[];
+  variables?: VariableEntity[];
+}): TableRow[] => {
+  const computedRows: TableRow[] = [];
 
-  if (!minings || !selectedDatasets || !variables) {
+  if (!summaryStatistics || !selectedDatasets || !variables) {
     return computedRows;
   }
 
-  const rows: ITableRow[] = [];
+  const rows: TableRow[] = [];
   variables.forEach(variable => {
     const isMultinominal =
       variable.type === 'multinominal' || variable.type === 'binominal';
-    const row: ITableRow = {};
-    let polynominalRows: ITableRow[] = [];
+    const row: TableRow = {};
+    let polynominalRows: TableRow[] = [];
 
     // set labels, Variables + multinominal categories rows
     if (isMultinominal && variable.enumerations) {
@@ -123,44 +74,60 @@ const computeMinings = ({
       row.variable = variable.label;
     }
 
+    // fetch results by datasets
     selectedDatasets.forEach(dataset => {
-      // Process data
-      const code = dataset.code;
-      const mining = minings.find((m: any) => m.dataset.code === code);
-      if (mining) {
-        // console.log(mining);
-        const { error, data } = mining;
-        if (!error && !data) {
-          row[code] = 'loading...';
-          if (isMultinominal) {
-            polynominalRows = polynominalRows.map(r => ({
-              ...r,
-              [code]: 'loading...'
-            }));
-          }
-        } else if (error) {
-          row[code] = error;
-          if (isMultinominal) {
-            polynominalRows = polynominalRows.map(r => ({
-              ...r,
-              [code]: error
-            }));
-          }
-        } else if (data) {
-          if (isMultinominal) {
-            row[code] = processMultinominalDataHeader(variable.code, data);
-            polynominalRows = polynominalRows.map(r => ({
-              ...r,
-              [code]: processMultinominalData(
-                variable.code,
-                r.category!.code,
-                data
-              )
-            }));
-          } else {
-            // row[code] = JSON.stringify(data);
-            row[code] = processContinuousData(variable.code, data);
-          }
+      const datasetCode = dataset.code;
+      const mining = summaryStatistics.find(
+        (m: any) =>
+          m.data.name === datasetCode && m.data.data[0] === variable.code
+      );
+
+      if (!mining) {
+        row[datasetCode] = 'loading...';
+        if (isMultinominal) {
+          polynominalRows = polynominalRows.map(r => ({
+            ...r,
+            [datasetCode]: 'loading...'
+          }));
+        }
+      }
+
+      if (mining?.type === MIME_TYPES.WARNING) {
+        row[datasetCode] = mining?.data;
+      }
+
+      if (mining?.data) {
+        const fieldNames: [string] = mining.data.schema.fields.map(
+          (f: { name: string }) => f.name
+        );
+        const variableData = mining.data.data;
+        const get = (field: string): string | any =>
+          variableData[fieldNames.indexOf(field)];
+        const getRound = (field: string): string => round(get(field), 2);
+
+        if (!variableData) {
+          row[datasetCode] = 'No data';
+        }
+
+        if (isMultinominal) {
+          row[datasetCode] = get('Count') as string;
+          const frequencies = get('Frequencies');
+
+          polynominalRows = polynominalRows.map(r => ({
+            ...r,
+            [datasetCode]: r.category?.code
+              ? frequencies[r.category?.code]
+                ? frequencies[r.category?.code]
+                : '0'
+              : '0'
+          }));
+        } else {
+          const mean = getRound('Mean');
+          row[datasetCode] = mean
+            ? `${mean} (${getRound('Min')}-${getRound(
+                'Max'
+              )}) - std: ${getRound('Std.Err.')}`
+            : '-';
         }
       }
     });
@@ -173,7 +140,7 @@ const computeMinings = ({
 };
 
 const Table = ({
-  minings,
+  summaryStatistics,
   selectedDatasets,
   query,
   lookup
@@ -186,8 +153,8 @@ const Table = ({
       ...(query.groupings || [])
     ].map(v => lookup(v.code));
 
-  const rows = computeMinings({
-    minings,
+  const rows = computeResults({
+    summaryStatistics,
     selectedDatasets,
     variables
   });

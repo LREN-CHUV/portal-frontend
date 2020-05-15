@@ -49,8 +49,8 @@ class Filter extends React.Component<Props, State> {
 
       if (
         this.compareKeys(
-          rules.map((n: any) => n.id),
-          nextRules.map((n: any) => n.id)
+          rules && rules.map((n: any) => n.id),
+          nextRules && nextRules.map((n: any) => n.id)
         )
       ) {
         this.ref.queryBuilder({ filters: nextFilters, rules: nextRules });

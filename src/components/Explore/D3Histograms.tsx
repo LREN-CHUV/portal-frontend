@@ -5,7 +5,7 @@ import styled from 'styled-components';
 
 import { APIMining } from '../API';
 import { VariableEntity } from '../API/Core';
-import { HistogramVariable, MiningResponseShape } from '../API/Mining';
+import { HistogramVariable, MiningResponse } from '../API/Mining';
 import { ModelResponse } from '../API/Model';
 import Loading from '../UI/Loader';
 import Highchart from '../UI/Visualization/Highchart';
@@ -15,7 +15,7 @@ import renderLifeCycle from './renderLifeCycle';
 interface Props {
   apiMining: APIMining;
   handleSelectedNode: (node: HierarchyCircularNode) => void;
-  histograms: MiningResponseShape;
+  histograms: MiningResponse;
   selectedNode?: HierarchyCircularNode;
   independantsVariables: VariableEntity[] | undefined;
   zoom: Function;
