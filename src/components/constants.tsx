@@ -13,8 +13,8 @@ export enum MIME_TYPES {
 }
 
 export const LONGITUDINAL_DATASET_TYPE = 'alzheimer_fake_cohort';
-
 export const HISTOGRAMS_STORAGE_KEY = 'mipChoosenHistogramsVars';
+export const PRIVACY_ERROR = 'NOT ENOUGH DATA';
 
 export const ERRORS_OUTPUT = [
   MIME_TYPES.ERROR,

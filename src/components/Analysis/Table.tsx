@@ -10,7 +10,7 @@ import * as React from 'react';
 import { Variable, VariableEntity } from '../API/Core';
 import { MiningResponse } from '../API/Mining';
 import { Query } from '../API/Model';
-import { MIME_TYPES } from '../constants';
+import { MIME_TYPES, PRIVACY_ERROR } from '../constants';
 import Error from '../UI/Error';
 import { round } from '../utils';
 
@@ -107,9 +107,7 @@ const computeResults = ({
         mining?.type === MIME_TYPES.ERROR
       ) {
         row[datasetCode] = mining?.data?.data;
-      }
-
-      if (mining?.data) {
+      } else if (mining?.data) {
         const fieldNames: [string] = mining.data.schema.fields.map(
           (f: { name: string }) => f.name
         );
@@ -128,19 +126,24 @@ const computeResults = ({
 
           polynominalRows = polynominalRows.map(r => ({
             ...r,
-            [datasetCode]: r.category?.code
-              ? frequencies[r.category?.code]
+            [datasetCode]:
+              frequencies.constructor.name === 'Object' && r.category?.code
                 ? frequencies[r.category?.code]
-                : '0'
-              : '0'
+                  ? frequencies[r.category?.code]
+                  : '0'
+                : frequencies
           }));
         } else {
           const mean = getRound('Mean');
-          row[datasetCode] = mean
-            ? `${mean} (${getRound('Min')}-${getRound(
-                'Max'
-              )}) - std: ${getRound('Std.Err.')}`
-            : '-';
+          if (mean === PRIVACY_ERROR) {
+            row[datasetCode] = mean;
+          } else {
+            row[datasetCode] = mean
+              ? `${mean} (${getRound('Min')}-${getRound(
+                  'Max'
+                )}) - std: ${getRound('Std.Err.')}`
+              : '-';
+          }
         }
       }
     });
