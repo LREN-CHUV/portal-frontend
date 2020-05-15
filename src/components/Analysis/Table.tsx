@@ -1,16 +1,18 @@
 import 'primeicons/primeicons.css';
-import { Column } from 'primereact/column';
-import { DataTable } from 'primereact/datatable';
 import 'primereact/resources/primereact.min.css';
 import 'primereact/resources/themes/nova-light/theme.css';
+import './Table.css';
+
+import { Column } from 'primereact/column';
+import { DataTable } from 'primereact/datatable';
 import * as React from 'react';
+
 import { Variable, VariableEntity } from '../API/Core';
 import { MiningResponse } from '../API/Mining';
 import { Query } from '../API/Model';
-import Loader from '../UI/Loader';
-import { round } from '../utils';
-import './Table.css';
 import { MIME_TYPES } from '../constants';
+import Error from '../UI/Error';
+import { round } from '../utils';
 
 interface Props {
   summaryStatistics?: MiningResponse[];
@@ -100,8 +102,11 @@ const computeResults = ({
         }
       }
 
-      if (mining?.type === MIME_TYPES.WARNING) {
-        row[datasetCode] = mining?.data;
+      if (
+        mining?.type === MIME_TYPES.WARNING ||
+        mining?.type === MIME_TYPES.ERROR
+      ) {
+        row[datasetCode] = mining?.data?.data;
       }
 
       if (mining?.data) {
@@ -140,7 +145,6 @@ const computeResults = ({
       }
     });
 
-    console.log(row);
     rows.push(row);
     polynominalRows.forEach(r => rows.push(r));
   });
@@ -186,15 +190,18 @@ const Table = ({
       ]
     : [];
 
-  return <DataTable value={rows}>{columns}</DataTable>;
+  const error =
+    summaryStatistics &&
+    summaryStatistics.find(
+      (r: any) => r.type === MIME_TYPES.WARNING || r.type === MIME_TYPES.ERROR
+    );
 
-  // return rows && rows.length > 0 && columns && columns.length > 0 ? (
-  //   <DataTable value={rows}>{columns}</DataTable>
-  // ) : variables && variables.length === 0 ? (
-  //   <p>Please select a model or some variables from the previous screen</p>
-  // ) : (
-  //   <Loader />
-  // );
+  return (
+    <>
+      {error && <Error message={error.data} />}
+      {!error && <DataTable value={rows}>{columns}</DataTable>}
+    </>
+  );
 };
 
 export default Table;
