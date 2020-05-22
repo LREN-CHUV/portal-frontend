@@ -1,6 +1,6 @@
 {
   "name": "mip-portal-frontend",
-  "version": "6.2.2",
+  "version": "6.3.0",
   "private": true,
   "dependencies": {
     "@bugsnag/js": "^6.4.0",
