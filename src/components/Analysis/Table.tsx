@@ -109,6 +109,10 @@ const computeResults = ({
             const data = rowData.data;
             if (data === PRIVACY_ERROR) {
               row[datasetCode] = data;
+              polynominalRows = polynominalRows.map(r => ({
+                ...r,
+                [datasetCode]: PRIVACY_ERROR
+              }));
             } else {
               row[datasetCode] = rowData.num_datapoints;
               polynominalRows = polynominalRows.map(r => ({

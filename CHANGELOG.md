@@ -1,5 +1,10 @@
 # Changelog
 
+## 6.2.3 - 2020/05/22
+
+- Datacatalogue integration for Federation
+- New Descriptive statistics integration
+
 ## 6.2.2 - 2020/05/07
 
 - Kaplan Meier new integration
