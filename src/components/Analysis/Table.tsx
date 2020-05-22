@@ -82,16 +82,14 @@ const computeResults = ({
       row.variable = variable.label;
     }
 
+    const mining =
+      summaryStatistics &&
+      summaryStatistics.length > 0 &&
+      summaryStatistics[0].data.single;
+
     // fetch results by datasets
     selectedDatasets.forEach(dataset => {
       const datasetCode = dataset.code;
-      const mining =
-        summaryStatistics &&
-        summaryStatistics.find(
-          (m: any) =>
-            m.data.name === datasetCode && m.data.data[0] === variable.code
-        );
-
       if (!mining) {
         row[datasetCode] = 'loading...';
         if (isMultinominal) {
@@ -100,49 +98,36 @@ const computeResults = ({
             [datasetCode]: 'loading...'
           }));
         }
-      }
+      } else {
+        const rowVariable = mining[variable.code];
+        const rowData = rowVariable && rowVariable[datasetCode];
 
-      if (
-        mining?.type === MIME_TYPES.WARNING ||
-        mining?.type === MIME_TYPES.ERROR
-      ) {
-        row[datasetCode] = mining?.data?.data;
-      } else if (mining?.data) {
-        const fieldNames: [string] = mining.data.schema.fields.map(
-          (f: { name: string }) => f.name
-        );
-        const variableData = mining.data.data;
-        const get = (field: string): string | any =>
-          variableData[fieldNames.indexOf(field)];
-        const getRound = (field: string): string => round(get(field), 2);
-
-        if (!variableData) {
-          row[datasetCode] = 'No data';
-        }
-
-        if (isMultinominal) {
-          row[datasetCode] = get('Count') as string;
-          const frequencies = get('Frequencies');
-
-          polynominalRows = polynominalRows.map(r => ({
-            ...r,
-            [datasetCode]:
-              frequencies.constructor.name === 'Object' && r.category?.code
-                ? frequencies[r.category?.code]
-                  ? frequencies[r.category?.code]
-                  : '0'
-                : frequencies
-          }));
+        if (!rowData) {
+          row[datasetCode] = 'loading...';
         } else {
-          const mean = getRound('Mean');
-          if (mean === PRIVACY_ERROR) {
-            row[datasetCode] = mean;
+          if (isMultinominal) {
+            const data = rowData.data;
+            if (data === PRIVACY_ERROR) {
+              row[datasetCode] = data;
+            } else {
+              row[datasetCode] = rowData.num_datapoints;
+              polynominalRows = polynominalRows.map(r => ({
+                ...r,
+                [datasetCode]: r?.category
+                  ? rowData.data[r?.category?.code]
+                  : ''
+              }));
+            }
           } else {
-            row[datasetCode] = mean
-              ? `${mean} (${getRound('Min')}-${getRound(
-                  'Max'
-                )}) - std: ${getRound('Std.Err.')}`
-              : '-';
+            const data = rowData.data;
+            if (data === PRIVACY_ERROR) {
+              row[datasetCode] = rowData.data;
+            } else {
+              const getRound = (value: number): string => round(value, 2);
+              row[datasetCode] = `${getRound(data.mean)} (${getRound(
+                data.min
+              )} - ${getRound(data.max)}) - std: ${getRound(data.std)}`;
+            }
           }
         }
       }

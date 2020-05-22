@@ -260,7 +260,7 @@ class Mining extends Container<MiningState> {
           'Content-Type': 'application/json;charset=UTF-8'
         },
         method: 'POST',
-        uri: `${this.backendURL}/mining/descriptive_stats_v2`
+        uri: `${this.backendURL}/mining/descriptive_stats`
       });
       this.requests.push(r);
       const data = await r;
@@ -270,10 +270,9 @@ class Mining extends Container<MiningState> {
       if (json && json.error) {
         this.setState({ error: json.error, summaryStatistics: undefined });
       }
-
       const summaryStatistics = json.result.filter(
         (r: any) =>
-          r.type === MIME_TYPES.JSONDATA ||
+          r.type === MIME_TYPES.JSON ||
           r.type === MIME_TYPES.WARNING ||
           r.type === MIME_TYPES.ERROR
       );
