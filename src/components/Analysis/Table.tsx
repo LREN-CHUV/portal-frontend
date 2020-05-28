@@ -10,7 +10,7 @@ import * as React from 'react';
 import { Variable, VariableEntity } from '../API/Core';
 import { MiningResponse } from '../API/Mining';
 import { Query } from '../API/Model';
-import { MIME_TYPES, PRIVACY_ERROR } from '../constants';
+import { ERRORS_OUTPUT, PRIVACY_ERROR } from '../constants';
 import Error from '../UI/Error';
 import { round } from '../utils';
 
@@ -184,9 +184,7 @@ const Table = ({
 
   const error =
     summaryStatistics &&
-    summaryStatistics.find(
-      (r: any) => r.type === MIME_TYPES.WARNING || r.type === MIME_TYPES.ERROR
-    );
+    summaryStatistics.find((r: any) => ERRORS_OUTPUT.includes(r.type));
 
   return (
     <>

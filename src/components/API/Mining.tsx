@@ -270,11 +270,9 @@ class Mining extends Container<MiningState> {
       if (json && json.error) {
         this.setState({ error: json.error, summaryStatistics: undefined });
       }
-      const summaryStatistics = json.result.filter(
-        (r: any) =>
-          r.type === MIME_TYPES.JSON ||
-          r.type === MIME_TYPES.WARNING ||
-          r.type === MIME_TYPES.ERROR
+
+      const summaryStatistics = json.result.filter((r: any) =>
+        [MIME_TYPES.JSON, ...ERRORS_OUTPUT].includes(r.type)
       );
 
       this.setState({ error: undefined, summaryStatistics });
