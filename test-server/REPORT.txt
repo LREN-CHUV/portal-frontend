@@ -1,27 +1,28 @@
- 2020.05.27 - Integration tests result
+ 2020.05.28 - Integration tests result
  
- PASS  src/components/API/__tests__/Utils.tsx (5.707s)
- PASS  src/components/API/__tests__/Integration/ExaremeTTestOneSample.tsx (11.656s)
- PASS  src/components/API/__tests__/Integration/ExaremeTTestIndependant.test.tsx (21.446s)
- PASS  src/components/API/__tests__/Integration/ExaremeLinearRegression.test.tsx (24.346s)
- PASS  src/components/API/__tests__/Integration/ExaremeNaiveBayesTraining.test.tsx (11.437s)
- PASS  src/components/API/__tests__/Integration/ExaremePearsonCorrelation.test.tsx (12.381s)
- PASS  src/components/API/__tests__/Integration/ExaremePCA.test.tsx (13.821s)
- PASS  src/components/API/__tests__/Integration/ExaremeAnova.test.tsx (56.108s)
- PASS  src/components/API/__tests__/Integration/ExaremeCalibrationBelt.test.tsx (65.355s)
- PASS  src/components/API/__tests__/Integration/ExaremeKaplanMeier.test.tsx (28.249s)
- PASS  src/components/API/__tests__/Integration/ExaremeTTestPaired.test.tsx (11.298s)
- PASS  src/components/API/__tests__/Integration/ExaremeKMeans.test.tsx (97.674s)
- PASS  src/components/API/__tests__/Integration/ExaremeLogisticRegression.test.tsx (98.935s)
- PASS  src/components/API/__tests__/Integration/ExaremeCart.test.tsx (95.553s)
- PASS  src/components/API/__tests__/Integration/ExaremeMultipleHistograms.test.tsx (14.958s)
- PASS  src/components/API/__tests__/Integration/ExaremeID3.test.tsx (89.319s)
+  PASS  src/components/API/__tests__/Utils.tsx (5.125s)
+ PASS  src/components/API/__tests__/Integration/ExaremeTTestOneSample.tsx (10.449s)
+ PASS  src/components/API/__tests__/Integration/ExaremeTTestIndependant.test.tsx (19.535s)
+ PASS  src/components/API/__tests__/Integration/ExaremeLinearRegression.test.tsx (22.804s)
+ PASS  src/components/API/__tests__/Integration/ExaremeNaiveBayesTraining.test.tsx (9.505s)
+ PASS  src/components/API/__tests__/Integration/ExaremePearsonCorrelation.test.tsx (10.551s)
+ PASS  src/components/API/__tests__/Integration/ExaremePCA.test.tsx (14.129s)
+ PASS  src/components/API/__tests__/Integration/ExaremeAnova.test.tsx (50.411s)
+ PASS  src/components/API/__tests__/Integration/ExaremeCalibrationBelt.test.tsx (58.819s)
+ PASS  src/components/API/__tests__/Integration/ExaremeKaplanMeier.test.tsx (17.276s)
+ PASS  src/components/API/__tests__/Integration/ExaremeTTestPaired.test.tsx (7.053s)
+ PASS  src/components/API/__tests__/Integration/ExaremeKMeans.test.tsx (72.357s)
+ PASS  src/components/API/__tests__/Integration/ExaremeLogisticRegression.test.tsx (73.386s)
+ PASS  src/components/API/__tests__/Integration/ExaremeCart.test.tsx (81.813s)
+ PASS  src/components/API/__tests__/Integration/ExaremeMultipleHistograms.test.tsx (13.577s)
+ PASS  src/components/API/__tests__/Integration/ExaremeID3.test.tsx (79.922s)
  PASS  src/components/API/__tests__/Integration/Core.test.tsx
- PASS  src/components/API/__tests__/Integration/GalaxyNaiveBayesCrossValidation.test.tsx (61.067s)
- PASS  src/components/API/__tests__/Integration/ExaremeHistograms.test.tsx (10.017s)
+ PASS  src/components/API/__tests__/Integration/ExaremeHistograms.test.tsx (8.207s)
+ PASS  src/components/API/__tests__/Integration/GalaxyNaiveBayesCrossValidation.test.tsx (58.319s)
 
 Test Suites: 19 passed, 19 total
 Tests:       58 passed, 58 total
 Snapshots:   0 total
-Time:        248.532s
+Time:        208.79s
+
 
