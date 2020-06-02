@@ -8,7 +8,13 @@ import HelpButton from './HelpButton';
 
 const ContentBox = styled.div`
   height: 100vh;
-  background-color: #181818;
+  background: rgb(36, 36, 36);
+  background: radial-gradient(
+    circle,
+    rgba(36, 36, 36, 1) 0%,
+    rgba(51, 51, 51, 1) 32%,
+    rgba(34, 34, 34, 1) 100%
+  );
 
   display: flex;
   flex-direction: column;
