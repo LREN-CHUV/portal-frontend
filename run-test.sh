@@ -15,14 +15,11 @@ run_test() {
     if [ "$answer" = "y" ]; then
         echo
         echo -e "Stop running containers"
-        sudo ./test-server/mip-deployment/stop.sh
+        sudo ./test-server/mip-deployment/mip stop --quiet
 
         echo
         echo -e "Start MIP for testing"
-        cp ./test-server/run-testing.sh ./test-server/mip-deployment/run.sh
-        cd ./test-server/mip-deployment
-        sed -i 's/AUTHENTICATION: 1/AUTHENTICATION: 0/g' docker-compose.yml
-        sudo ./run.sh
+        sudo ./test-server/mip-deployment/mip start --quiet
 
         echo
         echo -e "Waiting 2m for containers to be up"
