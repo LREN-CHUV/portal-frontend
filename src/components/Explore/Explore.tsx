@@ -76,10 +76,19 @@ const ModelTitle = styled.div`
   }
 `;
 
-const style = {
-  display: 'flex',
-  justifyContent: 'space-between'
-};
+const Grid = styled.div`
+  display: flex;
+  justify-content: center;
+`;
+
+const Col2 = styled.div`
+  flex: 1;
+`;
+
+const Col1 = styled(Col2)`
+  margin-right: 8px;
+  flex: 1;
+`;
 
 export interface ExploreProps {
   apiCore: APICore;
@@ -136,8 +145,8 @@ export default (props: ExploreProps): JSX.Element => {
 
   return (
     <>
-      <div style={style}>
-        <div style={{ flex: 1, marginRight: '8px' }}>
+      <Grid>
+        <Col1>
           <Panel>
             <DataSelectionBox>
               <PathologiesBox>
@@ -178,9 +187,9 @@ export default (props: ExploreProps): JSX.Element => {
               {children}
             </Panel.Body>
           </Panel>
-        </div>
-        <div style={{ flex: 1, maxWidth: '800px' }}>
-          <Panel className="statistics">
+        </Col1>
+        <Col2>
+          <Panel>
             <PanelTitle>
               <h3>{selectedNode && selectedNode.data.label}</h3>
               <Button bsStyle="info" type="submit" onClick={handleGoToAnalysis}>
@@ -296,8 +305,8 @@ export default (props: ExploreProps): JSX.Element => {
               />
             </Panel.Body>
           </Panel>
-        </div>
-      </div>
+        </Col2>
+      </Grid>
     </>
   );
 };
