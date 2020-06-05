@@ -59,8 +59,11 @@ const ActionBar = styled.div`
 `;
 
 const AlertBox = styled(Alert)`
-  position: relative;
-  margin: 16px;
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: 800px;
 `;
 
 const Columns = styled.div`
@@ -119,11 +122,12 @@ export default ({
       </ActionBar>
       <main>
         {forbidden && (
-          <AlertBox bsStyle="danger">
-            <strong>ACCESS DENIED</strong> You do not have the correct
-            authorization to enter the Medical Informatics Platform. Please
-            contact your administrator or search for support in the help menu
-            above.
+          <AlertBox bsStyle="success">
+            Connection SUCCESSFUL! Despite of this, it appears that you
+            currently don&lsquo;t have enough privileges to browse this
+            platform. Please contact the{' '}
+            <a href="mailto:support@ebrains.eu">Support Team</a>{' '}
+            (support@ebrains.eu) if you think you should have access.
           </AlertBox>
         )}
         <Logo alt="HBP logo" title={'Human Brain Project'} src={HBPLogo} />
