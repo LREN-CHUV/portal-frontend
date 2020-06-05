@@ -8,6 +8,7 @@ import Heatmap from 'highcharts/modules/heatmap.js';
 import SeriesLabel from 'highcharts/modules/series-label.js';
 import Annotations from 'highcharts/modules/annotations';
 import * as React from 'react';
+import styled from 'styled-components';
 
 HCMore(Highcharts);
 Heatmap(Highcharts);
@@ -16,10 +17,30 @@ Exporting(Highcharts);
 SeriesLabel(Highcharts);
 Annotations(Highcharts);
 
+export const StyledMyChart = styled.div`
+  margin: 1rem auto;
+  width: 600px;
+`;
+
 export default ({
-  options
+  options,
+  constraint = false
 }: {
   options: Highcharts.Options | any;
+  constraint?: boolean;
 }): JSX.Element => (
-  <HighchartsReact highcharts={Highcharts} options={options} />
+  <>
+    {constraint && (
+      <StyledMyChart>
+        <HighchartsReact
+          containerProps={{ style: { height: '600px', width: '600px' } }}
+          highcharts={Highcharts}
+          options={options}
+        />
+      </StyledMyChart>
+    )}
+    {!constraint && (
+      <HighchartsReact highcharts={Highcharts} options={options} />
+    )}
+  </>
 );

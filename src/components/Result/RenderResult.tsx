@@ -37,7 +37,7 @@ export default ({
                   <JSONData data={result.data} />
                 )}
                 {result.type === MIME_TYPES.HIGHCHARTS && (
-                  <Highchart options={result.data} />
+                  <Highchart options={result.data} constraint={true} />
                 )}
                 {result.type === MIME_TYPES.JSONBTREE && (
                   <BinaryTree data={result.data} />
