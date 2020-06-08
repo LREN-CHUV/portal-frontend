@@ -38,14 +38,17 @@ const Content = ({
               {(!selectedDatasets || selectedDatasets.length === 0) && (
                 <p>Please, select a dataset</p>
               )}
-              {selectedDatasets && selectedDatasets.length > 0 && (
-                <Table
-                  summaryStatistics={apiMining.state.summaryStatistics}
-                  selectedDatasets={selectedDatasets}
-                  query={model && model.query}
-                  lookup={lookup}
-                />
-              )}
+
+              {selectedDatasets &&
+                selectedDatasets.length > 0 &&
+                model?.query.variables && (
+                  <Table
+                    summaryStatistics={apiMining.state.summaryStatistics}
+                    selectedDatasets={selectedDatasets}
+                    query={model && model.query}
+                    lookup={lookup}
+                  />
+                )}
             </Panel.Body>
           </Panel>
         </Panel.Body>

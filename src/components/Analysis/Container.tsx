@@ -52,7 +52,7 @@ const Container = ({
 
     apiMining.clear();
 
-    if (datasets && query) {
+    if (datasets && query && query?.variables && query?.variables?.length > 0) {
       const payload: MiningPayload = {
         covariables: query.coVariables ? query.coVariables : [],
         datasets,
