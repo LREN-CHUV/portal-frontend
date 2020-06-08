@@ -35,10 +35,6 @@ class AppContainer extends React.Component<any, State> {
   public async componentDidMount(): Promise<
     [void, void, void, void, void, void] | void
   > {
-    // if (process.env.NODE_ENV === 'production') {
-    this.intervalId = setInterval(() => this.apiExperiment.all(), 10 * 1000);
-    // }
-
     // Conf written by dockerize
     let appConfig: AppConfig;
     const response = await fetch(`${webURL}/static/config.json`);
@@ -67,6 +63,17 @@ class AppContainer extends React.Component<any, State> {
     if (this.apiUser.state.authenticated) {
       const username =
         this.apiUser.state.user && this.apiUser.state.user.username;
+
+      // Experiments polling and auth by interval
+      this.intervalId = setInterval(() => {
+        this.apiUser.user().then(() => {
+          if (this.apiUser.state.authenticated) {
+            this.apiExperiment.all();
+          } else {
+            clearInterval(this.intervalId);
+          }
+        });
+      }, 10 * 1000);
 
       return await Promise.all([
         this.apiUser.profile({ username }),
