@@ -129,6 +129,7 @@ export interface State {
   articles?: Article[];
   stats?: Stats;
   galaxy?: GalaxyConfig;
+  variablesForPathology?: { [key: string]: VariableEntity[] };
 }
 
 class Core extends Container<State> {
@@ -155,45 +156,30 @@ class Core extends Container<State> {
     }
   };
 
-  // FIXME: those infos should be in the frontend model
+  // TODO: those infos should be reconciliated in the model when the fetch occurs
+  // At the moment, the model is storing only variable codes
   public lookup = (
     code: string,
     pathologyCode: string | undefined
   ): VariableEntity => {
-    const variables = this.variablesForPathology(pathologyCode);
-
-    if (variables) {
-      const originalVar =
-        variables &&
-        variables.find((variable: VariableEntity) => variable.code === code);
-
-      return this.formatLookup(code, originalVar);
+    if (!pathologyCode) {
+      return { code, label: code, info: code };
     }
-    // else {
-    //   const pathologyJSON = this.state.pathologyJSON;
-    //   if (pathologyJSON) {
-    //     let variables: any = [];
 
-    //     const dummyAccumulator = (node: any) => {
-    //       if (node.variables) {
-    //         variables = [...variables, ...node.variables];
-    //       }
+    const variablesForPathology = this.state.variablesForPathology;
 
-    //       if (node.groups) {
-    //         return node.groups.map(dummyAccumulator);
-    //       }
-    //     };
+    if (!variablesForPathology) {
+      return { code, label: code, info: code };
+    } else {
+      const variables = variablesForPathology[pathologyCode];
+      if (variables) {
+        const originalVar =
+          variables &&
+          variables.find((variable: VariableEntity) => variable.code === code);
 
-    //     pathologyJSON.map(p => dummyAccumulator(p.metadataHierarchy));
-    //     this.setState({ variables });
-
-    //     const originalVar =
-    //       variables &&
-    //       variables.find((variable: any) => variable.code === code);
-
-    //     return this.formatLookup(code, originalVar);
-    //   }
-    // }
+        return this.formatLookup(code, originalVar);
+      }
+    }
 
     return { code, label: code, info: code };
   };
@@ -254,6 +240,14 @@ class Core extends Container<State> {
     const pathologyJSON = this.state.pathologyJSON;
     if (code && pathologyJSON) {
       const pathology = pathologyJSON.find(p => p.code === code);
+
+      // Set a cache for the flat variable lookup function
+      const fetchedVariables = this.variablesForPathology(code);
+      if (fetchedVariables) {
+        this.setState({
+          variablesForPathology: { [code]: fetchedVariables }
+        });
+      }
 
       return pathology && pathology.metadataHierarchy;
     }

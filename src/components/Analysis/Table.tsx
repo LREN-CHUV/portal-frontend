@@ -265,7 +265,6 @@ const Table = ({
       ...(query.groupings || [])
     ].map(v => lookup(v.code, query?.pathology));
 
-  console.log(variables);
   const rows = computeSingleResults({
     summaryStatistics,
     selectedDatasets,
