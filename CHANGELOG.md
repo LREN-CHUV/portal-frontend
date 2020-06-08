@@ -1,5 +1,35 @@
 # Changelog
 
+## 6.3.3 - 2020/06/08
+
+- Fixed scaling of containers for browser resizing or large screen [#174](https://redmine.hbpmip.link/issues/174)
+  - Needs a refactoring of current Highchart implementation
+- Highcharts lib update
+- Refactored variable lookup function, Bubbles should react faster
+- Fix for stalled session [#176](https://redmine.hbpmip.link/issues/176)
+- Fix for missing datastests on saved models [#162](https://redmine.hbpmip.link/issues/162)
+- Fix for wrong dataset selection [#175](https://redmine.hbpmip.link/issues/175)
+- New error message when user don't have access to roles/pathologies [#153](https://redmine.hbpmip.link/issues/153)
+- Added link to MIP website for requesting access [#6](https://redmine.hbpmip.link/issues/6)
+- No more unecessary call if not logged in [#24](https://redmine.hbpmip.link/issues/24)
+- Cleanup CSS / removed unused code
+
+## 6.3.2 - 2020/06/02
+
+- UI splash Radial background
+- Fixed error handling for stats
+- Mip deployment fixes
+
+## 6.3.1 - 2020/05/28
+
+- Updated MIP deployment test server with python deployment
+
+## 6.3.0 - 2020/05/22
+
+- New statistics fixes
+- Filter fixes
+- Error handling for tables
+
 ## 6.2.3 - 2020/05/22
 
 - Datacatalogue integration for Federation
