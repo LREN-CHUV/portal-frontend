@@ -139,7 +139,11 @@ class Container extends React.Component<Props, State> {
       if (slug) {
         apiCore.setLookupVariablesForPathology(model?.query?.pathology);
 
-        return await apiModel.one(slug);
+        return await apiModel.one(model.slug).then(() => {
+          apiModel.checkModelDatasets(
+            apiCore.datasetsForPathology(apiModel.state.model?.query?.pathology)
+          );
+        });
       }
     }
   };

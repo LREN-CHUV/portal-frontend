@@ -108,7 +108,12 @@ const Container = ({
     if (model) {
       setShouldReload(true);
       apiCore.setLookupVariablesForPathology(model?.query?.pathology);
-      await apiModel.setModel(model);
+
+      return await apiModel.one(model.slug).then(() => {
+        apiModel.checkModelDatasets(
+          apiCore.datasetsForPathology(apiModel.state.model?.query?.pathology)
+        );
+      });
     }
   };
 

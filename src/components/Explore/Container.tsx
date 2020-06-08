@@ -333,7 +333,11 @@ export default ({
 
   const handleSelectModel = (nextModel?: ModelResponse): void => {
     if (nextModel && nextModel.slug) {
-      apiModel.one(nextModel.slug);
+      apiModel.one(nextModel.slug).then(() => {
+        apiModel.checkModelDatasets(
+          apiCore.datasetsForPathology(apiModel.state.model?.query?.pathology)
+        );
+      });
     } else {
       const model = apiModel.state.model;
       if (model) {

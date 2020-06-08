@@ -57,6 +57,30 @@ class Model extends Container<ModelState> {
     this.baseUrl = `${backendURL}/models`;
   }
 
+  // Check if the model's datasets have been removed in the API
+  public checkModelDatasets = (
+    currentDatasets: VariableEntity[] | undefined
+  ): void => {
+    const datasetCodes = currentDatasets?.map(d => d.code);
+    const model = this.state.model;
+
+    if (model) {
+      const query = model?.query;
+      const trainingDatasets = query?.trainingDatasets?.map(t => t.code);
+      if (
+        datasetCodes?.sort().toString() !== trainingDatasets?.sort().toString()
+      ) {
+        const updatedDatasets = query?.trainingDatasets?.filter(t =>
+          datasetCodes?.includes(t.code)
+        );
+
+        model.query.trainingDatasets = updatedDatasets;
+
+        this.update({ model });
+      }
+    }
+  };
+
   public setModel = async (model?: ModelResponse): Promise<void> => {
     return await this.setState({
       model
