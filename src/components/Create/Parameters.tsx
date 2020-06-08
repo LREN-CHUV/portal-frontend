@@ -56,7 +56,7 @@ const Parameters = ({
     const vars =
       categoricalVariables &&
       categoricalVariables
-        .map(v => lookupCallback(v.code))
+        .map(v => lookupCallback(v.code, query?.pathology))
         .filter(v => v.type === 'multinominal' || v.type === 'binominal');
 
     const first = (vars && vars.length && vars[0]) || undefined;
@@ -251,7 +251,8 @@ const Parameters = ({
                           {apiCore
                             .lookup(
                               query?.variables?.find((v, i) => i === 0)?.code ||
-                                ''
+                                '',
+                              query?.pathology
                             )
                             ?.enumerations?.map((v: VariableEntity) => (
                               <option key={v.code} value={v.code}>

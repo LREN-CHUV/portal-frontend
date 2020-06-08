@@ -10,7 +10,7 @@ interface Props {
   apiMining?: APIMining;
   model?: ModelResponse;
   selectedDatasets?: VariableEntity[];
-  lookup: (code: string) => VariableEntity;
+  lookup: (code: string, pathologyCode: string | undefined) => VariableEntity;
   children: any;
 }
 

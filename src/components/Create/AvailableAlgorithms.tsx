@@ -35,22 +35,24 @@ const AvailableAlgorithms = ({
 }: {
   algorithms: Algorithm[] | undefined;
   layout?: string;
-  lookup: (code: string) => VariableEntity;
+  lookup: (code: string, pathologyCode: string | undefined) => VariableEntity;
   handleSelectMethod?: (method: Algorithm) => void;
   apiModel: APIModel;
 }): JSX.Element => {
   const query = apiModel.state.model?.query;
   const modelVariable =
-    (query && query.variables && query.variables.map(v => lookup(v.code))) ||
+    (query &&
+      query.variables &&
+      query.variables.map(v => lookup(v.code, query.pathology))) ||
     [];
   const modelCovariables = [
     ...((query &&
       query.coVariables &&
-      query.coVariables.map(v => lookup(v.code))) ||
+      query.coVariables.map(v => lookup(v.code, query?.pathology))) ||
       []),
     ...((query &&
       query.groupings &&
-      query.groupings.map(v => lookup(v.code))) ||
+      query.groupings.map(v => lookup(v.code, query?.pathology))) ||
       [])
   ];
 

@@ -46,7 +46,7 @@ export default ({
     const vars =
       categoricalVariables &&
       categoricalVariables
-        .map(v => lookupCallback(v.code))
+        .map(v => lookupCallback(v.code, query?.pathology))
         .filter(v => v.type === 'multinominal' || v.type === 'binominal');
 
     setCategories(vars);

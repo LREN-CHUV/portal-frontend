@@ -128,7 +128,6 @@ export interface State {
   article?: Article;
   articles?: Article[];
   stats?: Stats;
-  variables?: VariableEntity[];
   galaxy?: GalaxyConfig;
 }
 
@@ -144,7 +143,10 @@ class Core extends Container<State> {
     this.backendURL = backendURL;
   }
 
-  formatLookup = (code: string, originalVar: VariableEntity | undefined) => {
+  formatLookup = (
+    code: string,
+    originalVar: VariableEntity | undefined
+  ): VariableEntity => {
     if (originalVar) {
       const info = `${originalVar.label} (${originalVar.type})`;
       return { ...originalVar, info };
@@ -154,8 +156,11 @@ class Core extends Container<State> {
   };
 
   // FIXME: those infos should be in the frontend model
-  public lookup = (code: string): VariableEntity => {
-    const variables = this.state.variables;
+  public lookup = (
+    code: string,
+    pathologyCode: string | undefined
+  ): VariableEntity => {
+    const variables = this.variablesForPathology(pathologyCode);
 
     if (variables) {
       const originalVar =
@@ -163,31 +168,32 @@ class Core extends Container<State> {
         variables.find((variable: VariableEntity) => variable.code === code);
 
       return this.formatLookup(code, originalVar);
-    } else {
-      const pathologyJSON = this.state.pathologyJSON;
-      if (pathologyJSON) {
-        let variables: any = [];
-
-        const dummyAccumulator = (node: any) => {
-          if (node.variables) {
-            variables = [...variables, ...node.variables];
-          }
-
-          if (node.groups) {
-            return node.groups.map(dummyAccumulator);
-          }
-        };
-
-        pathologyJSON.map(p => dummyAccumulator(p.metadataHierarchy));
-        this.setState({ variables });
-
-        const originalVar =
-          variables &&
-          variables.find((variable: any) => variable.code === code);
-
-        return this.formatLookup(code, originalVar);
-      }
     }
+    // else {
+    //   const pathologyJSON = this.state.pathologyJSON;
+    //   if (pathologyJSON) {
+    //     let variables: any = [];
+
+    //     const dummyAccumulator = (node: any) => {
+    //       if (node.variables) {
+    //         variables = [...variables, ...node.variables];
+    //       }
+
+    //       if (node.groups) {
+    //         return node.groups.map(dummyAccumulator);
+    //       }
+    //     };
+
+    //     pathologyJSON.map(p => dummyAccumulator(p.metadataHierarchy));
+    //     this.setState({ variables });
+
+    //     const originalVar =
+    //       variables &&
+    //       variables.find((variable: any) => variable.code === code);
+
+    //     return this.formatLookup(code, originalVar);
+    //   }
+    // }
 
     return { code, label: code, info: code };
   };
@@ -255,7 +261,9 @@ class Core extends Container<State> {
     return undefined;
   };
 
-  public variablesForPathology = (code: string | undefined) => {
+  public variablesForPathology = (
+    code: string | undefined
+  ): VariableEntity[] | undefined => {
     const pathologyJSON = this.state.pathologyJSON;
     if (code && pathologyJSON) {
       const pathology = pathologyJSON.find(p => p.code === code);

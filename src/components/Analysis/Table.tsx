@@ -18,7 +18,7 @@ interface Props {
   summaryStatistics?: MiningResponse[];
   selectedDatasets?: Variable[];
   query?: Query;
-  lookup: (code: string) => VariableEntity;
+  lookup: (code: string, pathologyCode: string | undefined) => VariableEntity;
 }
 
 interface TableRow {
@@ -263,8 +263,9 @@ const Table = ({
       ...(query.variables || []),
       ...(query.coVariables || []),
       ...(query.groupings || [])
-    ].map(v => lookup(v.code));
+    ].map(v => lookup(v.code, query?.pathology));
 
+  console.log(variables);
   const rows = computeSingleResults({
     summaryStatistics,
     selectedDatasets,
