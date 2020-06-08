@@ -52,6 +52,7 @@
   border-radius: 4px 4px 0 0;
   background-color: #fff;
   text-transform: capitalize;
+  border-bottom: 1px solid #ddd;
 }
 
 .Model .content .nav-tabs li.active a,
@@ -59,10 +60,11 @@
 .Model .content .nav-tabs li.active a:hover {
   color: #616161;
   font-weight: 700;
+  border-bottom: 1px solid transparent;
 }
 
 .Model .content .tab-pane {
-  border: 0.5px #eeeeee solid;
+  /* border: 1px #eeeeee solid; */
   padding: 1em;
 }
 

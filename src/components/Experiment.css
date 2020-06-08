@@ -75,6 +75,7 @@
   border-radius: 4px 4px 0 0;
   background-color: #fff;
   text-transform: capitalize;
+  border-bottom: 1px solid #ddd;
 }
 
 .Experiment .content .nav-tabs li.active a,
@@ -82,10 +83,10 @@
 .Experiment .content .nav-tabs li.active a:hover {
   color: #616161;
   font-weight: 700;
+  border-bottom: 1px solid transparent;
 }
 
 .Experiment .content .tab-pane {
-  border: 0.5px #eeeeee solid;
   padding: 1em;
 }
 
