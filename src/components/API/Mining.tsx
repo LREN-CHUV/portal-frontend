@@ -221,6 +221,16 @@ class Mining extends Container<MiningState> {
   }: {
     payload: MiningPayload;
   }): Promise<any> => {
+    const y = [
+      ...payload.variables,
+      ...payload.covariables,
+      ...payload.grouping
+    ].map(v => v.code);
+
+    if (y?.length === 0) {
+      return;
+    }
+
     const parameters: Parameter[] = [
       {
         name: 'dataset',
@@ -230,13 +240,7 @@ class Mining extends Container<MiningState> {
       {
         name: 'y',
         label: 'y',
-        value: [
-          ...payload.variables,
-          ...payload.covariables,
-          ...payload.grouping
-        ]
-          .map(v => v.code)
-          .toString()
+        value: y.toString()
       },
       {
         name: 'filter',

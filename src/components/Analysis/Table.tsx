@@ -47,12 +47,12 @@ const computeSingleResults = ({
   const computedRows: TableRow[] = [];
 
   if (!variables || variables.length === 0) {
-    computedRows.push({ variable: 'Select some variables' });
+    computedRows.push({ variable: 'Please, select some variables' });
     return computedRows;
   }
 
   if (!selectedDatasets) {
-    computedRows.push({ variable: 'Select a dataset' });
+    computedRows.push({ variable: 'Please, select a dataset' });
     return computedRows;
   }
 
