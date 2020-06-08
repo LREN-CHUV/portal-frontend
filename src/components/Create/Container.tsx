@@ -135,8 +135,10 @@ class Container extends React.Component<Props, State> {
   private handleSelectModel = async (model?: ModelResponse): Promise<void> => {
     if (model) {
       const { slug } = model;
-      const { apiModel } = this.props;
+      const { apiModel, apiCore } = this.props;
       if (slug) {
+        apiCore.setLookupVariablesForPathology(model?.query?.pathology);
+
         return await apiModel.one(slug);
       }
     }

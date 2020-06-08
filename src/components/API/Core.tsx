@@ -234,20 +234,41 @@ class Core extends Container<State> {
     return undefined;
   };
 
+  // Set a cache for the flat variable lookup function
+  public setLookupVariablesForPathology = (
+    pathologyCode: string | undefined
+  ): VariableEntity[] | undefined => {
+    if (!pathologyCode) {
+      return;
+    }
+
+    const variablesForPathology = this.state.variablesForPathology;
+
+    if (
+      !variablesForPathology ||
+      (variablesForPathology && !variablesForPathology[pathologyCode])
+    ) {
+      const fetchedVariables = this.variablesForPathology(pathologyCode);
+      if (fetchedVariables) {
+        this.setState({
+          variablesForPathology: {
+            [pathologyCode]: fetchedVariables
+          }
+        });
+      }
+      return fetchedVariables;
+    }
+
+    return variablesForPathology[pathologyCode];
+  };
+
   public hierarchyForPathology = (
     code: string | undefined
   ): Hierarchy | undefined => {
     const pathologyJSON = this.state.pathologyJSON;
     if (code && pathologyJSON) {
       const pathology = pathologyJSON.find(p => p.code === code);
-
-      // Set a cache for the flat variable lookup function
-      const fetchedVariables = this.variablesForPathology(code);
-      if (fetchedVariables) {
-        this.setState({
-          variablesForPathology: { [code]: fetchedVariables }
-        });
-      }
+      this.setLookupVariablesForPathology(code);
 
       return pathology && pathology.metadataHierarchy;
     }

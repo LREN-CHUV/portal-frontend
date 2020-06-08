@@ -107,6 +107,7 @@ const Container = ({
   const handleSelectModel = async (model?: ModelResponse): Promise<void> => {
     if (model) {
       setShouldReload(true);
+      apiCore.setLookupVariablesForPathology(model?.query?.pathology);
       await apiModel.setModel(model);
     }
   };
