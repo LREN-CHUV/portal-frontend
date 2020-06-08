@@ -27,7 +27,7 @@ interface Props {
   selectedSlug?: string;
   items?: ModelResponse[];
   handleSelectModel?: (model?: ModelResponse) => void;
-  lookup: (code: string) => VariableEntity;
+  lookup: (code: string, pathologyCode: string | undefined) => VariableEntity;
 }
 
 class Model extends React.Component<Props> {
@@ -70,7 +70,7 @@ class Model extends React.Component<Props> {
               {query.variables && <Subtitle>Variables</Subtitle>}
               {query.variables &&
                 query.variables.map((v: any) => (
-                  <var key={v.code}>{lookup(v.code).info}</var>
+                  <var key={v.code}>{lookup(v.code, query.pathology).info}</var>
                 ))}
               {((query.coVariables && query.coVariables.length > 0) ||
                 (query.groupings && query.groupings.length > 0)) && (
@@ -79,12 +79,12 @@ class Model extends React.Component<Props> {
               {query.coVariables &&
                 query.coVariables.length > 0 &&
                 query.coVariables.map((v: any) => (
-                  <var key={v.code}>{lookup(v.code).info}</var>
+                  <var key={v.code}>{lookup(v.code, query.pathology).info}</var>
                 ))}
               {query.groupings &&
                 query.groupings.length > 0 &&
                 query.groupings.map((v: any) => (
-                  <var key={v.code}>{lookup(v.code).info}</var>
+                  <var key={v.code}>{lookup(v.code, query.pathology).info}</var>
                 ))}
               {query.filters && <Subtitle>Filters</Subtitle>}
               {query.filters && this.formatFilter(query.filters)}
@@ -116,8 +116,9 @@ class Model extends React.Component<Props> {
 
   private formatFilter = (filter: any) => {
     // TODO: refactor
-    const { lookup } = this.props;
+    const { lookup, model } = this.props;
     const humanRules: any = [];
+    const pathologyCode = model?.query?.pathology;
     try {
       const json = JSON.parse(filter);
 
@@ -130,9 +131,9 @@ class Model extends React.Component<Props> {
           }
 
           humanRules.push({
-            data: `${lookup(rule.field).label} ${this.ruleOperator(
-              rule.operator
-            )} ${rule.value}`,
+            data: `${
+              lookup(rule.field, pathologyCode).label
+            } ${this.ruleOperator(rule.operator)} ${rule.value}`,
             level
           });
           if (index < data.rules.length - 1) {
