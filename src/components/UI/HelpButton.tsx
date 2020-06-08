@@ -44,7 +44,7 @@ export default ({ showTraining }: { showTraining?: boolean }): JSX.Element => {
         <MenuItem
           // tslint:disable-next-line jsx-no-lambda
           onSelect={() => {
-            window.open('https://hbpmedical.github.io/documentation/');
+            window.open('https://mip.ebrains.eu/documentation/');
           }}
         >
           <Glyphicon glyph="book" /> MIP Documentation
@@ -58,9 +58,7 @@ export default ({ showTraining }: { showTraining?: boolean }): JSX.Element => {
         )}
         <li>
           <Glyphicon glyph="envelope" /> Email us at{' '}
-          <a href="mailto://support@humanbrainproject.eu">
-            support@humanbrainproject.eu
-          </a>
+          <a href="mailto://support@ebrains.eu">support@ebrains.eu</a>
         </li>
         <Helpdesk />
       </DropdownButton>

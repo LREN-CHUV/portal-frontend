@@ -7,7 +7,7 @@ import { backendURL } from '../API';
 import HelpButton from './HelpButton';
 
 const ContentBox = styled.div`
-  height: 100vh;
+  min-height: 100vh;
   background: rgb(36, 36, 36);
   background: radial-gradient(
     circle,
@@ -55,7 +55,7 @@ const ActionBar = styled.div`
   display: flex;
   justify-content: space-between;
   margin: 0;
-  padding: 16px;
+  margin: 16px;
 `;
 
 const AlertBox = styled(Alert)`
@@ -64,6 +64,17 @@ const AlertBox = styled(Alert)`
   left: 50%;
   transform: translateX(-50%);
   max-width: 800px;
+`;
+
+const LoginBox = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  button {
+    flex: 1 0 0%;
+    min-height: 34px;
+    margin-bottom: 1rem;
+  }
 `;
 
 const Columns = styled.div`
@@ -116,9 +127,14 @@ export default ({
         <div style={{ left: 100 }}>
           <HelpButton />
         </div>
-        <Button onClick={handleLoginPress} bsStyle="info" type="submit">
-          Login
-        </Button>
+        <LoginBox>
+          <Button onClick={handleLoginPress} bsStyle="info" type="submit">
+            Login
+          </Button>
+          <p>
+            <a href="https://mip.ebrains.eu/access">Request Access</a>
+          </p>
+        </LoginBox>
       </ActionBar>
       <main>
         {forbidden && (
