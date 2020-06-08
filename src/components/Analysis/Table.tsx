@@ -312,7 +312,7 @@ const Table = ({
           const total = (sum && sum.num_datapoints) || '';
           return (
             <Column
-              header={`${dataset.label || dataset.code} (${total})`}
+              header={`${dataset.label || dataset.code} (${total || 0})`}
               field={dataset.code}
               key={dataset.code}
             />
