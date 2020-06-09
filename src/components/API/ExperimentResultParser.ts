@@ -71,20 +71,6 @@ class APIAdapter {
       return experimentResponse;
     }
 
-    if (!experiment.result) {
-      const elapsed: number =
-        (new Date().getTime() - experimentResponse.created.getTime()) / 1000;
-
-      if (elapsed > 60 * 5) {
-        experimentResponse = {
-          ...experimentResponse,
-          error: 'Timeout after 5 mn'
-        };
-      }
-
-      return experimentResponse;
-    }
-
     try {
       const resultParsed = parse(experiment.result);
       const flattenedResults =
