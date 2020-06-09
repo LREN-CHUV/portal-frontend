@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import { round } from '../../utils';
 
-const nodeRectSize = { width: 240, height: 80 };
+const nodeRectSize = { width: 192, height: 64 };
 const fixedSize = { w: 800, h: 1000 };
 
 const SVGContainer = styled.div`
@@ -41,23 +41,22 @@ interface Node {
   info?: NodeData;
 }
 
-interface JSONNode extends Partial<NodeData> {
+interface JSONNode {
   right: JSONNode | string;
   left: JSONNode | string;
   colName: string;
   threshold: number;
   gain: number | string;
-  samplesPerClass: object;
   class: string;
+  criterion: string;
+  classValue: number | string;
 }
 
 interface NodeData {
   isRight: string;
   variable: string;
-  criterion: string;
-  samples: string;
-  value: string;
-  class: string;
+  criterion: { y: number; text: string };
+  class: { y: number; text: string };
 }
 
 interface NodeAttribute {
@@ -94,26 +93,42 @@ const makeNodes = (data: JSONNode): Node[] | undefined => {
   return children;
 };
 
-const makeNodeData = (data: JSONNode, isRight: boolean): NodeData => ({
-  isRight: isRight ? 'True' : 'False',
-  variable:
-    (data.colName !== 'None' &&
-      `${data.colName} <= ${round(data.threshold, 3)}`) ||
-    '',
-  criterion:
-    (data.gain !== 'None' &&
-      `${data.criterion} = ${round(data.gain as number, 3)}`) ||
-    '',
-  samples: `samples = ${data.samples}`,
-  value: `value = [${Object.values(data.samplesPerClass).toString()}]`,
-  class: `class = ${data.class.replace('u', '')}`
-});
+const makeNodeData = (data: JSONNode, isRight: boolean): NodeData => {
+  const variable =
+    data.colName !== 'None'
+      ? `${data.colName} <= ${round(data.threshold, 3)}`
+      : '';
+
+  const criterion =
+    data.gain !== 'None'
+      ? {
+          y: variable !== '' ? 14 : 0,
+          text: `${data.criterion} = ${round(data.gain as number, 3)}`
+        }
+      : { y: 0, text: '' };
+
+  const y = criterion.text !== '' ? 28 : 14;
+
+  const klass =
+    data.class !== 'None'
+      ? { y, text: `class = ${data.class}` }
+      : data.classValue !== 'None'
+      ? { y, text: `classValue = ${round(data.classValue as number, 3)}` }
+      : { y, text: '' };
+
+  return {
+    isRight: isRight ? 'True' : 'False',
+    variable,
+    criterion,
+    class: klass
+  };
+};
 
 // TODO collapsible tree https://observablehq.com/@d3/collapsible-tree
 export default ({ data }: { data: JSONNode }): JSX.Element => {
   const svgRef = useRef(null);
   const [, setLocalData] = React.useState(data);
-
+  console.log(data);
   React.useLayoutEffect(() => {
     if (!svgRef.current || !data) {
       return;
@@ -202,27 +217,30 @@ export default ({ data }: { data: JSONNode }): JSX.Element => {
       const y = -nodeRectSize.height / 2 + 20;
 
       node
+        .filter(function(d) {
+          const enabled = d?.data.info?.variable !== '';
+
+          return enabled;
+        })
         .append('text')
         .attr('x', x)
-        .attr('y', y)
+        .attr('y', d => y)
         .style('text-anchor', 'start')
-        .text((d: HierarchyPointNode) => d?.data.info?.variable || '')
-        .append('tspan')
+        .text((d: HierarchyPointNode) => d?.data.info?.variable || '');
+
+      node
+        .append('text')
         .attr('x', x)
-        .attr('y', y + 12)
-        .text((d: HierarchyPointNode) => d?.data.info?.criterion || '')
-        .append('tspan')
+        .attr('y', d => y + (d?.data.info?.criterion?.y || 0))
+        .style('text-anchor', 'start')
+        .text((d: HierarchyPointNode) => d?.data.info?.criterion?.text || '');
+
+      node
+        .append('text')
         .attr('x', x)
-        .attr('y', y + 24)
-        .text((d: HierarchyPointNode) => d?.data.info?.samples || '')
-        .append('tspan')
-        .attr('x', x)
-        .attr('y', y + 36)
-        .text((d: HierarchyPointNode) => d?.data.info?.value || '')
-        .append('tspan')
-        .attr('x', x)
-        .attr('y', y + 50)
-        .text((d: HierarchyPointNode) => d?.data.info?.class || '');
+        .attr('y', d => y + (d?.data.info?.class?.y || 0))
+        .style('text-anchor', 'start')
+        .text((d: HierarchyPointNode) => d?.data.info?.class?.text || '');
     };
 
     const updateRender = (treeData: Node): void => {
