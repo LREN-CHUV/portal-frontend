@@ -57,7 +57,7 @@ const Main = styled.main`
   margin: 0 auto;
   padding: 52px 8px;
   min-height: 100vh;
-  max-width: 1500px;
+  /* max-width: 1500px; */
 `;
 
 const App = ({
