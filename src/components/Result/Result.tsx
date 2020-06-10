@@ -3,6 +3,7 @@ import { Panel } from 'react-bootstrap';
 import styled from 'styled-components';
 
 import { Result, State } from '../API/Experiment';
+import ResultsErrorBoundary from '../UI/ResultsErrorBoundary';
 import RenderResult from './RenderResult';
 
 const Body = styled(Panel.Body)`
@@ -48,7 +49,9 @@ export default ({
             <p>{error}</p>
           </div>
         ) : null}
-        <RenderResult results={results as Result[]} />
+        <ResultsErrorBoundary>
+          <RenderResult results={results as Result[]} />
+        </ResultsErrorBoundary>
       </Body>
     </Panel>
   );

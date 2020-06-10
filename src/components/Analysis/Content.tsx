@@ -1,9 +1,11 @@
 import * as React from 'react';
 import { Panel } from 'react-bootstrap';
+
 import { APIMining } from '../API';
 import { VariableEntity } from '../API/Core';
 import { ModelResponse } from '../API/Model';
 import { Alert } from '../UI/Alert';
+import ResultsErrorBoundary from '../UI/ResultsErrorBoundary';
 import Table from './Table';
 
 interface Props {
@@ -42,12 +44,14 @@ const Content = ({
               {selectedDatasets &&
                 selectedDatasets.length > 0 &&
                 model?.query.variables && (
-                  <Table
-                    summaryStatistics={apiMining.state.summaryStatistics}
-                    selectedDatasets={selectedDatasets}
-                    query={model && model.query}
-                    lookup={lookup}
-                  />
+                  <ResultsErrorBoundary>
+                    <Table
+                      summaryStatistics={apiMining.state.summaryStatistics}
+                      selectedDatasets={selectedDatasets}
+                      query={model && model.query}
+                      lookup={lookup}
+                    />
+                  </ResultsErrorBoundary>
                 )}
             </Panel.Body>
           </Panel>
