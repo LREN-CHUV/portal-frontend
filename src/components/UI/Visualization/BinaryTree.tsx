@@ -52,11 +52,16 @@ interface JSONNode {
   classValue: number | string;
 }
 
+interface NodeInfo {
+  y: number;
+  text: string;
+}
+
 interface NodeData {
   isRight: string;
-  variable: string;
-  criterion: { y: number; text: string };
-  class: { y: number; text: string };
+  variable: NodeInfo | undefined;
+  criterion: NodeInfo | undefined;
+  class: NodeInfo | undefined;
 }
 
 interface NodeAttribute {
@@ -96,28 +101,28 @@ const makeNodes = (data: JSONNode): Node[] | undefined => {
 const makeNodeData = (data: JSONNode, isRight: boolean): NodeData => {
   const variable =
     data.colName !== 'None'
-      ? `${data.colName} <= ${round(data.threshold, 3)}`
-      : '';
+      ? { y: 0, text: `${data.colName} <= ${round(data.threshold, 3)}` }
+      : undefined;
 
   const criterion =
     data.gain !== 'None'
       ? {
-          y: variable !== '' ? 14 : 0,
+          y: variable ? 14 : 0,
           text: `${data.criterion} = ${round(data.gain as number, 3)}`
         }
-      : { y: 0, text: '' };
+      : undefined;
 
-  const y = criterion.text !== '' ? 28 : 14;
+  const y = criterion ? (variable ? 28 : 14) : 0;
 
   const klass =
     data.class !== 'None'
       ? { y, text: `class = ${data.class}` }
       : data.classValue !== 'None'
       ? { y, text: `classValue = ${round(data.classValue as number, 3)}` }
-      : { y, text: '' };
+      : undefined;
 
   return {
-    isRight: isRight ? 'True' : 'False',
+    isRight: isRight ? 'False' : 'True',
     variable,
     criterion,
     class: klass
@@ -128,7 +133,6 @@ const makeNodeData = (data: JSONNode, isRight: boolean): NodeData => {
 export default ({ data }: { data: JSONNode }): JSX.Element => {
   const svgRef = useRef(null);
   const [, setLocalData] = React.useState(data);
-  console.log(data);
   React.useLayoutEffect(() => {
     if (!svgRef.current || !data) {
       return;
@@ -217,16 +221,11 @@ export default ({ data }: { data: JSONNode }): JSX.Element => {
       const y = -nodeRectSize.height / 2 + 20;
 
       node
-        .filter(function(d) {
-          const enabled = d?.data.info?.variable !== '';
-
-          return enabled;
-        })
         .append('text')
         .attr('x', x)
-        .attr('y', d => y)
+        .attr('y', d => y + (d?.data.info?.variable?.y || 0))
         .style('text-anchor', 'start')
-        .text((d: HierarchyPointNode) => d?.data.info?.variable || '');
+        .text((d: HierarchyPointNode) => d?.data.info?.variable?.text || '');
 
       node
         .append('text')
