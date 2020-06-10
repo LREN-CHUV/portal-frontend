@@ -71,6 +71,10 @@ class APIAdapter {
       return experimentResponse;
     }
 
+    if (!experiment.result) {
+      return experimentResponse;
+    }
+
     try {
       const resultParsed = parse(experiment.result);
       const flattenedResults =
