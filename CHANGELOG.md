@@ -1,6 +1,15 @@
 # Changelog
 
-## 6.3.4 - 2020/06/11
+## 6.4.1 - 2020/06/11
+
+- New test data for TBI
+- Fixes for
+  - Kaplan Meyer
+  - Statistics
+  - Calibration Belt
+  - Longitudinal data
+
+## 6.4.0 - 2020/06/11
 
 - Cart new output
 - Removed timeout for experiment
