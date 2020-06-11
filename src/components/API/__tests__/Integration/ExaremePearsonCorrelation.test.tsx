@@ -90,17 +90,15 @@ describe('Integration Test for experiment API', () => {
       experimentState
     };
 
-    let wrapper: any = shallow(<Result {...props} />);
+    const wrapper = mount(<Result {...props} />);
     expect(wrapper.find('.error')).toHaveLength(0);
     expect(wrapper.find('.loading')).toHaveLength(0);
-    // expect(wrapper.find('.result')).toHaveLength(2);
-
-    // Ensure Highchart is loading by catching error
-    // Annoying highcharts Type error due to embbedding visualisation in algorithms output
-    // FIXME: Exareme output as data
-
-    expect(() => {
-      wrapper = mount(<Result {...props} />);
-    }).toThrow(TypeError);
+    expect(wrapper.find('.result')).toHaveLength(2);
+    expect(
+      wrapper
+        .find('div.result table tbody tr td')
+        .at(1)
+        .text()
+    ).toEqual('0.924');
   });
 });
