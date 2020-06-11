@@ -11,6 +11,7 @@ import { LONGITUDINAL_DATASET_TYPE } from '../constants';
 import Modal from '../UI/Modal';
 import CirclePack from './D3CirclePackLayer';
 import { d3Hierarchy, VariableDatum } from './d3Hierarchy';
+import { VariableEntity } from '../API/Core';
 
 const diameter = 800;
 const padding = 1.5;
@@ -91,15 +92,17 @@ export default ({
       const defaultPathology = apiCore.state.pathologies.find(
         (_, i) => i === 0
       );
-      const datasets = apiCore.datasetsForPathology(defaultPathology?.code);
+      const r = new RegExp(LONGITUDINAL_DATASET_TYPE);
+      const trainingDatasets = apiCore
+        .datasetsForPathology(defaultPathology?.code)
+        ?.filter((d: VariableEntity) => !r.test(d.code));
       const newModel = {
         query: {
           pathology: defaultPathology?.code,
-          trainingDatasets: datasets?.filter(
-            d => d.code !== LONGITUDINAL_DATASET_TYPE
-          )
+          trainingDatasets
         }
       };
+
       apiModel.setModel(newModel);
     }
   }, [apiCore, apiCore.state.pathologies, apiModel]);

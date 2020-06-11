@@ -12,7 +12,7 @@ export enum MIME_TYPES {
   TEXT = 'text/plain'
 }
 
-export const LONGITUDINAL_DATASET_TYPE = 'alzheimer_fake_cohort';
+export const LONGITUDINAL_DATASET_TYPE = 'longitudinal';
 export const HISTOGRAMS_STORAGE_KEY = 'mipChoosenHistogramsVars';
 export const PRIVACY_ERROR = 'NOT ENOUGH DATA';
 
@@ -112,6 +112,7 @@ export const ENABLED_ALGORITHMS = [
     enabled: true,
     label: 'Kaplan-Meier Estimator',
     datasetType: LONGITUDINAL_DATASET_TYPE,
+
     types: [MIME_TYPES.HIGHCHARTS]
   }
 ].map(a => ({ ...a, types: [...ERRORS_OUTPUT, ...a.types] }));
