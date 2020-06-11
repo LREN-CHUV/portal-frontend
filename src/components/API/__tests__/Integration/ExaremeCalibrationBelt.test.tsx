@@ -50,7 +50,7 @@ const model: ModelResponse = {
     pathology: TEST_PATHOLOGIES.tbi.code,
     coVariables: [
       {
-        code: 'impact_prob_core_mortality'
+        code: 'mortality_core'
       }
     ],
     filters: '',
@@ -60,7 +60,7 @@ const model: ModelResponse = {
     validationDatasets: [],
     variables: [
       {
-        code: 'Mortality'
+        code: 'mortality_gose'
       }
     ]
   }

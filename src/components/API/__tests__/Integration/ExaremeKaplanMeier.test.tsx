@@ -47,7 +47,7 @@ const model: ModelResponse = {
     groupings: [],
     testingDatasets: [],
     trainingDatasets: TEST_PATHOLOGIES.dementia.datasets.filter(
-      d => d.code === 'alzheimer_fake_cohort'
+      d => d.code === 'fake_longitudinal'
     ),
     validationDatasets: [],
     variables: [

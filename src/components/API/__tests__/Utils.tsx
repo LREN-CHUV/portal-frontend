@@ -20,7 +20,7 @@ const TEST_PATHOLOGIES = {
       },
       { code: 'edsd' },
       { code: 'ppmi' },
-      { code: 'alzheimer_fake_cohort' }
+      { code: 'fake_longitudinal' }
     ]
   },
   mentalhealth: {
@@ -29,7 +29,7 @@ const TEST_PATHOLOGIES = {
   },
   tbi: {
     code: 'tbi',
-    datasets: [{ code: 'demo1' }]
+    datasets: [{ code: 'dummy_tbi' }]
   }
 };
 
