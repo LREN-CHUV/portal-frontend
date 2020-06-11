@@ -193,7 +193,7 @@ export default (props: ExploreProps): JSX.Element => {
             <PanelTitle>
               <h3>{selectedNode && selectedNode.data.label}</h3>
               <Button bsStyle="info" type="submit" onClick={handleGoToAnalysis}>
-                Interactive Analysis <Glyphicon glyph="chevron-right" />
+                Descriptive Analysis <Glyphicon glyph="chevron-right" />
               </Button>
             </PanelTitle>
           </Panel>

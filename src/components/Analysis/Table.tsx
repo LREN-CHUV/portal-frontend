@@ -128,9 +128,9 @@ const computeSingleResults = ({
               row[datasetCode] = rowData.data;
             } else {
               const getRound = (value: number): string => round(value, 2);
-              row[datasetCode] = `${getRound(data.mean)} (${getRound(
-                data.min
-              )} - ${getRound(data.max)}) - std: ${getRound(data.std)}`;
+              row[datasetCode] = `${getRound(data.mean)}, ${getRound(
+                data.std
+              )} [${getRound(data.min)} - ${getRound(data.max)}]`;
             }
           }
         }
@@ -235,9 +235,9 @@ const computeModelResults = ({
               row[datasetCode] = data;
             } else {
               const getRound = (value: number): string => round(value, 2);
-              row[datasetCode] = `${getRound(data.mean)} (${getRound(
-                data.min
-              )} - ${getRound(data.max)}) - std: ${getRound(data.std)}`;
+              row[datasetCode] = `${getRound(data.mean)}, ${getRound(
+                data.std
+              )} [${getRound(data.min)} - ${getRound(data.max)}] `;
             }
           }
         }
@@ -330,10 +330,18 @@ const Table = ({
       {error && <Error message={error.data} />}
       {!error && (
         <Tabs defaultActiveKey={1} id="uncontrolled-mining-tab">
-          <Tab eventKey={1} title="Single">
+          <Tab eventKey={1} title="Variables">
+            <p>
+              Descriptive statistics for the variables of interest. The layout
+              is mean, std, [min, max].
+            </p>
             <DataTable value={rows}>{columns}</DataTable>
           </Tab>
           <Tab eventKey={2} title="Model">
+            <p>
+              Intersection table for the variables of interest as it appears in
+              the experiment. The layout is mean, std, [min, max].
+            </p>
             <DataTable value={rows2}>{columns2}</DataTable>
           </Tab>
         </Tabs>

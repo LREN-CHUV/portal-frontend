@@ -37,7 +37,7 @@ export default class Header extends React.Component<Props, State> {
       <Panel>
         <Panel.Body>
           <Button onClick={handleGoBackToReview} bsStyle="info" type="submit">
-            <Glyphicon glyph="chevron-left" /> Review
+            <Glyphicon glyph="chevron-left" /> Descriptive Analysis
           </Button>
           <h3>Create Experiment</h3>
           <div className="item">

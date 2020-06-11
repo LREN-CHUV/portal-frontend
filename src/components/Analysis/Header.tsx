@@ -38,7 +38,7 @@ export default class Header extends React.Component<Props> {
           <Button onClick={handleGoBackToExplore} bsStyle="info" type="submit">
             <Glyphicon glyph="chevron-left" /> Variables
           </Button>
-          <h3>Interactive Analysis</h3>
+          <h3>Descriptive Analysis</h3>
           <div className="item">&nbsp;</div>
           {modelNotSaved && (
             <div className="item">
