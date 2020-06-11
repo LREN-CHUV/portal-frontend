@@ -1,5 +1,11 @@
 # Changelog
 
+## 6.3.4 - 2020/06/11
+
+- Cart new output
+- Removed timeout for experiment
+- Fixed IE broken link
+
 ## 6.3.3 - 2020/06/08
 
 - Fixed scaling of containers for browser resizing or large screen [#174](https://redmine.hbpmip.link/issues/174)

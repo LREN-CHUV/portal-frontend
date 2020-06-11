@@ -86,7 +86,7 @@ const Container = ({
     const model = apiModel.state.model;
     if (model) {
       apiMining.abortMiningRequests();
-      await apiModel.update({ model });
+      apiModel.update({ model });
       history.push(`/experiment`);
     }
   };
