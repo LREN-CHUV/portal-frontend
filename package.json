@@ -9,7 +9,7 @@
     "bootstrap": "3.4.1",
     "d3": "^5.11.0",
     "dotenv": "^8.1.0",
-    "highcharts": "^7.2.0",
+    "highcharts": "^8.1.1",
     "highcharts-react-official": "^2.2.2",
     "history": "^4.10.1",
     "jQuery-QueryBuilder": "^2.5.2",
