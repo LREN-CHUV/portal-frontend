@@ -110,6 +110,12 @@ const DropdownWrapper = styled.div`
   }
 `;
 
+const ALink = styled.a`
+  color: white;
+  font-size: 16px;
+  margin: 0px 16px 0px 0px;
+`;
+
 export default ({
   name,
   datacatalogueUrl,
@@ -117,6 +123,7 @@ export default ({
   handleSelect
 }: Props): JSX.Element => {
   const instanceName = name || 'MIP';
+
   return (
     <NavBar>
       <Brand>
@@ -146,9 +153,13 @@ export default ({
         </DropdownWrapper>
         <Link to="/galaxy">Workflow</Link>
         {datacatalogueUrl && (
-          <a href={datacatalogueUrl} rel="noopener noreferrer" target="_blank">
+          <ALink
+            href={datacatalogueUrl}
+            rel="noopener noreferrer"
+            target="_blank"
+          >
             Data Catalogue
-          </a>
+          </ALink>
         )}
       </Links>
       <RightLinks>
