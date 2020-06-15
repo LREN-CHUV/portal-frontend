@@ -1,5 +1,9 @@
 # Changelog
 
+## 6.4.2 - 2020/06/15
+
+- Fixed error handling in summary_statistics
+
 ## 6.4.1 - 2020/06/11
 
 - New test data for TBI
