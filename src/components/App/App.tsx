@@ -26,7 +26,7 @@ export interface AppConfig {
   version?: string;
   instanceName?: string;
   ga?: string;
-  federation?: boolean;
+  datacatalogueUrl?: string | undefined;
 }
 interface Props {
   appConfig: AppConfig;
@@ -74,7 +74,7 @@ const App = ({
       <header>
         <Navigation
           name={appConfig.instanceName}
-          federation={appConfig.federation || false}
+          datacatalogueUrl={appConfig.datacatalogueUrl || undefined}
           experiments={apiExperiment.state.experiments}
           handleSelect={(experiment: ExperimentResponse): void => {
             history.push(

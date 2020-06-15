@@ -10,7 +10,7 @@ interface Props {
   name?: string;
   experiments?: ExperimentResponse[];
   handleSelect: (experiment: ExperimentResponse) => void;
-  federation: boolean;
+  datacatalogueUrl: string | undefined;
 }
 
 const NavBar = styled.nav`
@@ -112,7 +112,7 @@ const DropdownWrapper = styled.div`
 
 export default ({
   name,
-  federation,
+  datacatalogueUrl,
   experiments,
   handleSelect
 }: Props): JSX.Element => {
@@ -145,7 +145,11 @@ export default ({
           />
         </DropdownWrapper>
         <Link to="/galaxy">Workflow</Link>
-        {federation && <Link to="/catalog">Data Catalogue</Link>}
+        {datacatalogueUrl && (
+          <a href={datacatalogueUrl} rel="noopener noreferrer" target="_blank">
+            Data Catalogue
+          </a>
+        )}
       </Links>
       <RightLinks>
         <Link to="/profile">Profile</Link>

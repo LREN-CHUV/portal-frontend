@@ -42,7 +42,8 @@ class AppContainer extends React.Component<any, State> {
       const config = await response.json();
       appConfig = {
         ...config,
-        federation: config.federation === '0' ? false : true
+        datacatalogueUrl:
+          config.datacatalogueUrl === '0' ? undefined : config.datacatalogueUrl
       };
       this.setState({ appConfig });
 
@@ -53,7 +54,7 @@ class AppContainer extends React.Component<any, State> {
       appConfig = {
         instanceName: 'MIP DEV',
         version: 'alpha',
-        federation: false
+        datacatalogueUrl: undefined
       };
 
       this.setState({ appConfig });

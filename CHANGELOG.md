@@ -1,5 +1,9 @@
 # Changelog
 
+## 6.4.3 - 2020/06/15
+
+- Renamed federation to datacatalogueUrl for main server
+
 ## 6.4.2 - 2020/06/15
 
 - Fixed error handling in summary_statistics
