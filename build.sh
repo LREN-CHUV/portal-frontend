@@ -18,3 +18,5 @@ VCS_REF=$(git describe --tags) \
 VERSION=$(git describe --tags) \
 WORKSPACE=$(get_script_dir) \
   docker build -t hbpmip/portal-frontend:$(git describe --tags) .
+
+docker tag hbpmip/portal-frontend:$(git describe --tags) hbpmip/portal-frontend:latest

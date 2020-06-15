@@ -58,11 +58,10 @@ git tag $INCREMENTED_VERSION
 echo
 echo "Git commit & push"
 git commit -a -m "Bumped version to $INCREMENTED_VERSION"
-git push
 git push --tags
 
 echo
-echo "Push on dockerhub"
+echo "Push hbpmip/portal-frontend:$INCREMENTED_VERSION on dockerhub"
 BUILD_DATE=$(date --iso-8601=seconds) \
 VCS_REF=$INCREMENTED_VERSION \
 VERSION=$INCREMENTED_VERSION \
