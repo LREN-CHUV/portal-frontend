@@ -282,7 +282,7 @@ class Mining extends Container<MiningState> {
       this.setState({ error: undefined, summaryStatistics });
     } catch (error) {
       console.log(error);
-      this.setState({ error, summaryStatistics: undefined });
+      this.setState({ error: error.message, summaryStatistics: undefined });
     }
   };
 
