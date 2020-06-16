@@ -93,9 +93,12 @@ export default ({
         (_, i) => i === 0
       );
       const r = new RegExp(LONGITUDINAL_DATASET_TYPE);
-      const trainingDatasets = apiCore
-        .datasetsForPathology(defaultPathology?.code)
-        ?.filter((d: VariableEntity) => !r.test(d.code));
+      const datasets =
+        apiCore.state.pathologiesDatasets[defaultPathology?.code || ''];
+
+      const trainingDatasets = datasets?.filter(
+        (d: VariableEntity) => !r.test(d.code)
+      );
       const newModel = {
         query: {
           pathology: defaultPathology?.code,
@@ -337,8 +340,9 @@ export default ({
   const handleSelectModel = (nextModel?: ModelResponse): void => {
     if (nextModel && nextModel.slug) {
       apiModel.one(nextModel.slug).then(() => {
+        const pathology = apiModel.state.model?.query?.pathology || '';
         apiModel.checkModelDatasets(
-          apiCore.datasetsForPathology(apiModel.state.model?.query?.pathology)
+          apiCore.state.pathologiesDatasets[pathology]
         );
       });
     } else {
@@ -366,7 +370,7 @@ export default ({
       const newModel: ModelResponse = {
         query: {
           pathology: nextPathologyCode,
-          trainingDatasets: apiCore.datasetsForPathology(nextPathologyCode)
+          trainingDatasets: apiCore.state.pathologiesDatasets[nextPathologyCode]
         }
       };
       apiModel.setModel(newModel);

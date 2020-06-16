@@ -109,8 +109,9 @@ const Container = ({
       setShouldReload(true);
 
       return await apiModel.one(model.slug).then(() => {
+        const pathology = apiModel.state.model?.query?.pathology || '';
         apiModel.checkModelDatasets(
-          apiCore.datasetsForPathology(apiModel.state.model?.query?.pathology)
+          apiCore.state.pathologiesDatasets[pathology]
         );
       });
     }
@@ -124,7 +125,7 @@ const Container = ({
     apiModel: APIModel;
   }): any => {
     const query = apiModel.state.model && apiModel.state.model.query;
-    const variablesForPathology = apiCore.state.variablesForPathology;
+    const variablesForPathology = apiCore.state.pathologiesVariables;
     const pathology = query?.pathology;
     const variables =
       pathology && variablesForPathology && variablesForPathology[pathology];
@@ -231,7 +232,8 @@ const Container = ({
   const { fields, filters } = makeFilters({ apiCore, apiModel });
   const model = apiModel.state.model;
   const query = model?.query;
-  const datasets = apiCore.datasetsForPathology(query?.pathology);
+  const pathology = query?.pathology || '';
+  const datasets =  apiCore.state.pathologiesDatasets[pathology];
   const selectedDatasets = model?.query?.trainingDatasets?.map(d => ({
     ...datasets?.find(v => v.code === d.code),
     ...d
@@ -259,9 +261,7 @@ const Container = ({
                 <strong>Datasets</strong>
               </h5>
               <LargeDatasetSelect
-                datasets={apiCore.datasetsForPathology(
-                  query && query.pathology
-                )}
+                datasets={datasets}
                 handleSelectDataset={apiModel.selectDataset}
                 selectedDatasets={query?.trainingDatasets || []}
               ></LargeDatasetSelect>

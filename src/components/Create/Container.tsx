@@ -41,6 +41,8 @@ class Container extends React.Component<Props, State> {
     const { apiCore, apiModel, apiExperiment } = this.props;
     const alert = this.state && this.state.alert;
     const query = apiModel.state.model && apiModel.state.model.query;
+    const pathology = query?.pathology || '';
+    const datasets = apiCore.state.pathologiesDatasets[pathology];
 
     return (
       <div className="Experiment">
@@ -66,9 +68,7 @@ class Container extends React.Component<Props, State> {
                   <strong>Datasets</strong>
                 </h5>
                 <LargeDatasetSelect
-                  datasets={apiCore.datasetsForPathology(
-                    query && query.pathology
-                  )}
+                  datasets={datasets}
                   handleSelectDataset={apiModel.selectDataset}
                   selectedDatasets={query?.trainingDatasets || []}
                 ></LargeDatasetSelect>
@@ -138,8 +138,9 @@ class Container extends React.Component<Props, State> {
       const { apiModel, apiCore } = this.props;
       if (slug) {
         return await apiModel.one(model.slug).then(() => {
+          const pathology = apiModel.state.model?.query?.pathology || '';
           apiModel.checkModelDatasets(
-            apiCore.datasetsForPathology(apiModel.state.model?.query?.pathology)
+            apiCore.state.pathologiesDatasets[pathology]
           );
         });
       }

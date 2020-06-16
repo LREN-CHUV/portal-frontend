@@ -133,10 +133,10 @@ export default (props: ExploreProps): JSX.Element => {
 
   const model = apiModel.state.model;
   const selectedDatasets = model?.query?.trainingDatasets || [];
-  const selectedPathology = model?.query?.pathology || undefined;
-  const datasets = apiCore.datasetsForPathology(selectedPathology);
+  const selectedPathology = model?.query?.pathology || '';
+  const datasets = apiCore.state.pathologiesDatasets[selectedPathology];
 
-  const variablesForPathologyDict = apiCore.state.variablesForPathology;
+  const variablesForPathologyDict = apiCore.state.pathologiesVariables;
   const variablesForPathology: VariableEntity[] | undefined =
     (selectedPathology &&
       variablesForPathologyDict &&

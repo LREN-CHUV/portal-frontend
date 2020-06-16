@@ -118,6 +118,10 @@ export interface GalaxyConfig {
   error?: { error?: string; message: string };
 }
 
+interface PathologiesVariables {
+  [key: string]: VariableEntity[];
+}
+
 export interface State {
   error?: string;
   loading?: boolean;
@@ -129,11 +133,14 @@ export interface State {
   articles?: Article[];
   stats?: Stats;
   galaxy?: GalaxyConfig;
-  variablesForPathology?: { [key: string]: VariableEntity[] };
+  pathologiesVariables?: PathologiesVariables;
+  pathologiesDatasets: PathologiesVariables;
 }
 
 class Core extends Container<State> {
-  public state: State = {};
+  public state: State = {
+    pathologiesDatasets: {}
+  };
 
   private options: request.Options;
   private backendURL: string;
@@ -154,7 +161,7 @@ class Core extends Container<State> {
       return { code, label: code, info: code };
     }
 
-    const variablesForPathology = this.state.variablesForPathology;
+    const variablesForPathology = this.state.pathologiesVariables;
 
     if (!variablesForPathology) {
       return { code, label: code, info: code };
@@ -202,12 +209,14 @@ class Core extends Container<State> {
         });
       }
 
-      const variablesForPathology = this.variablesForPathology(json);
+      const pathologiesVariables = this.pathologiesVariables(json);
+      const pathologiesDatasets = this.pathologiesDatasets(json);
 
       return await this.setState({
         error: undefined,
         pathologies,
-        variablesForPathology,
+        pathologiesVariables,
+        pathologiesDatasets,
         pathologyJSON: json
       });
     } catch (error) {
@@ -217,17 +226,14 @@ class Core extends Container<State> {
     }
   };
 
-  public datasetsForPathology = (
-    code: string | undefined
-  ): VariableEntity[] | undefined => {
-    const pathologyJSON = this.state.pathologyJSON;
-    if (code && pathologyJSON) {
-      const pathology = pathologyJSON.find(p => p.code === code);
+  private pathologiesDatasets = (json: Pathology[]): PathologiesVariables => {
+    const pathologiesDatasets: PathologiesVariables = {};
 
-      return pathology && pathology.datasets;
-    }
+    json.forEach(pathology => {
+      pathologiesDatasets[pathology.code] = pathology.datasets;
+    });
 
-    return undefined;
+    return pathologiesDatasets;
   };
 
   public hierarchyForPathology = (
@@ -393,10 +399,10 @@ class Core extends Container<State> {
     return defaults[label] ? defaults[label] : '';
   };
 
-  private variablesForPathology = (
+  private pathologiesVariables = (
     json: Pathology[]
-  ): { [key: string]: VariableEntity[] } | undefined => {
-    const variablesForPathology: { [key: string]: VariableEntity[] } = {};
+  ): PathologiesVariables | undefined => {
+    const pathologiesVariables: PathologiesVariables = {};
     json.forEach(pathology => {
       let variables: VariableEntity[] = [];
 
@@ -414,10 +420,10 @@ class Core extends Container<State> {
         dummyAccumulator(pathology.metadataHierarchy);
       }
 
-      variablesForPathology[pathology.code] = variables;
+      pathologiesVariables[pathology.code] = variables;
     });
 
-    return variablesForPathology;
+    return pathologiesVariables;
   };
 
   private fetchAlgorithms = async (
