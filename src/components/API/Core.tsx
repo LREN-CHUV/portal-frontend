@@ -136,13 +136,14 @@ export interface State {
   articles?: Article[];
   stats?: Stats;
   galaxy?: GalaxyConfig;
-  pathologiesVariables?: PathologiesVariables;
+  pathologiesVariables: PathologiesVariables;
   pathologiesDatasets: PathologiesVariables;
   pathologiesHierarchies: PathologiesHierarchies;
 }
 
 class Core extends Container<State> {
   public state: State = {
+    pathologiesVariables: {},
     pathologiesDatasets: {},
     pathologiesHierarchies: {}
   };
@@ -382,9 +383,7 @@ class Core extends Container<State> {
     return defaults[label] ? defaults[label] : '';
   };
 
-  private pathologiesVariables = (
-    json: Pathology[]
-  ): PathologiesVariables | undefined => {
+  private pathologiesVariables = (json: Pathology[]): PathologiesVariables => {
     const pathologiesVariables: PathologiesVariables = {};
     json.forEach(pathology => {
       let variables: VariableEntity[] = [];
