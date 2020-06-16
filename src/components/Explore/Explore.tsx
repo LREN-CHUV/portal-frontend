@@ -12,6 +12,7 @@ import { D3Model, HierarchyCircularNode, ModelType } from './Container';
 import Histograms from './D3Histograms';
 import ModelView from './D3Model';
 import Search from './D3Search';
+import { VariableEntity } from '../API/Core';
 
 const DataSelectionBox = styled(Panel.Title)`
   display: flex;
@@ -131,14 +132,16 @@ export default (props: ExploreProps): JSX.Element => {
   } = props;
 
   const model = apiModel.state.model;
-  const selectedDatasets =
-    (model && model.query && model.query.trainingDatasets) || [];
-  const selectedPathology = model && model.query && model.query.pathology;
+  const selectedDatasets = model?.query?.trainingDatasets || [];
+  const selectedPathology = model?.query?.pathology || undefined;
   const datasets = apiCore.datasetsForPathology(selectedPathology);
 
-  const variablesForPathology = apiCore.variablesForPathology(
-    selectedPathology
-  );
+  const variablesForPathologyDict = apiCore.state.variablesForPathology;
+  const variablesForPathology: VariableEntity[] | undefined =
+    (selectedPathology &&
+      variablesForPathologyDict &&
+      variablesForPathologyDict[selectedPathology]) ||
+    undefined;
   const independantsVariables =
     variablesForPathology &&
     variablesForPathology.filter((v: any) => v.isCategorical);

@@ -144,18 +144,6 @@ class Core extends Container<State> {
     this.backendURL = backendURL;
   }
 
-  formatLookup = (
-    code: string,
-    originalVar: VariableEntity | undefined
-  ): VariableEntity => {
-    if (originalVar) {
-      const info = `${originalVar.label} (${originalVar.type})`;
-      return { ...originalVar, info };
-    } else {
-      return { code, label: code, info: code };
-    }
-  };
-
   // TODO: those infos should be reconciliated in the model when the fetch occurs
   // At the moment, the model is storing only variable codes
   public lookup = (
@@ -170,14 +158,19 @@ class Core extends Container<State> {
 
     if (!variablesForPathology) {
       return { code, label: code, info: code };
-    } else {
-      const variables = variablesForPathology[pathologyCode];
-      if (variables) {
-        const originalVar =
-          variables &&
-          variables.find((variable: VariableEntity) => variable.code === code);
+    }
 
-        return this.formatLookup(code, originalVar);
+    const variables = variablesForPathology[pathologyCode];
+    if (variables) {
+      const originalVar =
+        variables &&
+        variables.find((variable: VariableEntity) => variable.code === code);
+
+      if (originalVar) {
+        const info = `${originalVar.label} (${originalVar.type})`;
+        return { ...originalVar, info };
+      } else {
+        return { code, label: code, info: code };
       }
     }
 
@@ -197,7 +190,7 @@ class Core extends Container<State> {
         });
       }
 
-      const pathologies = json.map((h: any) => ({
+      const pathologies: Variable[] = json.map((h: Variable) => ({
         code: h.code,
         label: h.label
       }));
@@ -209,9 +202,12 @@ class Core extends Container<State> {
         });
       }
 
+      const variablesForPathology = this.variablesForPathology(json);
+
       return await this.setState({
         error: undefined,
         pathologies,
+        variablesForPathology,
         pathologyJSON: json
       });
     } catch (error) {
@@ -234,73 +230,14 @@ class Core extends Container<State> {
     return undefined;
   };
 
-  // Set a cache for the flat variable lookup function
-  public setLookupVariablesForPathology = (
-    pathologyCode: string | undefined
-  ): VariableEntity[] | undefined => {
-    if (!pathologyCode) {
-      return;
-    }
-
-    const variablesForPathology = this.state.variablesForPathology;
-
-    if (
-      !variablesForPathology ||
-      (variablesForPathology && !variablesForPathology[pathologyCode])
-    ) {
-      const fetchedVariables = this.variablesForPathology(pathologyCode);
-      if (fetchedVariables) {
-        this.setState({
-          variablesForPathology: {
-            [pathologyCode]: fetchedVariables
-          }
-        });
-      }
-      return fetchedVariables;
-    }
-
-    return variablesForPathology[pathologyCode];
-  };
-
   public hierarchyForPathology = (
     code: string | undefined
   ): Hierarchy | undefined => {
     const pathologyJSON = this.state.pathologyJSON;
     if (code && pathologyJSON) {
       const pathology = pathologyJSON.find(p => p.code === code);
-      this.setLookupVariablesForPathology(code);
 
       return pathology && pathology.metadataHierarchy;
-    }
-
-    return undefined;
-  };
-
-  public variablesForPathology = (
-    code: string | undefined
-  ): VariableEntity[] | undefined => {
-    const pathologyJSON = this.state.pathologyJSON;
-    if (code && pathologyJSON) {
-      const pathology = pathologyJSON.find(p => p.code === code);
-
-      let variables: any = [];
-
-      // TODO: fanciest function
-      const dummyAccumulator = (node: any) => {
-        if (node.variables) {
-          variables = [...variables, ...node.variables];
-        }
-
-        if (node.groups) {
-          return node.groups.map(dummyAccumulator);
-        }
-      };
-
-      if (pathology) {
-        dummyAccumulator(pathology.metadataHierarchy);
-      }
-
-      return variables;
     }
 
     return undefined;
@@ -454,6 +391,33 @@ class Core extends Container<State> {
     defaults?: any;
   }): string => {
     return defaults[label] ? defaults[label] : '';
+  };
+
+  private variablesForPathology = (
+    json: Pathology[]
+  ): { [key: string]: VariableEntity[] } | undefined => {
+    const variablesForPathology: { [key: string]: VariableEntity[] } = {};
+    json.forEach(pathology => {
+      let variables: VariableEntity[] = [];
+
+      const dummyAccumulator = (node: any) => {
+        if (node.variables) {
+          variables = [...variables, ...node.variables];
+        }
+
+        if (node.groups) {
+          return node.groups.map(dummyAccumulator);
+        }
+      };
+
+      if (pathology) {
+        dummyAccumulator(pathology.metadataHierarchy);
+      }
+
+      variablesForPathology[pathology.code] = variables;
+    });
+
+    return variablesForPathology;
   };
 
   private fetchAlgorithms = async (

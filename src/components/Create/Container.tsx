@@ -137,8 +137,6 @@ class Container extends React.Component<Props, State> {
       const { slug } = model;
       const { apiModel, apiCore } = this.props;
       if (slug) {
-        apiCore.setLookupVariablesForPathology(model?.query?.pathology);
-
         return await apiModel.one(model.slug).then(() => {
           apiModel.checkModelDatasets(
             apiCore.datasetsForPathology(apiModel.state.model?.query?.pathology)

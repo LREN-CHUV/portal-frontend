@@ -107,7 +107,6 @@ const Container = ({
   const handleSelectModel = async (model?: ModelResponse): Promise<void> => {
     if (model) {
       setShouldReload(true);
-      apiCore.setLookupVariablesForPathology(model?.query?.pathology);
 
       return await apiModel.one(model.slug).then(() => {
         apiModel.checkModelDatasets(
@@ -125,7 +124,10 @@ const Container = ({
     apiModel: APIModel;
   }): any => {
     const query = apiModel.state.model && apiModel.state.model.query;
-    const variables = apiCore.variablesForPathology(query && query.pathology);
+    const variablesForPathology = apiCore.state.variablesForPathology;
+    const pathology = query?.pathology;
+    const variables =
+      pathology && variablesForPathology && variablesForPathology[pathology];
 
     // FIXME: move to Filter, refactor in a pure way
     let fields: any[] = [];
