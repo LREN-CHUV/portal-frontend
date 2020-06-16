@@ -122,12 +122,15 @@ interface PathologiesVariables {
   [key: string]: VariableEntity[];
 }
 
+interface PathologiesHierarchies {
+  [key: string]: Hierarchy;
+}
+
 export interface State {
   error?: string;
   loading?: boolean;
   algorithms?: Algorithm[];
   pathologies?: VariableEntity[];
-  pathologyJSON?: Pathology[];
   pathologyError?: string;
   article?: Article;
   articles?: Article[];
@@ -135,11 +138,13 @@ export interface State {
   galaxy?: GalaxyConfig;
   pathologiesVariables?: PathologiesVariables;
   pathologiesDatasets: PathologiesVariables;
+  pathologiesHierarchies: PathologiesHierarchies;
 }
 
 class Core extends Container<State> {
   public state: State = {
-    pathologiesDatasets: {}
+    pathologiesDatasets: {},
+    pathologiesHierarchies: {}
   };
 
   private options: request.Options;
@@ -211,42 +216,20 @@ class Core extends Container<State> {
 
       const pathologiesVariables = this.pathologiesVariables(json);
       const pathologiesDatasets = this.pathologiesDatasets(json);
+      const pathologiesHierarchies = this.pathologiesHierarchies(json);
 
       return await this.setState({
         error: undefined,
         pathologies,
         pathologiesVariables,
         pathologiesDatasets,
-        pathologyJSON: json
+        pathologiesHierarchies
       });
     } catch (error) {
       return await this.setState({
         pathologyError: error.message
       });
     }
-  };
-
-  private pathologiesDatasets = (json: Pathology[]): PathologiesVariables => {
-    const pathologiesDatasets: PathologiesVariables = {};
-
-    json.forEach(pathology => {
-      pathologiesDatasets[pathology.code] = pathology.datasets;
-    });
-
-    return pathologiesDatasets;
-  };
-
-  public hierarchyForPathology = (
-    code: string | undefined
-  ): Hierarchy | undefined => {
-    const pathologyJSON = this.state.pathologyJSON;
-    if (code && pathologyJSON) {
-      const pathology = pathologyJSON.find(p => p.code === code);
-
-      return pathology && pathology.metadataHierarchy;
-    }
-
-    return undefined;
   };
 
   public stats = async (): Promise<void> => {
@@ -424,6 +407,26 @@ class Core extends Container<State> {
     });
 
     return pathologiesVariables;
+  };
+
+  private pathologiesDatasets = (json: Pathology[]): PathologiesVariables => {
+    const pathologiesDatasets: PathologiesVariables = {};
+    json.forEach(pathology => {
+      pathologiesDatasets[pathology.code] = pathology.datasets;
+    });
+
+    return pathologiesDatasets;
+  };
+
+  private pathologiesHierarchies = (
+    json: Pathology[]
+  ): PathologiesHierarchies => {
+    const pathologiesDatasets: PathologiesHierarchies = {};
+    json.forEach(pathology => {
+      pathologiesDatasets[pathology.code] = pathology.metadataHierarchy;
+    });
+
+    return pathologiesDatasets;
   };
 
   private fetchAlgorithms = async (

@@ -114,7 +114,8 @@ export default ({
   useEffect(() => {
     const model = apiModel.state.model;
     if (model) {
-      const hierarchy = apiCore.hierarchyForPathology(model.query.pathology);
+      const hierarchy =
+        apiCore.state.pathologiesHierarchies[model.query.pathology || ''];
       if (hierarchy) {
         const node = d3Hierarchy(hierarchy);
         const bubbleLayout = d3

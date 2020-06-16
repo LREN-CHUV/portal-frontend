@@ -233,7 +233,7 @@ const Container = ({
   const model = apiModel.state.model;
   const query = model?.query;
   const pathology = query?.pathology || '';
-  const datasets =  apiCore.state.pathologiesDatasets[pathology];
+  const datasets = apiCore.state.pathologiesDatasets[pathology];
   const selectedDatasets = model?.query?.trainingDatasets?.map(d => ({
     ...datasets?.find(v => v.code === d.code),
     ...d
