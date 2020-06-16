@@ -77,6 +77,7 @@ export default ({
     if (
       !apiUser.state.loading &&
       apiUser.state.authenticated &&
+      !apiUser.state.forbidden &&
       !apiUser.state.agreeNDA
     ) {
       history.push('/tos');
@@ -84,6 +85,7 @@ export default ({
   }, [
     apiUser.state.agreeNDA,
     apiUser.state.authenticated,
+    apiUser.state.forbidden,
     apiUser.state.loading,
     history
   ]);
