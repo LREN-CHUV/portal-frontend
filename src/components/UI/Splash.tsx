@@ -4,6 +4,7 @@ import styled from 'styled-components';
 
 import HBPLogo from '../../images/hbp_logo_135.png';
 import { backendURL } from '../API';
+import { FORBIDDEN_ACCESS_MESSAGE } from '../constants';
 import HelpButton from './HelpButton';
 
 const ContentBox = styled.div`
@@ -149,11 +150,11 @@ export default ({
       <main>
         {forbidden && (
           <AlertBox bsStyle="success">
-            Connection SUCCESSFUL! Despite of this, it appears that you
-            currently don&lsquo;t have enough privileges to browse this
-            platform. Please contact the{' '}
-            <a href="mailto:support@ebrains.eu">Support Team</a>{' '}
-            (support@ebrains.eu) if you think you should have access.
+            <div
+              dangerouslySetInnerHTML={{
+                __html: `${FORBIDDEN_ACCESS_MESSAGE}`
+              }}
+            />
           </AlertBox>
         )}
         <Logo alt="HBP logo" title={'Human Brain Project'} src={HBPLogo} />

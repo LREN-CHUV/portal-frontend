@@ -23,8 +23,11 @@ const initialD3Model = {
 };
 
 const AlertBox = styled(Alert)`
-  position: relative;
-  margin: 16px;
+  position: absolute;
+  top: 64px;
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: 800px;
 `;
 
 export type HierarchyCircularNode = d3.HierarchyCircularNode<VariableDatum>;
@@ -407,8 +410,12 @@ export default ({
   return (
     <section>
       {apiCore.state.pathologyError && (
-        <AlertBox bsStyle="danger">
-          <strong>There was an error</strong> {apiCore.state.pathologyError}
+        <AlertBox bsStyle="warning">
+          <div
+            dangerouslySetInnerHTML={{
+              __html: `${apiCore.state.pathologyError}`
+            }}
+          />
         </AlertBox>
       )}
       {showPathologySwitchWarning && (

@@ -15,6 +15,8 @@ export enum MIME_TYPES {
 export const LONGITUDINAL_DATASET_TYPE = 'longitudinal';
 export const HISTOGRAMS_STORAGE_KEY = 'mipChoosenHistogramsVars';
 export const PRIVACY_ERROR = 'NOT ENOUGH DATA';
+export const FORBIDDEN_ACCESS_MESSAGE =
+  'Connection SUCCESSFUL! Despite of this, it appears that you currently don&lsquo;t have enough privileges to browse this platform. Please contact the  <a href="mailto:support@ebrains.eu">Support Team</a> (support@ebrains.eu) if you think you should have <a href="https://mip.ebrains.eu/access" target="_blank">access</a>.';
 
 export const ERRORS_OUTPUT = [
   MIME_TYPES.ERROR,

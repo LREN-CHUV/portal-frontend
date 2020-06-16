@@ -2,7 +2,11 @@ import request from 'request-promise-native';
 import { Container } from 'unstated';
 
 import { backendURL } from '../API';
-import { ENABLED_ALGORITHMS, UI_HIDDEN_PARAMETERS } from '../constants';
+import {
+  ENABLED_ALGORITHMS,
+  FORBIDDEN_ACCESS_MESSAGE,
+  UI_HIDDEN_PARAMETERS
+} from '../constants';
 
 export interface Variable {
   code: string;
@@ -210,8 +214,7 @@ class Core extends Container<State> {
 
       if (pathologies && pathologies.length === 0) {
         return await this.setState({
-          pathologyError:
-            'You do not have access to any dataset. Please contact your administrator to request access.'
+          pathologyError: FORBIDDEN_ACCESS_MESSAGE
         });
       }
 
