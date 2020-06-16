@@ -113,12 +113,18 @@ const Logo = styled.img`
 `;
 
 export default ({
+  logout,
   forbidden
 }: {
+  logout: () => Promise<void>;
   forbidden: boolean | undefined;
 }): JSX.Element => {
   const handleLoginPress = (): void => {
     window.location.href = `${backendURL}/login/hbp`;
+  };
+  const handleLogoutPress = (): void => {
+    logout();
+    window.location.href = '/';
   };
 
   return (
@@ -128,8 +134,12 @@ export default ({
           <HelpButton />
         </div>
         <LoginBox>
-          <Button onClick={handleLoginPress} bsStyle="info" type="submit">
-            Login
+          <Button
+            onClick={forbidden ? handleLogoutPress : handleLoginPress}
+            bsStyle={forbidden ? 'warning' : 'info'}
+            type="submit"
+          >
+            {forbidden ? 'Logout' : 'Login'}
           </Button>
           <p>
             <a href="https://mip.ebrains.eu/access">Request Access</a>
