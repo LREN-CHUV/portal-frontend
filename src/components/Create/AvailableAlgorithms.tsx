@@ -107,19 +107,13 @@ const AvailableAlgorithms = ({
     return checkSelectedVariables('x', x) && checkSelectedVariables('y', y);
   };
 
-  // TODO: longitudinal datasets should be tagged
   const availableAlgorithms: AvailableAlgorithm[] =
     algorithms?.map(algorithm => ({
       ...algorithm,
-      enabled:
-        algorithmEnabled(algorithm.parameters as AlgorithmParameter[], {
-          x: modelCovariables,
-          y: modelVariable
-        }) &&
-        ((): boolean =>
-          isLongitudinalDataset
-            ? algorithm.datasetType === LONGITUDINAL_DATASET_TYPE
-            : algorithm.datasetType !== LONGITUDINAL_DATASET_TYPE)()
+      enabled: algorithmEnabled(algorithm.parameters as AlgorithmParameter[], {
+        x: modelCovariables,
+        y: modelVariable
+      })
     })) || [];
 
   const variablesHelpMessage = (algorithm: Algorithm): JSX.Element => {
