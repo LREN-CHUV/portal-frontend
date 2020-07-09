@@ -10,7 +10,7 @@ import {
   createModel,
   TEST_PATHOLOGIES,
   waitForResult
-} from '../Utils';
+} from '../../Utils';
 
 // config
 

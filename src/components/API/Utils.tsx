@@ -1,13 +1,13 @@
 import APICore, {
   AlgorithmParameter,
   AlgorithmParameterRequest
-} from '../Core';
+} from './Core';
 import APIExperiment, {
   ExperimentPayload,
   State as ExperimentState
-} from '../Experiment';
-import APIModel, { ModelResponse, ModelState } from '../Model';
-import config from '../RequestHeaders';
+} from './Experiment';
+import APIModel, { ModelResponse, ModelState } from './Model';
+import config from './RequestHeaders';
 
 const TIMEOUT_DURATION = 60 * 10;
 
@@ -36,22 +36,6 @@ const TEST_PATHOLOGIES = {
 const apiCore = new APICore(config);
 const apiModel = new APIModel(config);
 const apiExperiment = new APIExperiment(config);
-
-describe('Utils test', () => {
-  it('get pathologies', async () => {
-    await apiCore.fetchPathologies();
-    const result = apiCore.state.pathologies;
-    expect(result).toBeTruthy();
-    expect(result).toHaveLength(3);
-  });
-
-  it('get datasets', async () => {
-    await apiCore.fetchPathologies();
-    const result = apiCore.datasetsForPathology('dementia');
-    expect(result).toBeTruthy();
-    expect(result).toHaveLength(4);
-  });
-});
 
 const createModel = async ({
   modelSlug,

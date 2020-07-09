@@ -455,18 +455,12 @@ class Core extends Container<State> {
               ENABLED_ALGORITHMS.find(a => algorithm.label === a.label)?.enabled
           );
 
-      const data = algorithms
-        .map((algorithm: Algorithm) => ({
-          ...algorithm,
-          datasetType: ENABLED_ALGORITHMS.find(a => algorithm.label === a.label)
-            ?.datasetType
-        }))
-        .sort((x: Algorithm, y: Algorithm) => {
-          const a = x.label;
-          const b = y.label;
+      const data = algorithms.sort((x: Algorithm, y: Algorithm) => {
+        const a = x.label;
+        const b = y.label;
 
-          return a > b ? 1 : a < b ? -1 : 0;
-        });
+        return a > b ? 1 : a < b ? -1 : 0;
+      });
 
       // FIXME: Algorithms defnition in Exareme will contains those extra parameters.
       const extraParametersData = data.map((algorithm: Algorithm) => ({

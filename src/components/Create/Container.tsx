@@ -178,17 +178,6 @@ class Container extends React.Component<Props, State> {
   ): Promise<void> => {
     const { apiModel, apiExperiment, history } = this.props;
 
-    if (!this.state) {
-      this.setState({
-        alert: {
-          message: 'An error occured, please try again later',
-          styled: 'error',
-          title: 'Info'
-        }
-      });
-      return;
-    }
-
     const model = apiModel.state.model;
     if (!model) {
       this.setState({
@@ -207,13 +196,9 @@ class Container extends React.Component<Props, State> {
       return;
     }
     const selectedAlgorithm = this.state && this.state.algorithm;
-    if (!selectedAlgorithm) {
-      this.setState({ alert: { message: 'Select an algorithm' } });
-      return;
-    }
-
     const { parameters } = this.state;
-    if (!parameters) {
+
+    if (!selectedAlgorithm || !parameters) {
       this.setState({ alert: { message: 'Select an algorithm' } });
       return;
     }
