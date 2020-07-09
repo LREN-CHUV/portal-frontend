@@ -4,11 +4,21 @@ import { Container } from 'unstated';
 import { backendURL } from '../API';
 import { LONGITUDINAL_DATASET_TYPE } from '../constants';
 import { VariableEntity } from './Core';
+import { VariableDatum } from '../Explore/d3Hierarchy';
+
+export type HierarchyCircularNode = d3.HierarchyCircularNode<VariableDatum>;
+
+export interface D3Model {
+  covariables: HierarchyCircularNode[] | undefined;
+  filters: HierarchyCircularNode[] | undefined;
+  variables: HierarchyCircularNode[] | undefined;
+}
 
 export interface ModelState {
   error?: string;
   model?: ModelResponse;
   models?: ModelResponse[];
+  internalD3Model: D3Model;
 }
 export interface ModelResponse {
   error?: string;
@@ -45,8 +55,16 @@ export interface Query {
   formulaString?: string;
 }
 
+const initialD3Model = {
+  covariables: undefined,
+  filters: undefined,
+  variables: undefined
+};
+
 class Model extends Container<ModelState> {
-  public state: ModelState = {};
+  public state: ModelState = {
+    internalD3Model: initialD3Model
+  };
 
   private options: request.Options;
   private baseUrl: string;
@@ -84,6 +102,12 @@ class Model extends Container<ModelState> {
   public setModel = async (model?: ModelResponse): Promise<void> => {
     return await this.setState({
       model
+    });
+  };
+
+  public setD3Model = async (internalD3Model?: D3Model): Promise<void> => {
+    return await this.setState({
+      internalD3Model
     });
   };
 
@@ -233,6 +257,65 @@ class Model extends Container<ModelState> {
         error: error.message
       });
     }
+  };
+
+  // Utility to convert variables to D3 model
+  public convertModelToD3Model = (
+    aModel: ModelResponse,
+    aD3Layout: HierarchyCircularNode
+  ): D3Model => {
+    const query = aModel && aModel.query;
+
+    const filterVariables: string[] = [];
+    const extractVariablesFromFilter = (filter: any) =>
+      filter.rules.forEach((r: any) => {
+        if (r.rules) {
+          extractVariablesFromFilter(r);
+        }
+        if (r.id) {
+          filterVariables.push(r.id);
+        }
+      });
+
+    if (query && query.filters) {
+      extractVariablesFromFilter(JSON.parse(query.filters));
+    }
+
+    const nextModel = {
+      covariables: [
+        ...((query.coVariables &&
+          aD3Layout
+            .descendants()
+            .filter(l =>
+              query.coVariables!.map(c => c.code).includes(l.data.code)
+            )) ||
+          []),
+        ...((query.groupings &&
+          aD3Layout
+            .descendants()
+            .filter(l =>
+              query.groupings!.map(c => c.code).includes(l.data.code)
+            )) ||
+          [])
+      ],
+      filters:
+        filterVariables &&
+        aD3Layout
+          .descendants()
+          .filter(l => filterVariables.includes(l.data.code)),
+      groupings: undefined,
+      variables:
+        (query.variables !== undefined &&
+          query.variables.length > 0 &&
+          aD3Layout
+            .descendants()
+            .filter(l =>
+              query.variables!.map(c => c.code).includes(l.data.code)
+            )) ||
+        []
+    };
+
+    return nextModel;
   };
 }
 

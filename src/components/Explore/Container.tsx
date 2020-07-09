@@ -12,15 +12,10 @@ import Modal from '../UI/Modal';
 import CirclePack from './D3CirclePackLayer';
 import { d3Hierarchy, VariableDatum } from './d3Hierarchy';
 import { VariableEntity } from '../API/Core';
+import { HierarchyCircularNode, D3Model } from '../API/Model';
 
 const diameter = 800;
 const padding = 1.5;
-
-const initialD3Model = {
-  covariables: undefined,
-  filters: undefined,
-  variables: undefined
-};
 
 const AlertBox = styled(Alert)`
   position: absolute;
@@ -29,14 +24,6 @@ const AlertBox = styled(Alert)`
   transform: translateX(-50%);
   max-width: 800px;
 `;
-
-export type HierarchyCircularNode = d3.HierarchyCircularNode<VariableDatum>;
-
-export interface D3Model {
-  covariables: HierarchyCircularNode[] | undefined;
-  filters: HierarchyCircularNode[] | undefined;
-  variables: HierarchyCircularNode[] | undefined;
-}
 
 export enum ModelType {
   COVARIABLE,
@@ -64,7 +51,6 @@ export default ({
   >();
 
   // D3Model is used to expose D3 data and interact with the D3 Layout.
-  const [d3Model, setD3Model] = useState<D3Model>(initialD3Model);
   const [d3Layout, setD3Layout] = useState<HierarchyCircularNode>();
   const [formulaString, setFormulaString] = useState<string>('');
   const [showPathologySwitchWarning, setShowPathologySwitchWarning] = useState(
@@ -134,74 +120,13 @@ export default ({
     }
   }, [apiCore, apiModel.state.model]);
 
-  // Utility to convert variables to D3 model
-  const convertModelToD3Model = (
-    aModel: ModelResponse,
-    aD3Layout: HierarchyCircularNode
-  ): D3Model => {
-    const query = aModel && aModel.query;
-
-    const filterVariables: string[] = [];
-    const extractVariablesFromFilter = (filter: any) =>
-      filter.rules.forEach((r: any) => {
-        if (r.rules) {
-          extractVariablesFromFilter(r);
-        }
-        if (r.id) {
-          filterVariables.push(r.id);
-        }
-      });
-
-    if (query && query.filters) {
-      extractVariablesFromFilter(JSON.parse(query.filters));
-    }
-
-    const nextModel = {
-      covariables: [
-        ...((query.coVariables &&
-          aD3Layout
-            .descendants()
-            .filter(l =>
-              query.coVariables!.map(c => c.code).includes(l.data.code)
-            )) ||
-          []),
-        ...((query.groupings &&
-          aD3Layout
-            .descendants()
-            .filter(l =>
-              query.groupings!.map(c => c.code).includes(l.data.code)
-            )) ||
-          [])
-      ],
-      filters:
-        filterVariables &&
-        aD3Layout
-          .descendants()
-          .filter(l => filterVariables.includes(l.data.code)),
-      groupings: undefined,
-      variables:
-        (query.variables !== undefined &&
-          query.variables.length > 0 &&
-          aD3Layout
-            .descendants()
-            .filter(l =>
-              query.variables!.map(c => c.code).includes(l.data.code)
-            )) ||
-        []
-    };
-
-    return nextModel;
-  };
-
   // Sync selected variables and D3 Model
   useEffect(() => {
     const next = apiModel.state.model;
     if (next && d3Layout) {
-      setD3Model(convertModelToD3Model(next, d3Layout));
-    } else {
-      setD3Model(initialD3Model);
+      apiModel.setD3Model(apiModel.convertModelToD3Model(next, d3Layout));
     }
-  }, [apiModel.state, d3Layout]);
+  }, [apiModel, d3Layout]);
 
   // Load Histograms for selected variable
   const trainingDatasets =
@@ -226,10 +151,7 @@ export default ({
   ]);
 
   // Utility to convert  D3 model to variables
-  const convertD3ModelToModel = (
-    aD3Model: D3Model,
-    aModel?: ModelResponse
-  ): ModelResponse => {
+  const convertD3ModelToModel = (aD3Model: D3Model): ModelResponse => {
     const model = apiModel.state.model;
     const datasets = model && model.query && model.query.trainingDatasets;
 
@@ -242,7 +164,7 @@ export default ({
             )
             .map(v => ({ code: v.data.code }))) ||
         [],
-      filters: aModel ? aModel.query.filters : '',
+      filters: model?.query.filters || '',
       groupings:
         (aD3Model.covariables &&
           aD3Model.covariables
@@ -259,10 +181,10 @@ export default ({
       pathology: (model && model.query && model.query.pathology) || ''
     };
 
-    if (aModel) {
-      aModel.query = query;
+    if (model) {
+      model.query = query;
 
-      return aModel;
+      return model;
     } else {
       const draft: ModelResponse = {
         query,
@@ -281,6 +203,9 @@ export default ({
     if (node === undefined) {
       return;
     }
+
+    const d3Model = apiModel.state.internalD3Model;
+
     if (type === ModelType.VARIABLE) {
       const nextModel = d3Model.variables
         ? {
@@ -301,8 +226,8 @@ export default ({
             variables: node.leaves()
           };
 
-      setD3Model(nextModel);
-      apiModel.setModel(convertD3ModelToModel(nextModel, apiModel.state.model));
+      apiModel.setD3Model(nextModel);
+      apiModel.setModel(convertD3ModelToModel(nextModel));
     }
 
     if (type === ModelType.COVARIABLE) {
@@ -324,8 +249,8 @@ export default ({
               d3Model.variables && d3Model.variables.filter(c => c !== node)
           };
 
-      setD3Model(nextModel);
-      apiModel.setModel(convertD3ModelToModel(nextModel, apiModel.state.model));
+      apiModel.setD3Model(nextModel);
+      apiModel.setModel(convertD3ModelToModel(nextModel));
     }
 
     if (type === ModelType.FILTER) {
@@ -338,8 +263,9 @@ export default ({
             ]
           }
         : { ...d3Model, filters: node.leaves() };
-      setD3Model(nextModel);
-      apiModel.setModel(convertD3ModelToModel(nextModel, apiModel.state.model));
+
+      apiModel.setD3Model(nextModel);
+      // apiModel.setModel(convertD3ModelToModel(nextModel));
     }
   };
 
@@ -384,7 +310,8 @@ export default ({
   };
 
   const handleGoToAnalysis = async (): Promise<void> => {
-    const nextModel = convertD3ModelToModel(d3Model, apiModel.state.model);
+    const d3Model = apiModel.state.internalD3Model;
+    const nextModel = convertD3ModelToModel(d3Model);
     apiMining.abortMiningRequests();
 
     const model = {
@@ -408,6 +335,8 @@ export default ({
     selectedNode,
     setFormulaString
   };
+
+  const d3Model = apiModel.state.internalD3Model;
 
   return (
     <section>

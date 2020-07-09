@@ -5,7 +5,8 @@ import React, { useCallback, useEffect, useRef } from 'react';
 
 import { APICore, APIMining, APIModel } from '../API';
 import { ModelResponse } from '../API/Model';
-import { D3Model, HierarchyCircularNode, ModelType } from './Container';
+import { ModelType } from './Container';
+import { D3Model, HierarchyCircularNode } from '../API/Model';
 import Explore from './Explore';
 
 const diameter = 800;

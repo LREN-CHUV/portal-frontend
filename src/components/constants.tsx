@@ -132,16 +132,4 @@ export const UI_HIDDEN_PARAMETERS = [
   'formula'
 ];
 
-// backward compatibility
-export const variablesFilter = [
-  'subjectageyears',
-  'gender',
-  'DIAG_etiology_1',
-  'DIAG_stade',
-  'bnabroadcategory',
-  'amyloid42_status',
-  'p_tau_status',
-  'dataset'
-];
-
 export const ONTOLOGY_URL = 'https://rohan.scai.fraunhofer.de/ols/index';

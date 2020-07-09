@@ -1,7 +1,4 @@
-import APICore, {
-  AlgorithmParameter,
-  AlgorithmParameterRequest
-} from './Core';
+import APICore, { AlgorithmParameter, AlgorithmParameterRequest } from './Core';
 import APIExperiment, {
   ExperimentPayload,
   State as ExperimentState

@@ -1,7 +1,9 @@
+import './D3Search.css';
+
 import * as d3 from 'd3';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { HierarchyCircularNode } from './Container';
-import './D3Search.css';
+
+import { HierarchyCircularNode } from '../API/Model';
 
 interface Props {
   hierarchy: HierarchyCircularNode;

@@ -1,6 +1,7 @@
 import * as d3 from 'd3';
 import React, { useRef } from 'react';
-import { D3Model, HierarchyCircularNode, ModelType } from './Container';
+import { ModelType } from './Container';
+import { D3Model, HierarchyCircularNode } from '../API/Model';
 import renderLifeCycle from './renderLifeCycle';
 import styled from 'styled-components';
 
@@ -12,6 +13,7 @@ export interface ModelProps {
   zoom: Function;
   buttonVariable: JSX.Element;
   buttonCovariable: JSX.Element;
+  buttonFilter: JSX.Element;
 }
 
 const Wrapper = styled.div`
@@ -50,16 +52,19 @@ const Wrapper = styled.div`
   }
 `;
 
-export default (props: ModelProps) => {
+export default (props: ModelProps): JSX.Element => {
   const variableRef = useRef(null);
   const covariableRef = useRef(null);
+  const filterRef = useRef(null);
+
   const {
     d3Model: model,
     handleUpdateD3Model,
     handleSelectNode,
     zoom,
     buttonVariable,
-    buttonCovariable
+    buttonCovariable,
+    buttonFilter
   } = props;
 
   const makeTree = (
@@ -69,7 +74,9 @@ export default (props: ModelProps) => {
     const ref =
       type === ModelType.COVARIABLE
         ? covariableRef.current
-        : variableRef.current;
+        : type === ModelType.VARIABLE
+        ? variableRef.current
+        : filterRef.current;
 
     const block = d3
       .select(ref)
@@ -108,12 +115,20 @@ export default (props: ModelProps) => {
         .selectAll('p')
         .remove();
 
+      d3.select(filterRef.current)
+        .selectAll('p')
+        .remove();
+
       if (model && model.variables) {
         makeTree(model.variables, ModelType.VARIABLE);
       }
 
       if (model && model.covariables) {
         makeTree(model.covariables, ModelType.COVARIABLE);
+      }
+
+      if (model && model.filters) {
+        makeTree(model.filters, ModelType.FILTER);
       }
     }
   });
@@ -127,6 +142,10 @@ export default (props: ModelProps) => {
       <div>
         {buttonCovariable}
         <div ref={covariableRef} />
+      </div>
+      <div>
+        {buttonFilter}
+        <div ref={filterRef} />
       </div>
     </Wrapper>
   );

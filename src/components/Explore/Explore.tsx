@@ -3,16 +3,16 @@ import { Button, Glyphicon, Panel } from 'react-bootstrap';
 import styled from 'styled-components';
 
 import { APICore, APIMining, APIModel } from '../API';
-import { ModelResponse } from '../API/Model';
+import { VariableEntity } from '../API/Core';
+import { D3Model, HierarchyCircularNode, ModelResponse } from '../API/Model';
 import { ONTOLOGY_URL } from '../constants';
 import AvailableAlgorithms from '../Create/AvailableAlgorithms';
 import DropdownModel from '../UI/DropdownModel';
 import LargeDatasetSelect from '../UI/LargeDatasetSelect';
-import { D3Model, HierarchyCircularNode, ModelType } from './Container';
+import { ModelType } from './Container';
 import Histograms from './D3Histograms';
 import ModelView from './D3Model';
 import Search from './D3Search';
-import { VariableEntity } from '../API/Core';
 
 const DataSelectionBox = styled(Panel.Title)`
   display: flex;
@@ -273,6 +273,29 @@ export default (props: ExploreProps): JSX.Element => {
                       ? '-'
                       : '+'}{' '}
                     AS COVARIABLE
+                  </Button>
+                }
+                buttonFilter={
+                  <Button
+                    className="child"
+                    bsStyle={'danger'}
+                    bsSize={'small'}
+                    disabled={
+                      !selectedNode || selectedNode.data.code === 'root'
+                    }
+                    // tslint:disable-next-line jsx-no-lambda
+                    onClick={() =>
+                      handleUpdateD3Model(ModelType.FILTER, selectedNode)
+                    }
+                  >
+                    {d3Model.filters &&
+                    selectedNode &&
+                    d3Model.filters.filter(c =>
+                      selectedNode.leaves().includes(c)
+                    ).length === selectedNode.leaves().length
+                      ? '-'
+                      : '+'}{' '}
+                    AS FILTER
                   </Button>
                 }
               />

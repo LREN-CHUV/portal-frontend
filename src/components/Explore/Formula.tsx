@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
-import { D3Model, HierarchyCircularNode, ModelType } from './Container';
+import { D3Model, HierarchyCircularNode } from '../API/Model';
+import { ModelType } from './Container';
 
 interface Props {
   Terms: any;

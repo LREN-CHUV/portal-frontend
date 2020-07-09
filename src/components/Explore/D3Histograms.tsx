@@ -9,7 +9,7 @@ import { HistogramVariable, MiningResponse } from '../API/Mining';
 import { ModelResponse } from '../API/Model';
 import Loading from '../UI/Loader';
 import Highchart from '../UI/Visualization/Highchart';
-import { HierarchyCircularNode } from './Container';
+import { HierarchyCircularNode } from '../API/Model';
 import renderLifeCycle from './renderLifeCycle';
 
 interface Props {

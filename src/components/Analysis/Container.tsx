@@ -9,7 +9,6 @@ import { APICore, APIMining, APIModel } from '../API';
 import { VariableEntity } from '../API/Core';
 import { MiningPayload } from '../API/Mining';
 import { ModelResponse } from '../API/Model';
-import { variablesFilter } from '../constants';
 import { IAlert } from '../UI/Alert';
 import LargeDatasetSelect from '../UI/LargeDatasetSelect';
 import Model from '../UI/Model';
@@ -189,20 +188,7 @@ const Container = ({
       return output;
     };
 
-    const keys = ['variables', 'coVariables', 'groupings', 'filtersFromParams'];
-    let allVariables: string[] = [];
-    if (query) {
-      keys.forEach((key: string) => {
-        const rows = query[key];
-        if (rows) {
-          rows.forEach((v: any) => {
-            allVariables.push(v.code);
-          });
-        }
-      });
-    }
-
-    allVariables = [...allVariables, ...variablesFilter];
+    const allVariables: string[] = [];
 
     // add filter variables
     const extractVariablesFromFilter = (filter: any) =>
