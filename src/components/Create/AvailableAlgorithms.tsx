@@ -4,7 +4,6 @@ import styled from 'styled-components';
 
 import { APIModel } from '../API';
 import { Algorithm, AlgorithmParameter, VariableEntity } from '../API/Core';
-import { LONGITUDINAL_DATASET_TYPE } from '../constants';
 
 interface AvailableAlgorithm extends Algorithm {
   enabled: boolean;
@@ -55,10 +54,6 @@ const AvailableAlgorithms = ({
       query.groupings.map(v => lookup(v.code, query?.pathology))) ||
       [])
   ];
-
-  const isLongitudinalDataset = apiModel.isDatasetLongitudinal(
-    query?.trainingDatasets
-  );
 
   const algorithmEnabled = (
     parameters: AlgorithmParameter[],

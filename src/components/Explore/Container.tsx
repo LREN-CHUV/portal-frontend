@@ -52,7 +52,7 @@ export default ({
 
   // D3Model is used to expose D3 data and interact with the D3 Layout.
   const [d3Layout, setD3Layout] = useState<HierarchyCircularNode>();
-  const [formulaString, setFormulaString] = useState<string>('');
+  const [, setFormulaString] = useState<string>('');
   const [showPathologySwitchWarning, setShowPathologySwitchWarning] = useState(
     false
   );
