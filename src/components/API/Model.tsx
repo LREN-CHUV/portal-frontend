@@ -105,9 +105,11 @@ class Model extends Container<ModelState> {
     });
   };
 
-  public setD3Model = async (internalD3Model?: D3Model): Promise<void> => {
+  public setD3Model = async (internalD3Model: D3Model): Promise<void> => {
+    const model = this.convertD3ModelToModel(internalD3Model);
     return await this.setState({
-      internalD3Model
+      internalD3Model,
+      model
     });
   };
 
@@ -259,63 +261,53 @@ class Model extends Container<ModelState> {
     }
   };
 
-  // Utility to convert variables to D3 model
-  public convertModelToD3Model = (
-    aModel: ModelResponse,
-    aD3Layout: HierarchyCircularNode
-  ): D3Model => {
-    const query = aModel && aModel.query;
+  // Utility to convert  D3 model to variables
+  public convertD3ModelToModel = (d3Model: D3Model): ModelResponse => {
+    const model = this.state.model;
+    const datasets = model && model.query && model.query.trainingDatasets;
 
-    const filterVariables: string[] = [];
-    const extractVariablesFromFilter = (filter: any) =>
-      filter.rules.forEach((r: any) => {
-        if (r.rules) {
-          extractVariablesFromFilter(r);
-        }
-        if (r.id) {
-          filterVariables.push(r.id);
-        }
-      });
-
-    if (query && query.filters) {
-      extractVariablesFromFilter(JSON.parse(query.filters));
-    }
-
-    const nextModel = {
-      covariables: [
-        ...((query.coVariables &&
-          aD3Layout
-            .descendants()
-            .filter(l =>
-              query.coVariables!.map(c => c.code).includes(l.data.code)
-            )) ||
-          []),
-        ...((query.groupings &&
-          aD3Layout
-            .descendants()
-            .filter(l =>
-              query.groupings!.map(c => c.code).includes(l.data.code)
-            )) ||
-          [])
-      ],
-      filters:
-        filterVariables &&
-        aD3Layout
-          .descendants()
-          .filter(l => filterVariables.includes(l.data.code)),
-      groupings: undefined,
+    const query: Query = {
+      coVariables:
+        (d3Model.covariables &&
+          d3Model.covariables
+            .filter(
+              v => v.data.type !== 'multinominal' && v.data.type !== 'binominal'
+            )
+            .map(v => ({ code: v.data.code }))) ||
+        [],
+      filters: model?.query.filters || '',
+      filterVariables:
+        (d3Model.filters &&
+          d3Model.filters.map(v => ({ code: v.data.code }))) ||
+        [],
+      groupings:
+        (d3Model.covariables &&
+          d3Model.covariables
+            .filter(
+              v => v.data.type === 'multinominal' || v.data.type === 'binominal'
+            )
+            .map(v => ({ code: v.data.code }))) ||
+        [],
+      trainingDatasets: datasets,
       variables:
-        (query.variables !== undefined &&
-          query.variables.length > 0 &&
-          aD3Layout
-            .descendants()
-            .filter(l =>
-              query.variables!.map(c => c.code).includes(l.data.code)
-            )) ||
-        []
+        (d3Model.variables &&
+          d3Model.variables.map(v => ({ code: v.data.code }))) ||
+        [],
+      pathology: (model && model.query && model.query.pathology) || ''
     };
 
-    return nextModel;
+    if (model) {
+      model.query = query;
+
+      return model;
+    } else {
+      const draft: ModelResponse = {
+        query,
+        title: 'untitled'
+      };
+
+      return draft;
+    }
   };
 }
 

@@ -151,7 +151,7 @@ export default ({ layout, ...props }: Props): JSX.Element => {
         )
         .transition()
         .duration(250)
-        .style('fill', '#337ab7');
+        .style('fill', '#d9534f');
     }
     if (d3Model.variables) {
       circle

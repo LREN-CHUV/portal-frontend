@@ -188,7 +188,7 @@ const Container = ({
       return output;
     };
 
-    const allVariables: string[] = [];
+    const allVariables = query?.filterVariables?.map(f => f.code) || [];
 
     // add filter variables
     const extractVariablesFromFilter = (filter: any) =>

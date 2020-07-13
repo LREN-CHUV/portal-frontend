@@ -5,7 +5,7 @@ import { RouteComponentProps } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { APICore, APIMining, APIModel, APIUser } from '../API';
-import { ModelResponse, Query } from '../API/Model';
+import { ModelResponse } from '../API/Model';
 import { AppConfig } from '../App/App';
 import { LONGITUDINAL_DATASET_TYPE } from '../constants';
 import Modal from '../UI/Modal';
@@ -58,6 +58,71 @@ export default ({
   );
   const [nextPathologyCode, setNextPathologyCode] = useState(''); // TODO: maybe there is a better way... like promise.then() ?
   const { history } = props;
+
+  // Utility to convert variables to D3 model
+  const convertModelToD3Model = (
+    model: ModelResponse,
+    d3Layout: HierarchyCircularNode
+  ): D3Model => {
+    const query = model && model.query;
+
+    const filterVariables: string[] = [];
+    const extractVariablesFromFilter = (filter: any) =>
+      filter.rules.forEach((r: any) => {
+        if (r.rules) {
+          extractVariablesFromFilter(r);
+        }
+        if (r.id) {
+          filterVariables.push(r.id);
+        }
+      });
+
+    if (query && query.filters) {
+      extractVariablesFromFilter(JSON.parse(query.filters));
+    } else {
+      query.filterVariables?.forEach(v => {
+        filterVariables.push(v.code);
+      });
+    }
+
+    const nextModel = {
+      covariables: [
+        ...((query.coVariables &&
+          d3Layout
+            .descendants()
+            .filter(l =>
+              query.coVariables!.map(c => c.code).includes(l.data.code)
+            )) ||
+          []),
+        ...((query.groupings &&
+          d3Layout
+            .descendants()
+            .filter(l =>
+              query.groupings!.map(c => c.code).includes(l.data.code)
+            )) ||
+          [])
+      ],
+      filters: [
+        ...((filterVariables &&
+          d3Layout
+            .descendants()
+            .filter(l => filterVariables.includes(l.data.code))) ||
+          [])
+      ],
+      groupings: undefined,
+      variables:
+        (query.variables !== undefined &&
+          query.variables.length > 0 &&
+          d3Layout
+            .descendants()
+            .filter(l =>
+              query.variables!.map(c => c.code).includes(l.data.code)
+            )) ||
+        []
+    };
+
+    return nextModel;
+  };
 
   useEffect(() => {
     if (
@@ -122,9 +187,9 @@ export default ({
 
   // Sync selected variables and D3 Model
   useEffect(() => {
-    const next = apiModel.state.model;
-    if (next && d3Layout) {
-      apiModel.setD3Model(apiModel.convertModelToD3Model(next, d3Layout));
+    const model = apiModel.state.model;
+    if (model && d3Layout) {
+      apiModel.setD3Model(convertModelToD3Model(model, d3Layout));
     }
   }, [apiModel, d3Layout]);
 
@@ -149,51 +214,6 @@ export default ({
     apiMining.state.refetchAlgorithms,
     trainingDatasets
   ]);
-
-  // Utility to convert  D3 model to variables
-  const convertD3ModelToModel = (aD3Model: D3Model): ModelResponse => {
-    const model = apiModel.state.model;
-    const datasets = model && model.query && model.query.trainingDatasets;
-
-    const query: Query = {
-      coVariables:
-        (aD3Model.covariables &&
-          aD3Model.covariables
-            .filter(
-              v => v.data.type !== 'multinominal' && v.data.type !== 'binominal'
-            )
-            .map(v => ({ code: v.data.code }))) ||
-        [],
-      filters: model?.query.filters || '',
-      groupings:
-        (aD3Model.covariables &&
-          aD3Model.covariables
-            .filter(
-              v => v.data.type === 'multinominal' || v.data.type === 'binominal'
-            )
-            .map(v => ({ code: v.data.code }))) ||
-        [],
-      trainingDatasets: datasets,
-      variables:
-        (aD3Model.variables &&
-          aD3Model.variables.map(v => ({ code: v.data.code }))) ||
-        [],
-      pathology: (model && model.query && model.query.pathology) || ''
-    };
-
-    if (model) {
-      model.query = query;
-
-      return model;
-    } else {
-      const draft: ModelResponse = {
-        query,
-        title: 'untitled'
-      };
-
-      return draft;
-    }
-  };
 
   // Update D3 data from interaction with D3 widgets (PackLayer, Model, breadcrumb, search bar)
   const handleUpdateD3Model = (
@@ -227,7 +247,6 @@ export default ({
           };
 
       apiModel.setD3Model(nextModel);
-      apiModel.setModel(convertD3ModelToModel(nextModel));
     }
 
     if (type === ModelType.COVARIABLE) {
@@ -250,7 +269,6 @@ export default ({
           };
 
       apiModel.setD3Model(nextModel);
-      apiModel.setModel(convertD3ModelToModel(nextModel));
     }
 
     if (type === ModelType.FILTER) {
@@ -265,7 +283,6 @@ export default ({
         : { ...d3Model, filters: node.leaves() };
 
       apiModel.setD3Model(nextModel);
-      // apiModel.setModel(convertD3ModelToModel(nextModel));
     }
   };
 
@@ -280,7 +297,9 @@ export default ({
     } else {
       const model = apiModel.state.model;
       if (model) {
-        const newModel = { query: { pathology: model.query.pathology } };
+        const newModel = {
+          query: { pathology: model.query.pathology }
+        };
         apiModel.setModel(newModel);
       }
     }
@@ -310,15 +329,6 @@ export default ({
   };
 
   const handleGoToAnalysis = async (): Promise<void> => {
-    const d3Model = apiModel.state.internalD3Model;
-    const nextModel = convertD3ModelToModel(d3Model);
-    apiMining.abortMiningRequests();
-
-    const model = {
-      ...nextModel,
-      query: { ...nextModel.query, formulaString }
-    };
-    await apiModel.setModel(model);
     history.push(`/review`);
   };
 
