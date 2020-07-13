@@ -7,6 +7,9 @@ import { round } from '../../utils';
 const nodeRectSize = { width: 192, height: 64 };
 const fixedSize = { w: 800, h: 1000 };
 
+const transLat = fixedSize.w / 2;
+const transLon = 100;
+
 const SVGContainer = styled.div`
   width: 100%;
   height: 100%;
@@ -138,6 +141,10 @@ export default ({ data }: { data: JSONNode }): JSX.Element => {
       return;
     }
 
+    let g: d3.Selection<SVGGElement, unknown, null, undefined>;
+    const transScale = JSON.stringify(data).length > 10000 ? 0.2 : 1;
+
+
     const firstRender = (treeNode: Node): void => {
       const treemap = d3
         .tree()
@@ -147,6 +154,14 @@ export default ({ data }: { data: JSONNode }): JSX.Element => {
       const root = d3.hierarchy(treeNode);
       const nodes = treemap(root) as HierarchyPointNode;
 
+      const zoom = (): void => {
+        if (g) {
+          g.attr('transform', d3.event.transform);
+        }
+      };
+
+      const zoomExtent = d3.zoom().on('zoom', zoom);
+
       const svg = d3
         .select(svgRef.current)
         .append<Element>('svg')
@@ -154,14 +169,18 @@ export default ({ data }: { data: JSONNode }): JSX.Element => {
         .attr('height', '100%')
         .attr('preserveAspectRatio', 'none')
         .attr('viewBox', `0 0 ${fixedSize.w} ${fixedSize.h}`)
+        .call(zoomExtent)
         .call(
-          d3
-            .zoom()
-            .scaleExtent([0, 10])
-            .on('zoom', () => g.attr('transform', d3.event.transform))
+          zoomExtent.transform,
+          d3.zoomIdentity.translate(transLat, transLon).scale(transScale)
         );
 
-      const g = svg.append('g');
+      g = svg
+        .append('g')
+        .attr(
+          'transform',
+          `translate(${transLat},${transLon}) scale(${transScale})`
+        );
 
       // adds the links between the nodes
       g.selectAll('.link')
