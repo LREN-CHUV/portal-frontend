@@ -351,7 +351,7 @@ export default ({
   return (
     <section>
       {apiCore.state.pathologyError && (
-        <AlertBox bsStyle="warning">
+        <AlertBox variant="warning">
           <div
             dangerouslySetInnerHTML={{
               __html: `${apiCore.state.pathologyError}`

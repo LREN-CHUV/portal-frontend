@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { Button, FormControl, Glyphicon, Panel } from 'react-bootstrap';
+import { Button, FormControl, Card } from 'react-bootstrap';
+import { BsFillCaretLeftFill, BsFillCaretRightFill } from 'react-icons/bs';
 
 import { Algorithm } from '../API/Core';
 import { ExperimentResponse } from '../API/Experiment';
@@ -34,10 +35,10 @@ export default class Header extends React.Component<Props, State> {
     const { experimentName } = this.state;
 
     return (
-      <Panel>
-        <Panel.Body>
-          <Button onClick={handleGoBackToReview} bsStyle="info" type="submit">
-            <Glyphicon glyph="chevron-left" /> Descriptive Analysis
+      <Card>
+        <Card.Body>
+          <Button onClick={handleGoBackToReview} variant="info" type="submit">
+            <BsFillCaretLeftFill /> Descriptive Analysis
           </Button>
           <h3>Create Experiment</h3>
           <div className="item">
@@ -80,7 +81,7 @@ export default class Header extends React.Component<Props, State> {
                   ? 'Please select a dataset'
                   : ''
               }
-              bsStyle="info"
+              variant="info"
               type="submit"
               disabled={
                 method === undefined ||
@@ -91,11 +92,11 @@ export default class Header extends React.Component<Props, State> {
                 model.query.trainingDatasets.length <= 0
               }
             >
-              Run Experiment <Glyphicon glyph="chevron-right" />
+              Run Experiment <BsFillCaretRightFill />
             </Button>
           </div>
-        </Panel.Body>
-      </Panel>
+        </Card.Body>
+      </Card>
     );
   }
 

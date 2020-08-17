@@ -67,7 +67,7 @@ export default React.memo(({ apiCore }: Props) => {
   return (
     <IFrameContainer>
       {error && (
-        <AlertBox bsStyle="danger">
+        <AlertBox variant="danger">
           <strong>There was an error</strong> {error}
         </AlertBox>
       )}

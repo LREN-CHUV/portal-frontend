@@ -2,7 +2,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { ExperimentResponse } from '../API/Experiment';
 import { UI_HIDDEN_PARAMETERS } from '../constants';
-import Panel from '../UI/Panel';
+import Card from '../UI/Panel';
 import { Algorithm } from '../API/Core';
 
 const Param = styled.p`
@@ -22,7 +22,7 @@ const Algorithms = ({
 
   return (
     (algorithms && (
-      <Panel
+      <Card
         title="Algorithm"
         body={
           <>

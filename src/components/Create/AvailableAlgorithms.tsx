@@ -161,7 +161,7 @@ const AvailableAlgorithms = ({
               {algorithm.enabled && (
                 <Button
                   key={algorithm.name}
-                  bsStyle="link"
+                  variant="link"
                   // ts lint:disable-next-line jsx-no-lambda
                   onClick={(): void =>
                     handleSelectMethod && handleSelectMethod(algorithm)

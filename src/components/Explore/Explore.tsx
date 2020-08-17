@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button, Glyphicon, Panel } from 'react-bootstrap';
+import { Button, Card } from 'react-bootstrap';
 import styled from 'styled-components';
 
 import { APICore, APIMining, APIModel } from '../API';
@@ -14,7 +14,7 @@ import Histograms from './D3Histograms';
 import ModelView from './D3Model';
 import Search from './D3Search';
 
-const DataSelectionBox = styled(Panel.Title)`
+const DataSelectionBox = styled(Card.Title)`
   display: flex;
   padding: 0.4em;
   margin-bottom: 4px;
@@ -51,7 +51,7 @@ const SearchBox = styled.div`
   /* width: 320px; */
 `;
 
-const PanelTitle = styled(Panel.Title)`
+const PanelTitle = styled(Card.Title)`
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -150,7 +150,7 @@ export default (props: ExploreProps): JSX.Element => {
     <>
       <Grid>
         <Col1>
-          <Panel>
+          <Card>
             <DataSelectionBox>
               <PathologiesBox>
                 {apiCore.state.pathologies &&
@@ -186,22 +186,27 @@ export default (props: ExploreProps): JSX.Element => {
                 />
               </SearchBox>
             </DataSelectionBox>
-            <Panel.Body style={{ margin: 0, padding: 0 }}>
-              {children}
-            </Panel.Body>
-          </Panel>
+            <Card.Body style={{ margin: 0, padding: 0 }}>{children}</Card.Body>
+          </Card>
         </Col1>
         <Col2>
-          <Panel>
-            <PanelTitle>
-              <h3>{selectedNode && selectedNode.data.label}</h3>
-              <Button bsStyle="info" type="submit" onClick={handleGoToAnalysis}>
-                Descriptive Analysis <Glyphicon glyph="chevron-right" />
-              </Button>
-            </PanelTitle>
-          </Panel>
-          <Panel>
-            <Panel.Body>
+          <Card>
+            <Card.Body>
+              <PanelTitle>
+                <h3>{selectedNode && selectedNode.data.label}</h3>
+                <Button
+                  variant="info"
+                  type="submit"
+                  onClick={handleGoToAnalysis}
+                >
+                  Descriptive Analysis{' '}
+                  {/* <Glyphicon glyph="chevron-right" /> */}
+                </Button>
+              </PanelTitle>
+            </Card.Body>
+          </Card>
+          <Card>
+            <Card.Body>
               {/* <Tabs defaultActiveKey={0} id="uncontrolled-formula-tabs">
                 <Tab eventKey={0} title={'Parameters'} key={0}> */}
               <ModelTitle>
@@ -232,8 +237,7 @@ export default (props: ExploreProps): JSX.Element => {
                 buttonVariable={
                   <Button
                     className="child"
-                    bsStyle={'success'}
-                    bsSize={'small'}
+                    variant={'success'}
                     disabled={
                       !selectedNode || selectedNode.data.code === 'root'
                     }
@@ -255,8 +259,7 @@ export default (props: ExploreProps): JSX.Element => {
                 buttonCovariable={
                   <Button
                     className="child"
-                    bsStyle={'warning'}
-                    bsSize={'small'}
+                    variant={'warning'}
                     disabled={
                       !selectedNode || selectedNode.data.code === 'root'
                     }
@@ -278,8 +281,7 @@ export default (props: ExploreProps): JSX.Element => {
                 buttonFilter={
                   <Button
                     className="child"
-                    bsStyle={'danger'}
-                    bsSize={'small'}
+                    variant={'danger'}
                     disabled={
                       !selectedNode || selectedNode.data.code === 'root'
                     }
@@ -315,11 +317,11 @@ export default (props: ExploreProps): JSX.Element => {
                 lookup={apiCore.lookup}
                 apiModel={apiModel}
               />
-            </Panel.Body>
-          </Panel>
+            </Card.Body>
+          </Card>
 
-          <Panel className="statistics">
-            <Panel.Body>
+          <Card className="statistics">
+            <Card.Body>
               <Histograms
                 apiMining={apiMining}
                 histograms={histograms}
@@ -329,8 +331,8 @@ export default (props: ExploreProps): JSX.Element => {
                 zoom={zoom}
                 model={model}
               />
-            </Panel.Body>
-          </Panel>
+            </Card.Body>
+          </Card>
         </Col2>
       </Grid>
     </>

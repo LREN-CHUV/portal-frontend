@@ -7,7 +7,7 @@ import '../Experiment.css';
 import Model from '../UI/Model';
 import Algorithms from './Algorithms';
 import Datasets from '../UI/Datasets';
-import Panel from '../UI/Panel';
+import Card from '../UI/Panel';
 
 interface RouteParams {
   uuid: string;
@@ -87,7 +87,7 @@ class Experiment extends React.Component<Props> {
         </div>
         <div className="content">
           <div className="sidebar">
-            <Panel
+            <Card
               title="Pathology"
               body={<p>{model?.query?.pathology || ''}</p>}
             />

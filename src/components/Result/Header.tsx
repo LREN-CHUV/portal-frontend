@@ -1,6 +1,6 @@
 import moment from 'moment'; // FIXME: change lib, too heavy
 import * as React from 'react';
-import { Panel } from 'react-bootstrap';
+import { Card } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 import { ExperimentResponse } from '../API/Experiment';
@@ -25,8 +25,8 @@ export default ({
   const modelDefinitionId = experiment && experiment.modelSlug;
 
   return (
-    <Panel>
-      <Panel.Body>
+    <Card>
+      <Card.Body>
         <div className="item text">
           <h3>
             Results of experiment <strong>{name}</strong> on{' '}
@@ -55,7 +55,7 @@ export default ({
             handleCreateNewExperiment={handleCreateNewExperiment}
           />
         </div>
-      </Panel.Body>
-    </Panel>
+      </Card.Body>
+    </Card>
   );
 };

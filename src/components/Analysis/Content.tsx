@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Panel } from 'react-bootstrap';
+import { Card } from 'react-bootstrap';
 
 import { APIMining } from '../API';
 import { VariableEntity } from '../API/Core';
@@ -32,11 +32,11 @@ const Content = ({
       />
     )}
     {apiMining && (
-      <Panel>
-        <Panel.Body>
+      <Card>
+        <Card.Body>
           {children}
-          <Panel>
-            <Panel.Body>
+          <Card>
+            <Card.Body>
               {(!selectedDatasets || selectedDatasets.length === 0) && (
                 <p>Please, select a dataset</p>
               )}
@@ -53,10 +53,10 @@ const Content = ({
                     />
                   </ResultsErrorBoundary>
                 )}
-            </Panel.Body>
-          </Panel>
-        </Panel.Body>
-      </Panel>
+            </Card.Body>
+          </Card>
+        </Card.Body>
+      </Card>
     )}
   </>
 );

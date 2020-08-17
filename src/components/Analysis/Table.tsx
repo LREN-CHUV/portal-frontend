@@ -330,14 +330,14 @@ const Table = ({
       {error && <Error message={error.data} />}
       {!error && (
         <Tabs defaultActiveKey={1} id="uncontrolled-mining-tab">
-          <Tab eventKey={1} title="Variables">
+          <Tab eventKey={'1'} title="Variables">
             <p>
               Descriptive statistics for the variables of interest. The layout
               is mean, std, [min, max].
             </p>
             <DataTable value={rows}>{columns}</DataTable>
           </Tab>
-          <Tab eventKey={2} title="Model">
+          <Tab eventKey={'2'} title="Model">
             <p>
               Intersection table for the variables of interest as it appears in
               the experiment. The layout is mean, std, [min, max].

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Panel } from 'react-bootstrap';
+import { Card } from 'react-bootstrap';
 import styled from 'styled-components';
 
 const Title = styled.h3`
@@ -18,13 +18,13 @@ const Video = styled.iframe`
 
 export default (): JSX.Element => (
   <>
-    <Panel>
-      <Panel.Title>
+    <Card>
+      <Card.Title>
         <Title>Training</Title>
-      </Panel.Title>
-    </Panel>
-    <Panel>
-      <Panel.Body>
+      </Card.Title>
+    </Card>
+    <Card>
+      <Card.Body>
         <article>
           <Videos>
             <Video
@@ -91,7 +91,7 @@ export default (): JSX.Element => (
             ></Video>
           </Videos>
         </article>
-      </Panel.Body>
-    </Panel>
+      </Card.Body>
+    </Card>
   </>
 );

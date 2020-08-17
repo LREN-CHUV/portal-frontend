@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { DropdownButton, MenuItem } from 'react-bootstrap';
+import { DropdownButton, Dropdown as BsDropdown } from 'react-bootstrap';
 import { ModelResponse } from '../API/Model';
 
 interface Dropdown {
@@ -25,10 +25,10 @@ export default ({
   }, [selectedSlug, items]);
 
   return (
-    <DropdownButton bsSize="small" id={'model-dropdown'} title={title}>
+    <DropdownButton id={'model-dropdown'} title={title}>
       {reset && (
         <>
-          <MenuItem
+          <BsDropdown.Item
             eventKey={'reset'}
             key={'reset'}
             // tslint:disable-next-line jsx-no-lambda
@@ -38,8 +38,8 @@ export default ({
             }}
           >
             <strong>Reset</strong>
-          </MenuItem>
-          <MenuItem>---</MenuItem>
+          </BsDropdown.Item>
+          <BsDropdown.Item>---</BsDropdown.Item>
         </>
       )}
 
@@ -47,8 +47,8 @@ export default ({
         handleSelect &&
         items.map((item, i: number) => {
           return (
-            <MenuItem
-              eventKey={i}
+            <BsDropdown.Item
+              eventKey={`${i}`}
               key={item.title}
               // tslint:disable-next-line jsx-no-lambda
               onSelect={(): void => {
@@ -57,7 +57,7 @@ export default ({
               }}
             >
               <strong>{item.title}</strong>
-            </MenuItem>
+            </BsDropdown.Item>
           );
         })}
     </DropdownButton>

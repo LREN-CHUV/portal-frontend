@@ -1,12 +1,12 @@
 import * as React from 'react';
-import { Panel } from 'react-bootstrap';
+import { Card } from 'react-bootstrap';
 import styled from 'styled-components';
 import { VariableEntity } from '../API/Core';
 import { ModelResponse } from '../API/Model';
 import DropdownModel from './DropdownModel';
 import './Model.css';
 
-const Body = styled(Panel.Body)`
+const Body = styled(Card.Body)`
   padding: 0 16px 16px 16px;
 
   var {
@@ -43,8 +43,8 @@ class Model extends React.Component<Props> {
     const query = model && model.query;
 
     return (
-      <Panel className="model">
-        <Panel.Title>
+      <Card className="model">
+        <Card.Title>
           {!handleSelectModel && (
             <Title>{(model && model.title) || selectedSlug}</Title>
           )}
@@ -58,7 +58,7 @@ class Model extends React.Component<Props> {
               />
             )}
           </Title>
-        </Panel.Title>
+        </Card.Title>
         <Body>
           {/* {!model && (
             <div style={{ marginTop: '8px' }}>
@@ -91,7 +91,7 @@ class Model extends React.Component<Props> {
             </>
           )}
         </Body>
-      </Panel>
+      </Card>
     );
   }
 

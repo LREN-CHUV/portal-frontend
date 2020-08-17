@@ -2,7 +2,7 @@ import '../Model.css';
 import './Review.css';
 
 import * as React from 'react';
-import { Panel } from 'react-bootstrap';
+import { Card } from 'react-bootstrap';
 import { RouteComponentProps } from 'react-router-dom';
 
 import { APICore, APIMining, APIModel } from '../API';
@@ -237,8 +237,8 @@ const Container = ({
       </div>
       <div className="content">
         <div className="sidebar">
-          <Panel className="datasets">
-            <Panel.Body>
+          <Card className="datasets">
+            <Card.Body>
               <h5>
                 <strong>Pathology</strong>
               </h5>
@@ -251,8 +251,8 @@ const Container = ({
                 handleSelectDataset={apiModel.selectDataset}
                 selectedDatasets={query?.trainingDatasets || []}
               ></LargeDatasetSelect>
-            </Panel.Body>
-          </Panel>
+            </Card.Body>
+          </Card>
           <Model
             model={model}
             selectedSlug={model && model.slug}
@@ -268,22 +268,20 @@ const Container = ({
             selectedDatasets={selectedDatasets}
             lookup={apiCore.lookup}
           >
-            <Panel className="filters" defaultExpanded={false}>
-              <Panel.Title toggle={true}>
+            <Card className="filters">
+              <Card.Title>
                 <h3 className={'btn btn-info'}>Filters</h3>
-              </Panel.Title>
-              <Panel.Collapse>
-                <Panel.Body collapsible={true}>
-                  {fields && fields.length > 0 && (
-                    <Filter
-                      rules={filters}
-                      filters={fields}
-                      handleChangeFilter={handleUpdateFilter}
-                    />
-                  )}
-                </Panel.Body>
-              </Panel.Collapse>
-            </Panel>
+              </Card.Title>
+              <Card.Body>
+                {fields && fields.length > 0 && (
+                  <Filter
+                    rules={filters}
+                    filters={fields}
+                    handleChangeFilter={handleUpdateFilter}
+                  />
+                )}
+              </Card.Body>
+            </Card>
           </Content>
         </div>
       </div>

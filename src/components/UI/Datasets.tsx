@@ -2,7 +2,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 
 import { ModelResponse } from '../API/Model';
-import Panel from '../UI/Panel';
+import Card from '../UI/Panel';
 
 const Body = styled.div`
   p {
@@ -26,7 +26,7 @@ class Model extends React.Component<Props> {
     const query = model && model.query;
 
     return (
-      <Panel
+      <Card
         title="Datasets"
         body={
           query && (
