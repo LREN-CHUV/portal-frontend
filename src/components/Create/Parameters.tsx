@@ -1,12 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import {
-  Col,
-  Form,
-  FormControl,
-  FormGroup,
-  HelpBlock as Help,
-  Row
-} from 'react-bootstrap';
+import { Col, Form, FormControl, FormGroup, Row } from 'react-bootstrap';
 import Select from 'react-select';
 import styled from 'styled-components';
 
@@ -25,7 +18,7 @@ interface Props {
   handleChangeParameters: (parameters: AlgorithmParameter[]) => void;
 }
 
-const HelpBlock = styled(Help)`
+const HelpBlock = styled.div`
   var:after {
     content: ', ';
   }
@@ -152,7 +145,7 @@ const Parameters = ({
         <h4>Parameters</h4>
       )}
       {parameters && parameters.length > 0 && (
-        <Form horizontal={true}>
+        <Form>
           {parameters &&
             parameters.length &&
             parameters.map((parameter: AlgorithmParameter) => {
@@ -166,7 +159,6 @@ const Parameters = ({
 
               return (
                 <FormGroup
-                  validationState={getValidationState(parameter)}
                   key={parameter.label}
                   style={{
                     display:
@@ -200,7 +192,6 @@ const Parameters = ({
                       {parameter.valueEnumerations &&
                         parameter.valueEnumerations.length > 0 && (
                           <FormControl
-                            componentClass="select"
                             defaultValue={parameter.defaultValue}
                             placeholder={parameter.placeholder}
                             // tslint:disable-next-line jsx-no-lambda
@@ -240,7 +231,6 @@ const Parameters = ({
                       {(parameter.label === 'Positive outcome' ||
                         parameter.label === 'Negative outcome') && (
                         <FormControl
-                          componentClass="select"
                           defaultValue={parameter.defaultValue}
                           placeholder={parameter.placeholder}
                           // tslint:disable-next-line jsx-no-lambda

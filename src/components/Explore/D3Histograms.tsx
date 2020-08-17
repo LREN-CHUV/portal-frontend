@@ -1,6 +1,6 @@
 import * as d3 from 'd3';
 import React, { useEffect, useRef, useState } from 'react';
-import { DropdownButton, MenuItem, Tab, Tabs } from 'react-bootstrap';
+import { DropdownButton, Dropdown, Tab, Tabs } from 'react-bootstrap';
 import styled from 'styled-components';
 
 import { APIMining } from '../API';
@@ -219,7 +219,7 @@ export default (props: Props): JSX.Element => {
             {[0, 1, 2, 3].map((k, i) => {
               return i === 0 ? (
                 <Tab
-                  eventKey={i}
+                  eventKey={`${i}`}
                   title={`${selectedNode && selectedNode.data.label}`}
                   key={i}
                 >
@@ -231,13 +231,12 @@ export default (props: Props): JSX.Element => {
                 </Tab>
               ) : (
                 <Tab
-                  eventKey={i}
+                  eventKey={`${i}`}
                   title={
                     i === selectedTab ||
                     !(choosenVariables && choosenVariables[i]) ? (
                       <DropDown
-                        noCaret={false}
-                        bsStyle="link"
+                        variant="link"
                         id={`independant-dropdown-${i}`}
                         title={
                           (choosenVariables &&
@@ -248,12 +247,12 @@ export default (props: Props): JSX.Element => {
                       >
                         {independantsVariables &&
                           independantsVariables.map((v: VariableEntity) => (
-                            <MenuItem
+                            <Dropdown.Item
                               key={v.code}
                               onSelect={(): void => handleChooseVariable(i, v)}
                             >
                               {v.label}
-                            </MenuItem>
+                            </Dropdown.Item>
                           ))}
                       </DropDown>
                     ) : (

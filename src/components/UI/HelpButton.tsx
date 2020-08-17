@@ -1,5 +1,7 @@
 import * as React from 'react';
-import { DropdownButton, Glyphicon, MenuItem } from 'react-bootstrap';
+import { DropdownButton, Dropdown } from 'react-bootstrap';
+import { BsBook, BsFilm, BsFillEnvelopeFill } from 'react-icons/bs';
+
 import styled from 'styled-components';
 import { NavLink } from 'react-router-dom';
 
@@ -35,29 +37,24 @@ const Link = styled(NavLink)`
 export default ({ showTraining }: { showTraining?: boolean }): JSX.Element => {
   return (
     <MainBox>
-      <DropdownButton
-        noCaret={false}
-        bsStyle="link"
-        id={'help-dropdown'}
-        title={'Help'}
-      >
-        <MenuItem
+      <DropdownButton variant="link" id={'help-dropdown'} title={'Help'}>
+        <Dropdown.Item
           // tslint:disable-next-line jsx-no-lambda
           onSelect={() => {
             window.open('https://mip.ebrains.eu/documentation/');
           }}
         >
-          <Glyphicon glyph="book" /> MIP Documentation
-        </MenuItem>
+          <BsBook /> MIP Documentation
+        </Dropdown.Item>
         {showTraining && (
           <li>
             <Link to="/training">
-              <Glyphicon glyph="film" /> MIP Training
+              <BsFilm /> MIP Training
             </Link>
           </li>
         )}
         <li>
-          <Glyphicon glyph="envelope" /> Email us at{' '}
+          <BsFillEnvelopeFill /> Email us at{' '}
           <a href="mailto://support@ebrains.eu">support@ebrains.eu</a>
         </li>
         <Helpdesk />

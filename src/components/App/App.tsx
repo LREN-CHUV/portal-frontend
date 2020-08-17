@@ -39,17 +39,29 @@ interface Props {
 
 const GlobalStyles = createGlobalStyle`
   body {
-    font-family: 'Open Sans', sans-serif !important;
+    font-family: 'Open Sans', sans-serif;
     background: url(${backgroundImage}) top center no-repeat fixed #f5f5f5;
     background-size: 100% auto;
   }
 
-  .panel {
+  .card {
     margin-bottom: 8px;
     background-color: #fff;
     border: 1px solid transparent;
     border-radius: 4px;
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+  }
+
+  .card-body {
+    padding: 0.6rem 0;
+  }
+
+  .card-title h3 {
+    font-size: 1.4rem;
+  }
+
+  .btn {
+    font-size: 0.8rem;
   }
 `;
 
@@ -57,7 +69,6 @@ const Main = styled.main`
   margin: 0 auto;
   padding: 52px 8px;
   min-height: 100vh;
-  /* max-width: 1500px; */
 `;
 
 const App = ({

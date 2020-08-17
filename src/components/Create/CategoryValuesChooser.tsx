@@ -60,7 +60,7 @@ export default ({
   ]);
 
   const handleChangeValue = (
-    event: React.FormEvent<FormControl>,
+    event: React.FormEvent<any>,
     name: string
   ): void => {
     event.preventDefault();
@@ -91,8 +91,8 @@ export default ({
               <strong>{category.label}</strong>
             </p>
             <FormControl
-              componentClass="select"
-              placeholder="select"
+              /*               componentClass="select"
+               */ placeholder="select"
               id={`parameter-category-chooser-${category.code}`}
               onChange={(event): void => {
                 handleChangeValue(event, category.code);

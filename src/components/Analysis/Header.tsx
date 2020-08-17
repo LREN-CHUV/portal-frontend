@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { Button, FormControl, Glyphicon, Panel } from 'react-bootstrap';
+import { Button, FormControl, Card } from 'react-bootstrap';
+import { BsFillCaretLeftFill, BsFillCaretRightFill } from 'react-icons/bs';
 import { ModelResponse } from '../API/Model';
 
 interface Props {
@@ -33,10 +34,10 @@ export default class Header extends React.Component<Props> {
     const modelNotSaved = model && !model.slug;
 
     return (
-      <Panel>
-        <Panel.Body>
-          <Button onClick={handleGoBackToExplore} bsStyle="info" type="submit">
-            <Glyphicon glyph="chevron-left" /> Variables
+      <Card>
+        <Card.Body>
+          <Button onClick={handleGoBackToExplore} variant="info" type="submit">
+            <BsFillCaretLeftFill /> Variables
           </Button>
           <h3>Descriptive Analysis</h3>
           <div className="item">&nbsp;</div>
@@ -56,7 +57,7 @@ export default class Header extends React.Component<Props> {
             <div className="item">
               <Button
                 onClick={this.handleSaveModel1}
-                bsStyle={'info'}
+                variant={'info'}
                 type="submit"
                 disabled={currentModelName === ''}
                 title={
@@ -72,7 +73,7 @@ export default class Header extends React.Component<Props> {
           <div className="item">
             <Button
               onClick={handleRunAnalysis}
-              bsStyle="info"
+              variant="info"
               type="submit"
               disabled={modelNotSaved}
               title={
@@ -81,11 +82,11 @@ export default class Header extends React.Component<Props> {
                   : ''
               }
             >
-              RUN ML EXPERIMENT <Glyphicon glyph="chevron-right" />{' '}
+              RUN EXPERIMENT <BsFillCaretRightFill />{' '}
             </Button>
           </div>
-        </Panel.Body>
-      </Panel>
+        </Card.Body>
+      </Card>
     );
   }
 

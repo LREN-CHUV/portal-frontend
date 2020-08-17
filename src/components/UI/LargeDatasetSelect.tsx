@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Checkbox } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 import styled from 'styled-components';
 
 import { VariableEntity } from '../API/Core';
@@ -40,7 +40,7 @@ const DropDownPanel = styled.div`
   }
 `;
 
-const Panel = styled.div`
+const Card = styled.div`
   label {
     margin-right: 8px;
   }
@@ -81,7 +81,7 @@ export default ({
   const checkboxFor = (sets: VariableEntity[]): JSX.Element[] =>
     sets.map(dataset => (
       <span key={dataset.code}>
-        <Checkbox
+        <Form.Check
           inline={true}
           onChange={(): void => {
             handleSelectDataset(dataset);
@@ -89,7 +89,7 @@ export default ({
           checked={selectedDatasets.map(s => s.code).includes(dataset.code)}
         >
           {dataset.label}
-        </Checkbox>
+        </Form.Check>
       </span>
     ));
 
@@ -118,7 +118,7 @@ export default ({
           <DropDownPanel style={style}>{data}</DropDownPanel>
         </>
       )}
-      {!isDropdown && <Panel>{data}</Panel>}
+      {!isDropdown && <Card>{data}</Card>}
     </>
   );
 };

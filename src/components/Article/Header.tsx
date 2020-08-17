@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { Button, Panel } from 'react-bootstrap';
+import { Button, Card } from 'react-bootstrap';
 import styled from 'styled-components';
 
-const PanelBody = styled(Panel.Body)`
+const PanelBody = styled(Card.Body)`
   display: flex;
   padding-top: 15px !important;
   justify-content: flex-end;
@@ -20,13 +20,13 @@ interface Props {
 }
 export default ({ handleNewArticle }: Props) => {
   return (
-    <Panel>
+    <Card>
       <PanelBody>
         <h3 style={{ flex: 1 }}>Articles</h3>
-        <Button bsStyle="info" type="submit" onClick={handleNewArticle}>
+        <Button variant="info" type="submit" onClick={handleNewArticle}>
           New article
         </Button>
       </PanelBody>
-    </Panel>
+    </Card>
   );
 };

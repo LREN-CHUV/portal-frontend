@@ -1,11 +1,11 @@
 import moment from 'moment';
 import * as React from 'react';
-import { DropdownButton, Glyphicon, MenuItem } from 'react-bootstrap';
+import { DropdownButton, Dropdown as BsDropdown } from 'react-bootstrap';
 import styled from 'styled-components';
 
 import { ExperimentResponse } from '../API/Experiment';
 
-const Link = styled(MenuItem)`
+const Link = styled(BsDropdown.Item)`
   a {
     color: black !important;
   }
@@ -42,12 +42,7 @@ export default ({
   noCaret = false,
   style = 'default'
 }: IDropdown): JSX.Element => (
-  <Dropdown
-    noCaret={noCaret}
-    bsStyle={style}
-    id={'experiment-dropdown'}
-    title={title}
-  >
+  <Dropdown variant={style} id={'experiment-dropdown'} title={title}>
     {handleCreateNewExperiment && (
       <>
         <Link
@@ -84,12 +79,12 @@ export default ({
 
           return (
             <Link
-              eventKey={i}
+              eventKey={`${i}`}
               key={experiment.uuid}
               // tslint:disable-next-line jsx-no-lambda
               onSelect={() => handleSelect(experiment)}
             >
-              <Glyphicon glyph={experimentState} /> {experiment.name}{' '}
+              {/*<Glyphicon glyph={experimentState} />*/} {experiment.name}{' '}
               <span>({moment(experiment.created, 'YYYYMMDD').fromNow()})</span>
             </Link>
           );

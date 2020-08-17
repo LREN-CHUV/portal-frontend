@@ -1,12 +1,12 @@
 import * as React from 'react';
-import { Panel } from 'react-bootstrap';
+import { Card } from 'react-bootstrap';
 import styled from 'styled-components';
 
 import { Result, State } from '../API/Experiment';
 import ResultsErrorBoundary from '../UI/ResultsErrorBoundary';
 import RenderResult from './RenderResult';
 
-const Body = styled(Panel.Body)`
+const Body = styled(Card.Body)`
   padding: 0 16px;
 `;
 
@@ -29,10 +29,10 @@ export default ({
     '';
 
   return (
-    <Panel>
-      <Panel.Title>
+    <Card>
+      <Card.Title>
         <h3>{algorithmName}</h3>
-      </Panel.Title>
+      </Card.Title>
       <Body>
         {loading ? (
           <div className="loading">
@@ -53,6 +53,6 @@ export default ({
           <RenderResult results={results as Result[]} />
         </ResultsErrorBoundary>
       </Body>
-    </Panel>
+    </Card>
   );
 };

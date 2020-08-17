@@ -10,7 +10,7 @@ interface Props {
 const ModalComponent = ({ title, body, handleCancel, handleOK }: Props) => (
   <div className="static-modal">
     <Modal.Dialog>
-      <Modal.Header>
+      <Modal.Header translate="no">
         <Modal.Title>{title}</Modal.Title>
       </Modal.Header>
 
@@ -18,9 +18,7 @@ const ModalComponent = ({ title, body, handleCancel, handleOK }: Props) => (
 
       <Modal.Footer>
         <Button onClick={handleCancel}>Cancel</Button>
-        <Button onClick={handleOK} bsStyle="info">
-          OK
-        </Button>
+        <Button onClick={handleOK}>OK</Button>
       </Modal.Footer>
     </Modal.Dialog>
   </div>

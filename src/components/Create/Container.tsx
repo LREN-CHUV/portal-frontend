@@ -1,7 +1,7 @@
 import '../Experiment.css';
 
 import * as React from 'react';
-import { Panel, Tab, Tabs } from 'react-bootstrap';
+import { Card, Tab, Tabs } from 'react-bootstrap';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 
 import { APICore, APIExperiment, APIModel } from '../API';
@@ -58,8 +58,8 @@ class Container extends React.Component<Props, State> {
         </div>
         <div className="content">
           <div className="sidebar">
-            <Panel className="datasets">
-              <Panel.Body>
+            <Card className="datasets">
+              <Card.Body>
                 <h5>
                   <strong>Pathology</strong>
                 </h5>
@@ -72,8 +72,8 @@ class Container extends React.Component<Props, State> {
                   handleSelectDataset={apiModel.selectDataset}
                   selectedDatasets={query?.trainingDatasets || []}
                 ></LargeDatasetSelect>
-              </Panel.Body>
-            </Panel>
+              </Card.Body>
+            </Card>
             <Model
               model={apiModel.state.model}
               selectedSlug={apiModel.state.model && apiModel.state.model.slug}
@@ -83,8 +83,8 @@ class Container extends React.Component<Props, State> {
             />
           </div>
           <div className="parameters">
-            <Panel>
-              <Panel.Body>
+            <Card>
+              <Card.Body>
                 {alert && (
                   <Alert
                     message={alert.message}
@@ -96,7 +96,7 @@ class Container extends React.Component<Props, State> {
                   defaultActiveKey={1}
                   id="uncontrolled-create-experiment-tab"
                 >
-                  <Tab eventKey={1} title="Algorithm">
+                  <Tab eventKey={'1'} title="Algorithm">
                     <Parameters
                       algorithm={this.state && this.state.algorithm}
                       parameters={this.state && this.state.parameters}
@@ -105,27 +105,27 @@ class Container extends React.Component<Props, State> {
                       apiCore={apiCore}
                     />
                   </Tab>
-                  <Tab eventKey={2} title="About running experiments">
+                  <Tab eventKey={'2'} title="About running experiments">
                     <Help />
                   </Tab>
                 </Tabs>
-              </Panel.Body>
-            </Panel>
+              </Card.Body>
+            </Card>
           </div>
           <div className="sidebar2">
-            <Panel>
-              <Panel.Title>
+            <Card>
+              <Card.Title>
                 <h3>Available Algorithms</h3>
-              </Panel.Title>
-              <Panel.Body>
+              </Card.Title>
+              <Card.Body>
                 <AvailableAlgorithms
                   algorithms={apiCore.state.algorithms}
                   lookup={apiCore.lookup}
                   handleSelectMethod={this.handleSelectAlgorithm}
                   apiModel={apiModel}
                 />
-              </Panel.Body>
-            </Panel>
+              </Card.Body>
+            </Card>
           </div>
         </div>
       </div>
