@@ -8,6 +8,11 @@
 
 .shortcuts input {
   margin-right: 16px;
+  padding: 0.2rem 0.5rem;
+}
+
+.shortcuts .form-control {
+  font-size: 0.8rem;
 }
 
 .shortcuts .d3-link-results {
@@ -26,4 +31,9 @@
 
 .shortcuts .d3-link-results a {
   display: block;
+  font-size: 0.8rem;
+}
+
+.shortcuts .hidden {
+  display: none;
 }

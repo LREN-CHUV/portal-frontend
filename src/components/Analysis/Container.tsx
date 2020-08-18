@@ -1,6 +1,3 @@
-import '../Model.css';
-import './Review.css';
-
 import * as React from 'react';
 import { Card } from 'react-bootstrap';
 import { RouteComponentProps } from 'react-router-dom';
@@ -239,27 +236,32 @@ const Container = ({
         <div className="sidebar">
           <Card className="datasets">
             <Card.Body>
-              <h5>
-                <strong>Pathology</strong>
-              </h5>
-              <p>{query?.pathology}</p>
-              <h5>
-                <strong>Datasets</strong>
-              </h5>
-              <LargeDatasetSelect
-                datasets={datasets}
-                handleSelectDataset={apiModel.selectDataset}
-                selectedDatasets={query?.trainingDatasets || []}
-              ></LargeDatasetSelect>
+              {query?.pathology && (
+                <section>
+                  <h4>Pathology</h4>
+                  <p>{query?.pathology}</p>
+                </section>
+              )}
+              {query?.trainingDatasets && (
+                <section>
+                  <LargeDatasetSelect
+                    datasets={datasets}
+                    handleSelectDataset={apiModel.selectDataset}
+                    selectedDatasets={query?.trainingDatasets || []}
+                  ></LargeDatasetSelect>
+                </section>
+              )}
+              <section>
+                <Model
+                  model={model}
+                  selectedSlug={model && model.slug}
+                  lookup={apiCore.lookup}
+                  items={apiModel.state.models}
+                  handleSelectModel={handleSelectModel}
+                />
+              </section>
             </Card.Body>
           </Card>
-          <Model
-            model={model}
-            selectedSlug={model && model.slug}
-            lookup={apiCore.lookup}
-            items={apiModel.state.models}
-            handleSelectModel={handleSelectModel}
-          />
         </div>
         <div className="results">
           <Content

@@ -1,12 +1,12 @@
 import * as React from 'react';
+import { Card } from 'react-bootstrap';
 import styled from 'styled-components';
+
+import { Algorithm } from '../API/Core';
 import { ExperimentResponse } from '../API/Experiment';
 import { UI_HIDDEN_PARAMETERS } from '../constants';
-import Card from '../UI/Panel';
-import { Algorithm } from '../API/Core';
 
 const Param = styled.p`
-  margin: 0 0 8px 0;
   overflow: wrap;
   width: 200px;
   word-wrap: break-word;
@@ -22,19 +22,13 @@ const Algorithms = ({
 
   return (
     (algorithms && (
-      <Card
-        title="Algorithm"
-        body={
+      <>
+        <h4>Algorithm</h4>
+        {
           <>
             {algorithms.map((algorithm: Algorithm, j: number) => (
               <div key={`name-${algorithm.name}-${j}`}>
-                <Param>
-                  <strong>{algorithm.label || algorithm.name}</strong>
-                </Param>
-                {algorithm.parameters &&
-                  algorithm.parameters.filter(
-                    (p: any) => !UI_HIDDEN_PARAMETERS.includes(p.label)
-                  ).length > 0 && <h4>Parameters</h4>}
+                <Param>{algorithm.label || algorithm.name}</Param>
                 {algorithm.parameters &&
                   algorithm.parameters.length > 0 &&
                   algorithm.parameters
@@ -48,7 +42,7 @@ const Algorithms = ({
             ))}
           </>
         }
-      />
+      </>
     )) ||
     null
   );

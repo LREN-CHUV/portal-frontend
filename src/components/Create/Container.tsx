@@ -1,5 +1,3 @@
-import '../Experiment.css';
-
 import * as React from 'react';
 import { Card, Tab, Tabs } from 'react-bootstrap';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
@@ -60,27 +58,36 @@ class Container extends React.Component<Props, State> {
           <div className="sidebar">
             <Card className="datasets">
               <Card.Body>
-                <h5>
-                  <strong>Pathology</strong>
-                </h5>
-                <p>{query?.pathology}</p>
-                <h5>
-                  <strong>Datasets</strong>
-                </h5>
-                <LargeDatasetSelect
-                  datasets={datasets}
-                  handleSelectDataset={apiModel.selectDataset}
-                  selectedDatasets={query?.trainingDatasets || []}
-                ></LargeDatasetSelect>
+                {query?.pathology && (
+                  <section>
+                    <h4>Pathology</h4>
+                    <p>{query?.pathology || ''}</p>
+                  </section>
+                )}
+
+                {datasets && (
+                  <section>
+                    <LargeDatasetSelect
+                      datasets={datasets}
+                      handleSelectDataset={apiModel.selectDataset}
+                      selectedDatasets={query?.trainingDatasets || []}
+                    ></LargeDatasetSelect>
+                  </section>
+                )}
+
+                <section>
+                  <Model
+                    model={apiModel.state.model}
+                    selectedSlug={
+                      apiModel.state.model && apiModel.state.model.slug
+                    }
+                    items={apiModel.state.models}
+                    handleSelectModel={this.handleSelectModel}
+                    lookup={apiCore.lookup}
+                  />
+                </section>
               </Card.Body>
             </Card>
-            <Model
-              model={apiModel.state.model}
-              selectedSlug={apiModel.state.model && apiModel.state.model.slug}
-              items={apiModel.state.models}
-              handleSelectModel={this.handleSelectModel}
-              lookup={apiCore.lookup}
-            />
           </div>
           <div className="parameters">
             <Card>
@@ -114,10 +121,8 @@ class Container extends React.Component<Props, State> {
           </div>
           <div className="sidebar2">
             <Card>
-              <Card.Title>
-                <h3>Available Algorithms</h3>
-              </Card.Title>
               <Card.Body>
+                <h4>Available Algorithms</h4>
                 <AvailableAlgorithms
                   algorithms={apiCore.state.algorithms}
                   lookup={apiCore.lookup}

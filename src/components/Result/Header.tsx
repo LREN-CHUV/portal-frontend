@@ -32,12 +32,12 @@ export default ({
             Results of experiment <strong>{name}</strong> on{' '}
             <Link to={`/review`}>{modelDefinitionId}</Link>
           </h3>
-          <h5 className="item">
+          <p className="item">
             Created{' '}
             {experiment &&
               moment(new Date(experiment.created), 'YYYYMMDD').fromNow()}{' '}
             by {experiment && experiment.user && experiment.user.username}
-          </h5>
+          </p>
         </div>
         <div className="item">
           <Dropdown
@@ -50,7 +50,7 @@ export default ({
             }
             /* eslint-disable-next-line */
             style={'info'}
-            title="RELATED EXPERIMENTS"
+            title="Related experiments"
             handleSelect={handleSelectExperiment}
             handleCreateNewExperiment={handleCreateNewExperiment}
           />
