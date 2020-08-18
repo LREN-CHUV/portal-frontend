@@ -33,6 +33,9 @@ const breadcrumb = (
 const Histogram = styled.div`
   min-height: 440px;
   margin-top: 8px;
+  .card-header-tabs a {
+    font-size: 0.8rem;
+  }
 `;
 
 const Overview = styled.div`
@@ -182,9 +185,6 @@ export default (props: Props): JSX.Element => {
         <Overview>
           <p>
             <b>Path</b>: <Breadcrumb ref={divRef} />
-          </p>
-          <p>
-            <b>Type</b>: {selectedNode.data.type || 'group'}
           </p>
           <p>
             <b>Description</b>: {selectedNode.data.description || '-'}

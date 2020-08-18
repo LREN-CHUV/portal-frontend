@@ -1,5 +1,6 @@
 import React from 'react';
-import { Button, Form } from 'react-bootstrap';
+import { DropdownButton, Form } from 'react-bootstrap';
+import DropdownMenu from 'react-bootstrap/esm/DropdownMenu';
 import styled from 'styled-components';
 
 import { VariableEntity } from '../API/Core';
@@ -23,6 +24,7 @@ const DropDownPanel = styled.div`
 
   label {
     margin-right: 8px;
+    font-size: 0.8rem;
   }
 
   .checkbox {
@@ -38,11 +40,12 @@ const DropDownPanel = styled.div`
   p {
     margin-bottom: 0;
   }
-`;
+}`;
 
 const Card = styled.div`
   label {
     margin-right: 8px;
+    font-size: 0.8rem;
   }
 
   .checkbox {
@@ -83,13 +86,14 @@ export default ({
       <span key={dataset.code}>
         <Form.Check
           inline={true}
+          type="checkbox"
+          id={`default-${dataset.code}`}
+          label={dataset.label}
           onChange={(): void => {
             handleSelectDataset(dataset);
           }}
           checked={selectedDatasets.map(s => s.code).includes(dataset.code)}
-        >
-          {dataset.label}
-        </Form.Check>
+        ></Form.Check>
       </span>
     ));
 
@@ -99,9 +103,7 @@ export default ({
       {ldatasets && ldatasets.length > 0 && (
         <>
           <hr />
-          <p>
-            <b>Longitudinal datasets</b>
-          </p>
+          <h5>Longitudinal datasets</h5>
         </>
       )}
       {ldatasets && checkboxFor(ldatasets)}
@@ -112,13 +114,24 @@ export default ({
     <>
       {isDropdown && (
         <>
-          <Button onClick={(): void => setVisible(!visible)}>
-            Datasets <span className="caret"></span>
-          </Button>
-          <DropDownPanel style={style}>{data}</DropDownPanel>
+          <DropdownButton
+            size="sm"
+            onClick={(): void => setVisible(!visible)}
+            title="Datasets"
+            variant="light"
+          >
+            <DropdownMenu>
+              <DropDownPanel style={style}>{data}</DropDownPanel>
+            </DropdownMenu>
+          </DropdownButton>
         </>
       )}
-      {!isDropdown && <Card>{data}</Card>}
+      {!isDropdown && (
+        <>
+          {datasets && <h4>Datasets</h4>}
+          <Card>{data}</Card>
+        </>
+      )}
     </>
   );
 };

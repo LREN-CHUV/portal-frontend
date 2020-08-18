@@ -14,7 +14,7 @@ export default ({
   reset = false,
   selectedSlug
 }: Dropdown): JSX.Element => {
-  const [title, setTitle] = useState(selectedSlug || 'Select');
+  const [title, setTitle] = useState(selectedSlug || 'Select from model');
   useEffect(() => {
     if (selectedSlug) {
       const f = items && items.find(i => i.slug === selectedSlug);
@@ -25,7 +25,12 @@ export default ({
   }, [selectedSlug, items]);
 
   return (
-    <DropdownButton id={'model-dropdown'} title={title}>
+    <DropdownButton
+      id={'model-dropdown'}
+      title={title}
+      size="sm"
+      variant="light"
+    >
       {reset && (
         <>
           <BsDropdown.Item
@@ -37,9 +42,9 @@ export default ({
               handleSelect();
             }}
           >
-            <strong>Reset</strong>
+            Reset
           </BsDropdown.Item>
-          <BsDropdown.Item>---</BsDropdown.Item>
+          <BsDropdown.ItemText>-------</BsDropdown.ItemText>
         </>
       )}
 
@@ -56,7 +61,7 @@ export default ({
                 handleSelect(item);
               }}
             >
-              <strong>{item.title}</strong>
+              {item.title}
             </BsDropdown.Item>
           );
         })}

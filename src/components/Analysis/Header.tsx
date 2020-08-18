@@ -82,7 +82,7 @@ export default class Header extends React.Component<Props> {
                   : ''
               }
             >
-              RUN EXPERIMENT <BsFillCaretRightFill />{' '}
+              Run experiment <BsFillCaretRightFill />{' '}
             </Button>
           </div>
         </Card.Body>

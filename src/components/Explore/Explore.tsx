@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { Button, Card } from 'react-bootstrap';
+import { Button, Card, Dropdown, DropdownButton } from 'react-bootstrap';
+import { BsFillCaretRightFill } from 'react-icons/bs';
 import styled from 'styled-components';
 
 import { APICore, APIMining, APIModel } from '../API';
@@ -38,10 +39,6 @@ const DatasetsBox = styled.div`
 
 const Select = styled.select`
   padding: 6px 12px 4px 12px;
-
-  option {
-    background-color: white;
-  }
 `;
 
 const SearchBox = styled.div`
@@ -51,24 +48,16 @@ const SearchBox = styled.div`
   /* width: 320px; */
 `;
 
-const PanelTitle = styled(Card.Title)`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  margin: 0 8px 0 0;
-`;
-
 const ModelTitle = styled.div`
   display: flex;
   align-items: center;
   justify-content: flex-start;
   margin: 0 0 8px 0;
-  padding: 2px;
+  padding: 0 0 8px 0;
   border-bottom: 1px solid lightgray;
 
-  div:first-child {
-    flex: 1;
+  .dropdown {
+    flex: 2;
   }
 
   h5 {
@@ -155,19 +144,25 @@ export default (props: ExploreProps): JSX.Element => {
               <PathologiesBox>
                 {apiCore.state.pathologies &&
                   apiCore.state.pathologies.length > 1 && (
-                    <Select
-                      className={'btn btn-default'}
-                      onChange={(e): void => {
-                        handleSelectPathology(e.target.value);
-                      }}
-                      value={selectedPathology}
+                    <DropdownButton
+                      size="sm"
+                      id="dropdown-pathology"
+                      variant="light"
+                      title={selectedPathology || 'Pathology'}
                     >
-                      {apiCore.state.pathologies.map(g => (
-                        <option key={g.code} value={g.code}>
+                      {apiCore.state.pathologies.map((g, i: number) => (
+                        <Dropdown.Item
+                          onSelect={(): void => {
+                            handleSelectPathology(g.code);
+                          }}
+                          eventKey={`${i}`}
+                          key={`${g.code}`}
+                          value={g.code}
+                        >
                           {g.label}
-                        </option>
+                        </Dropdown.Item>
                       ))}
-                    </Select>
+                    </DropdownButton>
                   )}
               </PathologiesBox>
               <DatasetsBox>
@@ -192,25 +187,8 @@ export default (props: ExploreProps): JSX.Element => {
         <Col2>
           <Card>
             <Card.Body>
-              <PanelTitle>
-                <h3>{selectedNode && selectedNode.data.label}</h3>
-                <Button
-                  variant="info"
-                  type="submit"
-                  onClick={handleGoToAnalysis}
-                >
-                  Descriptive Analysis{' '}
-                  {/* <Glyphicon glyph="chevron-right" /> */}
-                </Button>
-              </PanelTitle>
-            </Card.Body>
-          </Card>
-          <Card>
-            <Card.Body>
-              {/* <Tabs defaultActiveKey={0} id="uncontrolled-formula-tabs">
-                <Tab eventKey={0} title={'Parameters'} key={0}> */}
               <ModelTitle>
-                <h5>Parameters</h5>
+                <h4 style={{ marginRight: '8px' }}>Parameters</h4>
                 <DropdownModel
                   items={apiModel.state.models}
                   selectedSlug={
@@ -219,16 +197,25 @@ export default (props: ExploreProps): JSX.Element => {
                   reset={apiModel.state.model ? true : false}
                   handleSelect={handleSelectModel}
                 />
-                <div style={{ marginLeft: 'auto' }}>
-                  <a
-                    href={`${ONTOLOGY_URL}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                <div className="item">
+                  <Button
+                    variant="info"
+                    type="submit"
+                    onClick={handleGoToAnalysis}
                   >
-                    <b>Access to the latest ontology and terminology</b>
-                  </a>
+                    Descriptive Analysis <BsFillCaretRightFill />
+                  </Button>
                 </div>
               </ModelTitle>
+              <p style={{ padding: '4px' }}>
+                <a
+                  href={`${ONTOLOGY_URL}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <b>Access to the latest ontology and terminology</b>
+                </a>
+              </p>
               <ModelView
                 d3Model={d3Model}
                 handleUpdateD3Model={handleUpdateD3Model}
@@ -238,6 +225,7 @@ export default (props: ExploreProps): JSX.Element => {
                   <Button
                     className="child"
                     variant={'success'}
+                    size="sm"
                     disabled={
                       !selectedNode || selectedNode.data.code === 'root'
                     }
@@ -253,13 +241,14 @@ export default (props: ExploreProps): JSX.Element => {
                     ).length === selectedNode.leaves().length
                       ? '-'
                       : '+'}{' '}
-                    AS VARIABLE
+                    As variable
                   </Button>
                 }
                 buttonCovariable={
                   <Button
                     className="child"
                     variant={'warning'}
+                    size="sm"
                     disabled={
                       !selectedNode || selectedNode.data.code === 'root'
                     }
@@ -275,13 +264,14 @@ export default (props: ExploreProps): JSX.Element => {
                     ).length === selectedNode.leaves().length
                       ? '-'
                       : '+'}{' '}
-                    AS COVARIABLE
+                    As covariable
                   </Button>
                 }
                 buttonFilter={
                   <Button
                     className="child"
-                    variant={'danger'}
+                    variant={'secondary'}
+                    size="sm"
                     disabled={
                       !selectedNode || selectedNode.data.code === 'root'
                     }
@@ -297,7 +287,7 @@ export default (props: ExploreProps): JSX.Element => {
                     ).length === selectedNode.leaves().length
                       ? '-'
                       : '+'}{' '}
-                    AS FILTER
+                    As filter
                   </Button>
                 }
               />
@@ -310,7 +300,8 @@ export default (props: ExploreProps): JSX.Element => {
                   />
                 </Tab>
               </Tabs> */}
-              Available algorithms:{' '}
+
+              <h5 style={{ paddingTop: '4px' }}>Available algorithms</h5>
               <AvailableAlgorithms
                 layout={'inline'}
                 algorithms={apiCore.state.algorithms}

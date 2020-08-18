@@ -2,9 +2,8 @@ import 'bootstrap/dist/css/bootstrap.css';
 
 import * as React from 'react';
 import { Route, Switch } from 'react-router-dom';
-import styled, { createGlobalStyle } from 'styled-components';
-
-import backgroundImage from '../../images/body-bg.jpg';
+import styled from 'styled-components';
+import { GlobalStyles } from '../UI/GlobalStyle';
 import ExperimentReview from '../Analysis/Container';
 import { APICore, APIExperiment, APIMining, APIModel, APIUser } from '../API';
 import { ExperimentResponse } from '../API/Experiment';
@@ -36,34 +35,6 @@ interface Props {
   apiMining: APIMining;
   apiUser: APIUser;
 }
-
-const GlobalStyles = createGlobalStyle`
-  body {
-    font-family: 'Open Sans', sans-serif;
-    background: url(${backgroundImage}) top center no-repeat fixed #f5f5f5;
-    background-size: 100% auto;
-  }
-
-  .card {
-    margin-bottom: 8px;
-    background-color: #fff;
-    border: 1px solid transparent;
-    border-radius: 4px;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
-  }
-
-  .card-body {
-    padding: 0.6rem 0;
-  }
-
-  .card-title h3 {
-    font-size: 1.4rem;
-  }
-
-  .btn {
-    font-size: 0.8rem;
-  }
-`;
 
 const Main = styled.main`
   margin: 0 auto;

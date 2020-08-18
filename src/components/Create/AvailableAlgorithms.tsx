@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button, OverlayTrigger, Popover } from 'react-bootstrap';
+import { Button, Card, OverlayTrigger, Popover } from 'react-bootstrap';
 import styled from 'styled-components';
 
 import { APIModel } from '../API';
@@ -150,9 +150,13 @@ const AvailableAlgorithms = ({
           rootClose={false}
           overlay={
             <Popover id={`tooltip-${algorithm.name}`}>
-              <h4>{algorithm.label}</h4>
-              <p>{algorithm.desc}</p>
-              {variablesHelpMessage(algorithm)}
+              <Card>
+                <Card.Body>
+                  <h4>{algorithm.label}</h4>
+                  <p>{algorithm.desc}</p>
+                  {variablesHelpMessage(algorithm)}
+                </Card.Body>
+              </Card>
             </Popover>
           }
         >
@@ -190,7 +194,7 @@ const AvailableAlgorithms = ({
               )}
             </div>
           ) : (
-            <var
+            <p
               key={algorithm.name}
               style={{
                 color: algorithm.enabled ? '#03a9f4' : 'gray',
@@ -199,7 +203,7 @@ const AvailableAlgorithms = ({
               }}
             >
               {algorithm.label || algorithm.name}
-            </var>
+            </p>
           )}
         </OverlayTrigger>
       ))}

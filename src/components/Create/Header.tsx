@@ -52,7 +52,7 @@ export default class Header extends React.Component<Props, State> {
               }
               /* eslint-disable-next-line */
               style={'info'}
-              title="RELATED EXPERIMENTS"
+              title="Related Experiments"
               handleSelect={handleSelectExperiment}
               handleCreateNewExperiment={null}
             />
