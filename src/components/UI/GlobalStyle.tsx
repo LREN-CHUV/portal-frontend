@@ -24,11 +24,11 @@ export const GlobalStyles = createGlobalStyle`
     margin-bottom: 4px;
   }
 
-  h5 {
+  h5, h6 {
     font-size: 0.7rem;
   }
 
-  p, th, td {
+  p, th, td, li {
     font-size: 0.8rem;
   }
 

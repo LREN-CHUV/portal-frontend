@@ -14,8 +14,6 @@ const Container = styled.div`
   margin: 48px;
 
   .tos-form {
-    display: flex;
-    flex-direction: column;
     margin: 48px;
   }
 `;
@@ -619,9 +617,14 @@ export default ({ ...props }: Props): JSX.Element => {
         </li>
       </ol>
       <div className="tos-form">
-        <Form.Check onChange={handleCheckboxChange}>
-          <b>I accept the HBP Medical Informatics Platform Terms of Use.</b>
-        </Form.Check>
+        <Form.Check
+          inline={true}
+          type="checkbox"
+          id={`tos`}
+          label={'I accept the HBP Medical Informatics Platform Terms of Use.'}
+          onChange={handleCheckboxChange}
+        ></Form.Check>
+
         <Button
           onClick={handleAcceptTOS}
           disabled={!accepted}
