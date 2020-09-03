@@ -207,7 +207,7 @@ export default (props: ExploreProps): JSX.Element => {
                   </Button>
                 </div>
               </ModelTitle>
-              <p style={{ padding: '4px' }}>
+              <p style={{ padding: '4px 0 8px 0' }}>
                 <a
                   href={`${ONTOLOGY_URL}`}
                   target="_blank"
