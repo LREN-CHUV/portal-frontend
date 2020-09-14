@@ -117,11 +117,23 @@ export const ENABLED_ALGORITHMS = [
     // datasetType: LONGITUDINAL_DATASET_TYPE,
 
     types: [MIME_TYPES.HIGHCHARTS]
+  },
+  {
+    enabled: true,
+    label: '3C',
+    types: [MIME_TYPES.HIGHCHARTS]
   }
 ].map(a => ({ ...a, types: [...ERRORS_OUTPUT, ...a.types] }));
 
-const independents = ['X', 'column1', 'x', 'descriptive_attributes'];
-const dependents = ['Y', 'column2', 'y', 'target_attributes', 'Event variable'];
+const independents = ['X', 'column1', 'x', 'descriptive_attributes', 'CM'];
+const dependents = [
+  'Y',
+  'column2',
+  'y',
+  'target_attributes',
+  'Event variable',
+  'PB'
+];
 export const UI_HIDDEN_PARAMETERS = [
   ...dependents,
   ...independents,
