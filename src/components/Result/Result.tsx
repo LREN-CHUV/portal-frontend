@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { Card } from 'react-bootstrap';
-import styled from 'styled-components';
 
 import { Result, State } from '../API/Experiment';
 import ResultsErrorBoundary from '../UI/ResultsErrorBoundary';

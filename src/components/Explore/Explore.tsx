@@ -37,10 +37,6 @@ const DatasetsBox = styled.div`
   flex: 0 1 1;
 `;
 
-const Select = styled.select`
-  padding: 6px 12px 4px 12px;
-`;
-
 const SearchBox = styled.div`
   margin-top: 4px;
   margin-left: 8px;

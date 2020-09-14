@@ -349,7 +349,7 @@ export default ({
   const d3Model = apiModel.state.internalD3Model;
 
   return (
-    <section>
+    <>
       {apiCore.state.pathologyError && (
         <AlertBox variant="warning">
           <div
@@ -359,18 +359,17 @@ export default ({
           />
         </AlertBox>
       )}
-      {showPathologySwitchWarning && (
-        <Modal
-          title="Change Pathology ?"
-          body="Selecting a new pathology will reset your selection"
-          handleCancel={handleCancelSwitchPathology}
-          handleOK={handleOKSwitchPathology}
-        />
-      )}
+      <Modal
+        show={showPathologySwitchWarning}
+        title="Change Pathology ?"
+        body="Selecting a new pathology will reset your selection"
+        handleCancel={handleCancelSwitchPathology}
+        handleOK={handleOKSwitchPathology}
+      />
 
       {d3Layout && (
         <CirclePack layout={d3Layout} d3Model={d3Model} {...nextProps} />
       )}
-    </section>
+    </>
   );
 };

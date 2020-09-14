@@ -1,6 +1,4 @@
 import * as React from 'react';
-import { Card } from 'react-bootstrap';
-import styled from 'styled-components';
 
 import { VariableEntity } from '../API/Core';
 import { ModelResponse } from '../API/Model';

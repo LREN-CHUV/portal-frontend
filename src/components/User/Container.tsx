@@ -20,6 +20,7 @@ const Content = styled.div`
 
   .card {
     padding: 1em;
+    min-width: 360px;
   }
 
   .card:first-child {
