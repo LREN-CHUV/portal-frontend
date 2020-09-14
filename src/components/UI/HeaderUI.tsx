@@ -12,14 +12,12 @@ const Body = styled(Card.Body)`
 `;
 
 interface Props {
-    title?: string;
-    body?: JSX.Element;
+  title?: string;
+  body?: JSX.Element;
 }
 
 export default ({ title, body }: Props): JSX.Element => (
-    <Card>
-        <Card.Body>
-            
-        </Card.Body>
-    </Card>
+  <Card>
+    <Card.Body></Card.Body>
+  </Card>
 );

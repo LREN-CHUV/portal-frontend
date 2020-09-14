@@ -10,6 +10,10 @@ interface AvailableAlgorithm extends Algorithm {
 }
 
 const Container = styled.div`
+  line-height: 1;
+  var {
+    font-size: 0.8rem;
+  }
   var::after {
     content: ', ';
   }
@@ -194,7 +198,7 @@ const AvailableAlgorithms = ({
               )}
             </div>
           ) : (
-            <p
+            <var
               key={algorithm.name}
               style={{
                 color: algorithm.enabled ? '#03a9f4' : 'gray',
@@ -203,7 +207,7 @@ const AvailableAlgorithms = ({
               }}
             >
               {algorithm.label || algorithm.name}
-            </p>
+            </var>
           )}
         </OverlayTrigger>
       ))}
