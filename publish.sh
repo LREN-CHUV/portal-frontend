@@ -44,8 +44,8 @@ case $n in
   ;;
 esac
 
-NEXT_VERSION=$(npm --no-git-tag-version version $VERSION)
-INCREMENTED_VERSION=$(echo $NEXT_VERSION | cut -c 2-)
+yarn version --no-git-tag-version --$VERSION
+INCREMENTED_VERSION=$(node -p -e "require('./package.json').version")
 
 echo "Incremented version ($VERSION): " $INCREMENTED_VERSION
 echo
