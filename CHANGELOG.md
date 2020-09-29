@@ -1,5 +1,12 @@
 # Changelog
 
+## 6.4.4 - 2020/09/29
+
+- Added 3C algorithm + test
+  - Current R implementation matters about the order of the x variables sent in an array
+- Added filter box
+- Various minor bug fixes
+
 ## 6.4.3 - 2020/06/15
 
 - Renamed federation to datacatalogueUrl for main server

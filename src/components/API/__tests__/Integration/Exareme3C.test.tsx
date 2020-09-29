@@ -15,35 +15,42 @@ import {
 
 // config
 
-const modelSlug = `anova-${Math.round(Math.random() * 10000)}`;
-const algorithmId = 'KMEANS';
-const algorithmLabel = 'k-Means Clustering';
+const modelSlug = `3c-${Math.round(Math.random() * 10000)}`;
+const algorithmId = 'THREE_C';
+const algorithmLabel = '3C';
 const parameters = [
-  { name: 'k', value: '4', label: 'k' },
-  { name: 'e', value: 1, label: 'e' },
-  {
-    name: 'iterations_max_number',
-    value: 1000,
-    label: 'iterations_max_number'
-  }
+   {"name": "dataset", "value": "ppmi, edsd"},
+   {"name": "dx", "value": "alzheimerbroadcategory"},
+   {"name": "c2_feature_selection_method", "value": "RF"},
+   {"name": "c2_num_clusters_method", "value": "Euclidean"},
+   {"name": "c2_num_clusters", "value": "6"},
+   {"name": "c2_clustering_method", "value": "Euclidean"},
+   {"name": "c3_feature_selection_method", "value": "RF"},
+   {"name": "c3_classification_method", "value": "RF"},
 ];
+
 const model: ModelResponse = {
   query: {
     pathology: TEST_PATHOLOGIES.dementia.code,
-    coVariables: [],
+    coVariables: [
+      {
+        code: 'gender'
+      },
+      {
+        code: 'agegroup'
+      }
+    ],
     filters: '',
+    groupings: [],
     testingDatasets: [],
     trainingDatasets: TEST_PATHOLOGIES.dementia.datasets.filter(
       d => d.code !== 'fake_longitudinal'
     ),
     validationDatasets: [],
     variables: [
-      {
-        code: 'leftacgganteriorcingulategyrus'
-      },
-      {
-        code: 'rightcerebellumexterior'
-      }
+      { code: 'lefthippocampus' },
+      { code: 'righthippocampus' },
+      { code: 'leftcaudate' }
     ]
   }
 };
@@ -51,6 +58,7 @@ const model: ModelResponse = {
 // Test
 
 describe('Integration Test for experiment API', () => {
+
   beforeAll(async () => {
     const mstate = await createModel({
       model,
@@ -60,7 +68,7 @@ describe('Integration Test for experiment API', () => {
     expect(mstate.error).toBeFalsy();
     expect(mstate.model).toBeTruthy();
 
-    return;
+    return
   });
 
   it(`create ${algorithmId}`, async () => {
@@ -93,12 +101,12 @@ describe('Integration Test for experiment API', () => {
     const wrapper = mount(<Result {...props} />);
     expect(wrapper.find('.error')).toHaveLength(0);
     expect(wrapper.find('.loading')).toHaveLength(0);
-    expect(wrapper.find('.result')).toHaveLength(2);
+    expect(wrapper.find('.result')).toHaveLength(1);
     expect(
       wrapper
         .find('div.result table tbody tr td')
         .at(1)
         .text()
-    ).toEqual('4.198');
+    ).toBeTruthy();
   });
 });
