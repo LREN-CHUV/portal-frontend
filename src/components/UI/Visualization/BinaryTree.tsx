@@ -144,7 +144,6 @@ export default ({ data }: { data: JSONNode }): JSX.Element => {
     let g: d3.Selection<SVGGElement, unknown, null, undefined>;
     const transScale = JSON.stringify(data).length > 10000 ? 0.2 : 1;
 
-
     const firstRender = (treeNode: Node): void => {
       const treemap = d3
         .tree()

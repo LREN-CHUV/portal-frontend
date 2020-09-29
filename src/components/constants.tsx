@@ -24,7 +24,7 @@ export const ERRORS_OUTPUT = [
   MIME_TYPES.USER_WARNING
 ];
 
-export const ENABLED_ALGORITHMS = [
+export const ALGORITHMS_OUTPUT = [
   {
     enabled: true,
     label: 'ANOVA',
@@ -121,7 +121,7 @@ export const ENABLED_ALGORITHMS = [
   {
     enabled: true,
     label: '3C',
-    types: [MIME_TYPES.HIGHCHARTS]
+    types: [MIME_TYPES.JSONDATA]
   }
 ].map(a => ({ ...a, types: [...ERRORS_OUTPUT, ...a.types] }));
 

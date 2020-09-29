@@ -3,7 +3,7 @@ import { Container } from 'unstated';
 
 import { backendURL } from '../API';
 import {
-  ENABLED_ALGORITHMS,
+  ALGORITHMS_OUTPUT,
   FORBIDDEN_ACCESS_MESSAGE,
   UI_HIDDEN_PARAMETERS
 } from '../constants';
@@ -43,6 +43,7 @@ export interface Algorithm {
   parameters: AlgorithmParameter[] | AlgorithmParameterRequest[];
   type: string;
   datasetType?: string;
+  enabled?: boolean;
 }
 
 export interface AlgorithmResult {
@@ -452,7 +453,8 @@ class Core extends Container<State> {
         ? json
         : json.filter(
             (algorithm: Algorithm) =>
-              ENABLED_ALGORITHMS.find(a => algorithm.label === a.label)?.enabled
+              algorithm.enabled ||
+              ALGORITHMS_OUTPUT.find(a => algorithm.label === a.label)?.enabled
           );
 
       const data = algorithms.sort((x: Algorithm, y: Algorithm) => {
@@ -474,7 +476,7 @@ class Core extends Container<State> {
               // For historical reason, exareme serves a "value" as a "defaultValue".
               // doesn't work for x,y,dataset and pathology. So we blank our "value", and
               // assign the default on the fly, if the user didn't provide it's own value
-              // Exareme's "defaultValue" in an other hand is a placeholder, a recommendation
+              // Exareme's "defaultValue" on an other hand is a placeholder, a recommendation
 
               const parameter = {
                 ...p,
