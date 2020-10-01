@@ -1,6 +1,5 @@
 import React from 'react';
-import { DropdownButton, Form } from 'react-bootstrap';
-import DropdownMenu from 'react-bootstrap/esm/DropdownMenu';
+import { Button, Form } from 'react-bootstrap';
 import styled from 'styled-components';
 
 import { VariableEntity } from '../API/Core';
@@ -41,6 +40,19 @@ const DropDownPanel = styled.div`
     margin-bottom: 0;
   }
 }`;
+
+const CaretButton = styled(Button)`
+  ::after {
+    display: inline-block;
+    margin-left: 0.255em;
+    vertical-align: 0.255em;
+    content: '';
+    border-top: 0.3em solid;
+    border-right: 0.3em solid transparent;
+    border-bottom: 0;
+    border-left: 0.3em solid transparent;
+  }
+`;
 
 const Card = styled.div`
   label {
@@ -114,16 +126,15 @@ export default ({
     <>
       {isDropdown && (
         <>
-          <DropdownButton
+          <CaretButton
+            variant="light"
+            id="dropdown-basic"
             size="sm"
             onClick={(): void => setVisible(!visible)}
-            title="Datasets"
-            variant="light"
           >
-            <DropdownMenu>
-              <DropDownPanel style={style}>{data}</DropDownPanel>
-            </DropdownMenu>
-          </DropdownButton>
+            Datasets
+          </CaretButton>
+          <DropDownPanel style={style}>{data}</DropDownPanel>
         </>
       )}
       {!isDropdown && (
