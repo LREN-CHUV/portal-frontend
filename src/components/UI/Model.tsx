@@ -115,18 +115,24 @@ class Model extends React.Component<Props> {
   };
 
   private formatFilter = (filter: any) => {
-    // TODO: refactor
     const { lookup, model } = this.props;
     const humanRules: any = [];
     const pathologyCode = model?.query?.pathology;
     try {
       const json = JSON.parse(filter);
 
-      let level = 0;
-      const stringifyRules = (data: any) => {
+      const stringifyRules = (data: any, level: number): void => {
         data.rules.forEach((rule: any, index: number) => {
           if (rule.condition) {
-            stringifyRules(rule);
+            stringifyRules(rule, level + 1);
+
+            if (index < data.rules.length - 1) {
+              humanRules.push({
+                data: `${data.condition}`,
+                level
+              });
+            }
+
             return;
           }
 
@@ -136,17 +142,16 @@ class Model extends React.Component<Props> {
             } ${this.ruleOperator(rule.operator)} ${rule.value}`,
             level
           });
+
           if (index < data.rules.length - 1) {
             humanRules.push({
               data: `${data.condition}`,
               level
             });
           }
-
-          level++;
         });
       };
-      stringifyRules(json);
+      stringifyRules(json, 0);
     } catch (e) {
       console.log(e);
     }
