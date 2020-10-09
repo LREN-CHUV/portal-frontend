@@ -123,14 +123,16 @@ class Model extends React.Component<Props> {
 
       const stringifyRules = (data: any, level: number): void => {
         data.rules.forEach((rule: any, index: number) => {
+          const condition = {
+            data: `${data.condition}`,
+            level
+          };
+
           if (rule.condition) {
             stringifyRules(rule, level + 1);
 
             if (index < data.rules.length - 1) {
-              humanRules.push({
-                data: `${data.condition}`,
-                level
-              });
+              humanRules.push(condition);
             }
 
             return;
@@ -144,10 +146,7 @@ class Model extends React.Component<Props> {
           });
 
           if (index < data.rules.length - 1) {
-            humanRules.push({
-              data: `${data.condition}`,
-              level
-            });
+            humanRules.push(condition);
           }
         });
       };
