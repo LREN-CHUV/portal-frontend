@@ -1,5 +1,10 @@
 # Changelog
 
+## 6.4.5 - 2020/10/13
+
+- Fixed available algorithms rules parsing #288
+- Fixed filter formating output
+
 ## 6.4.4 - 2020/09/29
 
 - Added 3C algorithm + test
