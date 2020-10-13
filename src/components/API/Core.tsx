@@ -82,8 +82,8 @@ export interface AlgorithmParameter {
   columnValuesIsCategorical: string;
   columnValuesNumOfEnumerations: string;
   value: string;
-  valueNotBlank: boolean;
-  valueMultiple: boolean;
+  valueNotBlank: string;
+  valueMultiple: string;
   valueMin?: number;
   valueMax?: number;
   valueType: string;

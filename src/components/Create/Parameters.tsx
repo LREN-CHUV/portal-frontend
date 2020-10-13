@@ -230,7 +230,7 @@ const Parameters = ({
                           apiCore={apiCore}
                           query={query}
                           parameterName={parameter.label}
-                          notblank={parameter.valueNotBlank}
+                          notblank={parameter.valueNotBlank === 'true'}
                           handleChangeCategoryParameter={
                             handleChangeCategoryParameter
                           }

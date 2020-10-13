@@ -72,8 +72,8 @@ const AvailableAlgorithms = ({
             ? true
             : false;
         // const type = xDefinition.columnValuesSQLType;
-        const multiple = definition.valueMultiple;
-        const notBlank = definition.valueNotBlank;
+        const multiple = definition.valueMultiple === 'true';
+        const notBlank = definition.valueNotBlank === 'true';
 
         if (isCategorical && !variables.every(c => c.isCategorical)) {
           return false;
