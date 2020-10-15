@@ -36,7 +36,7 @@ http {
   tcp_nopush on;
   # remove 200ms delay on TCP send
   tcp_nodelay on;
-  keepalive_timeout  65; # 300?
+  keepalive_timeout  300;
   # don't send the nginx version number in error pages and Server header
   server_tokens off;
   # CPU dependent optimisations. See http://nginx.org/en/docs/hash.html
