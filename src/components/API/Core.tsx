@@ -84,8 +84,8 @@ export interface AlgorithmParameter {
   value: string;
   valueNotBlank: string;
   valueMultiple: string;
-  valueMin?: number;
-  valueMax?: number;
+  valueMin?: number | null;
+  valueMax?: number | null;
   valueType: string;
   visible?: boolean;
   valueEnumerations?: string[];

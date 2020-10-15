@@ -271,14 +271,20 @@ const Parameters = ({
                           <var>type integer</var>
                         )}
 
+                        {parameter && parameter.valueType === 'float' && (
+                          <var>type float</var>
+                        )}
+
                         {parameter !== undefined &&
                           parameter.valueMin !== undefined &&
+                          parameter.valueMin !== null &&
                           !isNaN(parameter.valueMin) && (
                             <var>min value: {parameter.valueMin}</var>
                           )}
 
                         {parameter !== undefined &&
                           parameter.valueMax !== undefined &&
+                          parameter.valueMax !== null &&
                           !isNaN(parameter.valueMax) && (
                             <var>max value: {parameter.valueMax}</var>
                           )}
