@@ -1,5 +1,10 @@
 # Changelog
 
+## 6.4.6 - 2020/10/15
+
+- Check parameters for null
+- nginx timeout set to 300
+
 ## 6.4.5 - 2020/10/13
 
 - Fixed available algorithms rules parsing #288
