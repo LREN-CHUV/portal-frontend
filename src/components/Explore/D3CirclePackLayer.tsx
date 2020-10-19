@@ -4,9 +4,10 @@ import * as d3 from 'd3';
 import React, { useCallback, useEffect, useRef } from 'react';
 
 import { APICore, APIMining, APIModel } from '../API';
-import { ModelResponse } from '../API/Model';
+import { D3Model, HierarchyCircularNode, ModelResponse } from '../API/Model';
+import { TOOLTIPS } from '../constants';
+import { TooltipPlacement, Tooltip } from '../UI/ToolTip';
 import { ModelType } from './Container';
-import { D3Model, HierarchyCircularNode } from '../API/Model';
 import Explore from './Explore';
 
 const diameter = 800;

@@ -2,6 +2,7 @@ import * as React from 'react';
 import ReactGA from 'react-ga';
 import { Route, Router } from 'react-router-dom';
 import { Provider, Subscribe } from 'unstated';
+
 // import UNSTATED from 'unstated-debug';
 import {
   APICore,
@@ -15,15 +16,17 @@ import config from '../API/RequestHeaders';
 import App, { AppConfig } from '../App/App';
 import Splash from '../UI/Splash';
 import { history } from '../utils';
+import MIPContext from './MIPContext';
 
 // UNSTATED.logStateChanges = process.env.NODE_ENV === "development";
 
 interface State {
   appConfig: AppConfig;
+  showTooltip: boolean;
 }
 
 class AppContainer extends React.Component<any, State> {
-  public state: State = { appConfig: {} };
+  public state: State = { appConfig: {}, showTooltip: true };
   private apiExperiment = new APIExperiment(config);
   private apiModel = new APIModel(config);
   private apiCore = new APICore(config);
@@ -94,67 +97,78 @@ class AppContainer extends React.Component<any, State> {
   }
 
   public render(): JSX.Element {
+    const toggleTooltip = (): void => {
+      this.setState(state => ({
+        ...state,
+        showTooltip: !state.showTooltip
+      }));
+    };
+
     return (
-      <Provider
-        inject={[
-          this.apiExperiment,
-          this.apiCore,
-          this.apiModel,
-          this.apiMining,
-          this.apiUser
-        ]}
+      <MIPContext.Provider
+        value={{ showTooltips: this.state.showTooltip, toggleTooltip }}
       >
-        <Router history={history}>
-          <Subscribe
-            to={[APIExperiment, APICore, APIModel, APIMining, APIUser]}
-          >
-            {(
-              apiExperiment: APIExperiment,
-              apiCore: APICore,
-              apiModel: APIModel,
-              apiMining: APIMining,
-              apiUser: APIUser
-            ): JSX.Element => {
-              const loading = apiUser.state.loading;
-              const authenticated = apiUser.state.authenticated;
+        <Provider
+          inject={[
+            this.apiExperiment,
+            this.apiCore,
+            this.apiModel,
+            this.apiMining,
+            this.apiUser
+          ]}
+        >
+          <Router history={history}>
+            <Subscribe
+              to={[APIExperiment, APICore, APIModel, APIMining, APIUser]}
+            >
+              {(
+                apiExperiment: APIExperiment,
+                apiCore: APICore,
+                apiModel: APIModel,
+                apiMining: APIMining,
+                apiUser: APIUser
+              ): JSX.Element => {
+                const loading = apiUser.state.loading;
+                const authenticated = apiUser.state.authenticated;
 
-              return (
-                <>
-                  <Route
-                    // Callback from the auth server, redirected to the API
-                    path="/services/login/hbp"
-                    // tslint:disable-next-line jsx-no-lambda
-                    render={(props): JSX.Element => {
-                      const {
-                        location: { search }
-                      } = props;
-                      apiUser.login(search);
+                return (
+                  <>
+                    <Route
+                      // Callback from the auth server, redirected to the API
+                      path="/services/login/hbp"
+                      // tslint:disable-next-line jsx-no-lambda
+                      render={(props): JSX.Element => {
+                        const {
+                          location: { search }
+                        } = props;
+                        apiUser.login(search);
 
-                      return <div />;
-                    }}
-                  />
-                  {!loading && !authenticated && (
-                    <Splash
-                      forbidden={this.apiUser.state.forbidden}
-                      logout={apiUser.logout}
+                        return <div />;
+                      }}
                     />
-                  )}
-                  {!loading && authenticated && (
-                    <App
-                      appConfig={this.state.appConfig}
-                      apiExperiment={apiExperiment}
-                      apiCore={apiCore}
-                      apiModel={apiModel}
-                      apiMining={apiMining}
-                      apiUser={apiUser}
-                    />
-                  )}
-                </>
-              );
-            }}
-          </Subscribe>
-        </Router>
-      </Provider>
+                    {!loading && !authenticated && (
+                      <Splash
+                        forbidden={this.apiUser.state.forbidden}
+                        logout={apiUser.logout}
+                      />
+                    )}
+                    {!loading && authenticated && (
+                      <App
+                        appConfig={this.state.appConfig}
+                        apiExperiment={apiExperiment}
+                        apiCore={apiCore}
+                        apiModel={apiModel}
+                        apiMining={apiMining}
+                        apiUser={apiUser}
+                      />
+                    )}
+                  </>
+                );
+              }}
+            </Subscribe>
+          </Router>
+        </Provider>
+      </MIPContext.Provider>
     );
   }
 }

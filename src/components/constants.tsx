@@ -18,6 +18,33 @@ export const PRIVACY_ERROR = 'NOT ENOUGH DATA';
 export const FORBIDDEN_ACCESS_MESSAGE =
   'Connection SUCCESSFUL! Despite of this, it appears that you currently don&lsquo;t have enough privileges to browse this platform. Please contact the  <a href="mailto:support@ebrains.eu?subject=Medical%20Informatics%20Platform%20Access%20Request">Support Team</a> (support@ebrains.eu) if you think you should have <a href="https://mip.ebrains.eu/access" target="_blank">access</a>.';
 
+export const TOOLTIPS = {
+  '1': {
+    badge: '1',
+    title: 'Pathologies selection',
+    text:
+      'The left panel presents all the variables available for the selected " use case " , here the " use case dementia ".'
+  },
+  '2': {
+    badge: '2',
+    title: 'Pathologies selection',
+    text:
+      'The left panel presents all the variables available for the selected " use case " , here the " use case dementia ".'
+  },
+  '3': {
+    badge: '3',
+    title: 'Pathologies selection',
+    text:
+      'The left panel presents all the variables available for the selected " use case " , here the " use case dementia ".'
+  },
+  '4': {
+    badge: '4',
+    title: 'Pathologies selection',
+    text:
+      'The left panel presents all the variables available for the selected " use case " , here the " use case dementia ".'
+  }
+};
+
 export const ERRORS_OUTPUT = [
   MIME_TYPES.ERROR,
   MIME_TYPES.WARNING,

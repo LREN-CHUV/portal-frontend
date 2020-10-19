@@ -1,10 +1,13 @@
 import * as React from 'react';
+import { Button } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
-import Dropdown from './DropdownExperiments';
+
 import logo from '../../images/hbp-logo.png';
-import HelpButton from './HelpButton';
 import { ExperimentResponse } from '../API/Experiment';
+import MIPContext from '../App/MIPContext';
+import Dropdown from './DropdownExperiments';
+import HelpButton from './HelpButton';
 
 interface Props {
   name?: string;
@@ -165,6 +168,15 @@ export default ({
       <RightLinks>
         <Link to="/profile">Profile</Link>
         <HelpButton showTraining={true} />
+        <MIPContext.Consumer>
+          {({ toggleTooltip }): JSX.Element =>
+            (
+              <Button bsStyle="link" onClick={toggleTooltip}>
+                Tooltips
+              </Button>
+            ) || <></>
+          }
+        </MIPContext.Consumer>
       </RightLinks>
     </NavBar>
   );

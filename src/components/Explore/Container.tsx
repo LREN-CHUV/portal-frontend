@@ -5,14 +5,13 @@ import { RouteComponentProps } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { APICore, APIMining, APIModel, APIUser } from '../API';
-import { ModelResponse } from '../API/Model';
+import { VariableEntity } from '../API/Core';
+import { D3Model, HierarchyCircularNode, ModelResponse } from '../API/Model';
 import { AppConfig } from '../App/App';
 import { LONGITUDINAL_DATASET_TYPE } from '../constants';
 import Modal from '../UI/Modal';
 import CirclePack from './D3CirclePackLayer';
 import { d3Hierarchy, VariableDatum } from './d3Hierarchy';
-import { VariableEntity } from '../API/Core';
-import { HierarchyCircularNode, D3Model } from '../API/Model';
 
 const diameter = 800;
 const padding = 1.5;
