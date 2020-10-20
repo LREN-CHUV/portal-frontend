@@ -1,6 +1,7 @@
 import 'bootstrap/dist/css/bootstrap.css';
 
 import * as React from 'react';
+import Tutorial from '../Tutorial/Tutorial';
 import { Route, Switch } from 'react-router-dom';
 import styled, { createGlobalStyle } from 'styled-components';
 
@@ -35,6 +36,7 @@ interface Props {
   apiModel: APIModel;
   apiMining: APIMining;
   apiUser: APIUser;
+  showTutorial: boolean;
 }
 
 const GlobalStyles = createGlobalStyle`
@@ -51,13 +53,40 @@ const GlobalStyles = createGlobalStyle`
     border-radius: 4px;
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
   }
+
+  .modal-dialog {
+    width: 1200px; 
+    margin: 50px auto;
+}
+
 `;
 
-const Main = styled.main`
+interface MainProps {
+  showTutorial: any;
+}
+
+const Main = styled.main<MainProps>`
   margin: 0 auto;
   padding: 52px 8px;
   min-height: 100vh;
-  /* max-width: 1500px; */
+
+  ${(prop): string =>
+    prop.showTutorial &&
+    `
+   :after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.5);
+    opacity: 1;
+    transition: all 0.5s;
+    -webkit-transition: all 0.5s;
+    -moz-transition: all 0.5s;
+  }
+   `}
 `;
 
 const App = ({
@@ -66,7 +95,8 @@ const App = ({
   apiCore,
   apiModel,
   apiMining,
-  apiUser
+  apiUser,
+  showTutorial
 }: Props): JSX.Element => {
   return (
     <>
@@ -87,7 +117,8 @@ const App = ({
           }
         />
       </header>
-      <Main>
+      <Main showTutorial={showTutorial}>
+        {showTutorial && <Tutorial />}
         <Switch>
           <Route
             path={['/', '/explore']}

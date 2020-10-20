@@ -23,10 +23,15 @@ import MIPContext from './MIPContext';
 interface State {
   appConfig: AppConfig;
   showTooltip: boolean;
+  showTutorial: boolean;
 }
 
 class AppContainer extends React.Component<any, State> {
-  public state: State = { appConfig: {}, showTooltip: false };
+  public state: State = {
+    appConfig: {},
+    showTooltip: false,
+    showTutorial: true
+  };
   private apiExperiment = new APIExperiment(config);
   private apiModel = new APIModel(config);
   private apiCore = new APICore(config);
@@ -104,9 +109,21 @@ class AppContainer extends React.Component<any, State> {
       }));
     };
 
+    const toggleTutorial = (): void => {
+      this.setState(state => ({
+        ...state,
+        showTutorial: !state.showTutorial
+      }));
+    };
+
     return (
       <MIPContext.Provider
-        value={{ showTooltips: this.state.showTooltip, toggleTooltip }}
+        value={{
+          showTooltips: this.state.showTooltip,
+          toggleTooltip,
+          showTutorial: this.state.showTutorial,
+          toggleTutorial
+        }}
       >
         <Provider
           inject={[
@@ -160,6 +177,7 @@ class AppContainer extends React.Component<any, State> {
                         apiModel={apiModel}
                         apiMining={apiMining}
                         apiUser={apiUser}
+                        showTutorial={this.state.showTutorial}
                       />
                     )}
                   </>

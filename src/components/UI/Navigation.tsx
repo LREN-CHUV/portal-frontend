@@ -169,7 +169,7 @@ export default ({
         )}
       </Links>
       <RightLinks>
-        <div>
+        {/* <div>
           <MIPContext.Consumer>
             {({ toggleTooltip }): JSX.Element =>
               (
@@ -185,7 +185,22 @@ export default ({
               ) || <></>
             }
           </MIPContext.Consumer>
-        </div>
+        </div> */}
+        <MIPContext.Consumer>
+          {({ toggleTutorial }): JSX.Element =>
+            (
+              <>
+                <Button
+                  bsStyle="info"
+                  bsSize={'small'}
+                  onClick={toggleTutorial}
+                >
+                  Tutorial
+                </Button>
+              </>
+            ) || <></>
+          }
+        </MIPContext.Consumer>
         <HelpButton showTraining={true} />
         {logout && (
           <Button
