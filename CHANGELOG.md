@@ -1,5 +1,9 @@
 # Changelog
 
+## 6.4.7 - 2020/10/20
+
+- MIP Tutorial
+
 ## 6.4.6 - 2020/10/15
 
 - Check parameters for null
