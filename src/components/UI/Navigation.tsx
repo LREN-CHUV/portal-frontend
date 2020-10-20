@@ -191,7 +191,7 @@ export default ({
             (
               <>
                 <Button
-                  bsStyle="info"
+                  bsStyle="link"
                   bsSize={'small'}
                   onClick={toggleTutorial}
                 >
