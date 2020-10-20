@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { DropdownButton, Glyphicon, MenuItem } from 'react-bootstrap';
-import styled from 'styled-components';
 import { NavLink } from 'react-router-dom';
+import styled from 'styled-components';
 
 import Helpdesk from './Helpdesk';
 
@@ -57,8 +57,9 @@ export default ({ showTraining }: { showTraining?: boolean }): JSX.Element => {
           </li>
         )}
         <li>
-          <Glyphicon glyph="envelope" /> Email us at{' '}
-          <a href="mailto://support@ebrains.eu">support@ebrains.eu</a>
+          <a href="mailto://support@ebrains.eu">
+            <Glyphicon glyph="envelope" /> Email us at support@ebrains.eu
+          </a>
         </li>
         <Helpdesk />
       </DropdownButton>

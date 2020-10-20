@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Badge, Popover } from 'react-bootstrap';
+import styled from 'styled-components';
 
 import MIPContext from '../App/MIPContext';
 
@@ -17,6 +18,10 @@ interface ITooltip {
   badge: string;
 }
 
+const ColoredBadge = styled(Badge)`
+  background-color: #d9534f;
+`;
+
 export const Tooltip = ({
   title,
   text,
@@ -31,7 +36,7 @@ export const Tooltip = ({
             id={`popover-${title}`}
             title={
               <>
-                <Badge pullRight={true}>{badge}</Badge>
+                <ColoredBadge pullRight={true}>{badge}</ColoredBadge>
                 {title}
               </>
             }

@@ -5,8 +5,6 @@ import React, { useCallback, useEffect, useRef } from 'react';
 
 import { APICore, APIMining, APIModel } from '../API';
 import { D3Model, HierarchyCircularNode, ModelResponse } from '../API/Model';
-import { TOOLTIPS } from '../constants';
-import { TooltipPlacement, Tooltip } from '../UI/ToolTip';
 import { ModelType } from './Container';
 import Explore from './Explore';
 

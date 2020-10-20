@@ -19,29 +19,39 @@ export const FORBIDDEN_ACCESS_MESSAGE =
   'Connection SUCCESSFUL! Despite of this, it appears that you currently don&lsquo;t have enough privileges to browse this platform. Please contact the  <a href="mailto:support@ebrains.eu?subject=Medical%20Informatics%20Platform%20Access%20Request">Support Team</a> (support@ebrains.eu) if you think you should have <a href="https://mip.ebrains.eu/access" target="_blank">access</a>.';
 
 export const TOOLTIPS = {
+  '0': {
+    badge: 'Tooltips',
+    title: '',
+    text: 'Enable or disable the tooltips'
+  },
   '1': {
     badge: '1',
     title: 'Pathologies selection',
     text:
-      'The left panel presents all the variables available for the selected " use case " , here the " use case dementia ".'
+      'Tooltips guide you through the MIP. Select the pathology for your use case'
   },
   '2': {
     badge: '2',
-    title: 'Pathologies selection',
+    title: 'Data sets',
     text:
-      'The left panel presents all the variables available for the selected " use case " , here the " use case dementia ".'
+      'Here you can select the datasets available for the selected pathology'
   },
   '3': {
     badge: '3',
-    title: 'Pathologies selection',
+    title: 'Variables selection',
     text:
-      'The left panel presents all the variables available for the selected " use case " , here the " use case dementia ".'
+      'Variables are grouped by theme and each theme is represented by a circle .'
   },
   '4': {
     badge: '4',
-    title: 'Pathologies selection',
+    title: "Experiment's Parameters",
     text:
-      'The left panel presents all the variables available for the selected " use case " , here the " use case dementia ".'
+      'Add your selected variable as variables, covariables and filters by pressing the desired category button'
+  },
+  '5': {
+    badge: '5',
+    title: 'Analysis',
+    text: 'Click there when you are satisfied with your paramaters selection, '
   }
 };
 

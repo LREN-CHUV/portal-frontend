@@ -8,7 +8,7 @@ interface Context {
 const MIPContext = createContext<Context>({
   showTooltips: true,
   toggleTooltip: () => {
-    console.log('Startiung context');
+    console.log('Starting context');
   }
 });
 

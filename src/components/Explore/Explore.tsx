@@ -189,7 +189,7 @@ export default (props: ExploreProps): JSX.Element => {
                   title={TOOLTIPS[2].title}
                   text={TOOLTIPS[2].text}
                   placement={TooltipPlacement.bottom}
-                  badge={'2'}
+                  badge={TOOLTIPS[2].badge}
                 />
               </DatasetsBox>
               <SearchBox>
@@ -199,10 +199,10 @@ export default (props: ExploreProps): JSX.Element => {
                   handleSelectNode={handleSelectNode}
                 />
                 <Tooltip
-                  title={TOOLTIPS[4].title}
-                  text={TOOLTIPS[4].text}
+                  title={TOOLTIPS[3].title}
+                  text={TOOLTIPS[3].text}
                   placement={TooltipPlacement.top}
-                  badge={'4'}
+                  badge={TOOLTIPS[3].badge}
                 />
               </SearchBox>
             </DataSelectionBox>
@@ -215,9 +215,22 @@ export default (props: ExploreProps): JSX.Element => {
           <Panel>
             <PanelTitle>
               <h3>{selectedNode && selectedNode.data.label}</h3>
-              <Button bsStyle="info" type="submit" onClick={handleGoToAnalysis}>
-                Descriptive Analysis <Glyphicon glyph="chevron-right" />
-              </Button>
+
+              <div>
+                <Button
+                  bsStyle="info"
+                  type="submit"
+                  onClick={handleGoToAnalysis}
+                >
+                  Descriptive Analysis <Glyphicon glyph="chevron-right" />
+                </Button>
+                <Tooltip
+                  title={TOOLTIPS[5].title}
+                  text={TOOLTIPS[5].text}
+                  placement={TooltipPlacement.bottom}
+                  badge={TOOLTIPS[5].badge}
+                />
+              </div>
             </PanelTitle>
           </Panel>
           <Panel>
@@ -320,10 +333,10 @@ export default (props: ExploreProps): JSX.Element => {
                 }
               />
               <Tooltip
-                title={TOOLTIPS[3].title}
-                text={TOOLTIPS[3].text}
+                title={TOOLTIPS[4].title}
+                text={TOOLTIPS[4].text}
                 placement={TooltipPlacement.bottom}
-                badge={'3'}
+                badge={TOOLTIPS[4].badge}
               />
               {/* </Tab>
                 <Tab eventKey={1} title={'Formula'} key={1}>

@@ -85,6 +85,7 @@ const RightLinks = styled(Links)`
 
   button {
     color: white;
+    font-size: 16px;
   }
 `;
 
@@ -168,15 +169,23 @@ export default ({
         )}
       </Links>
       <RightLinks>
-        <MIPContext.Consumer>
-          {({ toggleTooltip }): JSX.Element =>
-            (
-              <Button bsStyle="link" onClick={toggleTooltip}>
-                Tooltips
-              </Button>
-            ) || <></>
-          }
-        </MIPContext.Consumer>
+        <div>
+          <MIPContext.Consumer>
+            {({ toggleTooltip }): JSX.Element =>
+              (
+                <>
+                  <Button
+                    bsStyle="danger"
+                    bsSize={'small'}
+                    onClick={toggleTooltip}
+                  >
+                    Tooltips
+                  </Button>
+                </>
+              ) || <></>
+            }
+          </MIPContext.Consumer>
+        </div>
         <HelpButton showTraining={true} />
         {logout && (
           <Button
