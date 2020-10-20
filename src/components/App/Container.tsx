@@ -43,6 +43,8 @@ class AppContainer extends React.Component<any, State> {
   public async componentDidMount(): Promise<
     [void, void, void, void, void, void] | void
   > {
+    const seenTutorial = localStorage.getItem('seenTutorial') === 'true';
+
     // Conf written by dockerize
     let appConfig: AppConfig;
     const response = await fetch(`${webURL}/static/config.json`);
@@ -53,7 +55,7 @@ class AppContainer extends React.Component<any, State> {
         datacatalogueUrl:
           config.datacatalogueUrl === '0' ? undefined : config.datacatalogueUrl
       };
-      this.setState({ appConfig });
+      this.setState({ appConfig, showTutorial: !seenTutorial });
 
       if (appConfig.ga) {
         ReactGA.initialize(appConfig.ga);
@@ -65,7 +67,7 @@ class AppContainer extends React.Component<any, State> {
         datacatalogueUrl: undefined
       };
 
-      this.setState({ appConfig });
+      this.setState({ appConfig, showTutorial: !seenTutorial });
     }
 
     await this.apiUser.user();
@@ -110,6 +112,7 @@ class AppContainer extends React.Component<any, State> {
     };
 
     const toggleTutorial = (): void => {
+      localStorage.setItem('seenTutorial', 'true');
       this.setState(state => ({
         ...state,
         showTutorial: !state.showTutorial

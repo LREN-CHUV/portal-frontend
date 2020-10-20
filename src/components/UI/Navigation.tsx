@@ -195,7 +195,7 @@ export default ({
                   bsSize={'small'}
                   onClick={toggleTutorial}
                 >
-                  Tutorial
+                  User Guide
                 </Button>
               </>
             ) || <></>
