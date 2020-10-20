@@ -81,6 +81,10 @@ const App = ({
               `/experiment/${experiment.modelSlug}/${experiment.uuid}`
             );
           }}
+          logout={
+            (apiUser.state.user?.username !== 'anonymous' && apiUser.logout) ||
+            undefined
+          }
         />
       </header>
       <Main>

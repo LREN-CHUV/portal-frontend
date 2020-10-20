@@ -14,6 +14,7 @@ interface Props {
   experiments?: ExperimentResponse[];
   handleSelect: (experiment: ExperimentResponse) => void;
   datacatalogueUrl: string | undefined;
+  logout?: () => {};
 }
 
 const NavBar = styled.nav`
@@ -123,7 +124,8 @@ export default ({
   name,
   datacatalogueUrl,
   experiments,
-  handleSelect
+  handleSelect,
+  logout
 }: Props): JSX.Element => {
   const instanceName = name || 'MIP';
 
@@ -166,8 +168,6 @@ export default ({
         )}
       </Links>
       <RightLinks>
-        <Link to="/profile">Profile</Link>
-        <HelpButton showTraining={true} />
         <MIPContext.Consumer>
           {({ toggleTooltip }): JSX.Element =>
             (
@@ -177,6 +177,19 @@ export default ({
             ) || <></>
           }
         </MIPContext.Consumer>
+        <HelpButton showTraining={true} />
+        {logout && (
+          <Button
+            bsStyle={'warning'}
+            bsSize={'small'}
+            onClick={(): void => {
+              logout();
+              window.location.href = '/';
+            }}
+          >
+            Logout
+          </Button>
+        )}
       </RightLinks>
     </NavBar>
   );
