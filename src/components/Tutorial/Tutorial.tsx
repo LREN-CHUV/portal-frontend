@@ -4,6 +4,8 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
 import MIPContext from '../App/MIPContext';
+import blank from './blank.png';
+import how from './how.png';
 import start from './0.png';
 import one from './1.png';
 import two from './2.png';
@@ -70,11 +72,20 @@ export default React.memo(
                       src={start}
                     />
                     <Carousel.Caption>
+                      <Title>Welcome To the MIP</Title>
                       <Text>
                         Basic skills to start working with the MIP and conduct
                         initial experiments
                       </Text>
                     </Carousel.Caption>
+                  </Carousel.Item>
+                  <Carousel.Item>
+                    <img
+                      width={width}
+                      height={height}
+                      alt="How does the MIP work"
+                      src={how}
+                    />
                   </Carousel.Item>
 
                   {slides.map((s, i) => (
@@ -93,14 +104,13 @@ export default React.memo(
                       width={width}
                       height={height}
                       alt="Variables"
-                      src={start}
+                      src={blank}
                     />
                     <Carousel.Caption>
-                      <Title>More ?</Title>
-                      <Text>You can watch the videos </Text>
+                      <Title>More Videos Training</Title>
                       <Text>
-                        Document created based on{' '}
-                        <Link to="/training"> MIP video tutorials</Link>
+                        This user manual is based on a{' '}
+                        <Link to="/training">series of video tutorials</Link>
                       </Text>
                     </Carousel.Caption>
                   </Carousel.Item>
