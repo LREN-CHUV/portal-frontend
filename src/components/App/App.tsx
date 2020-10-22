@@ -57,7 +57,17 @@ const GlobalStyles = createGlobalStyle`
   .modal-dialog {
     width: 1200px; 
     margin: 50px auto;
-}
+  }
+
+  @media (max-width: 767px) {
+    .modal-dialog {
+      width: 768px; 
+    }
+    
+    .modal-dialog .modal-footer {
+      text-align: left;
+    }
+  }
 
 `;
 
