@@ -45,7 +45,7 @@ export default React.memo(
     ];
 
     return (
-      <div className="static-modal">
+      <div className="static-modal user-guide">
         <MIPContext.Consumer>
           {({ toggleTutorial }): JSX.Element => (
             <Modal.Dialog>

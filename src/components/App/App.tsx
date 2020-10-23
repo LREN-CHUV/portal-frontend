@@ -1,7 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.css';
 
 import * as React from 'react';
-import Tutorial from '../Tutorial/Tutorial';
 import { Route, Switch } from 'react-router-dom';
 import styled, { createGlobalStyle } from 'styled-components';
 
@@ -11,9 +10,11 @@ import { APICore, APIExperiment, APIMining, APIModel, APIUser } from '../API';
 import { ExperimentResponse } from '../API/Experiment';
 import Article from '../Article/Container';
 import ExperimentCreate from '../Create/Container';
+import Dashboard from '../Dashboard/Dashboard';
 import Explore from '../Explore/Container';
 import Help from '../Help/Help';
 import ExperimentResult from '../Result/Container';
+import Tutorial from '../Tutorial/Tutorial';
 import DataCatalog from '../UI/DataCatalog';
 import Footer from '../UI/Footer';
 import Galaxy from '../UI/Galaxy';
@@ -54,17 +55,17 @@ const GlobalStyles = createGlobalStyle`
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
   }
 
-  .modal-dialog {
+  .user-guide .modal-dialog {
     width: 1200px; 
     margin: 50px auto;
   }
 
   @media (max-width: 767px) {
-    .modal-dialog {
+    .user-guide .modal-dialog {
       width: 768px; 
     }
     
-    .modal-dialog .modal-footer {
+    .user-guide .modal-dialog .modal-footer {
       text-align: left;
     }
   }
@@ -131,7 +132,13 @@ const App = ({
         {showTutorial && <Tutorial />}
         <Switch>
           <Route
-            path={['/', '/explore']}
+            path="/"
+            exact={true}
+            // tslint:disable-next-line jsx-no-lambda
+            render={(props): JSX.Element => <Dashboard />}
+          />
+          <Route
+            path={['/explore']}
             exact={true}
             // tslint:disable-next-line jsx-no-lambda
             render={(props): JSX.Element => (
