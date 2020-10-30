@@ -132,13 +132,7 @@ const App = ({
         {showTutorial && <Tutorial />}
         <Switch>
           <Route
-            path="/"
-            exact={true}
-            // tslint:disable-next-line jsx-no-lambda
-            render={(props): JSX.Element => <Dashboard />}
-          />
-          <Route
-            path={['/explore']}
+            path={['/', '/explore']}
             exact={true}
             // tslint:disable-next-line jsx-no-lambda
             render={(props): JSX.Element => (
