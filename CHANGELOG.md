@@ -1,5 +1,13 @@
 # Changelog
 
+## 6.4.9 - 2020/10/20
+
+- Naive Bayes visualisations #283
+
+## 6.4.8 - 2020/10/20
+
+- Updated MIP Screens Tutorial
+
 ## 6.4.7 - 2020/10/20
 
 - MIP Tutorial
