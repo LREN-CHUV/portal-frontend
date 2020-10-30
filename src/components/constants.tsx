@@ -135,7 +135,7 @@ export const ALGORITHMS_OUTPUT = [
   {
     enabled: true,
     label: 'Naive Bayes with Cross Validation',
-    types: [MIME_TYPES.HIGHCHARTS]
+    types: [MIME_TYPES.HIGHCHARTS, MIME_TYPES.JSONDATA]
   },
   {
     enabled: true,
