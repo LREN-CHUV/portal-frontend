@@ -1,4 +1,4 @@
-import request from 'request-promise-native';
+import Axios, { AxiosRequestConfig, AxiosPromise } from 'axios';
 import { Container } from 'unstated';
 
 import { backendURL } from '../API';
@@ -36,13 +36,17 @@ export interface MiningState {
   refetchAlgorithms?: number;
 }
 
+Axios.defaults.validateStatus = () => {
+  return true;
+};
+
 //
 class Mining extends Container<MiningState> {
   public state: MiningState;
 
-  private options: request.Options;
+  private options: AxiosRequestConfig;
   private backendURL: string;
-  private requests: request.RequestPromise<any>[] = [];
+  private requests: AxiosPromise<any>[] = [];
 
   constructor(config: any) {
     super();
@@ -64,7 +68,7 @@ class Mining extends Container<MiningState> {
 
   public abortMiningRequests = (): void => {
     try {
-      this.requests.forEach(r => r.abort && r.abort());
+      // this.requests.forEach(r => r.abort && r.abort());
       this.requests = [];
     } finally {
       //
@@ -169,23 +173,41 @@ class Mining extends Container<MiningState> {
 
     this.abortMiningRequests();
 
+    const experiment = {
+      algorithm: 'MULTIPLE_HISTOGRAMS',
+      name: 'MULTIPLE_HISTOGRAMS',
+      algorithmDetails: {
+        name: 'MULTIPLE_HISTOGRAMS',
+        parameters
+      }
+    };
+
     try {
-      const r = request({
-        body: JSON.stringify(parameters),
+      const request = Axios({
+        data: JSON.stringify(experiment),
         headers: {
           ...this.options.headers,
           'Content-Type': 'application/json;charset=UTF-8'
         },
         method: 'POST',
-        uri: `${this.backendURL}/mining/histograms`
+        url: `${this.backendURL}/experiments/transient`
       });
 
-      this.requests.push(r);
-      const data = await r;
-      const jsonString = await JSON.parse(data);
+      this.requests.push(request);
+      const response = await request;
 
-      // FIXME: in exareme, or backend API ? return type should be json
-      const json = await JSON.parse(jsonString);
+      console.log(response.status);
+      if (response.status >= 400) {
+        return this.setState({
+          histograms: {
+            data: undefined,
+            error: response.data.message,
+            loading: false
+          }
+        });
+      }
+
+      const json = response.data;
 
       const error = json.result.find((d: any) =>
         ERRORS_OUTPUT.includes(d.type)
@@ -257,18 +279,18 @@ class Mining extends Container<MiningState> {
     this.abortMiningRequests();
 
     try {
-      const r = request({
-        body: JSON.stringify(parameters),
+      const r = Axios({
+        data: JSON.stringify(parameters),
         headers: {
           ...this.options.headers,
           'Content-Type': 'application/json;charset=UTF-8'
         },
         method: 'POST',
-        uri: `${this.backendURL}/mining/descriptive_stats`
+        url: `${this.backendURL}/mining/descriptive_stats`
       });
       this.requests.push(r);
-      const data = await r;
-      const jsonString = await JSON.parse(data);
+      const response = await r;
+      const jsonString = response.data;
       const json = await JSON.parse(jsonString);
 
       if (json && json.error) {

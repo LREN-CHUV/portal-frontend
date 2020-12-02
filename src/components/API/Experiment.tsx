@@ -1,4 +1,4 @@
-import request from 'request-promise-native';
+import axios, { AxiosRequestConfig } from 'axios';
 import { Container } from 'unstated';
 
 import { backendURL } from '../API';
@@ -59,7 +59,7 @@ export interface State {
 class Experiment extends Container<State> {
   public state: State = {};
 
-  private options: request.Options;
+  private options: AxiosRequestConfig;
   private baseUrl: string;
 
   constructor(config: any) {
@@ -164,7 +164,7 @@ class Experiment extends Container<State> {
         this.state.experiments?.find(e => e.uuid === uuid)?.resultsViewed ===
         false
       ) {
-        await request.get(`${this.baseUrl}/${uuid}/markAsViewed`, this.options);
+        await axios.get(`${this.baseUrl}/${uuid}/markAsViewed`, this.options);
         await this.setState(previousState => ({
           experiments: previousState.experiments?.map(e => ({
             ...e,
@@ -173,13 +173,14 @@ class Experiment extends Container<State> {
         }));
       }
 
-      const data = await request.get(`${this.baseUrl}/${uuid}`, this.options);
-      const json = await JSON.parse(data);
-      if (json.error) {
-        return await this.setState({
-          error: json.error
-        });
-      }
+      const response = await axios.get(`${this.baseUrl}/${uuid}`, this.options);
+      const json = response.data;
+      // const json = await JSON.parse(data);
+      // if (json.error) {
+      //   return await this.setState({
+      //     error: json.error
+      //   });
+      // }
       const experiment = ExperimentResultParser.parse(json);
 
       return await this.setState({
@@ -195,8 +196,11 @@ class Experiment extends Container<State> {
 
   public all = async (): Promise<void> => {
     try {
-      const data = await request.get(`${this.baseUrl}?mine=true`, this.options);
-      const json = await JSON.parse(data);
+      const response = await axios.get(
+        `${this.baseUrl}?mine=true`,
+        this.options
+      );
+      const json = response.data;
       if (json.error) {
         return await this.setState({
           error: json.error
@@ -224,16 +228,16 @@ class Experiment extends Container<State> {
     const url = `${this.baseUrl}/runAlgorithm`;
 
     try {
-      const data = await request({
-        body: JSON.stringify(experiment),
+      const response = await axios({
+        data: JSON.stringify(experiment),
         headers: {
           ...this.options.headers,
           'Content-Type': 'application/json;charset=UTF-8'
         },
         method: 'POST',
-        uri: url
+        url
       });
-      const json = await JSON.parse(data);
+      const json = response.data;
       const result = ExperimentResultParser.parse(json);
 
       return await this.setState({
@@ -261,11 +265,11 @@ class Experiment extends Container<State> {
     action: string
   ): Promise<void> => {
     try {
-      const data = await request.get(
+      const response = await axios.get(
         `${this.baseUrl}/${uuid}/${action}`,
         this.options
       );
-      const json = await JSON.parse(data);
+      const json = response.data;
       if (json.error) {
         return await this.setState({
           error: json.error
