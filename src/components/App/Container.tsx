@@ -40,9 +40,7 @@ class AppContainer extends React.Component<any, State> {
 
   private intervalId: any; // FIXME: NodeJS.Timer | undefined;
 
-  public async componentDidMount(): Promise<
-    [void, void, void, void, void, void] | void
-  > {
+  public async componentDidMount(): Promise<[void, void, void] | void> {
     const seenTutorial = localStorage.getItem('seenTutorial') === 'true';
 
     // Conf written by dockerize
@@ -87,12 +85,9 @@ class AppContainer extends React.Component<any, State> {
       }, 10 * 1000);
 
       return await Promise.all([
-        this.apiUser.profile({ username }),
         this.apiExperiment.all(),
         this.apiCore.fetchPathologies(),
-        this.apiCore.algorithms(),
-        this.apiCore.stats(),
-        this.apiModel.all()
+        this.apiCore.algorithms()
       ]);
     }
 

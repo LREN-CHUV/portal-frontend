@@ -237,27 +237,6 @@ class Core extends Container<State> {
     }
   };
 
-  public stats = async (): Promise<void> => {
-    try {
-      const data = await request.get(`${this.backendURL}/stats`, this.options);
-      const json = await JSON.parse(data);
-      if (json.error) {
-        return await this.setState({
-          error: json.error
-        });
-      }
-
-      return await this.setState({
-        error: undefined,
-        stats: json
-      });
-    } catch (error) {
-      return await this.setState({
-        error: error.message
-      });
-    }
-  };
-
   public algorithms = async (all = false): Promise<void> => {
     const exaremeAlgorithms = await this.fetchAlgorithms(all);
     this.setState(state => ({

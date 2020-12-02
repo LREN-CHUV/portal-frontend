@@ -128,12 +128,12 @@ export default ({
       !apiUser.state.loading &&
       apiUser.state.authenticated &&
       !apiUser.state.forbidden &&
-      !apiUser.state.agreeNDA
+      !apiUser.state.user?.agreeNDA
     ) {
       history.push('/tos');
     }
   }, [
-    apiUser.state.agreeNDA,
+    apiUser.state.user,
     apiUser.state.authenticated,
     apiUser.state.forbidden,
     apiUser.state.loading,

@@ -24,7 +24,7 @@ export default ({ ...props }: Props): JSX.Element => {
   const [accepted, setAccepted] = useState(false);
 
   useEffect(() => {
-    const agreeNDA = props.apiUser.state.agreeNDA;
+    const agreeNDA = props.apiUser.state.user?.agreeNDA;
     if (agreeNDA) {
       props.history.push('/');
     }
