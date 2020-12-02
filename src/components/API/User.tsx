@@ -13,13 +13,11 @@ export interface State {
   error?: string;
   forbidden?: boolean;
   user?: User;
-  authenticated: boolean;
   loading: boolean;
 }
 
 class UserContainer extends Container<State> {
   public state: State = {
-    authenticated: false,
     loading: true
   };
 
@@ -53,28 +51,35 @@ class UserContainer extends Container<State> {
         `${this.backendURL}/activeUser `,
         this.options
       );
+
       const user = response.data;
 
       if (!user) {
         return await this.setState({
-          authenticated: false,
           error: "The server didn't get any response from the API",
           user: undefined,
           loading: false
         });
       }
 
+      if (response.status === 403) {
+        return await this.setState({
+          error: response.statusText,
+          forbidden: true,
+          loading: false,
+          user
+        });
+      }
+      
       return await this.setState({
-        authenticated: true,
         error: undefined,
         loading: false,
         user
       });
     } catch (error) {
       return await this.setState({
-        authenticated: false,
         error: error.message,
-        forbidden: error.statusCode !== undefined,
+        forbidden: true,
         loading: false
       });
     }
@@ -89,7 +94,6 @@ class UserContainer extends Container<State> {
       const user = response.data;
       if (!user) {
         return await this.setState({
-          authenticated: false,
           error: "The server didn't get any response from the API",
           user: undefined,
           loading: false

@@ -125,8 +125,8 @@ export default ({
 
   useEffect(() => {
     if (
+      apiUser.state.user &&
       !apiUser.state.loading &&
-      apiUser.state.authenticated &&
       !apiUser.state.forbidden &&
       !apiUser.state.user?.agreeNDA
     ) {
@@ -134,7 +134,6 @@ export default ({
     }
   }, [
     apiUser.state.user,
-    apiUser.state.authenticated,
     apiUser.state.forbidden,
     apiUser.state.loading,
     history
@@ -228,22 +227,22 @@ export default ({
     if (type === ModelType.VARIABLE) {
       const nextModel = d3Model.variables
         ? {
-            ...d3Model,
-            variables: [
-              ...d3Model.variables.filter(c => !node.leaves().includes(c)),
-              ...node.leaves().filter(c => !d3Model.variables!.includes(c))
-            ],
-            covariables: d3Model.covariables
-              ? [...d3Model.covariables.filter(c => !node.leaves().includes(c))]
-              : []
-          }
+          ...d3Model,
+          variables: [
+            ...d3Model.variables.filter(c => !node.leaves().includes(c)),
+            ...node.leaves().filter(c => !d3Model.variables!.includes(c))
+          ],
+          covariables: d3Model.covariables
+            ? [...d3Model.covariables.filter(c => !node.leaves().includes(c))]
+            : []
+        }
         : {
-            ...d3Model,
-            covariables:
-              d3Model.covariables &&
-              d3Model.covariables.filter(c => c !== node),
-            variables: node.leaves()
-          };
+          ...d3Model,
+          covariables:
+            d3Model.covariables &&
+            d3Model.covariables.filter(c => c !== node),
+          variables: node.leaves()
+        };
 
       apiModel.setD3Model(nextModel);
     }
@@ -251,21 +250,21 @@ export default ({
     if (type === ModelType.COVARIABLE) {
       const nextModel = d3Model.covariables
         ? {
-            ...d3Model,
-            covariables: [
-              ...d3Model.covariables.filter(c => !node.leaves().includes(c)),
-              ...node.leaves().filter(c => !d3Model.covariables!.includes(c))
-            ],
-            variables: d3Model.variables
-              ? [...d3Model.variables.filter(c => !node.leaves().includes(c))]
-              : []
-          }
+          ...d3Model,
+          covariables: [
+            ...d3Model.covariables.filter(c => !node.leaves().includes(c)),
+            ...node.leaves().filter(c => !d3Model.covariables!.includes(c))
+          ],
+          variables: d3Model.variables
+            ? [...d3Model.variables.filter(c => !node.leaves().includes(c))]
+            : []
+        }
         : {
-            ...d3Model,
-            covariables: node.leaves(),
-            variables:
-              d3Model.variables && d3Model.variables.filter(c => c !== node)
-          };
+          ...d3Model,
+          covariables: node.leaves(),
+          variables:
+            d3Model.variables && d3Model.variables.filter(c => c !== node)
+        };
 
       apiModel.setD3Model(nextModel);
     }
@@ -273,12 +272,12 @@ export default ({
     if (type === ModelType.FILTER) {
       const nextModel = d3Model.filters
         ? {
-            ...d3Model,
-            filters: [
-              ...d3Model.filters.filter(c => !node.leaves().includes(c)),
-              ...node.leaves().filter(c => !d3Model.filters!.includes(c))
-            ]
-          }
+          ...d3Model,
+          filters: [
+            ...d3Model.filters.filter(c => !node.leaves().includes(c)),
+            ...node.leaves().filter(c => !d3Model.filters!.includes(c))
+          ]
+        }
         : { ...d3Model, filters: node.leaves() };
 
       apiModel.setD3Model(nextModel);

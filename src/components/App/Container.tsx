@@ -69,14 +69,14 @@ class AppContainer extends React.Component<any, State> {
     }
 
     await this.apiUser.user();
-    if (this.apiUser.state.authenticated) {
+    if (this.apiUser.state.user) {
       const username =
         this.apiUser.state.user && this.apiUser.state.user.username;
 
       // Experiments polling and auth by interval
       this.intervalId = setInterval(() => {
         this.apiUser.user().then(() => {
-          if (this.apiUser.state.authenticated) {
+          if (this.apiUser.state.user) {
             this.apiExperiment.all();
           } else {
             clearInterval(this.intervalId);
@@ -144,7 +144,7 @@ class AppContainer extends React.Component<any, State> {
                 apiUser: APIUser
               ): JSX.Element => {
                 const loading = apiUser.state.loading;
-                const authenticated = apiUser.state.authenticated;
+                const authenticated = apiUser.state.user;
 
                 return (
                   <>
