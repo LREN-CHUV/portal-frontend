@@ -21,7 +21,7 @@ export interface ExperimentPayload {
   label: string;
 }
 
-export type experimentStatus = 'error' | 'succes';
+export type experimentStatus = 'error' | 'success';
 
 export interface ExperimentParameter {
   name: string;

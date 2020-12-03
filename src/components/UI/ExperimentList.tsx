@@ -33,7 +33,7 @@ const ExperimentIcon = ({ experiment }: { experiment: IExperiment }) => {
     return <BsFillEyeFill />;
   }
 
-  if (!experiment.viewed && experiment.status === 'succes') {
+  if (!experiment.viewed && experiment.status === 'success') {
     return <BsFillEyeSlashFill />;
   }
 
