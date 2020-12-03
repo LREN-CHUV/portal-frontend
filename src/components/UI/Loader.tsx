@@ -14,7 +14,7 @@ interface Props {
   visible?: boolean;
 }
 class LoaderComponent extends React.Component<Props> {
-  public render(): JSX.Element {
+  render(): JSX.Element {
     const { visible } = this.props || true;
     return (
       <Loader>

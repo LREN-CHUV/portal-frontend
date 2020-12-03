@@ -21,9 +21,7 @@ export interface ExperimentPayload {
   label: string;
 }
 
-export enum experimentStatus {
-  error
-}
+export type experimentStatus = 'error' | 'succes';
 
 export interface ExperimentParameter {
   name: string;
@@ -73,7 +71,7 @@ export interface State {
 }
 
 class Experiment extends Container<State> {
-  public state: State = {};
+  state: State = {};
 
   private options: AxiosRequestConfig;
   private baseUrl: string;
@@ -84,7 +82,7 @@ class Experiment extends Container<State> {
     this.baseUrl = `${backendURL}/experiments`;
   }
 
-  public makeParameters = (
+  makeParameters = (
     model: ModelResponse,
     selectedAlgorithm: Algorithm,
     parameters: AlgorithmParameter[]
@@ -169,11 +167,11 @@ class Experiment extends Container<State> {
       };
     });
 
-  public loaded = (): boolean =>
+  loaded = (): boolean =>
     this.state.experiment !== undefined &&
     this.state.experiment.results !== undefined;
 
-  public one = async ({ uuid }: IUUID): Promise<void> => {
+  one = async ({ uuid }: IUUID): Promise<void> => {
     try {
       // mark status and refresh the list
       /*       if (
@@ -202,7 +200,7 @@ class Experiment extends Container<State> {
     }
   };
 
-  public list = async (): Promise<void> => {
+  list = async (): Promise<void> => {
     try {
       const response = await axios.get(`${this.baseUrl}`, this.options);
 
@@ -219,7 +217,7 @@ class Experiment extends Container<State> {
     }
   };
 
-  public create = async ({
+  create = async ({
     payload
   }: {
     payload: ExperimentPayload;
@@ -249,13 +247,13 @@ class Experiment extends Container<State> {
     }
   };
 
-  public markAsViewed = async ({ uuid }: IUUID): Promise<void> =>
+  markAsViewed = async ({ uuid }: IUUID): Promise<void> =>
     this.markExperiment(uuid, 'markAsViewed');
 
-  public markAsShared = async ({ uuid }: IUUID): Promise<void> =>
+  markAsShared = async ({ uuid }: IUUID): Promise<void> =>
     this.markExperiment(uuid, 'markAsShared');
 
-  public markAsUnshared = async ({ uuid }: IUUID): Promise<void> =>
+  markAsUnshared = async ({ uuid }: IUUID): Promise<void> =>
     this.markExperiment(uuid, 'markAsUnshared');
 
   private markExperiment = async (

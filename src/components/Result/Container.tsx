@@ -23,7 +23,7 @@ interface Props extends RouteComponentProps<RouteParams> {
 class Experiment extends React.Component<Props> {
   private intervalId: any;
 
-  public async componentDidMount(): Promise<void> {
+  async componentDidMount(): Promise<void> {
     const params = this.urlParams(this.props);
     if (!params) {
       return;
@@ -39,7 +39,7 @@ class Experiment extends React.Component<Props> {
     return await apiModel.one(slug);
   }
 
-  public async componentDidUpdate(prevProps: Props): Promise<void> {
+  async componentDidUpdate(prevProps: Props): Promise<void> {
     const params = this.urlParams(this.props);
     if (!params) {
       return;
@@ -67,11 +67,11 @@ class Experiment extends React.Component<Props> {
     }
   }
 
-  public componentWillUnmount(): void {
+  componentWillUnmount(): void {
     clearInterval(this.intervalId);
   }
 
-  public render(): JSX.Element {
+  render(): JSX.Element {
     const { apiExperiment, apiModel, apiCore } = this.props;
     const model = apiModel?.state?.model;
     return (

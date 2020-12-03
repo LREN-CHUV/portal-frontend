@@ -27,7 +27,7 @@ interface State {
 }
 
 class AppContainer extends React.Component<any, State> {
-  public state: State = {
+  state: State = {
     appConfig: {},
     showTooltip: false,
     showTutorial: true
@@ -40,7 +40,7 @@ class AppContainer extends React.Component<any, State> {
 
   private intervalId: any; // FIXME: NodeJS.Timer | undefined;
 
-  public async componentDidMount(): Promise<[void, void, void] | void> {
+  async componentDidMount(): Promise<[void, void, void] | void> {
     const seenTutorial = localStorage.getItem('seenTutorial') === 'true';
 
     // Conf written by dockerize
@@ -94,11 +94,11 @@ class AppContainer extends React.Component<any, State> {
     return Promise.resolve();
   }
 
-  public componentWillUnmount(): void {
+  componentWillUnmount(): void {
     clearInterval(this.intervalId);
   }
 
-  public render(): JSX.Element {
+  render(): JSX.Element {
     const toggleTooltip = (): void => {
       this.setState(state => ({
         ...state,

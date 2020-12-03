@@ -62,7 +62,7 @@ const initialD3Model = {
 };
 
 class Model extends Container<ModelState> {
-  public state: ModelState = {
+  state: ModelState = {
     internalD3Model: initialD3Model
   };
 
@@ -76,7 +76,7 @@ class Model extends Container<ModelState> {
   }
 
   // Check if the model's datasets have been removed in the API
-  public checkModelDatasets = (
+  checkModelDatasets = (
     currentDatasets: VariableEntity[] | undefined
   ): void => {
     const datasetCodes = currentDatasets?.map(d => d.code);
@@ -99,13 +99,13 @@ class Model extends Container<ModelState> {
     }
   };
 
-  public setModel = async (model?: ModelResponse): Promise<void> => {
+  setModel = async (model?: ModelResponse): Promise<void> => {
     return await this.setState({
       model
     });
   };
 
-  public setD3Model = async (internalD3Model: D3Model): Promise<void> => {
+  setD3Model = async (internalD3Model: D3Model): Promise<void> => {
     const model = this.convertD3ModelToModel(internalD3Model);
     return await this.setState({
       internalD3Model,
@@ -114,7 +114,7 @@ class Model extends Container<ModelState> {
   };
 
   // FIXME: longitudinal datasets should be tagged
-  public isDatasetLongitudinal = (
+  isDatasetLongitudinal = (
     trainingDatasets: VariableEntity[] | undefined
   ): boolean => {
     const r = new RegExp(LONGITUDINAL_DATASET_TYPE);
@@ -124,7 +124,7 @@ class Model extends Container<ModelState> {
     return isLongitudinalDataset;
   };
 
-  public selectDataset = (dataset: VariableEntity): void => {
+  selectDataset = (dataset: VariableEntity): void => {
     const model = this.state.model;
     const trainingDatasets =
       (model && model.query && model.query.trainingDatasets) || [];
@@ -146,7 +146,7 @@ class Model extends Container<ModelState> {
     }
   };
 
-  public one = async (slug?: string) => {
+  one = async (slug?: string) => {
     this.setState({
       error: slug ? undefined : "Can't find model",
       model: undefined
@@ -171,11 +171,7 @@ class Model extends Container<ModelState> {
     }
   };
 
-  public update = async ({
-    model
-  }: {
-    model: ModelResponse;
-  }): Promise<void> => {
+  update = async ({ model }: { model: ModelResponse }): Promise<void> => {
     try {
       const { slug } = model;
       await request({
@@ -198,7 +194,7 @@ class Model extends Container<ModelState> {
     }
   };
 
-  public save = async ({
+  save = async ({
     model,
     title
   }: {
@@ -245,7 +241,7 @@ class Model extends Container<ModelState> {
     }
   };
 
-  public all = async () => {
+  all = async () => {
     try {
       const data = await request.get(`${this.baseUrl}`, this.options);
       const json: ModelResponse[] = await JSON.parse(data);
@@ -262,7 +258,7 @@ class Model extends Container<ModelState> {
   };
 
   // Utility to convert  D3 model to variables
-  public convertD3ModelToModel = (d3Model: D3Model): ModelResponse => {
+  convertD3ModelToModel = (d3Model: D3Model): ModelResponse => {
     const model = this.state.model;
     const datasets = model && model.query && model.query.trainingDatasets;
 

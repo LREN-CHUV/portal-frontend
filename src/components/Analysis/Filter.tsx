@@ -15,11 +15,11 @@ interface State {
 }
 
 class Filter extends React.Component<Props, State> {
-  public state: State = { rulesChanged: false, loading: false };
+  state: State = { rulesChanged: false, loading: false };
   protected queryBuilder = QueryBuilder; // prevents ts-lint to complain about ununused inport
   private ref: any;
 
-  public componentDidMount = (): void => {
+  componentDidMount = (): void => {
     const { filters, rules } = this.props;
 
     if (!rules) {
@@ -31,7 +31,7 @@ class Filter extends React.Component<Props, State> {
     this.onRulesChanged();
   };
 
-  public componentDidUpdate = (nextProps: any): void => {
+  componentDidUpdate = (nextProps: any): void => {
     if (this.state.rulesChanged) {
       return; // user is editing
     }
@@ -68,11 +68,11 @@ class Filter extends React.Component<Props, State> {
     }
   };
 
-  public componentWillUnmount = (): void => {
+  componentWillUnmount = (): void => {
     this.ref.queryBuilder('destroy');
   };
 
-  public handleSave = (): void => {
+  handleSave = (): void => {
     this.setState({ loading: true, rulesChanged: false });
     const rules = this.ref.queryBuilder('getRules');
     const { handleChangeFilter } = this.props;
@@ -81,7 +81,7 @@ class Filter extends React.Component<Props, State> {
     });
   };
 
-  public render = (): JSX.Element => {
+  render = (): JSX.Element => {
     return (
       <div>
         <div id="query-builder" ref={this.createRef} />

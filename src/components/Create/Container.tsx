@@ -33,9 +33,9 @@ interface State {
 }
 
 class Container extends React.Component<Props, State> {
-  public state!: State;
+  state!: State;
 
-  public render(): JSX.Element {
+  render(): JSX.Element {
     const { apiCore, apiModel, apiExperiment } = this.props;
     const alert = this.state && this.state.alert;
     const query = apiModel.state.model && apiModel.state.model.query;

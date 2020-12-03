@@ -7,7 +7,7 @@ interface Props {
 }
 
 class Model extends React.Component<Props> {
-  public render(): JSX.Element {
+  render(): JSX.Element {
     const { model } = this.props;
 
     const query = model && model.query;

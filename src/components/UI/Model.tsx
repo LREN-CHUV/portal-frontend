@@ -13,7 +13,7 @@ interface Props {
 }
 
 class Model extends React.Component<Props> {
-  public render(): JSX.Element {
+  render(): JSX.Element {
     const {
       items,
       handleSelectModel,

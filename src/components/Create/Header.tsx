@@ -20,11 +20,11 @@ interface State {
 }
 
 export default class Header extends React.Component<Props, State> {
-  public state = {
+  state = {
     experimentName: ''
   };
 
-  public render(): JSX.Element {
+  render(): JSX.Element {
     const {
       experimentList,
       model,

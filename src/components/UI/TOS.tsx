@@ -200,8 +200,8 @@ export default ({ ...props }: Props): JSX.Element => {
               identification number or factors specific to his or her physical,
               physiological, mental, economic, cultural or social identity.
               Personal Data does not include publicly available information that
-              has not been combined with non-public Personal Data, nor does it
-              include information that has been anonymized.
+              has not been combined with non- Personal Data, nor does it include
+              information that has been anonymized.
             </li>
           </ol>
         </li>

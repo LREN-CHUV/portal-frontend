@@ -10,24 +10,19 @@ interface Props {
   model?: ModelResponse;
 }
 export default class Header extends React.Component<Props> {
-  public state: any;
+  state = {
+    modelName: ''
+  };
 
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      modelName: ''
-    };
-  }
-
-  public handleClose = (): void => {
+  handleClose = (): void => {
     this.setState({ show: false });
   };
 
-  public handleShow = (): void => {
+  handleShow = (): void => {
     this.setState({ show: true });
   };
 
-  public render(): JSX.Element {
+  render(): JSX.Element {
     const { model, handleGoBackToExplore, handleRunAnalysis } = this.props;
 
     const currentModelName = this.state.modelName;

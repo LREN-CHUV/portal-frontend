@@ -5,7 +5,6 @@ import styled from 'styled-components';
 import ExperimentReview from '../Analysis/Container';
 import { APICore, APIExperiment, APIMining, APIModel, APIUser } from '../API';
 import { IExperiment } from '../API/Experiment';
-import Article from '../Article/Container';
 import ExperimentCreate from '../Create/Container';
 import Explore from '../Explore/Container';
 import Help from '../Help/Help';
@@ -158,13 +157,6 @@ const App = ({
             render={(): JSX.Element => <Galaxy apiCore={apiCore} />}
           />
           <Route path="/catalog" render={(): JSX.Element => <DataCatalog />} />
-          <Route
-            path={['/articles/:slug', '/articles']}
-            // tslint:disable-next-line jsx-no-lambda
-            render={(props): JSX.Element => (
-              <Article apiCore={apiCore} {...props} />
-            )}
-          />
           <Route
             path="/profile"
             // tslint:disable-next-line jsx-no-lambda

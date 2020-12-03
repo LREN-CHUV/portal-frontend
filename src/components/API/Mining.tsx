@@ -42,7 +42,7 @@ Axios.defaults.validateStatus = () => {
 
 //
 class Mining extends Container<MiningState> {
-  public state: MiningState;
+  state: MiningState;
 
   private options: AxiosRequestConfig;
   private backendURL: string;
@@ -58,7 +58,7 @@ class Mining extends Container<MiningState> {
     this.backendURL = backendURL;
   }
 
-  public clear = () => {
+  clear = () => {
     return this.setState((prevState: any) => ({
       error: undefined,
       histograms: undefined,
@@ -66,7 +66,7 @@ class Mining extends Container<MiningState> {
     }));
   };
 
-  public abortMiningRequests = (): void => {
+  abortMiningRequests = (): void => {
     try {
       // this.requests.forEach(r => r.abort && r.abort());
       this.requests = [];
@@ -75,7 +75,7 @@ class Mining extends Container<MiningState> {
     }
   };
 
-  public setGroupingForPathology = (
+  setGroupingForPathology = (
     pathology: string,
     choosenVariables: HistogramVariable
   ): void => {
@@ -90,7 +90,7 @@ class Mining extends Container<MiningState> {
     );
   };
 
-  public groupingForPathology = (pathology: string): HistogramVariable => {
+  groupingForPathology = (pathology: string): HistogramVariable => {
     const existing = this.choosenHistogramVariables()[pathology] || {};
 
     return existing;
@@ -98,10 +98,10 @@ class Mining extends Container<MiningState> {
 
   // TODO use context
   // used to trigger a fetch when local
-  public refetchAlgorithms = (): void => {
+  refetchAlgorithms = (): void => {
     this.setState({ refetchAlgorithms: Math.random() });
   };
-  public multipleHistograms = async ({
+  multipleHistograms = async ({
     y,
     datasets,
     pathology
@@ -239,7 +239,7 @@ class Mining extends Container<MiningState> {
     }
   };
 
-  public descriptiveStatistics = async ({
+  descriptiveStatistics = async ({
     payload
   }: {
     payload: MiningPayload;

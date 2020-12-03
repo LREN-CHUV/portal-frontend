@@ -68,7 +68,7 @@ export default ({
         .map((experiment, i: number) => {
           let experimentState;
           experimentState =
-            experiment.status === 0
+            experiment.status === 'error'
               ? 'exclamation-sign'
               : !experiment.results
               ? 'transfer'

@@ -147,7 +147,7 @@ export interface State {
 }
 
 class Core extends Container<State> {
-  public state: State = {
+  state: State = {
     pathologiesVariables: {},
     pathologiesDatasets: {},
     pathologiesHierarchies: {}
@@ -164,7 +164,7 @@ class Core extends Container<State> {
 
   // TODO: those infos should be reconciliated in the model when the fetch occurs
   // At the moment, the model is storing only variable codes
-  public lookup = (
+  lookup = (
     code: string,
     pathologyCode: string | undefined
   ): VariableEntity => {
@@ -195,7 +195,7 @@ class Core extends Container<State> {
     return { code, label: code, info: code };
   };
 
-  public fetchPathologies = async (): Promise<void> => {
+  fetchPathologies = async (): Promise<void> => {
     try {
       const data = await request.get(
         `${this.backendURL}/pathologies`,
@@ -237,7 +237,7 @@ class Core extends Container<State> {
     }
   };
 
-  public algorithms = async (all = false): Promise<void> => {
+  algorithms = async (all = false): Promise<void> => {
     const exaremeAlgorithms = await this.fetchAlgorithms(all);
     this.setState(state => ({
       ...state,
@@ -251,7 +251,7 @@ class Core extends Container<State> {
     return Promise.resolve();
   };
 
-  public articles = async (): Promise<void> => {
+  articles = async (): Promise<void> => {
     try {
       const data = await request.get(
         `${this.backendURL}/articles`,
@@ -275,7 +275,7 @@ class Core extends Container<State> {
     }
   };
 
-  public createArticle = async (payload: Article): Promise<void> => {
+  createArticle = async (payload: Article): Promise<void> => {
     try {
       const data = await request({
         body: JSON.stringify(payload),
@@ -300,10 +300,7 @@ class Core extends Container<State> {
     }
   };
 
-  public updateArticle = async (
-    slug: string,
-    payload: Article
-  ): Promise<void> => {
+  updateArticle = async (slug: string, payload: Article): Promise<void> => {
     try {
       const data = await request({
         body: JSON.stringify(payload),
@@ -328,7 +325,7 @@ class Core extends Container<State> {
     }
   };
 
-  public fetchGalaxyConfiguration = async (): Promise<void> => {
+  fetchGalaxyConfiguration = async (): Promise<void> => {
     try {
       const data = await request.get(`${this.backendURL}/galaxy`, {
         ...this.options

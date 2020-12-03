@@ -17,7 +17,7 @@ export interface State {
 }
 
 class UserContainer extends Container<State> {
-  public state: State = {
+  state: State = {
     loading: true
   };
 
@@ -30,21 +30,21 @@ class UserContainer extends Container<State> {
     this.backendURL = backendURL;
   }
 
-  public login = async (params: any): Promise<void> => {
+  login = async (params: any): Promise<void> => {
     const loginURL = `${this.backendURL}/login/hbp${params}`;
     const response = await axios.get(loginURL, this.options);
 
     return response.data;
   };
 
-  public logout = async (): Promise<void> => {
+  logout = async (): Promise<void> => {
     const logoutURL = `${this.backendURL}/logout`;
     const response = await axios.post(logoutURL, this.options);
 
     return response.data;
   };
 
-  public user = async (): Promise<void> => {
+  user = async (): Promise<void> => {
     console.log('Check user authorization');
     try {
       const response = await axios.get(
@@ -85,7 +85,7 @@ class UserContainer extends Container<State> {
     }
   };
 
-  public acceptTOS = async (): Promise<void> => {
+  acceptTOS = async (): Promise<void> => {
     try {
       const response = await axios.post(
         `${this.backendURL}/activeUser/agreeNDA`,
