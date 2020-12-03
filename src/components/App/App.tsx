@@ -18,6 +18,7 @@ import NotFound from '../UI/NotFound';
 import TOS from '../UI/TOS';
 import User from '../User/Container';
 import { history } from '../utils';
+import ExperimentList from '../UI/ExperimentList';
 
 export interface AppConfig {
   version?: string;
@@ -79,15 +80,29 @@ const App = ({
         <Navigation
           name={appConfig.instanceName}
           datacatalogueUrl={appConfig.datacatalogueUrl || undefined}
-          experimentList={apiExperiment.state.experimentList}
-          handleSelect={(experiment: IExperiment): void => {
-            history.push(`/experiment/${experiment.uuid}`);
-          }}
           logout={
             (apiUser.state.user?.username !== 'anonymous' && apiUser.logout) ||
             undefined
           }
-        />
+        >
+          <ExperimentList
+            experimentList={apiExperiment.state.experimentList}
+            handleSelect={(uuid: string): void => {
+              history.push(`/experiment/${uuid}`);
+            }}
+            handleDelete={(uuid: string) => apiExperiment.delete({ uuid })}
+            handleToggleShare={(
+              uuid: string,
+              experiment: Partial<IExperiment>
+            ) =>
+              apiExperiment.update({
+                uuid,
+                experiment: { shared: !experiment.shared }
+              })
+            }
+            handlePage={(page: number) => apiExperiment.list({ page })}
+          />
+        </Navigation>
       </header>
       <Main showTutorial={showTutorial}>
         {showTutorial && <Tutorial />}

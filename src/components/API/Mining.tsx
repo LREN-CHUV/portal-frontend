@@ -174,13 +174,12 @@ class Mining extends Container<MiningState> {
     this.abortMiningRequests();
 
     const experiment = {
-      algorithm: 'MULTIPLE_HISTOGRAMS',
-      name: 'MULTIPLE_HISTOGRAMS',
-      algorithmDetails: {
-        name: 'MULTIPLE_HISTOGRAMS',
+      algorithm: {
         parameters,
-        type: 'string'
-      }
+        type: 'string',
+        name: 'MULTIPLE_HISTOGRAMS'
+      },
+      name: 'An histogram'
     };
 
     try {

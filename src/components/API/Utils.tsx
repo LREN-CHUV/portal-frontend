@@ -121,7 +121,7 @@ const waitForResult = ({ uuid }: { uuid: string }): Promise<ExperimentState> =>
     const timerId = setInterval(async () => {
       await apiExperiment.one({ uuid });
       const { experiment, error } = apiExperiment.state;
-      const loading = experiment ? !(error || experiment.results) : true;
+      const loading = experiment ? !(error || experiment.result) : true;
 
       if (!loading) {
         clearInterval(timerId);

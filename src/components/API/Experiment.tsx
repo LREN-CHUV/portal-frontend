@@ -1,4 +1,4 @@
-import axios, { AxiosRequestConfig } from 'axios';
+import Axios, { AxiosRequestConfig } from 'axios';
 import { Container } from 'unstated';
 
 import { backendURL } from '../API';
@@ -21,20 +21,12 @@ export interface ExperimentPayload {
   label: string;
 }
 
-export type experimentStatus = 'error' | 'succes';
+export type experimentStatus = 'error' | 'success';
 
 export interface ExperimentParameter {
   name: string;
   label: string;
   value: string;
-}
-
-export interface AlgorithmDetail {
-  name: string;
-  desc?: string;
-  label?: string;
-  type: string;
-  parameters: ExperimentParameter[];
 }
 
 export interface Result {
@@ -51,10 +43,14 @@ export interface IExperiment {
   shared: boolean;
   viewed: boolean;
   status: experimentStatus;
-  algorithm: AlgorithmDetail;
-
-  algorithmDetails?: AlgorithmDetail;
-  results?: Result[];
+  algorithm: {
+    name: string;
+    desc?: string;
+    label?: string;
+    type: string;
+    parameters: ExperimentParameter[];
+  };
+  result?: Result[];
 }
 
 export interface IExperimentList {
@@ -68,10 +64,11 @@ export interface State {
   error?: string;
   experiment?: IExperiment;
   experimentList?: IExperimentList;
+  experimentListCurrentPage: number;
 }
 
 class Experiment extends Container<State> {
-  state: State = {};
+  state: State = { experimentListCurrentPage: 0 };
 
   private options: AxiosRequestConfig;
   private baseUrl: string;
@@ -81,6 +78,93 @@ class Experiment extends Container<State> {
     this.options = config.options;
     this.baseUrl = `${backendURL}/experiments`;
   }
+
+  list = async ({ page }: { page?: number }): Promise<void> => {
+    const currentPage = this.state.experimentListCurrentPage;
+    const nextPage = page !== undefined ? page : currentPage;
+    try {
+      const params = `?page=${nextPage}`;
+      const response = await Axios.get(
+        `${this.baseUrl}${params}`,
+        this.options
+      );
+
+      const experimentList: IExperimentList = response.data;
+
+      return await this.setState({
+        error: undefined,
+        experimentList,
+        experimentListCurrentPage: nextPage
+      });
+    } catch (error) {
+      return await this.setState({
+        error: error.message
+      });
+    }
+  };
+
+  delete = async ({ uuid }: { uuid: string }): Promise<void> => {
+    console.log('delete', uuid);
+    try {
+      const response = await Axios({
+        method: 'DELETE',
+        headers: this.options.headers,
+        url: `${this.baseUrl}/${uuid}`
+      });
+
+      if (response.status >= 400) {
+        return this.setState({
+          error: response.data.message
+        });
+      }
+
+      await this.list({});
+
+      return await this.setState({
+        error: undefined
+      });
+    } catch (error) {
+      return await this.setState({
+        error: error.message
+      });
+    }
+  };
+
+  update = async ({
+    uuid,
+    experiment
+  }: {
+    uuid: string;
+    experiment: Partial<IExperiment>;
+  }): Promise<void> => {
+    try {
+      const response = await Axios({
+        method: 'PATCH',
+        data: JSON.stringify(experiment),
+        headers: {
+          ...this.options.headers,
+          'Content-Type': 'application/json;charset=UTF-8'
+        },
+        url: `${this.baseUrl}/${uuid}`
+      });
+
+      if (response.status >= 400) {
+        return this.setState({
+          error: response.data.message
+        });
+      }
+
+      await this.list({});
+
+      return await this.setState({
+        error: undefined
+      });
+    } catch (error) {
+      return await this.setState({
+        error: error.message
+      });
+    }
+  };
 
   makeParameters = (
     model: ModelResponse,
@@ -169,7 +253,7 @@ class Experiment extends Container<State> {
 
   loaded = (): boolean =>
     this.state.experiment !== undefined &&
-    this.state.experiment.results !== undefined;
+    this.state.experiment.result !== undefined;
 
   one = async ({ uuid }: IUUID): Promise<void> => {
     try {
@@ -185,31 +269,14 @@ class Experiment extends Container<State> {
           }))
         }));
       }
-
+ 
       const response = await axios.get(`${this.baseUrl}/${uuid}`, this.options);
       const experiment = response.data;
-
+ 
       return await this.setState({
         error: undefined,
         experiment
       }); */
-    } catch (error) {
-      return await this.setState({
-        error: error.message
-      });
-    }
-  };
-
-  list = async (): Promise<void> => {
-    try {
-      const response = await axios.get(`${this.baseUrl}`, this.options);
-
-      const experimentList: IExperimentList = response.data;
-
-      return await this.setState({
-        error: undefined,
-        experimentList
-      });
     } catch (error) {
       return await this.setState({
         error: error.message
@@ -225,7 +292,7 @@ class Experiment extends Container<State> {
     const url = `${this.baseUrl}/runAlgorithm`;
 
     try {
-      const response = await axios({
+      const response = await Axios({
         data: JSON.stringify(payload),
         headers: {
           ...this.options.headers,
@@ -261,7 +328,7 @@ class Experiment extends Container<State> {
     action: string
   ): Promise<void> => {
     try {
-      const response = await axios.get(
+      const response = await Axios.get(
         `${this.baseUrl}/${uuid}/${action}`,
         this.options
       );

@@ -4,17 +4,15 @@ import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
 
 import logo from '../../images/hbp-logo.png';
-import { IExperimentList, IExperiment } from '../API/Experiment';
-import ExperimentList from '../UI/ExperimentList';
+
 import MIPContext from '../App/MIPContext';
 import HelpButton from './HelpButton';
 
 interface Props {
   name?: string;
-  experimentList?: IExperimentList;
-  handleSelect: (experiment: IExperiment) => void;
   datacatalogueUrl: string | undefined;
   logout?: () => {};
+  children: JSX.Element;
 }
 
 const NavBar = styled.nav`
@@ -124,9 +122,8 @@ const ALink = styled.a`
 export default ({
   name,
   datacatalogueUrl,
-  experimentList,
-  handleSelect,
-  logout
+  logout,
+  children
 }: Props): JSX.Element => {
   const instanceName = name || 'MIP';
 
@@ -146,7 +143,7 @@ export default ({
           <span> &gt; </span>
           <GroupLink to="/experiment">Experiment</GroupLink>
         </Group>
-        <ExperimentList experimentList={experimentList} />
+        {children}
         {/*  <DropdownWrapper>
           <Dropdown
             items={experiments}

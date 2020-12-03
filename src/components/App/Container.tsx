@@ -77,7 +77,7 @@ class AppContainer extends React.Component<any, State> {
       this.intervalId = setInterval(() => {
         this.apiUser.user().then(() => {
           if (this.apiUser.state.user) {
-            this.apiExperiment.list();
+            this.apiExperiment.list({});
           } else {
             clearInterval(this.intervalId);
           }
@@ -85,7 +85,7 @@ class AppContainer extends React.Component<any, State> {
       }, 10 * 1000);
 
       return await Promise.all([
-        this.apiExperiment.list(),
+        this.apiExperiment.list({}),
         this.apiCore.fetchPathologies(),
         this.apiCore.algorithms()
       ]);

@@ -72,7 +72,7 @@ export default ({
           experimentState =
             experiment.status === 'error'
               ? 'exclamation-sign'
-              : !experiment.results
+              : !experiment.result
               ? 'transfer'
               : experiment.viewed
               ? 'eye-open'

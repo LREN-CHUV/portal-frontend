@@ -17,7 +17,7 @@ const Algorithms = ({
 }: {
   experiment?: IExperiment;
 }): JSX.Element | null => {
-  const algorithms = experiment && experiment.algorithmDetails;
+  const algorithms = experiment && experiment.algorithm;
 
   return (
     (algorithms && (

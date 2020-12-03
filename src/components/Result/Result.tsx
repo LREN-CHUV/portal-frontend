@@ -11,7 +11,7 @@ export default ({
   experimentState: State;
 }): JSX.Element => {
   const experiment = experimentState && experimentState.experiment;
-  const results = experiment && experiment.results;
+  const results = experiment && experiment.result;
   const error =
     (experimentState && experimentState.error) ||
     (experiment && experiment.status);
