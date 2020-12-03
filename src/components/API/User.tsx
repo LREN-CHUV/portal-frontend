@@ -70,7 +70,7 @@ class UserContainer extends Container<State> {
           user
         });
       }
-      
+
       return await this.setState({
         error: undefined,
         loading: false,
