@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { Panel } from 'react-bootstrap';
+import { Card } from 'react-bootstrap';
 import styled from 'styled-components';
 
-const PanelBody = styled(Panel.Body)`
+const PanelBody = styled(Card.Body)`
   display: flex;
   padding-top: 15px !important;
   justify-content: flex-end;
@@ -17,10 +17,10 @@ const PanelBody = styled(Panel.Body)`
 
 export default (): JSX.Element => {
   return (
-    <Panel>
+    <Card>
       <PanelBody>
         <h3>User Profile</h3>
       </PanelBody>
-    </Panel>
+    </Card>
   );
 };

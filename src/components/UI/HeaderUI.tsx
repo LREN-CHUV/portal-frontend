@@ -18,9 +18,6 @@ interface Props {
 
 export default ({ title, body }: Props): JSX.Element => (
   <Card>
-    <Card.Title>
-      <Title>{title}</Title>
-    </Card.Title>
-    <Body>{body}</Body>
+    <Card.Body></Card.Body>
   </Card>
 );

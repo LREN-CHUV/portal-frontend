@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Panel } from 'react-bootstrap';
+import { Card } from 'react-bootstrap';
 import { RouteComponentProps } from 'react-router-dom';
 import { draftStateToHTML } from 'react-wysiwyg-typescript';
 import styled from 'styled-components';
@@ -22,7 +22,7 @@ const Layout = styled.div`
 
 const Content = styled.div`
   display: flex;
-  .panel:first-child {
+  .card:first-child {
     flex: 0;
     min-width: 240px;
     margin-right: 8px;
@@ -31,7 +31,7 @@ const Content = styled.div`
       text-align: left;
     }
   }
-  .panel:last-child {
+  .card:last-child {
     flex: 1;
   }
 `;
@@ -112,11 +112,11 @@ export default ({ apiCore, ...props }: Props) => {
     <Layout>
       <Header handleNewArticle={handleNewArticle} />
       <Content>
-        <Panel>
-          <Panel.Title>
+        <Card>
+          <Card.Title>
             <h3>My articles</h3>
-          </Panel.Title>
-          <Panel.Body>
+          </Card.Title>
+          <Card.Body>
             {apiCore.state &&
               apiCore.state.articles &&
               apiCore.state.articles.map(a => (
@@ -131,10 +131,10 @@ export default ({ apiCore, ...props }: Props) => {
                   </button>
                 </div>
               ))}
-          </Panel.Body>
-        </Panel>
-        <Panel>
-          <Panel.Body>
+          </Card.Body>
+        </Card>
+        <Card>
+          <Card.Body>
             {editing ? (
               <Edit
                 currentArticle={currentArticle}
@@ -161,8 +161,8 @@ export default ({ apiCore, ...props }: Props) => {
                 </div>
               </>
             )}
-          </Panel.Body>
-        </Panel>
+          </Card.Body>
+        </Card>
       </Content>
     </Layout>
   );

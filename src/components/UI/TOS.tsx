@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Checkbox } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 import { RouteComponentProps } from 'react-router-dom';
 import styled from 'styled-components';
 import { APIUser } from '../API';
@@ -14,8 +14,6 @@ const Container = styled.div`
   margin: 48px;
 
   .tos-form {
-    display: flex;
-    flex-direction: column;
     margin: 48px;
   }
 `;
@@ -39,7 +37,7 @@ export default ({ ...props }: Props): JSX.Element => {
     }
   };
 
-  const handleCheckboxChange = (event: React.FormEvent<Checkbox>): void => {
+  const handleCheckboxChange = (event: React.FormEvent<any>): void => {
     const target = event.target as HTMLInputElement;
     const value = target.checked;
     setAccepted(value);
@@ -619,16 +617,18 @@ export default ({ ...props }: Props): JSX.Element => {
         </li>
       </ol>
       <div className="tos-form">
-        <Checkbox
+        <Form.Check
+          inline={true}
+          type="checkbox"
+          id={`tos`}
+          label={'I accept the HBP Medical Informatics Platform Terms of Use.'}
           onChange={handleCheckboxChange}
-          validationState={accepted ? 'success' : 'error'}
-        >
-          <b>I accept the HBP Medical Informatics Platform Terms of Use.</b>
-        </Checkbox>
+        ></Form.Check>
+
         <Button
           onClick={handleAcceptTOS}
           disabled={!accepted}
-          bsStyle="info"
+          variant="info"
           type="submit"
         >
           Proceed

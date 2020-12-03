@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button, OverlayTrigger, Popover } from 'react-bootstrap';
+import { Button, Card, OverlayTrigger, Popover } from 'react-bootstrap';
 import styled from 'styled-components';
 
 import { APIModel } from '../API';
@@ -10,6 +10,10 @@ interface AvailableAlgorithm extends Algorithm {
 }
 
 const Container = styled.div`
+  line-height: 1;
+  var {
+    font-size: 0.8rem;
+  }
   var::after {
     content: ', ';
   }
@@ -150,9 +154,13 @@ const AvailableAlgorithms = ({
           rootClose={false}
           overlay={
             <Popover id={`tooltip-${algorithm.name}`}>
-              <h4>{algorithm.label}</h4>
-              <p>{algorithm.desc}</p>
-              {variablesHelpMessage(algorithm)}
+              <Card>
+                <Card.Body>
+                  <h4>{algorithm.label}</h4>
+                  <p>{algorithm.desc}</p>
+                  {variablesHelpMessage(algorithm)}
+                </Card.Body>
+              </Card>
             </Popover>
           }
         >
@@ -161,7 +169,7 @@ const AvailableAlgorithms = ({
               {algorithm.enabled && (
                 <Button
                   key={algorithm.name}
-                  bsStyle="link"
+                  variant="link"
                   // ts lint:disable-next-line jsx-no-lambda
                   onClick={(): void =>
                     handleSelectMethod && handleSelectMethod(algorithm)

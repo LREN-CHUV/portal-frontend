@@ -1,7 +1,5 @@
-import '../Experiment.css';
-
 import * as React from 'react';
-import { Panel, Tab, Tabs } from 'react-bootstrap';
+import { Card, Tab, Tabs } from 'react-bootstrap';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 
 import { APICore, APIExperiment, APIModel } from '../API';
@@ -58,33 +56,42 @@ class Container extends React.Component<Props, State> {
         </div>
         <div className="content">
           <div className="sidebar">
-            <Panel className="datasets">
-              <Panel.Body>
-                <h5>
-                  <strong>Pathology</strong>
-                </h5>
-                <p>{query?.pathology}</p>
-                <h5>
-                  <strong>Datasets</strong>
-                </h5>
-                <LargeDatasetSelect
-                  datasets={datasets}
-                  handleSelectDataset={apiModel.selectDataset}
-                  selectedDatasets={query?.trainingDatasets || []}
-                ></LargeDatasetSelect>
-              </Panel.Body>
-            </Panel>
-            <Model
-              model={apiModel.state.model}
-              selectedSlug={apiModel.state.model && apiModel.state.model.slug}
-              items={apiModel.state.models}
-              handleSelectModel={this.handleSelectModel}
-              lookup={apiCore.lookup}
-            />
+            <Card className="datasets">
+              <Card.Body>
+                {query?.pathology && (
+                  <section>
+                    <h4>Pathology</h4>
+                    <p>{query?.pathology || ''}</p>
+                  </section>
+                )}
+
+                {datasets && (
+                  <section>
+                    <LargeDatasetSelect
+                      datasets={datasets}
+                      handleSelectDataset={apiModel.selectDataset}
+                      selectedDatasets={query?.trainingDatasets || []}
+                    ></LargeDatasetSelect>
+                  </section>
+                )}
+
+                <section>
+                  <Model
+                    model={apiModel.state.model}
+                    selectedSlug={
+                      apiModel.state.model && apiModel.state.model.slug
+                    }
+                    items={apiModel.state.models}
+                    handleSelectModel={this.handleSelectModel}
+                    lookup={apiCore.lookup}
+                  />
+                </section>
+              </Card.Body>
+            </Card>
           </div>
           <div className="parameters">
-            <Panel>
-              <Panel.Body>
+            <Card>
+              <Card.Body>
                 {alert && (
                   <Alert
                     message={alert.message}
@@ -96,7 +103,7 @@ class Container extends React.Component<Props, State> {
                   defaultActiveKey={1}
                   id="uncontrolled-create-experiment-tab"
                 >
-                  <Tab eventKey={1} title="Algorithm">
+                  <Tab eventKey={'1'} title="Algorithm">
                     <Parameters
                       algorithm={this.state && this.state.algorithm}
                       parameters={this.state && this.state.parameters}
@@ -105,27 +112,25 @@ class Container extends React.Component<Props, State> {
                       apiCore={apiCore}
                     />
                   </Tab>
-                  <Tab eventKey={2} title="About running experiments">
+                  <Tab eventKey={'2'} title="About running experiments">
                     <Help />
                   </Tab>
                 </Tabs>
-              </Panel.Body>
-            </Panel>
+              </Card.Body>
+            </Card>
           </div>
           <div className="sidebar2">
-            <Panel>
-              <Panel.Title>
-                <h3>Available Algorithms</h3>
-              </Panel.Title>
-              <Panel.Body>
+            <Card>
+              <Card.Body>
+                <h4>Available Algorithms</h4>
                 <AvailableAlgorithms
                   algorithms={apiCore.state.algorithms}
                   lookup={apiCore.lookup}
                   handleSelectMethod={this.handleSelectAlgorithm}
                   apiModel={apiModel}
                 />
-              </Panel.Body>
-            </Panel>
+              </Card.Body>
+            </Card>
           </div>
         </div>
       </div>

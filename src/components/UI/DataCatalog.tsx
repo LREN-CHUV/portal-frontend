@@ -26,7 +26,7 @@ export default React.memo(() => {
   return (
     <IFrameContainer>
       {error && (
-        <AlertBox bsStyle="danger">
+        <AlertBox variant="danger">
           <strong>There was an error</strong> {error}
         </AlertBox>
       )}

@@ -1,13 +1,13 @@
 import * as React from 'react';
+import { Card } from 'react-bootstrap';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
-import { ExperimentResult, ExperimentResultHeader } from '.';
+
 import { APICore, APIExperiment, APIModel } from '../API';
 import { ExperimentResponse } from '../API/Experiment';
-import '../Experiment.css';
-import Model from '../UI/Model';
-import Algorithms from './Algorithms';
 import Datasets from '../UI/Datasets';
-import Panel from '../UI/Panel';
+import Model from '../UI/Model';
+import { ExperimentResult, ExperimentResultHeader } from './';
+import Algorithms from './Algorithms';
 
 interface RouteParams {
   uuid: string;
@@ -87,13 +87,25 @@ class Experiment extends React.Component<Props> {
         </div>
         <div className="content">
           <div className="sidebar">
-            <Panel
-              title="Pathology"
-              body={<p>{model?.query?.pathology || ''}</p>}
-            />
-            <Datasets model={model} />
-            <Model model={model} lookup={apiCore.lookup} />
-            <Algorithms experiment={apiExperiment.state.experiment} />
+            <Card>
+              <Card.Body>
+                {model?.query?.pathology && (
+                  <section>
+                    <h4>Pathology</h4>
+                    <p>{model?.query?.pathology || ''}</p>
+                  </section>
+                )}
+                <section>
+                  <Datasets model={model} />
+                </section>
+                <section>
+                  <Algorithms experiment={apiExperiment.state.experiment} />
+                </section>
+                <section>
+                  <Model model={model} lookup={apiCore.lookup} />
+                </section>
+              </Card.Body>
+            </Card>
           </div>
           <div className="results">
             <ExperimentResult experimentState={apiExperiment.state} />

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Checkbox } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 import styled from 'styled-components';
 
 import { VariableEntity } from '../API/Core';
@@ -23,6 +23,7 @@ const DropDownPanel = styled.div`
 
   label {
     margin-right: 8px;
+    font-size: 0.8rem;
   }
 
   .checkbox {
@@ -38,11 +39,25 @@ const DropDownPanel = styled.div`
   p {
     margin-bottom: 0;
   }
+}`;
+
+const CaretButton = styled(Button)`
+  ::after {
+    display: inline-block;
+    margin-left: 0.255em;
+    vertical-align: 0.255em;
+    content: '';
+    border-top: 0.3em solid;
+    border-right: 0.3em solid transparent;
+    border-bottom: 0;
+    border-left: 0.3em solid transparent;
+  }
 `;
 
-const Panel = styled.div`
+const Card = styled.div`
   label {
     margin-right: 8px;
+    font-size: 0.8rem;
   }
 
   .checkbox {
@@ -81,15 +96,16 @@ export default ({
   const checkboxFor = (sets: VariableEntity[]): JSX.Element[] =>
     sets.map(dataset => (
       <span key={dataset.code}>
-        <Checkbox
+        <Form.Check
           inline={true}
+          type="checkbox"
+          id={`default-${dataset.code}`}
+          label={dataset.label}
           onChange={(): void => {
             handleSelectDataset(dataset);
           }}
           checked={selectedDatasets.map(s => s.code).includes(dataset.code)}
-        >
-          {dataset.label}
-        </Checkbox>
+        ></Form.Check>
       </span>
     ));
 
@@ -99,9 +115,7 @@ export default ({
       {ldatasets && ldatasets.length > 0 && (
         <>
           <hr />
-          <p>
-            <b>Longitudinal datasets</b>
-          </p>
+          <h5>Longitudinal datasets</h5>
         </>
       )}
       {ldatasets && checkboxFor(ldatasets)}
@@ -112,13 +126,23 @@ export default ({
     <>
       {isDropdown && (
         <>
-          <Button onClick={(): void => setVisible(!visible)}>
-            Datasets <span className="caret"></span>
-          </Button>
+          <CaretButton
+            variant="light"
+            id="dropdown-basic"
+            size="sm"
+            onClick={(): void => setVisible(!visible)}
+          >
+            Datasets
+          </CaretButton>
           <DropDownPanel style={style}>{data}</DropDownPanel>
         </>
       )}
-      {!isDropdown && <Panel>{data}</Panel>}
+      {!isDropdown && (
+        <>
+          {datasets && <h4>Datasets</h4>}
+          <Card>{data}</Card>
+        </>
+      )}
     </>
   );
 };

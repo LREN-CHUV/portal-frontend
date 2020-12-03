@@ -1,14 +1,9 @@
 import * as React from 'react';
-import { Panel } from 'react-bootstrap';
-import styled from 'styled-components';
+import { Card } from 'react-bootstrap';
 
 import { Result, State } from '../API/Experiment';
 import ResultsErrorBoundary from '../UI/ResultsErrorBoundary';
 import RenderResult from './RenderResult';
-
-const Body = styled(Panel.Body)`
-  padding: 0 16px;
-`;
 
 export default ({
   experimentState
@@ -29,11 +24,9 @@ export default ({
     '';
 
   return (
-    <Panel>
-      <Panel.Title>
-        <h3>{algorithmName}</h3>
-      </Panel.Title>
-      <Body>
+    <Card>
+      <Card.Body>
+        <h4>{algorithmName}</h4>
         {loading ? (
           <div className="loading">
             <h3>Your experiment is currently running...</h3>
@@ -52,7 +45,7 @@ export default ({
         <ResultsErrorBoundary>
           <RenderResult results={results as Result[]} />
         </ResultsErrorBoundary>
-      </Body>
-    </Panel>
+      </Card.Body>
+    </Card>
   );
 };

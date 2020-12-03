@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { Button, Glyphicon, Panel } from 'react-bootstrap';
+import { Button, Card, Dropdown, DropdownButton } from 'react-bootstrap';
+import { BsFillCaretRightFill } from 'react-icons/bs';
 import styled from 'styled-components';
 
 import { APICore, APIMining, APIModel } from '../API';
@@ -15,7 +16,7 @@ import Histograms from './D3Histograms';
 import ModelView from './D3Model';
 import Search from './D3Search';
 
-const DataSelectionBox = styled(Panel.Title)`
+const DataSelectionBox = styled(Card.Title)`
   display: flex;
   padding: 0.4em;
   margin-bottom: 4px;
@@ -37,14 +38,6 @@ const DatasetsBox = styled.div`
   flex: 0 1 1;
 `;
 
-const Select = styled.select`
-  padding: 6px 12px 4px 12px;
-
-  option {
-    background-color: white;
-  }
-`;
-
 const SearchBox = styled.div`
   margin-top: 4px;
   margin-left: 8px;
@@ -52,24 +45,16 @@ const SearchBox = styled.div`
   /* width: 320px; */
 `;
 
-const PanelTitle = styled(Panel.Title)`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  margin: 0 8px 0 0;
-`;
-
 const ModelTitle = styled.div`
   display: flex;
   align-items: center;
   justify-content: flex-start;
   margin: 0 0 8px 0;
-  padding: 2px;
+  padding: 0 0 8px 0;
   border-bottom: 1px solid lightgray;
 
-  div:first-child {
-    flex: 1;
+  .dropdown {
+    flex: 2;
   }
 
   h5 {
@@ -151,24 +136,30 @@ export default (props: ExploreProps): JSX.Element => {
     <>
       <Grid>
         <Col1>
-          <Panel>
+          <Card>
             <DataSelectionBox>
               <PathologiesBox>
                 {apiCore.state.pathologies &&
                   apiCore.state.pathologies.length > 1 && (
-                    <Select
-                      className={'btn btn-default'}
-                      onChange={(e): void => {
-                        handleSelectPathology(e.target.value);
-                      }}
-                      value={selectedPathology}
+                    <DropdownButton
+                      size="sm"
+                      id="dropdown-pathology"
+                      variant="light"
+                      title={selectedPathology || 'Pathology'}
                     >
-                      {apiCore.state.pathologies.map(g => (
-                        <option key={g.code} value={g.code}>
+                      {apiCore.state.pathologies.map((g, i: number) => (
+                        <Dropdown.Item
+                          onSelect={(): void => {
+                            handleSelectPathology(g.code);
+                          }}
+                          eventKey={`${i}`}
+                          key={`${g.code}`}
+                          value={g.code}
+                        >
                           {g.label}
-                        </option>
+                        </Dropdown.Item>
                       ))}
-                    </Select>
+                    </DropdownButton>
                   )}
                 <Tooltip
                   title={TOOLTIPS[1].title}
@@ -206,39 +197,14 @@ export default (props: ExploreProps): JSX.Element => {
                 />
               </SearchBox>
             </DataSelectionBox>
-            <Panel.Body style={{ margin: 0, padding: 0 }}>
-              {children}
-            </Panel.Body>
-          </Panel>
+            <Card.Body style={{ margin: 0, padding: 0 }}>{children}</Card.Body>
+          </Card>
         </Col1>
         <Col2>
-          <Panel>
-            <PanelTitle>
-              <h3>{selectedNode && selectedNode.data.label}</h3>
-
-              <div>
-                <Button
-                  bsStyle="info"
-                  type="submit"
-                  onClick={handleGoToAnalysis}
-                >
-                  Descriptive Analysis <Glyphicon glyph="chevron-right" />
-                </Button>
-                <Tooltip
-                  title={TOOLTIPS[5].title}
-                  text={TOOLTIPS[5].text}
-                  placement={TooltipPlacement.bottom}
-                  badge={TOOLTIPS[5].badge}
-                />
-              </div>
-            </PanelTitle>
-          </Panel>
-          <Panel>
-            <Panel.Body>
-              {/* <Tabs defaultActiveKey={0} id="uncontrolled-formula-tabs">
-                <Tab eventKey={0} title={'Parameters'} key={0}> */}
+          <Card>
+            <Card.Body>
               <ModelTitle>
-                <h5>Parameters</h5>
+                <h4 style={{ marginRight: '8px' }}>Parameters</h4>
                 <DropdownModel
                   items={apiModel.state.models}
                   selectedSlug={
@@ -247,16 +213,25 @@ export default (props: ExploreProps): JSX.Element => {
                   reset={apiModel.state.model ? true : false}
                   handleSelect={handleSelectModel}
                 />
-                <div style={{ marginLeft: 'auto' }}>
-                  <a
-                    href={`${ONTOLOGY_URL}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                <div className="item">
+                  <Button
+                    variant="info"
+                    type="submit"
+                    onClick={handleGoToAnalysis}
                   >
-                    <b>Access to the latest ontology and terminology</b>
-                  </a>
+                    Descriptive Analysis <BsFillCaretRightFill />
+                  </Button>
                 </div>
               </ModelTitle>
+              <p style={{ padding: '4px 0 8px 0' }}>
+                <a
+                  href={`${ONTOLOGY_URL}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <b>Access to the latest ontology and terminology</b>
+                </a>
+              </p>
               <ModelView
                 d3Model={d3Model}
                 handleUpdateD3Model={handleUpdateD3Model}
@@ -265,8 +240,8 @@ export default (props: ExploreProps): JSX.Element => {
                 buttonVariable={
                   <Button
                     className="child"
-                    bsStyle={'success'}
-                    bsSize={'small'}
+                    variant={'success'}
+                    size="sm"
                     disabled={
                       !selectedNode || selectedNode.data.code === 'root'
                     }
@@ -282,14 +257,14 @@ export default (props: ExploreProps): JSX.Element => {
                     ).length === selectedNode.leaves().length
                       ? '-'
                       : '+'}{' '}
-                    AS VARIABLE
+                    As variable
                   </Button>
                 }
                 buttonCovariable={
                   <Button
                     className="child"
-                    bsStyle={'warning'}
-                    bsSize={'small'}
+                    variant={'warning'}
+                    size="sm"
                     disabled={
                       !selectedNode || selectedNode.data.code === 'root'
                     }
@@ -305,14 +280,14 @@ export default (props: ExploreProps): JSX.Element => {
                     ).length === selectedNode.leaves().length
                       ? '-'
                       : '+'}{' '}
-                    AS COVARIABLE
+                    As covariable
                   </Button>
                 }
                 buttonFilter={
                   <Button
                     className="child"
-                    bsStyle={'danger'}
-                    bsSize={'small'}
+                    variant={'secondary'}
+                    size="sm"
                     disabled={
                       !selectedNode || selectedNode.data.code === 'root'
                     }
@@ -328,7 +303,7 @@ export default (props: ExploreProps): JSX.Element => {
                     ).length === selectedNode.leaves().length
                       ? '-'
                       : '+'}{' '}
-                    AS FILTER
+                    As filter
                   </Button>
                 }
               />
@@ -347,18 +322,19 @@ export default (props: ExploreProps): JSX.Element => {
                   />
                 </Tab>
               </Tabs> */}
-              Available algorithms:{' '}
+
+              <h5 style={{ paddingTop: '4px' }}>Available algorithms</h5>
               <AvailableAlgorithms
                 layout={'inline'}
                 algorithms={apiCore.state.algorithms}
                 lookup={apiCore.lookup}
                 apiModel={apiModel}
               />
-            </Panel.Body>
-          </Panel>
+            </Card.Body>
+          </Card>
 
-          <Panel className="statistics">
-            <Panel.Body>
+          <Card className="statistics">
+            <Card.Body>
               <Histograms
                 apiMining={apiMining}
                 histograms={histograms}
@@ -368,8 +344,8 @@ export default (props: ExploreProps): JSX.Element => {
                 zoom={zoom}
                 model={model}
               />
-            </Panel.Body>
-          </Panel>
+            </Card.Body>
+          </Card>
         </Col2>
       </Grid>
     </>

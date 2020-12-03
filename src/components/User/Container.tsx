@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Panel } from 'react-bootstrap';
+import { Button, Card } from 'react-bootstrap';
 import { RouteComponentProps } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -7,7 +7,7 @@ import defaultUser from '../../images/default_user.png';
 import { APIUser } from '../API';
 import Header from './Header';
 
-const Heading = styled(Panel.Heading)`
+const Heading = styled(Card.Header)`
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -18,16 +18,17 @@ const Content = styled.div`
   display: flex;
   justify-content: flex-start;
 
-  .panel {
+  .card {
     padding: 1em;
+    min-width: 360px;
   }
 
-  .panel:first-child {
+  .card:first-child {
     flex: 0;
     margin-right: 8px;
   }
 
-  .panel:last-child {
+  .card:last-child {
     flex: 1;
   }
 `;
@@ -51,19 +52,19 @@ export default ({ apiUser }: Props): JSX.Element => {
     <>
       <Header />
       <Content>
-        <Panel>
+        <Card>
           <User
             className="img-circle"
             src={defaultUser}
             alt={user && user.username}
           />
           <h3>{user && user.username}</h3>
-        </Panel>
-        <Panel>
+        </Card>
+        <Card>
           <Heading>
             <h2>Infos</h2>
             <Button
-              bsStyle={'warning'}
+              variant={'warning'}
               onClick={(): void => {
                 apiUser.logout();
                 window.location.href = '/';
@@ -72,7 +73,7 @@ export default ({ apiUser }: Props): JSX.Element => {
               Logout
             </Button>
           </Heading>
-          <Panel.Body>
+          <Card.Body>
             <div className="form-group">
               <label className="control-label">Username:</label>
               <input
@@ -111,8 +112,8 @@ export default ({ apiUser }: Props): JSX.Element => {
                 Reset
               </button>
             </Submit>
-          </Panel.Body>
-        </Panel>
+          </Card.Body>
+        </Card>
       </Content>
     </>
   );

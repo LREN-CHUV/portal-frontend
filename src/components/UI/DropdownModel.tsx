@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { DropdownButton, MenuItem } from 'react-bootstrap';
+import { DropdownButton, Dropdown as BsDropdown } from 'react-bootstrap';
 import { ModelResponse } from '../API/Model';
 
 interface Dropdown {
@@ -14,7 +14,7 @@ export default ({
   reset = false,
   selectedSlug
 }: Dropdown): JSX.Element => {
-  const [title, setTitle] = useState(selectedSlug || 'Select');
+  const [title, setTitle] = useState(selectedSlug || 'Select from model');
   useEffect(() => {
     if (selectedSlug) {
       const f = items && items.find(i => i.slug === selectedSlug);
@@ -25,10 +25,15 @@ export default ({
   }, [selectedSlug, items]);
 
   return (
-    <DropdownButton bsSize="small" id={'model-dropdown'} title={title}>
+    <DropdownButton
+      id={'model-dropdown'}
+      title={title}
+      size="sm"
+      variant="light"
+    >
       {reset && (
         <>
-          <MenuItem
+          <BsDropdown.Item
             eventKey={'reset'}
             key={'reset'}
             // tslint:disable-next-line jsx-no-lambda
@@ -37,9 +42,9 @@ export default ({
               handleSelect();
             }}
           >
-            <strong>Reset</strong>
-          </MenuItem>
-          <MenuItem>---</MenuItem>
+            Reset
+          </BsDropdown.Item>
+          <BsDropdown.ItemText>-------</BsDropdown.ItemText>
         </>
       )}
 
@@ -47,8 +52,8 @@ export default ({
         handleSelect &&
         items.map((item, i: number) => {
           return (
-            <MenuItem
-              eventKey={i}
+            <BsDropdown.Item
+              eventKey={`${i}`}
               key={item.title}
               // tslint:disable-next-line jsx-no-lambda
               onSelect={(): void => {
@@ -56,8 +61,8 @@ export default ({
                 handleSelect(item);
               }}
             >
-              <strong>{item.title}</strong>
-            </MenuItem>
+              {item.title}
+            </BsDropdown.Item>
           );
         })}
     </DropdownButton>

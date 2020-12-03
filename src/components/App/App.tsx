@@ -1,16 +1,12 @@
 import 'bootstrap/dist/css/bootstrap.css';
-
 import * as React from 'react';
 import { Route, Switch } from 'react-router-dom';
-import styled, { createGlobalStyle } from 'styled-components';
-
-import backgroundImage from '../../images/body-bg.jpg';
+import styled from 'styled-components';
 import ExperimentReview from '../Analysis/Container';
 import { APICore, APIExperiment, APIMining, APIModel, APIUser } from '../API';
 import { ExperimentResponse } from '../API/Experiment';
 import Article from '../Article/Container';
 import ExperimentCreate from '../Create/Container';
-import Dashboard from '../Dashboard/Dashboard';
 import Explore from '../Explore/Container';
 import Help from '../Help/Help';
 import ExperimentResult from '../Result/Container';
@@ -18,11 +14,13 @@ import Tutorial from '../Tutorial/Tutorial';
 import DataCatalog from '../UI/DataCatalog';
 import Footer from '../UI/Footer';
 import Galaxy from '../UI/Galaxy';
+import { GlobalStyles } from '../UI/GlobalStyle';
 import Navigation from '../UI/Navigation';
 import NotFound from '../UI/NotFound';
 import TOS from '../UI/TOS';
 import User from '../User/Container';
 import { history } from '../utils';
+
 
 export interface AppConfig {
   version?: string;
@@ -39,38 +37,6 @@ interface Props {
   apiUser: APIUser;
   showTutorial: boolean;
 }
-
-const GlobalStyles = createGlobalStyle`
-  body {
-    font-family: 'Open Sans', sans-serif !important;
-    background: url(${backgroundImage}) top center no-repeat fixed #f5f5f5;
-    background-size: 100% auto;
-  }
-
-  .panel {
-    margin-bottom: 8px;
-    background-color: #fff;
-    border: 1px solid transparent;
-    border-radius: 4px;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
-  }
-
-  .user-guide .modal-dialog {
-    width: 1200px; 
-    margin: 50px auto;
-  }
-
-  @media (max-width: 767px) {
-    .user-guide .modal-dialog {
-      width: 768px; 
-    }
-    
-    .user-guide .modal-dialog .modal-footer {
-      text-align: left;
-    }
-  }
-
-`;
 
 interface MainProps {
   showTutorial: any;

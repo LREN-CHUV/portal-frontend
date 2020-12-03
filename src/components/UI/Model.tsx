@@ -1,26 +1,8 @@
 import * as React from 'react';
-import { Panel } from 'react-bootstrap';
-import styled from 'styled-components';
+
 import { VariableEntity } from '../API/Core';
 import { ModelResponse } from '../API/Model';
 import DropdownModel from './DropdownModel';
-import './Model.css';
-
-const Body = styled(Panel.Body)`
-  padding: 0 16px 16px 16px;
-
-  var {
-    display: block;
-  }
-`;
-
-const Title = styled.h3`
-  margin: 16px 0 0 0;
-`;
-
-const Subtitle = styled.h5`
-  margin-bottom: 4px;
-`;
 
 interface Props {
   model?: ModelResponse;
@@ -43,55 +25,54 @@ class Model extends React.Component<Props> {
     const query = model && model.query;
 
     return (
-      <Panel className="model">
-        <Panel.Title>
-          {!handleSelectModel && (
-            <Title>{(model && model.title) || selectedSlug}</Title>
+      <>
+        <h4>
+          {handleSelectModel && (
+            <DropdownModel
+              items={items}
+              selectedSlug={selectedSlug}
+              reset={false}
+              handleSelect={handleSelectModel}
+            />
           )}
-          <Title>
-            {handleSelectModel && (
-              <DropdownModel
-                items={items}
-                selectedSlug={selectedSlug}
-                reset={false}
-                handleSelect={handleSelectModel}
-              />
+        </h4>
+        {query && (
+          <>
+            {query.variables && (
+              <section>
+                <h4>Variables</h4>
+                {query.variables.map((v: any) => (
+                  <p key={v.code}>{lookup(v.code, query.pathology).info}</p>
+                ))}
+              </section>
             )}
-          </Title>
-        </Panel.Title>
-        <Body>
-          {/* {!model && (
-            <div style={{ marginTop: '8px' }}>
-              <Loading />
-            </div>
-          )} */}
-          {query && (
-            <>
-              {query.variables && <Subtitle>Variables</Subtitle>}
-              {query.variables &&
-                query.variables.map((v: any) => (
-                  <var key={v.code}>{lookup(v.code, query.pathology).info}</var>
-                ))}
-              {((query.coVariables && query.coVariables.length > 0) ||
-                (query.groupings && query.groupings.length > 0)) && (
-                <Subtitle>CoVariables</Subtitle>
-              )}
-              {query.coVariables &&
-                query.coVariables.length > 0 &&
-                query.coVariables.map((v: any) => (
-                  <var key={v.code}>{lookup(v.code, query.pathology).info}</var>
-                ))}
-              {query.groupings &&
-                query.groupings.length > 0 &&
-                query.groupings.map((v: any) => (
-                  <var key={v.code}>{lookup(v.code, query.pathology).info}</var>
-                ))}
-              {query.filters && <Subtitle>Filters</Subtitle>}
-              {query.filters && this.formatFilter(query.filters)}
-            </>
-          )}
-        </Body>
-      </Panel>
+
+            {((query.coVariables && query.coVariables.length > 0) ||
+              (query.groupings && query.groupings.length > 0)) && (
+              <section>
+                <h4>CoVariables</h4>
+                {query.coVariables &&
+                  query.coVariables.length > 0 &&
+                  query.coVariables.map((v: any) => (
+                    <p key={v.code}>{lookup(v.code, query.pathology).info}</p>
+                  ))}
+                {query.groupings &&
+                  query.groupings.length > 0 &&
+                  query.groupings.map((v: any) => (
+                    <p key={v.code}>{lookup(v.code, query.pathology).info}</p>
+                  ))}
+              </section>
+            )}
+
+            {query.filters && (
+              <section>
+                <h4>Filters</h4>
+                {query.filters && this.formatFilter(query.filters)}
+              </section>
+            )}
+          </>
+        )}
+      </>
     );
   }
 

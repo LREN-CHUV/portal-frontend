@@ -13,7 +13,7 @@ const Box = styled(BSAlert)`
 
 export const Alert = ({ message, styled, title }: IAlert) =>
   (message && (
-    <Box bsStyle={styled || 'danger'}>
+    <Box variant={styled || 'danger'}>
       <h4>{title || 'Error'}</h4>
       <p>{message}</p>
     </Box>

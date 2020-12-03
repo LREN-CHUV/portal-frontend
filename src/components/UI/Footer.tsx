@@ -26,19 +26,17 @@ const FooterBox = styled.div`
 
 export default ({ appConfig }: { appConfig: AppConfig }): JSX.Element => (
   <FooterBox>
-    <span>
-      <div title="CHUV Lausanne"></div>
-      <h6>
-        © 2015-2020{' '}
-        <a
-          href="https://www.humanbrainproject.eu/en/"
-          title="The Human Brain Project Website"
-        >
-          Human Brain Project{' '}
-        </a>
-        . All right reserved
-      </h6>
-    </span>
+    <div title="CHUV Lausanne"></div>
+    <h6>
+      © 2015-2020{' '}
+      <a
+        href="https://www.humanbrainproject.eu/en/"
+        title="The Human Brain Project Website"
+      >
+        Human Brain Project{' '}
+      </a>
+      . All right reserved
+    </h6>
     <h6>{appConfig.version}</h6>
   </FooterBox>
 );

@@ -137,7 +137,7 @@ export default ({
         <LoginBox>
           <Button
             onClick={forbidden ? handleLogoutPress : handleLoginPress}
-            bsStyle={forbidden ? 'warning' : 'info'}
+            variant={forbidden ? 'warning' : 'info'}
             type="submit"
           >
             {forbidden ? 'Logout' : 'Login'}
@@ -149,7 +149,7 @@ export default ({
       </ActionBar>
       <main>
         {forbidden && (
-          <AlertBox bsStyle="success">
+          <AlertBox variant="success">
             <div
               dangerouslySetInnerHTML={{
                 __html: `${FORBIDDEN_ACCESS_MESSAGE}`
