@@ -191,13 +191,7 @@ export default ({
           {({ toggleTutorial }): JSX.Element =>
             (
               <>
-                <Button
-                  bsStyle="link"
-                  bsSize={'small'}
-                  onClick={toggleTutorial}
-                >
-                  User Guide
-                </Button>
+                <Button onClick={toggleTutorial}>User Guide</Button>
               </>
             ) || <></>
           }
@@ -205,8 +199,6 @@ export default ({
         <HelpButton showTraining={true} />
         {logout && (
           <Button
-            bsStyle={'warning'}
-            bsSize={'small'}
             onClick={(): void => {
               logout();
               window.location.href = '/';

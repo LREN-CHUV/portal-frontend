@@ -9,7 +9,7 @@ const Container = styled.div`
 export default () => (
   <Container>
     <input placeholder="Search" />
-    <Table striped bordered condensed hover>
+    <Table striped bordered hover>
       <thead>
         <tr>
           <th>#</th>

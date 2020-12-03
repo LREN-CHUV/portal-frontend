@@ -109,4 +109,27 @@ export const GlobalStyles = createGlobalStyle`
   .content .result {
      margin-top: 1rem;
   }
+
+  .panel {
+    margin-bottom: 8px;
+    background-color: #fff;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+  }
+
+  .user-guide .modal-dialog {
+    width: 1200px; 
+    margin: 50px auto;
+  }
+
+  @media (max-width: 767px) {
+    .user-guide .modal-dialog {
+      width: 768px; 
+    }
+    
+    .user-guide .modal-dialog .modal-footer {
+      text-align: left;
+    }
+  }
 `;

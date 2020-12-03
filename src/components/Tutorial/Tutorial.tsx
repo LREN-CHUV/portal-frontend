@@ -49,7 +49,7 @@ export default React.memo(
         <MIPContext.Consumer>
           {({ toggleTutorial }): JSX.Element => (
             <Modal.Dialog>
-              <Modal.Header
+              {/*<Modal.Header
                 style={{ display: 'flex', justifyContent: 'space-between' }}
               >
                 <Modal.Title>MIP User Guide</Modal.Title>
@@ -119,6 +119,7 @@ export default React.memo(
               <Modal.Footer>
                 <Button onClick={toggleTutorial}>Close</Button>
               </Modal.Footer>
+                  */}
             </Modal.Dialog>
           )}
         </MIPContext.Consumer>

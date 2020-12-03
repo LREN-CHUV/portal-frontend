@@ -2,15 +2,13 @@ import * as React from 'react';
 import { Button, Card, Dropdown, DropdownButton } from 'react-bootstrap';
 import { BsFillCaretRightFill } from 'react-icons/bs';
 import styled from 'styled-components';
-
 import { APICore, APIMining, APIModel } from '../API';
 import { VariableEntity } from '../API/Core';
 import { D3Model, HierarchyCircularNode, ModelResponse } from '../API/Model';
-import { ONTOLOGY_URL, TOOLTIPS } from '../constants';
+import { ONTOLOGY_URL } from '../constants';
 import AvailableAlgorithms from '../Create/AvailableAlgorithms';
 import DropdownModel from '../UI/DropdownModel';
 import LargeDatasetSelect from '../UI/LargeDatasetSelect';
-import { Tooltip, TooltipPlacement } from '../UI/ToolTip';
 import { ModelType } from './Container';
 import Histograms from './D3Histograms';
 import ModelView from './D3Model';
@@ -161,12 +159,6 @@ export default (props: ExploreProps): JSX.Element => {
                       ))}
                     </DropdownButton>
                   )}
-                <Tooltip
-                  title={TOOLTIPS[1].title}
-                  text={TOOLTIPS[1].text}
-                  placement={TooltipPlacement.bottom}
-                  badge={'1'}
-                />
               </PathologiesBox>
 
               <DatasetsBox>
@@ -176,24 +168,12 @@ export default (props: ExploreProps): JSX.Element => {
                   selectedDatasets={selectedDatasets}
                   isDropdown={true}
                 ></LargeDatasetSelect>
-                <Tooltip
-                  title={TOOLTIPS[2].title}
-                  text={TOOLTIPS[2].text}
-                  placement={TooltipPlacement.bottom}
-                  badge={TOOLTIPS[2].badge}
-                />
               </DatasetsBox>
               <SearchBox>
                 <Search
                   hierarchy={layout}
                   zoom={zoom}
                   handleSelectNode={handleSelectNode}
-                />
-                <Tooltip
-                  title={TOOLTIPS[3].title}
-                  text={TOOLTIPS[3].text}
-                  placement={TooltipPlacement.top}
-                  badge={TOOLTIPS[3].badge}
                 />
               </SearchBox>
             </DataSelectionBox>
@@ -307,12 +287,7 @@ export default (props: ExploreProps): JSX.Element => {
                   </Button>
                 }
               />
-              <Tooltip
-                title={TOOLTIPS[4].title}
-                text={TOOLTIPS[4].text}
-                placement={TooltipPlacement.bottom}
-                badge={TOOLTIPS[4].badge}
-              />
+
               {/* </Tab>
                 <Tab eventKey={1} title={'Formula'} key={1}>
                   <Formula

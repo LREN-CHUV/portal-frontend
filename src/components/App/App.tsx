@@ -21,7 +21,6 @@ import TOS from '../UI/TOS';
 import User from '../User/Container';
 import { history } from '../utils';
 
-
 export interface AppConfig {
   version?: string;
   instanceName?: string;

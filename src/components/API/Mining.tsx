@@ -178,7 +178,8 @@ class Mining extends Container<MiningState> {
       name: 'MULTIPLE_HISTOGRAMS',
       algorithmDetails: {
         name: 'MULTIPLE_HISTOGRAMS',
-        parameters
+        parameters,
+        type: 'string'
       }
     };
 
