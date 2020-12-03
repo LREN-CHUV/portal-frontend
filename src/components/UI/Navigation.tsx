@@ -7,6 +7,7 @@ import logo from '../../images/hbp-logo.png';
 import { ExperimentResponse } from '../API/Experiment';
 import MIPContext from '../App/MIPContext';
 import Dropdown from './DropdownExperiments';
+import ExperimentList from './ExperimentList';
 import HelpButton from './HelpButton';
 
 interface Props {
