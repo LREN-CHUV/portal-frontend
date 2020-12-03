@@ -1,9 +1,11 @@
-import moment from 'moment';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import * as React from 'react';
-import { DropdownButton, Dropdown as BsDropdown } from 'react-bootstrap';
+import { Dropdown as BsDropdown, DropdownButton } from 'react-bootstrap';
 import styled from 'styled-components';
-
-import { IExperimentList, IExperiment } from '../API/Experiment';
+import { IExperiment } from '../API/Experiment';
+dayjs.extend(relativeTime);
+dayjs().format();
 
 const Link = styled(BsDropdown.Item)`
   a {
@@ -86,7 +88,7 @@ export default ({
               onSelect={() => handleSelect(experiment)}
             >
               {/*<Glyphicon glyph={experimentState} />*/} {experiment.name}{' '}
-              <span>({moment(experiment.created, 'YYYYMMDD').fromNow()})</span>
+              <span>({dayjs().to(dayjs(experiment.created))})</span>
             </Link>
           );
         })) || (

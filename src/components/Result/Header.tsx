@@ -1,10 +1,12 @@
-import moment from 'moment'; // FIXME: change lib, too heavy
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import * as React from 'react';
 import { Card } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-
 import { IExperiment, IExperimentList } from '../API/Experiment';
 import Dropdown from '../UI/DropdownExperiments';
+dayjs.extend(relativeTime);
+dayjs().format();
 
 interface Props {
   experiment?: IExperiment;
@@ -32,9 +34,7 @@ export default ({
             <Link to={`/review`}>{name}</Link>
           </h3>
           <p className="item">
-            Created{' '}
-            {experiment &&
-              moment(new Date(experiment.created), 'YYYYMMDD').fromNow()}{' '}
+            Created {experiment && dayjs().to(dayjs(experiment.created))}
             by {experiment && experiment.createdBy}
           </p>
         </div>
