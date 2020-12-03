@@ -3,16 +3,16 @@ import { Button, FormControl, Card } from 'react-bootstrap';
 import { BsFillCaretLeftFill, BsFillCaretRightFill } from 'react-icons/bs';
 
 import { Algorithm } from '../API/Core';
-import { ExperimentResponse } from '../API/Experiment';
+import { IExperiment, IExperimentList } from '../API/Experiment';
 import { ModelResponse } from '../API/Model';
 import Dropdown from '../UI/DropdownExperiments';
 
 interface Props {
   model?: ModelResponse;
-  experiments?: ExperimentResponse[];
+  experimentList?: IExperimentList;
   method?: Algorithm;
   handleGoBackToReview: () => void;
-  handleSelectExperiment: (experiment: ExperimentResponse) => Promise<any>;
+  handleSelectExperiment: (experiment: IExperiment) => Promise<any>;
   handleSaveAndRunExperiment: (experimentName: string) => Promise<any>;
 }
 interface State {
@@ -26,7 +26,7 @@ export default class Header extends React.Component<Props, State> {
 
   public render(): JSX.Element {
     const {
-      experiments,
+      experimentList,
       model,
       method,
       handleGoBackToReview,
@@ -45,8 +45,8 @@ export default class Header extends React.Component<Props, State> {
             <Dropdown
               items={
                 model &&
-                experiments &&
-                experiments.filter(
+                experimentList &&
+                experimentList?.experiments?.filter(
                   (e: any) => e.modelDefinitionId === model.slug
                 )
               }

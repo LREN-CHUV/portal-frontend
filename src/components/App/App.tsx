@@ -4,7 +4,7 @@ import { Route, Switch } from 'react-router-dom';
 import styled from 'styled-components';
 import ExperimentReview from '../Analysis/Container';
 import { APICore, APIExperiment, APIMining, APIModel, APIUser } from '../API';
-import { ExperimentResponse } from '../API/Experiment';
+import { IExperiment } from '../API/Experiment';
 import Article from '../Article/Container';
 import ExperimentCreate from '../Create/Container';
 import Explore from '../Explore/Container';
@@ -81,11 +81,9 @@ const App = ({
         <Navigation
           name={appConfig.instanceName}
           datacatalogueUrl={appConfig.datacatalogueUrl || undefined}
-          experiments={apiExperiment.state.experiments}
-          handleSelect={(experiment: ExperimentResponse): void => {
-            history.push(
-              `/experiment/${experiment.modelSlug}/${experiment.uuid}`
-            );
+          experimentList={apiExperiment.state.experimentList}
+          handleSelect={(experiment: IExperiment): void => {
+            history.push(`/experiment/${experiment.uuid}`);
           }}
           logout={
             (apiUser.state.user?.username !== 'anonymous' && apiUser.logout) ||

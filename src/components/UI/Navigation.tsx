@@ -4,16 +4,15 @@ import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
 
 import logo from '../../images/hbp-logo.png';
-import { ExperimentResponse } from '../API/Experiment';
+import { IExperimentList, IExperiment } from '../API/Experiment';
+import ExperimentList from '../UI/ExperimentList';
 import MIPContext from '../App/MIPContext';
-import Dropdown from './DropdownExperiments';
-import ExperimentList from './ExperimentList';
 import HelpButton from './HelpButton';
 
 interface Props {
   name?: string;
-  experiments?: ExperimentResponse[];
-  handleSelect: (experiment: ExperimentResponse) => void;
+  experimentList?: IExperimentList;
+  handleSelect: (experiment: IExperiment) => void;
   datacatalogueUrl: string | undefined;
   logout?: () => {};
 }
@@ -125,7 +124,7 @@ const ALink = styled.a`
 export default ({
   name,
   datacatalogueUrl,
-  experiments,
+  experimentList,
   handleSelect,
   logout
 }: Props): JSX.Element => {
@@ -147,17 +146,17 @@ export default ({
           <span> &gt; </span>
           <GroupLink to="/experiment">Experiment</GroupLink>
         </Group>
-        <DropdownWrapper>
+        <ExperimentList experimentList={experimentList} />
+        {/*  <DropdownWrapper>
           <Dropdown
             items={experiments}
-            /* eslint-disable-next-line */
             style="link"
             type={'models'}
             title="My Experiments"
             handleSelect={handleSelect}
             handleCreateNewExperiment={null}
           />
-        </DropdownWrapper>
+        </DropdownWrapper> */}
         <Link to="/galaxy">Workflow</Link>
         {datacatalogueUrl && (
           <ALink

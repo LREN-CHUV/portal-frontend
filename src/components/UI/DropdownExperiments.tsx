@@ -3,7 +3,7 @@ import * as React from 'react';
 import { DropdownButton, Dropdown as BsDropdown } from 'react-bootstrap';
 import styled from 'styled-components';
 
-import { ExperimentResponse } from '../API/Experiment';
+import { IExperimentList, IExperiment } from '../API/Experiment';
 
 const Link = styled(BsDropdown.Item)`
   a {
@@ -24,10 +24,10 @@ const Dropdown = styled(DropdownButton)`
 `;
 
 interface IDropdown {
-  items: ExperimentResponse[] | undefined;
+  items: IExperiment[] | undefined;
   title: string;
   type?: string;
-  handleSelect: (experiment: ExperimentResponse) => void;
+  handleSelect: (experiment: IExperiment) => void;
   handleCreateNewExperiment: (() => void) | null;
   noCaret?: boolean;
   style?: string;
@@ -59,7 +59,7 @@ export default ({
       handleSelect &&
       items.length > 0 &&
       items
-        .sort((a1: ExperimentResponse, b1: ExperimentResponse) => {
+        .sort((a1: IExperiment, b1: IExperiment) => {
           const a = a1.created;
           const b = b1.created;
 
@@ -67,15 +67,16 @@ export default ({
         })
         .map((experiment, i: number) => {
           let experimentState;
-          experimentState = experiment.error
-            ? 'exclamation-sign'
-            : !experiment.results
-            ? 'transfer'
-            : experiment.resultsViewed
-            ? 'eye-open'
-            : 'eye-close';
+          experimentState =
+            experiment.status === 0
+              ? 'exclamation-sign'
+              : !experiment.results
+              ? 'transfer'
+              : experiment.viewed
+              ? 'eye-open'
+              : 'eye-close';
 
-          experimentState += experiment.resultsViewed ? ' viewed' : ' ready';
+          experimentState += experiment.viewed ? ' viewed' : ' ready';
 
           return (
             <Link

@@ -105,11 +105,11 @@ const buildPayload = async (
 };
 
 const createExperiment = async ({
-  experiment
+  payload
 }: {
-  experiment: ExperimentPayload;
+  payload: ExperimentPayload;
 }): Promise<ExperimentState> => {
-  await apiExperiment.create({ experiment });
+  await apiExperiment.create({ payload });
   await new Promise(resolve => setTimeout(resolve, 1000));
 
   return apiExperiment.state;

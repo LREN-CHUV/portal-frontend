@@ -3,7 +3,7 @@ import { Card } from 'react-bootstrap';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 
 import { APICore, APIExperiment, APIModel } from '../API';
-import { ExperimentResponse } from '../API/Experiment';
+import { IExperiment } from '../API/Experiment';
 import Datasets from '../UI/Datasets';
 import Model from '../UI/Model';
 import { ExperimentResult, ExperimentResultHeader } from './';
@@ -79,7 +79,7 @@ class Experiment extends React.Component<Props> {
         <div className="header">
           <ExperimentResultHeader
             experiment={apiExperiment.state.experiment}
-            experiments={apiExperiment.state.experiments}
+            experimentList={apiExperiment.state.experimentList}
             handleSelectExperiment={this.handleSelectExperiment}
             handleShareExperiment={this.handleShareExperiment}
             handleCreateNewExperiment={this.handleCreateNewExperiment}
@@ -131,11 +131,11 @@ class Experiment extends React.Component<Props> {
   };
 
   private handleSelectExperiment = async (
-    experiment: ExperimentResponse
+    experiment: IExperiment
   ): Promise<void> => {
-    const { modelSlug: modelDefinitionId, uuid } = experiment;
+    const { uuid } = experiment;
     const { history, apiExperiment } = this.props;
-    history.push(`/experiment/${modelDefinitionId}/${uuid}`);
+    history.push(`/experiment/${uuid}`);
     await apiExperiment.markAsViewed({ uuid });
     return await apiExperiment.one({ uuid });
   };

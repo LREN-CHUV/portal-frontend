@@ -1,55 +1,50 @@
 import * as React from 'react';
 import { Pagination, Table } from 'react-bootstrap';
 import styled from 'styled-components';
+import { IExperimentList, IExperiment } from '../API/Experiment';
 
 const Container = styled.div`
   background-color: #fff;
 `;
 
-export default () => (
+interface Props {
+  experimentList?: IExperimentList;
+}
+
+const Experiment = ({ experiment }: { experiment: IExperiment }) => (
+  <tr>
+    <td>{experiment.viewed}</td>
+    <td>{experiment.name}</td>
+    <td>{experiment.created}</td>
+    <td>{experiment.createdBy}</td>
+    <td>share delete rename</td>
+  </tr>
+);
+
+export default ({ experimentList }: Props) => (
   <Container>
     <input placeholder="Search" />
     <Table striped bordered hover>
       <thead>
         <tr>
-          <th>#</th>
-          <th>First Name</th>
-          <th>Last Name</th>
-          <th>Username</th>
+          <th>Status</th>
+          <th>Name</th>
+          <th>Created</th>
+          <th>Created By</th>
+          <th>Actions</th>
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td>1</td>
-          <td>Mark09</td>
-          <td>Otto</td>
-          <td>@mdo</td>
-        </tr>
-        <tr>
-          <td>2</td>
-          <td>Jacob</td>
-          <td>Thornton</td>
-          <td>@fat</td>
-        </tr>
+        {experimentList?.experiments?.map(experiment => (
+          <Experiment experiment={experiment} />
+        ))}
       </tbody>
     </Table>
-    ;
     <Pagination>
-      <Pagination.First />
       <Pagination.Prev />
-      <Pagination.Item>{1}</Pagination.Item>
+      <Pagination.Item active>{1}</Pagination.Item>
       <Pagination.Ellipsis />
-
-      <Pagination.Item>{10}</Pagination.Item>
-      <Pagination.Item>{11}</Pagination.Item>
-      <Pagination.Item active>{12}</Pagination.Item>
-      <Pagination.Item>{13}</Pagination.Item>
-      <Pagination.Item disabled>{14}</Pagination.Item>
-
-      <Pagination.Ellipsis />
-      <Pagination.Item>{20}</Pagination.Item>
       <Pagination.Next />
-      <Pagination.Last />
     </Pagination>
   </Container>
 );

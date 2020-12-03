@@ -3,12 +3,12 @@ import * as React from 'react';
 import { Card } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
-import { ExperimentResponse } from '../API/Experiment';
+import { IExperiment, IExperimentList } from '../API/Experiment';
 import Dropdown from '../UI/DropdownExperiments';
 
 interface Props {
-  experiment?: ExperimentResponse;
-  experiments?: ExperimentResponse[];
+  experiment?: IExperiment;
+  experimentList?: IExperimentList;
   handleSelectExperiment: any;
   handleShareExperiment: any;
   handleCreateNewExperiment: any;
@@ -16,13 +16,12 @@ interface Props {
 
 export default ({
   experiment,
-  experiments,
+  experimentList,
   handleSelectExperiment,
   handleShareExperiment,
   handleCreateNewExperiment
 }: Props): JSX.Element => {
   const name = experiment && experiment.name;
-  const modelDefinitionId = experiment && experiment.modelSlug;
 
   return (
     <Card>
@@ -30,22 +29,21 @@ export default ({
         <div className="item text">
           <h3>
             Results of experiment <strong>{name}</strong> on{' '}
-            <Link to={`/review`}>{modelDefinitionId}</Link>
+            <Link to={`/review`}>{name}</Link>
           </h3>
           <p className="item">
             Created{' '}
             {experiment &&
               moment(new Date(experiment.created), 'YYYYMMDD').fromNow()}{' '}
-            by {experiment && experiment.user && experiment.user.username}
+            by {experiment && experiment.createdBy}
           </p>
         </div>
         <div className="item">
           <Dropdown
             items={
               experiment &&
-              experiments &&
-              experiments.filter(
-                (e: any) => e.modelDefinitionId === experiment.modelSlug
+              experimentList?.experiments?.filter(
+                (e: any) => e.uuid === experiment.uuid
               )
             }
             /* eslint-disable-next-line */

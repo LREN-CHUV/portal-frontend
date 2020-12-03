@@ -8,9 +8,11 @@ import {
   AlgorithmParameterRequest
 } from '../API/Core';
 import { ModelResponse, Query } from '../API/Model';
-import { User } from '../API/User';
 import { MIME_TYPES } from '../constants';
-import ExperimentResultParser from './ExperimentResultParser';
+
+interface IUUID {
+  uuid: string;
+}
 
 export interface ExperimentPayload {
   algorithms: Algorithm[];
@@ -19,26 +21,22 @@ export interface ExperimentPayload {
   label: string;
 }
 
-export interface ExperimentResponse {
-  created: Date;
-  error?: string | boolean;
-  name: string;
-  resultsViewed: boolean;
-  uuid: string;
-  modelSlug: string;
-  results?: Result[] | Node[];
-  user?: User;
-  algorithms: Algorithm[];
-  modelQuery?: Query;
-  shared: boolean;
-  hasServerError: boolean;
+export enum experimentStatus {
+  error
 }
 
-export interface ExperimentResponseRaw extends ExperimentResponse {
-  algorithms: any;
-  model: { slug: string };
-  createdBy: { fullname: string; username: string };
-  result: string;
+export interface ExperimentParameter {
+  name: string;
+  label: string;
+  value: string;
+}
+
+export interface AlgorithmDetail {
+  name: string;
+  desc?: string;
+  label?: string;
+  type: string;
+  parameters: ExperimentParameter[];
 }
 
 export interface Result {
@@ -46,14 +44,32 @@ export interface Result {
   data: any;
 }
 
-interface IUUID {
+export interface IExperiment {
   uuid: string;
+  name: string;
+  createdBy: string;
+  created: string;
+  finisehd: string;
+  shared: boolean;
+  viewed: boolean;
+  status: experimentStatus;
+  algorithm: AlgorithmDetail;
+
+  algorithmDetails?: AlgorithmDetail;
+  results?: Result[];
+}
+
+export interface IExperimentList {
+  experiments: IExperiment[];
+  totalPages: number;
+  currentPage: number;
+  totalExperiments: number;
 }
 
 export interface State {
   error?: string;
-  experiment?: ExperimentResponse;
-  experiments?: ExperimentResponse[];
+  experiment?: IExperiment;
+  experimentList?: IExperimentList;
 }
 
 class Experiment extends Container<State> {
@@ -160,33 +176,25 @@ class Experiment extends Container<State> {
   public one = async ({ uuid }: IUUID): Promise<void> => {
     try {
       // mark status and refresh the list
-      if (
-        this.state.experiments?.find(e => e.uuid === uuid)?.resultsViewed ===
-        false
+      /*       if (
+        this.state.experimentList?.experiments.find(e => e.uuid === uuid)
       ) {
         await axios.get(`${this.baseUrl}/${uuid}/markAsViewed`, this.options);
         await this.setState(previousState => ({
-          experiments: previousState.experiments?.map(e => ({
+          experimentList: previousState.experimentList?.map(e => ({
             ...e,
-            resultsViewed: e.uuid === uuid ? true : e.resultsViewed
+            resultsViewed: e.uuid === uuid ? true : e
           }))
         }));
       }
 
       const response = await axios.get(`${this.baseUrl}/${uuid}`, this.options);
-      const json = response.data;
-      // const json = await JSON.parse(data);
-      // if (json.error) {
-      //   return await this.setState({
-      //     error: json.error
-      //   });
-      // }
-      const experiment = ExperimentResultParser.parse(json);
+      const experiment = response.data;
 
       return await this.setState({
         error: undefined,
         experiment
-      });
+      }); */
     } catch (error) {
       return await this.setState({
         error: error.message
@@ -194,24 +202,15 @@ class Experiment extends Container<State> {
     }
   };
 
-  public all = async (): Promise<void> => {
+  public list = async (): Promise<void> => {
     try {
-      const response = await axios.get(
-        `${this.baseUrl}?mine=true`,
-        this.options
-      );
-      const json = response.data;
-      if (json.error) {
-        return await this.setState({
-          error: json.error
-        });
-      }
+      const response = await axios.get(`${this.baseUrl}`, this.options);
+
+      const experimentList: IExperimentList = response.data;
 
       return await this.setState({
         error: undefined,
-        experiments: json.map((j: ExperimentResponseRaw) =>
-          ExperimentResultParser.parse(j)
-        )
+        experimentList
       });
     } catch (error) {
       return await this.setState({
@@ -221,15 +220,15 @@ class Experiment extends Container<State> {
   };
 
   public create = async ({
-    experiment
+    payload
   }: {
-    experiment: ExperimentPayload;
+    payload: ExperimentPayload;
   }): Promise<void> => {
     const url = `${this.baseUrl}/runAlgorithm`;
 
     try {
       const response = await axios({
-        data: JSON.stringify(experiment),
+        data: JSON.stringify(payload),
         headers: {
           ...this.options.headers,
           'Content-Type': 'application/json;charset=UTF-8'
@@ -237,12 +236,11 @@ class Experiment extends Container<State> {
         method: 'POST',
         url
       });
-      const json = response.data;
-      const result = ExperimentResultParser.parse(json);
+      const experiment = response.data;
 
       return await this.setState({
         error: undefined,
-        experiment: result
+        experiment
       });
     } catch (error) {
       return await this.setState({
@@ -269,13 +267,8 @@ class Experiment extends Container<State> {
         `${this.baseUrl}/${uuid}/${action}`,
         this.options
       );
-      const json = response.data;
-      if (json.error) {
-        return await this.setState({
-          error: json.error
-        });
-      }
-      const experiment = ExperimentResultParser.parse(json);
+      const experiment = response.data;
+
       return await this.setState({
         error: undefined,
         experiment

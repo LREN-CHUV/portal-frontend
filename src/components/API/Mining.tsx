@@ -191,7 +191,7 @@ class Mining extends Container<MiningState> {
           'Content-Type': 'application/json;charset=UTF-8'
         },
         method: 'POST',
-        url: `${this.backendURL}/experiments/transient`
+        url: `${this.backendURL}/experiments`
       });
 
       this.requests.push(request);

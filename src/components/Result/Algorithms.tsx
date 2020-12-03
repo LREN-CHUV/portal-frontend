@@ -2,7 +2,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 
 import { Algorithm } from '../API/Core';
-import { ExperimentResponse } from '../API/Experiment';
+import { IExperiment } from '../API/Experiment';
 import { UI_HIDDEN_PARAMETERS } from '../constants';
 
 const Param = styled.p`
@@ -15,9 +15,9 @@ const Param = styled.p`
 const Algorithms = ({
   experiment
 }: {
-  experiment?: ExperimentResponse;
+  experiment?: IExperiment;
 }): JSX.Element | null => {
-  const algorithms = experiment && experiment.algorithms;
+  const algorithms = experiment && experiment.algorithmDetails;
 
   return (
     (algorithms && (
@@ -25,7 +25,7 @@ const Algorithms = ({
         <h4>Algorithm</h4>
         {
           <>
-            {algorithms.map((algorithm: Algorithm, j: number) => (
+            {/*algorithms.map((algorithm: Algorithm, j: number) => (
               <div key={`name-${algorithm.name}-${j}`}>
                 <Param>{algorithm.label || algorithm.name}</Param>
                 {algorithm.parameters &&
@@ -38,7 +38,7 @@ const Algorithms = ({
                       </Param>
                     ))}
               </div>
-            ))}
+                    ))*/}
           </>
         }
       </>

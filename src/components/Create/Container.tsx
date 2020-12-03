@@ -8,7 +8,7 @@ import {
   AlgorithmParameter,
   AlgorithmParameterRequest
 } from '../API/Core';
-import { ExperimentPayload, ExperimentResponse } from '../API/Experiment';
+import { ExperimentPayload, IExperiment } from '../API/Experiment';
 import { ModelResponse } from '../API/Model';
 import { AppConfig } from '../App/App';
 import { Alert, IAlert } from '../UI/Alert';
@@ -47,7 +47,7 @@ class Container extends React.Component<Props, State> {
         <div className="header">
           <ExperimentCreateHeader
             model={apiModel.state.model}
-            experiments={apiExperiment.state.experiments}
+            experimentList={apiExperiment.state.experimentList}
             method={this.state && this.state.algorithm}
             handleGoBackToReview={this.handleGoBackToReview}
             handleSelectExperiment={this.handleSelectExperiment}
@@ -164,11 +164,11 @@ class Container extends React.Component<Props, State> {
   };
 
   private handleSelectExperiment = async (
-    experiment: ExperimentResponse
+    experiment: IExperiment
   ): Promise<void> => {
-    const { modelSlug: modelDefinitionId, uuid } = experiment;
+    const { uuid } = experiment;
     const { apiExperiment, history } = this.props;
-    history.push(`/experiment/${modelDefinitionId}/${uuid}`);
+    history.push(`/experiment/${uuid}`);
 
     return await apiExperiment.one({ uuid });
   };
@@ -214,7 +214,7 @@ class Container extends React.Component<Props, State> {
       parameters
     );
 
-    const experiment: ExperimentPayload = {
+    const payload: ExperimentPayload = {
       algorithms: [
         {
           label: selectedAlgorithm.label,
@@ -228,7 +228,7 @@ class Container extends React.Component<Props, State> {
       name: experimentName
     };
 
-    await apiExperiment.create({ experiment });
+    await apiExperiment.create({ payload });
     const { experiment: e, error } = apiExperiment.state;
 
     if (error) {
