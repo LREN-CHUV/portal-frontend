@@ -104,7 +104,6 @@ class Experiment extends Container<State> {
   };
 
   delete = async ({ uuid }: { uuid: string }): Promise<void> => {
-    console.log('delete', uuid);
     try {
       const response = await Axios({
         method: 'DELETE',

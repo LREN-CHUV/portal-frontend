@@ -86,10 +86,8 @@ const App = ({
           }
         >
           <ExperimentList
+            username={apiUser.state.user?.username}
             experimentList={apiExperiment.state.experimentList}
-            handleSelect={(uuid: string): void => {
-              history.push(`/experiment/${uuid}`);
-            }}
             handleDelete={(uuid: string) => apiExperiment.delete({ uuid })}
             handleToggleShare={(
               uuid: string,
@@ -98,6 +96,12 @@ const App = ({
               apiExperiment.update({
                 uuid,
                 experiment: { shared: !experiment.shared }
+              })
+            }
+            handleUpdateName={(uuid: string, name: string) =>
+              apiExperiment.update({
+                uuid,
+                experiment: { name }
               })
             }
             handlePage={(page: number) => apiExperiment.list({ page })}

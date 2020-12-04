@@ -10,9 +10,10 @@ import {
   BsFillEyeSlashFill,
   BsCloudDownload,
   BsFillTrashFill,
-  BsPencilSquare,
-  BsBoxArrowUp
+  BsPencilSquare
 } from 'react-icons/bs';
+import { Link } from 'react-router-dom';
+import { FaShareAlt } from 'react-icons/fa';
 dayjs.extend(relativeTime);
 dayjs().format();
 
@@ -26,14 +27,19 @@ const Wrapper = styled(Container)`
 `;
 
 interface Props {
+  username?: string;
   experimentList?: IExperimentList;
   handleDelete: (uuid: string) => void;
   handleToggleShare: (uuid: string, experiment: Partial<IExperiment>) => void;
-  handleSelect: (uuid: string) => void;
   handlePage: (page: number) => void;
+  handleUpdateName: (uuid: string, name: string) => void;
 }
 
-const ExperimentIcon = ({ experiment }: { experiment: IExperiment }): JSX.Element => {
+const ExperimentIcon = ({
+  experiment
+}: {
+  experiment: IExperiment;
+}): JSX.Element => {
   if (experiment.status === 'error') {
     return <BsFillExclamationCircleFill />;
   }
@@ -41,7 +47,7 @@ const ExperimentIcon = ({ experiment }: { experiment: IExperiment }): JSX.Elemen
   if (experiment.shared) {
     return (
       <div style={{ color: 'blue' }}>
-        <BsBoxArrowUp size={24} />
+        <FaShareAlt />
       </div>
     );
   }
@@ -57,24 +63,41 @@ const ExperimentIcon = ({ experiment }: { experiment: IExperiment }): JSX.Elemen
   return <BsCloudDownload />;
 };
 
-const ExperimentRow = ({ ...props }: Props & { experiment: IExperiment }): JSX.Element => {
-  const e = props.experiment;
+const ExperimentRow = ({
+  ...props
+}: Props & { experiment: IExperiment }): JSX.Element => {
+  const { experiment, username } = props;
+  const isOwner = username === experiment.createdBy;
   return (
     <tr>
       <td>
-        <ExperimentIcon experiment={e} />
+        <ExperimentIcon experiment={experiment} />
       </td>
-      <td>{e.name}</td>
-      <td>{dayjs().to(dayjs(e.created))}</td>
-      <td>{e.createdBy}</td>
       <td>
-        <Button onClick={(): void => props?.handleToggleShare(e.uuid, e)}>
-          <BsBoxArrowUp />
-        </Button>
-        <Button onClick={(): void => props?.handleDelete(e.uuid)}>
+        <Link to={`/experiment/${experiment.uuid}`}>{experiment.name}</Link>
+      </td>
+      <td>{dayjs().to(dayjs(experiment.created))}</td>
+      <td>{experiment.createdBy}</td>
+      <td>
+        <Button
+          size={'sm'}
+          disabled={!isOwner}
+          onClick={(): void =>
+            props?.handleToggleShare(experiment.uuid, experiment)
+          }
+        >
+          <FaShareAlt />
+        </Button>{' '}
+        <Button
+          size={'sm'}
+          disabled={!isOwner}
+          onClick={(): void => props?.handleDelete(experiment.uuid)}
+        >
           <BsFillTrashFill />
+        </Button>{' '}
+        <Button size={'sm'} disabled={!isOwner}>
+          <BsPencilSquare />
         </Button>
-        <BsPencilSquare />
       </td>
     </tr>
   );
