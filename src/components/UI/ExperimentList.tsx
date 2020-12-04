@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import * as React from 'react';
+import React, { useState } from 'react';
 import { Button, Container, Pagination, Table } from 'react-bootstrap';
 import styled from 'styled-components';
 import { IExperiment, IExperimentList } from '../API/Experiment';
@@ -65,8 +65,12 @@ const ExperimentIcon = ({
 
 const ExperimentRow = ({
   ...props
-}: Props & { experiment: IExperiment }): JSX.Element => {
-  const { experiment, username } = props;
+}: Props & {
+  experiment: IExperiment;
+  editing: string;
+  setEditing: React.Dispatch<React.SetStateAction<string>>;
+}): JSX.Element => {
+  const { experiment, username, editing, setEditing } = props;
   const isOwner = username === experiment.createdBy;
   return (
     <tr>
@@ -74,7 +78,12 @@ const ExperimentRow = ({
         <ExperimentIcon experiment={experiment} />
       </td>
       <td>
-        <Link to={`/experiment/${experiment.uuid}`}>{experiment.name}</Link>
+        {' '}
+        {editing === experiment.uuid ? (
+          <input placeholder={experiment.name} />
+        ) : (
+          <Link to={`/experiment/${experiment.uuid}`}>{experiment.name}</Link>
+        )}
       </td>
       <td>{dayjs().to(dayjs(experiment.created))}</td>
       <td>{experiment.createdBy}</td>
@@ -95,7 +104,11 @@ const ExperimentRow = ({
         >
           <BsFillTrashFill />
         </Button>{' '}
-        <Button size={'sm'} disabled={!isOwner}>
+        <Button
+          size={'sm'}
+          disabled={!isOwner}
+          onClick={(): void => setEditing(experiment.uuid)}
+        >
           <BsPencilSquare />
         </Button>
       </td>
@@ -105,6 +118,7 @@ const ExperimentRow = ({
 
 export default ({ ...props }: Props): JSX.Element => {
   const { experimentList, handlePage } = props;
+  const [editing, setEditing] = useState('uuid');
 
   return experimentList ? (
     <Wrapper>
@@ -124,6 +138,8 @@ export default ({ ...props }: Props): JSX.Element => {
             <ExperimentRow
               key={experiment.uuid}
               experiment={experiment}
+              editing={editing}
+              setEditing={setEditing}
               {...props}
             />
           ))}
