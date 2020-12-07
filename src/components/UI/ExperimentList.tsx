@@ -1,24 +1,27 @@
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Container, Pagination, Table } from 'react-bootstrap';
-import styled from 'styled-components';
-import { IExperiment, IExperimentList } from '../API/Experiment';
 import {
+  BsCloudDownload,
   BsFillExclamationCircleFill,
   BsFillEyeFill,
   BsFillEyeSlashFill,
-  BsCloudDownload,
   BsFillTrashFill,
   BsPencilSquare
 } from 'react-icons/bs';
-import { Link } from 'react-router-dom';
 import { FaShareAlt } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
+import styled from 'styled-components';
+
+import { IExperiment, IExperimentList } from '../API/Experiment';
+
 dayjs.extend(relativeTime);
 dayjs().format();
 
 const Wrapper = styled(Container)`
   background-color: #fff;
+  min-width: 600px;
   a:link,
   a:visited {
     color: blue;
@@ -33,6 +36,41 @@ interface Props {
   handleToggleShare: (uuid: string, experiment: Partial<IExperiment>) => void;
   handlePage: (page: number) => void;
   handleUpdateName: (uuid: string, name: string) => void;
+}
+
+interface InternalProps extends Props {
+  experiment: IExperiment;
+  editing: null | string;
+  setEditing: React.Dispatch<React.SetStateAction<null | string>>;
+  inputValue: string;
+  setInputValue: React.Dispatch<React.SetStateAction<string>>;
+}
+/**
+ * useKeyPress
+ * @param {string} key - the name of the key to respond to, compared against event.key
+ * @param {function} action - the action to perform on key press
+ */
+
+export function useKeyPressed(
+  keyLookup: (event: KeyboardEvent) => boolean
+): boolean {
+  const [keyPressed, setKeyPressed] = useState(false);
+
+  useEffect(() => {
+    const downHandler = (ev: KeyboardEvent): void =>
+      setKeyPressed(keyLookup(ev));
+    const upHandler = (ev: KeyboardEvent): void => setKeyPressed(keyLookup(ev));
+
+    window.addEventListener('keydown', downHandler);
+    window.addEventListener('keyup', upHandler);
+
+    return (): void => {
+      window.removeEventListener('keydown', downHandler);
+      window.removeEventListener('keyup', upHandler);
+    };
+  }, [keyLookup]);
+
+  return keyPressed;
 }
 
 const ExperimentIcon = ({
@@ -63,14 +101,54 @@ const ExperimentIcon = ({
   return <BsCloudDownload />;
 };
 
-const ExperimentRow = ({
-  ...props
-}: Props & {
-  experiment: IExperiment;
-  editing: string;
-  setEditing: React.Dispatch<React.SetStateAction<string>>;
-}): JSX.Element => {
-  const { experiment, username, editing, setEditing } = props;
+const InlineEdit = ({ ...props }: InternalProps): JSX.Element => {
+  const {
+    experiment,
+    editing,
+    setEditing,
+    inputValue,
+    setInputValue,
+    handleUpdateName
+  } = props;
+  const shouldSubmit = useKeyPressed((ev: KeyboardEvent) => ev.key === 'Enter');
+  const shouldCancel = useKeyPressed(
+    (ev: KeyboardEvent) => ev.key === 'Escape'
+  );
+
+  useEffect(() => {
+    if (editing) {
+      if (shouldSubmit) {
+        handleUpdateName(experiment.uuid, inputValue);
+        setInputValue('');
+        setEditing(null);
+      }
+      if (shouldCancel) {
+        setInputValue('');
+        setEditing(null);
+      }
+    }
+  }, [
+    shouldSubmit,
+    shouldCancel,
+    inputValue,
+    setInputValue,
+    editing,
+    setEditing,
+    experiment.uuid,
+    handleUpdateName
+  ]);
+
+  return (
+    <input
+      placeholder={experiment.name}
+      value={inputValue}
+      onChange={(e): void => setInputValue(e.target.value)}
+    />
+  );
+};
+
+const ExperimentRow = ({ ...props }: Props & InternalProps): JSX.Element => {
+  const { experiment, username, editing, setEditing, setInputValue } = props;
   const isOwner = username === experiment.createdBy;
   return (
     <tr>
@@ -80,7 +158,7 @@ const ExperimentRow = ({
       <td>
         {' '}
         {editing === experiment.uuid ? (
-          <input placeholder={experiment.name} />
+          <InlineEdit {...props} />
         ) : (
           <Link to={`/experiment/${experiment.uuid}`}>{experiment.name}</Link>
         )}
@@ -107,7 +185,10 @@ const ExperimentRow = ({
         <Button
           size={'sm'}
           disabled={!isOwner}
-          onClick={(): void => setEditing(experiment.uuid)}
+          onClick={(): void => {
+            setInputValue(experiment.name);
+            setEditing(experiment.uuid);
+          }}
         >
           <BsPencilSquare />
         </Button>
@@ -118,9 +199,10 @@ const ExperimentRow = ({
 
 export default ({ ...props }: Props): JSX.Element => {
   const { experimentList, handlePage } = props;
-  const [editing, setEditing] = useState('uuid');
+  const [editing, setEditing] = useState<null | string>(null);
+  const [inputValue, setInputValue] = useState('');
 
-  return experimentList ? (
+  return experimentList && experimentList?.experiments ? (
     <Wrapper>
       <input placeholder="Search" />
       <Table striped bordered hover>
@@ -140,6 +222,8 @@ export default ({ ...props }: Props): JSX.Element => {
               experiment={experiment}
               editing={editing}
               setEditing={setEditing}
+              inputValue={inputValue}
+              setInputValue={setInputValue}
               {...props}
             />
           ))}
@@ -170,6 +254,8 @@ export default ({ ...props }: Props): JSX.Element => {
       )}
     </Wrapper>
   ) : (
-    <div>No experiment yet</div>
+    <Wrapper>
+      <div>You don&apos;t have any experiment yet</div>
+    </Wrapper>
   );
 };
