@@ -88,23 +88,27 @@ const App = ({
           <ExperimentList
             username={apiUser.state.user?.username}
             experimentList={apiExperiment.state.experimentList}
-            handleDelete={(uuid: string) => apiExperiment.delete({ uuid })}
+            handleDelete={(uuid: string): Promise<void> =>
+              apiExperiment.delete({ uuid })
+            }
             handleToggleShare={(
               uuid: string,
               experiment: Partial<IExperiment>
-            ) =>
+            ): Promise<void> =>
               apiExperiment.update({
                 uuid,
                 experiment: { shared: !experiment.shared }
               })
             }
-            handleUpdateName={(uuid: string, name: string) =>
+            handleUpdateName={(uuid: string, name: string): Promise<void> =>
               apiExperiment.update({
                 uuid,
                 experiment: { name }
               })
             }
-            handlePage={(page: number) => apiExperiment.list({ page })}
+            handlePage={(page: number): Promise<void> =>
+              apiExperiment.list({ page })
+            }
           />
         </Navigation>
       </header>
