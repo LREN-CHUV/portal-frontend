@@ -1,15 +1,17 @@
-import * as React from 'react';
+import React, { useCallback } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import styled from 'styled-components';
+
 import ExperimentReview from '../Analysis/Container';
 import { APICore, APIExperiment, APIMining, APIModel, APIUser } from '../API';
-import { IExperiment } from '../API/Experiment';
+import { ExperimentListQueryParameters, IExperiment } from '../API/Experiment';
 import ExperimentCreate from '../Create/Container';
 import Explore from '../Explore/Container';
 import Help from '../Help/Help';
 import ExperimentResult from '../Result/Container';
 import Tutorial from '../Tutorial/Tutorial';
 import DataCatalog from '../UI/DataCatalog';
+import ExperimentList from '../UI/ExperimentList';
 import Footer from '../UI/Footer';
 import Galaxy from '../UI/Galaxy';
 import { GlobalStyles } from '../UI/GlobalStyle';
@@ -17,8 +19,6 @@ import Navigation from '../UI/Navigation';
 import NotFound from '../UI/NotFound';
 import TOS from '../UI/TOS';
 import User from '../User/Container';
-import { history } from '../utils';
-import ExperimentList from '../UI/ExperimentList';
 
 export interface AppConfig {
   version?: string;
@@ -73,6 +73,12 @@ const App = ({
   apiUser,
   showTutorial
 }: Props): JSX.Element => {
+  const handleQueryParameters = useCallback(
+    ({ ...params }: ExperimentListQueryParameters): Promise<void> =>
+      apiExperiment.list({ ...params }),
+    [apiExperiment]
+  );
+
   return (
     <>
       <GlobalStyles />
@@ -106,9 +112,7 @@ const App = ({
                 experiment: { name }
               })
             }
-            handlePage={(page: number): Promise<void> =>
-              apiExperiment.list({ page })
-            }
+            handleQueryParameters={handleQueryParameters}
           />
         </Navigation>
       </header>

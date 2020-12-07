@@ -13,8 +13,11 @@ import {
 import { FaShareAlt } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-
-import { IExperiment, IExperimentList } from '../API/Experiment';
+import {
+  ExperimentListQueryParameters,
+  IExperiment,
+  IExperimentList
+} from '../API/Experiment';
 
 dayjs.extend(relativeTime);
 dayjs().format();
@@ -34,16 +37,20 @@ interface Props {
   experimentList?: IExperimentList;
   handleDelete: (uuid: string) => void;
   handleToggleShare: (uuid: string, experiment: Partial<IExperiment>) => void;
-  handlePage: (page: number) => void;
+  handleQueryParameters: ({ ...params }: ExperimentListQueryParameters) => void;
   handleUpdateName: (uuid: string, name: string) => void;
 }
 
-interface InternalProps extends Props {
+interface InternalProps
+  extends Pick<
+    Props,
+    'username' | 'handleDelete' | 'handleToggleShare' | 'handleUpdateName'
+  > {
   experiment: IExperiment;
-  editing: null | string;
-  setEditing: React.Dispatch<React.SetStateAction<null | string>>;
-  inputValue: string;
-  setInputValue: React.Dispatch<React.SetStateAction<string>>;
+  editingName: null | { uuid: string; name: string };
+  setEditingName: React.Dispatch<
+    React.SetStateAction<null | { uuid: string; name: string }>
+  >;
 }
 /**
  * useKeyPress
@@ -101,54 +108,48 @@ const ExperimentIcon = ({
   return <BsCloudDownload />;
 };
 
-const InlineEdit = ({ ...props }: InternalProps): JSX.Element => {
-  const {
-    experiment,
-    editing,
-    setEditing,
-    inputValue,
-    setInputValue,
-    handleUpdateName
-  } = props;
+const InlineNameEdit = ({
+  ...props
+}: InternalProps & Omit<InternalProps, 'experiment'>): JSX.Element => {
+  const { editingName, setEditingName, handleUpdateName } = props;
   const shouldSubmit = useKeyPressed((ev: KeyboardEvent) => ev.key === 'Enter');
   const shouldCancel = useKeyPressed(
     (ev: KeyboardEvent) => ev.key === 'Escape'
   );
 
   useEffect(() => {
-    if (editing) {
+    if (editingName) {
       if (shouldSubmit) {
-        handleUpdateName(experiment.uuid, inputValue);
-        setInputValue('');
-        setEditing(null);
+        handleUpdateName(editingName.uuid, editingName.name);
+        setEditingName(null);
       }
       if (shouldCancel) {
-        setInputValue('');
-        setEditing(null);
+        setEditingName(null);
       }
     }
   }, [
     shouldSubmit,
     shouldCancel,
-    inputValue,
-    setInputValue,
-    editing,
-    setEditing,
-    experiment.uuid,
+    editingName,
+    setEditingName,
     handleUpdateName
   ]);
 
+  if (!editingName) return <p>Something went wrong</p>;
+
   return (
     <input
-      placeholder={experiment.name}
-      value={inputValue}
-      onChange={(e): void => setInputValue(e.target.value)}
+      placeholder={editingName?.name}
+      value={editingName?.name}
+      onChange={(e): void =>
+        setEditingName({ uuid: editingName.uuid, name: e.target.value })
+      }
     />
   );
 };
 
-const ExperimentRow = ({ ...props }: Props & InternalProps): JSX.Element => {
-  const { experiment, username, editing, setEditing, setInputValue } = props;
+const ExperimentRow = ({ ...props }: InternalProps): JSX.Element => {
+  const { experiment, username, editingName, setEditingName } = props;
   const isOwner = username === experiment.createdBy;
   return (
     <tr>
@@ -157,8 +158,8 @@ const ExperimentRow = ({ ...props }: Props & InternalProps): JSX.Element => {
       </td>
       <td>
         {' '}
-        {editing === experiment.uuid ? (
-          <InlineEdit {...props} />
+        {editingName?.uuid === experiment.uuid ? (
+          <InlineNameEdit {...props} />
         ) : (
           <Link to={`/experiment/${experiment.uuid}`}>{experiment.name}</Link>
         )}
@@ -186,8 +187,7 @@ const ExperimentRow = ({ ...props }: Props & InternalProps): JSX.Element => {
           size={'sm'}
           disabled={!isOwner}
           onClick={(): void => {
-            setInputValue(experiment.name);
-            setEditing(experiment.uuid);
+            setEditingName({ uuid: experiment.uuid, name: experiment.name });
           }}
         >
           <BsPencilSquare />
@@ -197,65 +197,105 @@ const ExperimentRow = ({ ...props }: Props & InternalProps): JSX.Element => {
   );
 };
 
-export default ({ ...props }: Props): JSX.Element => {
-  const { experimentList, handlePage } = props;
-  const [editing, setEditing] = useState<null | string>(null);
-  const [inputValue, setInputValue] = useState('');
+const Search = ({
+  handleQueryParameters
+}: {
+  handleQueryParameters: Props['handleQueryParameters'];
+}): JSX.Element => {
+  const [searchName, setSearchName] = useState<string>('');
 
-  return experimentList && experimentList?.experiments ? (
+  useEffect(() => {
+    if (searchName.length > 2) {
+      handleQueryParameters({ name: searchName });
+    } else {
+      handleQueryParameters({ name: '' });
+    }
+  }, [searchName, handleQueryParameters]);
+
+  return (
+    <input
+      placeholder="Seaaarch"
+      value={searchName}
+      onChange={(e): void => {
+        setSearchName(e.target.value);
+      }}
+    />
+  );
+};
+
+export default ({ ...props }: Props): JSX.Element => {
+  const { experimentList, handleQueryParameters } = props;
+  const [editingName, setEditingName] = useState<InternalProps['editingName']>(
+    null
+  );
+
+  return (
     <Wrapper>
-      <input placeholder="Search" />
-      <Table striped bordered hover>
-        <thead>
-          <tr>
-            <th>Status</th>
-            <th>Name</th>
-            <th>Created</th>
-            <th>Created By</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {experimentList?.experiments?.map(experiment => (
-            <ExperimentRow
-              key={experiment.uuid}
-              experiment={experiment}
-              editing={editing}
-              setEditing={setEditing}
-              inputValue={inputValue}
-              setInputValue={setInputValue}
-              {...props}
-            />
-          ))}
-        </tbody>
-      </Table>
-      {experimentList.totalPages > 1 && (
-        <Pagination>
-          <Pagination.Prev
-            disabled={experimentList.currentPage === 0}
-            onClick={(): void => handlePage(experimentList.currentPage - 1)}
-          />
-          {[...Array(experimentList.totalPages).keys()].map(n => (
-            <Pagination.Item
-              key={`page-${n}`}
-              onClick={(): void => handlePage(n)}
-              active={experimentList.currentPage === n}
-            >
-              {n}
-            </Pagination.Item>
-          ))}
-          <Pagination.Next
-            disabled={
-              experimentList.totalPages === experimentList.currentPage + 1
-            }
-            onClick={(): void => handlePage(experimentList.currentPage + 1)}
-          />
-        </Pagination>
+      <div>
+        <Search handleQueryParameters={handleQueryParameters} />
+      </div>
+      {experimentList && experimentList?.experiments ? (
+        <>
+          <Table striped bordered hover>
+            <thead>
+              <tr>
+                <th>Status</th>
+                <th>Name</th>
+                <th>Created</th>
+                <th>Created By</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {experimentList?.experiments?.map(experiment => (
+                <ExperimentRow
+                  key={experiment.uuid}
+                  experiment={experiment}
+                  editingName={editingName}
+                  setEditingName={setEditingName}
+                  username={props.username}
+                  handleDelete={props.handleDelete}
+                  handleToggleShare={props.handleToggleShare}
+                  handleUpdateName={props.handleUpdateName}
+                />
+              ))}
+            </tbody>
+          </Table>
+          {experimentList.totalPages > 1 && (
+            <Pagination>
+              <Pagination.Prev
+                disabled={experimentList.currentPage === 0}
+                onClick={(): void =>
+                  handleQueryParameters({
+                    page: experimentList.currentPage - 1
+                  })
+                }
+              />
+              {[...Array(experimentList.totalPages).keys()].map(n => (
+                <Pagination.Item
+                  key={`page-${n}`}
+                  onClick={(): void => handleQueryParameters({ page: n })}
+                  active={experimentList.currentPage === n}
+                >
+                  {n}
+                </Pagination.Item>
+              ))}
+              <Pagination.Next
+                disabled={
+                  experimentList.totalPages === experimentList.currentPage + 1
+                }
+                onClick={(): void =>
+                  handleQueryParameters({
+                    page: experimentList.currentPage + 1
+                  })
+                }
+              />
+            </Pagination>
+          )}
+        </>
+      ) : (
+        <div>You don&apos;t have any experiment yet</div>
       )}
-    </Wrapper>
-  ) : (
-    <Wrapper>
-      <div>You don&apos;t have any experiment yet</div>
     </Wrapper>
   );
 };

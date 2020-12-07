@@ -60,15 +60,29 @@ export interface IExperimentList {
   totalExperiments: number;
 }
 
+type Order = 'created';
+
+export interface ExperimentListQueryParameters {
+  algorithm?: string;
+  descending?: boolean;
+  includeShared?: boolean;
+  name?: string;
+  orderBy?: Order;
+  page?: number;
+  shared?: boolean;
+  size?: number;
+  viewed?: boolean;
+}
+
 export interface State {
   error?: string;
   experiment?: IExperiment;
   experimentList?: IExperimentList;
-  experimentListCurrentPage: number;
+  experimentListQueryParameters: ExperimentListQueryParameters;
 }
 
 class Experiment extends Container<State> {
-  state: State = { experimentListCurrentPage: 0 };
+  state: State = { experimentListQueryParameters: { page: 0 } };
 
   private options: AxiosRequestConfig;
   private baseUrl: string;
@@ -79,23 +93,33 @@ class Experiment extends Container<State> {
     this.baseUrl = `${backendURL}/experiments`;
   }
 
-  list = async ({ page }: { page?: number }): Promise<void> => {
-    const currentPage = this.state.experimentListCurrentPage;
-    const nextPage = page !== undefined ? page : currentPage;
+  list = async ({
+    ...params
+  }: ExperimentListQueryParameters): Promise<void> => {
+    const currentExperimentListQueryParameters = this.state
+      .experimentListQueryParameters;
+
+    const nextQueryParameters = {
+      ...currentExperimentListQueryParameters,
+      ...params
+    };
+    const nextParams = Object.entries(nextQueryParameters)
+      .map(entry => `${entry[0]}=${entry[1]}&`)
+      .join('');
+
     try {
-      const params = `?page=${nextPage}`;
       const response = await Axios.get(
-        `${this.baseUrl}${params}`,
+        `${this.baseUrl}?${nextParams}`,
         this.options
       );
 
       const experimentList: IExperimentList = response.data;
 
-      return await this.setState({
+      return await this.setState(previousState => ({
         error: undefined,
         experimentList,
-        experimentListCurrentPage: nextPage
-      });
+        experimentListQueryParameters: nextQueryParameters
+      }));
     } catch (error) {
       return await this.setState({
         error: error.message
