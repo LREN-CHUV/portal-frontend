@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { Button, Container, Pagination, Table } from 'react-bootstrap';
 import {
   BsCloudDownload,
@@ -11,6 +11,8 @@ import {
   BsPencilSquare
 } from 'react-icons/bs';
 import { FaShareAlt } from 'react-icons/fa';
+import { GoCheck, GoX } from 'react-icons/go';
+
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import {
@@ -25,11 +27,25 @@ dayjs().format();
 
 const Wrapper = styled(Container)`
   background-color: #fff;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: normal;
   min-width: 600px;
   a:link,
   a:visited {
     color: blue !important;
     text-decoration: none;
+  }
+
+  table tr td {
+    font-size: 1rem;
+  }
+
+  .centered {
+    text-align: center;
+  }
+
+  .actions {
+    min-width: 140px;
   }
 `;
 
@@ -45,8 +61,8 @@ interface Props {
 interface InternalProps
   extends Pick<Props, 'username' | 'handleToggleShare' | 'handleUpdateName'> {
   experiment: IExperiment;
-  editingName: null | { uuid: string; name: string };
-  setEditingName: React.Dispatch<
+  editingExperimentName: null | { uuid: string; name: string };
+  setEditingExperimentName: React.Dispatch<
     React.SetStateAction<null | { uuid: string; name: string }>
   >;
   //confirmDelete: null | { uuid: string; confirm: boolean };
@@ -113,66 +129,107 @@ const ExperimentIcon = ({
 const InlineNameEdit = ({
   ...props
 }: InternalProps & Omit<InternalProps, 'experiment'>): JSX.Element => {
-  const { editingName, setEditingName, handleUpdateName } = props;
+  const {
+    editingExperimentName,
+    setEditingExperimentName,
+    handleUpdateName
+  } = props;
   const shouldSubmit = useKeyPressed((ev: KeyboardEvent) => ev.key === 'Enter');
   const shouldCancel = useKeyPressed(
     (ev: KeyboardEvent) => ev.key === 'Escape'
   );
 
+  const submit = useCallback(
+    (uuid: string, name: string): void => {
+      handleUpdateName(uuid, name);
+      setEditingExperimentName(null);
+    },
+    [handleUpdateName, setEditingExperimentName]
+  );
+
+  const cancel = useCallback((): void => {
+    setEditingExperimentName(null);
+  }, [setEditingExperimentName]);
+
   useEffect(() => {
-    if (editingName) {
+    if (editingExperimentName) {
       if (shouldSubmit) {
-        handleUpdateName(editingName.uuid, editingName.name);
-        setEditingName(null);
+        submit(editingExperimentName.uuid, editingExperimentName.name);
       }
       if (shouldCancel) {
-        setEditingName(null);
+        cancel();
       }
     }
-  }, [
-    shouldSubmit,
-    shouldCancel,
-    editingName,
-    setEditingName,
-    handleUpdateName
-  ]);
+  }, [shouldSubmit, shouldCancel, editingExperimentName, submit, cancel]);
 
-  if (!editingName) return <p>Something went wrong</p>;
+  if (!editingExperimentName) return <p>Something went wrong</p>;
 
   return (
-    <input
-      placeholder={editingName?.name}
-      value={editingName?.name}
-      onChange={(e): void =>
-        setEditingName({ uuid: editingName.uuid, name: e.target.value })
-      }
-    />
+    <>
+      <input
+        autoFocus
+        placeholder={editingExperimentName?.name}
+        value={editingExperimentName?.name}
+        onChange={(e): void =>
+          setEditingExperimentName({
+            uuid: editingExperimentName.uuid,
+            name: e.target.value
+          })
+        }
+      />
+      <Button
+        size={'sm'}
+        variant="primary"
+        onClick={(): void => {
+          submit(editingExperimentName.uuid, editingExperimentName.name);
+        }}
+      >
+        <GoCheck />
+      </Button>{' '}
+      <Button
+        size={'sm'}
+        variant="outline-dark"
+        onClick={(): void => {
+          cancel();
+        }}
+      >
+        <GoX />
+      </Button>
+    </>
   );
 };
 
 const ExperimentRow = ({ ...props }: InternalProps): JSX.Element => {
-  const { experiment, username, editingName, setEditingName } = props;
+  const {
+    experiment,
+    username,
+    editingExperimentName,
+    setEditingExperimentName
+  } = props;
   const isOwner = username === experiment.createdBy;
 
   return (
     <tr>
-      <td>
+      <td className="centered">
         <ExperimentIcon experiment={experiment} />
       </td>
       <td>
         {' '}
-        {editingName?.uuid === experiment.uuid ? (
+        {editingExperimentName?.uuid === experiment.uuid ? (
           <InlineNameEdit {...props} />
         ) : (
-          <Link to={`/experiment/${experiment.uuid}`}>{experiment.name}</Link>
+          <Link to={`/experiment/${experiment.uuid}`} title={experiment.name}>
+            {experiment.name}
+          </Link>
         )}
       </td>
-      <td>{dayjs().to(dayjs(experiment.created))}</td>
-      <td>{experiment.createdBy}</td>
-      <td>
+      <td className="centered">{dayjs().to(dayjs(experiment.created))}</td>
+      <td className="centered">{experiment.createdBy}</td>
+      <td className="centered">
         <Button
           size={'sm'}
           disabled={!isOwner}
+          variant="light"
           onClick={(): void =>
             props?.handleToggleShare(experiment.uuid, experiment)
           }
@@ -181,21 +238,26 @@ const ExperimentRow = ({ ...props }: InternalProps): JSX.Element => {
         </Button>{' '}
         <Button
           size={'sm'}
+          disabled={!isOwner || editingExperimentName?.uuid === experiment.uuid}
+          variant="light"
+          onClick={(): void => {
+            setEditingExperimentName({
+              uuid: experiment.uuid,
+              name: experiment.name
+            });
+          }}
+        >
+          <BsPencilSquare />
+        </Button>{' '}
+        <Button
+          size={'sm'}
           disabled={!isOwner}
+          variant="light"
           onClick={(): void => {
             props.setConfirmDelete({ uuid: experiment.uuid, confirm: true });
           }}
         >
           <BsFillTrashFill />
-        </Button>{' '}
-        <Button
-          size={'sm'}
-          disabled={!isOwner}
-          onClick={(): void => {
-            setEditingName({ uuid: experiment.uuid, name: experiment.name });
-          }}
-        >
-          <BsPencilSquare />
         </Button>
       </td>
     </tr>
@@ -219,7 +281,7 @@ const Search = ({
 
   return (
     <input
-      placeholder="Seaaaaaaaaaaaaaaaaaaaaaaaarch"
+      placeholder="Seaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaarch"
       value={searchName}
       onChange={(e): void => {
         setSearchName(e.target.value);
@@ -230,9 +292,9 @@ const Search = ({
 
 export default ({ ...props }: Props): JSX.Element => {
   const { experimentList, handleQueryParameters } = props;
-  const [editingName, setEditingName] = useState<InternalProps['editingName']>(
-    null
-  );
+  const [editingExperimentName, setEditingExperimentName] = useState<
+    InternalProps['editingExperimentName']
+  >(null);
   const [confirmDelete, setConfirmDelete] = useState<null | {
     uuid: string;
     confirm: boolean;
@@ -264,7 +326,7 @@ export default ({ ...props }: Props): JSX.Element => {
                 <th>Name</th>
                 <th>Created</th>
                 <th>Created By</th>
-                <th>Actions</th>
+                <th className="actions">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -272,8 +334,8 @@ export default ({ ...props }: Props): JSX.Element => {
                 <ExperimentRow
                   key={experiment.uuid}
                   experiment={experiment}
-                  editingName={editingName}
-                  setEditingName={setEditingName}
+                  editingExperimentName={editingExperimentName}
+                  setEditingExperimentName={setEditingExperimentName}
                   username={props.username}
                   handleToggleShare={props.handleToggleShare}
                   handleUpdateName={props.handleUpdateName}
