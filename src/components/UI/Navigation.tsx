@@ -21,6 +21,7 @@ const NavBar = styled.nav`
   top: 0;
   width: 100%;
   font-family: 'Open Sans Condensed', sans-serif;
+  font-weight: bold;
   background: #333;
   display: flex;
   align-items: center;

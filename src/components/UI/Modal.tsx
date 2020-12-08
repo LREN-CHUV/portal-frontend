@@ -23,7 +23,9 @@ const ModalComponent = ({
     <Modal.Body>{body}</Modal.Body>
 
     <Modal.Footer>
-      <Button onClick={handleCancel}>Cancel</Button>
+      <Button variant={'outline-dark'} onClick={handleCancel}>
+        Cancel
+      </Button>
       <Button onClick={handleOK}>OK</Button>
     </Modal.Footer>
   </Modal>
