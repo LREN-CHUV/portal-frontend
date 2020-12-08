@@ -60,12 +60,14 @@ interface Props {
 
 interface InternalProps extends Pick<Props, 'username' | 'handleUpdate'> {
   experiment: IExperiment;
+  setConfirmDelete: React.Dispatch<
+    React.SetStateAction<null | { uuid: string; confirm: boolean }>
+  >;
+}
+interface EditingProps {
   editingExperimentName: null | { uuid: string; name: string };
   setEditingExperimentName: React.Dispatch<
     React.SetStateAction<null | { uuid: string; name: string }>
-  >;
-  setConfirmDelete: React.Dispatch<
-    React.SetStateAction<null | { uuid: string; confirm: boolean }>
   >;
 }
 
@@ -99,7 +101,9 @@ const ExperimentIcon = ({
 
 const InlineNameEdit = ({
   ...props
-}: InternalProps & Omit<InternalProps, 'experiment'>): JSX.Element => {
+}: InternalProps &
+  Omit<InternalProps, 'experiment'> &
+  EditingProps): JSX.Element => {
   const {
     editingExperimentName,
     setEditingExperimentName,
@@ -171,13 +175,11 @@ const InlineNameEdit = ({
 };
 
 const ExperimentRow = ({ ...props }: InternalProps): JSX.Element => {
-  const {
-    experiment,
-    username,
-    editingExperimentName,
-    setEditingExperimentName
-  } = props;
+  const { experiment, username } = props;
   const isOwner = username === experiment.createdBy;
+  const [editingExperimentName, setEditingExperimentName] = useState<
+    EditingProps['editingExperimentName']
+  >(null);
 
   return (
     <tr>
@@ -187,7 +189,11 @@ const ExperimentRow = ({ ...props }: InternalProps): JSX.Element => {
       <td>
         {' '}
         {editingExperimentName?.uuid === experiment.uuid ? (
-          <InlineNameEdit {...props} />
+          <InlineNameEdit
+            editingExperimentName={editingExperimentName}
+            setEditingExperimentName={setEditingExperimentName}
+            {...props}
+          />
         ) : (
           <Link to={`/experiment/${experiment.uuid}`} title={experiment.name}>
             {experiment.name}
@@ -236,12 +242,14 @@ const ExperimentRow = ({ ...props }: InternalProps): JSX.Element => {
 };
 
 const Search = ({
-  handleQueryParameters
+  handleQueryParameters,
+  searchName,
+  setSearchName
 }: {
   handleQueryParameters: Props['handleQueryParameters'];
+  searchName: string;
+  setSearchName: React.Dispatch<React.SetStateAction<string>>;
 }): JSX.Element => {
-  const [searchName, setSearchName] = useState<string>('');
-
   useEffect(() => {
     if (searchName.length > 2) {
       handleQueryParameters({ name: searchName });
@@ -252,7 +260,7 @@ const Search = ({
 
   return (
     <input
-      placeholder="Seaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaarch"
+      placeholder="Searrrrrrrrrrrrrch"
       value={searchName}
       onChange={(e): void => {
         setSearchName(e.target.value);
@@ -263,13 +271,11 @@ const Search = ({
 
 export default ({ ...props }: Props): JSX.Element => {
   const { experimentList, handleQueryParameters } = props;
-  const [editingExperimentName, setEditingExperimentName] = useState<
-    InternalProps['editingExperimentName']
-  >(null);
   const [confirmDelete, setConfirmDelete] = useState<null | {
     uuid: string;
     confirm: boolean;
   }>(null);
+  const [searchName, setSearchName] = useState<string>('');
 
   return (
     <Wrapper>
@@ -286,7 +292,11 @@ export default ({ ...props }: Props): JSX.Element => {
         }}
       />
       <div>
-        <Search handleQueryParameters={handleQueryParameters} />
+        <Search
+          handleQueryParameters={handleQueryParameters}
+          searchName={searchName}
+          setSearchName={setSearchName}
+        />
       </div>
       {experimentList && experimentList?.experiments ? (
         <>
@@ -305,8 +315,6 @@ export default ({ ...props }: Props): JSX.Element => {
                 <ExperimentRow
                   key={experiment.uuid}
                   experiment={experiment}
-                  editingExperimentName={editingExperimentName}
-                  setEditingExperimentName={setEditingExperimentName}
                   username={props.username}
                   handleUpdate={props.handleUpdate}
                   setConfirmDelete={setConfirmDelete}
@@ -346,6 +354,8 @@ export default ({ ...props }: Props): JSX.Element => {
             </Pagination>
           )}
         </>
+      ) : searchName.length > 2 ? (
+        <div>Your search didn&apos;t return any results</div>
       ) : (
         <div>You don&apos;t have any experiment yet</div>
       )}
