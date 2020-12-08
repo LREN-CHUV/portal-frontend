@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button } from 'react-bootstrap';
+import { Button, Dropdown, DropdownButton } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -108,9 +108,12 @@ const GroupLink = styled(Link)`
 `;
 
 const DropdownWrapper = styled.div`
-  .dropdown-menu {
-    overflow-y: auto;
-    height: 400px;
+  .dropdown > button {
+    font-weight: bold;
+    font-size: 16px;
+    text-decoration: none;
+    color: white;
+    box-shadow: none;
   }
 `;
 
@@ -144,17 +147,14 @@ export default ({
           <span> &gt; </span>
           <GroupLink to="/experiment">Experiment</GroupLink>
         </Group>
-        {children}
-        {/*  <DropdownWrapper>
-          <Dropdown
-            items={experiments}
-            style="link"
-            type={'models'}
-            title="My Experiments"
-            handleSelect={handleSelect}
-            handleCreateNewExperiment={null}
-          />
-        </DropdownWrapper> */}
+        <DropdownWrapper>
+          <Dropdown>
+            <Dropdown.Toggle variant="link" id="dropdown-nav-experiments">
+              My Experiments
+            </Dropdown.Toggle>
+            <Dropdown.Menu>{children}</Dropdown.Menu>
+          </Dropdown>
+        </DropdownWrapper>
         <Link to="/galaxy">Workflow</Link>
         {datacatalogueUrl && (
           <ALink
@@ -167,23 +167,6 @@ export default ({
         )}
       </Links>
       <RightLinks>
-        {/* <div>
-          <MIPContext.Consumer>
-            {({ toggleTooltip }): JSX.Element =>
-              (
-                <>
-                  <Button
-                    bsStyle="danger"
-                    bsSize={'small'}
-                    onClick={toggleTooltip}
-                  >
-                    Tooltips
-                  </Button>
-                </>
-              ) || <></>
-            }
-          </MIPContext.Consumer>
-        </div> */}
         <MIPContext.Consumer>
           {({ toggleTutorial }): JSX.Element =>
             (

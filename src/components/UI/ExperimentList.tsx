@@ -27,9 +27,9 @@ dayjs.extend(relativeTime);
 dayjs().format();
 
 const Wrapper = styled(Container)`
-  background-color: #fff;
   font-family: 'Open Sans', sans-serif;
   font-weight: normal;
+  min-width: 600px;
 
   a:link,
   a:visited {
@@ -48,6 +48,10 @@ const Wrapper = styled(Container)`
   .actions {
     min-width: 140px;
   }
+`;
+
+const SearchContainer = styled.div`
+  margin: 1rem 0;
 `;
 
 interface Props {
@@ -72,15 +76,15 @@ interface EditingProps {
 }
 
 const ExperimentIcon = ({
-  experiment
-}: {
-  experiment: IExperiment;
-}): JSX.Element => {
-  if (experiment.status === 'error') {
+  status,
+  viewed,
+  shared
+}: Partial<IExperiment>): JSX.Element => {
+  if (status === 'error') {
     return <BsFillExclamationCircleFill />;
   }
 
-  if (experiment.shared) {
+  if (shared) {
     return (
       <div style={{ color: 'blue' }}>
         <FaShareAlt />
@@ -88,11 +92,11 @@ const ExperimentIcon = ({
     );
   }
 
-  if (experiment.viewed) {
+  if (viewed) {
     return <BsFillEyeFill />;
   }
 
-  if (!experiment.viewed && experiment.status === 'success') {
+  if (!viewed && status === 'success') {
     return <BsFillEyeSlashFill />;
   }
 
@@ -183,10 +187,10 @@ const ExperimentRow = ({ ...props }: InternalProps): JSX.Element => {
 
   return (
     <tr>
-      <td className="centered">
-        <ExperimentIcon experiment={experiment} />
+      <td className="centered align-middle">
+        <ExperimentIcon {...experiment} />
       </td>
-      <td>
+      <td className="align-middle">
         {' '}
         {editingExperimentName?.uuid === experiment.uuid ? (
           <InlineNameEdit
@@ -200,9 +204,11 @@ const ExperimentRow = ({ ...props }: InternalProps): JSX.Element => {
           </Link>
         )}
       </td>
-      <td className="centered">{dayjs().to(dayjs(experiment.created))}</td>
-      <td className="centered">{experiment.createdBy}</td>
-      <td className="centered">
+      <td className="centered align-middle">
+        {dayjs().to(dayjs(experiment.created))}
+      </td>
+      <td className="centered align-middle">{experiment.createdBy}</td>
+      <td className="centered align-middle">
         <Button
           size={'sm'}
           disabled={!isOwner}
@@ -260,7 +266,7 @@ const Search = ({
 
   return (
     <input
-      placeholder="Searrrrrrrrrrrrrch"
+      placeholder="Searrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrch"
       value={searchName}
       onChange={(e): void => {
         setSearchName(e.target.value);
@@ -291,23 +297,23 @@ export default ({ ...props }: Props): JSX.Element => {
           }
         }}
       />
-      <div>
+      <SearchContainer>
         <Search
           handleQueryParameters={handleQueryParameters}
           searchName={searchName}
           setSearchName={setSearchName}
         />
-      </div>
+      </SearchContainer>
       {experimentList && experimentList?.experiments ? (
         <>
           <Table striped bordered hover size="sm" responsive>
             <thead>
               <tr>
-                <th>Status</th>
+                <th></th>
                 <th>Name</th>
                 <th>Created</th>
                 <th>Created By</th>
-                <th className="actions">Actions</th>
+                <th className="actions"></th>
               </tr>
             </thead>
             <tbody>
@@ -323,7 +329,7 @@ export default ({ ...props }: Props): JSX.Element => {
             </tbody>
           </Table>
           {experimentList.totalPages > 1 && (
-            <Pagination>
+            <Pagination className="justify-content-center">
               <Pagination.Prev
                 disabled={experimentList.currentPage === 0}
                 onClick={(): void =>
