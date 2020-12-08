@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Button, Container, Pagination, Table } from 'react-bootstrap';
 import {
   BsCloudDownload,
@@ -12,14 +12,15 @@ import {
 } from 'react-icons/bs';
 import { FaShareAlt } from 'react-icons/fa';
 import { GoCheck, GoX } from 'react-icons/go';
-
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+
 import {
   ExperimentListQueryParameters,
   IExperiment,
   IExperimentList
 } from '../API/Experiment';
+import { useKeyPressed } from '../utils';
 import Modal from './Modal';
 
 dayjs.extend(relativeTime);
@@ -29,7 +30,7 @@ const Wrapper = styled(Container)`
   background-color: #fff;
   font-family: 'Open Sans', sans-serif;
   font-weight: normal;
-  min-width: 600px;
+
   a:link,
   a:visited {
     color: blue !important;
@@ -53,49 +54,19 @@ interface Props {
   username?: string;
   experimentList?: IExperimentList;
   handleDelete: (uuid: string) => void;
-  handleToggleShare: (uuid: string, experiment: Partial<IExperiment>) => void;
+  handleUpdate: (uuid: string, experiment: Partial<IExperiment>) => void;
   handleQueryParameters: ({ ...params }: ExperimentListQueryParameters) => void;
-  handleUpdateName: (uuid: string, name: string) => void;
 }
 
-interface InternalProps
-  extends Pick<Props, 'username' | 'handleToggleShare' | 'handleUpdateName'> {
+interface InternalProps extends Pick<Props, 'username' | 'handleUpdate'> {
   experiment: IExperiment;
   editingExperimentName: null | { uuid: string; name: string };
   setEditingExperimentName: React.Dispatch<
     React.SetStateAction<null | { uuid: string; name: string }>
   >;
-  //confirmDelete: null | { uuid: string; confirm: boolean };
   setConfirmDelete: React.Dispatch<
     React.SetStateAction<null | { uuid: string; confirm: boolean }>
   >;
-}
-/**
- * useKeyPress
- * @param {string} key - the name of the key to respond to, compared against event.key
- * @param {function} action - the action to perform on key press
- */
-
-export function useKeyPressed(
-  keyLookup: (event: KeyboardEvent) => boolean
-): boolean {
-  const [keyPressed, setKeyPressed] = useState(false);
-
-  useEffect(() => {
-    const downHandler = (ev: KeyboardEvent): void =>
-      setKeyPressed(keyLookup(ev));
-    const upHandler = (ev: KeyboardEvent): void => setKeyPressed(keyLookup(ev));
-
-    window.addEventListener('keydown', downHandler);
-    window.addEventListener('keyup', upHandler);
-
-    return (): void => {
-      window.removeEventListener('keydown', downHandler);
-      window.removeEventListener('keyup', upHandler);
-    };
-  }, [keyLookup]);
-
-  return keyPressed;
 }
 
 const ExperimentIcon = ({
@@ -132,7 +103,7 @@ const InlineNameEdit = ({
   const {
     editingExperimentName,
     setEditingExperimentName,
-    handleUpdateName
+    handleUpdate
   } = props;
   const shouldSubmit = useKeyPressed((ev: KeyboardEvent) => ev.key === 'Enter');
   const shouldCancel = useKeyPressed(
@@ -141,10 +112,10 @@ const InlineNameEdit = ({
 
   const submit = useCallback(
     (uuid: string, name: string): void => {
-      handleUpdateName(uuid, name);
+      handleUpdate(uuid, { name });
       setEditingExperimentName(null);
     },
-    [handleUpdateName, setEditingExperimentName]
+    [handleUpdate, setEditingExperimentName]
   );
 
   const cancel = useCallback((): void => {
@@ -231,7 +202,7 @@ const ExperimentRow = ({ ...props }: InternalProps): JSX.Element => {
           disabled={!isOwner}
           variant="light"
           onClick={(): void =>
-            props?.handleToggleShare(experiment.uuid, experiment)
+            props?.handleUpdate(experiment.uuid, { shared: !experiment.shared })
           }
         >
           <FaShareAlt />
@@ -281,7 +252,7 @@ const Search = ({
 
   return (
     <input
-      placeholder="Seaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaarch"
+      placeholder="Seaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaarch"
       value={searchName}
       onChange={(e): void => {
         setSearchName(e.target.value);
@@ -319,7 +290,7 @@ export default ({ ...props }: Props): JSX.Element => {
       </div>
       {experimentList && experimentList?.experiments ? (
         <>
-          <Table striped bordered hover>
+          <Table striped bordered hover size="sm" responsive>
             <thead>
               <tr>
                 <th>Status</th>
@@ -337,8 +308,7 @@ export default ({ ...props }: Props): JSX.Element => {
                   editingExperimentName={editingExperimentName}
                   setEditingExperimentName={setEditingExperimentName}
                   username={props.username}
-                  handleToggleShare={props.handleToggleShare}
-                  handleUpdateName={props.handleUpdateName}
+                  handleUpdate={props.handleUpdate}
                   setConfirmDelete={setConfirmDelete}
                 />
               ))}

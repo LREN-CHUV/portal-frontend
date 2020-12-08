@@ -73,12 +73,6 @@ const App = ({
   apiUser,
   showTutorial
 }: Props): JSX.Element => {
-  const handleQueryParameters = useCallback(
-    ({ ...params }: ExperimentListQueryParameters): Promise<void> =>
-      apiExperiment.list({ ...params }),
-    [apiExperiment]
-  );
-
   return (
     <>
       <GlobalStyles />
@@ -97,22 +91,15 @@ const App = ({
             handleDelete={(uuid: string): Promise<void> =>
               apiExperiment.delete({ uuid })
             }
-            handleToggleShare={(
+            handleUpdate={(
               uuid: string,
               experiment: Partial<IExperiment>
-            ): Promise<void> =>
-              apiExperiment.update({
-                uuid,
-                experiment: { shared: !experiment.shared }
-              })
-            }
-            handleUpdateName={(uuid: string, name: string): Promise<void> =>
-              apiExperiment.update({
-                uuid,
-                experiment: { name }
-              })
-            }
-            handleQueryParameters={handleQueryParameters}
+            ): Promise<void> => apiExperiment.update({ uuid, experiment })}
+            handleQueryParameters={useCallback(
+              ({ ...params }: ExperimentListQueryParameters): Promise<void> =>
+                apiExperiment.list({ ...params }),
+              [apiExperiment]
+            )}
           />
         </Navigation>
       </header>
