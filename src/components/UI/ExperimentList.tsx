@@ -18,6 +18,7 @@ import {
   IExperiment,
   IExperimentList
 } from '../API/Experiment';
+import Modal from './Modal';
 
 dayjs.extend(relativeTime);
 dayjs().format();
@@ -27,7 +28,7 @@ const Wrapper = styled(Container)`
   min-width: 600px;
   a:link,
   a:visited {
-    color: blue;
+    color: blue !important;
     text-decoration: none;
   }
 `;
@@ -42,14 +43,15 @@ interface Props {
 }
 
 interface InternalProps
-  extends Pick<
-    Props,
-    'username' | 'handleDelete' | 'handleToggleShare' | 'handleUpdateName'
-  > {
+  extends Pick<Props, 'username' | 'handleToggleShare' | 'handleUpdateName'> {
   experiment: IExperiment;
   editingName: null | { uuid: string; name: string };
   setEditingName: React.Dispatch<
     React.SetStateAction<null | { uuid: string; name: string }>
+  >;
+  //confirmDelete: null | { uuid: string; confirm: boolean };
+  setConfirmDelete: React.Dispatch<
+    React.SetStateAction<null | { uuid: string; confirm: boolean }>
   >;
 }
 /**
@@ -151,6 +153,7 @@ const InlineNameEdit = ({
 const ExperimentRow = ({ ...props }: InternalProps): JSX.Element => {
   const { experiment, username, editingName, setEditingName } = props;
   const isOwner = username === experiment.createdBy;
+
   return (
     <tr>
       <td>
@@ -179,7 +182,9 @@ const ExperimentRow = ({ ...props }: InternalProps): JSX.Element => {
         <Button
           size={'sm'}
           disabled={!isOwner}
-          onClick={(): void => props?.handleDelete(experiment.uuid)}
+          onClick={(): void => {
+            props.setConfirmDelete({ uuid: experiment.uuid, confirm: true });
+          }}
         >
           <BsFillTrashFill />
         </Button>{' '}
@@ -214,7 +219,7 @@ const Search = ({
 
   return (
     <input
-      placeholder="Seaaarch"
+      placeholder="Seaaaaaaaaaaaaaaaaaaaaaaaarch"
       value={searchName}
       onChange={(e): void => {
         setSearchName(e.target.value);
@@ -228,9 +233,25 @@ export default ({ ...props }: Props): JSX.Element => {
   const [editingName, setEditingName] = useState<InternalProps['editingName']>(
     null
   );
+  const [confirmDelete, setConfirmDelete] = useState<null | {
+    uuid: string;
+    confirm: boolean;
+  }>(null);
 
   return (
     <Wrapper>
+      <Modal
+        show={confirmDelete !== null}
+        title={'Delete this experiment ?'}
+        body={'This will be final'}
+        handleCancel={(): void => setConfirmDelete(null)}
+        handleOK={(): void => {
+          if (confirmDelete?.uuid) {
+            props.handleDelete(confirmDelete.uuid);
+            setConfirmDelete(null);
+          }
+        }}
+      />
       <div>
         <Search handleQueryParameters={handleQueryParameters} />
       </div>
@@ -254,9 +275,9 @@ export default ({ ...props }: Props): JSX.Element => {
                   editingName={editingName}
                   setEditingName={setEditingName}
                   username={props.username}
-                  handleDelete={props.handleDelete}
                   handleToggleShare={props.handleToggleShare}
                   handleUpdateName={props.handleUpdateName}
+                  setConfirmDelete={setConfirmDelete}
                 />
               ))}
             </tbody>
