@@ -8,7 +8,8 @@ import {
   BsFillEyeFill,
   BsFillEyeSlashFill,
   BsFillTrashFill,
-  BsPencilSquare
+  BsPencilSquare,
+  BsWatch
 } from 'react-icons/bs';
 import { FaShareAlt } from 'react-icons/fa';
 import { GoCheck, GoX } from 'react-icons/go';
@@ -46,7 +47,7 @@ const Wrapper = styled(Container)`
   }
 
   .actions {
-    min-width: 140px;
+    width: 140px;
   }
 `;
 
@@ -82,6 +83,10 @@ const ExperimentIcon = ({
 }: Partial<IExperiment>): JSX.Element => {
   if (status === 'error') {
     return <BsFillExclamationCircleFill />;
+  }
+
+  if (status === 'pending') {
+    return <BsWatch />;
   }
 
   if (shared) {
@@ -258,7 +263,7 @@ const Search = ({
 }): JSX.Element => {
   useEffect(() => {
     if (searchName.length > 2) {
-      handleQueryParameters({ name: searchName });
+      handleQueryParameters({ name: searchName, page: 0 });
     } else {
       handleQueryParameters({ name: '' });
     }

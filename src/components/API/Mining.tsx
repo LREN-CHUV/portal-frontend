@@ -7,6 +7,32 @@ import { VariableDatum } from '../Explore/d3Hierarchy';
 import { Algorithm, Parameter, VariableEntity } from './Core';
 import { ERRORS_OUTPUT, MIME_TYPES } from '../constants';
 
+/*
+useEffect(() => {
+  const source = axios.CancelToken.source();
+
+  const fetchUsers = async () => {
+    try {
+      await Axios.get('/users', {
+        cancelToken: source.token
+      });
+      // ...
+    } catch (error) {
+      if (Axios.isCancel(error)) {
+      } else {
+        throw error;
+      }
+    }
+  };
+
+  fetchData();
+
+  return () => {
+    source.cancel();
+  };
+}, []);
+*/
+
 export interface MiningResponse {
   data?: any;
   type?: string;
@@ -190,7 +216,7 @@ class Mining extends Container<MiningState> {
           'Content-Type': 'application/json;charset=UTF-8'
         },
         method: 'POST',
-        url: `${this.backendURL}/experiments/transient`
+        url: `${this.backendURL}/experiments`
       });
 
       this.requests.push(request);

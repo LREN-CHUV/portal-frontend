@@ -1,8 +1,8 @@
-import * as React from 'react';
+import React, { useCallback } from 'react';
 import { Button, Card, Dropdown, DropdownButton } from 'react-bootstrap';
 import { BsFillCaretRightFill } from 'react-icons/bs';
 import styled from 'styled-components';
-import { APICore, APIMining, APIModel } from '../API';
+import { APICore, APIMining, APIModel, APIExperiment } from '../API';
 import { VariableEntity } from '../API/Core';
 import { D3Model, HierarchyCircularNode, ModelResponse } from '../API/Model';
 import { ONTOLOGY_URL } from '../constants';
@@ -13,6 +13,8 @@ import { ModelType } from './Container';
 import Histograms from './D3Histograms';
 import ModelView from './D3Model';
 import Search from './D3Search';
+import ExperimentList from '../UI/ExperimentList2';
+import { ExperimentListQueryParameters, IExperiment } from '../API/Experiment';
 
 const DataSelectionBox = styled(Card.Title)`
   display: flex;
@@ -79,6 +81,7 @@ export interface ExploreProps {
   apiCore: APICore;
   apiModel: APIModel;
   apiMining: APIMining;
+  apiExperiment: APIExperiment;
   children?: any;
   selectedNode: HierarchyCircularNode | undefined;
   layout: HierarchyCircularNode;
@@ -101,6 +104,7 @@ export default (props: ExploreProps): JSX.Element => {
     apiCore,
     apiModel,
     apiMining,
+    apiExperiment,
     children,
     layout,
     selectedNode,
@@ -129,6 +133,12 @@ export default (props: ExploreProps): JSX.Element => {
   const independantsVariables =
     variablesForPathology &&
     variablesForPathology.filter((v: any) => v.isCategorical);
+
+  const q = useCallback(
+    ({ ...params }: ExperimentListQueryParameters): Promise<void> =>
+      apiExperiment.list({ ...params }),
+    [apiExperiment]
+  );
 
   return (
     <>
@@ -185,14 +195,29 @@ export default (props: ExploreProps): JSX.Element => {
             <Card.Body>
               <ModelTitle>
                 <h4 style={{ marginRight: '8px' }}>Parameters</h4>
-                <DropdownModel
+                <Dropdown>
+                  <Dropdown.Toggle
+                    variant="link"
+                    id="dropdown-model-experiments"
+                  >
+                    Select
+                  </Dropdown.Toggle>
+                  <Dropdown.Menu>
+                    <ExperimentList
+                      experimentList={apiExperiment.state.experimentList}
+                      handleQueryParameters={q}
+                    />
+                  </Dropdown.Menu>
+                </Dropdown>
+                {/*                 <DropdownModel
                   items={apiModel.state.models}
                   selectedSlug={
                     apiModel.state.model && apiModel.state.model.slug
                   }
                   reset={apiModel.state.model ? true : false}
                   handleSelect={handleSelectModel}
-                />
+                /> */}
+
                 <div className="item">
                   <Button
                     variant="info"

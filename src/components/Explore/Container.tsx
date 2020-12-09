@@ -4,7 +4,7 @@ import { Alert } from 'react-bootstrap';
 import { RouteComponentProps } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { APICore, APIMining, APIModel, APIUser } from '../API';
+import { APICore, APIExperiment, APIMining, APIModel, APIUser } from '../API';
 import { VariableEntity } from '../API/Core';
 import { D3Model, HierarchyCircularNode, ModelResponse } from '../API/Model';
 import { AppConfig } from '../App/App';
@@ -34,6 +34,7 @@ interface Props extends RouteComponentProps {
   apiCore: APICore;
   apiMining: APIMining;
   apiModel: APIModel;
+  apiExperiment: APIExperiment;
   appConfig: AppConfig;
   apiUser: APIUser;
 }
@@ -43,6 +44,7 @@ export default ({
   apiMining,
   apiModel,
   apiUser,
+  apiExperiment,
   ...props
 }: Props): JSX.Element => {
   const [selectedNode, setSelectedNode] = useState<
@@ -334,6 +336,7 @@ export default ({
     apiCore,
     apiModel,
     apiMining,
+    apiExperiment,
     handleGoToAnalysis,
     handleSelectModel,
     handleSelectNode: setSelectedNode,

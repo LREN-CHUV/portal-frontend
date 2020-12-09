@@ -214,21 +214,19 @@ class Container extends React.Component<Props, State> {
       parameters
     );
 
-    const payload: ExperimentPayload = {
-      algorithms: [
-        {
-          label: selectedAlgorithm.label,
-          name: selectedAlgorithm.name,
-          parameters: nextParameters,
-          type: selectedAlgorithm.type
-        }
-      ],
-      model: model.slug,
-      label: selectedAlgorithm.label,
+    /*
+    const experiment: Partial<IExperiment> = {
+      algorithm: {
+        label: selectedAlgorithm.label,
+        name: selectedAlgorithm.name,
+        parameters: nextParameters,
+        type: selectedAlgorithm.type
+      },
       name: experimentName
     };
+    */
 
-    await apiExperiment.create({ payload });
+    //await apiExperiment.create({ experiment });
     const { experiment: e, error } = apiExperiment.state;
 
     if (error) {

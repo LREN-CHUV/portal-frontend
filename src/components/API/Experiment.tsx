@@ -21,12 +21,13 @@ export interface ExperimentPayload {
   label: string;
 }
 
-export type experimentStatus = 'error' | 'success';
+export type experimentStatus = 'error' | 'pending' | 'success';
+export type ParameterName = 'x' | 'y' | 'dataset' | 'pathology';
 
 export interface ExperimentParameter {
-  name: string;
+  name: ParameterName;
   label: string;
-  value: string;
+  value: string | number;
 }
 
 export interface Result {
@@ -189,6 +190,47 @@ class Experiment extends Container<State> {
     }
   };
 
+  create = async ({
+    experiment,
+    transient = true
+  }: {
+    experiment: Partial<IExperiment>;
+    transient?: boolean;
+  }): Promise<void> => {
+    try {
+      const response = await Axios({
+        method: 'POST',
+        data: JSON.stringify(experiment),
+        headers: {
+          ...this.options.headers,
+          'Content-Type': 'application/json;charset=UTF-8'
+        },
+        url: transient ? `${this.baseUrl}/transient` : `${this.baseUrl}`
+      });
+
+      if (response.status >= 400) {
+        return this.setState({
+          error: response.data.message
+        });
+      }
+
+      const json: IExperiment = {
+        ...response.data,
+        transient
+      }
+
+      return await this.setState({
+        experiment: json,
+        error: undefined
+      });
+
+    } catch (error) {
+      return await this.setState({
+        error: error.message
+      });
+    }
+  };
+
   makeParameters = (
     model: ModelResponse,
     selectedAlgorithm: Algorithm,
@@ -307,7 +349,7 @@ class Experiment extends Container<State> {
     }
   };
 
-  create = async ({
+  /*create = async ({
     payload
   }: {
     payload: ExperimentPayload;
@@ -335,7 +377,7 @@ class Experiment extends Container<State> {
         error: error.message
       });
     }
-  };
+  }; */
 
   markAsViewed = async ({ uuid }: IUUID): Promise<void> =>
     this.markExperiment(uuid, 'markAsViewed');

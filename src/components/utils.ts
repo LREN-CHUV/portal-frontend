@@ -1,6 +1,6 @@
 import numbro from 'numbro';
 import { createBrowserHistory } from 'history';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export const round = (num: number, decimals = 3): string =>
   // !(num % 1 === 0) checks if number is an Integer

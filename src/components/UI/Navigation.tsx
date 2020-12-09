@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button, Dropdown, DropdownButton } from 'react-bootstrap';
+import { Button, Dropdown } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
 

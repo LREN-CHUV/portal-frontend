@@ -3,7 +3,7 @@ import './CirclePack.css';
 import * as d3 from 'd3';
 import React, { useCallback, useEffect, useRef } from 'react';
 
-import { APICore, APIMining, APIModel } from '../API';
+import { APICore, APIMining, APIModel, APIExperiment } from '../API';
 import { D3Model, HierarchyCircularNode, ModelResponse } from '../API/Model';
 import { ModelType } from './Container';
 import Explore from './Explore';
@@ -20,6 +20,7 @@ export interface Props {
   apiCore: APICore;
   apiModel: APIModel;
   apiMining: APIMining;
+  apiExperiment: APIExperiment;
   selectedNode: HierarchyCircularNode | undefined;
   layout: HierarchyCircularNode;
   histograms?: any;

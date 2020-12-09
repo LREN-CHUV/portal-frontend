@@ -73,6 +73,8 @@ const App = ({
   apiUser,
   showTutorial
 }: Props): JSX.Element => {
+  
+
   return (
     <>
       <GlobalStyles />
@@ -117,8 +119,9 @@ const App = ({
                 apiModel={apiModel}
                 appConfig={appConfig}
                 apiUser={apiUser}
+                apiExperiment={apiExperiment}
                 {...props}
-              />
+              ></Explore>
             )}
           />
           <Route
