@@ -15,7 +15,9 @@ const AppBox = (): JSX.Element => {
     const ErrorBoundary = bugsnagClient.getPlugin('react');
     return (
       <ErrorBoundary>
-        <AppContainer />
+        <React.StrictMode>
+          <AppContainer />
+        </React.StrictMode>
       </ErrorBoundary>
     );
   }

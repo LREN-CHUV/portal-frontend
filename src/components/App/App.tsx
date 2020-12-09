@@ -73,8 +73,6 @@ const App = ({
   apiUser,
   showTutorial
 }: Props): JSX.Element => {
-  
-
   return (
     <>
       <GlobalStyles />
