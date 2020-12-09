@@ -217,13 +217,12 @@ class Experiment extends Container<State> {
       const json: IExperiment = {
         ...response.data,
         transient
-      }
+      };
 
       return await this.setState({
         experiment: json,
         error: undefined
       });
-
     } catch (error) {
       return await this.setState({
         error: error.message

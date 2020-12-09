@@ -271,7 +271,7 @@ const Search = ({
 
   return (
     <input
-      placeholder="Searrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrch"
+      placeholder="Search"
       value={searchName}
       onChange={(e): void => {
         setSearchName(e.target.value);
