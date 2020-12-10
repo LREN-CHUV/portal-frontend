@@ -41,7 +41,6 @@ const createModel = async ({
   modelSlug: string;
   model: any;
 }): Promise<ModelState> => {
-  await apiModel.save({ model, title: modelSlug });
   await new Promise(resolve => setTimeout(resolve, 1500));
   return apiModel.state;
 };

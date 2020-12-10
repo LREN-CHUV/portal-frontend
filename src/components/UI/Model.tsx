@@ -2,40 +2,20 @@ import * as React from 'react';
 
 import { VariableEntity } from '../API/Core';
 import { ModelResponse } from '../API/Model';
-import DropdownModel from './DropdownModel';
 
 interface Props {
   model?: ModelResponse;
-  selectedSlug?: string;
-  items?: ModelResponse[];
-  handleSelectModel?: (model?: ModelResponse) => void;
   lookup: (code: string, pathologyCode: string | undefined) => VariableEntity;
 }
 
 class Model extends React.Component<Props> {
   render(): JSX.Element {
-    const {
-      items,
-      handleSelectModel,
-      model,
-      selectedSlug,
-      lookup
-    } = this.props;
+    const { model, lookup } = this.props;
 
     const query = model && model.query;
 
     return (
       <>
-        <h4>
-          {handleSelectModel && (
-            <DropdownModel
-              items={items}
-              selectedSlug={selectedSlug}
-              reset={false}
-              handleSelect={handleSelectModel}
-            />
-          )}
-        </h4>
         {query && (
           <>
             {query.variables && (

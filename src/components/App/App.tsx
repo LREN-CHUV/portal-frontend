@@ -143,7 +143,7 @@ const App = ({
             )}
           />
           <Route
-            path="/experiment/:slug/:uuid"
+            path="/experiment/:uuid"
             // tslint:disable-next-line jsx-no-lambda
             render={(): JSX.Element => (
               <ExperimentResult

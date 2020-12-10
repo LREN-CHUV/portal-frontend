@@ -28,15 +28,15 @@ class Experiment extends React.Component<Props> {
     if (!params) {
       return;
     }
-    const { uuid, slug } = params;
-    const { apiExperiment, apiModel } = this.props;
+    const { uuid } = params;
+    const { apiExperiment } = this.props;
 
-    await apiExperiment.one({ uuid });
+    const experiment = await apiExperiment.one({ uuid });
     if (!apiExperiment.loaded()) {
       this.pollFetchExperiment(uuid);
     }
 
-    return await apiModel.one(slug);
+    return experiment;
   }
 
   async componentDidUpdate(prevProps: Props): Promise<void> {
@@ -44,15 +44,9 @@ class Experiment extends React.Component<Props> {
     if (!params) {
       return;
     }
-    const { uuid, slug } = params;
+    const { uuid } = params;
     const previousParams = this.urlParams(prevProps);
     const previousUUID = previousParams && previousParams.uuid;
-    const previousSlug = previousParams && previousParams.slug;
-
-    if (slug !== previousSlug) {
-      const { apiModel } = this.props;
-      await apiModel.one(slug);
-    }
 
     const { apiExperiment } = this.props;
     if (uuid !== previousUUID) {

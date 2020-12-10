@@ -322,25 +322,14 @@ class Experiment extends Container<State> {
   one = async ({ uuid }: IUUID): Promise<void> => {
     try {
       // mark status and refresh the list
-      /*       if (
-        this.state.experimentList?.experiments.find(e => e.uuid === uuid)
-      ) {
-        await axios.get(`${this.baseUrl}/${uuid}/markAsViewed`, this.options);
-        await this.setState(previousState => ({
-          experimentList: previousState.experimentList?.map(e => ({
-            ...e,
-            resultsViewed: e.uuid === uuid ? true : e
-          }))
-        }));
-      }
  
-      const response = await axios.get(`${this.baseUrl}/${uuid}`, this.options);
+      const response = await Axios.get(`${this.baseUrl}/${uuid}`, this.options);
       const experiment = response.data;
  
       return await this.setState({
         error: undefined,
         experiment
-      }); */
+      });
     } catch (error) {
       return await this.setState({
         error: error.message

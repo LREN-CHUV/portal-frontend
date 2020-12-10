@@ -129,21 +129,6 @@ class Container extends React.Component<Props, State> {
     );
   }
 
-  private handleSelectModel = async (model?: ModelResponse): Promise<void> => {
-    if (model) {
-      const { slug } = model;
-      const { apiModel, apiCore } = this.props;
-      if (slug) {
-        return await apiModel.one(model.slug).then(() => {
-          const pathology = apiModel.state.model?.query?.pathology || '';
-          apiModel.checkModelDatasets(
-            apiCore.state.pathologiesDatasets[pathology]
-          );
-        });
-      }
-    }
-  };
-
   private handleSelectAlgorithm = (algorithm: Algorithm): void => {
     this.setState({
       algorithm: algorithm,
@@ -187,11 +172,6 @@ class Container extends React.Component<Props, State> {
       return;
     }
 
-    await apiModel.update({ model });
-    if (!model.slug) {
-      this.setState({ alert: { message: 'Model was not saved' } });
-      return;
-    }
     const selectedAlgorithm = this.state && this.state.algorithm;
     const { parameters } = this.state;
 

@@ -288,22 +288,7 @@ export default ({
   };
 
   const handleSelectModel = (nextModel?: ModelResponse): void => {
-    if (nextModel && nextModel.slug) {
-      apiModel.one(nextModel.slug).then(() => {
-        const pathology = apiModel.state.model?.query?.pathology || '';
-        apiModel.checkModelDatasets(
-          apiCore.state.pathologiesDatasets[pathology]
-        );
-      });
-    } else {
-      const model = apiModel.state.model;
-      if (model) {
-        const newModel = {
-          query: { pathology: model.query.pathology }
-        };
-        apiModel.setModel(newModel);
-      }
-    }
+    apiModel.setModel(nextModel);
   };
 
   const handleSelectPathology = (code: string): void => {

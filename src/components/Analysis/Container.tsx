@@ -71,21 +71,10 @@ const Container = ({
     shouldReload
   ]);
 
-  const handleSaveModel = async ({
-    title
-  }: {
-    title: string;
-  }): Promise<void> => {
-    setShouldReload(false);
-    const model = apiModel.state.model;
-    apiModel.save({ model, title });
-  };
-
   const handleRunExperiment = async (): Promise<void> => {
     const model = apiModel.state.model;
     if (model) {
       apiMining.abortMiningRequests();
-      apiModel.update({ model });
       history.push(`/experiment`);
     }
   };
@@ -100,19 +89,6 @@ const Container = ({
       model.query.filters = (filters && JSON.stringify(filters)) || '';
       setShouldReload(true);
       await apiModel.setModel(model);
-    }
-  };
-
-  const handleSelectModel = async (model?: ModelResponse): Promise<void> => {
-    if (model) {
-      setShouldReload(true);
-
-      return await apiModel.one(model.slug).then(() => {
-        const pathology = apiModel.state.model?.query?.pathology || '';
-        apiModel.checkModelDatasets(
-          apiCore.state.pathologiesDatasets[pathology]
-        );
-      });
     }
   };
 
