@@ -97,7 +97,6 @@ export interface ExploreProps {
   handleGoToAnalysis: any; // FIXME Promise<void>
   zoom: (circleNode: HierarchyCircularNode) => void;
   setFormulaString: (f: string) => void;
-  handleSelectExperiment: (experiment: IExperiment) => void;
 }
 
 export default (props: ExploreProps): JSX.Element => {
@@ -116,8 +115,7 @@ export default (props: ExploreProps): JSX.Element => {
     handleUpdateD3Model,
     handleSelectModel,
     handleGoToAnalysis,
-    zoom,
-    handleSelectExperiment
+    zoom
     // setFormulaString
   } = props;
 
@@ -136,11 +134,26 @@ export default (props: ExploreProps): JSX.Element => {
     variablesForPathology &&
     variablesForPathology.filter((v: any) => v.isCategorical);
 
-  const q = useCallback(
-    ({ ...params }: ExperimentListQueryParameters): Promise<void> =>
-      apiExperiment.list({ ...params }),
-    [apiExperiment]
-  );
+  const handleSelectExperiment = (experiment: IExperiment): void => {
+    const parameters = experiment.algorithm.parameters;
+    const extract = (field: string): VariableEntity[] =>
+      (parameters.find(p => p.name === field)?.value as string)
+        .split(',')
+        .map(m => ({ code: m, label: m }));
+
+    const newModel: ModelResponse = {
+      query: {
+        pathology: parameters.find(p => p.name === 'pathology')
+          ?.value as string,
+        trainingDatasets: extract('dataset'),
+        variables: extract('y'),
+        coVariables: extract('x'),
+        filters: parameters.find(p => p.name === 'filters')?.value as string
+      }
+    };
+    //handleSelectModel(newModel);
+    apiModel.setModel(newModel);
+  };
 
   return (
     <>
@@ -202,7 +215,7 @@ export default (props: ExploreProps): JSX.Element => {
                     variant="link"
                     id="dropdown-model-experiments"
                   >
-                    Select
+                    Select from Experiment
                   </Dropdown.Toggle>
                   <Dropdown.Menu>
                     <ExperimentList2

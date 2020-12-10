@@ -9,9 +9,12 @@ import { ModelResponse } from '../API/Model';
 import { IAlert } from '../UI/Alert';
 import LargeDatasetSelect from '../UI/LargeDatasetSelect';
 import Model from '../UI/Model';
+import { IExperiment } from '../API/Experiment';
+import ExperimentList2 from '../UI/ExperimentList2';
 import Content from './Content';
 import Filter from './Filter';
 import ExperimentReviewHeader from './Header';
+import { Dropdown } from 'react-bootstrap';
 
 interface Props extends RouteComponentProps {
   apiModel: APIModel;
@@ -222,14 +225,33 @@ const Container = ({
     ...d
   }));
 
+  const handleSelectExperiment = (experiment: IExperiment): void => {
+    const parameters = experiment.algorithm.parameters;
+    const extract = (field: string): VariableEntity[] =>
+      (parameters.find(p => p.name === field)?.value as string)
+        .split(',')
+        .map(m => ({ code: m, label: m }));
+
+    const newModel: ModelResponse = {
+      query: {
+        pathology: parameters.find(p => p.name === 'pathology')
+          ?.value as string,
+        trainingDatasets: extract('dataset'),
+        variables: extract('y'),
+        coVariables: extract('x'),
+        filters: parameters.find(p => p.name === 'filters')?.value as string
+      }
+    };
+    //handleSelectModel(newModel);
+    apiModel.setModel(newModel);
+  };
+
   return (
     <div className="Model Review">
       <div className="header">
         <ExperimentReviewHeader
           handleGoBackToExplore={handleGoBackToExplore}
-          handleSaveModel={handleSaveModel}
           handleRunAnalysis={handleRunExperiment}
-          model={model}
         />
       </div>
       <div className="content">
@@ -252,13 +274,20 @@ const Container = ({
                 </section>
               )}
               <section>
-                <Model
-                  model={model}
-                  selectedSlug={model && model.slug}
-                  lookup={apiCore.lookup}
-                  items={apiModel.state.models}
-                  handleSelectModel={handleSelectModel}
-                />
+                <Dropdown>
+                  <Dropdown.Toggle
+                    variant="link"
+                    id="dropdown-model-experiments"
+                  >
+                    Select from Experiment
+                  </Dropdown.Toggle>
+                  <Dropdown.Menu>
+                    <ExperimentList2
+                      handleSelectExperiment={handleSelectExperiment}
+                    />
+                  </Dropdown.Menu>
+                </Dropdown>
+                <Model model={model} lookup={apiCore.lookup} />
               </section>
             </Card.Body>
           </Card>

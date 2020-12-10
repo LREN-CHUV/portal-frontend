@@ -32,7 +32,6 @@ export interface Props {
   handleSelectModel: (d3Model?: ModelResponse) => void;
   handleGoToAnalysis: Function;
   setFormulaString: (f: string) => void;
-  handleSelectExperiment: (experiment: IExperiment) => void;
 }
 
 export default ({ layout, ...props }: Props): JSX.Element => {

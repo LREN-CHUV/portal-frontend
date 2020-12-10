@@ -222,7 +222,6 @@ class Mining extends Container<MiningState> {
       this.requests.push(request);
       const response = await request;
 
-      console.log(response.status);
       if (response.status >= 400) {
         return this.setState({
           histograms: {
@@ -302,30 +301,41 @@ class Mining extends Container<MiningState> {
       }
     ];
 
+    const experiment = {
+      algorithm: {
+        parameters,
+        type: 'string',
+        name: 'DESCRIPTIVE_STATS'
+      },
+      name: 'Descriptive statistics'
+    };
+
     this.abortMiningRequests();
 
     try {
       const r = Axios({
-        data: JSON.stringify(parameters),
+        data: JSON.stringify(experiment),
         headers: {
           ...this.options.headers,
           'Content-Type': 'application/json;charset=UTF-8'
         },
         method: 'POST',
-        url: `${this.backendURL}/mining/descriptive_stats`
+        url: `${this.backendURL}/experiments/transient`
       });
       this.requests.push(r);
       const response = await r;
-      const jsonString = response.data;
-      const json = await JSON.parse(jsonString);
+      const json = response.data;
 
       if (json && json.error) {
         this.setState({ error: json.error, summaryStatistics: undefined });
       }
 
-      const summaryStatistics = json.result.filter((r: any) =>
+      console.log(json);
+
+      const summaryStatistics =
+        json.result; /*.filter((r: any) =>
         [MIME_TYPES.JSON, ...ERRORS_OUTPUT].includes(r.type)
-      );
+      );*/
 
       this.setState({ error: undefined, summaryStatistics });
     } catch (error) {

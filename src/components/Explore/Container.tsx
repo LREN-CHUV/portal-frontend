@@ -333,26 +333,6 @@ export default ({
     history.push(`/review`);
   };
 
-  const handleSelectExperiment = (experiment: IExperiment): void => {
-    const parameters = experiment.algorithm.parameters;
-    const extract = (field: string): VariableEntity[] =>
-      (parameters.find(p => p.name === field)?.value as string)
-        .split(',')
-        .map(m => ({ code: m, label: m }));
-
-    const newModel: ModelResponse = {
-      query: {
-        pathology: parameters.find(p => p.name === 'pathology')
-          ?.value as string,
-        trainingDatasets: extract('dataset'),
-        variables: extract('y'),
-        coVariables: extract('x'),
-        filters: parameters.find(p => p.name === 'filters')?.value as string
-      }
-    };
-    apiModel.setModel(newModel);
-  };
-
   const nextProps = {
     apiCore,
     apiModel,
@@ -365,8 +345,7 @@ export default ({
     handleUpdateD3Model,
     histograms: apiMining.state.histograms,
     selectedNode,
-    setFormulaString,
-    handleSelectExperiment
+    setFormulaString
   };
 
   const d3Model = apiModel.state.internalD3Model;

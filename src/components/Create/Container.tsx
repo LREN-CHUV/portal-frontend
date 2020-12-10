@@ -76,15 +76,7 @@ class Container extends React.Component<Props, State> {
                 )}
 
                 <section>
-                  <Model
-                    model={apiModel.state.model}
-                    selectedSlug={
-                      apiModel.state.model && apiModel.state.model.slug
-                    }
-                    items={apiModel.state.models}
-                    handleSelectModel={this.handleSelectModel}
-                    lookup={apiCore.lookup}
-                  />
+                  <Model model={apiModel.state.model} lookup={apiCore.lookup} />
                 </section>
               </Card.Body>
             </Card>
