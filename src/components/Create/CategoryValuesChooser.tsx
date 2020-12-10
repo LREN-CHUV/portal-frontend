@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { FormControl } from 'react-bootstrap';
+import { Form } from 'react-bootstrap';
 import styled from 'styled-components';
 
 import { APICore } from '../API';
@@ -90,7 +90,8 @@ export default ({
             <p>
               <strong>{category.label}</strong>
             </p>
-            <FormControl
+            <Form.Control
+              as={'select'}
               /*               componentClass="select"
                */ placeholder="select"
               id={`parameter-category-chooser-${category.code}`}
@@ -108,7 +109,7 @@ export default ({
                     {v.label}
                   </option>
                 ))}
-            </FormControl>
+            </Form.Control>
           </ControlBox>
         ))}
     </>

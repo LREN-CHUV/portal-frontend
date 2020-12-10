@@ -45,7 +45,7 @@ const createModel = async ({
   return apiModel.state;
 };
 
-const buildPayload = async (
+/* const buildPayload = async (
   model: ModelResponse,
   parameters: AlgorithmParameter[],
   algorithmId: string,
@@ -101,7 +101,7 @@ const buildPayload = async (
   };
 
   return payload;
-};
+}; */
 
 const createExperiment = async ({
   payload
@@ -147,7 +147,7 @@ const uid = (): string =>
   });
 
 export {
-  buildPayload,
+  //buildPayload,
   createExperiment,
   createModel,
   uid,

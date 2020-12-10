@@ -16,7 +16,7 @@ export default ({
     (experimentState && experimentState.error) ||
     (experiment && experiment.status);
   const loading = !results && !error;
-  const algorithmName = experiment && experiment.algorithm.name;
+  const algorithmName = experiment && experiment.algorithm?.name;
 
   return (
     <Card>

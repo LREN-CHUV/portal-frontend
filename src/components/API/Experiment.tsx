@@ -234,7 +234,7 @@ class Experiment extends Container<State> {
     model: ModelResponse,
     selectedAlgorithm: Algorithm,
     parameters: AlgorithmParameter[]
-  ): AlgorithmParameterRequest[] =>
+  ): ExperimentParameter[] =>
     parameters.map(p => {
       let value: string = p.value;
       const query = model && model.query;
@@ -309,7 +309,7 @@ class Experiment extends Container<State> {
       }
 
       return {
-        name: p.name,
+        name: p.name as ParameterName,
         label: p.label,
         value
       };
@@ -322,10 +322,10 @@ class Experiment extends Container<State> {
   one = async ({ uuid }: IUUID): Promise<void> => {
     try {
       // mark status and refresh the list
- 
+
       const response = await Axios.get(`${this.baseUrl}/${uuid}`, this.options);
       const experiment = response.data;
- 
+
       return await this.setState({
         error: undefined,
         experiment

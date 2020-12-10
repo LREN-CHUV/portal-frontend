@@ -13,14 +13,13 @@ export default ({
 }: {
   results: Result[] | undefined;
 }): JSX.Element => {
-
   return (
     <>
       {results &&
         results.map((result: Result, i: number) => (
           <div className="result" key={i}>
             <Highchart options={result.data} constraint={true} />
-            
+
             {/*result.type === MIME_TYPES.ERROR && (
               <Error message={result.data} />
             )}

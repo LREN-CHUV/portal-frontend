@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Card, Tab, Tabs } from 'react-bootstrap';
+import { Card, Tab, Tabs, Dropdown } from 'react-bootstrap';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 
 import { APICore, APIExperiment, APIModel } from '../API';
@@ -10,6 +10,7 @@ import {
 } from '../API/Core';
 import { ExperimentPayload, IExperiment } from '../API/Experiment';
 import { ModelResponse } from '../API/Model';
+import { VariableEntity } from '../API/Core';
 import { AppConfig } from '../App/App';
 import { Alert, IAlert } from '../UI/Alert';
 import LargeDatasetSelect from '../UI/LargeDatasetSelect';
@@ -18,6 +19,7 @@ import AvailableAlgorithms from './AvailableAlgorithms';
 import ExperimentCreateHeader from './Header';
 import Help from './Help';
 import Parameters from './Parameters';
+import ExperimentList2 from '../UI/ExperimentList2';
 
 interface Props extends RouteComponentProps<any> {
   apiExperiment: APIExperiment;
@@ -41,6 +43,27 @@ class Container extends React.Component<Props, State> {
     const query = apiModel.state.model && apiModel.state.model.query;
     const pathology = query?.pathology || '';
     const datasets = apiCore.state.pathologiesDatasets[pathology];
+
+    const handleSelectExperiment = (experiment: IExperiment): void => {
+      const parameters = experiment.algorithm.parameters;
+      const extract = (field: string): VariableEntity[] =>
+        (parameters.find(p => p.name === field)?.value as string)
+          .split(',')
+          .map(m => ({ code: m, label: m }));
+
+      const newModel: ModelResponse = {
+        query: {
+          pathology: parameters.find(p => p.name === 'pathology')
+            ?.value as string,
+          trainingDatasets: extract('dataset'),
+          variables: extract('y'),
+          coVariables: extract('x'),
+          filters: parameters.find(p => p.name === 'filters')?.value as string
+        }
+      };
+      //handleSelectModel(newModel);
+      apiModel.setModel(newModel);
+    };
 
     return (
       <div className="Experiment">
@@ -76,6 +99,19 @@ class Container extends React.Component<Props, State> {
                 )}
 
                 <section>
+                  <Dropdown>
+                    <Dropdown.Toggle
+                      variant="link"
+                      id="dropdown-model-experiments"
+                    >
+                      Select from Experiment
+                    </Dropdown.Toggle>
+                    <Dropdown.Menu>
+                      <ExperimentList2
+                        handleSelectExperiment={handleSelectExperiment}
+                      />
+                    </Dropdown.Menu>
+                  </Dropdown>
                   <Model model={apiModel.state.model} lookup={apiCore.lookup} />
                 </section>
               </Card.Body>
@@ -180,25 +216,22 @@ class Container extends React.Component<Props, State> {
       return;
     }
 
-    const nextParameters: AlgorithmParameterRequest[] = apiExperiment.makeParameters(
+    const nextParameters = apiExperiment.makeParameters(
       model,
       selectedAlgorithm,
       parameters
     );
 
-    /*
     const experiment: Partial<IExperiment> = {
       algorithm: {
-        label: selectedAlgorithm.label,
         name: selectedAlgorithm.name,
         parameters: nextParameters,
         type: selectedAlgorithm.type
       },
       name: experimentName
     };
-    */
 
-    //await apiExperiment.create({ experiment });
+    await apiExperiment.create({ experiment, transient: false });
     const { experiment: e, error } = apiExperiment.state;
 
     if (error) {
@@ -212,7 +245,7 @@ class Container extends React.Component<Props, State> {
     }
 
     const uuid = (e && e.uuid) || '';
-    history.push(`/experiment/${model && model.slug}/${uuid}`);
+    history.push(`/experiment/${uuid}`);
   };
 }
 

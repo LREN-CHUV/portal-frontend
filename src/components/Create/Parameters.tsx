@@ -167,70 +167,30 @@ const Parameters = ({
                         : 'none'
                   }}
                 >
-                  <Row>
-                    <Col sm={12}>{parameter.desc}</Col>
-                  </Row>
-                  <Row>
-                    <Col sm={6}>{parameter.label}</Col>
-                    <Col sm={6}>
-                      {!parameter.valueEnumerations &&
-                        parameter.label !== 'referencevalues' &&
-                        parameter.label !== 'xlevels' &&
-                        parameter.label !== 'Positive outcome' &&
-                        parameter.label !== 'Negative outcome' && (
-                          <FormControl
-                            type={type}
-                            defaultValue={parameter.defaultValue}
-                            placeholder={parameter.placeholder}
-                            // tslint:disable-next-line jsx-no-lambda
-                            onChange={event =>
-                              handleChangeParameter(event, parameter.label)
-                            }
-                          />
-                        )}
-
-                      {parameter.valueEnumerations &&
-                        parameter.valueEnumerations.length > 0 && (
-                          <FormControl
-                            defaultValue={parameter.defaultValue}
-                            placeholder={parameter.placeholder}
-                            // tslint:disable-next-line jsx-no-lambda
-                            onChange={event =>
-                              handleChangeParameter(event, parameter.label)
-                            }
-                          >
-                            {parameter.valueEnumerations.map((v: string) => (
-                              <option key={v} value={v}>
-                                {v}
-                              </option>
-                            ))}
-                          </FormControl>
-                        )}
-
-                      {parameter.label === 'xlevels' && (
-                        <Select
-                          value={selectedOptions}
-                          onChange={handleSelect}
-                          options={modalities}
-                          isMulti={true}
-                        />
-                      )}
-
-                      {parameter.label === 'referencevalues' && (
-                        <CategoryChooser
-                          apiCore={apiCore}
-                          query={query}
-                          parameterName={parameter.label}
-                          notblank={parameter.valueNotBlank === 'true'}
-                          handleChangeCategoryParameter={
-                            handleChangeCategoryParameter
+                  <p>{parameter.desc}</p>
+                  <p>{parameter.label}</p>
+                  <div>
+                    {!parameter.valueEnumerations &&
+                      parameter.label !== 'referencevalues' &&
+                      parameter.label !== 'xlevels' &&
+                      parameter.label !== 'Positive outcome' &&
+                      parameter.label !== 'Negative outcome' && (
+                        <Form.Control
+                          type={type}
+                          defaultValue={parameter.defaultValue}
+                          placeholder={parameter.placeholder}
+                          // tslint:disable-next-line jsx-no-lambda
+                          onChange={event =>
+                            handleChangeParameter(event, parameter.label)
                           }
                         />
                       )}
 
-                      {(parameter.label === 'Positive outcome' ||
-                        parameter.label === 'Negative outcome') && (
-                        <FormControl
+                    {console.log(parameter.valueEnumerations)}
+                    {parameter.valueEnumerations &&
+                      parameter.valueEnumerations.length > 0 && (
+                        <Form.Control
+                          as={'select'}
                           defaultValue={parameter.defaultValue}
                           placeholder={parameter.placeholder}
                           // tslint:disable-next-line jsx-no-lambda
@@ -238,49 +198,87 @@ const Parameters = ({
                             handleChangeParameter(event, parameter.label)
                           }
                         >
-                          {apiCore
-                            .lookup(
-                              query?.variables?.find((v, i) => i === 0)?.code ||
-                                '',
-                              query?.pathology
-                            )
-                            ?.enumerations?.map((v: VariableEntity) => (
-                              <option key={v.code} value={v.code}>
-                                {v.label}
-                              </option>
-                            ))}
-                        </FormControl>
+                          {parameter.valueEnumerations.map((v: string) => (
+                            <option key={v} value={v}>
+                              {v}
+                            </option>
+                          ))}
+                        </Form.Control>
                       )}
 
-                      <FormControl.Feedback />
-                      <HelpBlock>
-                        {parameter && parameter.valueNotBlank && (
-                          <var>required</var>
-                        )}
-                        {parameter && parameter.valueType === 'integer' && (
-                          <var>type integer</var>
+                    {parameter.label === 'xlevels' && (
+                      <Select
+                        value={selectedOptions}
+                        onChange={handleSelect}
+                        options={modalities}
+                        isMulti={true}
+                      />
+                    )}
+
+                    {parameter.label === 'referencevalues' && (
+                      <CategoryChooser
+                        apiCore={apiCore}
+                        query={query}
+                        parameterName={parameter.label}
+                        notblank={parameter.valueNotBlank === 'true'}
+                        handleChangeCategoryParameter={
+                          handleChangeCategoryParameter
+                        }
+                      />
+                    )}
+
+                    {(parameter.label === 'Positive outcome' ||
+                      parameter.label === 'Negative outcome') && (
+                      <Form.Control
+                        defaultValue={parameter.defaultValue}
+                        placeholder={parameter.placeholder}
+                        // tslint:disable-next-line jsx-no-lambda
+                        onChange={event =>
+                          handleChangeParameter(event, parameter.label)
+                        }
+                      >
+                        {apiCore
+                          .lookup(
+                            query?.variables?.find((v, i) => i === 0)?.code ||
+                              '',
+                            query?.pathology
+                          )
+                          ?.enumerations?.map((v: VariableEntity) => (
+                            <option key={v.code} value={v.code}>
+                              {v.label}
+                            </option>
+                          ))}
+                      </Form.Control>
+                    )}
+
+                    <FormControl.Feedback />
+                    <HelpBlock>
+                      {parameter && parameter.valueNotBlank && (
+                        <var>required</var>
+                      )}
+                      {parameter && parameter.valueType === 'integer' && (
+                        <var>type integer</var>
+                      )}
+
+                      {parameter && parameter.valueType === 'float' && (
+                        <var>type float</var>
+                      )}
+
+                      {parameter !== undefined &&
+                        parameter.valueMin !== undefined &&
+                        parameter.valueMin !== null &&
+                        !isNaN(parameter.valueMin) && (
+                          <var>min value: {parameter.valueMin}</var>
                         )}
 
-                        {parameter && parameter.valueType === 'float' && (
-                          <var>type float</var>
+                      {parameter !== undefined &&
+                        parameter.valueMax !== undefined &&
+                        parameter.valueMax !== null &&
+                        !isNaN(parameter.valueMax) && (
+                          <var>max value: {parameter.valueMax}</var>
                         )}
-
-                        {parameter !== undefined &&
-                          parameter.valueMin !== undefined &&
-                          parameter.valueMin !== null &&
-                          !isNaN(parameter.valueMin) && (
-                            <var>min value: {parameter.valueMin}</var>
-                          )}
-
-                        {parameter !== undefined &&
-                          parameter.valueMax !== undefined &&
-                          parameter.valueMax !== null &&
-                          !isNaN(parameter.valueMax) && (
-                            <var>max value: {parameter.valueMax}</var>
-                          )}
-                      </HelpBlock>
-                    </Col>
-                  </Row>
+                    </HelpBlock>
+                  </div>
                 </FormGroup>
               );
             })}
