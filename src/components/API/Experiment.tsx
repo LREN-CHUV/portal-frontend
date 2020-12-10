@@ -22,7 +22,7 @@ export interface ExperimentPayload {
 }
 
 export type experimentStatus = 'error' | 'pending' | 'success';
-export type ParameterName = 'x' | 'y' | 'dataset' | 'pathology';
+export type ParameterName = 'x' | 'y' | 'dataset' | 'pathology' | 'filters';
 
 export interface ExperimentParameter {
   name: ParameterName;

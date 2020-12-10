@@ -13,7 +13,7 @@ import { ModelType } from './Container';
 import Histograms from './D3Histograms';
 import ModelView from './D3Model';
 import Search from './D3Search';
-import ExperimentList from '../UI/ExperimentList2';
+import ExperimentList2 from '../UI/ExperimentList2';
 import { ExperimentListQueryParameters, IExperiment } from '../API/Experiment';
 
 const DataSelectionBox = styled(Card.Title)`
@@ -97,6 +97,7 @@ export interface ExploreProps {
   handleGoToAnalysis: any; // FIXME Promise<void>
   zoom: (circleNode: HierarchyCircularNode) => void;
   setFormulaString: (f: string) => void;
+  handleSelectExperiment: (experiment: IExperiment) => void;
 }
 
 export default (props: ExploreProps): JSX.Element => {
@@ -115,7 +116,8 @@ export default (props: ExploreProps): JSX.Element => {
     handleUpdateD3Model,
     handleSelectModel,
     handleGoToAnalysis,
-    zoom
+    zoom,
+    handleSelectExperiment
     // setFormulaString
   } = props;
 
@@ -203,9 +205,10 @@ export default (props: ExploreProps): JSX.Element => {
                     Select
                   </Dropdown.Toggle>
                   <Dropdown.Menu>
-                    <ExperimentList
+                    <ExperimentList2
                       experimentList={apiExperiment.state.experimentList}
                       handleQueryParameters={q}
+                      handleSelectExperiment={handleSelectExperiment}
                     />
                   </Dropdown.Menu>
                 </Dropdown>

@@ -5,6 +5,7 @@ import React, { useCallback, useEffect, useRef } from 'react';
 
 import { APICore, APIMining, APIModel, APIExperiment } from '../API';
 import { D3Model, HierarchyCircularNode, ModelResponse } from '../API/Model';
+import { IExperiment } from '../API/Experiment';
 import { ModelType } from './Container';
 import Explore from './Explore';
 
@@ -31,6 +32,7 @@ export interface Props {
   handleSelectModel: (d3Model?: ModelResponse) => void;
   handleGoToAnalysis: Function;
   setFormulaString: (f: string) => void;
+  handleSelectExperiment: (experiment: IExperiment) => void;
 }
 
 export default ({ layout, ...props }: Props): JSX.Element => {
