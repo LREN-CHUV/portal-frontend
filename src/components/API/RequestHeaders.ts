@@ -11,7 +11,7 @@ const XSRFToken = (cookie: string) => {
   return token;
 };
 
-const options: RequestInit = process.env.REACT_APP_TOKEN
+const options: any = process.env.REACT_APP_TOKEN
   ? {
       headers: {
         Authorization: process.env.REACT_APP_AUTHORIZATION!,

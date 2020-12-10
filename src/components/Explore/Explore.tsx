@@ -206,8 +206,6 @@ export default (props: ExploreProps): JSX.Element => {
                   </Dropdown.Toggle>
                   <Dropdown.Menu>
                     <ExperimentList2
-                      experimentList={apiExperiment.state.experimentList}
-                      handleQueryParameters={q}
                       handleSelectExperiment={handleSelectExperiment}
                     />
                   </Dropdown.Menu>

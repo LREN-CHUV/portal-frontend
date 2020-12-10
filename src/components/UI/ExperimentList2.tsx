@@ -1,9 +1,8 @@
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import React, { useEffect, useState } from 'react';
-import { Container, Pagination, Table } from 'react-bootstrap';
+import { Button, Container, Pagination, Table } from 'react-bootstrap';
 
-import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 import {
@@ -11,6 +10,8 @@ import {
   IExperiment,
   IExperimentList
 } from '../API/Experiment';
+
+import Experiment from '../Store/Experiment';
 
 dayjs.extend(relativeTime);
 dayjs().format();
@@ -43,48 +44,105 @@ const SearchContainer = styled.div`
 `;
 
 interface Props {
-  experimentList?: IExperimentList;
-  handleQueryParameters: ({ ...params }: ExperimentListQueryParameters) => void;
+  handleSelectExperiment: (experiment: IExperiment) => void;
 }
 
-const ExperimentRow = ({
+interface InternalProps {
+  list: ({ ...params }: ExperimentListQueryParameters) => Promise<void>;
+}
+
+const ExperimentTable = ({
   ...props
 }: {
-  experiment: IExperiment;
+  experimentList?: IExperimentList;
+  searchName: string;
+  handleSelectExperiment: (experiment: IExperiment) => void;
+  list: InternalProps['list'];
 }): JSX.Element => {
-  const { experiment } = props;
+  const { experimentList, searchName, handleSelectExperiment, list } = props;
 
-  return (
-    <tr>
-      <td className="align-middle">
-        <Link to={`/experiment/${experiment.uuid}`} title={experiment.name}>
-          {experiment.name}
-        </Link>
-      </td>
-    </tr>
+  return experimentList && experimentList?.experiments ? (
+    <>
+      <Table striped bordered hover size="sm" responsive>
+        <thead>
+          <tr>
+            <th>Name</th>
+          </tr>
+        </thead>
+        <tbody>
+          {experimentList?.experiments?.map((experiment: IExperiment) => (
+            <tr key={experiment.uuid}>
+              <td className="align-middle">
+                <Button
+                  onClick={(): void => handleSelectExperiment(experiment)}
+                  variant={'link'}
+                >
+                  {experiment.name}
+                </Button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
+      {experimentList.totalPages > 1 && (
+        <Pagination className="justify-content-center">
+          <Pagination.Prev
+            disabled={experimentList.currentPage === 0}
+            onClick={(): Promise<void> =>
+              list({
+                page: experimentList.currentPage - 1
+              })
+            }
+          />
+          {[...Array(experimentList.totalPages).keys()].map(n => (
+            <Pagination.Item
+              key={`page-${n}`}
+              onClick={(): Promise<void> => list({ page: n })}
+              active={experimentList.currentPage === n}
+            >
+              {n}
+            </Pagination.Item>
+          ))}
+          <Pagination.Next
+            disabled={
+              experimentList.totalPages === experimentList.currentPage + 1
+            }
+            onClick={(): Promise<void> =>
+              list({
+                page: experimentList.currentPage + 1
+              })
+            }
+          />
+        </Pagination>
+      )}
+    </>
+  ) : searchName.length > 2 ? (
+    <div>Your search didn&apos;t return any results</div>
+  ) : (
+    <div>You don&apos;t have any experiment yet</div>
   );
 };
 
 const Search = ({
-  handleQueryParameters,
+  list,
   searchName,
   setSearchName
 }: {
-  handleQueryParameters: Props['handleQueryParameters'];
+  list: InternalProps['list'];
   searchName: string;
   setSearchName: React.Dispatch<React.SetStateAction<string>>;
 }): JSX.Element => {
   useEffect(() => {
     if (searchName.length > 2) {
-      handleQueryParameters({ name: searchName });
+      list({ name: searchName });
     } else {
-      handleQueryParameters({ name: '' });
+      list({ name: '' });
     }
-  }, [searchName, handleQueryParameters]);
+  }, [searchName, list]);
 
   return (
     <input
-      placeholder="Searrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrch"
+      placeholder="Search"
       value={searchName}
       onChange={(e): void => {
         setSearchName(e.target.value);
@@ -93,70 +151,37 @@ const Search = ({
   );
 };
 
-export default ({ ...props }: Props): JSX.Element => {
-  const { experimentList, handleQueryParameters } = props;
+const Main = ({ handleSelectExperiment }: Props): JSX.Element => {
+  const experiment = Experiment.useContainer();
+  const { list } = experiment;
   const [searchName, setSearchName] = useState<string>('');
 
   return (
-    <Wrapper>
+    <>
       <SearchContainer>
         <Search
-          handleQueryParameters={handleQueryParameters}
+          list={list}
           searchName={searchName}
           setSearchName={setSearchName}
         />
       </SearchContainer>
-      {experimentList && experimentList?.experiments ? (
-        <>
-          <Table striped bordered hover size="sm" responsive>
-            <thead>
-              <tr>
-                <th>Name</th>
-              </tr>
-            </thead>
-            <tbody>
-              {experimentList?.experiments?.map(experiment => (
-                <ExperimentRow key={experiment.uuid} experiment={experiment} />
-              ))}
-            </tbody>
-          </Table>
-          {experimentList.totalPages > 1 && (
-            <Pagination className="justify-content-center">
-              <Pagination.Prev
-                disabled={experimentList.currentPage === 0}
-                onClick={(): void =>
-                  handleQueryParameters({
-                    page: experimentList.currentPage - 1
-                  })
-                }
-              />
-              {[...Array(experimentList.totalPages).keys()].map(n => (
-                <Pagination.Item
-                  key={`page-${n}`}
-                  onClick={(): void => handleQueryParameters({ page: n })}
-                  active={experimentList.currentPage === n}
-                >
-                  {n}
-                </Pagination.Item>
-              ))}
-              <Pagination.Next
-                disabled={
-                  experimentList.totalPages === experimentList.currentPage + 1
-                }
-                onClick={(): void =>
-                  handleQueryParameters({
-                    page: experimentList.currentPage + 1
-                  })
-                }
-              />
-            </Pagination>
-          )}
-        </>
-      ) : searchName.length > 2 ? (
-        <div>Your search didn&apos;t return any results</div>
-      ) : (
-        <div>You don&apos;t have any experiment yet</div>
-      )}
-    </Wrapper>
+
+      <ExperimentTable
+        experimentList={experiment.experimentList}
+        searchName={searchName}
+        handleSelectExperiment={handleSelectExperiment}
+        list={list}
+      />
+    </>
+  );
+};
+
+export default ({ ...props }: Props): JSX.Element => {
+  return (
+    <Experiment.Provider>
+      <Wrapper>
+        <Main handleSelectExperiment={props.handleSelectExperiment} />
+      </Wrapper>
+    </Experiment.Provider>
   );
 };

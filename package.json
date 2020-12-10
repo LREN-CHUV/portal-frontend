@@ -63,7 +63,8 @@
     "styled-components": "^5.0.1",
     "typescript": "3.8.3",
     "unstated": "^2.1.1",
-    "unstated-debug": "^0.3.2"
+    "unstated-debug": "^0.3.2",
+    "unstated-next": "^1.1.0"
   },
   "scripts": {
     "analyze": "source-map-explorer 'build/static/js/*.js'",
