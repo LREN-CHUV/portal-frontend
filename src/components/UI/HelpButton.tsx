@@ -14,49 +14,72 @@ const MainBox = styled.div`
     width: fit-content !important;
     max-height: none;
     overflow-y: auto;
-    padding: 0.5em 1em;
+    padding: 0.5em 0.5em;
+    min-width: 200px;
 
-    li {
-      padding: 0.5em 0;
-      margin: 0;
+    p > a {
+      font-family: 'Open Sans', sans-serif;
+      font-weight: normal !important;
+      padding: 0.5em;
+      color: #007bff;
+      font-size: 0.9rem;
+
+      :hover {
+        color: #0056b3 !important;
+      }
     }
 
-    li > a {
-      padding: 0;
+    svg {
+      margin-right: 4px;
+      margin-top: -2px;
       color: black;
     }
   }
-`;
 
-const Link = styled(NavLink)`
-  font-size: 14px;
-  margin: 0 16px 0 0;
-  color: #000;
+  .btn-link {
+      font-weight: bold !important;
+      border: 0;
+      text-decoration: none;
+
+      :active {
+        border: 0
+        color: #5bc0de !important;
+      }
+
+      :hover {
+        color: #ccc !important;
+        text-decoration: none;
+      }
+  }
 `;
 
 export default ({ showTraining }: { showTraining?: boolean }): JSX.Element => {
   return (
     <MainBox>
       <DropdownButton variant="link" id={'help-dropdown'} title={'Help'}>
-        <Dropdown.Item
-          // tslint:disable-next-line jsx-no-lambda
-          onSelect={() => {
-            window.open('https://mip.ebrains.eu/documentation/');
-          }}
-        >
-          <BsBook /> MIP Documentation
-        </Dropdown.Item>
+        <p>
+          <a
+            href="#"
+            // tslint:disable-next-line jsx-no-lambda
+            onSelect={() => {
+              window.open('https://mip.ebrains.eu/documentation/');
+            }}
+          >
+            <BsBook /> MIP Documentation
+          </a>
+        </p>
         {showTraining && (
-          <li>
-            <Link to="/training">
+          <p>
+            <NavLink to="/training">
               <BsFilm /> MIP Training
-            </Link>
-          </li>
+            </NavLink>
+          </p>
         )}
-        <li>
-          <BsFillEnvelopeFill /> Email us at{' '}
-          <a href="mailto://support@ebrains.eu">support@ebrains.eu</a>
-        </li>
+        <p>
+          <a href="mailto://support@ebrains.eu">
+            <BsFillEnvelopeFill /> Email us at support@ebrains.eu
+          </a>
+        </p>
         <Helpdesk />
       </DropdownButton>
     </MainBox>

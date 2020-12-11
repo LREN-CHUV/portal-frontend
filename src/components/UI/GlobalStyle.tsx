@@ -15,27 +15,9 @@ export const GlobalStyles = createGlobalStyle`
     margin: 0;
   }
 
-  h3 {
-    font-size: 1.2rem;
-  }
-
-  h4 {
-    font-size: 1.1rem;
-    margin-bottom: 4px;
-  }
-
-  h5, h6 {
-    font-size: 0.7rem;
-  }
-
-  p, th, td, li {
-    font-size: 0.8rem;
-  }
-
   .btn {
     font-size: 0.9rem;
   }
-
   
   .card {
     margin-bottom: 8px;

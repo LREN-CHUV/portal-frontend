@@ -78,10 +78,6 @@ const Links = styled.div`
 `;
 
 const RightLinks = styled(Links)`
-  display: flex;
-  align-items: center;
-  // margin-left: auto;
-
   button {
     color: white;
     font-size: 16px;
@@ -114,13 +110,11 @@ const DropdownWrapper = styled.div`
     text-decoration: none;
     color: white;
     box-shadow: none;
-  }
-`;
 
-const ALink = styled.a`
-  color: white;
-  font-size: 16px;
-  margin: 0px 16px 0px 0px;
+    :hover {
+      color: #ccc !important;
+    }
+  }
 `;
 
 export default ({
@@ -157,22 +151,18 @@ export default ({
         </DropdownWrapper>
         <Link to="/galaxy">Workflow</Link>
         {datacatalogueUrl && (
-          <ALink
-            href={datacatalogueUrl}
-            rel="noopener noreferrer"
-            target="_blank"
-          >
+          <a href={datacatalogueUrl} rel="noopener noreferrer" target="_blank">
             Data Catalogue
-          </ALink>
+          </a>
         )}
       </Links>
       <RightLinks>
         <MIPContext.Consumer>
           {({ toggleTutorial }): JSX.Element =>
             (
-              <>
-                <Button onClick={toggleTutorial}>User Guide</Button>
-              </>
+              <a href="#" onClick={toggleTutorial}>
+                User Guide
+              </a>
             ) || <></>
           }
         </MIPContext.Consumer>
