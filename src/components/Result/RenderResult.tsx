@@ -18,9 +18,7 @@ export default ({
       {results &&
         results.map((result: Result, i: number) => (
           <div className="result" key={i}>
-            <Highchart options={result.data} constraint={true} />
-
-            {/*result.type === MIME_TYPES.ERROR && (
+            {result.type === MIME_TYPES.ERROR && (
               <Error message={result.data} />
             )}
             {result.type === MIME_TYPES.WARNING && (
@@ -40,7 +38,7 @@ export default ({
             )}
             {result.type === MIME_TYPES.JSON && (
               <Dendogram data={result.data} />
-            ) */}
+            )}
           </div>
         ))}
     </>
