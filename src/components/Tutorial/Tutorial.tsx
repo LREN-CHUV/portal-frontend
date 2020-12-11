@@ -45,16 +45,18 @@ export default React.memo(
     ];
 
     return (
-      <div className="static-modal user-guide">
-        <MIPContext.Consumer>
-          {({ toggleTutorial }): JSX.Element => (
+      <MIPContext.Consumer>
+        {({ toggleTutorial }): JSX.Element => (
+          <Modal show={true} centered>
             <Modal.Dialog>
-              {/*<Modal.Header
+              <Modal.Header
+                closeButton
+                translate="no"
                 style={{ display: 'flex', justifyContent: 'space-between' }}
               >
                 <Modal.Title>MIP User Guide</Modal.Title>
                 <Button
-                  bsClass="close"
+                  variant="link"
                   onClick={toggleTutorial}
                   style={{ marginLeft: 'auto' }}
                 >
@@ -119,11 +121,10 @@ export default React.memo(
               <Modal.Footer>
                 <Button onClick={toggleTutorial}>Close</Button>
               </Modal.Footer>
-                  */}
             </Modal.Dialog>
-          )}
-        </MIPContext.Consumer>
-      </div>
+          </Modal>
+        )}
+      </MIPContext.Consumer>
     );
   }
 );
