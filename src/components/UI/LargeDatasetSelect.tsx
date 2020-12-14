@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import styled from 'styled-components';
 
@@ -16,20 +16,23 @@ const DropDownPanel = styled.div`
   position: absolute;
   width: 320px;
   background-color: white;
-  padding: 8px;
+  padding: 16px;
   border: 1px lightblue solid;
   margin: 2px 0;
   border-radius: 4px;
 
   label {
     margin-right: 8px;
-    font-size: 0.8rem;
   }
 
   .checkbox {
     position: absolute;
     margin-top: 4px;
     margin-left: -8px;
+  }
+
+  h5 {
+    margin-bottom: 8px;
   }
 
   hr {
@@ -39,7 +42,7 @@ const DropDownPanel = styled.div`
   p {
     margin-bottom: 0;
   }
-}`;
+`;
 
 const CaretButton = styled(Button)`
   ::after {
@@ -57,7 +60,6 @@ const CaretButton = styled(Button)`
 const Card = styled.div`
   label {
     margin-right: 8px;
-    font-size: 0.8rem;
   }
 
   .checkbox {
@@ -68,6 +70,10 @@ const Card = styled.div`
 
   span {
     display: block;
+  }
+
+  h5 {
+    margin-bottom: 8px;
   }
 
   hr {
@@ -87,11 +93,32 @@ export default ({
 }: Props): JSX.Element => {
   const [visible, setVisible] = React.useState(!isDropdown);
   const style = visible ? undefined : { display: 'none' };
+  const node = useRef<HTMLDivElement | null>(null);
 
   // TODO: tag dataset as longitudinal
   const r = new RegExp(LONGITUDINAL_DATASET_TYPE);
   const ndatasets = datasets?.filter(d => !r.test(d.code));
   const ldatasets = datasets?.filter(d => r.test(d.code));
+
+  const handleClickOutside = (event: MouseEvent): void => {
+    // inside click
+    if (node.current?.contains(event.target as HTMLInputElement)) {
+      return;
+    }
+
+    setVisible(false);
+  };
+
+  useEffect(() => {
+    if (visible) {
+      window.addEventListener('mousedown', handleClickOutside);
+    } else {
+      window.removeEventListener('mousedown', handleClickOutside);
+    }
+    return (): void => {
+      window.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [setVisible, visible]);
 
   const checkboxFor = (sets: VariableEntity[]): JSX.Element[] =>
     sets.map(dataset => (
@@ -134,7 +161,9 @@ export default ({
           >
             Datasets
           </CaretButton>
-          <DropDownPanel style={style}>{data}</DropDownPanel>
+          <DropDownPanel ref={node} style={style}>
+            {data}
+          </DropDownPanel>
         </>
       )}
       {!isDropdown && (
