@@ -1,9 +1,52 @@
-import './D3Search.css';
-
 import * as d3 from 'd3';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import styled from 'styled-components';
 
 import { HierarchyCircularNode } from '../API/Model';
+
+const Shortcuts = styled.div`
+  .d3-link a:after {
+    content: ' - ';
+  }
+
+  .d3-link a:last-child:after {
+    content: '';
+  }
+
+  input {
+    margin-right: 16px;
+    padding: 0.2rem 0.5rem;
+  }
+
+  .form-control {
+    font-size: 0.9rem;
+  }
+
+  .d3-link-results {
+    position: absolute;
+    background-color: white;
+    padding: 8px;
+    border: 1px lightblue solid;
+    margin: 2px 0 0 -16px;
+    border-radius: 4px;
+    cursor: pointer;
+    max-height: 100vh;
+    overflow: auto;
+  }
+
+  .d3-link-results a.selected {
+    text-decoration: underline;
+  }
+
+  .d3-link-results a {
+    display: block;
+    font-size: 0.9rem;
+  }
+
+  .hidden {
+    display: none;
+  }
+`;
 
 interface Props {
   hierarchy: HierarchyCircularNode;
@@ -11,7 +54,7 @@ interface Props {
   handleSelectNode: (node: HierarchyCircularNode) => void;
 }
 
-export default (props: Props) => {
+export default (props: Props): JSX.Element => {
   const resultRef = useRef(null);
   const searchRef = useRef<HTMLInputElement>(document.createElement('input'));
   const [visibleResults, setVisibleResults] = useState(false);
@@ -23,7 +66,7 @@ export default (props: Props) => {
   const handleSelectNodeCallback = useCallback(handleSelectNode, []);
   const zoomCallback = useCallback(zoom, []);
 
-  const handleKeyDown = (event: KeyboardEvent) => {
+  const handleKeyDown = (event: KeyboardEvent): void => {
     if (event.key === 'ArrowDown') {
       setKeyDownIndex(index => index + 1);
     } else if (event.key === 'ArrowUp') {
@@ -38,7 +81,7 @@ export default (props: Props) => {
   useEffect(() => {
     document.addEventListener('keydown', handleKeyDown);
 
-    return function cleanup() {
+    return function cleanup(): void {
       document.removeEventListener('keydown', handleKeyDown);
     };
   }, []);
@@ -95,7 +138,9 @@ export default (props: Props) => {
     setEnterZoom
   ]);
 
-  const handleChangeInput = (e: React.SyntheticEvent<HTMLInputElement>) => {
+  const handleChangeInput = (
+    e: React.SyntheticEvent<HTMLInputElement>
+  ): void => {
     const value = e.currentTarget.value;
     if (!value || value.length < 2) {
       setSearchResult(undefined);
@@ -113,16 +158,16 @@ export default (props: Props) => {
     setSearchResult(results.length > 0 ? results : undefined);
   };
 
-  const handleBlur = () => {
+  const handleBlur = (): void => {
     setTimeout(() => setVisibleResults(false), 250);
   };
 
   return (
-    <div className="shortcuts">
+    <Shortcuts>
       <input
         placeholder="Search"
         // tslint:disable jsx-no-lambda
-        onFocus={() => setVisibleResults(searchResult ? true : false)}
+        onFocus={(): void => setVisibleResults(searchResult ? true : false)}
         onBlur={handleBlur}
         onChange={handleChangeInput}
         ref={searchRef}
@@ -132,6 +177,6 @@ export default (props: Props) => {
         className={`d3-link-results ${visibleResults ? 'visible' : 'hidden'} `}
         ref={resultRef}
       />
-    </div>
+    </Shortcuts>
   );
 };
