@@ -11,8 +11,28 @@ export const GlobalStyles = createGlobalStyle`
     background-size: 100% auto;
   }
 
-  h1, h2, h3, h4, h5, h6, p {
+  h1, h2, h3, h4, h5, h6 {
     margin: 0;
+    font-size: 1.2em
+  }
+
+  p {
+    margin: 0;
+    font-size: 0.9em;
+  }
+
+  a {
+    color: #007ad9;
+    text-decoration: none;
+  }
+
+  a :hover {
+    color: #0056b3;
+    text-decoration: underline;
+  }
+
+  .success {
+    color: #28a745;
   }
 
   .btn {

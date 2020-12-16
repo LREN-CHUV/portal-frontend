@@ -21,7 +21,7 @@ const DataSelectionBox = styled(Card.Title)`
   padding: 0.4em;
   margin-bottom: 4px;
   justify-content: space-between;
-  align-items: start;
+  align-items: center;
   background-color: #eee;
 `;
 
@@ -168,7 +168,12 @@ export default (props: ExploreProps): JSX.Element => {
                       size="sm"
                       id="dropdown-pathology"
                       variant="light"
-                      title={selectedPathology || 'Pathology'}
+                      title={
+                        `${selectedPathology
+                          ?.charAt(0)
+                          .toUpperCase()}${selectedPathology?.slice(1)}` ||
+                        'Pathology'
+                      }
                     >
                       {apiCore.state.pathologies.map((g, i: number) => (
                         <Dropdown.Item
@@ -223,18 +228,9 @@ export default (props: ExploreProps): JSX.Element => {
                     />
                   </Dropdown.Menu>
                 </Dropdown>
-                {/*                 <DropdownModel
-                  items={apiModel.state.models}
-                  selectedSlug={
-                    apiModel.state.model && apiModel.state.model.slug
-                  }
-                  reset={apiModel.state.model ? true : false}
-                  handleSelect={handleSelectModel}
-                /> */}
-
                 <div className="item">
                   <Button
-                    variant="info"
+                    variant="primary"
                     type="submit"
                     onClick={handleGoToAnalysis}
                   >

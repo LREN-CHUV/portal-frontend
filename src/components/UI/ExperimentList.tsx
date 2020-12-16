@@ -34,7 +34,7 @@ const Wrapper = styled(Container)`
 
   a:link,
   a:visited {
-    color: blue !important;
+    color: #007ad9 !important;
     text-decoration: none;
   }
 

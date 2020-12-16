@@ -14,7 +14,7 @@ const MainBox = styled.div`
     width: fit-content !important;
     max-height: none;
     overflow-y: auto;
-    padding: 0.5em 0.5em;
+    padding: 0.8em;
     min-width: 200px;
 
     p > a {
@@ -26,6 +26,7 @@ const MainBox = styled.div`
 
       :hover {
         color: #0056b3 !important;
+        text-decoration: underline;
       }
     }
 
@@ -36,20 +37,22 @@ const MainBox = styled.div`
     }
   }
 
-  .btn-link {
-      font-weight: bold !important;
+  .btn-link,
+  .btn {
+    font-weight: bold !important;
+    border: 0;
+    text-decoration: none;
+    box-shadow: none;
+
+    :active {
       border: 0;
-      text-decoration: none;
+      color: #5bc0de !important;
+    }
 
-      :active {
-        border: 0
-        color: #5bc0de !important;
-      }
-
-      :hover {
-        color: #ccc !important;
-        text-decoration: none;
-      }
+    :hover {
+      border: 0;
+      color: #ccc !important;
+    }
   }
 `;
 
@@ -59,7 +62,7 @@ export default ({ showTraining }: { showTraining?: boolean }): JSX.Element => {
       <DropdownButton variant="link" id={'help-dropdown'} title={'Help'}>
         <p>
           <a
-            href="#"
+            href="https://mip.ebrains.eu/documentation/"
             // tslint:disable-next-line jsx-no-lambda
             onSelect={() => {
               window.open('https://mip.ebrains.eu/documentation/');

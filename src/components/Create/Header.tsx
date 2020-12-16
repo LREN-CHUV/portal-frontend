@@ -37,7 +37,11 @@ export default class Header extends React.Component<Props, State> {
     return (
       <Card>
         <Card.Body>
-          <Button onClick={handleGoBackToReview} variant="info" type="submit">
+          <Button
+            onClick={handleGoBackToReview}
+            variant="primary"
+            type="submit"
+          >
             <BsFillCaretLeftFill /> Descriptive Analysis
           </Button>
           <h3>Create Experiment</h3>
@@ -51,7 +55,7 @@ export default class Header extends React.Component<Props, State> {
                 )
               }
               /* eslint-disable-next-line */
-              style={'info'}
+              style={'primary'}
               title="Related Experiments"
               handleSelect={handleSelectExperiment}
               handleCreateNewExperiment={null}
@@ -81,7 +85,7 @@ export default class Header extends React.Component<Props, State> {
                   ? 'Please select a dataset'
                   : ''
               }
-              variant="info"
+              variant="primary"
               type="submit"
               disabled={
                 method === undefined ||

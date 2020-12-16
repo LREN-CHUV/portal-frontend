@@ -628,7 +628,7 @@ export default ({ ...props }: Props): JSX.Element => {
         <Button
           onClick={handleAcceptTOS}
           disabled={!accepted}
-          variant="info"
+          variant="primary"
           type="submit"
         >
           Proceed

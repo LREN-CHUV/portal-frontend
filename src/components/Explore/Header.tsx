@@ -8,7 +8,7 @@ export default ({ handleGoToAnalysis }: Props) => {
   return (
     <Card>
       <Card.Body>
-        <Button variant="info" type="submit" onClick={handleGoToAnalysis}>
+        <Button variant="primary" type="submit" onClick={handleGoToAnalysis}>
           Descriptive Analysis {/* <Glyphicon glyph="chevron-right" /> */}
         </Button>
       </Card.Body>

@@ -40,7 +40,7 @@ const Wrapper = styled.div`
   }
 
   div div {
-    padding: 0 1em;
+    padding: 0 0 0 0.5em;
     margin: 0 0 4px 0;
     border: 1px solid #ddd;
     height: 84px;
@@ -49,6 +49,12 @@ const Wrapper = styled.div`
 
   div div a {
     cursor: pointer;
+    color: #007ad9 !important;
+
+    :hover {
+      text-decoration: underline !important;
+      color: #0056b3 !important;
+    }
   }
 `;
 
