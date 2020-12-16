@@ -35,6 +35,10 @@ export const GlobalStyles = createGlobalStyle`
     color: #28a745;
   }
 
+  .info {
+    color: #17a2b8;
+  }
+
   .btn {
     font-size: 0.9rem;
   }
@@ -123,6 +127,11 @@ export const GlobalStyles = createGlobalStyle`
   .user-guide .modal-dialog {
     width: 1200px; 
     margin: 50px auto;
+  }
+
+  .nav-tabs {
+    border-bottom: 1px solid #dee2e6;
+    margin-bottom: 8px;
   }
 
   @media (max-width: 767px) {

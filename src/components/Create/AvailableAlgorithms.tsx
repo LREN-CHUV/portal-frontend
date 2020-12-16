@@ -176,7 +176,7 @@ const AvailableAlgorithms = ({
                   }
                   disabled={!algorithm.enabled}
                   style={{
-                    color: algorithm.enabled ? '#03a9f4' : 'gray',
+                    color: algorithm.enabled ? '#28a745' : 'gray',
                     padding: 0,
                     textTransform: 'none'
                   }}
@@ -188,7 +188,7 @@ const AvailableAlgorithms = ({
                 <p
                   key={algorithm.name}
                   style={{
-                    color: algorithm.enabled ? '#03a9f4' : 'gray',
+                    color: algorithm.enabled ? '#28a745' : 'gray',
                     padding: 0,
                     textTransform: 'none'
                   }}
@@ -201,7 +201,7 @@ const AvailableAlgorithms = ({
             <var
               key={algorithm.name}
               style={{
-                color: algorithm.enabled ? '#03a9f4' : 'gray',
+                color: algorithm.enabled ? '#28a745' : 'gray',
                 padding: 0,
                 textTransform: 'none'
               }}

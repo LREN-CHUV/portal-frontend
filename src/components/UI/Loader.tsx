@@ -4,9 +4,10 @@ import styled from 'styled-components';
 
 const Loader = styled.div`
   display: flex;
+  align-content: center;
   p {
     padding-left: 8px;
-    color: cadetblue;
+    color: #17a2b8;
   }
 `;
 
@@ -21,7 +22,7 @@ class LoaderComponent extends React.Component<Props> {
         <RingLoader
           sizeUnit={'px'}
           size={16}
-          color={'#0c6c94'}
+          color={'#17a2b8'}
           loading={visible}
         />
         <p>loading...</p>

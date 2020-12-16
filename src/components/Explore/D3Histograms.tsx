@@ -35,6 +35,13 @@ const Histogram = styled.div`
   margin-top: 8px;
   .card-header-tabs a {
     font-size: 0.8rem;
+    margin: 0 0.5em;
+  }
+
+  .nav-tabs {
+    border-bottom: 1px solid #dee2e6;
+    margin-bottom: 8px;
+    margin: 0 0.5em;
   }
 `;
 
@@ -55,6 +62,10 @@ const Breadcrumb = styled.span`
     color: #007ad9;
     display: inline;
     cursor: pointer;
+  }
+  p:hover {
+    text-decoration: underline;
+    color: #0056b3;
   }
 `;
 
@@ -183,12 +194,12 @@ export default (props: Props): JSX.Element => {
     <>
       {selectedNode && (
         <Overview>
-          <p>
+          <div>
             <b>Path</b>: <Breadcrumb ref={divRef} />
-          </p>
-          <p>
+          </div>
+          <div>
             <b>Description</b>: {selectedNode.data.description || '-'}
-          </p>
+          </div>
         </Overview>
       )}
 
@@ -196,7 +207,7 @@ export default (props: Props): JSX.Element => {
         {selectedNode && selectedNode.children && (
           <Highchart options={overviewChart(selectedNode)} />
         )}
-        {histograms && histograms.loading && <Loading />}
+
         {histograms && histograms.error && (
           <div className="error">
             <h3>An error has occured</h3>
@@ -220,7 +231,10 @@ export default (props: Props): JSX.Element => {
               return i === 0 ? (
                 <Tab
                   eventKey={`${i}`}
-                  title={`${selectedNode && selectedNode.data.label}`}
+                  title={
+                    (histograms && histograms.loading && <Loading />) ||
+                    `${selectedNode && selectedNode.data.label}`
+                  }
                   key={i}
                 >
                   {histograms &&
