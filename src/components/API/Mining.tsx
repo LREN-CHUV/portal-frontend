@@ -3,7 +3,7 @@ import { Container } from 'unstated';
 
 import { backendURL } from '../API';
 import { HISTOGRAMS_STORAGE_KEY } from '../constants';
-import { VariableDatum } from '../Explore/d3Hierarchy';
+import { VariableDatum } from '../ExperimentExplore/d3Hierarchy';
 import { Algorithm, Parameter, VariableEntity } from './Core';
 import { ERRORS_OUTPUT, MIME_TYPES } from '../constants';
 

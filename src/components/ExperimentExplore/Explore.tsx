@@ -6,7 +6,7 @@ import { APICore, APIMining, APIModel, APIExperiment } from '../API';
 import { VariableEntity } from '../API/Core';
 import { D3Model, HierarchyCircularNode, ModelResponse } from '../API/Model';
 import { ONTOLOGY_URL } from '../constants';
-import AvailableAlgorithms from '../Create/AvailableAlgorithms';
+import AvailableAlgorithms from '../ExperimentCreate/AvailableAlgorithms';
 import DropdownModel from '../UI/DropdownModel';
 import LargeDatasetSelect from '../UI/LargeDatasetSelect';
 import { ModelType } from './Container';

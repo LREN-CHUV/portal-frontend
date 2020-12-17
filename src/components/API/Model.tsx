@@ -4,7 +4,7 @@ import { Container } from 'unstated';
 import { backendURL } from '../API';
 import { LONGITUDINAL_DATASET_TYPE } from '../constants';
 import { VariableEntity } from './Core';
-import { VariableDatum } from '../Explore/d3Hierarchy';
+import { VariableDatum } from '../ExperimentExplore/d3Hierarchy';
 
 export type HierarchyCircularNode = d3.HierarchyCircularNode<VariableDatum>;
 

@@ -2,7 +2,7 @@ import * as d3 from 'd3';
 import React, { useRef } from 'react';
 import styled from 'styled-components';
 
-import renderLifeCycle from '../../Explore/renderLifeCycle';
+import renderLifeCycle from '../../ExperimentExplore/renderLifeCycle';
 
 const SVGContainer = styled.svg`
   width: 1000px;

@@ -6,7 +6,7 @@ import { APICore, APIExperiment, APIModel } from '../API';
 import { IExperiment } from '../API/Experiment';
 import Datasets from '../UI/Datasets';
 import Model from '../UI/Model';
-import { ExperimentResult, ExperimentResultHeader } from './';
+import { ExperimentResult, ExperimentResultHeader } from '.';
 import Algorithms from './Algorithms';
 
 interface RouteParams {

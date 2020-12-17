@@ -2,13 +2,13 @@ import React, { useCallback } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import styled from 'styled-components';
 
-import ExperimentReview from '../Analysis/Container';
+import ExperimentReview from '../ExperimentAnalysis/Container';
 import { APICore, APIExperiment, APIMining, APIModel, APIUser } from '../API';
 import { ExperimentListQueryParameters, IExperiment } from '../API/Experiment';
-import ExperimentCreate from '../Create/Container';
-import Explore from '../Explore/Container';
+import ExperimentCreate from '../ExperimentCreate/Container';
+import Explore from '../ExperimentExplore/Container';
 import Help from '../Help/Help';
-import ExperimentResult from '../Result/Container';
+import ExperimentResult from '../ExperimentResult/Container';
 import Tutorial from '../Tutorial/Tutorial';
 import DataCatalog from '../UI/DataCatalog';
 import ExperimentList from '../UI/ExperimentList';
