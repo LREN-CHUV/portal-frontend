@@ -16,7 +16,7 @@ export const GlobalStyles = createGlobalStyle`
     font-size: 1.2em
   }
 
-  p {
+  p, label {
     margin: 0;
     font-size: 0.9em;
   }
@@ -131,7 +131,7 @@ export const GlobalStyles = createGlobalStyle`
 
   .nav-tabs {
     border-bottom: 1px solid #dee2e6;
-    margin-bottom: 8px;
+    margin-bottom: 16px;
   }
 
   @media (max-width: 767px) {

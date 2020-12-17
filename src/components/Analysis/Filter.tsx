@@ -2,6 +2,7 @@ import $ from 'jquery';
 import QueryBuilder from 'jQuery-QueryBuilder';
 import * as React from 'react';
 import { Button } from 'react-bootstrap';
+import './jquery-builder.css';
 
 interface Props {
   rules: any;

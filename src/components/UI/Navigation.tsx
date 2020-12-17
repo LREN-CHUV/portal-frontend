@@ -34,14 +34,14 @@ const NavBar = styled.nav`
     font-size: 16px;
   }
 
-  a:link,
-  a:visited {
+  .experiment-nav a:link,
+  .experiment-nav a:visited {
     color: #fff;
     text-decoration: none;
   }
 
-  a:hover,
-  a:active {
+  .experiment-nav a:hover,
+  .experiment-nav a:active {
     color: #ccc;
     text-decoration: none;
   }
@@ -127,14 +127,14 @@ export default ({
 
   return (
     <NavBar>
-      <Brand>
+      <Brand className="experiment-nav">
         <Link to="/">
           <div title="Human Brain Project"></div>
         </Link>
         <Link to="/">{instanceName}</Link>
       </Brand>
       <Links>
-        <Group>
+        <Group className="experiment-nav">
           <GroupLink to="/explore">Variables</GroupLink>
           <span> &gt; </span>
           <GroupLink to="/review">Analysis</GroupLink>
@@ -149,14 +149,20 @@ export default ({
             <Dropdown.Menu>{children}</Dropdown.Menu>
           </Dropdown>
         </DropdownWrapper>
-        <Link to="/galaxy">Workflow</Link>
-        {datacatalogueUrl && (
-          <a href={datacatalogueUrl} rel="noopener noreferrer" target="_blank">
-            Data Catalogue
-          </a>
-        )}
+        <div className="experiment-nav">
+          <Link to="/galaxy">Workflow</Link>
+          {datacatalogueUrl && (
+            <a
+              href={datacatalogueUrl}
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              Data Catalogue
+            </a>
+          )}
+        </div>
       </Links>
-      <RightLinks>
+      <RightLinks className="experiment-nav">
         <MIPContext.Consumer>
           {({ toggleTutorial }): JSX.Element =>
             (

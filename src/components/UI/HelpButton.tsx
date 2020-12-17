@@ -21,7 +21,7 @@ const MainBox = styled.div`
       font-family: 'Open Sans', sans-serif;
       font-weight: normal !important;
       padding: 0.5em;
-      color: #007bff;
+      color: #007bff !important;
       font-size: 0.9rem;
 
       :hover {

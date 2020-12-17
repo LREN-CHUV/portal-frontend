@@ -166,36 +166,24 @@ const AvailableAlgorithms = ({
         >
           {layout !== 'inline' ? (
             <div>
-              {algorithm.enabled && (
-                <Button
-                  key={algorithm.name}
-                  variant="link"
-                  // ts lint:disable-next-line jsx-no-lambda
-                  onClick={(): void =>
-                    handleSelectMethod && handleSelectMethod(algorithm)
-                  }
-                  disabled={!algorithm.enabled}
-                  style={{
-                    color: algorithm.enabled ? '#28a745' : 'gray',
-                    padding: 0,
-                    textTransform: 'none'
-                  }}
-                >
-                  {algorithm.label || algorithm.name}
-                </Button>
-              )}
-              {!algorithm.enabled && (
-                <p
-                  key={algorithm.name}
-                  style={{
-                    color: algorithm.enabled ? '#28a745' : 'gray',
-                    padding: 0,
-                    textTransform: 'none'
-                  }}
-                >
-                  {algorithm.label}
-                </p>
-              )}
+              <Button
+                key={algorithm.name}
+                variant="link"
+                // ts lint:disable-next-line jsx-no-lambda
+                onClick={(): void =>
+                  handleSelectMethod && handleSelectMethod(algorithm)
+                }
+                disabled={!algorithm.enabled}
+                style={{
+                  color: algorithm.enabled ? '#007ad9' : 'gray',
+                  padding: 0,
+                  textTransform: 'none',
+                  whiteSpace: 'normal',
+                  textAlign: 'left'
+                }}
+              >
+                {algorithm.label || algorithm.name}
+              </Button>
             </div>
           ) : (
             <var

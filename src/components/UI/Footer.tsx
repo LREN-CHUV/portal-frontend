@@ -11,6 +11,9 @@ const FooterBox = styled.div`
   background: #000000cc;
   color: white;
   height: 31px;
+  h6 {
+    font-size: 14px;
+  }
 
   span {
     display: flex;

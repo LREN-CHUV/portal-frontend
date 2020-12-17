@@ -13,16 +13,12 @@ export default class Header extends React.Component<Props> {
     return (
       <Card>
         <Card.Body>
-          <Button
-            onClick={handleGoBackToExplore}
-            variant="primary"
-            type="submit"
-          >
+          <Button onClick={handleGoBackToExplore} variant="info" type="submit">
             <BsFillCaretLeftFill /> Variables
           </Button>
           <h3>Descriptive Analysis</h3>
           <div className="item">
-            <Button onClick={handleRunAnalysis} variant="primary" type="submit">
+            <Button onClick={handleRunAnalysis} variant="info" type="submit">
               Run experiment <BsFillCaretRightFill />{' '}
             </Button>
           </div>

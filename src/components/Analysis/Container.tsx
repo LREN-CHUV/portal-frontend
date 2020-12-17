@@ -203,10 +203,14 @@ const Container = ({
 
   const handleSelectExperiment = (experiment: IExperiment): void => {
     const parameters = experiment.algorithm.parameters;
-    const extract = (field: string): VariableEntity[] =>
-      (parameters.find(p => p.name === field)?.value as string)
-        .split(',')
-        .map(m => ({ code: m, label: m }));
+    const extract = (field: string): VariableEntity[] | undefined => {
+      const p = parameters.find(p => p.name === field)?.value as string;
+      const parameter = p
+        ? p.split(',').map(m => ({ code: m, label: m }))
+        : undefined;
+
+      return parameter;
+    };
 
     const newModel: ModelResponse = {
       query: {

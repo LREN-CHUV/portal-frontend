@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import React, { useEffect, useState } from 'react';
-import { Button, Container, Pagination, Table } from 'react-bootstrap';
+import { Button, Container, Pagination, Card } from 'react-bootstrap';
 
 import styled from 'styled-components';
 
@@ -26,16 +26,8 @@ const Wrapper = styled(Container)`
     text-decoration: none;
   }
 
-  table tr td {
-    font-size: 1rem;
-  }
-
-  .centered {
-    text-align: center;
-  }
-
-  .actions {
-    width: 140px;
+  .btn {
+    display: block;
   }
 `;
 
@@ -63,27 +55,17 @@ const ExperimentTable = ({
 
   return experimentList && experimentList?.experiments ? (
     <>
-      <Table striped bordered hover size="sm" responsive>
-        <thead>
-          <tr>
-            <th>Name</th>
-          </tr>
-        </thead>
-        <tbody>
-          {experimentList?.experiments?.map((experiment: IExperiment) => (
-            <tr key={experiment.uuid}>
-              <td className="align-middle">
-                <Button
-                  onClick={(): void => handleSelectExperiment(experiment)}
-                  variant={'link'}
-                >
-                  {experiment.name}
-                </Button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </Table>
+      <Card>
+        {experimentList?.experiments?.map((experiment: IExperiment) => (
+          <Button
+            key={experiment.uuid}
+            onClick={(): void => handleSelectExperiment(experiment)}
+            variant={'link'}
+          >
+            {experiment.name}
+          </Button>
+        ))}
+      </Card>
       {experimentList.totalPages > 1 && (
         <Pagination className="justify-content-center">
           <Pagination.Prev

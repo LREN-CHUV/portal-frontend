@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Col, Form, FormControl, FormGroup, Row } from 'react-bootstrap';
+import { Form, FormControl, FormGroup } from 'react-bootstrap';
 import Select from 'react-select';
 import styled from 'styled-components';
 
@@ -123,7 +123,7 @@ const Parameters = ({
   return (
     <>
       {!algorithm && (
-        <div>
+        <div style={{ minHeight: '0.3vh' }}>
           <h4>
             <strong>Your algorithm</strong>
           </h4>
@@ -133,6 +133,7 @@ const Parameters = ({
           </p>
         </div>
       )}
+
       {algorithm && (
         <div>
           <h4>
@@ -141,6 +142,7 @@ const Parameters = ({
           <p>{algorithm.desc}</p>
         </div>
       )}
+
       {parameters && parameters.filter(p => p.visible).length > 0 && (
         <h4>Parameters</h4>
       )}

@@ -35,7 +35,11 @@ const Wrapper = styled(Container)`
   a:link,
   a:visited {
     color: #007ad9 !important;
-    text-decoration: none;
+  }
+
+  .experiment-name a :hover {
+    text-decoration: underline !important;
+    color: #0056b3 !important;
   }
 
   table tr td {
@@ -204,7 +208,11 @@ const ExperimentRow = ({ ...props }: InternalProps): JSX.Element => {
             {...props}
           />
         ) : (
-          <Link to={`/experiment/${experiment.uuid}`} title={experiment.name}>
+          <Link
+            className="experiment-name"
+            to={`/experiment/${experiment.uuid}`}
+            title={experiment.name}
+          >
             {experiment.name}
           </Link>
         )}
@@ -292,8 +300,8 @@ export default ({ ...props }: Props): JSX.Element => {
     <Wrapper>
       <Modal
         show={confirmDelete !== null}
-        title={'Delete this experiment ?'}
-        body={'This will be final'}
+        title={'Delete'}
+        body={'Really delete this experiment ?'}
         handleCancel={(): void => setConfirmDelete(null)}
         handleOK={(): void => {
           if (confirmDelete?.uuid) {
