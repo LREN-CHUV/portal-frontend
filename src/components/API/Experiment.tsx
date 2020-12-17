@@ -1,13 +1,10 @@
 import Axios, { AxiosRequestConfig } from 'axios';
+import { FaBullseye } from 'react-icons/fa';
 import { Container } from 'unstated';
 
 import { backendURL } from '../API';
-import {
-  Algorithm,
-  AlgorithmParameter,
-  AlgorithmParameterRequest
-} from '../API/Core';
-import { ModelResponse, Query } from '../API/Model';
+import { Algorithm, AlgorithmParameter } from '../API/Core';
+import { ModelResponse } from '../API/Model';
 import { MIME_TYPES } from '../constants';
 
 interface IUUID {
@@ -93,6 +90,10 @@ class Experiment extends Container<State> {
     this.options = config.options;
     this.baseUrl = `${backendURL}/experiments`;
   }
+
+  loaded = (): boolean =>
+    this.state.experiment !== undefined &&
+    this.state.experiment.result !== undefined;
 
   list = async ({
     ...params
@@ -230,6 +231,38 @@ class Experiment extends Container<State> {
     }
   };
 
+  one = async ({ uuid }: IUUID): Promise<void> => {
+    try {
+      const response = await Axios.get(`${this.baseUrl}/${uuid}`, this.options);
+      const experiment: IExperiment = response.data;
+
+      if (experiment.status === 'error') {
+        return await this.setState({
+          error: 'undefined',
+          experiment
+        });
+      }
+
+      return await this.setState({
+        error: undefined,
+        experiment
+      });
+    } catch (error) {
+      return await this.setState({
+        error: error.message
+      });
+    }
+  };
+
+  markAsViewed = async ({ uuid }: IUUID): Promise<void> =>
+    this.update({ uuid, experiment: { viewed: true } });
+
+  markAsShared = async ({ uuid }: IUUID): Promise<void> =>
+    this.update({ uuid, experiment: { shared: true } });
+
+  markAsUnshared = async ({ uuid }: IUUID): Promise<void> =>
+    this.update({ uuid, experiment: { shared: false } });
+
   makeParameters = (
     model: ModelResponse,
     selectedAlgorithm: Algorithm,
@@ -314,90 +347,6 @@ class Experiment extends Container<State> {
         value
       };
     });
-
-  loaded = (): boolean =>
-    this.state.experiment !== undefined &&
-    this.state.experiment.result !== undefined;
-
-  one = async ({ uuid }: IUUID): Promise<void> => {
-    try {
-      // mark status and refresh the list
-
-      const response = await Axios.get(`${this.baseUrl}/${uuid}`, this.options);
-      const experiment = response.data;
-
-      return await this.setState({
-        error: undefined,
-        experiment
-      });
-    } catch (error) {
-      return await this.setState({
-        error: error.message
-      });
-    }
-  };
-
-  /*create = async ({
-    payload
-  }: {
-    payload: ExperimentPayload;
-  }): Promise<void> => {
-    const url = `${this.baseUrl}/runAlgorithm`;
-
-    try {
-      const response = await Axios({
-        data: JSON.stringify(payload),
-        headers: {
-          ...this.options.headers,
-          'Content-Type': 'application/json;charset=UTF-8'
-        },
-        method: 'POST',
-        url
-      });
-      const experiment = response.data;
-
-      return await this.setState({
-        error: undefined,
-        experiment
-      });
-    } catch (error) {
-      return await this.setState({
-        error: error.message
-      });
-    }
-  }; */
-
-  markAsViewed = async ({ uuid }: IUUID): Promise<void> =>
-    this.markExperiment(uuid, 'markAsViewed');
-
-  markAsShared = async ({ uuid }: IUUID): Promise<void> =>
-    this.markExperiment(uuid, 'markAsShared');
-
-  markAsUnshared = async ({ uuid }: IUUID): Promise<void> =>
-    this.markExperiment(uuid, 'markAsUnshared');
-
-  private markExperiment = async (
-    uuid: string,
-    action: string
-  ): Promise<void> => {
-    try {
-      const response = await Axios.get(
-        `${this.baseUrl}/${uuid}/${action}`,
-        this.options
-      );
-      const experiment = response.data;
-
-      return await this.setState({
-        error: undefined,
-        experiment
-      });
-    } catch (error) {
-      console.log({ error });
-      return await this.setState({
-        error: error.message
-      });
-    }
-  };
 }
 
 export default Experiment;

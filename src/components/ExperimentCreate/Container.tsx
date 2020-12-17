@@ -1,31 +1,29 @@
 import * as React from 'react';
-import { Card, Tab, Tabs, Dropdown } from 'react-bootstrap';
+import { Card, Dropdown, Tab, Tabs } from 'react-bootstrap';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 
 import { APICore, APIExperiment, APIModel } from '../API';
 import {
   Algorithm,
   AlgorithmParameter,
-  AlgorithmParameterRequest
+  AlgorithmParameterRequest,
+  VariableEntity
 } from '../API/Core';
-import { ExperimentPayload, IExperiment } from '../API/Experiment';
+import { IExperiment } from '../API/Experiment';
 import { ModelResponse } from '../API/Model';
-import { VariableEntity } from '../API/Core';
-import { AppConfig } from '../App/App';
 import { Alert, IAlert } from '../UI/Alert';
+import ExperimentList2 from '../UI/ExperimentList2';
 import LargeDatasetSelect from '../UI/LargeDatasetSelect';
 import Model from '../UI/Model';
 import AvailableAlgorithms from './AvailableAlgorithms';
 import ExperimentCreateHeader from './Header';
 import Help from './Help';
 import Parameters from './Parameters';
-import ExperimentList2 from '../UI/ExperimentList2';
 
 interface Props extends RouteComponentProps<any> {
   apiExperiment: APIExperiment;
   apiCore: APICore;
   apiModel: APIModel;
-  appConfig: AppConfig;
 }
 
 interface State {
@@ -74,10 +72,8 @@ class Container extends React.Component<Props, State> {
         <div className="header">
           <ExperimentCreateHeader
             model={apiModel.state.model}
-            experimentList={apiExperiment.state.experimentList}
             method={this.state && this.state.algorithm}
             handleGoBackToReview={this.handleGoBackToReview}
-            handleSelectExperiment={this.handleSelectExperiment}
             handleSaveAndRunExperiment={this.handleSaveAndRunExperiment}
           />
         </div>

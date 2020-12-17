@@ -3,10 +3,12 @@ import { Card } from 'react-bootstrap';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 
 import { APICore, APIExperiment, APIModel } from '../API';
+import { VariableEntity } from '../API/Core';
 import { IExperiment } from '../API/Experiment';
+import { ModelResponse } from '../API/Model';
 import Datasets from '../UI/Datasets';
 import Model from '../UI/Model';
-import { ExperimentResult, ExperimentResultHeader } from '.';
+import { ExperimentResult, ExperimentResultHeader } from './';
 import Algorithms from './Algorithms';
 
 interface RouteParams {
@@ -36,6 +38,11 @@ class Experiment extends React.Component<Props> {
       this.pollFetchExperiment(uuid);
     }
 
+    const e = apiExperiment.state.experiment;
+    if (e) {
+      this.handleSelectExperiment(e);
+    }
+
     return experiment;
   }
 
@@ -56,6 +63,10 @@ class Experiment extends React.Component<Props> {
       }
     } else {
       if (apiExperiment.loaded()) {
+        const e = apiExperiment.state.experiment;
+        if (e) {
+          // this.handleSelectExperiment(e);
+        }
         clearInterval(this.intervalId);
       }
     }
@@ -64,6 +75,32 @@ class Experiment extends React.Component<Props> {
   componentWillUnmount(): void {
     clearInterval(this.intervalId);
   }
+
+  handleSelectExperiment = (experiment: IExperiment): void => {
+    const parameters = experiment.algorithm.parameters;
+    const extract = (field: string): VariableEntity[] | undefined => {
+      const p = parameters.find(p => p.name === field)?.value as string;
+      const parameter = p
+        ? p.split(',').map(m => ({ code: m, label: m }))
+        : undefined;
+
+      return parameter;
+    };
+
+    const newModel: ModelResponse = {
+      query: {
+        pathology: parameters.find(p => p.name === 'pathology')
+          ?.value as string,
+        trainingDatasets: extract('dataset'),
+        variables: extract('y'),
+        coVariables: extract('x'),
+        filters: parameters.find(p => p.name === 'filters')?.value as string
+      }
+    };
+    //handleSelectModel(newModel);
+    const { apiModel } = this.props;
+    apiModel.setModel(newModel);
+  };
 
   render(): JSX.Element {
     const { apiExperiment, apiModel, apiCore } = this.props;
@@ -74,7 +111,7 @@ class Experiment extends React.Component<Props> {
           <ExperimentResultHeader
             experiment={apiExperiment.state.experiment}
             experimentList={apiExperiment.state.experimentList}
-            handleSelectExperiment={this.handleSelectExperiment}
+            handleSelectExperiment={this.handleSelectExperiment1}
             handleShareExperiment={this.handleShareExperiment}
             handleCreateNewExperiment={this.handleCreateNewExperiment}
           />
@@ -124,7 +161,7 @@ class Experiment extends React.Component<Props> {
     return match.params;
   };
 
-  private handleSelectExperiment = async (
+  private handleSelectExperiment1 = async (
     experiment: IExperiment
   ): Promise<void> => {
     const { uuid } = experiment;

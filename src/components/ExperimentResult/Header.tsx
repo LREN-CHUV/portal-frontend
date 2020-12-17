@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import * as React from 'react';
-import { Card } from 'react-bootstrap';
+import { Card, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { IExperiment, IExperimentList } from '../API/Experiment';
 import Dropdown from '../UI/DropdownExperiments';
@@ -18,8 +18,6 @@ interface Props {
 
 export default ({
   experiment,
-  experimentList,
-  handleSelectExperiment,
   handleShareExperiment,
   handleCreateNewExperiment
 }: Props): JSX.Element => {
@@ -38,21 +36,20 @@ export default ({
             by {experiment && experiment.createdBy}
           </p>
         </div>
-        <div className="item">
-          <Dropdown
-            items={
-              experiment &&
-              experimentList?.experiments?.filter(
-                (e: any) => e.uuid === experiment.uuid
-              )
-            }
-            /* eslint-disable-next-line */
-            style={'info'}
-            title="Related experiments"
-            handleSelect={handleSelectExperiment}
-            handleCreateNewExperiment={handleCreateNewExperiment}
-          />
-        </div>
+        <Button
+          variant={experiment?.shared ? 'secondary' : 'info'}
+          onClick={handleShareExperiment}
+        >
+          {experiment?.shared ? 'Unshare Experiment' : 'Share Experiment'}
+        </Button>
+
+        <Button
+          onClick={handleCreateNewExperiment}
+          variant="info"
+          type="submit"
+        >
+          Create new Experiment
+        </Button>
       </Card.Body>
     </Card>
   );

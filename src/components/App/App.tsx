@@ -162,7 +162,6 @@ const App = ({
                 apiExperiment={apiExperiment}
                 apiCore={apiCore}
                 apiModel={apiModel}
-                appConfig={appConfig}
               />
             )}
           />

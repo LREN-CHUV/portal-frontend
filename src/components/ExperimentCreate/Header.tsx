@@ -1,18 +1,14 @@
 import * as React from 'react';
-import { Button, FormControl, Card } from 'react-bootstrap';
+import { Button, Card, FormControl } from 'react-bootstrap';
 import { BsFillCaretLeftFill, BsFillCaretRightFill } from 'react-icons/bs';
 
 import { Algorithm } from '../API/Core';
-import { IExperiment, IExperimentList } from '../API/Experiment';
 import { ModelResponse } from '../API/Model';
-import Dropdown from '../UI/DropdownExperiments';
 
 interface Props {
   model?: ModelResponse;
-  experimentList?: IExperimentList;
   method?: Algorithm;
   handleGoBackToReview: () => void;
-  handleSelectExperiment: (experiment: IExperiment) => Promise<any>;
   handleSaveAndRunExperiment: (experimentName: string) => Promise<any>;
 }
 interface State {
@@ -25,13 +21,7 @@ export default class Header extends React.Component<Props, State> {
   };
 
   render(): JSX.Element {
-    const {
-      experimentList,
-      model,
-      method,
-      handleGoBackToReview,
-      handleSelectExperiment
-    } = this.props;
+    const { model, method, handleGoBackToReview } = this.props;
     const { experimentName } = this.state;
 
     return (
@@ -41,22 +31,6 @@ export default class Header extends React.Component<Props, State> {
             <BsFillCaretLeftFill /> Descriptive Analysis
           </Button>
           <h3>Create Experiment</h3>
-          <div className="item">
-            <Dropdown
-              items={
-                model &&
-                experimentList &&
-                experimentList?.experiments?.filter(
-                  (e: any) => e.modelDefinitionId === model.slug
-                )
-              }
-              /* eslint-disable-next-line */
-              style={'info'}
-              title="Related Experiments"
-              handleSelect={handleSelectExperiment}
-              handleCreateNewExperiment={null}
-            />
-          </div>
           <div className="item">
             <FormControl
               className="item experiment-name"
