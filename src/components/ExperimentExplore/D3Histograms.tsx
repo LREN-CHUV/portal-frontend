@@ -1,6 +1,6 @@
 import * as d3 from 'd3';
 import React, { useEffect, useRef, useState } from 'react';
-import { DropdownButton, Dropdown, Tab, Tabs } from 'react-bootstrap';
+import { Button, DropdownButton, Dropdown, Tab, Tabs } from 'react-bootstrap';
 import styled from 'styled-components';
 
 import { APIMining } from '../API';
@@ -36,6 +36,14 @@ const Histogram = styled.div`
   .card-header-tabs a {
     font-size: 0.8rem;
     margin: 0 0.5em;
+    text-text-decoration: none;
+  }
+
+  .card-header-tabs button {
+    font-size: 0.8rem;
+    margin: 0;
+    padding: 0;
+    box-shadow: none;
   }
 
   .nav-tabs {
@@ -126,12 +134,6 @@ export default (props: Props): JSX.Element => {
     apiMining.refetchAlgorithms();
   };
 
-  const handleSelectTab = (event: any): void => {
-    setTimeout(() => {
-      setSelectedTab(event);
-    }, 300);
-  };
-
   renderLifeCycle({
     updateRender: () => {
       if (selectedNode) {
@@ -208,6 +210,7 @@ export default (props: Props): JSX.Element => {
           <Highchart options={overviewChart(selectedNode)} />
         )}
 
+        {console.log(histograms)}
         {histograms && histograms.error && (
           <div className="error">
             <h3>An error has occured</h3>
@@ -224,7 +227,11 @@ export default (props: Props): JSX.Element => {
         {selectedNode && !selectedNode.children && (
           <Tabs
             defaultActiveKey={0}
-            onSelect={handleSelectTab}
+            onSelect={(index): void => {
+              if (index) {
+                setSelectedTab(Number.parseInt(index));
+              }
+            }}
             id="uncontrolled-histogram-tabs"
           >
             {[0, 1, 2, 3].map((k, i) => {
@@ -261,7 +268,7 @@ export default (props: Props): JSX.Element => {
                       >
                         {independantsVariables &&
                           independantsVariables.map((v: VariableEntity) => (
-                            <Dropdown.Item
+                            <Dropdown.Item as={Button}
                               key={v.code}
                               onSelect={(): void => handleChooseVariable(i, v)}
                             >

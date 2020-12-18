@@ -1,11 +1,15 @@
-import Axios, { AxiosRequestConfig, AxiosPromise } from 'axios';
+import Axios, { AxiosPromise, AxiosRequestConfig } from 'axios';
 import { Container } from 'unstated';
 
 import { backendURL } from '../API';
-import { HISTOGRAMS_STORAGE_KEY } from '../constants';
+import {
+  ERRORS_OUTPUT,
+  HISTOGRAMS_STORAGE_KEY,
+  MIME_TYPES
+} from '../constants';
 import { VariableDatum } from '../ExperimentExplore/d3Hierarchy';
 import { Algorithm, Parameter, VariableEntity } from './Core';
-import { ERRORS_OUTPUT, MIME_TYPES } from '../constants';
+import { IExperiment } from './Experiment';
 
 /*
 useEffect(() => {
@@ -222,7 +226,9 @@ class Mining extends Container<MiningState> {
       this.requests.push(request);
       const response = await request;
 
-      if (response.status >= 400) {
+      const mining: IExperiment = response.data;
+
+      if (mining.status === 'error') {
         return this.setState({
           histograms: {
             data: undefined,
