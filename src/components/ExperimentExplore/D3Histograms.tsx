@@ -210,7 +210,6 @@ export default (props: Props): JSX.Element => {
           <Highchart options={overviewChart(selectedNode)} />
         )}
 
-        {console.log(histograms)}
         {histograms && histograms.error && (
           <div className="error">
             <h3>An error has occured</h3>
@@ -268,7 +267,8 @@ export default (props: Props): JSX.Element => {
                       >
                         {independantsVariables &&
                           independantsVariables.map((v: VariableEntity) => (
-                            <Dropdown.Item as={Button}
+                            <Dropdown.Item
+                              as={Button}
                               key={v.code}
                               onSelect={(): void => handleChooseVariable(i, v)}
                             >

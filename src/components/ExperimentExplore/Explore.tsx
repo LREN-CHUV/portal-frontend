@@ -16,6 +16,7 @@ import { ModelType } from './Container';
 import Histograms from './D3Histograms';
 import ModelView from './D3Model';
 import Search from './D3Search';
+import CustomDropdown from '../UI/CustomDropdown';
 
 const DataSelectionBox = styled(Card.Title)`
   display: flex;
@@ -195,24 +196,16 @@ export default (props: ExploreProps): JSX.Element => {
             <Card.Body>
               <ModelTitle>
                 <h4 style={{ marginRight: '8px' }}>Parameters</h4>
-                <Dropdown>
-                  <Dropdown.Toggle
-                    variant="link"
-                    id="dropdown-model-experiments"
-                  >
-                    Select from Experiment
-                  </Dropdown.Toggle>
-                  <Dropdown.Menu>
-                    <ExperimentList2
-                      handleSelectExperiment={(experiment: IExperiment): void =>
-                        handleSelectExperimentToModel(
-                          apiModel.setModel,
-                          experiment
-                        )
-                      }
-                    />
-                  </Dropdown.Menu>
-                </Dropdown>
+                <CustomDropdown title="Select from Experiment">
+                  <ExperimentList2
+                    handleSelectExperiment={(experiment: IExperiment): void =>
+                      handleSelectExperimentToModel(
+                        apiModel.setModel,
+                        experiment
+                      )
+                    }
+                  />
+                </CustomDropdown>
                 <div className="item">
                   <Button
                     variant="info"

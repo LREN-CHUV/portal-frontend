@@ -70,11 +70,14 @@ const ExperimentTable = ({
         <Pagination className="justify-content-center">
           <Pagination.Prev
             disabled={experimentList.currentPage === 0}
-            onClick={(): Promise<void> =>
-              list({
+            onClick={(
+              e: React.MouseEvent<HTMLElement, MouseEvent>
+            ): Promise<void> => {
+              e.preventDefault();
+              return list({
                 page: experimentList.currentPage - 1
-              })
-            }
+              });
+            }}
           />
           {[...Array(experimentList.totalPages).keys()].map(n => (
             <Pagination.Item
