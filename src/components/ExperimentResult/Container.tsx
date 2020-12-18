@@ -9,6 +9,7 @@ import { ModelResponse } from '../API/Model';
 import Datasets from '../UI/Datasets';
 import Model from '../UI/Model';
 import { ExperimentResult, ExperimentResultHeader } from './';
+import { handleSelectExperimentToModel } from '../utils';
 
 interface RouteParams {
   uuid: string;
@@ -30,7 +31,7 @@ class Experiment extends React.Component<Props> {
       return;
     }
     const { uuid } = params;
-    const { apiExperiment } = this.props;
+    const { apiExperiment, apiModel } = this.props;
 
     const experiment = await apiExperiment.get({ uuid });
     if (apiExperiment.state.experiment?.status === 'pending') {
@@ -39,7 +40,7 @@ class Experiment extends React.Component<Props> {
 
     const e = apiExperiment.state.experiment;
     if (e) {
-      this.handleSelectExperimentToModel(e);
+      handleSelectExperimentToModel(apiModel.setModel, e);
 
       if (!e.viewed) {
         apiExperiment.markAsViewed({ uuid });
@@ -58,12 +59,12 @@ class Experiment extends React.Component<Props> {
     const previousParams = this.urlParams(prevProps);
     const previousUUID = previousParams && previousParams.uuid;
 
-    const { apiExperiment } = this.props;
+    const { apiExperiment, apiModel } = this.props;
     if (uuid !== previousUUID) {
       await apiExperiment.get({ uuid });
       const e = apiExperiment.state.experiment;
       if (e) {
-        this.handleSelectExperimentToModel(e);
+        handleSelectExperimentToModel(apiModel.setModel, e);
         if (!e.viewed) {
           apiExperiment.markAsViewed({ uuid });
         }
@@ -82,32 +83,6 @@ class Experiment extends React.Component<Props> {
   componentWillUnmount(): void {
     clearInterval(this.intervalId);
   }
-
-  handleSelectExperimentToModel = (experiment: IExperiment): void => {
-    const parameters = experiment.algorithm.parameters;
-    const extract = (field: string): VariableEntity[] | undefined => {
-      const p = parameters.find(p => p.name === field)?.value as string;
-      const parameter = p
-        ? p.split(',').map(m => ({ code: m, label: m }))
-        : undefined;
-
-      return parameter;
-    };
-
-    const newModel: ModelResponse = {
-      query: {
-        pathology: parameters.find(p => p.name === 'pathology')
-          ?.value as string,
-        trainingDatasets: extract('dataset'),
-        variables: extract('y'),
-        coVariables: extract('x'),
-        filters: parameters.find(p => p.name === 'filter')?.value as string
-      }
-    };
-
-    const { apiModel } = this.props;
-    apiModel.setModel(newModel);
-  };
 
   render(): JSX.Element {
     const { apiExperiment, apiModel, apiCore } = this.props;

@@ -15,6 +15,7 @@ import { Alert, IAlert } from '../UI/Alert';
 import ExperimentList2 from '../UI/ExperimentList2';
 import LargeDatasetSelect from '../UI/LargeDatasetSelect';
 import Model from '../UI/Model';
+import { handleSelectExperimentToModel } from '../utils';
 import AvailableAlgorithms from './AvailableAlgorithms';
 import ExperimentCreateHeader from './Header';
 import Help from './Help';
@@ -41,31 +42,6 @@ class Container extends React.Component<Props, State> {
     const query = apiModel.state.model && apiModel.state.model.query;
     const pathology = query?.pathology || '';
     const datasets = apiCore.state.pathologiesDatasets[pathology];
-
-    const handleSelectExperimentToModel = (experiment: IExperiment): void => {
-      const parameters = experiment.algorithm.parameters;
-      const extract = (field: string): VariableEntity[] | undefined => {
-        const p = parameters.find(p => p.name === field)?.value as string;
-        const parameter = p
-          ? p.split(',').map(m => ({ code: m, label: m }))
-          : undefined;
-
-        return parameter;
-      };
-
-      const newModel: ModelResponse = {
-        query: {
-          pathology: parameters.find(p => p.name === 'pathology')
-            ?.value as string,
-          trainingDatasets: extract('dataset'),
-          variables: extract('y'),
-          coVariables: extract('x'),
-          filters: parameters.find(p => p.name === 'filter')?.value as string
-        }
-      };
-      //handleSelectModel(newModel);
-      apiModel.setModel(newModel);
-    };
 
     return (
       <div className="Experiment">
@@ -108,7 +84,14 @@ class Container extends React.Component<Props, State> {
                     </Dropdown.Toggle>
                     <Dropdown.Menu>
                       <ExperimentList2
-                        handleSelectExperiment={handleSelectExperimentToModel}
+                        handleSelectExperiment={(
+                          experiment: IExperiment
+                        ): void =>
+                          handleSelectExperimentToModel(
+                            apiModel.setModel,
+                            experiment
+                          )
+                        }
                       />
                     </Dropdown.Menu>
                   </Dropdown>

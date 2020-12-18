@@ -1,20 +1,21 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { Button, Card, Dropdown, DropdownButton } from 'react-bootstrap';
 import { BsFillCaretRightFill } from 'react-icons/bs';
 import styled from 'styled-components';
-import { APICore, APIMining, APIModel, APIExperiment } from '../API';
+
+import { APICore, APIExperiment, APIMining, APIModel } from '../API';
 import { VariableEntity } from '../API/Core';
+import { IExperiment } from '../API/Experiment';
 import { D3Model, HierarchyCircularNode, ModelResponse } from '../API/Model';
 import { ONTOLOGY_URL } from '../constants';
 import AvailableAlgorithms from '../ExperimentCreate/AvailableAlgorithms';
-import DropdownModel from '../UI/DropdownModel';
+import ExperimentList2 from '../UI/ExperimentList2';
 import LargeDatasetSelect from '../UI/LargeDatasetSelect';
+import { handleSelectExperimentToModel } from '../utils';
 import { ModelType } from './Container';
 import Histograms from './D3Histograms';
 import ModelView from './D3Model';
 import Search from './D3Search';
-import ExperimentList2 from '../UI/ExperimentList2';
-import { ExperimentListQueryParameters, IExperiment } from '../API/Experiment';
 
 const DataSelectionBox = styled(Card.Title)`
   display: flex;
@@ -134,31 +135,6 @@ export default (props: ExploreProps): JSX.Element => {
     variablesForPathology &&
     variablesForPathology.filter((v: any) => v.isCategorical);
 
-  const handleSelectExperimentToModel = (experiment: IExperiment): void => {
-    const parameters = experiment.algorithm.parameters;
-    const extract = (field: string): VariableEntity[] | undefined => {
-      const p = parameters.find(p => p.name === field)?.value as string;
-      const parameter = p
-        ? p.split(',').map(m => ({ code: m, label: m }))
-        : undefined;
-
-      return parameter;
-    };
-
-    const newModel: ModelResponse = {
-      query: {
-        pathology: parameters.find(p => p.name === 'pathology')
-          ?.value as string,
-        trainingDatasets: extract('dataset'),
-        variables: extract('y'),
-        coVariables: extract('x'),
-        filters: parameters.find(p => p.name === 'filter')?.value as string
-      }
-    };
-    //handleSelectModel(newModel);
-    apiModel.setModel(newModel);
-  };
-
   return (
     <>
       <Grid>
@@ -227,8 +203,13 @@ export default (props: ExploreProps): JSX.Element => {
                     Select from Experiment
                   </Dropdown.Toggle>
                   <Dropdown.Menu>
-                    <ExperimentList2 
-                      handleSelectExperiment={handleSelectExperimentToModel}
+                    <ExperimentList2
+                      handleSelectExperiment={(experiment: IExperiment): void =>
+                        handleSelectExperimentToModel(
+                          apiModel.setModel,
+                          experiment
+                        )
+                      }
                     />
                   </Dropdown.Menu>
                 </Dropdown>

@@ -1,20 +1,20 @@
 import * as React from 'react';
-import { Card } from 'react-bootstrap';
+import { Card, Dropdown } from 'react-bootstrap';
 import { RouteComponentProps } from 'react-router-dom';
 
 import { APICore, APIMining, APIModel } from '../API';
 import { VariableEntity } from '../API/Core';
+import { IExperiment } from '../API/Experiment';
 import { MiningPayload } from '../API/Mining';
 import { ModelResponse } from '../API/Model';
 import { IAlert } from '../UI/Alert';
+import ExperimentList2 from '../UI/ExperimentList2';
 import LargeDatasetSelect from '../UI/LargeDatasetSelect';
 import Model from '../UI/Model';
-import { IExperiment } from '../API/Experiment';
-import ExperimentList2 from '../UI/ExperimentList2';
+import { handleSelectExperimentToModel } from '../utils';
 import Content from './Content';
 import Filter from './Filter';
 import ExperimentReviewHeader from './Header';
-import { Dropdown } from 'react-bootstrap';
 
 interface Props extends RouteComponentProps {
   apiModel: APIModel;
@@ -201,31 +201,6 @@ const Container = ({
     ...d
   }));
 
-  const handleSelectExperimentToModel = (experiment: IExperiment): void => {
-    const parameters = experiment.algorithm.parameters;
-    const extract = (field: string): VariableEntity[] | undefined => {
-      const p = parameters.find(p => p.name === field)?.value as string;
-      const parameter = p
-        ? p.split(',').map(m => ({ code: m, label: m }))
-        : undefined;
-
-      return parameter;
-    };
-
-    const newModel: ModelResponse = {
-      query: {
-        pathology: parameters.find(p => p.name === 'pathology')
-          ?.value as string,
-        trainingDatasets: extract('dataset'),
-        variables: extract('y'),
-        coVariables: extract('x'),
-        filters: parameters.find(p => p.name === 'filter')?.value as string
-      }
-    };
-    //handleSelectModel(newModel);
-    apiModel.setModel(newModel);
-  };
-
   return (
     <div className="Model Review">
       <div className="header">
@@ -263,7 +238,12 @@ const Container = ({
                   </Dropdown.Toggle>
                   <Dropdown.Menu>
                     <ExperimentList2
-                      handleSelectExperiment={handleSelectExperimentToModel}
+                      handleSelectExperiment={(experiment: IExperiment): void =>
+                        handleSelectExperimentToModel(
+                          apiModel.setModel,
+                          experiment
+                        )
+                      }
                     />
                   </Dropdown.Menu>
                 </Dropdown>

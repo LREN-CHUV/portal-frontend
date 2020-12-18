@@ -1,6 +1,9 @@
 import numbro from 'numbro';
 import { createBrowserHistory } from 'history';
 import { useEffect, useState } from 'react';
+import { VariableEntity } from './API/Core';
+import { ModelResponse } from './API/Model';
+import { IExperiment } from './API/Experiment';
 
 export const round = (num: number, decimals = 3): string =>
   // !(num % 1 === 0) checks if number is an Integer
@@ -37,3 +40,31 @@ export function useKeyPressed(
 
   return keyPressed;
 }
+
+export const handleSelectExperimentToModel = (
+  setModel: (model?: ModelResponse | undefined) => Promise<void>,
+  experiment: IExperiment
+): void => {
+  const parameters = experiment.algorithm.parameters;
+  const extract = (field: string): VariableEntity[] | undefined => {
+    const p = parameters.find(p => p.name === field)?.value as string;
+    const separator = /\*/.test(p) ? '*' : /\+/.test(p) ? '+' : ',';
+    const parameter = p
+      ? p.split(separator).map(m => ({ code: m, label: m }))
+      : undefined;
+
+    return parameter;
+  };
+
+  const newModel: ModelResponse = {
+    query: {
+      pathology: parameters.find(p => p.name === 'pathology')?.value as string,
+      trainingDatasets: extract('dataset'),
+      variables: extract('y'),
+      coVariables: extract('x'),
+      filters: parameters.find(p => p.name === 'filter')?.value as string
+    }
+  };
+
+  setModel(newModel);
+};
