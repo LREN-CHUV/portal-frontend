@@ -60,7 +60,7 @@ class Container extends React.Component<Props, State> {
           trainingDatasets: extract('dataset'),
           variables: extract('y'),
           coVariables: extract('x'),
-          filters: parameters.find(p => p.name === 'filters')?.value as string
+          filters: parameters.find(p => p.name === 'filter')?.value as string
         }
       };
       //handleSelectModel(newModel);

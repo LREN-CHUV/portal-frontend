@@ -152,7 +152,7 @@ export default (props: ExploreProps): JSX.Element => {
         trainingDatasets: extract('dataset'),
         variables: extract('y'),
         coVariables: extract('x'),
-        filters: parameters.find(p => p.name === 'filters')?.value as string
+        filters: parameters.find(p => p.name === 'filter')?.value as string
       }
     };
     //handleSelectModel(newModel);
@@ -227,7 +227,7 @@ export default (props: ExploreProps): JSX.Element => {
                     Select from Experiment
                   </Dropdown.Toggle>
                   <Dropdown.Menu>
-                    <ExperimentList2
+                    <ExperimentList2 
                       handleSelectExperiment={handleSelectExperimentToModel}
                     />
                   </Dropdown.Menu>
