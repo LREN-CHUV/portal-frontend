@@ -1,11 +1,10 @@
 import Axios, { AxiosRequestConfig } from 'axios';
-import { FaBullseye } from 'react-icons/fa';
 import { Container } from 'unstated';
 
 import { backendURL } from '../API';
 import { Algorithm, AlgorithmParameter } from '../API/Core';
 import { ModelResponse } from '../API/Model';
-import { MIME_TYPES } from '../constants';
+import { MIME_TYPES, ALGORITHMS_OUTPUT } from '../constants';
 
 interface IUUID {
   uuid: string;
@@ -103,9 +102,18 @@ class Experiment extends Container<State> {
         });
       }
 
+      const result = experiment.result?.filter(e =>
+        ALGORITHMS_OUTPUT.find(
+          a => (a.name = experiment.algorithm.name)
+        )?.types?.includes(e.type)
+      );
+
       return await this.setState({
         error: undefined,
-        experiment
+        experiment: {
+          ...experiment,
+          result
+        }
       });
     } catch (error) {
       return await this.setState({

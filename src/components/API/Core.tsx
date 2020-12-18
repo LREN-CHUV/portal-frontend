@@ -430,7 +430,7 @@ class Core extends Container<State> {
         : json.filter(
             (algorithm: Algorithm) =>
               algorithm.enabled ||
-              ALGORITHMS_OUTPUT.find(a => algorithm.label === a.label)?.enabled
+              ALGORITHMS_OUTPUT.find(a => algorithm.name === a.name)?.enabled
           );
 
       const data = algorithms.sort((x: Algorithm, y: Algorithm) => {

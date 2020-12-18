@@ -8,8 +8,9 @@ import { IExperiment } from '../API/Experiment';
 import { ModelResponse } from '../API/Model';
 import Datasets from '../UI/Datasets';
 import Model from '../UI/Model';
-import { ExperimentResult, ExperimentResultHeader } from './';
 import { handleSelectExperimentToModel } from '../utils';
+import { ExperimentResult, ExperimentResultHeader } from './';
+import Algorithm from './Algorithms';
 
 interface RouteParams {
   uuid: string;
@@ -111,10 +112,7 @@ class Experiment extends React.Component<Props> {
                   <Datasets model={model} />
                 </section>
                 <section>
-                  <h4>Algorithm</h4>
-                  <p>
-                    {experiment?.algorithm.label || experiment?.algorithm.name}
-                  </p>
+                  <Algorithm experiment={experiment} />
                 </section>
                 <section>
                   <Model model={model} lookup={apiCore.lookup} />

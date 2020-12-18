@@ -1,8 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
 
-import { Algorithm } from '../API/Core';
-import { IExperiment } from '../API/Experiment';
+import { IExperiment, ExperimentParameter } from '../API/Experiment';
 import { UI_HIDDEN_PARAMETERS } from '../constants';
 
 const Param = styled.p`
@@ -17,33 +16,26 @@ const Algorithms = ({
 }: {
   experiment?: IExperiment;
 }): JSX.Element | null => {
-  const algorithms = experiment && experiment.algorithm;
+  const algorithm = experiment?.algorithm;
 
   return (
-    (algorithms && (
-      <>
-        <h4>Algorithm</h4>
-        {
-          <>
-            {/*algorithms.map((algorithm: Algorithm, j: number) => (
-              <div key={`name-${algorithm.name}-${j}`}>
-                <Param>{algorithm.label || algorithm.name}</Param>
-                {algorithm.parameters &&
-                  algorithm.parameters.length > 0 &&
-                  algorithm.parameters
-                    .filter((p: any) => !UI_HIDDEN_PARAMETERS.includes(p.label))
-                    .map((m: any, i: number) => (
-                      <Param key={`parameters-${algorithm.name}-${i}`}>
-                        {m.label}: {m.value}
-                      </Param>
-                    ))}
-              </div>
-                    ))*/}
-          </>
-        }
-      </>
-    )) ||
-    null
+    <>
+      <h4>Algorithm</h4>
+      {algorithm && (
+        <>
+          <Param>{algorithm.label || algorithm.name}</Param>
+          {algorithm.parameters &&
+            algorithm.parameters.length > 0 &&
+            algorithm.parameters
+              .filter(p => !UI_HIDDEN_PARAMETERS.includes(p.label))
+              .map((m: ExperimentParameter, i: number) => (
+                <Param key={`parameters-${algorithm.name}-${i}`}>
+                  {m.label}: {m.value}
+                </Param>
+              ))}
+        </>
+      )}
+    </>
   );
 };
 
