@@ -42,7 +42,7 @@ class Container extends React.Component<Props, State> {
     const pathology = query?.pathology || '';
     const datasets = apiCore.state.pathologiesDatasets[pathology];
 
-    const handleSelectExperiment = (experiment: IExperiment): void => {
+    const handleSelectExperimentToModel = (experiment: IExperiment): void => {
       const parameters = experiment.algorithm.parameters;
       const extract = (field: string): VariableEntity[] | undefined => {
         const p = parameters.find(p => p.name === field)?.value as string;
@@ -108,7 +108,7 @@ class Container extends React.Component<Props, State> {
                     </Dropdown.Toggle>
                     <Dropdown.Menu>
                       <ExperimentList2
-                        handleSelectExperiment={handleSelectExperiment}
+                        handleSelectExperiment={handleSelectExperimentToModel}
                       />
                     </Dropdown.Menu>
                   </Dropdown>
@@ -183,7 +183,7 @@ class Container extends React.Component<Props, State> {
     const { apiExperiment, history } = this.props;
     history.push(`/experiment/${uuid}`);
 
-    return await apiExperiment.one({ uuid });
+    return await apiExperiment.get({ uuid });
   };
 
   private handleGoBackToReview = (): void => {

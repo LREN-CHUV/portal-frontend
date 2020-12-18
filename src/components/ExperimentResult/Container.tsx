@@ -33,14 +33,14 @@ class Experiment extends React.Component<Props> {
     const { uuid } = params;
     const { apiExperiment } = this.props;
 
-    const experiment = await apiExperiment.one({ uuid });
-    if (!apiExperiment.loaded()) {
+    const experiment = await apiExperiment.get({ uuid });
+    if (apiExperiment.state.experiment?.status !== 'pending') {
       this.pollFetchExperiment(uuid);
     }
 
     const e = apiExperiment.state.experiment;
     if (e) {
-      this.handleSelectExperiment(e);
+      this.handleSelectExperimentToModel(e);
     }
 
     return experiment;
@@ -57,16 +57,18 @@ class Experiment extends React.Component<Props> {
 
     const { apiExperiment } = this.props;
     if (uuid !== previousUUID) {
-      await apiExperiment.one({ uuid });
-      if (!apiExperiment.loaded()) {
+      console.log('uuid !== previousUUID');
+      await apiExperiment.get({ uuid });
+      const e = apiExperiment.state.experiment;
+      if (e) {
+        this.handleSelectExperimentToModel(e);
+      }
+
+      if (apiExperiment.state.experiment?.status === 'pending') {
         this.pollFetchExperiment(uuid);
       }
     } else {
-      if (apiExperiment.loaded()) {
-        const e = apiExperiment.state.experiment;
-        if (e) {
-          // this.handleSelectExperiment(e);
-        }
+      if (apiExperiment.state.experiment?.status !== 'pending') {
         clearInterval(this.intervalId);
       }
     }
@@ -76,7 +78,7 @@ class Experiment extends React.Component<Props> {
     clearInterval(this.intervalId);
   }
 
-  handleSelectExperiment = (experiment: IExperiment): void => {
+  handleSelectExperimentToModel = (experiment: IExperiment): void => {
     const parameters = experiment.algorithm.parameters;
     const extract = (field: string): VariableEntity[] | undefined => {
       const p = parameters.find(p => p.name === field)?.value as string;
@@ -97,7 +99,7 @@ class Experiment extends React.Component<Props> {
         filters: parameters.find(p => p.name === 'filters')?.value as string
       }
     };
-    //handleSelectModel(newModel);
+
     const { apiModel } = this.props;
     apiModel.setModel(newModel);
   };
@@ -167,8 +169,7 @@ class Experiment extends React.Component<Props> {
     const { uuid } = experiment;
     const { history, apiExperiment } = this.props;
     history.push(`/experiment/${uuid}`);
-    await apiExperiment.markAsViewed({ uuid });
-    return await apiExperiment.one({ uuid });
+    return await apiExperiment.markAsViewed({ uuid });
   };
 
   private handleShareExperiment = async (): Promise<void> => {
@@ -196,9 +197,14 @@ class Experiment extends React.Component<Props> {
     clearInterval(this.intervalId);
     const { apiExperiment } = this.props;
     this.intervalId = setInterval(async () => {
-      await apiExperiment.one({ uuid });
-      if (apiExperiment.loaded()) {
+      await apiExperiment.get({ uuid });
+      if (apiExperiment.state.experiment?.status !== 'pending') {
         clearInterval(this.intervalId);
+
+        const experiment = apiExperiment.state.experiment;
+        if (experiment !== undefined) {
+          this.handleSelectExperimentToModel(experiment);
+        }
       }
     }, 10 * 1000);
   };

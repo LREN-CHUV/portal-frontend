@@ -201,7 +201,7 @@ const Container = ({
     ...d
   }));
 
-  const handleSelectExperiment = (experiment: IExperiment): void => {
+  const handleSelectExperimentToModel = (experiment: IExperiment): void => {
     const parameters = experiment.algorithm.parameters;
     const extract = (field: string): VariableEntity[] | undefined => {
       const p = parameters.find(p => p.name === field)?.value as string;
@@ -263,7 +263,7 @@ const Container = ({
                   </Dropdown.Toggle>
                   <Dropdown.Menu>
                     <ExperimentList2
-                      handleSelectExperiment={handleSelectExperiment}
+                      handleSelectExperiment={handleSelectExperimentToModel}
                     />
                   </Dropdown.Menu>
                 </Dropdown>

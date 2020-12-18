@@ -134,7 +134,7 @@ export default (props: ExploreProps): JSX.Element => {
     variablesForPathology &&
     variablesForPathology.filter((v: any) => v.isCategorical);
 
-  const handleSelectExperiment = (experiment: IExperiment): void => {
+  const handleSelectExperimentToModel = (experiment: IExperiment): void => {
     const parameters = experiment.algorithm.parameters;
     const extract = (field: string): VariableEntity[] | undefined => {
       const p = parameters.find(p => p.name === field)?.value as string;
@@ -228,7 +228,7 @@ export default (props: ExploreProps): JSX.Element => {
                   </Dropdown.Toggle>
                   <Dropdown.Menu>
                     <ExperimentList2
-                      handleSelectExperiment={handleSelectExperiment}
+                      handleSelectExperiment={handleSelectExperimentToModel}
                     />
                   </Dropdown.Menu>
                 </Dropdown>
