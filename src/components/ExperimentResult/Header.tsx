@@ -2,16 +2,12 @@ import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import * as React from 'react';
 import { Card, Button } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
-import { IExperiment, IExperimentList } from '../API/Experiment';
-import Dropdown from '../UI/DropdownExperiments';
+import { IExperiment } from '../API/Experiment';
 dayjs.extend(relativeTime);
 dayjs().format();
 
 interface Props {
   experiment?: IExperiment;
-  experimentList?: IExperimentList;
-  handleSelectExperiment: any;
   handleShareExperiment: any;
   handleCreateNewExperiment: any;
 }
@@ -28,12 +24,11 @@ export default ({
       <Card.Body>
         <div className="item text">
           <h3>
-            Results of experiment <strong>{name}</strong> on{' '}
-            <Link to={`/review`}>{name}</Link>
+            Results of experiment <strong>{name}</strong>
           </h3>
           <p className="item">
-            Created {experiment && dayjs().to(dayjs(experiment.created))}
-            by {experiment && experiment.createdBy}
+            Created {experiment && dayjs().to(dayjs(experiment.created))} by{' '}
+            {experiment && experiment.createdBy}
           </p>
         </div>
         <Button

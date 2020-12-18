@@ -10,9 +10,11 @@ interface AvailableAlgorithm extends Algorithm {
 }
 
 const Container = styled.div`
-  line-height: 1;
   var {
+    cursor: default;
     font-size: 0.8rem;
+    padding: 0,
+    text-transform: none
   }
   var::after {
     content: ', ';
@@ -146,7 +148,7 @@ const AvailableAlgorithms = ({
   };
 
   return (
-    <Container>
+    <Container style={{ lineHeight: layout !== 'inline' ? 'default' : '1.0' }}>
       {availableAlgorithms.map(algorithm => (
         <OverlayTrigger
           key={algorithm.name}
@@ -189,9 +191,7 @@ const AvailableAlgorithms = ({
             <var
               key={algorithm.name}
               style={{
-                color: algorithm.enabled ? '#28a745' : 'gray',
-                padding: 0,
-                textTransform: 'none'
+                color: algorithm.enabled ? '#28a745' : 'gray'
               }}
             >
               {algorithm.label || algorithm.name}

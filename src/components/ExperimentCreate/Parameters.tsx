@@ -188,7 +188,6 @@ const Parameters = ({
                         />
                       )}
 
-                    {console.log(parameter.valueEnumerations)}
                     {parameter.valueEnumerations &&
                       parameter.valueEnumerations.length > 0 && (
                         <Form.Control
