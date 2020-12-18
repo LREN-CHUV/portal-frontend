@@ -118,7 +118,7 @@ const waitForResult = ({ uuid }: { uuid: string }): Promise<ExperimentState> =>
   new Promise(resolve => {
     let elapsed = 0;
     const timerId = setInterval(async () => {
-      await apiExperiment.one({ uuid });
+      await apiExperiment.get({ uuid });
       const { experiment, error } = apiExperiment.state;
       const loading = experiment ? !(error || experiment.result) : true;
 

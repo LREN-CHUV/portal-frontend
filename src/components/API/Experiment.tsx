@@ -18,7 +18,7 @@ export interface ExperimentPayload {
   label: string;
 }
 
-export type experimentStatus = 'error' | 'pending' | 'success';
+export type ExperimentStatus = 'error' | 'pending' | 'success';
 export type ParameterName = 'x' | 'y' | 'dataset' | 'pathology' | 'filters';
 
 export interface ExperimentParameter {
@@ -40,7 +40,7 @@ export interface IExperiment {
   finisehd: string;
   shared: boolean;
   viewed: boolean;
-  status: experimentStatus;
+  status: ExperimentStatus;
   algorithm: {
     name: string;
     desc?: string;
@@ -91,9 +91,28 @@ class Experiment extends Container<State> {
     this.baseUrl = `${backendURL}/experiments`;
   }
 
-  loaded = (): boolean =>
-    this.state.experiment !== undefined &&
-    this.state.experiment.result !== undefined;
+  get = async ({ uuid }: IUUID): Promise<void> => {
+    try {
+      const response = await Axios.get(`${this.baseUrl}/${uuid}`, this.options);
+      const experiment: IExperiment = response.data;
+
+      if (experiment.status === 'error') {
+        return await this.setState({
+          error: 'undefined',
+          experiment
+        });
+      }
+
+      return await this.setState({
+        error: undefined,
+        experiment
+      });
+    } catch (error) {
+      return await this.setState({
+        error: error.message
+      });
+    }
+  };
 
   list = async ({
     ...params
@@ -182,7 +201,8 @@ class Experiment extends Container<State> {
       await this.list({});
 
       return await this.setState({
-        error: undefined
+        error: undefined,
+        experiment: response.data
       });
     } catch (error) {
       return await this.setState({
@@ -223,29 +243,6 @@ class Experiment extends Container<State> {
       return await this.setState({
         experiment: json,
         error: undefined
-      });
-    } catch (error) {
-      return await this.setState({
-        error: error.message
-      });
-    }
-  };
-
-  one = async ({ uuid }: IUUID): Promise<void> => {
-    try {
-      const response = await Axios.get(`${this.baseUrl}/${uuid}`, this.options);
-      const experiment: IExperiment = response.data;
-
-      if (experiment.status === 'error') {
-        return await this.setState({
-          error: 'undefined',
-          experiment
-        });
-      }
-
-      return await this.setState({
-        error: undefined,
-        experiment
       });
     } catch (error) {
       return await this.setState({
