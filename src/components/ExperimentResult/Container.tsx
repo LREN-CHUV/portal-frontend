@@ -9,7 +9,6 @@ import { ModelResponse } from '../API/Model';
 import Datasets from '../UI/Datasets';
 import Model from '../UI/Model';
 import { ExperimentResult, ExperimentResultHeader } from './';
-import Algorithms from './Algorithms';
 
 interface RouteParams {
   uuid: string;
@@ -34,13 +33,17 @@ class Experiment extends React.Component<Props> {
     const { apiExperiment } = this.props;
 
     const experiment = await apiExperiment.get({ uuid });
-    if (apiExperiment.state.experiment?.status !== 'pending') {
+    if (apiExperiment.state.experiment?.status === 'pending') {
       this.pollFetchExperiment(uuid);
     }
 
     const e = apiExperiment.state.experiment;
     if (e) {
       this.handleSelectExperimentToModel(e);
+
+      if (!e.viewed) {
+        apiExperiment.markAsViewed({ uuid });
+      }
     }
 
     return experiment;
@@ -57,11 +60,13 @@ class Experiment extends React.Component<Props> {
 
     const { apiExperiment } = this.props;
     if (uuid !== previousUUID) {
-      console.log('uuid !== previousUUID');
       await apiExperiment.get({ uuid });
       const e = apiExperiment.state.experiment;
       if (e) {
         this.handleSelectExperimentToModel(e);
+        if (!e.viewed) {
+          apiExperiment.markAsViewed({ uuid });
+        }
       }
 
       if (apiExperiment.state.experiment?.status === 'pending') {
@@ -107,13 +112,12 @@ class Experiment extends React.Component<Props> {
   render(): JSX.Element {
     const { apiExperiment, apiModel, apiCore } = this.props;
     const model = apiModel?.state?.model;
+    const experiment = apiExperiment.state.experiment;
     return (
       <div className="Experiment Result">
         <div className="header">
           <ExperimentResultHeader
             experiment={apiExperiment.state.experiment}
-            experimentList={apiExperiment.state.experimentList}
-            handleSelectExperiment={this.handleSelectExperiment1}
             handleShareExperiment={this.handleShareExperiment}
             handleCreateNewExperiment={this.handleCreateNewExperiment}
           />
@@ -132,7 +136,10 @@ class Experiment extends React.Component<Props> {
                   <Datasets model={model} />
                 </section>
                 <section>
-                  <Algorithms experiment={apiExperiment.state.experiment} />
+                  <h4>Algorithm</h4>
+                  <p>
+                    {experiment?.algorithm.label || experiment?.algorithm.name}
+                  </p>
                 </section>
                 <section>
                   <Model model={model} lookup={apiCore.lookup} />
@@ -163,15 +170,6 @@ class Experiment extends React.Component<Props> {
     return match.params;
   };
 
-  private handleSelectExperiment1 = async (
-    experiment: IExperiment
-  ): Promise<void> => {
-    const { uuid } = experiment;
-    const { history, apiExperiment } = this.props;
-    history.push(`/experiment/${uuid}`);
-    return await apiExperiment.markAsViewed({ uuid });
-  };
-
   private handleShareExperiment = async (): Promise<void> => {
     const { apiExperiment } = this.props;
     const experiment = apiExperiment.state.experiment;
@@ -200,11 +198,6 @@ class Experiment extends React.Component<Props> {
       await apiExperiment.get({ uuid });
       if (apiExperiment.state.experiment?.status !== 'pending') {
         clearInterval(this.intervalId);
-
-        const experiment = apiExperiment.state.experiment;
-        if (experiment !== undefined) {
-          this.handleSelectExperimentToModel(experiment);
-        }
       }
     }, 10 * 1000);
   };
