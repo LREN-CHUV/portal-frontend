@@ -6,9 +6,8 @@ import { APICore, APIMining, APIModel } from '../API';
 import { VariableEntity } from '../API/Core';
 import { IExperiment } from '../API/Experiment';
 import { MiningPayload } from '../API/Mining';
-import { ModelResponse } from '../API/Model';
 import { IAlert } from '../UI/Alert';
-import ExperimentList2 from '../UI/ExperimentList2';
+import DropdownExperimentList from '../UI/DropdownExperimentList';
 import LargeDatasetSelect from '../UI/LargeDatasetSelect';
 import Model from '../UI/Model';
 import { handleSelectExperimentToModel } from '../utils';
@@ -229,24 +228,11 @@ const Container = ({
                 </section>
               )}
               <section>
-                <Dropdown>
-                  <Dropdown.Toggle
-                    variant="link"
-                    id="dropdown-model-experiments"
-                  >
-                    Select from Experiment
-                  </Dropdown.Toggle>
-                  <Dropdown.Menu>
-                    <ExperimentList2
-                      handleSelectExperiment={(experiment: IExperiment): void =>
-                        handleSelectExperimentToModel(
-                          apiModel.setModel,
-                          experiment
-                        )
-                      }
-                    />
-                  </Dropdown.Menu>
-                </Dropdown>
+                <DropdownExperimentList
+                  handleSelectExperiment={(experiment: IExperiment): void =>
+                    handleSelectExperimentToModel(apiModel.setModel, experiment)
+                  }
+                />
                 <Model model={model} lookup={apiCore.lookup} />
               </section>
             </Card.Body>

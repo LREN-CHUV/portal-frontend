@@ -3,16 +3,10 @@ import { Card, Dropdown, Tab, Tabs } from 'react-bootstrap';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 
 import { APICore, APIExperiment, APIModel } from '../API';
-import {
-  Algorithm,
-  AlgorithmParameter,
-  AlgorithmParameterRequest,
-  VariableEntity
-} from '../API/Core';
+import { Algorithm, AlgorithmParameter } from '../API/Core';
 import { IExperiment } from '../API/Experiment';
-import { ModelResponse } from '../API/Model';
 import { Alert, IAlert } from '../UI/Alert';
-import ExperimentList2 from '../UI/ExperimentList2';
+import DropdownExperimentList from '../UI/DropdownExperimentList';
 import LargeDatasetSelect from '../UI/LargeDatasetSelect';
 import Model from '../UI/Model';
 import { handleSelectExperimentToModel } from '../utils';
@@ -75,26 +69,14 @@ class Container extends React.Component<Props, State> {
                 )}
 
                 <section>
-                  <Dropdown>
-                    <Dropdown.Toggle
-                      variant="link"
-                      id="dropdown-model-experiments"
-                    >
-                      Select from Experiment
-                    </Dropdown.Toggle>
-                    <Dropdown.Menu>
-                      <ExperimentList2
-                        handleSelectExperiment={(
-                          experiment: IExperiment
-                        ): void =>
-                          handleSelectExperimentToModel(
-                            apiModel.setModel,
-                            experiment
-                          )
-                        }
-                      />
-                    </Dropdown.Menu>
-                  </Dropdown>
+                  <DropdownExperimentList
+                    handleSelectExperiment={(experiment: IExperiment): void =>
+                      handleSelectExperimentToModel(
+                        apiModel.setModel,
+                        experiment
+                      )
+                    }
+                  />
                   <Model model={apiModel.state.model} lookup={apiCore.lookup} />
                 </section>
               </Card.Body>

@@ -9,14 +9,13 @@ import { IExperiment } from '../API/Experiment';
 import { D3Model, HierarchyCircularNode, ModelResponse } from '../API/Model';
 import { ONTOLOGY_URL } from '../constants';
 import AvailableAlgorithms from '../ExperimentCreate/AvailableAlgorithms';
-import ExperimentList2 from '../UI/ExperimentList2';
+import DropdownExperimentList from '../UI/DropdownExperimentList';
 import LargeDatasetSelect from '../UI/LargeDatasetSelect';
 import { handleSelectExperimentToModel } from '../utils';
 import { ModelType } from './Container';
 import Histograms from './D3Histograms';
 import ModelView from './D3Model';
 import Search from './D3Search';
-import CustomDropdown from '../UI/CustomDropdown';
 
 const DataSelectionBox = styled(Card.Title)`
   display: flex;
@@ -47,22 +46,13 @@ const SearchBox = styled.div`
   /* width: 320px; */
 `;
 
-const ModelTitle = styled.div`
+const ParameterContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: flex-start;
   margin: 0 0 8px 0;
   padding: 0 0 8px 0;
   border-bottom: 1px solid lightgray;
-
-  .dropdown {
-    flex: 2;
-  }
-
-  h5 {
-    font-weight: bold;
-    margin-right: 8px;
-  }
 `;
 
 const Grid = styled.div`
@@ -194,18 +184,13 @@ export default (props: ExploreProps): JSX.Element => {
         <Col2>
           <Card>
             <Card.Body>
-              <ModelTitle>
+              <ParameterContainer>
                 <h4 style={{ marginRight: '8px' }}>Parameters</h4>
-                <CustomDropdown title="Select from Experiment">
-                  <ExperimentList2
-                    handleSelectExperiment={(experiment: IExperiment): void =>
-                      handleSelectExperimentToModel(
-                        apiModel.setModel,
-                        experiment
-                      )
-                    }
-                  />
-                </CustomDropdown>
+                <DropdownExperimentList
+                  handleSelectExperiment={(experiment: IExperiment): void =>
+                    handleSelectExperimentToModel(apiModel.setModel, experiment)
+                  }
+                />
                 <div className="item">
                   <Button
                     variant="info"
@@ -215,7 +200,7 @@ export default (props: ExploreProps): JSX.Element => {
                     Descriptive Analysis <BsFillCaretRightFill />
                   </Button>
                 </div>
-              </ModelTitle>
+              </ParameterContainer>
               <p style={{ padding: '4px 0 8px 0' }}>
                 <a
                   href={`${ONTOLOGY_URL}`}
