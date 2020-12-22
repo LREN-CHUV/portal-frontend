@@ -33,10 +33,16 @@ const breadcrumb = (
 const Histogram = styled.div`
   min-height: 440px;
   margin-top: 8px;
+
   .card-header-tabs a {
     font-size: 0.8rem;
     margin: 0 0.5em;
-    text-text-decoration: none;
+    text-decoration: none !important;
+  }
+
+  .card-header-tabs a:hover,
+  .card-header-tabs .dropdown-menu a:active {
+    text-decoration: none !important;
   }
 
   .card-header-tabs button {
@@ -46,10 +52,21 @@ const Histogram = styled.div`
     box-shadow: none;
   }
 
+  .card-header-tabs button:active {
+    color: black !important;
+    background-color: white !important;
+    border-color: white !important;
+    box-shadow: none !important;
+  }
+
   .nav-tabs {
     border-bottom: 1px solid #dee2e6;
     margin-bottom: 8px;
     margin: 0 0.5em;
+  }
+
+  .dropdown-menu {
+    padding: 1em;
   }
 `;
 
