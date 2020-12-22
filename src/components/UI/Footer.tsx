@@ -13,6 +13,7 @@ const FooterBox = styled.div`
   height: 31px;
   h6 {
     font-size: 14px;
+    color: white;
   }
 
   span {

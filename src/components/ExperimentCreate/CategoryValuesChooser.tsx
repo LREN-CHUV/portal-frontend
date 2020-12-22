@@ -87,9 +87,7 @@ export default ({
       {categories &&
         categories.map(category => (
           <ControlBox key={category.code}>
-            <p>
-              <strong>{category.label}</strong>
-            </p>
+            <Form.Label>{category.label}</Form.Label>
             <Form.Control
               as={'select'}
               /*               componentClass="select"

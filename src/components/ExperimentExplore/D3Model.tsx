@@ -45,13 +45,12 @@ const Wrapper = styled.div`
     border: 1px solid #ddd;
     height: 84px;
     overflow-y: auto;
-    line-height: 0.9em !important;
   }
 
   div div a {
     cursor: pointer;
     color: #007ad9 !important;
-    font-size: 0.9em;
+    font-size: 1em;
 
     :hover {
       text-decoration: underline !important;

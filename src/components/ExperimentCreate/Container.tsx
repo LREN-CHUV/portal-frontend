@@ -14,6 +14,13 @@ import AvailableAlgorithms from './AvailableAlgorithms';
 import ExperimentCreateHeader from './Header';
 import Help from './Help';
 import Parameters from './Parameters';
+import styled from 'styled-components';
+
+const Wrapper = styled.div`
+  padding: 0 1em;
+  min-height: 50vh;
+`;
+
 
 interface Props extends RouteComponentProps<any> {
   apiExperiment: APIExperiment;
@@ -51,6 +58,14 @@ class Container extends React.Component<Props, State> {
           <div className="sidebar">
             <Card className="datasets">
               <Card.Body>
+                <section>
+                  <DropdownExperimentList
+                    apiExperiment={apiExperiment}
+                    handleSelectExperiment={(experiment?: IExperiment): void =>
+                      handleSelectExperimentToModel(apiModel, experiment)
+                    }
+                  />
+                </section>
                 {query?.pathology && (
                   <section>
                     <h4>Pathology</h4>
@@ -69,12 +84,6 @@ class Container extends React.Component<Props, State> {
                 )}
 
                 <section>
-                  <DropdownExperimentList
-                    apiExperiment={apiExperiment}
-                    handleSelectExperiment={(experiment?: IExperiment): void =>
-                      handleSelectExperimentToModel(apiModel, experiment)
-                    }
-                  />
                   <Model model={apiModel.state.model} lookup={apiCore.lookup} />
                 </section>
               </Card.Body>
@@ -90,23 +99,27 @@ class Container extends React.Component<Props, State> {
                     styled={alert.styled}
                   />
                 )}
-                <Tabs
-                  defaultActiveKey={1}
-                  id="uncontrolled-create-experiment-tab"
-                >
-                  <Tab eventKey={'1'} title="Algorithm">
-                    <Parameters
-                      algorithm={this.state && this.state.algorithm}
-                      parameters={this.state && this.state.parameters}
-                      handleChangeParameters={this.handleChangeParameters}
-                      query={apiModel.state.model && apiModel.state.model.query}
-                      apiCore={apiCore}
-                    />
-                  </Tab>
-                  <Tab eventKey={'2'} title="About running experiments">
-                    <Help />
-                  </Tab>
-                </Tabs>
+                <Wrapper>
+                  <Tabs
+                    defaultActiveKey={1}
+                    id="uncontrolled-create-experiment-tab"
+                  >
+                    <Tab eventKey={'1'} title="Algorithm">
+                      <Parameters
+                        algorithm={this.state && this.state.algorithm}
+                        parameters={this.state && this.state.parameters}
+                        handleChangeParameters={this.handleChangeParameters}
+                        query={
+                          apiModel.state.model && apiModel.state.model.query
+                        }
+                        apiCore={apiCore}
+                      />
+                    </Tab>
+                    <Tab eventKey={'2'} title="About running experiments">
+                      <Help />
+                    </Tab>
+                  </Tabs>
+                </Wrapper>
               </Card.Body>
             </Card>
           </div>

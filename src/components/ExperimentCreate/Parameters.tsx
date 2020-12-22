@@ -8,6 +8,10 @@ import { Algorithm, AlgorithmParameter, VariableEntity } from '../API/Core';
 import { Query } from '../API/Model';
 import CategoryChooser from './CategoryValuesChooser';
 
+const Header = styled.div`
+  margin-bottom: 16px;
+`;
+
 type LocalVar = { value: string; label: string }[] | undefined;
 
 interface Props {
@@ -123,11 +127,11 @@ const Parameters = ({
   return (
     <>
       {!algorithm && (
-        <div style={{ minHeight: '0.3vh' }}>
+        <div>
           <h4>
             <strong>Your algorithm</strong>
           </h4>
-          <p style={{ color: 'orange' }}>
+          <p>
             Please, select the algorithm to be performed in the &apos;Available
             Algorithms&apos; panel
           </p>
@@ -135,17 +139,14 @@ const Parameters = ({
       )}
 
       {algorithm && (
-        <div>
+        <Header>
           <h4>
             <strong>{algorithm.label}</strong>
           </h4>
           <p>{algorithm.desc}</p>
-        </div>
+        </Header>
       )}
 
-      {parameters && parameters.filter(p => p.visible).length > 0 && (
-        <h4>Parameters</h4>
-      )}
       {parameters && parameters.length > 0 && (
         <Form>
           {parameters &&
@@ -160,18 +161,20 @@ const Parameters = ({
                   : 'text';
 
               return (
-                <FormGroup
-                  key={parameter.label}
+                <Form.Group
+                  key={parameter.name}
                   style={{
+                    marginBottom: '16px',
                     display:
                       parameter.visible === undefined || parameter.visible
-                        ? 'inline'
+                        ? 'normal'
                         : 'none'
                   }}
                 >
-                  <p>{parameter.desc}</p>
-                  <p>{parameter.label}</p>
-                  <div>
+                  <Form.Label htmlFor={`"${parameter.name}"`}>
+                    {parameter.label}
+                  </Form.Label>
+                  <>
                     {!parameter.valueEnumerations &&
                       parameter.label !== 'referencevalues' &&
                       parameter.label !== 'xlevels' &&
@@ -252,35 +255,39 @@ const Parameters = ({
                       </Form.Control>
                     )}
 
+                    <Form.Text id="passwordHelpBlock" muted>
+                      {parameter.desc}
+                    </Form.Text>
+
                     <FormControl.Feedback />
                     <HelpBlock>
-                      {parameter && parameter.valueNotBlank && (
-                        <var>required</var>
+                      {parameter && parameter.valueNotBlank === 'true' && (
+                        <small>required</small>
                       )}
                       {parameter && parameter.valueType === 'integer' && (
-                        <var>type integer</var>
+                        <small>type integer</small>
                       )}
 
                       {parameter && parameter.valueType === 'float' && (
-                        <var>type float</var>
+                        <small>type float</small>
                       )}
 
                       {parameter !== undefined &&
                         parameter.valueMin !== undefined &&
                         parameter.valueMin !== null &&
                         !isNaN(parameter.valueMin) && (
-                          <var>min value: {parameter.valueMin}</var>
+                          <small>min value: {parameter.valueMin}</small>
                         )}
 
                       {parameter !== undefined &&
                         parameter.valueMax !== undefined &&
                         parameter.valueMax !== null &&
                         !isNaN(parameter.valueMax) && (
-                          <var>max value: {parameter.valueMax}</var>
+                          <small>max value: {parameter.valueMax}</small>
                         )}
                     </HelpBlock>
-                  </div>
-                </FormGroup>
+                  </>
+                </Form.Group>
               );
             })}
         </Form>

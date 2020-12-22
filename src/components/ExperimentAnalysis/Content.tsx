@@ -38,7 +38,7 @@ const Content = ({
           <Card>
             <Card.Body>
               {(!selectedDatasets || selectedDatasets.length === 0) && (
-                <p>Please, select a dataset</p>
+                <p>Select some data to analyse</p>
               )}
 
               {selectedDatasets &&

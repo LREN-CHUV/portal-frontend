@@ -214,6 +214,14 @@ const Container = ({
         <div className="sidebar">
           <Card className="datasets">
             <Card.Body>
+              <section>
+                <DropdownExperimentList
+                  apiExperiment={apiExperiment}
+                  handleSelectExperiment={(experiment?: IExperiment): void =>
+                    handleSelectExperimentToModel(apiModel, experiment)
+                  }
+                />
+              </section>
               {query?.pathology && (
                 <section>
                   <h4>Pathology</h4>
@@ -230,12 +238,6 @@ const Container = ({
                 </section>
               )}
               <section>
-                <DropdownExperimentList
-                  apiExperiment={apiExperiment}
-                  handleSelectExperiment={(experiment?: IExperiment): void =>
-                    handleSelectExperimentToModel(apiModel, experiment)
-                  }
-                />
                 <Model model={model} lookup={apiCore.lookup} />
               </section>
             </Card.Body>
@@ -256,6 +258,9 @@ const Container = ({
                     variant="info"
                     disabled={fields && fields.length === 0}
                     eventKey="0"
+                    title={
+                      'Add filter variables on the previous screen in order to filter your data'
+                    }
                   >
                     Filters
                   </Accordion.Toggle>

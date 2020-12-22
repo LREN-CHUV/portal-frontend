@@ -47,6 +47,10 @@ const Wrapper = styled(Container)`
     font-size: 1rem;
   }
 
+  table th {
+    font-weight: normal;
+  }
+
   .centered {
     text-align: center;
   }
@@ -86,8 +90,8 @@ const DropDownHeader = styled.div`
 `;
 
 const DropDownListContainer = styled.div`
-  background-color: white;
-  border: 1px solid rgba(0, 0, 0, 0.15);
+  background-color: #fefefe;
+  border: 2px solid #eee;
   border-radius: 0.25rem;
   position: absolute;
   z-index: 100;

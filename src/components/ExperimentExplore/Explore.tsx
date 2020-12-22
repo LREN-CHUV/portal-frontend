@@ -185,7 +185,7 @@ export default (props: ExploreProps): JSX.Element => {
           <Card>
             <Card.Body>
               <ParameterContainer>
-                <h4 style={{ marginRight: '8px' }}>Parameters</h4>
+                <h5 style={{ marginRight: '8px' }}>Parameters</h5>
                 <DropdownExperimentList
                   apiExperiment={apiExperiment}
                   handleSelectExperiment={(experiment?: IExperiment): void =>

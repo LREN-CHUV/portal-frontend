@@ -13,10 +13,28 @@ export const GlobalStyles = createGlobalStyle`
 
   h1, h2, h3, h4, h5, h6 {
     margin: 0;
+  }
+
+   h1, h3, h4, h6 {
     font-size: 1.2em
   }
 
-  p, label {
+  h2 {
+    font-size: 1.4em;
+  }
+
+  h5 {
+    font-size: 1em;
+    font-weight: bold;
+    color: #666;
+  }
+
+  h6 {
+    font-size: 1em;
+    color: #333;
+  }
+
+  p, label, ol {
     margin: 0;
     font-size: 0.9em;
   }
@@ -80,9 +98,7 @@ export const GlobalStyles = createGlobalStyle`
     margin-left: 8px;
   }
 
-  .header .card-body .item:not(:first-child) {
-    padding-left: 8px;
-  }
+ 
 
   .header .card-body .text {
     flex: 2;

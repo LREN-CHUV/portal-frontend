@@ -6,6 +6,10 @@ import { Result, State } from '../API/Experiment';
 import ResultsErrorBoundary from '../UI/ResultsErrorBoundary';
 import RenderResult from './RenderResult';
 
+const Body = styled(Card.Body)`
+  min-height: 50vh;
+`
+
 const indeterminateAnimation = keyframes`
  from {
       left: -25%;
@@ -37,8 +41,7 @@ export default ({
 
   return (
     <Card>
-      <Card.Body>
-        <h4>{experiment?.name}</h4>
+      <Body>
         {loading ? (
           <div className="loading">
             <h3>Your experiment is currently running</h3>
@@ -60,7 +63,7 @@ export default ({
         <ResultsErrorBoundary>
           <RenderResult results={result as Result[]} />
         </ResultsErrorBoundary>
-      </Card.Body>
+      </Body>
     </Card>
   );
 };

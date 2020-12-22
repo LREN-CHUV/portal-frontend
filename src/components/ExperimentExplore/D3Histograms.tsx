@@ -80,6 +80,9 @@ const Breadcrumb = styled.span`
   p:after {
     content: ' > ';
   }
+  p:last-child {
+    font-weight: bold;
+  }
   p:last-child:after {
     content: '';
   }
@@ -99,6 +102,10 @@ const DropDown = styled(DropdownButton)`
   padding: 0;
 `;
 
+const Title = styled.h5`
+  display: inline;
+`;
+
 export default (props: Props): JSX.Element => {
   const divRef = useRef(null);
   const [choosenVariables, setChoosenVariables] = useState<HistogramVariable>();
@@ -112,16 +119,6 @@ export default (props: Props): JSX.Element => {
     zoom,
     model
   } = props;
-
-  // useEffect(() => {
-  //   if (choosenVariables) {
-  //     const pathology = model?.query?.pathology;
-  //     if (pathology) {
-  //       console.log('write', pathology)
-  //       apiMining.setGroupingForPathology(pathology, choosenVariables);
-  //     }
-  //   }
-  // }, [choosenVariables, apiMining, model]);
 
   useEffect(() => {
     const pathology = model?.query?.pathology;
@@ -214,10 +211,10 @@ export default (props: Props): JSX.Element => {
       {selectedNode && (
         <Overview>
           <div>
-            <b>Path</b>: <Breadcrumb ref={divRef} />
+            <Title>Path</Title>: <Breadcrumb ref={divRef} />
           </div>
           <div>
-            <b>Description</b>: {selectedNode.data.description || '-'}
+            <Title>Description</Title>: {selectedNode.data.description || '-'}
           </div>
         </Overview>
       )}

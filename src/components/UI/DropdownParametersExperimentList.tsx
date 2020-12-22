@@ -17,7 +17,6 @@ dayjs().format();
 
 const DropDownContainer = styled.div`
   flex: 2;
-  margin-top: 2px;
 `;
 
 const DropDownHeader = styled.div`
@@ -42,8 +41,8 @@ const DropDownHeader = styled.div`
 `;
 
 const DropDownListContainer = styled.div`
-  background-color: white;
-  border: 1px solid rgba(0, 0, 0, 0.15);
+  background-color: #fefefe;
+  border: 2px solid #eee;
   border-radius: 0.25rem;
   position: absolute;
   z-index: 100;
@@ -66,15 +65,16 @@ const ListItem = styled.li`
 `;
 
 const ResetItem = styled.p`
+  font-size: 1em;
   cursor: pointer;
-  padding: 4px 24px 8px;
-  margin: 1em 0;
+  padding: 4px 24px;
   color: #666;
   display: flex;
   align-items: center;
+  margin-bottom: 4px;
 
   svg {
-    margin-right: 4px;
+    margin-right: 8px;
   }
 
   &:hover {
@@ -91,7 +91,7 @@ const MessageItem = styled.li`
 `;
 
 const SearchContainer = styled.div`
-  margin: 0 1em 8px 1em;
+  margin: 1em 1em 8px 1em;
 `;
 
 const PaginationContainer = styled.div`
@@ -197,10 +197,6 @@ const Items = ({
 
   return (
     <>
-      <ResetItem onClick={(): void => handleOnClick()} key={'reset'}>
-        <BsFillTrashFill /> Reset Parameters
-      </ResetItem>
-
       <SearchContainer>
         <Search
           list={list}
@@ -232,6 +228,10 @@ const Items = ({
       <PaginationContainer>
         <Pagination {...{ experimentList, list }} />
       </PaginationContainer>
+
+      <ResetItem onClick={(): void => handleOnClick()} key={'reset'}>
+        <BsFillTrashFill /> Reset Parameters
+      </ResetItem>
     </>
   );
 };

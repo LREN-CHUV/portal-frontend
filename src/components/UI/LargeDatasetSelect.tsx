@@ -23,6 +23,7 @@ const DropDownPanel = styled.div`
 
   label {
     margin-right: 8px;
+    font-size: 1em;
   }
 
   .checkbox {
@@ -31,12 +32,13 @@ const DropDownPanel = styled.div`
     margin-left: -8px;
   }
 
-  h5 {
-    margin-bottom: 8px;
+  h6 {
+    font-size: 0.9em;
+    margin-bottom: 4px;
   }
 
   hr {
-    margin: 4px;
+    margin: 8px 0 4px 0;
   }
 
   p {
@@ -58,6 +60,9 @@ const CaretButton = styled(Button)`
 `;
 
 const Card = styled.div`
+
+  margin-top: 4px;
+
   label {
     margin-right: 8px;
   }
@@ -72,8 +77,9 @@ const Card = styled.div`
     display: block;
   }
 
-  h5 {
-    margin-bottom: 8px;
+  h6 {
+    font-size: 0.9em;
+    margin-bottom: 4px;
   }
 
   hr {
@@ -142,7 +148,7 @@ export default ({
       {ldatasets && ldatasets.length > 0 && (
         <>
           <hr />
-          <h5>Longitudinal datasets</h5>
+          <h6>Longitudinal datasets</h6>
         </>
       )}
       {ldatasets && checkboxFor(ldatasets)}
