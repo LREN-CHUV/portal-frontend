@@ -2,6 +2,7 @@ import numbro from 'numbro';
 import { createBrowserHistory } from 'history';
 import { useEffect, RefObject, useState } from 'react';
 import { VariableEntity } from './API/Core';
+import { APIModel } from './API';
 import { ModelResponse } from './API/Model';
 import { IExperiment } from './API/Experiment';
 
@@ -74,9 +75,26 @@ export function useOnClickOutside<T extends HTMLElement = HTMLElement>(
 }
 
 export const handleSelectExperimentToModel = (
-  setModel: (model?: ModelResponse | undefined) => Promise<void>,
-  experiment: IExperiment
+  apiModel: APIModel,
+  experiment?: IExperiment
 ): void => {
+  if (!experiment) {
+    const oldModel = apiModel.state.model;
+    const newModel: ModelResponse = {
+      query: {
+        pathology: oldModel?.query.pathology,
+        trainingDatasets: oldModel?.query.trainingDatasets,
+        variables: undefined,
+        coVariables: undefined,
+        filters: undefined
+      }
+    };
+
+    apiModel.setModel(newModel);
+
+    return;
+  }
+
   const parameters = experiment.algorithm.parameters;
   const extract = (field: string): VariableEntity[] | undefined => {
     const p = parameters.find(p => p.name === field)?.value as string;
@@ -98,5 +116,5 @@ export const handleSelectExperimentToModel = (
     }
   };
 
-  setModel(newModel);
+  apiModel.setModel(newModel);
 };

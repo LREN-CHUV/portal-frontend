@@ -4,15 +4,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Form, Pagination as BSPagination } from 'react-bootstrap';
 import styled from 'styled-components';
 import { useOnClickOutside } from '../utils';
-import {
-  BsCloudDownload,
-  BsFillExclamationCircleFill,
-  BsFillEyeFill,
-  BsFillEyeSlashFill,
-  BsFillTrashFill,
-  BsPencilSquare,
-  BsWatch
-} from 'react-icons/bs';
+import { BsFillTrashFill } from 'react-icons/bs';
 import { APIExperiment } from '../API';
 import {
   ExperimentListQueryParameters,
@@ -25,6 +17,7 @@ dayjs().format();
 
 const DropDownContainer = styled.div`
   flex: 2;
+  margin-top: 2px;
 `;
 
 const DropDownHeader = styled.div`
