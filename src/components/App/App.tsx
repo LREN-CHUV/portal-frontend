@@ -11,7 +11,7 @@ import Help from '../Help/Help';
 import ExperimentResult from '../ExperimentResult/Container';
 import Tutorial from '../Tutorial/Tutorial';
 import DataCatalog from '../UI/DataCatalog';
-import ExperimentList from '../UI/ExperimentList';
+import ExperimentList from '../UI/DropdownExperimentList';
 import Footer from '../UI/Footer';
 import Galaxy from '../UI/Galaxy';
 import { GlobalStyles } from '../UI/GlobalStyle';
@@ -100,6 +100,7 @@ const App = ({
                 apiExperiment.list({ ...params }),
               [apiExperiment]
             )}
+            setParameterExperiment={apiExperiment.setParameterExperiment}
           />
         </Navigation>
       </header>

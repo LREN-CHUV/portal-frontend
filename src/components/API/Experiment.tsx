@@ -187,7 +187,6 @@ class Experiment extends Container<State> {
     const nextParams = Object.entries(nextQueryParameters)
       .map(entry => `${entry[0]}=${entry[1]}&`)
       .join('');
-
     console.log(nextParams);
 
     try {

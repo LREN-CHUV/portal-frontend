@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Card, Dropdown } from 'react-bootstrap';
+import { Card } from 'react-bootstrap';
 import { RouteComponentProps } from 'react-router-dom';
 
 import { APICore, APIExperiment, APIMining, APIModel } from '../API';
@@ -7,7 +7,7 @@ import { VariableEntity } from '../API/Core';
 import { IExperiment } from '../API/Experiment';
 import { MiningPayload } from '../API/Mining';
 import { IAlert } from '../UI/Alert';
-import DropdownExperimentList from '../UI/DropdownExperimentList';
+import DropdownExperimentList from '../UI/DropdownParametersExperimentList';
 import LargeDatasetSelect from '../UI/LargeDatasetSelect';
 import Model from '../UI/Model';
 import { handleSelectExperimentToModel } from '../utils';

@@ -9,7 +9,7 @@ import { IExperiment } from '../API/Experiment';
 import { D3Model, HierarchyCircularNode, ModelResponse } from '../API/Model';
 import { ONTOLOGY_URL } from '../constants';
 import AvailableAlgorithms from '../ExperimentCreate/AvailableAlgorithms';
-import DropdownExperimentList from '../UI/DropdownExperimentList';
+import DropdownExperimentList from '../UI/DropdownParametersExperimentList';
 import LargeDatasetSelect from '../UI/LargeDatasetSelect';
 import { handleSelectExperimentToModel } from '../utils';
 import { ModelType } from './Container';

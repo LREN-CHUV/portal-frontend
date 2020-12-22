@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button, Dropdown } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -104,17 +104,6 @@ const GroupLink = styled(Link)`
 `;
 
 const DropdownWrapper = styled.div`
-  .dropdown > button {
-    font-weight: bold;
-    font-size: 16px;
-    text-decoration: none;
-    color: white;
-    box-shadow: none;
-
-    :hover {
-      color: #ccc !important;
-    }
-  }
 `;
 
 export default ({
@@ -141,14 +130,7 @@ export default ({
           <span> &gt; </span>
           <GroupLink to="/experiment">Experiment</GroupLink>
         </Group>
-        <DropdownWrapper>
-          <Dropdown>
-            <Dropdown.Toggle variant="link" id="dropdown-nav-experiments">
-              My Experiments
-            </Dropdown.Toggle>
-            <Dropdown.Menu>{children}</Dropdown.Menu>
-          </Dropdown>
-        </DropdownWrapper>
+        <DropdownWrapper>{children}</DropdownWrapper>
         <div className="experiment-nav">
           <Link to="/galaxy">Workflow</Link>
           {datacatalogueUrl && (

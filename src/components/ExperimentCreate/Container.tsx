@@ -6,7 +6,7 @@ import { APICore, APIExperiment, APIModel } from '../API';
 import { Algorithm, AlgorithmParameter } from '../API/Core';
 import { IExperiment } from '../API/Experiment';
 import { Alert, IAlert } from '../UI/Alert';
-import DropdownExperimentList from '../UI/DropdownExperimentList';
+import DropdownExperimentList from '../UI/DropdownParametersExperimentList';
 import LargeDatasetSelect from '../UI/LargeDatasetSelect';
 import Model from '../UI/Model';
 import { handleSelectExperimentToModel } from '../utils';

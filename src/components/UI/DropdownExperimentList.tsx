@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import React, { useCallback, useEffect, useState } from 'react';
-import { Button, Container, Pagination, Table } from 'react-bootstrap';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { Button, Container, Pagination, Table, Form } from 'react-bootstrap';
 import {
   BsCloudDownload,
   BsFillExclamationCircleFill,
@@ -11,9 +11,10 @@ import {
   BsPencilSquare,
   BsWatch
 } from 'react-icons/bs';
+import { Link } from 'react-router-dom';
+
 import { FaShareAlt } from 'react-icons/fa';
 import { GoCheck, GoX } from 'react-icons/go';
-import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 import {
@@ -21,7 +22,7 @@ import {
   IExperiment,
   IExperimentList
 } from '../API/Experiment';
-import { useKeyPressed } from '../utils';
+import { useKeyPressed, useOnClickOutside } from '../utils';
 import Modal from './Modal';
 
 dayjs.extend(relativeTime);
@@ -59,12 +60,46 @@ const SearchContainer = styled.div`
   margin: 1rem 0;
 `;
 
+const DropDownContainer = styled.div`
+  flex: 2;
+`;
+
+const DropDownHeader = styled.div`
+  cursor: pointer;
+  color: white !important;
+  margin-right: 16px;
+
+  &:hover {
+    color: #ccc !important;
+  }
+
+  &:after {
+    display: inline-block;
+    margin-left: 0.255em;
+    vertical-align: 0.255em;
+    content: '';
+    border-top: 0.3em solid;
+    border-right: 0.3em solid transparent;
+    border-bottom: 0;
+    border-left: 0.3em solid transparent;
+  }
+`;
+
+const DropDownListContainer = styled.div`
+  background-color: white;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 0.25rem;
+  position: absolute;
+  z-index: 100;
+`;
+
 interface Props {
   username?: string;
   experimentList?: IExperimentList;
   handleDelete: (uuid: string) => void;
   handleUpdate: (uuid: string, experiment: Partial<IExperiment>) => void;
   handleQueryParameters: ({ ...params }: ExperimentListQueryParameters) => void;
+  setParameterExperiment: (parameterExperiment?: IExperiment) => void;
 }
 
 interface InternalProps extends Pick<Props, 'username' | 'handleUpdate'> {
@@ -72,7 +107,9 @@ interface InternalProps extends Pick<Props, 'username' | 'handleUpdate'> {
   setConfirmDelete: React.Dispatch<
     React.SetStateAction<null | { uuid: string; confirm: boolean }>
   >;
+  handleOnClick: (parameterExperiment: IExperiment) => void;
 }
+
 interface EditingProps {
   editingExperimentName: null | { uuid: string; name: string };
   setEditingExperimentName: React.Dispatch<
@@ -212,6 +249,7 @@ const ExperimentRow = ({ ...props }: InternalProps): JSX.Element => {
             className="experiment-name"
             to={`/experiment/${experiment.uuid}`}
             title={experiment.name}
+            onClick={(): void => props.handleOnClick(experiment)}
           >
             {experiment.name}
           </Link>
@@ -278,9 +316,9 @@ const Search = ({
   }, [searchName, handleQueryParameters]);
 
   return (
-    <input
-      placeholder="Search"
+    <Form.Control
       value={searchName}
+      placeholder="Search"
       onChange={(e): void => {
         setSearchName(e.target.value);
       }}
@@ -288,7 +326,10 @@ const Search = ({
   );
 };
 
-export default ({ ...props }: Props): JSX.Element => {
+const Items = ({
+  handleOnClick,
+  ...props
+}: Props & { handleOnClick: InternalProps['handleOnClick'] }): JSX.Element => {
   const { experimentList, handleQueryParameters } = props;
   const [confirmDelete, setConfirmDelete] = useState<null | {
     uuid: string;
@@ -337,6 +378,7 @@ export default ({ ...props }: Props): JSX.Element => {
                   username={props.username}
                   handleUpdate={props.handleUpdate}
                   setConfirmDelete={setConfirmDelete}
+                  handleOnClick={handleOnClick}
                 />
               ))}
             </tbody>
@@ -381,3 +423,34 @@ export default ({ ...props }: Props): JSX.Element => {
     </Wrapper>
   );
 };
+
+const Dropdown = ({ ...props }: Props): JSX.Element => {
+  const [isOpen, setIsOpen] = useState(false);
+  const node = useRef(null);
+
+  const toggling = (): void => setIsOpen(!isOpen);
+
+  const onOptionClicked = (experiment?: IExperiment): void => {
+    props.setParameterExperiment(experiment);
+    setIsOpen(false);
+  };
+
+  const handleClickOutside = (event: Event): void => {
+    setIsOpen(false);
+  };
+
+  useOnClickOutside(node, handleClickOutside);
+
+  return (
+    <DropDownContainer ref={node}>
+      <DropDownHeader onClick={toggling}>My Experiments</DropDownHeader>
+      {isOpen && (
+        <DropDownListContainer>
+          <Items handleOnClick={onOptionClicked} {...props} />
+        </DropDownListContainer>
+      )}
+    </DropDownContainer>
+  );
+};
+
+export default ({ ...props }: Props): JSX.Element => <Dropdown {...props} />;
