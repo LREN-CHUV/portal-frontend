@@ -232,8 +232,8 @@ const Container = ({
               <section>
                 <DropdownExperimentList
                   apiExperiment={apiExperiment}
-                  handleSelectExperiment={(experiment: IExperiment): void =>
-                    handleSelectExperimentToModel(apiModel.setModel, experiment)
+                  handleSelectExperiment={(experiment?: IExperiment): void =>
+                    handleSelectExperimentToModel(apiModel, experiment)
                   }
                 />
                 <Model model={model} lookup={apiCore.lookup} />

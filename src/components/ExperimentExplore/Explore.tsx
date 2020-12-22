@@ -188,8 +188,8 @@ export default (props: ExploreProps): JSX.Element => {
                 <h4 style={{ marginRight: '8px' }}>Parameters</h4>
                 <DropdownExperimentList
                   apiExperiment={apiExperiment}
-                  handleSelectExperiment={(experiment: IExperiment): void =>
-                    handleSelectExperimentToModel(apiModel.setModel, experiment)
+                  handleSelectExperiment={(experiment?: IExperiment): void =>
+                    handleSelectExperimentToModel(apiModel, experiment)
                   }
                 />
                 <div className="item">

@@ -41,7 +41,7 @@ class Experiment extends React.Component<Props> {
 
     const e = apiExperiment.state.experiment;
     if (e) {
-      handleSelectExperimentToModel(apiModel.setModel, e);
+      handleSelectExperimentToModel(apiModel, e);
 
       if (!e.viewed) {
         apiExperiment.markAsViewed({ uuid });
@@ -65,7 +65,7 @@ class Experiment extends React.Component<Props> {
       await apiExperiment.get({ uuid });
       const e = apiExperiment.state.experiment;
       if (e) {
-        handleSelectExperimentToModel(apiModel.setModel, e);
+        handleSelectExperimentToModel(apiModel, e);
         if (!e.viewed) {
           apiExperiment.markAsViewed({ uuid });
         }

@@ -39,6 +39,10 @@ export const GlobalStyles = createGlobalStyle`
     color: #17a2b8;
   }
 
+  .warning {
+    color: #ffc107;
+  }
+
   .btn {
     font-size: 0.9rem;
   }

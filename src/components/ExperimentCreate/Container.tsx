@@ -71,11 +71,8 @@ class Container extends React.Component<Props, State> {
                 <section>
                   <DropdownExperimentList
                     apiExperiment={apiExperiment}
-                    handleSelectExperiment={(experiment: IExperiment): void =>
-                      handleSelectExperimentToModel(
-                        apiModel.setModel,
-                        experiment
-                      )
+                    handleSelectExperiment={(experiment?: IExperiment): void =>
+                      handleSelectExperimentToModel(apiModel, experiment)
                     }
                   />
                   <Model model={apiModel.state.model} lookup={apiCore.lookup} />

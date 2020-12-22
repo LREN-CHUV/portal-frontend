@@ -76,10 +76,16 @@ export interface State {
   experiment?: IExperiment;
   experimentList?: IExperimentList;
   experimentListQueryParameters: ExperimentListQueryParameters;
+  parameterExperimentList?: IExperimentList;
+  parameterExperiment?: IExperiment;
+  parameterExperimentListQueryParameters: ExperimentListQueryParameters;
 }
 
 class Experiment extends Container<State> {
-  state: State = { experimentListQueryParameters: { page: 0 } };
+  state: State = {
+    experimentListQueryParameters: { page: 0 },
+    parameterExperimentListQueryParameters: { page: 0 }
+  };
 
   private options: AxiosRequestConfig;
   private baseUrl: string;
@@ -89,6 +95,10 @@ class Experiment extends Container<State> {
     this.options = config.options;
     this.baseUrl = `${backendURL}/experiments`;
   }
+
+  setParameterExperiment = (parameterExperiment?: IExperiment): void => {
+    this.setState({ parameterExperiment });
+  };
 
   get = async ({ uuid }: IUUID): Promise<void> => {
     try {
@@ -148,6 +158,41 @@ class Experiment extends Container<State> {
         error: undefined,
         experimentList,
         experimentListQueryParameters: nextQueryParameters
+      }));
+    } catch (error) {
+      return await this.setState({
+        error: error.message
+      });
+    }
+  };
+
+  parameterList = async ({
+    ...params
+  }: ExperimentListQueryParameters): Promise<void> => {
+    console.log(params)
+    const currentExperimentListQueryParameters = this.state
+      .parameterExperimentListQueryParameters;
+
+    const nextQueryParameters = {
+      ...currentExperimentListQueryParameters,
+      ...params
+    };
+    const nextParams = Object.entries(nextQueryParameters)
+      .map(entry => `${entry[0]}=${entry[1]}&`)
+      .join('');
+
+    try {
+      const response = await Axios.get(
+        `${this.baseUrl}?${nextParams}`,
+        this.options
+      );
+
+      const parameterExperimentList: IExperimentList = response.data;
+
+      return await this.setState(previousState => ({
+        error: undefined,
+        parameterExperimentList,
+        parameterExperimentListQueryParameters: nextQueryParameters
       }));
     } catch (error) {
       return await this.setState({

@@ -4,7 +4,15 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Form, Pagination as BSPagination } from 'react-bootstrap';
 import styled from 'styled-components';
 import { useOnClickOutside } from '../utils';
-
+import {
+  BsCloudDownload,
+  BsFillExclamationCircleFill,
+  BsFillEyeFill,
+  BsFillEyeSlashFill,
+  BsFillTrashFill,
+  BsPencilSquare,
+  BsWatch
+} from 'react-icons/bs';
 import { APIExperiment } from '../API';
 import {
   ExperimentListQueryParameters,
@@ -44,7 +52,6 @@ const DropDownListContainer = styled.div`
   background-color: white;
   border: 1px solid rgba(0, 0, 0, 0.15);
   border-radius: 0.25rem;
-  padding: 1em 0 0 0 !important;
   position: absolute;
   z-index: 100;
 `;
@@ -65,10 +72,29 @@ const ListItem = styled.li`
   }
 `;
 
+const ResetItem = styled.p`
+  cursor: pointer;
+  padding: 4px 24px 8px;
+  margin: 1em 0;
+  color: #666;
+  display: flex;
+  align-items: center;
+
+  svg {
+    margin-right: 4px;
+  }
+
+  &:hover {
+    background-color: #ffc107;
+    color: white;
+  }
+`;
+
 const MessageItem = styled.li`
   list-style: none;
   cursor: pointer;
   padding: 4px 24px;
+  margin: 0 0 8px 0;
 `;
 
 const SearchContainer = styled.div`
@@ -82,7 +108,7 @@ const PaginationContainer = styled.div`
 
 interface Props {
   apiExperiment: APIExperiment;
-  handleSelectExperiment: (experiment: IExperiment) => void;
+  handleSelectExperiment: (experiment?: IExperiment) => void;
 }
 
 interface InternalProps {
@@ -172,12 +198,16 @@ const Items = ({
 }: {
   experimentList?: IExperimentList;
   list: ({ ...params }: ExperimentListQueryParameters) => Promise<void>;
-  handleOnClick: (experiment: IExperiment) => void;
+  handleOnClick: (experiment?: IExperiment) => void;
 }): JSX.Element => {
   const [searchName, setSearchName] = useState<string>('');
 
   return (
     <>
+      <ResetItem onClick={(): void => handleOnClick()} key={'reset'}>
+        <BsFillTrashFill /> Reset Parameters
+      </ResetItem>
+
       <SearchContainer>
         <Search
           list={list}
@@ -193,17 +223,18 @@ const Items = ({
       {!experimentList?.experiments && searchName.length < 3 && (
         <MessageItem>You don&apos;t have any experiment yet</MessageItem>
       )}
-
-      {experimentList?.experiments?.map(
-        (experiment: IExperiment, i: number) => (
-          <ListItem
-            onClick={(): void => handleOnClick(experiment)}
-            key={experiment.uuid}
-          >
-            {experiment.name}
-          </ListItem>
-        )
-      )}
+      <DropDownList>
+        {experimentList?.experiments?.map(
+          (experiment: IExperiment, i: number) => (
+            <ListItem
+              onClick={(): void => handleOnClick(experiment)}
+              key={experiment.uuid}
+            >
+              {experiment.name}
+            </ListItem>
+          )
+        )}
+      </DropDownList>
 
       <PaginationContainer>
         <Pagination {...{ experimentList, list }} />
@@ -214,20 +245,24 @@ const Items = ({
 
 const Dropdown = ({ ...props }: Props): JSX.Element => {
   const { apiExperiment } = props;
-  const { state, list } = apiExperiment;
-  const { experiment, experimentList } = state;
-  const [selectedExperiment, setSelectedExperiment] = useState<
-    IExperiment | undefined
-  >();
+  const {
+    state,
+    parameterList: list,
+    setParameterExperiment: setExperiment
+  } = apiExperiment;
+  const {
+    parameterExperiment: experiment,
+    parameterExperimentList: experimentList
+  } = state;
 
   const [isOpen, setIsOpen] = useState(false);
   const node = useRef(null);
 
   const toggling = (): void => setIsOpen(!isOpen);
 
-  const onOptionClicked = (experiment: IExperiment): void => {
+  const onOptionClicked = (experiment?: IExperiment): void => {
     props.handleSelectExperiment(experiment);
-    setSelectedExperiment(experiment);
+    setExperiment(experiment);
     setIsOpen(false);
   };
 
@@ -240,18 +275,14 @@ const Dropdown = ({ ...props }: Props): JSX.Element => {
   return (
     <DropDownContainer ref={node}>
       <DropDownHeader onClick={toggling}>
-        {selectedExperiment
-          ? `from ${selectedExperiment.name}`
-          : 'Select from Experiment'}
+        {experiment ? `from ${experiment.name}` : 'Select from Experiment'}
       </DropDownHeader>
       {isOpen && (
         <DropDownListContainer>
-          <DropDownList>
-            <Items
-              handleOnClick={onOptionClicked}
-              {...{ experimentList, list }}
-            />
-          </DropDownList>
+          <Items
+            handleOnClick={onOptionClicked}
+            {...{ experimentList, list }}
+          />
         </DropDownListContainer>
       )}
     </DropDownContainer>
