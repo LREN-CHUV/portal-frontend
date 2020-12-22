@@ -1,12 +1,13 @@
 import { mount } from 'enzyme';
 import * as React from 'react';
-import { IExperiment, ExperimentParameter } from '../../Experiment';
+
+import Result from '../../../ExperimentResult/Result';
+import { ExperimentParameter, IExperiment } from '../../Experiment';
 import {
   createExperiment,
   TEST_PATHOLOGIES,
   waitForResult
 } from '../../UtiltyTests';
-import Result from '../../../ExperimentResult/Result'
 
 // config
 
@@ -32,9 +33,10 @@ const parameters: ExperimentParameter[] = [
   },
   {
     name: 'dataset',
-    value: TEST_PATHOLOGIES.dementia.datasets.filter(
-      d => d.code !== 'fake_longitudinal'
-    ).map(d => d.code).toString()
+    value: TEST_PATHOLOGIES.dementia.datasets
+      .filter(d => d.code !== 'fake_longitudinal')
+      .map(d => d.code)
+      .toString()
   }
 ];
 
@@ -50,9 +52,7 @@ const experiment: Partial<IExperiment> = {
 // Test
 
 describe('Integration Test for experiment API', () => {
-
   it(`create ${algorithmId}`, async () => {
-    
     const { error, experiment: result } = await createExperiment({
       experiment
     });
@@ -72,7 +72,7 @@ describe('Integration Test for experiment API', () => {
 
     const props = { experimentState };
     const wrapper = mount(<Result {...props} />);
-    console.log(wrapper.debug())
+    console.log(wrapper.debug());
     expect(wrapper.find('.error')).toHaveLength(0);
     expect(wrapper.find('.loading')).toHaveLength(0);
     expect(wrapper.find('.result')).toHaveLength(3);

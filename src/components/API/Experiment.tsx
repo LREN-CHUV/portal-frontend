@@ -24,7 +24,9 @@ export type ParameterName =
   | 'dataset'
   | 'pathology'
   | 'filter'
-  | 'bins';
+  | 'bins'
+  | 'referencevalues'
+  | 'encodingparameter';
 
 export interface ExperimentParameter {
   name: ParameterName;
@@ -120,7 +122,7 @@ class Experiment extends Container<State> {
 
       const result = experiment.result?.filter(e =>
         ALGORITHMS_OUTPUT.find(
-          a => (a.name = experiment.algorithm.name)
+          a => a.name === experiment.algorithm.name
         )?.types?.includes(e.type)
       );
 
