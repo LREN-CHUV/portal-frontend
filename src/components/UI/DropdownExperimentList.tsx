@@ -228,7 +228,9 @@ const InlineNameEdit = ({
   );
 };
 
-const ExperimentRow = ({ ...props }: InternalProps): JSX.Element => {
+const ExperimentRow = ({
+  ...props
+}: InternalProps & { handleDelete: Props['handleDelete'] }): JSX.Element => {
   const { experiment, username } = props;
   const isOwner = username === experiment.createdBy;
   const [editingExperimentName, setEditingExperimentName] = useState<
@@ -292,7 +294,8 @@ const ExperimentRow = ({ ...props }: InternalProps): JSX.Element => {
           disabled={!isOwner}
           variant="light"
           onClick={(): void => {
-            props.setConfirmDelete({ uuid: experiment.uuid, confirm: true });
+            props.handleDelete(experiment.uuid);
+            //props.setConfirmDelete({ uuid: experiment.uuid, confirm: true });
           }}
         >
           <BsFillTrashFill />
@@ -383,6 +386,7 @@ const Items = ({
                   handleUpdate={props.handleUpdate}
                   setConfirmDelete={setConfirmDelete}
                   handleOnClick={handleOnClick}
+                  handleDelete={props.handleDelete}
                 />
               ))}
             </tbody>
