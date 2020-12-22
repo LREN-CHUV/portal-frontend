@@ -103,8 +103,7 @@ const GroupLink = styled(Link)`
   margin: 0 8px 0 0;
 `;
 
-const DropdownWrapper = styled.div`
-`;
+const DropdownWrapper = styled.div``;
 
 export default ({
   name,

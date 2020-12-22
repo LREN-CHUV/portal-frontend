@@ -22,14 +22,12 @@ import MIPContext from './MIPContext';
 
 interface State {
   appConfig: AppConfig;
-  showTooltip: boolean;
   showTutorial: boolean;
 }
 
 class AppContainer extends React.Component<any, State> {
   state: State = {
     appConfig: {},
-    showTooltip: false,
     showTutorial: true
   };
   private apiExperiment = new APIExperiment(config);
@@ -99,12 +97,6 @@ class AppContainer extends React.Component<any, State> {
   }
 
   render(): JSX.Element {
-    const toggleTooltip = (): void => {
-      this.setState(state => ({
-        ...state,
-        showTooltip: !state.showTooltip
-      }));
-    };
 
     const toggleTutorial = (): void => {
       localStorage.setItem('seenTutorial', 'true');
@@ -117,8 +109,6 @@ class AppContainer extends React.Component<any, State> {
     return (
       <MIPContext.Provider
         value={{
-          showTooltips: this.state.showTooltip,
-          toggleTooltip,
           showTutorial: this.state.showTutorial,
           toggleTutorial
         }}

@@ -128,7 +128,7 @@ export const GlobalStyles = createGlobalStyle`
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
   }
 
-  .user-guide .modal-dialog {
+  #main-modal {
     width: 1200px; 
     margin: 50px auto;
   }
@@ -138,12 +138,24 @@ export const GlobalStyles = createGlobalStyle`
     margin-bottom: 16px;
   }
 
+  @media (min-width: 576px) {
+    #main-modal.modal-dialog {
+      max-width: 100vw;
+      margin: 1.75rem auto;
+    }
+  }
+
   @media (max-width: 767px) {
-    .user-guide .modal-dialog {
+    #main-modal {
+      width: 768px; 
+      margin: 50px auto;
+    }
+
+    #main-modal.modal-dialog {
       width: 768px; 
     }
-    
-    .user-guide .modal-dialog .modal-footer {
+
+    #main-modal .modal-footer {
       text-align: left;
     }
   }

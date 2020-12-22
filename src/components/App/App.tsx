@@ -9,7 +9,7 @@ import ExperimentCreate from '../ExperimentCreate/Container';
 import Explore from '../ExperimentExplore/Container';
 import Help from '../Help/Help';
 import ExperimentResult from '../ExperimentResult/Container';
-import Tutorial from '../Tutorial/Tutorial';
+import Tutorial from '../UserGuide/Tutorial';
 import DataCatalog from '../UI/DataCatalog';
 import ExperimentList from '../UI/DropdownExperimentList';
 import Footer from '../UI/Footer';
