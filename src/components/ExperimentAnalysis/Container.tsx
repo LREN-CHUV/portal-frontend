@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Card } from 'react-bootstrap';
+import { Button, Card, Accordion } from 'react-bootstrap';
 import { RouteComponentProps } from 'react-router-dom';
 
 import { APICore, APIExperiment, APIMining, APIModel } from '../API';
@@ -248,20 +248,31 @@ const Container = ({
             selectedDatasets={selectedDatasets}
             lookup={apiCore.lookup}
           >
-            <Card className="filters">
-              <Card.Title>
-                <h3 className={'btn btn-info'}>Filters</h3>
-              </Card.Title>
-              <Card.Body>
-                {fields && fields.length > 0 && (
-                  <Filter
-                    rules={filters}
-                    filters={fields}
-                    handleChangeFilter={handleUpdateFilter}
-                  />
-                )}
-              </Card.Body>
-            </Card>
+            <Accordion defaultActiveKey="0">
+              <Card className="filters">
+                <Card.Header>
+                  <Accordion.Toggle
+                    as={Button}
+                    variant="info"
+                    disabled={fields && fields.length === 0}
+                    eventKey="0"
+                  >
+                    Filters
+                  </Accordion.Toggle>
+                </Card.Header>
+                <Accordion.Collapse eventKey="0">
+                  <Card.Body>
+                    {fields && fields.length > 0 && (
+                      <Filter
+                        rules={filters}
+                        filters={fields}
+                        handleChangeFilter={handleUpdateFilter}
+                      />
+                    )}
+                  </Card.Body>
+                </Accordion.Collapse>
+              </Card>
+            </Accordion>
           </Content>
         </div>
       </div>

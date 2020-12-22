@@ -23,13 +23,16 @@
   vertical-align: middle;
 }
 .query-builder .rules-group-container {
-  padding: 10px;
   padding-bottom: 6px;
-  border: 1px solid #dcc896;
-  background: rgba(250, 240, 210, 0.5);
+  padding: 5px;
+  border: 1px solid #ddd;
+  background: rgba(237, 237, 237, 0.5);
 }
 .query-builder .rules-group-header {
   margin-bottom: 10px;
+}
+#query-builder .btn {
+  padding: 1px 5px;
 }
 .query-builder .rules-group-header .group-conditions .btn.readonly:not(.active),
 .query-builder .rules-group-header .group-conditions input[name$='_cond'] {
