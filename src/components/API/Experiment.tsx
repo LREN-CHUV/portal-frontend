@@ -140,7 +140,11 @@ class Experiment extends Container<State> {
 
     const nextQueryParameters = {
       ...currentExperimentListQueryParameters,
-      ...params
+      ...params,
+      page:
+        params?.name && params?.name?.length > 2
+          ? 0
+          : params.page || currentExperimentListQueryParameters.page // reset the page if search is on
     };
     const nextParams = Object.entries(nextQueryParameters)
       .map(entry => `${entry[0]}=${entry[1]}&`)
@@ -169,17 +173,22 @@ class Experiment extends Container<State> {
   parameterList = async ({
     ...params
   }: ExperimentListQueryParameters): Promise<void> => {
-    console.log(params)
     const currentExperimentListQueryParameters = this.state
       .parameterExperimentListQueryParameters;
 
     const nextQueryParameters = {
       ...currentExperimentListQueryParameters,
-      ...params
+      ...params,
+      page:
+        params?.name && params?.name?.length > 2
+          ? 0
+          : params.page || currentExperimentListQueryParameters.page // reset the page if search is on
     };
     const nextParams = Object.entries(nextQueryParameters)
       .map(entry => `${entry[0]}=${entry[1]}&`)
       .join('');
+
+    console.log(nextParams);
 
     try {
       const response = await Axios.get(
