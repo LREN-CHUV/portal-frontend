@@ -60,7 +60,6 @@ const CaretButton = styled(Button)`
 `;
 
 const Card = styled.div`
-
   margin-top: 4px;
 
   label {

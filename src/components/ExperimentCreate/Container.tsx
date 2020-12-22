@@ -21,7 +21,6 @@ const Wrapper = styled.div`
   min-height: 50vh;
 `;
 
-
 interface Props extends RouteComponentProps<any> {
   apiExperiment: APIExperiment;
   apiCore: APICore;

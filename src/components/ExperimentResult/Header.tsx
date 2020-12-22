@@ -34,6 +34,7 @@ export default ({
         <Button
           variant={experiment?.shared ? 'secondary' : 'info'}
           onClick={handleShareExperiment}
+          style={{ marginRight: '8px' }}
         >
           {experiment?.shared ? 'Unshare Experiment' : 'Share Experiment'}
         </Button>

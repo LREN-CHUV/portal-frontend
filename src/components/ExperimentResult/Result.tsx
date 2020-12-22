@@ -8,7 +8,7 @@ import RenderResult from './RenderResult';
 
 const Body = styled(Card.Body)`
   min-height: 50vh;
-`
+`;
 
 const indeterminateAnimation = keyframes`
  from {

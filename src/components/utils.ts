@@ -95,7 +95,12 @@ export const handleSelectExperimentToModel = (
     return;
   }
 
-  const parameters = experiment.algorithm.parameters;
+  const parameters = experiment.algorithm?.parameters;
+
+  if (!parameters) {
+    return;
+  }
+
   const extract = (field: string): VariableEntity[] | undefined => {
     const p = parameters.find(p => p.name === field)?.value as string;
     const separator = /\*/.test(p) ? '*' : /\+/.test(p) ? '+' : ',';

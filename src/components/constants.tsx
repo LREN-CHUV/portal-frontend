@@ -157,7 +157,6 @@ export const ALGORITHMS_OUTPUT = [
     enabled: true,
     name: 'THREE_C',
     label: '3C',
-
     types: [MIME_TYPES.JSONDATA]
   }
 ].map(a => ({ ...a, types: [...ERRORS_OUTPUT, ...a.types] }));
