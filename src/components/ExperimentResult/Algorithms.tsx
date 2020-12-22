@@ -27,10 +27,10 @@ const Algorithms = ({
           {algorithm.parameters &&
             algorithm.parameters.length > 0 &&
             algorithm.parameters
-              .filter(p => !UI_HIDDEN_PARAMETERS.includes(p.label))
+              .filter(p => !UI_HIDDEN_PARAMETERS.includes(p.name))
               .map((m: ExperimentParameter, i: number) => (
                 <Param key={`parameters-${algorithm.name}-${i}`}>
-                  {m.label}: {m.value}
+                  {m.label || m.name}: {m.value}
                 </Param>
               ))}
         </>
