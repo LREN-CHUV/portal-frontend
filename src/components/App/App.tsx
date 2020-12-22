@@ -138,6 +138,7 @@ const App = ({
                 apiMining={apiMining}
                 apiModel={apiModel}
                 apiCore={apiCore}
+                apiExperiment={apiExperiment}
                 {...props}
               />
             )}

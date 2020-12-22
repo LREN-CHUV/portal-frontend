@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Card, Dropdown } from 'react-bootstrap';
 import { RouteComponentProps } from 'react-router-dom';
 
-import { APICore, APIMining, APIModel } from '../API';
+import { APICore, APIExperiment, APIMining, APIModel } from '../API';
 import { VariableEntity } from '../API/Core';
 import { IExperiment } from '../API/Experiment';
 import { MiningPayload } from '../API/Mining';
@@ -19,6 +19,7 @@ interface Props extends RouteComponentProps {
   apiModel: APIModel;
   apiCore: APICore;
   apiMining: APIMining;
+  apiExperiment: APIExperiment;
 }
 interface State {
   alert?: IAlert;
@@ -30,6 +31,7 @@ const Container = ({
   apiModel,
   apiCore,
   apiMining,
+  apiExperiment,
   ...props
 }: Props): JSX.Element => {
   const { history } = props;
@@ -229,6 +231,7 @@ const Container = ({
               )}
               <section>
                 <DropdownExperimentList
+                  apiExperiment={apiExperiment}
                   handleSelectExperiment={(experiment: IExperiment): void =>
                     handleSelectExperimentToModel(apiModel.setModel, experiment)
                   }

@@ -12,6 +12,8 @@ import config from '../API/RequestHeaders';
 const baseUrl = `${backendURL}/experiments`;
 const options: AxiosRequestConfig = config.options;
 
+// FIXME: Unexpectedly, the state is not persisent in the context
+// Let aside for the moment
 const useExperiment = (
   initialState = { experimentListQueryParameters: { page: 0 } }
 ) => {
@@ -24,6 +26,9 @@ const useExperiment = (
   ] = useState<ExperimentListQueryParameters>(
     initialState.experimentListQueryParameters
   );
+  const [selectedExperiment, setSelectedExperiment] = useState<
+    IExperiment | undefined
+  >();
 
   const list = useCallback(
     async ({ ...params }: ExperimentListQueryParameters): Promise<void> => {
@@ -48,7 +53,21 @@ const useExperiment = (
     [experimentListQueryParameters]
   );
 
-  return { experimentList, list, setExperimentListQueryParameters };
+  React.useEffect(() => {
+    console.log('mounted', selectedExperiment);
+
+    return () => {
+      console.log('unmoounted', selectedExperiment);
+    };
+  }, [selectedExperiment]);
+
+  return {
+    experimentList,
+    list,
+    setExperimentListQueryParameters,
+    setSelectedExperiment,
+    selectedExperiment
+  };
 };
 
 const Experiment = createContainer(useExperiment);

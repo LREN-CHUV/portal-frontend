@@ -1,17 +1,16 @@
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Form, Pagination as BSPagination } from 'react-bootstrap';
-
 import styled from 'styled-components';
+import { useOnClickOutside } from '../utils';
 
+import { APIExperiment } from '../API';
 import {
   ExperimentListQueryParameters,
   IExperiment,
   IExperimentList
 } from '../API/Experiment';
-
-import Experiment from '../Store/Experiment';
 
 dayjs.extend(relativeTime);
 dayjs().format();
@@ -82,6 +81,7 @@ const PaginationContainer = styled.div`
 `;
 
 interface Props {
+  apiExperiment: APIExperiment;
   handleSelectExperiment: (experiment: IExperiment) => void;
 }
 
@@ -166,13 +166,14 @@ const Search = ({
 };
 
 const Items = ({
-  handleOnClick
+  handleOnClick,
+  experimentList,
+  list
 }: {
+  experimentList?: IExperimentList;
+  list: ({ ...params }: ExperimentListQueryParameters) => Promise<void>;
   handleOnClick: (experiment: IExperiment) => void;
 }): JSX.Element => {
-  const Container = Experiment.useContainer();
-  const experimentList = Container && Container?.experimentList;
-  const list = Container && Container?.list;
   const [searchName, setSearchName] = useState<string>('');
 
   return (
@@ -196,7 +197,7 @@ const Items = ({
       {experimentList?.experiments?.map(
         (experiment: IExperiment, i: number) => (
           <ListItem
-            onClick={() => handleOnClick(experiment)}
+            onClick={(): void => handleOnClick(experiment)}
             key={experiment.uuid}
           >
             {experiment.name}
@@ -211,36 +212,50 @@ const Items = ({
   );
 };
 
-export default ({ ...props }: Props): JSX.Element => {
+const Dropdown = ({ ...props }: Props): JSX.Element => {
+  const { apiExperiment } = props;
+  const { state, list } = apiExperiment;
+  const { experiment, experimentList } = state;
+  const [selectedExperiment, setSelectedExperiment] = useState<
+    IExperiment | undefined
+  >();
+
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState<IExperiment | null>(
-    null
-  );
+  const node = useRef(null);
 
   const toggling = (): void => setIsOpen(!isOpen);
 
   const onOptionClicked = (experiment: IExperiment): void => {
     props.handleSelectExperiment(experiment);
-    setSelectedOption(experiment);
+    setSelectedExperiment(experiment);
     setIsOpen(false);
   };
 
+  const handleClickOutside = (event: Event): void => {
+    setIsOpen(false);
+  };
+
+  useOnClickOutside(node, handleClickOutside);
+
   return (
-    <DropDownContainer>
+    <DropDownContainer ref={node}>
       <DropDownHeader onClick={toggling}>
-        {selectedOption?.name
-          ? `from ${selectedOption?.name}`
+        {selectedExperiment
+          ? `from ${selectedExperiment.name}`
           : 'Select from Experiment'}
       </DropDownHeader>
       {isOpen && (
         <DropDownListContainer>
           <DropDownList>
-            <Experiment.Provider>
-              <Items handleOnClick={onOptionClicked} />
-            </Experiment.Provider>
+            <Items
+              handleOnClick={onOptionClicked}
+              {...{ experimentList, list }}
+            />
           </DropDownList>
         </DropDownListContainer>
       )}
     </DropDownContainer>
   );
 };
+
+export default ({ ...props }: Props): JSX.Element => <Dropdown {...props} />;
