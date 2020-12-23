@@ -12,7 +12,7 @@ import {
 // config
 
 const modelSlug = `naivebayes-${Math.round(Math.random() * 10000)}`;
-const algorithmId = 'NAIVE_BAYES_TRAINING_STANDALONE';
+const algorithmId = 'NAIVE_BAYES_TRAINING';
 const algorithmLabel = 'Naive Bayes Training';
 
 const parameters: ExperimentParameter[] = [
