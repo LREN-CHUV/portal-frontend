@@ -39,8 +39,6 @@ export default ({
   const error = experiment.status === 'error';
   const loading = !result && !error;
 
-  console.log(experiment?.name, result, error)
-
   return (
     <Card>
       <Body>

@@ -219,7 +219,7 @@ class Container extends React.Component<Props, State> {
       return;
     }
 
-    const uuid = apiExperiment.isExperiment(e)?.uuid
+    const uuid = apiExperiment.isExperiment(e)?.uuid;
     if (uuid) {
       history.push(`/experiment/${uuid}`);
     }
