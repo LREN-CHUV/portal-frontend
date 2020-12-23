@@ -1,80 +1,64 @@
-import { mount, shallow } from 'enzyme';
+import { mount } from 'enzyme';
 import * as React from 'react';
 
-import Result from '../../../Result/Result';
-import { AlgorithmParameter } from '../../Core';
-import { ModelResponse } from '../../Model';
-
-import {
-  buildPayload,
-  createExperiment,
-  createModel,
-  TEST_PATHOLOGIES,
-  waitForResult
-} from '../../Utils';
+import Result from '../../../ExperimentResult/Result';
+import { ExperimentParameter, IExperiment } from '../../Experiment';
+import { createExperiment, TEST_PATHOLOGIES, waitForResult } from '../../UtiltyTests';
 
 // config
 
 const modelSlug = `pearson-${Math.round(Math.random() * 10000)}`;
 const algorithmId = 'PEARSON_CORRELATION';
 const algorithmLabel = 'Pearson Correlation';
-const parameters = [];
-
-const model: ModelResponse = {
-  query: {
-    pathology: TEST_PATHOLOGIES.dementia.code,
-    coVariables: [
-      {
-        code: 'lefthippocampus'
-      }
-    ],
-    filters: '',
-    groupings: [],
-    testingDatasets: [],
-    trainingDatasets: TEST_PATHOLOGIES.dementia.datasets.filter(d => d.code !== 'fake_longitudinal'),
-
-    validationDatasets: [],
-    variables: [
-      {
-        code: 'righthippocampus'
-      }
-    ]
+const parameters: ExperimentParameter = [
+  {
+    name: 'x', // covariable
+    value: 'lefthippocampus'
+  },
+  {
+    name: 'y', // variable
+    value: 'righthippocampus'
+  },
+  {
+    name: 'pathology',
+    value: TEST_PATHOLOGIES.dementia.code
+  },
+  {
+    name: 'dataset',
+    value: TEST_PATHOLOGIES.dementia.datasets
+      .filter(d => d.code !== 'fake_longitudinal')
+      .map(d => d.code)
+      .toString()
+  },
+  {
+    name: 'filter',
+    value: ''
   }
+];
+
+const experiment: Partial<IExperiment> = {
+  algorithm: {
+    name: algorithmId,
+    parameters,
+    type: 'string'
+  },
+  name: modelSlug
 };
 
 // Test
 
 describe('Integration Test for experiment API', () => {
   
-  beforeAll(async () => {
-    const mstate = await createModel({
-      model,
-      modelSlug
-    });
-
-    expect(mstate.error).toBeFalsy();
-    expect(mstate.model).toBeTruthy();
-
-    return;
-  });
-
   it(`create ${algorithmId}`, async () => {
-    const payload = await buildPayload(
-      model,
-      parameters as AlgorithmParameter[],
-      algorithmId,
-      algorithmLabel,
-      modelSlug
-    );
-
-    const { error, experiment } = await createExperiment({
-      experiment: payload
+    
+    const { error, experiment: result } = await createExperiment({
+      experiment
     });
 
     expect(error).toBeFalsy();
-    expect(experiment).toBeTruthy();
+    expect(result).toBeTruthy();
 
-    const uuid = experiment && experiment.uuid;
+    const uuid = result?.uuid;
     expect(uuid).toBeTruthy();
     if (!uuid) {
       throw new Error('uuid not defined');

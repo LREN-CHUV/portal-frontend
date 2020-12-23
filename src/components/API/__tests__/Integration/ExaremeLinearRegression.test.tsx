@@ -73,7 +73,7 @@ describe('Integration Test for experiment API', () => {
     expect(error).toBeFalsy();
     expect(result).toBeTruthy();
 
-    const uuid = result && result.uuid;
+    const uuid = result?.uuid;
     expect(uuid).toBeTruthy();
     if (!uuid) {
       throw new Error('uuid not defined');

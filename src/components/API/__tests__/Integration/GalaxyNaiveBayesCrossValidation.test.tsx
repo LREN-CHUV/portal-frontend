@@ -1,84 +1,85 @@
 import { mount } from 'enzyme';
 import * as React from 'react';
 
-import Result from '../../../Result/Result';
-import { AlgorithmParameter } from '../../Core';
-import { ModelResponse } from '../../Model';
-
-import {
-  buildPayload,
-  createExperiment,
-  createModel,
-  TEST_PATHOLOGIES,
-  waitForResult
-} from '../../Utils';
+import Result from '../../../ExperimentResult/Result';
+import APICore from '../../Core';
+import { ExperimentParameter, IExperiment } from '../../Experiment';
+import config from '../../RequestHeaders';
+import { createExperiment, TEST_PATHOLOGIES, waitForResult } from '../../UtiltyTests';
 
 // config
 
 const modelSlug = `naivebayes-${Math.round(Math.random() * 10000)}`;
-const algorithmId = 'f2db41e1fa331b3e';
+//const algorithmId = 'c9468fdb6dc5c5f1';
 const algorithmLabel = 'Naive Bayes with Cross Validation';
-const parameters = [
+const parameters: ExperimentParameter[] = [
   { name: 'kfold', label: 'kfold', value: 3 },
-  { name: 'alpha', label: 'alpha', value: 0.1 }
+  { name: 'alpha', label: 'alpha', value: 0.1 },
+  {
+    name: 'x', // covariable
+    value: 'leftacgganteriorcingulategyrus,lefthippocampus'
+  },
+  {
+    name: 'y', // variable
+    value: 'alzheimerbroadcategory'
+  },
+  {
+    name: 'pathology',
+    value: TEST_PATHOLOGIES.dementia.code
+  },
+  {
+    name: 'dataset',
+    value: TEST_PATHOLOGIES.dementia.datasets
+      .filter(d => d.code !== 'fake_longitudinal')
+      .map(d => d.code)
+      .toString()
+  },
+  {
+    name: 'filter',
+    value: ''
+  }
 ];
 
-const model: ModelResponse = {
-  query: {
-    pathology: TEST_PATHOLOGIES.dementia.code,
-    coVariables: [
-      { code: 'leftacgganteriorcingulategyrus' },
-      { code: 'lefthippocampus' }
-    ],
-    filters: '',
-    groupings: [],
-    testingDatasets: [],
-    trainingDatasets: TEST_PATHOLOGIES.dementia.datasets.filter(
-      d => d.code !== 'fake_longitudinal'
-    ),
-
-    validationDatasets: [],
-    variables: [
-      {
-        code: 'alzheimerbroadcategory'
-      }
-    ]
-  }
-};
+let algorithmId: string | undefined;
 
 // Test
 
 describe('Integration Test for experiment API', () => {
-  
-  beforeAll(async () => {
-    const mstate = await createModel({
-      model,
-      modelSlug
-    });
+   beforeAll(async () => {
+     const apiCore = new APICore(config);
+     await apiCore.algorithms();
+     const result = apiCore.state.algorithms;
+     const error = apiCore.state.error;
+     expect(error).toBeFalsy();
+     expect(result).toBeTruthy();
 
-    expect(mstate.error).toBeFalsy();
-    expect(mstate.model).toBeTruthy();
+     algorithmId = result && result.find(a => a.label === algorithmLabel)?.name;
+     expect(algorithmId).toBeTruthy();
 
-    return;
-  });
+     console.log(algorithmId)
+
+     return;
+   });
 
   it(`create ${algorithmId}`, async () => {
-    const payload = await buildPayload(
-      model,
-      parameters as AlgorithmParameter[],
-      algorithmId,
-      algorithmLabel,
-      modelSlug
-    );
 
-    const { error, experiment } = await createExperiment({
-      experiment: payload
+    const experiment: Partial<IExperiment> = {
+      algorithm: {
+        name: algorithmId!,
+        parameters,
+        type: 'string'
+      },
+      name: modelSlug
+    };
+
+    const { error, experiment: result } = await createExperiment({
+      experiment
     });
 
     expect(error).toBeFalsy();
-    expect(experiment).toBeTruthy();
+    expect(result).toBeTruthy();
 
-    const uuid = experiment && experiment.uuid;
+    const uuid = result?.uuid;
     expect(uuid).toBeTruthy();
     if (!uuid) {
       throw new Error('uuid not defined');

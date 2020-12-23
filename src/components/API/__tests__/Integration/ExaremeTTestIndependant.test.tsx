@@ -1,24 +1,16 @@
 import { mount } from 'enzyme';
 import * as React from 'react';
 
-import Result from '../../../Result/Result';
-import { AlgorithmParameter } from '../../Core';
-import { ModelResponse } from '../../Model';
-
-import {
-  buildPayload,
-  createExperiment,
-  createModel,
-  TEST_PATHOLOGIES,
-  waitForResult
-} from '../../Utils';
+import Result from '../../../ExperimentResult/Result';
+import { ExperimentParameter, IExperiment } from '../../Experiment';
+import { createExperiment, TEST_PATHOLOGIES, waitForResult } from '../../UtiltyTests';
 
 // config
 
 const modelSlug = `ttest-i-${Math.round(Math.random() * 10000)}`;
 const algorithmId = 'TTEST_INDEPENDENT';
 const algorithmLabel = 'T-Test Independent';
-const parameters: any = [
+const parameters: ExperimentParameter[] = [
   { name: 'xlevels', value: 'M,F', label: 'xlevels' },
   { name: 'testvalue', value: '3.0', label: 'testvalue' },
   {
@@ -41,85 +33,55 @@ const parameters: any = [
     value: '1',
     label: 'meandiff'
   },
-  { 
-    name: 'pathology', 
-    value: 'dementia', 
-    label: 'pathology' 
+  {
+    name: 'x', // covariable
+    value: 'gender'
+  },
+  {
+    name: 'y', // variable
+    value:
+      'rightpcggposteriorcingulategyrus,leftpcggposteriorcingulategyrus,rightacgganteriorcingulategyrus,leftacgganteriorcingulategyrus,rightmcggmiddlecingulategyrus,leftmcggmiddlecingulategyrus,rightphgparahippocampalgyrus'
+  },
+  {
+    name: 'pathology',
+    value: TEST_PATHOLOGIES.dementia.code
+  },
+  {
+    name: 'dataset',
+    value: TEST_PATHOLOGIES.dementia.datasets
+      .filter(d => d.code !== 'fake_longitudinal')
+      .map(d => d.code)
+      .toString()
+  },
+  {
+    name: 'filter',
+    value: ''
   }
 ];
-const model: ModelResponse = {
-  query: {
-    pathology: TEST_PATHOLOGIES.dementia.code,
-    coVariables: [
-      {
-        code: 'gender'
-      }
-    ],
-    filters: '',
-    groupings: [],
-    testingDatasets: [],
-        trainingDatasets: TEST_PATHOLOGIES.dementia.datasets.filter(d => d.code !== 'fake_longitudinal'),
 
-    validationDatasets: [],
-    variables: [
-      {
-        code: 'rightpcggposteriorcingulategyrus'
-      },
-      {
-        code: 'leftpcggposteriorcingulategyrus'
-      },
-      {
-        code: 'rightacgganteriorcingulategyrus'
-      },
-      {
-        code: 'leftacgganteriorcingulategyrus'
-      },
-      {
-        code: 'rightmcggmiddlecingulategyrus'
-      },
-      {
-        code: 'leftmcggmiddlecingulategyrus'
-      },
-      {
-        code: 'rightphgparahippocampalgyrus'
-      }
-    ]
-  }
+const experiment: Partial<IExperiment> = {
+  algorithm: {
+    name: algorithmId,
+    parameters,
+    type: 'string'
+  },
+  name: modelSlug
 };
 
 // Test
 
 describe('Integration Test for experiment API', () => {
   
-  beforeAll(async () => {
-    const mstate = await createModel({
-      model,
-      modelSlug
-    });
-
-    expect(mstate.error).toBeFalsy();
-    expect(mstate.model).toBeTruthy();
-
-    return;
-  });
-
   it(`create ${algorithmId}`, async () => {
-    const payload = await buildPayload(
-      model,
-      parameters as AlgorithmParameter[],
-      algorithmId,
-      algorithmLabel,
-      modelSlug
-    );
 
-    const { error, experiment } = await createExperiment({
-      experiment: payload
+    const { error, experiment: result } = await createExperiment({
+      experiment
     });
 
     expect(error).toBeFalsy();
-    expect(experiment).toBeTruthy();
+    expect(result).toBeTruthy();
 
-    const uuid = experiment && experiment.uuid;
+    const uuid = result?.uuid;
     expect(uuid).toBeTruthy();
     if (!uuid) {
       throw new Error('uuid not defined');

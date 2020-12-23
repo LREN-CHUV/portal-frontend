@@ -26,7 +26,22 @@ export type ParameterName =
   | 'filter'
   | 'bins'
   | 'referencevalues'
-  | 'encodingparameter';
+  | 'encodingparameter'
+  | 'iterations_max_number'
+  | 'sstype'
+  | 'outputformat'
+  | 'standardize'
+  | 'coding'
+  | 'kfold'
+  | 'alpha'
+  | 'k'
+  | 'e'
+  | 'xlevels'
+  | 'hypothesis'
+  | 'effectsize'
+  | 'ci'
+  | 'meandiff'
+  | 'testvalue'
 
 export interface ExperimentParameter {
   name: ParameterName;
