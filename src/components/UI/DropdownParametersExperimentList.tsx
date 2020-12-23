@@ -1,16 +1,18 @@
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import React, { useEffect, useRef, useState } from 'react';
-import { Form, Pagination as BSPagination } from 'react-bootstrap';
 import styled from 'styled-components';
 import { useOnClickOutside } from '../utils';
 import { BsFillTrashFill } from 'react-icons/bs';
+import { Form } from 'react-bootstrap';
+
 import { APIExperiment } from '../API';
 import {
   ExperimentListQueryParameters,
   IExperiment,
   IExperimentList
 } from '../API/Experiment';
+import Pagination from '../UI/Pagination';
 
 dayjs.extend(relativeTime);
 dayjs().format();
@@ -108,54 +110,6 @@ interface InternalProps {
   list: ({ ...params }: ExperimentListQueryParameters) => Promise<void>;
 }
 
-const Pagination = ({
-  ...props
-}: {
-  experimentList?: IExperimentList;
-  list: InternalProps['list'];
-}): JSX.Element => {
-  const { experimentList, list } = props;
-
-  return (
-    <>
-      {experimentList && experimentList.totalPages > 1 && (
-        <BSPagination className="justify-content-center">
-          <BSPagination.Prev
-            disabled={experimentList.currentPage === 0}
-            onClick={(
-              e: React.MouseEvent<HTMLElement, MouseEvent>
-            ): Promise<void> => {
-              e.preventDefault();
-              return list({
-                page: experimentList.currentPage - 1
-              });
-            }}
-          />
-          {[...Array(experimentList.totalPages).keys()].map(n => (
-            <BSPagination.Item
-              key={`page-${n}`}
-              onClick={(): Promise<void> => list({ page: n })}
-              active={experimentList.currentPage === n}
-            >
-              {n}
-            </BSPagination.Item>
-          ))}
-          <BSPagination.Next
-            disabled={
-              experimentList.totalPages === experimentList.currentPage + 1
-            }
-            onClick={(): Promise<void> =>
-              list({
-                page: experimentList.currentPage + 1
-              })
-            }
-          />
-        </BSPagination>
-      )}
-    </>
-  );
-};
-
 const Search = ({
   list,
   searchName,
@@ -225,9 +179,11 @@ const Items = ({
         )}
       </DropDownList>
 
-      <PaginationContainer>
-        <Pagination {...{ experimentList, list }} />
-      </PaginationContainer>
+      {experimentList && (
+        <PaginationContainer>
+          <Pagination list={experimentList} query={list} />
+        </PaginationContainer>
+      )}
 
       <ResetItem onClick={(): void => handleOnClick()} key={'reset'}>
         <BsFillTrashFill /> Reset Parameters
@@ -248,7 +204,7 @@ const Dropdown = ({ ...props }: Props): JSX.Element => {
     parameterExperimentList: experimentList
   } = state;
 
-const experiment = apiExperiment.isExperiment(e);
+  const experiment = apiExperiment.isExperiment(e);
 
   const [isOpen, setIsOpen] = useState(false);
   const node = useRef(null);

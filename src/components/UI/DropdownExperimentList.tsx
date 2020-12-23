@@ -1,7 +1,8 @@
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Button, Container, Pagination, Table, Form } from 'react-bootstrap';
+import { Button, Container, Table, Form } from 'react-bootstrap';
+import Pagination from '../UI/Pagination';
 import {
   BsCloudDownload,
   BsFillExclamationCircleFill,
@@ -394,35 +395,7 @@ const Items = ({
             </tbody>
           </Table>
           {experimentList.totalPages > 1 && (
-            <Pagination className="justify-content-center">
-              <Pagination.Prev
-                disabled={experimentList.currentPage === 0}
-                onClick={(): void =>
-                  handleQueryParameters({
-                    page: experimentList.currentPage - 1
-                  })
-                }
-              />
-              {[...Array(experimentList.totalPages).keys()].map(n => (
-                <Pagination.Item
-                  key={`page-${n}`}
-                  onClick={(): void => handleQueryParameters({ page: n })}
-                  active={experimentList.currentPage === n}
-                >
-                  {n}
-                </Pagination.Item>
-              ))}
-              <Pagination.Next
-                disabled={
-                  experimentList.totalPages === experimentList.currentPage + 1
-                }
-                onClick={(): void =>
-                  handleQueryParameters({
-                    page: experimentList.currentPage + 1
-                  })
-                }
-              />
-            </Pagination>
+            <Pagination list={experimentList} query={handleQueryParameters} />
           )}
         </>
       ) : searchName.length > 2 ? (

@@ -100,7 +100,6 @@ export interface IExperimentList {
 }
 
 type Order = 'created';
-
 export interface ExperimentListQueryParameters {
   algorithm?: string;
   descending?: boolean;
@@ -113,6 +112,9 @@ export interface ExperimentListQueryParameters {
   viewed?: boolean;
 }
 
+export type HandleQueryParameters = ({
+  ...params
+}: ExperimentListQueryParameters) => void;
 export interface State {
   experiment: IExperiment | IExperimentError;
   experimentList?: IExperimentList;
@@ -145,37 +147,48 @@ class Experiment extends Container<State> {
   };
 
   // Iexperiment Type Guards
-  isExperiment = (e?: IExperiment | IExperimentError): IExperiment | undefined => e === undefined || (e as IExperiment).uuid !== undefined ? (e as IExperiment) : undefined;
+  isExperiment = (
+    e?: IExperiment | IExperimentError
+  ): IExperiment | undefined =>
+    e === undefined || (e as IExperiment).uuid !== undefined
+      ? (e as IExperiment)
+      : undefined;
 
-  filterResponse = (response: AxiosResponse<any>): { experiment: IExperiment | IExperimentError } => {
-
+  filterResponse = (
+    response: AxiosResponse<any>
+  ): { experiment: IExperiment | IExperimentError } => {
     if (response.status >= 500) {
-      return ({
+      return {
         experiment: {
           status: 'error',
           result: [{ type: MIME_TYPES.ERROR, data: response.data.message }]
-        },
-      });
+        }
+      };
     }
 
     if (response.status >= 400) {
-      return ({
+      return {
         experiment: {
           status: 'error',
           result: [{ type: MIME_TYPES.WARNING, data: response.data.message }]
-        },
-      });
+        }
+      };
     }
 
     const experiment: IExperiment = response.data;
 
     if (experiment.status === 'error') {
-      return ({
+      return {
         experiment: {
           status: 'error',
-          result: [{ type: MIME_TYPES.ERROR, data: 'An unknown error occured. Please retry in a moment' }]
-        },
-      });
+          result: [
+            {
+              type: MIME_TYPES.ERROR,
+              data: 'An unknown error occured. Please retry in a moment'
+            }
+          ]
+        }
+      };
     }
 
     const result = experiment.result?.filter(e =>
@@ -188,23 +201,22 @@ class Experiment extends Container<State> {
       experiment: {
         ...experiment,
         result
-      },
-    }
-  }
+      }
+    };
+  };
 
   get = async ({ uuid }: IUUID): Promise<void> => {
     try {
       const response = await Axios.get(`${this.baseUrl}/${uuid}`, this.options);
 
       return await this.setState(this.filterResponse(response));
-
     } catch (error) {
-      console.log('error')
+      console.log('error');
       return await this.setState({
         experiment: {
           status: 'error',
           result: [{ type: MIME_TYPES.ERROR, data: error.message }]
-        },
+        }
       });
     }
   };
@@ -238,7 +250,7 @@ class Experiment extends Container<State> {
       return await this.setState({
         experimentList,
         experimentListQueryParameters: nextQueryParameters
-      })
+      });
     } catch (error) {
       return await this.setState({
         experimentListError: error.message
@@ -300,7 +312,7 @@ class Experiment extends Container<State> {
         experiment: {
           status: 'error',
           result: [{ type: MIME_TYPES.ERROR, data: error.message }]
-        },
+        }
       });
     }
   };
@@ -323,7 +335,6 @@ class Experiment extends Container<State> {
         url: `${this.baseUrl}/${uuid}`
       });
 
-
       await this.list({});
 
       return await this.setState(this.filterResponse(response));
@@ -332,7 +343,7 @@ class Experiment extends Container<State> {
         experiment: {
           status: 'error',
           result: [{ type: MIME_TYPES.ERROR, data: error.message }]
-        },
+        }
       });
     }
   };
@@ -361,7 +372,7 @@ class Experiment extends Container<State> {
         experiment: {
           status: 'error',
           result: [{ type: MIME_TYPES.ERROR, data: error.message }]
-        },
+        }
       });
     }
   };
@@ -419,22 +430,22 @@ class Experiment extends Container<State> {
           const varCount = (query.variables && query.variables.length) || 0;
           value = isVector
             ? (query.variables &&
-              query.variables // outputs: a1-a2,b1-b2, c1-a1
-                .reduce(
-                  (vectors: string, v, i) =>
-                    (i + 1) % 2 === 0
-                      ? `${vectors}${v.code},`
-                      : varCount === i + 1
+                query.variables // outputs: a1-a2,b1-b2, c1-a1
+                  .reduce(
+                    (vectors: string, v, i) =>
+                      (i + 1) % 2 === 0
+                        ? `${vectors}${v.code},`
+                        : varCount === i + 1
                         ? `${vectors}${v.code}-${query.variables &&
-                        query.variables[0].code}`
+                            query.variables[0].code}`
                         : `${vectors}${v.code}-`,
-                  ''
-                )
-                .replace(/,$/, '')) ||
-            ''
+                    ''
+                  )
+                  .replace(/,$/, '')) ||
+              ''
             : (query.variables &&
-              query.variables.map(v => v.code).toString()) ||
-            '';
+                query.variables.map(v => v.code).toString()) ||
+              '';
         }
 
         if (p.label === 'dataset') {
