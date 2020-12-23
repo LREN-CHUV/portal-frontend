@@ -207,20 +207,22 @@ class Container extends React.Component<Props, State> {
     };
 
     await apiExperiment.create({ experiment, transient: false });
-    const { experiment: e, error } = apiExperiment.state;
+    const { experiment: e } = apiExperiment.state;
 
-    if (error) {
+    if (e.status === 'error') {
       this.setState({
         alert: {
-          message: `${error}`
+          message: `${e?.result ? e?.result[0].data : ''}`
         }
       });
 
       return;
     }
 
-    const uuid = (e && e.uuid) || '';
-    history.push(`/experiment/${uuid}`);
+    const uuid = apiExperiment.isExperiment(e)?.uuid
+    if (uuid) {
+      history.push(`/experiment/${uuid}`);
+    }
   };
 }
 

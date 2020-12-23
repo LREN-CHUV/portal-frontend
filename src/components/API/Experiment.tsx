@@ -1,4 +1,4 @@
-import Axios, { AxiosRequestConfig } from 'axios';
+import Axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { Container } from 'unstated';
 
 import { backendURL } from '../API';
@@ -57,7 +57,7 @@ export type ParameterName =
   | 'max_depth'
   | 'outcome_pos'
   | 'outcome_neg'
-  | 'max_age'
+  | 'max_age';
 
 export interface ExperimentParameter {
   name: ParameterName;
@@ -70,15 +70,19 @@ export interface Result {
   data: any;
 }
 
-export interface IExperiment {
+export interface IExperimentError {
+  status: ExperimentStatus;
+  result?: Result[];
+}
+
+export interface IExperiment extends IExperimentError {
   uuid: string;
   name: string;
   createdBy: string;
   created: string;
   finisehd: string;
-  shared: boolean;
+  shared?: boolean;
   viewed: boolean;
-  status: ExperimentStatus;
   algorithm: {
     name: string;
     desc?: string;
@@ -86,7 +90,6 @@ export interface IExperiment {
     type: string;
     parameters: ExperimentParameter[];
   };
-  result?: Result[];
 }
 
 export interface IExperimentList {
@@ -111,17 +114,19 @@ export interface ExperimentListQueryParameters {
 }
 
 export interface State {
-  error?: string;
-  experiment?: IExperiment;
+  experiment: IExperiment | IExperimentError;
   experimentList?: IExperimentList;
+  experimentListError?: string;
   experimentListQueryParameters: ExperimentListQueryParameters;
   parameterExperimentList?: IExperimentList;
-  parameterExperiment?: IExperiment;
+  parameterExperimentListError?: string;
+  parameterExperiment?: IExperiment | IExperimentError;
   parameterExperimentListQueryParameters: ExperimentListQueryParameters;
 }
 
 class Experiment extends Container<State> {
   state: State = {
+    experiment: { status: 'pending' },
     experimentListQueryParameters: { page: 0 },
     parameterExperimentListQueryParameters: { page: 0 }
   };
@@ -133,42 +138,73 @@ class Experiment extends Container<State> {
     super();
     this.options = config.options;
     this.baseUrl = `${backendURL}/experiments`;
-
-    console.log(this.baseUrl)
   }
 
   setParameterExperiment = (parameterExperiment?: IExperiment): void => {
     this.setState({ parameterExperiment });
   };
 
+  // Iexperiment Type Guards
+  isExperiment = (e?: IExperiment | IExperimentError): IExperiment | undefined => e === undefined || (e as IExperiment).uuid !== undefined ? (e as IExperiment) : undefined;
+
+  filterResponse = (response: AxiosResponse<any>): { experiment: IExperiment | IExperimentError } => {
+
+    if (response.status >= 500) {
+      return ({
+        experiment: {
+          status: 'error',
+          result: [{ type: MIME_TYPES.ERROR, data: response.data.message }]
+        },
+      });
+    }
+
+    if (response.status >= 400) {
+      return ({
+        experiment: {
+          status: 'error',
+          result: [{ type: MIME_TYPES.WARNING, data: response.data.message }]
+        },
+      });
+    }
+
+    const experiment: IExperiment = response.data;
+
+    if (experiment.status === 'error') {
+      return ({
+        experiment: {
+          status: 'error',
+          result: [{ type: MIME_TYPES.ERROR, data: 'An unknown error occured. Please retry in a moment' }]
+        },
+      });
+    }
+
+    const result = experiment.result?.filter(e =>
+      ALGORITHMS_OUTPUT.find(
+        a => a.name === experiment.algorithm.name
+      )?.types?.includes(e.type)
+    );
+
+    return {
+      experiment: {
+        ...experiment,
+        result
+      },
+    }
+  }
+
   get = async ({ uuid }: IUUID): Promise<void> => {
     try {
       const response = await Axios.get(`${this.baseUrl}/${uuid}`, this.options);
-      const experiment: IExperiment = response.data;
 
-      if (experiment.status === 'error') {
-        return await this.setState({
-          error: 'undefined',
-          experiment
-        });
-      }
+      return await this.setState(this.filterResponse(response));
 
-      const result = experiment.result?.filter(e =>
-        ALGORITHMS_OUTPUT.find(
-          a => a.name === experiment.algorithm.name
-        )?.types?.includes(e.type)
-      );
-
-      return await this.setState({
-        error: undefined,
-        experiment: {
-          ...experiment,
-          result
-        }
-      });
     } catch (error) {
+      console.log('error')
       return await this.setState({
-        error: error.message
+        experiment: {
+          status: 'error',
+          result: [{ type: MIME_TYPES.ERROR, data: error.message }]
+        },
       });
     }
   };
@@ -199,14 +235,13 @@ class Experiment extends Container<State> {
 
       const experimentList: IExperimentList = response.data;
 
-      return await this.setState(previousState => ({
-        error: undefined,
+      return await this.setState({
         experimentList,
         experimentListQueryParameters: nextQueryParameters
-      }));
+      })
     } catch (error) {
       return await this.setState({
-        error: error.message
+        experimentListError: error.message
       });
     }
   };
@@ -228,7 +263,6 @@ class Experiment extends Container<State> {
     const nextParams = Object.entries(nextQueryParameters)
       .map(entry => `${entry[0]}=${entry[1]}&`)
       .join('');
-    console.log(nextParams);
 
     try {
       const response = await Axios.get(
@@ -245,7 +279,7 @@ class Experiment extends Container<State> {
       }));
     } catch (error) {
       return await this.setState({
-        error: error.message
+        parameterExperimentListError: error.message
       });
     }
   };
@@ -258,20 +292,15 @@ class Experiment extends Container<State> {
         url: `${this.baseUrl}/${uuid}`
       });
 
-      if (response.status >= 400) {
-        return this.setState({
-          error: response.data.message
-        });
-      }
-
       await this.list({});
 
-      return await this.setState({
-        error: undefined
-      });
+      return await this.setState(this.filterResponse(response));
     } catch (error) {
       return await this.setState({
-        error: error.message
+        experiment: {
+          status: 'error',
+          result: [{ type: MIME_TYPES.ERROR, data: error.message }]
+        },
       });
     }
   };
@@ -294,21 +323,16 @@ class Experiment extends Container<State> {
         url: `${this.baseUrl}/${uuid}`
       });
 
-      if (response.status >= 400) {
-        return this.setState({
-          error: response.data.message
-        });
-      }
 
       await this.list({});
 
-      return await this.setState({
-        error: undefined,
-        experiment: response.data
-      });
+      return await this.setState(this.filterResponse(response));
     } catch (error) {
       return await this.setState({
-        error: error.message
+        experiment: {
+          status: 'error',
+          result: [{ type: MIME_TYPES.ERROR, data: error.message }]
+        },
       });
     }
   };
@@ -331,24 +355,13 @@ class Experiment extends Container<State> {
         url: transient ? `${this.baseUrl}/transient` : `${this.baseUrl}`
       });
 
-      if (response.status >= 400) {
-        return this.setState({
-          error: response.data.message
-        });
-      }
-
-      const json: IExperiment = {
-        ...response.data,
-        transient
-      };
-
-      return await this.setState({
-        experiment: json,
-        error: undefined
-      });
+      return await this.setState(this.filterResponse(response));
     } catch (error) {
       return await this.setState({
-        error: error.message
+        experiment: {
+          status: 'error',
+          result: [{ type: MIME_TYPES.ERROR, data: error.message }]
+        },
       });
     }
   };
@@ -406,22 +419,22 @@ class Experiment extends Container<State> {
           const varCount = (query.variables && query.variables.length) || 0;
           value = isVector
             ? (query.variables &&
-                query.variables // outputs: a1-a2,b1-b2, c1-a1
-                  .reduce(
-                    (vectors: string, v, i) =>
-                      (i + 1) % 2 === 0
-                        ? `${vectors}${v.code},`
-                        : varCount === i + 1
+              query.variables // outputs: a1-a2,b1-b2, c1-a1
+                .reduce(
+                  (vectors: string, v, i) =>
+                    (i + 1) % 2 === 0
+                      ? `${vectors}${v.code},`
+                      : varCount === i + 1
                         ? `${vectors}${v.code}-${query.variables &&
-                            query.variables[0].code}`
+                        query.variables[0].code}`
                         : `${vectors}${v.code}-`,
-                    ''
-                  )
-                  .replace(/,$/, '')) ||
-              ''
+                  ''
+                )
+                .replace(/,$/, '')) ||
+            ''
             : (query.variables &&
-                query.variables.map(v => v.code).toString()) ||
-              '';
+              query.variables.map(v => v.code).toString()) ||
+            '';
         }
 
         if (p.label === 'dataset') {

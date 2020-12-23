@@ -244,9 +244,11 @@ const Dropdown = ({ ...props }: Props): JSX.Element => {
     setParameterExperiment: setExperiment
   } = apiExperiment;
   const {
-    parameterExperiment: experiment,
+    parameterExperiment: e,
     parameterExperimentList: experimentList
   } = state;
+
+const experiment = apiExperiment.isExperiment(e);
 
   const [isOpen, setIsOpen] = useState(false);
   const node = useRef(null);

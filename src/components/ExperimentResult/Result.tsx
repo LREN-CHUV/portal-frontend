@@ -2,12 +2,12 @@ import * as React from 'react';
 import { Card, ProgressBar } from 'react-bootstrap';
 import styled, { keyframes } from 'styled-components';
 
-import { Result, State } from '../API/Experiment';
+import { Result, State, IExperiment } from '../API/Experiment';
 import ResultsErrorBoundary from '../UI/ResultsErrorBoundary';
 import RenderResult from './RenderResult';
 
 const Body = styled(Card.Body)`
-  min-height: 50vh;
+  min-height: 20vh;
 `;
 
 const indeterminateAnimation = keyframes`
@@ -34,14 +34,17 @@ export default ({
 }: {
   experimentState: State;
 }): JSX.Element => {
-  const experiment = experimentState.experiment;
+  const experiment = experimentState.experiment as IExperiment;
   const result = experiment?.result;
-  const error = experimentState.error;
+  const error = experiment.status === 'error';
   const loading = !result && !error;
+
+  console.log(experiment?.name, result, error)
 
   return (
     <Card>
       <Body>
+        <h4>{experiment?.name}</h4>
         {loading ? (
           <div className="loading">
             <h3>Your experiment is currently running</h3>
@@ -56,7 +59,6 @@ export default ({
         ) : null}
         {error ? (
           <div className="error">
-            <h3>An error has occured</h3>
             <p>{error}</p>
           </div>
         ) : null}

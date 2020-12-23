@@ -39,7 +39,7 @@ class Experiment extends React.Component<Props> {
       this.pollFetchExperiment(uuid);
     }
 
-    const e = apiExperiment.state.experiment;
+    const e = apiExperiment.isExperiment(apiExperiment.state.experiment);
     if (e) {
       handleSelectExperimentToModel(apiModel, e);
 
@@ -63,7 +63,7 @@ class Experiment extends React.Component<Props> {
     const { apiExperiment, apiModel } = this.props;
     if (uuid !== previousUUID) {
       await apiExperiment.get({ uuid });
-      const e = apiExperiment.state.experiment;
+      const e = apiExperiment.isExperiment(apiExperiment.state.experiment);
       if (e) {
         handleSelectExperimentToModel(apiModel, e);
         if (!e.viewed) {
@@ -93,7 +93,7 @@ class Experiment extends React.Component<Props> {
       <div className="Experiment Result">
         <div className="header">
           <ExperimentResultHeader
-            experiment={apiExperiment.state.experiment}
+            experiment={apiExperiment.isExperiment(apiExperiment.state.experiment)}
             handleShareExperiment={this.handleShareExperiment}
             handleCreateNewExperiment={this.handleCreateNewExperiment}
           />
@@ -112,7 +112,7 @@ class Experiment extends React.Component<Props> {
                   <Datasets model={model} />
                 </section>
                 <section>
-                  <Algorithm experiment={experiment} />
+                  <Algorithm experiment={apiExperiment.isExperiment(experiment)} />
                 </section>
                 <section>
                   <Model model={model} lookup={apiCore.lookup} />
@@ -132,9 +132,9 @@ class Experiment extends React.Component<Props> {
     props: Props
   ):
     | {
-        uuid: string;
-        slug: string;
-      }
+      uuid: string;
+      slug: string;
+    }
     | undefined => {
     const { match } = props;
     if (!match) {
@@ -145,8 +145,8 @@ class Experiment extends React.Component<Props> {
 
   private handleShareExperiment = async (): Promise<void> => {
     const { apiExperiment } = this.props;
-    const experiment = apiExperiment.state.experiment;
-    const shared = experiment && experiment.shared;
+    const experiment = apiExperiment.isExperiment(apiExperiment.state.experiment);
+    const shared = experiment?.shared;
     const params = this.urlParams(this.props);
 
     if (!params) {

@@ -32,6 +32,7 @@ const Wrapper = styled(Container)`
   font-family: 'Open Sans', sans-serif;
   font-weight: normal;
   min-width: 600px;
+  padding-bottom: 0.25em;
 
   a:link,
   a:visited {
@@ -94,6 +95,7 @@ const DropDownListContainer = styled.div`
   border: 2px solid #eee;
   border-radius: 0.25rem;
   position: absolute;
+  margin-top: 0.4em;
   z-index: 100;
 `;
 
