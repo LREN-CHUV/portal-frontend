@@ -14,6 +14,7 @@ import {
 const modelSlug = `pca-${Math.round(Math.random() * 10000)}`;
 const algorithmId = 'PCA';
 const algorithmLabel = 'Principal Components analysis';
+
 const parameters: ExperimentParameter[] = [
   { name: 'standardize', value: 'false', label: 'standardize' },
   { name: 'coding', value: 'null', label: 'coding' },

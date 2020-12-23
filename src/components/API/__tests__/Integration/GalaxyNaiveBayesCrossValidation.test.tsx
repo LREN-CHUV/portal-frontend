@@ -45,21 +45,21 @@ let algorithmId: string | undefined;
 // Test
 
 describe('Integration Test for experiment API', () => {
-   beforeAll(async () => {
-     const apiCore = new APICore(config);
-     await apiCore.algorithms();
-     const result = apiCore.state.algorithms;
-     const error = apiCore.state.error;
-     expect(error).toBeFalsy();
-     expect(result).toBeTruthy();
+  beforeAll(async () => {
+    const apiCore = new APICore(config);
+    await apiCore.algorithms();
+    const result = apiCore.state.algorithms;
+    const error = apiCore.state.error;
+    expect(error).toBeFalsy();
+    expect(result).toBeTruthy();
 
-     algorithmId = result && result.find(a => a.label === algorithmLabel)?.name;
-     expect(algorithmId).toBeTruthy();
+    algorithmId = result && result.find(a => a.label === algorithmLabel)?.name;
+    expect(algorithmId).toBeTruthy();
 
-     console.log(algorithmId)
+    console.log(algorithmId)
 
-     return;
-   });
+    return;
+  });
 
   it(`create ${algorithmId}`, async () => {
 

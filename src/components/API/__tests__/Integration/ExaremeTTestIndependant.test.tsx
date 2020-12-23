@@ -10,6 +10,7 @@ import { createExperiment, TEST_PATHOLOGIES, waitForResult } from '../../UtiltyT
 const modelSlug = `ttest-i-${Math.round(Math.random() * 10000)}`;
 const algorithmId = 'TTEST_INDEPENDENT';
 const algorithmLabel = 'T-Test Independent';
+
 const parameters: ExperimentParameter[] = [
   { name: 'xlevels', value: 'M,F', label: 'xlevels' },
   { name: 'testvalue', value: '3.0', label: 'testvalue' },

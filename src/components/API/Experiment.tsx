@@ -42,6 +42,22 @@ export type ParameterName =
   | 'ci'
   | 'meandiff'
   | 'testvalue'
+  | 'dx'
+  | 'c2_feature_selection_method'
+  | 'c2_num_clusters_method'
+  | 'c2_num_clusters'
+  | 'c2_clustering_method'
+  | 'c3_feature_selection_method'
+  | 'c3_classification_method'
+  | 'devel'
+  | 'max_deg'
+  | 'confLevels'
+  | 'thres'
+  | 'num_points'
+  | 'max_depth'
+  | 'outcome_pos'
+  | 'outcome_neg'
+  | 'max_age'
 
 export interface ExperimentParameter {
   name: ParameterName;
@@ -117,6 +133,8 @@ class Experiment extends Container<State> {
     super();
     this.options = config.options;
     this.baseUrl = `${backendURL}/experiments`;
+
+    console.log(this.baseUrl)
   }
 
   setParameterExperiment = (parameterExperiment?: IExperiment): void => {

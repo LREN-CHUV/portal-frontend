@@ -10,7 +10,8 @@ import { createExperiment, TEST_PATHOLOGIES, waitForResult } from '../../UtiltyT
 const modelSlug = `pearson-${Math.round(Math.random() * 10000)}`;
 const algorithmId = 'PEARSON_CORRELATION';
 const algorithmLabel = 'Pearson Correlation';
-const parameters: ExperimentParameter = [
+
+const parameters: ExperimentParameter[] = [
   {
     name: 'x', // covariable
     value: 'lefthippocampus'

@@ -1,93 +1,73 @@
 import { mount } from 'enzyme';
 import * as React from 'react';
 
-import Result from '../../../Result/Result';
-import { AlgorithmParameter } from '../../Core';
-import { ModelResponse } from '../../Model';
-
+import Result from '../../../ExperimentResult/Result';
+import { ExperimentParameter, IExperiment } from '../../Experiment';
 import {
-  buildPayload,
   createExperiment,
-  createModel,
   TEST_PATHOLOGIES,
   waitForResult
-} from '../../Utils';
+} from '../../UtiltyTests';
 
 // config
 
 const modelSlug = `3c-${Math.round(Math.random() * 10000)}`;
 const algorithmId = 'THREE_C';
 const algorithmLabel = '3C';
-const parameters = [
-   {"name": "dataset", "value": "ppmi, edsd"},
-   {"name": "dx", "value": "alzheimerbroadcategory"},
-   {"name": "c2_feature_selection_method", "value": "RF"},
-   {"name": "c2_num_clusters_method", "value": "Euclidean"},
-   {"name": "c2_num_clusters", "value": "6"},
-   {"name": "c2_clustering_method", "value": "Euclidean"},
-   {"name": "c3_feature_selection_method", "value": "RF"},
-   {"name": "c3_classification_method", "value": "RF"},
+
+const parameters: ExperimentParameter[] = [
+  { "name": "dx", "value": "alzheimerbroadcategory" },
+  { "name": "c2_feature_selection_method", "value": "RF" },
+  { "name": "c2_num_clusters_method", "value": "Euclidean" },
+  { "name": "c2_num_clusters", "value": "6" },
+  { "name": "c2_clustering_method", "value": "Euclidean" },
+  { "name": "c3_feature_selection_method", "value": "RF" },
+  { "name": "c3_classification_method", "value": "RF" },
+  {
+    name: 'x', // covariable
+    value: 'gender, agegroup'
+  },
+  {
+    name: 'y', // variable
+    value: 'lefthippocampus,righthippocampus,leftcaudate'
+  },
+  {
+    name: 'pathology',
+    value: TEST_PATHOLOGIES.dementia.code
+  },
+  {
+    name: 'dataset',
+    value: TEST_PATHOLOGIES.dementia.datasets
+      .filter(d => d.code === 'ppmi' || d.code === 'edsd')
+      .map(d => d.code)
+      .toString()
+  }
 ];
 
-const model: ModelResponse = {
-  query: {
-    pathology: TEST_PATHOLOGIES.dementia.code,
-    coVariables: [
-      {
-        code: 'gender'
-      },
-      {
-        code: 'agegroup'
-      }
-    ],
-    filters: '',
-    groupings: [],
-    testingDatasets: [],
-    trainingDatasets: TEST_PATHOLOGIES.dementia.datasets.filter(
-      d => d.code !== 'fake_longitudinal'
-    ),
-    validationDatasets: [],
-    variables: [
-      { code: 'lefthippocampus' },
-      { code: 'righthippocampus' },
-      { code: 'leftcaudate' }
-    ]
-  }
+const experiment: Partial<IExperiment> = {
+  algorithm: {
+    name: algorithmId,
+    parameters,
+    type: 'string'
+  },
+  name: modelSlug
 };
 
 // Test
 
 describe('Integration Test for experiment API', () => {
 
-  beforeAll(async () => {
-    const mstate = await createModel({
-      model,
-      modelSlug
-    });
-
-    expect(mstate.error).toBeFalsy();
-    expect(mstate.model).toBeTruthy();
-
-    return
-  });
 
   it(`create ${algorithmId}`, async () => {
-    const payload = await buildPayload(
-      model,
-      parameters as AlgorithmParameter[],
-      algorithmId,
-      algorithmLabel,
-      modelSlug
-    );
 
-    const { error, experiment } = await createExperiment({
-      experiment: payload
+    const { error, experiment: result } = await createExperiment({
+      experiment
     });
 
     expect(error).toBeFalsy();
-    expect(experiment).toBeTruthy();
+    expect(result).toBeTruthy();
 
-    const uuid = experiment && experiment.uuid;
+    const uuid = result && result.uuid;
     expect(uuid).toBeTruthy();
     if (!uuid) {
       throw new Error('uuid not defined');
