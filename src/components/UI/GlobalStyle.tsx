@@ -61,6 +61,10 @@ export const GlobalStyles = createGlobalStyle`
     color: #ffc107;
   }
 
+  .danger {
+    color: #dc3545;
+  }
+
   .btn {
     font-size: 0.9rem;
   }

@@ -289,6 +289,7 @@ class Experiment extends Container<State> {
       ...params,
       page
     };
+
     const nextParams = Object.entries(nextQueryParameters)
       .map(entry => `${entry[0]}=${entry[1]}&`)
       .join('');

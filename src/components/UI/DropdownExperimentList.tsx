@@ -100,6 +100,12 @@ const DropDownListContainer = styled.div`
   z-index: 100;
 `;
 
+const InlineDialog = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
 interface Props {
   username?: string;
   experimentList?: IExperimentList;
@@ -111,9 +117,6 @@ interface Props {
 
 interface InternalProps extends Pick<Props, 'username' | 'handleUpdate'> {
   experiment: IExperiment;
-  setConfirmDelete: React.Dispatch<
-    React.SetStateAction<null | { uuid: string; confirm: boolean }>
-  >;
   handleOnClick: (parameterExperiment: IExperiment) => void;
 }
 
@@ -130,27 +133,23 @@ const ExperimentIcon = ({
   shared
 }: Partial<IExperiment>): JSX.Element => {
   if (status === 'error') {
-    return <BsFillExclamationCircleFill />;
+    return <BsFillExclamationCircleFill title="Experiment has errors" />;
   }
 
   if (status === 'pending') {
-    return <BsWatch />;
+    return <BsWatch title="pending experiment" />;
   }
 
   if (shared) {
-    return (
-      <div style={{ color: 'blue' }}>
-        <FaShareAlt />
-      </div>
-    );
+    return <FaShareAlt title="shared" />;
   }
 
   if (viewed) {
-    return <BsFillEyeFill />;
+    return <BsFillEyeFill title="viewed" />;
   }
 
   if (!viewed && status === 'success') {
-    return <BsFillEyeSlashFill />;
+    return <BsFillEyeSlashFill title="Not viewed" />;
   }
 
   return <BsCloudDownload />;
@@ -198,35 +197,41 @@ const InlineNameEdit = ({
 
   return (
     <>
-      <input
-        autoFocus
-        placeholder={editingExperimentName?.name}
-        value={editingExperimentName?.name}
-        onChange={(e): void =>
-          setEditingExperimentName({
-            uuid: editingExperimentName.uuid,
-            name: e.target.value
-          })
-        }
-      />
-      <Button
-        size={'sm'}
-        variant="primary"
-        onClick={(): void => {
-          submit(editingExperimentName.uuid, editingExperimentName.name);
-        }}
-      >
-        <GoCheck />
-      </Button>{' '}
-      <Button
-        size={'sm'}
-        variant="outline-dark"
-        onClick={(): void => {
-          cancel();
-        }}
-      >
-        <GoX />
-      </Button>
+      <InlineDialog>
+        <div>
+          <Form.Control
+            autoFocus
+            placeholder={editingExperimentName?.name}
+            value={editingExperimentName?.name}
+            onChange={(e): void =>
+              setEditingExperimentName({
+                uuid: editingExperimentName.uuid,
+                name: e.target.value
+              })
+            }
+          />
+        </div>
+        <div>
+          <Button
+            size={'sm'}
+            variant="primary"
+            onClick={(): void => {
+              submit(editingExperimentName.uuid, editingExperimentName.name);
+            }}
+          >
+            <GoCheck />
+          </Button>{' '}
+          <Button
+            size={'sm'}
+            variant="outline-dark"
+            onClick={(): void => {
+              cancel();
+            }}
+          >
+            Cancel
+          </Button>
+        </div>
+      </InlineDialog>
     </>
   );
 };
@@ -239,71 +244,122 @@ const ExperimentRow = ({
   const [editingExperimentName, setEditingExperimentName] = useState<
     EditingProps['editingExperimentName']
   >(null);
+  const [confirmDelete, setConfirmDelete] = useState<null | string>(null);
+
+  const ConfimDeleteContainer = ({
+    ...props
+  }: {
+    handleDelete: Props['handleDelete'];
+  }): JSX.Element => (
+    <td colSpan={3}>
+      <InlineDialog>
+        <p className="danger">Really delete this experiment?</p>
+        <div>
+          <Button
+            size={'sm'}
+            variant="primary"
+            onClick={(): void => {
+              props.handleDelete(experiment.uuid);
+              setConfirmDelete(null);
+            }}
+          >
+            <GoCheck />
+          </Button>{' '}
+          <Button
+            size={'sm'}
+            variant="outline-dark"
+            onClick={(): void => {
+              setConfirmDelete(null);
+            }}
+          >
+            Cancel
+          </Button>
+        </div>
+      </InlineDialog>
+    </td>
+  );
 
   return (
     <tr>
       <td className="centered align-middle">
         <ExperimentIcon {...experiment} />
       </td>
-      <td className="align-middle">
-        {' '}
-        {editingExperimentName?.uuid === experiment.uuid ? (
+
+      {editingExperimentName?.uuid === experiment.uuid ? (
+        <td colSpan={5} className="align-middle">
           <InlineNameEdit
             editingExperimentName={editingExperimentName}
             setEditingExperimentName={setEditingExperimentName}
             {...props}
           />
-        ) : (
-          <Link
-            className="experiment-name"
-            to={`/experiment/${experiment.uuid}`}
-            title={experiment.name}
-            onClick={(): void => props.handleOnClick(experiment)}
-          >
-            {experiment.name}
-          </Link>
-        )}
-      </td>
-      <td className="centered align-middle">
-        {dayjs().to(dayjs(experiment.created))}
-      </td>
-      <td className="centered align-middle">{experiment.createdBy}</td>
-      <td className="centered align-middle">
-        <Button
-          size={'sm'}
-          disabled={!isOwner}
-          variant="light"
-          onClick={(): void =>
-            props?.handleUpdate(experiment.uuid, { shared: !experiment.shared })
-          }
-        >
-          <FaShareAlt />
-        </Button>{' '}
-        <Button
-          size={'sm'}
-          disabled={!isOwner || editingExperimentName?.uuid === experiment.uuid}
-          variant="light"
-          onClick={(): void => {
-            setEditingExperimentName({
-              uuid: experiment.uuid,
-              name: experiment.name
-            });
-          }}
-        >
-          <BsPencilSquare />
-        </Button>{' '}
-        <Button
-          size={'sm'}
-          disabled={!isOwner}
-          variant="light"
-          onClick={(): void => {
-            props.handleDelete(experiment.uuid);
-            //props.setConfirmDelete({ uuid: experiment.uuid, confirm: true });
-          }}
-        >
-          <BsFillTrashFill />
-        </Button>
-      </td>
+        </td>
+      ) : (
+        <>
+          <td className="align-middle">
+            <Link
+              className="experiment-name"
+              to={`/experiment/${experiment.uuid}`}
+              title={`See experiment ${experiment.name}`}
+              onClick={(): void => props.handleOnClick(experiment)}
+            >
+              {experiment.name}
+            </Link>
+          </td>
+
+          {confirmDelete ? (
+            <ConfimDeleteContainer {...props} />
+          ) : (
+            <>
+              <td className="centered align-middle">
+                {dayjs().to(dayjs(experiment.created))}
+              </td>
+              <td className="centered align-middle">{experiment.createdBy}</td>
+              <td className="centered align-middle">
+                <Button
+                  size={'sm'}
+                  disabled={!isOwner}
+                  variant="light"
+                  title="Share with all users"
+                  onClick={(): void =>
+                    props?.handleUpdate(experiment.uuid, {
+                      shared: !experiment.shared
+                    })
+                  }
+                >
+                  <FaShareAlt />
+                </Button>{' '}
+                <Button
+                  size={'sm'}
+                  disabled={
+                    !isOwner || editingExperimentName?.uuid === experiment.uuid
+                  }
+                  variant="light"
+                  title="Edit name"
+                  onClick={(): void => {
+                    setEditingExperimentName({
+                      uuid: experiment.uuid,
+                      name: experiment.name
+                    });
+                  }}
+                >
+                  <BsPencilSquare />
+                </Button>{' '}
+                <Button
+                  size={'sm'}
+                  disabled={!isOwner}
+                  variant="light"
+                  title="Delete"
+                  onClick={(): void => {
+                    setConfirmDelete(experiment.uuid);
+                  }}
+                >
+                  <BsFillTrashFill />
+                </Button>
+              </td>
+            </>
+          )}
+        </>
+      )}
     </tr>
   );
 };
@@ -341,26 +397,10 @@ const Items = ({
   ...props
 }: Props & { handleOnClick: InternalProps['handleOnClick'] }): JSX.Element => {
   const { experimentList, handleQueryParameters } = props;
-  const [confirmDelete, setConfirmDelete] = useState<null | {
-    uuid: string;
-    confirm: boolean;
-  }>(null);
   const [searchName, setSearchName] = useState<string>('');
 
   return (
     <Wrapper>
-      <Modal
-        show={confirmDelete !== null}
-        title={'Delete'}
-        body={'Really delete this experiment ?'}
-        handleCancel={(): void => setConfirmDelete(null)}
-        handleOK={(): void => {
-          if (confirmDelete?.uuid) {
-            props.handleDelete(confirmDelete.uuid);
-            setConfirmDelete(null);
-          }
-        }}
-      />
       <SearchContainer>
         <Search
           handleQueryParameters={handleQueryParameters}
@@ -387,7 +427,6 @@ const Items = ({
                   experiment={experiment}
                   username={props.username}
                   handleUpdate={props.handleUpdate}
-                  setConfirmDelete={setConfirmDelete}
                   handleOnClick={handleOnClick}
                   handleDelete={props.handleDelete}
                 />
