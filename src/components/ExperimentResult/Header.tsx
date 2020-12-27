@@ -44,7 +44,7 @@ export default ({
           variant="info"
           type="submit"
         >
-          Create new Experiment
+          New Experiment from Parameters
         </Button>
       </Card.Body>
     </Card>

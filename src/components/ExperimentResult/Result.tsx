@@ -50,7 +50,7 @@ export default ({
               <IndederminateProgressBar striped now={100} />
             </div>
             <p>
-              Please check back in a few minutes. This page will automatically
+              Please check back in a moment. This page will automatically
               refresh once your experiment has finished executing.
             </p>
           </div>
