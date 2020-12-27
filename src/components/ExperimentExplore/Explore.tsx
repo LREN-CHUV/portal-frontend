@@ -46,13 +46,27 @@ const SearchBox = styled.div`
   /* width: 320px; */
 `;
 
+const MenuParametersContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 0 8px 0;
+  padding: 0 0 8px 0;
+  border-bottom: 1px solid lightgray;
+`;
+
+const AlgorithmTitleContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0.5em 0.5em 0 0;
+`;
+
+
 const ParameterContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  margin: 0 0 8px 0;
-  padding: 0 0 8px 0;
-  border-bottom: 1px solid lightgray;
 `;
 
 const Grid = styled.div`
@@ -184,14 +198,16 @@ export default (props: ExploreProps): JSX.Element => {
         <Col2>
           <Card>
             <Card.Body>
-              <ParameterContainer>
-                <h5 style={{ marginRight: '8px' }}>Parameters</h5>
-                <DropdownExperimentList
-                  apiExperiment={apiExperiment}
-                  handleSelectExperiment={(experiment?: IExperiment): void =>
-                    handleSelectExperimentToModel(apiModel, experiment)
-                  }
-                />
+              <MenuParametersContainer>
+                <ParameterContainer>
+                  <h5 style={{ marginRight: '8px' }}>Parameters</h5>
+                  <DropdownExperimentList
+                    apiExperiment={apiExperiment}
+                    handleSelectExperiment={(experiment?: IExperiment): void =>
+                      handleSelectExperimentToModel(apiModel, experiment)
+                    }
+                  />
+                </ParameterContainer>
                 <div className="item">
                   <Button
                     variant="info"
@@ -201,16 +217,8 @@ export default (props: ExploreProps): JSX.Element => {
                     Descriptive Analysis <BsFillCaretRightFill />
                   </Button>
                 </div>
-              </ParameterContainer>
-              <p style={{ padding: '4px 0 8px 0' }}>
-                <a
-                  href={`${ONTOLOGY_URL}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <b>Access to the latest ontology and terminology</b>
-                </a>
-              </p>
+              </MenuParametersContainer>
+
               <ModelView
                 d3Model={d3Model}
                 handleUpdateD3Model={handleUpdateD3Model}
@@ -286,18 +294,18 @@ export default (props: ExploreProps): JSX.Element => {
                   </Button>
                 }
               />
-
-              {/* </Tab>
-                <Tab eventKey={1} title={'Formula'} key={1}>
-                  <Formula
-                    parameters={d3Model}
-                    handleUpdateD3Model={handleUpdateD3Model}
-                    setFormulaString={setFormulaString}
-                  />
-                </Tab>
-              </Tabs> */}
-
-              <h5 style={{ paddingTop: '4px' }}>Available algorithms</h5>
+              <AlgorithmTitleContainer>
+                <h5 >Available algorithms</h5>
+                <p>
+                  <a
+                    href={`${ONTOLOGY_URL}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <b>Access to the latest ontology and terminology</b>
+                  </a>
+                </p>
+              </AlgorithmTitleContainer>
               <AvailableAlgorithms
                 layout={'inline'}
                 algorithms={apiCore.state.algorithms}

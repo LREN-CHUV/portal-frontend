@@ -3,7 +3,6 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useOnClickOutside } from '../utils';
-import { BsFillTrashFill } from 'react-icons/bs';
 import { Form } from 'react-bootstrap';
 
 import { APIExperiment } from '../API';
@@ -186,7 +185,7 @@ const Items = ({
       )}
 
       <ResetItem onClick={(): void => handleOnClick()} key={'reset'}>
-        <BsFillTrashFill /> Reset Parameters
+        Reset Current Parameters
       </ResetItem>
     </>
   );
