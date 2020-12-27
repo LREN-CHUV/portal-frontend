@@ -221,20 +221,30 @@ class Experiment extends Container<State> {
     }
   };
 
+  /* Must keep the parameters as we are polling this list to retrieve updated status and new experiments,
+  so the list must be refreshed with the same parameters otherwise the index (page, search) get reset */
   list = async ({
     ...params
   }: ExperimentListQueryParameters): Promise<void> => {
     const currentExperimentListQueryParameters = this.state
       .experimentListQueryParameters;
 
+    const nextPage =
+      params.page === 0
+        ? 0
+        : params.page === undefined
+        ? currentExperimentListQueryParameters.page
+        : params.page;
+
+    // reset the page if search is on */
+    const page = params?.name && params?.name?.length > 2 ? 0 : nextPage;
+
     const nextQueryParameters = {
       ...currentExperimentListQueryParameters,
       ...params,
-      page:
-        params?.name && params?.name?.length > 2
-          ? 0
-          : params.page || currentExperimentListQueryParameters.page // reset the page if search is on
+      page
     };
+
     const nextParams = Object.entries(nextQueryParameters)
       .map(entry => `${entry[0]}=${entry[1]}&`)
       .join('');
@@ -264,13 +274,20 @@ class Experiment extends Container<State> {
     const currentExperimentListQueryParameters = this.state
       .parameterExperimentListQueryParameters;
 
+    const nextPage =
+      params.page === 0
+        ? 0
+        : params.page === undefined
+        ? currentExperimentListQueryParameters.page
+        : params.page;
+
+    // reset the page if search is on */
+    const page = params?.name && params?.name?.length > 2 ? 0 : nextPage;
+
     const nextQueryParameters = {
       ...currentExperimentListQueryParameters,
       ...params,
-      page:
-        params?.name && params?.name?.length > 2
-          ? 0
-          : params.page || currentExperimentListQueryParameters.page // reset the page if search is on
+      page
     };
     const nextParams = Object.entries(nextQueryParameters)
       .map(entry => `${entry[0]}=${entry[1]}&`)
