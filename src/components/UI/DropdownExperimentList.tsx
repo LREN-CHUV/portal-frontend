@@ -15,7 +15,7 @@ import {
 import { Link } from 'react-router-dom';
 
 import { FaShareAlt } from 'react-icons/fa';
-import { GoCheck, GoX } from 'react-icons/go';
+import { GoCheck } from 'react-icons/go';
 import styled from 'styled-components';
 
 import {
@@ -24,7 +24,6 @@ import {
   IExperimentList
 } from '../API/Experiment';
 import { useKeyPressed, useOnClickOutside } from '../utils';
-import Modal from './Modal';
 
 dayjs.extend(relativeTime);
 dayjs().format();

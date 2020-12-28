@@ -89,6 +89,7 @@ class Experiment extends React.Component<Props> {
     const { apiExperiment, apiModel, apiCore } = this.props;
     const model = apiModel?.state?.model;
     const experiment = apiExperiment.state.experiment;
+    
     return (
       <div className="Experiment Result">
         <div className="header">
@@ -96,6 +97,7 @@ class Experiment extends React.Component<Props> {
             experiment={apiExperiment.isExperiment(
               apiExperiment.state.experiment
             )}
+            handleDeleteExperiment={this.handleDeleteExperiment}
             handleShareExperiment={this.handleShareExperiment}
             handleCreateNewExperiment={this.handleCreateNewExperiment}
           />
@@ -136,9 +138,9 @@ class Experiment extends React.Component<Props> {
     props: Props
   ):
     | {
-        uuid: string;
-        slug: string;
-      }
+      uuid: string;
+      slug: string;
+    }
     | undefined => {
     const { match } = props;
     if (!match) {
@@ -146,6 +148,13 @@ class Experiment extends React.Component<Props> {
     }
     return match.params;
   };
+
+  private handleDeleteExperiment = (uuid: string): void => {
+    const { apiExperiment } = this.props;
+    apiExperiment.delete({ uuid })
+    const { history } = this.props;
+    history.push(`/experiment`);
+  }
 
   private handleShareExperiment = async (): Promise<void> => {
     const { apiExperiment } = this.props;
@@ -164,6 +173,8 @@ class Experiment extends React.Component<Props> {
       ? await apiExperiment.markAsUnshared({ uuid })
       : await apiExperiment.markAsShared({ uuid });
   };
+
+
 
   private handleCreateNewExperiment = (): void => {
     const { history } = this.props;

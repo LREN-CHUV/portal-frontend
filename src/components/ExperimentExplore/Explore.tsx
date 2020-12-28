@@ -118,7 +118,6 @@ export default (props: ExploreProps): JSX.Element => {
     handleSelectNode,
     handleSelectPathology,
     handleUpdateD3Model,
-    handleSelectModel,
     handleGoToAnalysis,
     zoom
     // setFormulaString

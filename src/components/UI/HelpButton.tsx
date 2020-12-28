@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { DropdownButton, Dropdown } from 'react-bootstrap';
+import { DropdownButton } from 'react-bootstrap';
 import { BsBook, BsFilm, BsFillEnvelopeFill } from 'react-icons/bs';
 
 import styled from 'styled-components';
