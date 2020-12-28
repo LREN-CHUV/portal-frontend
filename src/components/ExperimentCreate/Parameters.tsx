@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Form, FormControl } from 'react-bootstrap';
+import { Form } from 'react-bootstrap';
 import Select from 'react-select';
 import styled from 'styled-components';
 import { APICore } from '../API';
@@ -7,10 +7,6 @@ import { Algorithm, AlgorithmParameter, VariableEntity } from '../API/Core';
 import { Query } from '../API/Model';
 import CategoryChooser from './CategoryValuesChooser';
 import LogisticCategory from './LogisticCategory';
-
-const Header = styled.div`
-  margin-bottom: 16px;
-`;
 
 type LocalVar = { value: string; label: string }[] | undefined;
 
@@ -22,10 +18,27 @@ interface Props {
   handleChangeParameters: (parameters: AlgorithmParameter[]) => void;
 }
 
+const Header = styled.div`
+  margin-bottom: 16px;
+
+  h4 {
+    margin-bottom: 4px;
+  }
+`;
+
 const HelpBlock = styled.div`
+
+  var {
+    color: #6c757d;
+    display: inline;
+    font-size: 0.8em;
+    font-weight: 400;
+  }
+
   var:after {
     content: ', ';
   }
+
   var:last-child:after {
     content: '';
   }
@@ -40,6 +53,7 @@ const Parameters = ({
 }: Props): JSX.Element => {
   const [selectedOptions, setSelectedOptions] = useState<any>();
   const [modalities, setModalities] = useState<LocalVar>();
+  const [validated, setValidated] = useState(false)
 
   // TODO effect in Select component
   const lookupCallback = useCallback(apiCore.lookup, []);
@@ -66,33 +80,6 @@ const Parameters = ({
       );
     }
   }, [query, lookupCallback]);
-
-  const getValidationState = (parameter: AlgorithmParameter): any => {
-    const value = parameter.value;
-
-    const notBlank = parameter.valueNotBlank;
-    const valueType = parameter.valueType;
-    const valueMin = parameter.valueMin;
-    const valueMax = parameter.valueMax;
-
-    if (notBlank && !value) {
-      return 'error';
-    }
-
-    if (valueType === 'integer' && isNaN(parseInt(value))) {
-      return 'error';
-    }
-
-    if (valueMin && parseInt(value) < valueMin) {
-      return 'error';
-    }
-
-    if (valueMax && parseInt(value) > valueMax) {
-      return 'error';
-    }
-
-    return 'success';
-  };
 
   const handleChangeCategoryParameter = (
     label: string,
@@ -125,10 +112,20 @@ const Parameters = ({
     );
   };
 
+  const handleSubmit = (event: Record<string, any>) => {
+    const form = event.currentTarget;
+    if (form.checkValidity() === false) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+
+    setValidated(true);
+  };
+
   return (
     <>
       {!algorithm && (
-        <div>
+        <Header>
           <h4>
             <strong>Your algorithm</strong>
           </h4>
@@ -136,7 +133,7 @@ const Parameters = ({
             Please, select the algorithm to be performed in the &apos;Available
             Algorithms&apos; panel
           </p>
-        </div>
+        </Header>
       )}
 
       {algorithm && (
@@ -149,17 +146,18 @@ const Parameters = ({
       )}
 
       {parameters && parameters.length > 0 && (
-        <Form>
+        <Form noValidate validated={validated} onLoad={handleSubmit} onChange={handleSubmit}>
           {parameters &&
             parameters.length &&
             parameters.map((parameter: AlgorithmParameter) => {
               const numberTypes = ['integer', 'real'];
               const type =
                 parameter &&
-                parameter.valueType &&
-                numberTypes.includes(parameter.valueType)
+                  parameter.valueType &&
+                  numberTypes.includes(parameter.valueType)
                   ? 'number'
                   : 'text';
+              const step = parameter.valueType === 'real' ? 0.01 : 1;
 
               return (
                 <Form.Group
@@ -175,6 +173,7 @@ const Parameters = ({
                   <Form.Label htmlFor={`"${parameter.name}"`}>
                     {parameter.label}
                   </Form.Label>
+
                   <>
                     {!parameter.valueEnumerations &&
                       parameter.label !== 'referencevalues' &&
@@ -185,6 +184,10 @@ const Parameters = ({
                       parameter.name !== 'negative_level' && (
                         <Form.Control
                           type={type}
+                          required={parameter.valueNotBlank === 'true'}
+                          min={parameter.valueMin}
+                          max={parameter.valueMax}
+                          step={step}
                           defaultValue={parameter.defaultValue}
                           placeholder={parameter.placeholder}
                           // tslint:disable-next-line jsx-no-lambda
@@ -200,6 +203,7 @@ const Parameters = ({
                           as={'select'}
                           defaultValue={parameter.defaultValue}
                           placeholder={parameter.placeholder}
+                          required={parameter.valueNotBlank === 'true'}
                           // tslint:disable-next-line jsx-no-lambda
                           onChange={event =>
                             handleChangeParameter(event, parameter.label)
@@ -227,7 +231,7 @@ const Parameters = ({
                         apiCore={apiCore}
                         query={query}
                         parameterName={parameter.name}
-                        notblank={parameter.valueNotBlank === 'true'}
+                        required={parameter.valueNotBlank === 'true'}
                         handleChangeCategoryParameter={
                           handleChangeCategoryParameter
                         }
@@ -236,72 +240,72 @@ const Parameters = ({
 
                     {(parameter.name === 'negative_level' ||
                       parameter.name === 'positive_level') && (
-                      <>
-                        <LogisticCategory
-                          apiCore={apiCore}
-                          query={query}
-                          parameterName={parameter.name}
-                          notblank={parameter.valueNotBlank === 'true'}
-                          handleChangeCategoryParameter={
-                            handleChangeCategoryParameter
-                          }
-                        />
-                      </>
-                    )}
+                        <>
+                          <LogisticCategory
+                            apiCore={apiCore}
+                            query={query}
+                            parameterName={parameter.name}
+                            required={parameter.valueNotBlank === 'true'}
+                            handleChangeCategoryParameter={
+                              handleChangeCategoryParameter
+                            }
+                          />
+                        </>
+                      )}
 
                     {(parameter.label === 'Positive outcome' ||
                       parameter.label === 'Negative outcome') && (
-                      <Form.Control
-                        defaultValue={parameter.defaultValue}
-                        placeholder={parameter.placeholder}
-                        // tslint:disable-next-line jsx-no-lambda
-                        onChange={event =>
-                          handleChangeParameter(event, parameter.label)
-                        }
-                      >
-                        {apiCore
-                          .lookup(
-                            query?.variables?.find((v, i) => i === 0)?.code ||
+                        <Form.Control
+                          defaultValue={parameter.defaultValue}
+                          placeholder={parameter.placeholder}
+                          required={parameter.valueNotBlank === 'true'}
+                          // tslint:disable-next-line jsx-no-lambda
+                          onChange={event =>
+                            handleChangeParameter(event, parameter.label)
+                          }
+                        >
+                          {apiCore
+                            .lookup(
+                              query?.variables?.find((v, i) => i === 0)?.code ||
                               '',
-                            query?.pathology
-                          )
-                          ?.enumerations?.map((v: VariableEntity) => (
-                            <option key={v.code} value={v.code}>
-                              {v.label}
-                            </option>
-                          ))}
-                      </Form.Control>
-                    )}
+                              query?.pathology
+                            )
+                            ?.enumerations?.map((v: VariableEntity) => (
+                              <option key={v.code} value={v.code}>
+                                {v.label}
+                              </option>
+                            ))}
+                        </Form.Control>
+                      )}
 
                     <Form.Text id="passwordHelpBlock" muted>
                       {parameter.desc}
                     </Form.Text>
 
-                    <FormControl.Feedback />
                     <HelpBlock>
                       {parameter && parameter.valueNotBlank === 'true' && (
-                        <small>required</small>
+                        <var>required</var>
                       )}
                       {parameter && parameter.valueType === 'integer' && (
-                        <small>type integer</small>
+                        <var>type integer</var>
                       )}
 
-                      {parameter && parameter.valueType === 'float' && (
-                        <small>type float</small>
+                      {parameter && parameter.valueType === 'real' && (
+                        <var>type real</var>
                       )}
 
                       {parameter !== undefined &&
                         parameter.valueMin !== undefined &&
                         parameter.valueMin !== null &&
                         !isNaN(parameter.valueMin) && (
-                          <small>min value: {parameter.valueMin}</small>
+                          <var>min value: {parameter.valueMin}</var>
                         )}
 
                       {parameter !== undefined &&
                         parameter.valueMax !== undefined &&
                         parameter.valueMax !== null &&
                         !isNaN(parameter.valueMax) && (
-                          <small>max value: {parameter.valueMax}</small>
+                          <var>max value: {parameter.valueMax}</var>
                         )}
                     </HelpBlock>
                   </>

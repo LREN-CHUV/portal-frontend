@@ -12,7 +12,7 @@ interface Props {
   apiCore: APICore;
   parameterName: string;
   query?: Query;
-  notblank?: boolean;
+  required?: boolean;
   handleChangeCategoryParameter: (code: string, value: string) => void;
 }
 
@@ -24,7 +24,7 @@ export default ({
   apiCore,
   query,
   parameterName,
-  notblank = false,
+  required = false,
   handleChangeCategoryParameter
 }: Props): JSX.Element => {
   const [categories, setCategories] = useState<LocalVar>();
@@ -74,12 +74,13 @@ export default ({
               as={'select'}
               placeholder="select"
               id={`parameter-category-chooser-${category.code}`}
+              required={required}
               onChange={(event): void => {
                 handleChangeValue(event, category.code);
               }}
             >
               <option value={'select'}>
-                Select a level ({notblank ? 'mandatory' : 'optional'})
+                Select a level ({required ? 'mandatory' : 'optional'})
               </option>
               {category &&
                 category.enumerations &&
