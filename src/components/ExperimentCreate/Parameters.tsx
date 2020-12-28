@@ -244,22 +244,21 @@ const Parameters = ({
 
                     {(parameter.name === 'negative_level' ||
                       parameter.name === 'positive_level') && (
-                      <>
-                        <LogisticCategory
-                          apiCore={apiCore}
-                          query={query}
-                          parameterName={parameter.name}
-                          required={parameter.valueNotBlank === 'true'}
-                          handleChangeCategoryParameter={
-                            handleChangeCategoryParameter
-                          }
-                        />
-                      </>
+                      <LogisticCategory
+                        apiCore={apiCore}
+                        query={query}
+                        parameterName={parameter.name}
+                        required={parameter.valueNotBlank === 'true'}
+                        handleChangeCategoryParameter={
+                          handleChangeCategoryParameter
+                        }
+                      />
                     )}
 
                     {(parameter.label === 'Positive outcome' ||
                       parameter.label === 'Negative outcome') && (
                       <Form.Control
+                        as={'select'}
                         defaultValue={parameter.defaultValue}
                         placeholder={parameter.placeholder}
                         required={parameter.valueNotBlank === 'true'}
