@@ -1,12 +1,12 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Form, FormControl, FormGroup } from 'react-bootstrap';
+import { Form, FormControl } from 'react-bootstrap';
 import Select from 'react-select';
 import styled from 'styled-components';
-
 import { APICore } from '../API';
 import { Algorithm, AlgorithmParameter, VariableEntity } from '../API/Core';
 import { Query } from '../API/Model';
 import CategoryChooser from './CategoryValuesChooser';
+import LogisticCategory from './LogisticCategory';
 
 const Header = styled.div`
   margin-bottom: 16px;
@@ -99,7 +99,8 @@ const Parameters = ({
     value: string
   ): void => {
     if (parameters && parameters.length) {
-      const o = (element: any) => element.label === label;
+      const o = (element: any) =>
+        element.label === label || element.name === label;
       const index = parameters.findIndex(o);
       const parameter = parameters.find(o);
       if (parameter) {
@@ -179,7 +180,9 @@ const Parameters = ({
                       parameter.label !== 'referencevalues' &&
                       parameter.label !== 'xlevels' &&
                       parameter.label !== 'Positive outcome' &&
-                      parameter.label !== 'Negative outcome' && (
+                      parameter.label !== 'Negative outcome' &&
+                      parameter.name !== 'positive_level' &&
+                      parameter.name !== 'negative_level' && (
                         <Form.Control
                           type={type}
                           defaultValue={parameter.defaultValue}
@@ -223,12 +226,27 @@ const Parameters = ({
                       <CategoryChooser
                         apiCore={apiCore}
                         query={query}
-                        parameterName={parameter.label}
+                        parameterName={parameter.name}
                         notblank={parameter.valueNotBlank === 'true'}
                         handleChangeCategoryParameter={
                           handleChangeCategoryParameter
                         }
                       />
+                    )}
+
+                    {(parameter.name === 'negative_level' ||
+                      parameter.name === 'positive_level') && (
+                      <>
+                        <LogisticCategory
+                          apiCore={apiCore}
+                          query={query}
+                          parameterName={parameter.name}
+                          notblank={parameter.valueNotBlank === 'true'}
+                          handleChangeCategoryParameter={
+                            handleChangeCategoryParameter
+                          }
+                        />
+                      </>
                     )}
 
                     {(parameter.label === 'Positive outcome' ||

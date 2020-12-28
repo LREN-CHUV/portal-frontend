@@ -57,7 +57,9 @@ export type ParameterName =
   | 'max_depth'
   | 'outcome_pos'
   | 'outcome_neg'
-  | 'max_age';
+  | 'max_age'
+  | 'positive_level'
+  | 'negative_level'
 
 export interface ExperimentParameter {
   name: ParameterName;
@@ -233,8 +235,8 @@ class Experiment extends Container<State> {
       params.page === 0
         ? 0
         : params.page === undefined
-        ? currentExperimentListQueryParameters.page
-        : params.page;
+          ? currentExperimentListQueryParameters.page
+          : params.page;
 
     // reset the page if search is on */
     const page = params?.name && params?.name?.length > 2 ? 0 : nextPage;
@@ -278,8 +280,8 @@ class Experiment extends Container<State> {
       params.page === 0
         ? 0
         : params.page === undefined
-        ? currentExperimentListQueryParameters.page
-        : params.page;
+          ? currentExperimentListQueryParameters.page
+          : params.page;
 
     // reset the page if search is on */
     const page = params?.name && params?.name?.length > 2 ? 0 : nextPage;
@@ -448,22 +450,22 @@ class Experiment extends Container<State> {
           const varCount = (query.variables && query.variables.length) || 0;
           value = isVector
             ? (query.variables &&
-                query.variables // outputs: a1-a2,b1-b2, c1-a1
-                  .reduce(
-                    (vectors: string, v, i) =>
-                      (i + 1) % 2 === 0
-                        ? `${vectors}${v.code},`
-                        : varCount === i + 1
+              query.variables // outputs: a1-a2,b1-b2, c1-a1
+                .reduce(
+                  (vectors: string, v, i) =>
+                    (i + 1) % 2 === 0
+                      ? `${vectors}${v.code},`
+                      : varCount === i + 1
                         ? `${vectors}${v.code}-${query.variables &&
-                            query.variables[0].code}`
+                        query.variables[0].code}`
                         : `${vectors}${v.code}-`,
-                    ''
-                  )
-                  .replace(/,$/, '')) ||
-              ''
+                  ''
+                )
+                .replace(/,$/, '')) ||
+            ''
             : (query.variables &&
-                query.variables.map(v => v.code).toString()) ||
-              '';
+              query.variables.map(v => v.code).toString()) ||
+            '';
         }
 
         if (p.label === 'dataset') {

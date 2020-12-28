@@ -1,4 +1,4 @@
-import { shallow} from 'enzyme';
+import { mount } from 'enzyme';
 import * as React from 'react';
 
 import Result from '../../../ExperimentResult/Result';
@@ -23,6 +23,8 @@ const parameters: ExperimentParameter[] = [
     name: 'y', // variable
     value: 'gender'
   },
+  { name: "positive_level", label: "other", value: "M" },
+  { name: "negative_level", label: "other", value: "F" },
   {
     name: 'pathology',
     value: TEST_PATHOLOGIES.dementia.code
@@ -53,36 +55,36 @@ const experiment: Partial<IExperiment> = {
 
 describe('Integration Test for experiment API', () => {
   it(`create ${algorithmId}`, async () => {
-    const { error, experiment: result } = await createExperiment({
+    const { experiment: result } = await createExperiment({
       experiment
     });
 
-    expect(error).toBeFalsy();
     expect(result).toBeTruthy();
+    expect(result.status).toStrictEqual('pending')
 
-    const uuid = result && result.uuid;
+    const uuid = (result as IExperiment)?.uuid;
     expect(uuid).toBeTruthy();
+
     if (!uuid) {
       throw new Error('uuid not defined');
     }
 
+    
     const experimentState = await waitForResult({ uuid });
-    expect(experimentState.error).toBeFalsy();
+    expect(experimentState.experiment.status).toStrictEqual('success')
     expect(experimentState.experiment).toBeTruthy();
 
     const props = { experimentState };
 
-    let wrapper: any = shallow(<Result {...props} />);
+    let wrapper: any = mount(<Result {...props} />);
     expect(wrapper.find('.error')).toHaveLength(0);
     expect(wrapper.find('.loading')).toHaveLength(0);
-    // expect(wrapper.find('.result')).toHaveLength(2);
-
-    // Ensure Highchart is loading by catching error
-    // Annoying highcharts Type error due to embbedding visualisation in algorithms output
-    // FIXME: Exareme output as data
-
-    // expect(() => {
-    //   wrapper = mount(<Result {...props} />);
-    // }).toThrow(TypeError);
+    expect(wrapper.find('.result')).toHaveLength(4);
+    expect(
+      wrapper
+        .find('div.result table tbody tr td')
+        .at(1)
+        .text()
+    ).toEqual('-7.628');
   });
 });
