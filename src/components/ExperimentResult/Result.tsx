@@ -12,6 +12,7 @@ const Body = styled(Card.Body)`
 
 const LoadingTitle = styled.h5`
   margin-top: 16px;
+  margin-bottom: 8px;
 `;
 
 const indeterminateAnimation = keyframes`
@@ -51,7 +52,7 @@ export default ({
             <div style={{ position: 'relative', overflowX: 'hidden' }}>
               <IndederminateProgressBar striped now={100} />
             </div>
-            <p>
+            <p style={{ marginTop: '16px ' }}>
               Please check back in a moment. This page will automatically
               refresh once your experiment has finished executing.
             </p>
