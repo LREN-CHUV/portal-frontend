@@ -40,9 +40,7 @@ export default ({
 }): JSX.Element => {
   const experiment = experimentState.experiment as IExperiment;
   const result = experiment?.result;
-  const error = experiment.status === 'error';
-  const loading = !result && !error;
-
+  const loading = experiment.status === 'pending';
   return (
     <Card>
       <Body>
@@ -57,11 +55,6 @@ export default ({
               Please check back in a moment. This page will automatically
               refresh once your experiment has finished executing.
             </p>
-          </div>
-        ) : null}
-        {error ? (
-          <div className="error">
-            <p>{error}</p>
           </div>
         ) : null}
         <ResultsErrorBoundary>
