@@ -13,7 +13,7 @@ export interface Variable {
   label?: string;
 }
 export interface VariableEntity extends Variable {
-  type?: string;
+  type?: 'multinominal' | 'binominal' | 'real' | 'integer';
   sqlType?: string;
   description?: string;
   enumerations?: Variable[];
@@ -82,11 +82,11 @@ export interface AlgorithmParameter {
   columnValuesIsCategorical: string;
   columnValuesNumOfEnumerations: string;
   value: string;
-  valueNotBlank: string;
+  valueNotBlank: 'true' | 'false';
   valueMultiple: string;
-  valueMin?: number | null;
-  valueMax?: number | null;
-  valueType: string;
+  valueMin?: number | undefined;
+  valueMax?: number | undefined;
+  valueType: 'integer' | 'real' | 'json';
   visible?: boolean;
   valueEnumerations?: string[];
 }

@@ -10,6 +10,10 @@ const Body = styled(Card.Body)`
   min-height: 20vh;
 `;
 
+const LoadingTitle = styled.h5`
+  margin-top: 16px;
+`;
+
 const indeterminateAnimation = keyframes`
  from {
       left: -25%;
@@ -45,7 +49,7 @@ export default ({
         <h4>{experiment?.name}</h4>
         {loading ? (
           <div className="loading">
-            <h3>Your experiment is currently running</h3>
+            <LoadingTitle>Your experiment is currently running</LoadingTitle>
             <div style={{ position: 'relative', overflowX: 'hidden' }}>
               <IndederminateProgressBar striped now={100} />
             </div>

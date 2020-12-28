@@ -27,7 +27,6 @@ const Header = styled.div`
 `;
 
 const HelpBlock = styled.div`
-
   var {
     color: #6c757d;
     display: inline;
@@ -53,7 +52,7 @@ const Parameters = ({
 }: Props): JSX.Element => {
   const [selectedOptions, setSelectedOptions] = useState<any>();
   const [modalities, setModalities] = useState<LocalVar>();
-  const [validated, setValidated] = useState(false)
+  const [validated, setValidated] = useState(false);
 
   // TODO effect in Select component
   const lookupCallback = useCallback(apiCore.lookup, []);
@@ -146,15 +145,20 @@ const Parameters = ({
       )}
 
       {parameters && parameters.length > 0 && (
-        <Form noValidate validated={validated} onLoad={handleSubmit} onChange={handleSubmit}>
+        <Form
+          noValidate
+          validated={validated}
+          onLoad={handleSubmit}
+          onChange={handleSubmit}
+        >
           {parameters &&
             parameters.length &&
             parameters.map((parameter: AlgorithmParameter) => {
               const numberTypes = ['integer', 'real'];
               const type =
                 parameter &&
-                  parameter.valueType &&
-                  numberTypes.includes(parameter.valueType)
+                parameter.valueType &&
+                numberTypes.includes(parameter.valueType)
                   ? 'number'
                   : 'text';
               const step = parameter.valueType === 'real' ? 0.01 : 1;
@@ -240,43 +244,43 @@ const Parameters = ({
 
                     {(parameter.name === 'negative_level' ||
                       parameter.name === 'positive_level') && (
-                        <>
-                          <LogisticCategory
-                            apiCore={apiCore}
-                            query={query}
-                            parameterName={parameter.name}
-                            required={parameter.valueNotBlank === 'true'}
-                            handleChangeCategoryParameter={
-                              handleChangeCategoryParameter
-                            }
-                          />
-                        </>
-                      )}
+                      <>
+                        <LogisticCategory
+                          apiCore={apiCore}
+                          query={query}
+                          parameterName={parameter.name}
+                          required={parameter.valueNotBlank === 'true'}
+                          handleChangeCategoryParameter={
+                            handleChangeCategoryParameter
+                          }
+                        />
+                      </>
+                    )}
 
                     {(parameter.label === 'Positive outcome' ||
                       parameter.label === 'Negative outcome') && (
-                        <Form.Control
-                          defaultValue={parameter.defaultValue}
-                          placeholder={parameter.placeholder}
-                          required={parameter.valueNotBlank === 'true'}
-                          // tslint:disable-next-line jsx-no-lambda
-                          onChange={event =>
-                            handleChangeParameter(event, parameter.label)
-                          }
-                        >
-                          {apiCore
-                            .lookup(
-                              query?.variables?.find((v, i) => i === 0)?.code ||
+                      <Form.Control
+                        defaultValue={parameter.defaultValue}
+                        placeholder={parameter.placeholder}
+                        required={parameter.valueNotBlank === 'true'}
+                        // tslint:disable-next-line jsx-no-lambda
+                        onChange={event =>
+                          handleChangeParameter(event, parameter.label)
+                        }
+                      >
+                        {apiCore
+                          .lookup(
+                            query?.variables?.find((v, i) => i === 0)?.code ||
                               '',
-                              query?.pathology
-                            )
-                            ?.enumerations?.map((v: VariableEntity) => (
-                              <option key={v.code} value={v.code}>
-                                {v.label}
-                              </option>
-                            ))}
-                        </Form.Control>
-                      )}
+                            query?.pathology
+                          )
+                          ?.enumerations?.map((v: VariableEntity) => (
+                            <option key={v.code} value={v.code}>
+                              {v.label}
+                            </option>
+                          ))}
+                      </Form.Control>
+                    )}
 
                     <Form.Text id="passwordHelpBlock" muted>
                       {parameter.desc}
