@@ -3,9 +3,6 @@ import { Card } from 'react-bootstrap';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 
 import { APICore, APIExperiment, APIModel } from '../API';
-import { VariableEntity } from '../API/Core';
-import { IExperiment } from '../API/Experiment';
-import { ModelResponse } from '../API/Model';
 import Datasets from '../UI/Datasets';
 import Model from '../UI/Model';
 import { handleSelectExperimentToModel } from '../utils';

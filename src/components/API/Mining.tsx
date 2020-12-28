@@ -2,40 +2,10 @@ import Axios, { AxiosPromise, AxiosRequestConfig } from 'axios';
 import { Container } from 'unstated';
 
 import { backendURL } from '../API';
-import {
-  ERRORS_OUTPUT,
-  HISTOGRAMS_STORAGE_KEY,
-  MIME_TYPES
-} from '../constants';
+import { ERRORS_OUTPUT, HISTOGRAMS_STORAGE_KEY } from '../constants';
 import { VariableDatum } from '../ExperimentExplore/d3Hierarchy';
 import { Algorithm, Parameter, VariableEntity } from './Core';
 import { IExperiment } from './Experiment';
-
-/*
-useEffect(() => {
-  const source = axios.CancelToken.source();
-
-  const fetchUsers = async () => {
-    try {
-      await Axios.get('/users', {
-        cancelToken: source.token
-      });
-      // ...
-    } catch (error) {
-      if (Axios.isCancel(error)) {
-      } else {
-        throw error;
-      }
-    }
-  };
-
-  fetchData();
-
-  return () => {
-    source.cancel();
-  };
-}, []);
-*/
 
 export interface MiningResponse {
   data?: any;

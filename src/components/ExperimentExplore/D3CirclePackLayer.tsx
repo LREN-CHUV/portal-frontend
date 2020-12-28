@@ -5,7 +5,6 @@ import React, { useCallback, useEffect, useRef } from 'react';
 
 import { APICore, APIMining, APIModel, APIExperiment } from '../API';
 import { D3Model, HierarchyCircularNode, ModelResponse } from '../API/Model';
-import { IExperiment } from '../API/Experiment';
 import { ModelType } from './Container';
 import Explore from './Explore';
 

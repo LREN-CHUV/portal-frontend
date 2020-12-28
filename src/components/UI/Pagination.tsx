@@ -6,11 +6,6 @@ import { HandleQueryParameters, IExperimentList } from '../API/Experiment';
 const PAGE_SIZE = 10; //pageSize (optional) - the number of items per page, defaults to 10
 const MAX_PAGES = 7; // maxPages (optional) - the maximum number of page navigation links to display, defaults to 10
 
-const range = (start: number, end: number): number[] => {
-  const length = end - start;
-  return Array.from({ length }, (_, i) => start + i);
-};
-
 // https://jasonwatmore.com/post/2018/08/07/javascript-pure-pagination-logic-in-vanilla-js-typescript
 
 const paginate = (

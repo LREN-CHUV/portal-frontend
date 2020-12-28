@@ -6,7 +6,6 @@ import styled from 'styled-components';
 
 import { APICore, APIExperiment, APIMining, APIModel, APIUser } from '../API';
 import { VariableEntity } from '../API/Core';
-import { IExperiment } from '../API/Experiment';
 import { D3Model, HierarchyCircularNode, ModelResponse } from '../API/Model';
 import { AppConfig } from '../App/App';
 import { LONGITUDINAL_DATASET_TYPE } from '../constants';
