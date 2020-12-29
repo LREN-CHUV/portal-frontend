@@ -65,23 +65,9 @@ const ListItem = styled.li`
   }
 `;
 
-const ResetItem = styled(Button)`
-  font-size: 1em;
-  cursor: pointer;
+const ResetItem = styled.div`
   padding: 4px 24px;
-  color: #666;
-  display: flex;
-  align-items: center;
   margin-bottom: 4px;
-
-  svg {
-    margin-right: 8px;
-  }
-
-  &:hover {
-    background-color: #ffc107;
-    color: white;
-  }
 `;
 
 const MessageItem = styled.li`
@@ -191,9 +177,10 @@ const Items = ({
           />
         </PaginationContainer>
       )}
-
-      <ResetItem onClick={(): void => handleOnClick()} key={'reset'}>
-        Reset Current Parameters
+      <ResetItem>
+        <Button onClick={(): void => handleOnClick()} key={'reset'} variant={'light'}>
+          Reset Parameters
+      </Button>
       </ResetItem>
     </>
   );
