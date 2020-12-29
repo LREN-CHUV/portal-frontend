@@ -1,17 +1,17 @@
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import React, { useEffect, useRef, useState } from 'react';
-import styled from 'styled-components';
-import { useOnClickOutside } from '../utils';
 import { Form } from 'react-bootstrap';
-
+import styled from 'styled-components';
 import { APIExperiment } from '../API';
 import {
   ExperimentListQueryParameters,
   IExperiment,
   IExperimentList
 } from '../API/Experiment';
+import { MIN_SEARCH_CHARACTER_NUMBER } from '../constants';
 import Pagination from '../UI/Pagination';
+import { useOnClickOutside } from '../utils';
 
 dayjs.extend(relativeTime);
 dayjs().format();
@@ -119,7 +119,7 @@ const Search = ({
   setSearchName: React.Dispatch<React.SetStateAction<string>>;
 }): JSX.Element => {
   useEffect(() => {
-    if (searchName.length > 2) {
+    if (searchName.length > (MIN_SEARCH_CHARACTER_NUMBER - 1)) {
       list({ name: searchName });
     } else {
       list({ name: '' });
@@ -158,11 +158,11 @@ const Items = ({
         />
       </SearchContainer>
 
-      {!experimentList?.experiments && searchName.length > 2 && (
+      {!experimentList?.experiments && searchName.length > (MIN_SEARCH_CHARACTER_NUMBER - 1) && (
         <MessageItem>Your search didn&apos;t return any results</MessageItem>
       )}
 
-      {!experimentList?.experiments && searchName.length < 3 && (
+      {!experimentList?.experiments && searchName.length < (MIN_SEARCH_CHARACTER_NUMBER) && (
         <MessageItem>You don&apos;t have any experiment yet</MessageItem>
       )}
       <DropDownList>

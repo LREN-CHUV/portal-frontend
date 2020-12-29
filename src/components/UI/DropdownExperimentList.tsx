@@ -1,8 +1,7 @@
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Button, Container, Table, Form } from 'react-bootstrap';
-import Pagination from '../UI/Pagination';
+import { Button, Container, Form, Table } from 'react-bootstrap';
 import {
   BsCloudDownload,
   BsFillExclamationCircleFill,
@@ -12,18 +11,21 @@ import {
   BsPencilSquare,
   BsWatch
 } from 'react-icons/bs';
-import { Link } from 'react-router-dom';
-
 import { FaShareAlt } from 'react-icons/fa';
 import { GoCheck } from 'react-icons/go';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-
 import {
   ExperimentListQueryParameters,
   IExperiment,
   IExperimentList
 } from '../API/Experiment';
+import { MIN_SEARCH_CHARACTER_NUMBER } from '../constants';
+import Pagination from '../UI/Pagination';
 import { useKeyPressed, useOnClickOutside } from '../utils';
+
+
+
 
 dayjs.extend(relativeTime);
 dayjs().format();
@@ -309,72 +311,72 @@ const ExperimentRow = ({
           />
         </td>
       ) : (
-        <>
-          <td className="align-middle">
-            <Link
-              className="experiment-name"
-              to={`/experiment/${experiment.uuid}`}
-              title={`See experiment ${experiment.name}`}
-              onClick={(): void => props.handleOnClick(experiment)}
-            >
-              {experiment.name}
-            </Link>
-          </td>
+          <>
+            <td className="align-middle">
+              <Link
+                className="experiment-name"
+                to={`/experiment/${experiment.uuid}`}
+                title={`See experiment ${experiment.name}`}
+                onClick={(): void => props.handleOnClick(experiment)}
+              >
+                {experiment.name}
+              </Link>
+            </td>
 
-          {confirmDelete ? (
-            <ConfimDeleteContainer {...props} />
-          ) : (
-            <>
-              <td className="centered align-middle">
-                {dayjs().to(dayjs(experiment.created))}
-              </td>
-              <td className="centered align-middle">{experiment.createdBy}</td>
-              <td className="centered align-middle">
-                <Button
-                  size={'sm'}
-                  disabled={!isOwner}
-                  variant="light"
-                  title="Share with all users"
-                  onClick={(): void =>
-                    props?.handleUpdate(experiment.uuid, {
-                      shared: !experiment.shared
-                    })
-                  }
-                >
-                  <FaShareAlt />
-                </Button>{' '}
-                <Button
-                  size={'sm'}
-                  disabled={
-                    !isOwner || editingExperimentName?.uuid === experiment.uuid
-                  }
-                  variant="light"
-                  title="Edit name"
-                  onClick={(): void => {
-                    setEditingExperimentName({
-                      uuid: experiment.uuid,
-                      name: experiment.name
-                    });
-                  }}
-                >
-                  <BsPencilSquare />
-                </Button>{' '}
-                <Button
-                  size={'sm'}
-                  disabled={!isOwner}
-                  variant="light"
-                  title="Delete"
-                  onClick={(): void => {
-                    setConfirmDelete(experiment.uuid);
-                  }}
-                >
-                  <BsFillTrashFill />
-                </Button>
-              </td>
-            </>
-          )}
-        </>
-      )}
+            {confirmDelete ? (
+              <ConfimDeleteContainer {...props} />
+            ) : (
+                <>
+                  <td className="centered align-middle">
+                    {dayjs().to(dayjs(experiment.created))}
+                  </td>
+                  <td className="centered align-middle">{experiment.createdBy}</td>
+                  <td className="centered align-middle">
+                    <Button
+                      size={'sm'}
+                      disabled={!isOwner}
+                      variant="light"
+                      title="Share with all users"
+                      onClick={(): void =>
+                        props?.handleUpdate(experiment.uuid, {
+                          shared: !experiment.shared
+                        })
+                      }
+                    >
+                      <FaShareAlt />
+                    </Button>{' '}
+                    <Button
+                      size={'sm'}
+                      disabled={
+                        !isOwner || editingExperimentName?.uuid === experiment.uuid
+                      }
+                      variant="light"
+                      title="Edit name"
+                      onClick={(): void => {
+                        setEditingExperimentName({
+                          uuid: experiment.uuid,
+                          name: experiment.name
+                        });
+                      }}
+                    >
+                      <BsPencilSquare />
+                    </Button>{' '}
+                    <Button
+                      size={'sm'}
+                      disabled={!isOwner}
+                      variant="light"
+                      title="Delete"
+                      onClick={(): void => {
+                        setConfirmDelete(experiment.uuid);
+                      }}
+                    >
+                      <BsFillTrashFill />
+                    </Button>
+                  </td>
+                </>
+              )}
+          </>
+        )}
     </tr>
   );
 };
@@ -389,7 +391,7 @@ const Search = ({
   setSearchName: React.Dispatch<React.SetStateAction<string>>;
 }): JSX.Element => {
   useEffect(() => {
-    if (searchName.length > 2) {
+    if (searchName.length > (MIN_SEARCH_CHARACTER_NUMBER - 1)) {
       handleQueryParameters({ name: searchName, page: 0 });
     } else {
       handleQueryParameters({ name: '' });
@@ -452,11 +454,11 @@ const Items = ({
             <Pagination list={experimentList} query={handleQueryParameters} />
           )}
         </>
-      ) : searchName.length > 2 ? (
+      ) : searchName.length > (MIN_SEARCH_CHARACTER_NUMBER - 1) ? (
         <div>Your search didn&apos;t return any results</div>
       ) : (
-        <div>You don&apos;t have any experiment yet</div>
-      )}
+            <div>You don&apos;t have any experiment yet</div>
+          )}
     </Wrapper>
   );
 };

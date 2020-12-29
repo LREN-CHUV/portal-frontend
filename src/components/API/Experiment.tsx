@@ -4,7 +4,7 @@ import { Container } from 'unstated';
 import { backendURL } from '../API';
 import { Algorithm, AlgorithmParameter } from '../API/Core';
 import { ModelResponse } from '../API/Model';
-import { MIME_TYPES, ALGORITHMS_OUTPUT } from '../constants';
+import { MIME_TYPES, ALGORITHMS_OUTPUT, MIN_SEARCH_CHARACTER_NUMBER } from '../constants';
 
 interface IUUID {
   uuid: string;
@@ -239,8 +239,8 @@ class Experiment extends Container<State> {
           ? currentExperimentListQueryParameters.page
           : params.page;
 
-    // reset the page if search is on */
-    const page = params?.name && params?.name?.length > 2 ? 0 : nextPage;
+    // reset the page if search is on
+    const page = params?.name && params?.name?.length > (MIN_SEARCH_CHARACTER_NUMBER - 1) ? 0 : nextPage;
 
     const nextQueryParameters = {
       ...currentExperimentListQueryParameters,
@@ -248,8 +248,9 @@ class Experiment extends Container<State> {
       page
     };
 
+    // Encode params and enable SQL search with %[name]%
     const nextParams = Object.entries(nextQueryParameters)
-      .map(entry => `${entry[0]}=${entry[1]}&`)
+      .map(entry => entry[0] === 'name' ? `${entry[0]}=%25${entry[1]}%25&` : `${entry[0]}=${entry[1]}&`)
       .join('');
 
     try {
@@ -285,7 +286,7 @@ class Experiment extends Container<State> {
           : params.page;
 
     // reset the page if search is on */
-    const page = params?.name && params?.name?.length > 2 ? 0 : nextPage;
+    const page = params?.name && params?.name?.length > (MIN_SEARCH_CHARACTER_NUMBER - 1) ? 0 : nextPage;
 
     const nextQueryParameters = {
       ...currentExperimentListQueryParameters,
@@ -293,8 +294,9 @@ class Experiment extends Container<State> {
       page
     };
 
+    // Encode params and enable SQL search with %[name]%
     const nextParams = Object.entries(nextQueryParameters)
-      .map(entry => `${entry[0]}=${entry[1]}&`)
+      .map(entry => entry[0] === 'name' ? `${entry[0]}=%25${entry[1]}%25&` : `${entry[0]}=${entry[1]}&`)
       .join('');
 
     try {
