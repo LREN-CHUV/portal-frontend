@@ -145,15 +145,17 @@ const Parameters = ({
       )}
 
       {parameters && parameters.length > 0 && (
-        <Form
-          noValidate
-          validated={validated}
-          onLoad={handleSubmit}
-          onChange={handleSubmit}
-        >
-          {parameters &&
-            parameters.length &&
-            parameters.map((parameter: AlgorithmParameter) => {
+        <>
+          {parameters.filter(p => p.visible).length === 0 && (
+            <p>No parameters needed</p>
+          )}
+          <Form
+            noValidate
+            validated={validated}
+            onFocus={handleSubmit}
+            onChange={handleSubmit}
+          >
+            {parameters.map((parameter: AlgorithmParameter) => {
               const numberTypes = ['integer', 'real'];
               const type =
                 parameter &&
@@ -315,7 +317,8 @@ const Parameters = ({
                 </Form.Group>
               );
             })}
-        </Form>
+          </Form>
+        </>
       )}
     </>
   );
