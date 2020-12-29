@@ -17,6 +17,13 @@ const Algorithms = ({
   experiment?: IExperiment;
 }): JSX.Element | null => {
   const algorithm = experiment?.algorithm;
+  const isWorkflow = algorithm?.type === 'workflow';
+  const paramName = isWorkflow ? 'label' : 'name';
+
+  const parameters = algorithm?.parameters &&
+    algorithm.parameters.length > 0 &&
+    algorithm.parameters
+      .filter(p => !UI_HIDDEN_PARAMETERS.includes(p[paramName]!)) || [];
 
   return (
     <>
@@ -24,15 +31,11 @@ const Algorithms = ({
       {algorithm && (
         <>
           <Param>{algorithm.label || algorithm.name}</Param>
-          {algorithm.parameters &&
-            algorithm.parameters.length > 0 &&
-            algorithm.parameters
-              .filter(p => !UI_HIDDEN_PARAMETERS.includes(p.name))
-              .map((m: ExperimentParameter, i: number) => (
-                <Param key={`parameters-${algorithm.name}-${i}`}>
-                  {m.label || m.name}: {m.value}
-                </Param>
-              ))}
+          {parameters.map((p: ExperimentParameter, i: number) => (
+            <Param key={`parameters-${algorithm.name}-${i}`}>
+              {p.label || p.name}: {p.value}
+            </Param>
+          ))}
         </>
       )}
     </>

@@ -101,8 +101,11 @@ export const handleSelectExperimentToModel = (
     return;
   }
 
+  const isWorkflow = experiment.algorithm.type === 'workflow';
+  const paramName = isWorkflow ? 'label' : 'name';
+
   const extract = (field: string): VariableEntity[] | undefined => {
-    const p = parameters.find(p => p.name === field)?.value as string;
+    const p = parameters.find(p => p[paramName] === field)?.value as string;
     const separator = /\*/.test(p) ? '*' : /\+/.test(p) ? '+' : ',';
     const parameter = p
       ? p.split(separator).map(m => ({ code: m, label: m }))
@@ -113,11 +116,12 @@ export const handleSelectExperimentToModel = (
 
   const newModel: ModelResponse = {
     query: {
-      pathology: parameters.find(p => p.name === 'pathology')?.value as string,
+      pathology: parameters.find(p => p[paramName] === 'pathology')
+        ?.value as string,
       trainingDatasets: extract('dataset'),
       variables: extract('y'),
       coVariables: extract('x'),
-      filters: parameters.find(p => p.name === 'filter')?.value as string
+      filters: parameters.find(p => p[paramName] === 'filter')?.value as string
     }
   };
 

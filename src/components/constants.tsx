@@ -1,3 +1,5 @@
+import { type } from "os";
+
 // Mime types
 export enum MIME_TYPES {
   ERROR = 'text/plain+error',
@@ -24,139 +26,104 @@ export const ERRORS_OUTPUT = [
   MIME_TYPES.USER_WARNING
 ];
 
-export const ALGORITHMS_OUTPUT = [
+
+interface AlgorithmOutput {
+  enabled: boolean;
+  name?: string;
+  types: MIME_TYPES[];
+  label?: string;
+}
+
+export const ALGORITHMS_OUTPUT: AlgorithmOutput[] = [
   {
     enabled: true,
     name: 'ANOVA',
-    label: 'ANOVA',
-
     types: [MIME_TYPES.JSONDATA]
   },
   {
     enabled: true,
     name: 'LINEAR_REGRESSION',
-    label: 'Linear Regression',
-
     types: [MIME_TYPES.JSONDATA]
   },
   {
     enabled: true,
     name: 'LOGISTIC_REGRESSION',
-    label: 'Logistic Regression',
-
     types: [MIME_TYPES.JSONDATA, MIME_TYPES.HIGHCHARTS]
-  },
-  {
-    enabled: false,
-    name: 'HISTOGRAMS',
-    label: 'Histograms',
-
-    types: [MIME_TYPES.HIGHCHARTS]
   },
   {
     enabled: true,
     name: 'TTEST_INDEPENDENT',
-    label: 'T-Test Independent',
-
     types: [MIME_TYPES.JSONDATA]
   },
   {
     enabled: true,
     name: 'TTEST_PAIRED',
-    label: 'T-Test Paired',
-
     types: [MIME_TYPES.JSONDATA]
   },
   {
     enabled: true,
     name: 'PEARSON_CORRELATION',
-    label: 'Pearson Correlation',
-
     types: [MIME_TYPES.JSONDATA, MIME_TYPES.HIGHCHARTS]
   },
   {
     enabled: true,
     name: 'ID3',
-    label: 'ID3',
-
     types: [MIME_TYPES.JSONDATA, MIME_TYPES.JSON]
   },
   {
     enabled: true,
     name: 'KMEANS',
-    label: 'k-Means Clustering',
-
     types: [MIME_TYPES.JSONDATA, MIME_TYPES.HIGHCHARTS]
   },
   {
     enabled: true,
     name: 'NAIVE_BAYES_TRAINING',
-    label: 'Naive Bayes Training',
-
     types: [MIME_TYPES.JSONDATA, MIME_TYPES.HIGHCHARTS]
   },
   {
     enabled: true,
     name: 'TTEST_ONESAMPLE',
-    label: 'T-Test One-Sample ',
-
     types: [MIME_TYPES.JSONDATA]
   },
   {
     enabled: false,
     name: 'MULTIPLE_HISTOGRAMS',
-    label: 'Multiple Histograms',
-
     types: [MIME_TYPES.HIGHCHARTS]
   },
   {
     enabled: true,
     name: 'PCA',
-    label: 'Principal Components analysis',
-
     types: [MIME_TYPES.JSONDATA, MIME_TYPES.HIGHCHARTS]
   },
   {
     enabled: true,
-    name: '1cd8e2f6b131e891',
-    label: 'Workflow Naive Bayes with Hold Out Validation',
-
+    label: 'Naive Bayes with Hold Out Validation',
     types: [MIME_TYPES.HIGHCHARTS]
   },
   {
     enabled: true,
-
-    name: 'c9468fdb6dc5c5f1',
     label: 'Naive Bayes with Cross Validation',
-
     types: [MIME_TYPES.HIGHCHARTS, MIME_TYPES.JSONDATA]
   },
   {
     enabled: true,
     name: 'CALIBRATION_BELT',
-    label: 'Calibration Belt',
-
     types: [MIME_TYPES.HIGHCHARTS]
   },
   {
     enabled: true,
     name: 'CART',
-    label: 'CART',
-
     types: [MIME_TYPES.JSON]
   },
   {
     enabled: true,
     name: 'KAPLAN_MEIER',
-    label: 'Kaplan-Meier Estimator',
-
     // TODO: longitudinal datasets should be tagged
     types: [MIME_TYPES.HIGHCHARTS]
   },
   {
     enabled: true,
     name: 'THREE_C',
-    label: '3C',
     types: [MIME_TYPES.JSONDATA]
   }
 ].map(a => ({ ...a, types: [...ERRORS_OUTPUT, ...a.types] }));

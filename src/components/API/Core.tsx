@@ -36,12 +36,13 @@ interface Hierarchy {
   variables: VariableEntity[];
 }
 
+export type AlgorithmType = 'workflow' | 'pipeline' | 'python_iterative' | 'python_local_global' | 'multiple_local_global' | 'python_local';
 export interface Algorithm {
   name: string;
   label: string;
   desc?: string;
   parameters: AlgorithmParameter[] | AlgorithmParameterRequest[];
-  type: string;
+  type: AlgorithmType;
   datasetType?: string;
   enabled?: boolean;
 }
@@ -275,56 +276,6 @@ class Core extends Container<State> {
     }
   };
 
-  createArticle = async (payload: Article): Promise<void> => {
-    try {
-      const data = await request({
-        body: JSON.stringify(payload),
-        headers: {
-          ...this.options.headers,
-          'Content-Type': 'application/json;charset=UTF-8'
-        },
-        method: 'POST',
-        uri: `${this.backendURL}/articles`
-      });
-      const json = await JSON.parse(data);
-      await this.setState({
-        article: json,
-        error: undefined
-      });
-
-      return json.slug;
-    } catch (error) {
-      return await this.setState({
-        error: error.message
-      });
-    }
-  };
-
-  updateArticle = async (slug: string, payload: Article): Promise<void> => {
-    try {
-      const data = await request({
-        body: JSON.stringify(payload),
-        headers: {
-          ...this.options.headers,
-          'Content-Type': 'application/json;charset=UTF-8'
-        },
-        method: 'PUT',
-        uri: `${this.backendURL}/articles/${slug}`
-      });
-      const json = await JSON.parse(data);
-      await this.setState({
-        article: json,
-        error: undefined
-      });
-
-      return json.slug;
-    } catch (error) {
-      return await this.setState({
-        error: error.message
-      });
-    }
-  };
-
   fetchGalaxyConfiguration = async (): Promise<void> => {
     try {
       const data = await request.get(`${this.backendURL}/galaxy`, {
@@ -428,12 +379,16 @@ class Core extends Container<State> {
       const algorithms = all
         ? json
         : json.filter(
-            (algorithm: Algorithm) =>
-              algorithm.enabled ||
-              ALGORITHMS_OUTPUT.find(a => algorithm.name === a.name)?.enabled
+            (algorithm: Algorithm) => ALGORITHMS_OUTPUT.find(a => algorithm.name === a.name)?.enabled
           );
 
-      const data = algorithms.sort((x: Algorithm, y: Algorithm) => {
+      const galaxyAlgorithms = all
+        ? json
+        : json.filter(
+          (algorithm: Algorithm) => ALGORITHMS_OUTPUT.find(a => algorithm.type === 'workflow' && algorithm.label === a.label)?.enabled
+        );
+
+      const data = [...algorithms, ...galaxyAlgorithms].sort((x: Algorithm, y: Algorithm) => {
         const a = x.label;
         const b = y.label;
 

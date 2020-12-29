@@ -200,6 +200,7 @@ class Container extends React.Component<Props, State> {
     const experiment: Partial<IExperiment> = {
       algorithm: {
         name: selectedAlgorithm.name,
+        label: selectedAlgorithm.label,
         parameters: nextParameters,
         type: selectedAlgorithm.type
       },
