@@ -128,6 +128,7 @@ const Search = ({
 
   return (
     <Form.Control
+      autoFocus
       value={searchName}
       placeholder="Search"
       onChange={(e): void => {
