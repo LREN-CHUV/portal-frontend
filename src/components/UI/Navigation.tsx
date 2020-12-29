@@ -99,7 +99,6 @@ const GroupLink = styled(Link)`
 
 const DropdownWrapper = styled.div``;
 
-
 interface Props {
   name?: string;
   datacatalogueUrl: string | undefined;
@@ -131,7 +130,11 @@ export default ({
           <span> &gt; </span>
           <GroupLink to="/review">Analysis</GroupLink>
           <span> &gt; </span>
-          {experiment && <GroupLink to={`/experiment/${experiment.uuid}`}>Experiment</GroupLink>}
+          {experiment && (
+            <GroupLink to={`/experiment/${experiment.uuid}`}>
+              Experiment
+            </GroupLink>
+          )}
           {!experiment && <GroupLink to="/experiment">Experiment</GroupLink>}
         </Group>
         <DropdownWrapper>{children}</DropdownWrapper>

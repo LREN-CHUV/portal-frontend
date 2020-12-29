@@ -178,9 +178,13 @@ const Items = ({
         </PaginationContainer>
       )}
       <ResetItem>
-        <Button onClick={(): void => handleOnClick()} key={'reset'} variant={'light'}>
+        <Button
+          onClick={(): void => handleOnClick()}
+          key={'reset'}
+          variant={'light'}
+        >
           Reset Parameters
-      </Button>
+        </Button>
       </ResetItem>
     </>
   );
