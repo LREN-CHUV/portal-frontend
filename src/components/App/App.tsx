@@ -100,7 +100,6 @@ const App = ({
                 apiExperiment.list({ ...params }),
               [apiExperiment]
             )}
-            setParameterExperiment={apiExperiment.setParameterExperiment}
           />
         </Navigation>
       </header>

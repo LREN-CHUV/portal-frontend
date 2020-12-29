@@ -110,7 +110,6 @@ interface Props {
   handleDelete: (uuid: string) => void;
   handleUpdate: (uuid: string, experiment: Partial<IExperiment>) => void;
   handleQueryParameters: ({ ...params }: ExperimentListQueryParameters) => void;
-  setParameterExperiment: (parameterExperiment?: IExperiment) => void;
 }
 
 interface InternalProps extends Pick<Props, 'username' | 'handleUpdate'> {
@@ -468,7 +467,6 @@ const Dropdown = ({ ...props }: Props): JSX.Element => {
   const toggling = (): void => setIsOpen(!isOpen);
 
   const onOptionClicked = (experiment?: IExperiment): void => {
-    props.setParameterExperiment(experiment);
     setIsOpen(false);
   };
 

@@ -36,7 +36,13 @@ interface Hierarchy {
   variables: VariableEntity[];
 }
 
-export type AlgorithmType = 'workflow' | 'pipeline' | 'python_iterative' | 'python_local_global' | 'multiple_local_global' | 'python_local';
+export type AlgorithmType =
+  | 'workflow'
+  | 'pipeline'
+  | 'python_iterative'
+  | 'python_local_global'
+  | 'multiple_local_global'
+  | 'python_local';
 export interface Algorithm {
   name: string;
   label: string;
@@ -379,21 +385,28 @@ class Core extends Container<State> {
       const algorithms = all
         ? json
         : json.filter(
-            (algorithm: Algorithm) => ALGORITHMS_OUTPUT.find(a => algorithm.name === a.name)?.enabled
+            (algorithm: Algorithm) =>
+              ALGORITHMS_OUTPUT.find(a => algorithm.name === a.name)?.enabled
           );
 
       const galaxyAlgorithms = all
         ? json
         : json.filter(
-          (algorithm: Algorithm) => ALGORITHMS_OUTPUT.find(a => algorithm.type === 'workflow' && algorithm.label === a.label)?.enabled
-        );
+            (algorithm: Algorithm) =>
+              ALGORITHMS_OUTPUT.find(
+                a =>
+                  algorithm.type === 'workflow' && algorithm.label === a.label
+              )?.enabled
+          );
 
-      const data = [...algorithms, ...galaxyAlgorithms].sort((x: Algorithm, y: Algorithm) => {
-        const a = x.label;
-        const b = y.label;
+      const data = [...algorithms, ...galaxyAlgorithms].sort(
+        (x: Algorithm, y: Algorithm) => {
+          const a = x.label;
+          const b = y.label;
 
-        return a > b ? 1 : a < b ? -1 : 0;
-      });
+          return a > b ? 1 : a < b ? -1 : 0;
+        }
+      );
 
       // FIXME: Algorithms defnition in Exareme will contains those extra parameters.
       const extraParametersData = data.map((algorithm: Algorithm) => ({

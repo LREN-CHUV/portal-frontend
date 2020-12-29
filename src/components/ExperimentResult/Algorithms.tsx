@@ -20,10 +20,13 @@ const Algorithms = ({
   const isWorkflow = algorithm?.type === 'workflow';
   const paramName = isWorkflow ? 'label' : 'name';
 
-  const parameters = algorithm?.parameters &&
-    algorithm.parameters.length > 0 &&
-    algorithm.parameters
-      .filter(p => !UI_HIDDEN_PARAMETERS.includes(p[paramName]!)) || [];
+  const parameters =
+    (algorithm?.parameters &&
+      algorithm.parameters.length > 0 &&
+      algorithm.parameters.filter(
+        p => !UI_HIDDEN_PARAMETERS.includes(p[paramName]!)
+      )) ||
+    [];
 
   return (
     <>

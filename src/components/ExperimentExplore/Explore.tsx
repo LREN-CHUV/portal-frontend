@@ -9,7 +9,7 @@ import { IExperiment } from '../API/Experiment';
 import { D3Model, HierarchyCircularNode, ModelResponse } from '../API/Model';
 import { ONTOLOGY_URL } from '../constants';
 import AvailableAlgorithms from '../ExperimentCreate/AvailableAlgorithms';
-import DropdownExperimentList from '../UI/DropdownParametersExperimentList';
+import DropdownParametersExperimentList from '../UI/DropdownParametersExperimentList';
 import LargeDatasetSelect from '../UI/LargeDatasetSelect';
 import { handleSelectExperimentToModel } from '../utils';
 import { ModelType } from './Container';
@@ -199,11 +199,14 @@ export default (props: ExploreProps): JSX.Element => {
               <MenuParametersContainer>
                 <ParameterContainer>
                   <h5 style={{ marginRight: '8px' }}>Parameters</h5>
-                  <DropdownExperimentList
+                  <DropdownParametersExperimentList
                     apiExperiment={apiExperiment}
-                    handleSelectExperiment={(experiment?: IExperiment): void =>
-                      handleSelectExperimentToModel(apiModel, experiment)
-                    }
+                    handleSelectExperiment={(
+                      experiment?: IExperiment
+                    ): void => {
+                      apiExperiment.setExperiment(experiment);
+                      handleSelectExperimentToModel(apiModel, experiment);
+                    }}
                   />
                 </ParameterContainer>
                 <div className="item">

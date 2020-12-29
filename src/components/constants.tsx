@@ -1,5 +1,3 @@
-import { type } from "os";
-
 // Mime types
 export enum MIME_TYPES {
   ERROR = 'text/plain+error',
@@ -25,7 +23,6 @@ export const ERRORS_OUTPUT = [
   MIME_TYPES.WARNING,
   MIME_TYPES.USER_WARNING
 ];
-
 
 interface AlgorithmOutput {
   enabled: boolean;

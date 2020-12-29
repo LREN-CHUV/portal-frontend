@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import React, { useEffect, useRef, useState } from 'react';
-import { Form } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 import styled from 'styled-components';
 import { APIExperiment } from '../API';
 import {
@@ -65,7 +65,7 @@ const ListItem = styled.li`
   }
 `;
 
-const ResetItem = styled.p`
+const ResetItem = styled(Button)`
   font-size: 1em;
   cursor: pointer;
   padding: 4px 24px;
@@ -140,11 +140,13 @@ const Search = ({
 
 const Items = ({
   handleOnClick,
-  experimentList,
-  list
+  experimentListForParamters,
+  getListForExperimentParameters
 }: {
-  experimentList?: IExperimentList;
-  list: ({ ...params }: ExperimentListQueryParameters) => Promise<void>;
+  experimentListForParamters?: IExperimentList;
+  getListForExperimentParameters: ({
+    ...params
+  }: ExperimentListQueryParameters) => Promise<void>;
   handleOnClick: (experiment?: IExperiment) => void;
 }): JSX.Element => {
   const [searchName, setSearchName] = useState<string>('');
@@ -153,23 +155,23 @@ const Items = ({
     <>
       <SearchContainer>
         <Search
-          list={list}
+          list={getListForExperimentParameters}
           searchName={searchName}
           setSearchName={setSearchName}
         />
       </SearchContainer>
 
-      {!experimentList?.experiments &&
+      {!experimentListForParamters?.experiments &&
         searchName.length > MIN_SEARCH_CHARACTER_NUMBER - 1 && (
           <MessageItem>Your search didn&apos;t return any results</MessageItem>
         )}
 
-      {!experimentList?.experiments &&
+      {!experimentListForParamters?.experiments &&
         searchName.length < MIN_SEARCH_CHARACTER_NUMBER && (
           <MessageItem>You don&apos;t have any experiment yet</MessageItem>
         )}
       <DropDownList>
-        {experimentList?.experiments?.map(
+        {experimentListForParamters?.experiments?.map(
           (experiment: IExperiment, i: number) => (
             <ListItem
               onClick={(): void => handleOnClick(experiment)}
@@ -181,9 +183,12 @@ const Items = ({
         )}
       </DropDownList>
 
-      {experimentList && (
+      {experimentListForParamters && (
         <PaginationContainer>
-          <Pagination list={experimentList} query={list} />
+          <Pagination
+            list={experimentListForParamters}
+            query={getListForExperimentParameters}
+          />
         </PaginationContainer>
       )}
 
@@ -196,26 +201,18 @@ const Items = ({
 
 const Dropdown = ({ ...props }: Props): JSX.Element => {
   const { apiExperiment } = props;
-  const {
-    state,
-    parameterList: list,
-    setParameterExperiment: setExperiment
-  } = apiExperiment;
-  const {
-    parameterExperiment: e,
-    parameterExperimentList: experimentList
-  } = state;
+  const { state, getListForExperimentParameters } = apiExperiment;
+  const { experimentListForParamters } = state;
 
-  const experiment = apiExperiment.isExperiment(e);
+  const experiment = apiExperiment.isExperiment(apiExperiment.state.experiment);
 
   const [isOpen, setIsOpen] = useState(false);
   const node = useRef(null);
 
   const toggling = (): void => setIsOpen(!isOpen);
 
-  const onOptionClicked = (experiment?: IExperiment): void => {
+  const handleOnClick = (experiment?: IExperiment): void => {
     props.handleSelectExperiment(experiment);
-    setExperiment(experiment);
     setIsOpen(false);
   };
 
@@ -233,8 +230,8 @@ const Dropdown = ({ ...props }: Props): JSX.Element => {
       {isOpen && (
         <DropDownListContainer>
           <Items
-            handleOnClick={onOptionClicked}
-            {...{ experimentList, list }}
+            handleOnClick={handleOnClick}
+            {...{ experimentListForParamters, getListForExperimentParameters }}
           />
         </DropDownListContainer>
       )}

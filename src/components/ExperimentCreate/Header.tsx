@@ -33,7 +33,6 @@ export default class Header extends React.Component<Props, State> {
           <h3>Create Experiment</h3>
           <div className="item" style={{ marginRight: '8px' }}>
             <FormControl
-              
               className="item experiment-name"
               type="text"
               placeholder={'Experiment name'}
@@ -49,12 +48,12 @@ export default class Header extends React.Component<Props, State> {
                 method === undefined || method === null
                   ? 'Please choose a method on the right'
                   : experimentName === ''
-                    ? 'Please enter a title for your experiment'
-                    : model === undefined ||
-                      model.query.trainingDatasets === undefined ||
-                      model.query.trainingDatasets.length <= 0
-                      ? 'Please select a dataset'
-                      : ''
+                  ? 'Please enter a title for your experiment'
+                  : model === undefined ||
+                    model.query.trainingDatasets === undefined ||
+                    model.query.trainingDatasets.length <= 0
+                  ? 'Please select a dataset'
+                  : ''
               }
               variant="info"
               type="submit"

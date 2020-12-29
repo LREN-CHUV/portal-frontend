@@ -7,7 +7,7 @@ import { VariableEntity } from '../API/Core';
 import { IExperiment } from '../API/Experiment';
 import { MiningPayload } from '../API/Mining';
 import { IAlert } from '../UI/Alert';
-import DropdownExperimentList from '../UI/DropdownParametersExperimentList';
+import DropdownParametersExperimentList from '../UI/DropdownParametersExperimentList';
 import LargeDatasetSelect from '../UI/LargeDatasetSelect';
 import Model from '../UI/Model';
 import { handleSelectExperimentToModel } from '../utils';
@@ -215,11 +215,12 @@ const Container = ({
           <Card className="datasets">
             <Card.Body>
               <section>
-                <DropdownExperimentList
+                <DropdownParametersExperimentList
                   apiExperiment={apiExperiment}
-                  handleSelectExperiment={(experiment?: IExperiment): void =>
-                    handleSelectExperimentToModel(apiModel, experiment)
-                  }
+                  handleSelectExperiment={(experiment?: IExperiment): void => {
+                    apiExperiment.setExperiment(experiment);
+                    handleSelectExperimentToModel(apiModel, experiment);
+                  }}
                 />
               </section>
               {query?.pathology && (

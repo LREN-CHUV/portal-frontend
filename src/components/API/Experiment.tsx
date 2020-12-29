@@ -126,9 +126,8 @@ export interface State {
   experimentList?: IExperimentList;
   experimentListError?: string;
   experimentListQueryParameters: ExperimentListQueryParameters;
-  parameterExperimentList?: IExperimentList;
+  experimentListForParamters?: IExperimentList;
   parameterExperimentListError?: string;
-  parameterExperiment?: IExperiment | IExperimentError;
   parameterExperimentListQueryParameters: ExperimentListQueryParameters;
 }
 
@@ -148,8 +147,8 @@ class Experiment extends Container<State> {
     this.baseUrl = `${backendURL}/experiments`;
   }
 
-  setParameterExperiment = (parameterExperiment?: IExperiment): void => {
-    this.setState({ parameterExperiment });
+  setExperiment = (experiment?: IExperiment): void => {
+    this.setState({ experiment });
   };
 
   // Iexperiment Type Guards
@@ -283,7 +282,7 @@ class Experiment extends Container<State> {
     }
   };
 
-  parameterList = async ({
+  getListForExperimentParameters = async ({
     ...params
   }: ExperimentListQueryParameters): Promise<void> => {
     const currentExperimentListQueryParameters = this.state
@@ -323,11 +322,11 @@ class Experiment extends Container<State> {
         this.options
       );
 
-      const parameterExperimentList: IExperimentList = response.data;
+      const experimentListForParamters: IExperimentList = response.data;
 
       return await this.setState(previousState => ({
         error: undefined,
-        parameterExperimentList,
+        experimentListForParamters,
         parameterExperimentListQueryParameters: nextQueryParameters
       }));
     } catch (error) {
