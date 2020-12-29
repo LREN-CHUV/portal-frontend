@@ -121,7 +121,7 @@ export default ({
   forbidden: boolean | undefined;
 }): JSX.Element => {
   const handleLoginPress = (): void => {
-    window.location.href = `${backendURL}/login/hbp`;
+    window.location.href = `${backendURL}/sso/login`;
   };
   const handleLogoutPress = (): void => {
     logout();
@@ -135,12 +135,8 @@ export default ({
           <HelpButton />
         </div>
         <LoginBox>
-          <Button
-            onClick={forbidden ? handleLogoutPress : handleLoginPress}
-            variant={forbidden ? 'warning' : 'info'}
-            type="submit"
-          >
-            {forbidden ? 'Logout' : 'Login'}
+          <Button onClick={handleLoginPress} variant={'info'} type="submit">
+            Login
           </Button>
           <p>
             <a href="https://mip.ebrains.eu/access">Request Access</a>

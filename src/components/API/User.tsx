@@ -31,7 +31,7 @@ class UserContainer extends Container<State> {
   }
 
   login = async (params: any): Promise<void> => {
-    const loginURL = `${this.backendURL}/login/hbp${params}`;
+    const loginURL = `${this.backendURL}/sso/login${params}`;
     const response = await axios.get(loginURL, this.options);
 
     return response.data;
@@ -79,7 +79,7 @@ class UserContainer extends Container<State> {
     } catch (error) {
       return await this.setState({
         error: error.message,
-        forbidden: true,
+        forbidden: false,
         loading: false
       });
     }

@@ -56,8 +56,6 @@ describe('Integration Test for experiment API', () => {
     algorithmId = result && result.find(a => a.label === algorithmLabel)?.name;
     expect(algorithmId).toBeTruthy();
 
-    console.log(algorithmId)
-
     return;
   });
 
@@ -67,7 +65,7 @@ describe('Integration Test for experiment API', () => {
       algorithm: {
         name: algorithmId!,
         parameters,
-        type: 'string'
+        type: 'workflow'
       },
       name: modelSlug
     };

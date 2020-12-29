@@ -139,7 +139,7 @@ class AppContainer extends React.Component<any, State> {
                   <>
                     <Route
                       // Callback from the auth server, redirected to the API
-                      path="/services/login/hbp"
+                      path="/services/sso/login"
                       // tslint:disable-next-line jsx-no-lambda
                       render={(props): JSX.Element => {
                         const {
