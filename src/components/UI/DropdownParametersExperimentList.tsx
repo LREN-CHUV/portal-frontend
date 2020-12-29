@@ -119,7 +119,7 @@ const Search = ({
   setSearchName: React.Dispatch<React.SetStateAction<string>>;
 }): JSX.Element => {
   useEffect(() => {
-    if (searchName.length > (MIN_SEARCH_CHARACTER_NUMBER - 1)) {
+    if (searchName.length > MIN_SEARCH_CHARACTER_NUMBER - 1) {
       list({ name: searchName });
     } else {
       list({ name: '' });
@@ -158,13 +158,15 @@ const Items = ({
         />
       </SearchContainer>
 
-      {!experimentList?.experiments && searchName.length > (MIN_SEARCH_CHARACTER_NUMBER - 1) && (
-        <MessageItem>Your search didn&apos;t return any results</MessageItem>
-      )}
+      {!experimentList?.experiments &&
+        searchName.length > MIN_SEARCH_CHARACTER_NUMBER - 1 && (
+          <MessageItem>Your search didn&apos;t return any results</MessageItem>
+        )}
 
-      {!experimentList?.experiments && searchName.length < (MIN_SEARCH_CHARACTER_NUMBER) && (
-        <MessageItem>You don&apos;t have any experiment yet</MessageItem>
-      )}
+      {!experimentList?.experiments &&
+        searchName.length < MIN_SEARCH_CHARACTER_NUMBER && (
+          <MessageItem>You don&apos;t have any experiment yet</MessageItem>
+        )}
       <DropDownList>
         {experimentList?.experiments?.map(
           (experiment: IExperiment, i: number) => (
