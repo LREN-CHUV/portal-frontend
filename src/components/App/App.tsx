@@ -84,6 +84,9 @@ const App = ({
             (apiUser.state.user?.username !== 'anonymous' && apiUser.logout) ||
             undefined
           }
+          experiment={apiExperiment.isExperiment(
+            apiExperiment.state.experiment
+          )}
         >
           <ExperimentList
             username={apiUser.state.user?.username}

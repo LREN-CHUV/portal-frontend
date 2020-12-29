@@ -4,16 +4,10 @@ import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
 
 import logo from '../../images/hbp-logo.png';
+import { IExperiment } from '../API/Experiment';
 
 import MIPContext from '../App/MIPContext';
 import HelpButton from './HelpButton';
-
-interface Props {
-  name?: string;
-  datacatalogueUrl: string | undefined;
-  logout?: () => {};
-  children: JSX.Element;
-}
 
 const NavBar = styled.nav`
   position: fixed;
@@ -105,10 +99,20 @@ const GroupLink = styled(Link)`
 
 const DropdownWrapper = styled.div``;
 
+
+interface Props {
+  name?: string;
+  datacatalogueUrl: string | undefined;
+  logout?: () => {};
+  experiment: IExperiment | undefined;
+  children: JSX.Element;
+}
+
 export default ({
   name,
   datacatalogueUrl,
   logout,
+  experiment,
   children
 }: Props): JSX.Element => {
   const instanceName = name || 'MIP';
@@ -127,7 +131,8 @@ export default ({
           <span> &gt; </span>
           <GroupLink to="/review">Analysis</GroupLink>
           <span> &gt; </span>
-          <GroupLink to="/experiment">Experiment</GroupLink>
+          {experiment && <GroupLink to={`/experiment/${experiment.uuid}`}>Experiment</GroupLink>}
+          {!experiment && <GroupLink to="/experiment">Experiment</GroupLink>}
         </Group>
         <DropdownWrapper>{children}</DropdownWrapper>
         <div className="experiment-nav">
