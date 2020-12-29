@@ -159,6 +159,8 @@ const InlineNameEdit = ({
 }: InternalProps &
   Omit<InternalProps, 'experiment'> &
   EditingProps): JSX.Element => {
+  const node = useRef(null);
+
   const {
     editingExperimentName,
     setEditingExperimentName,
@@ -168,6 +170,12 @@ const InlineNameEdit = ({
   const shouldCancel = useKeyPressed(
     (ev: KeyboardEvent) => ev.key === 'Escape'
   );
+
+  const handleClickOutside = (event: Event): void => {
+    setEditingExperimentName(null);
+  };
+
+  useOnClickOutside(node, handleClickOutside);
 
   const submit = useCallback(
     (uuid: string, name: string): void => {
@@ -196,7 +204,7 @@ const InlineNameEdit = ({
 
   return (
     <>
-      <InlineDialog>
+      <InlineDialog ref={node}>
         <div>
           <Form.Control
             autoFocus
@@ -238,12 +246,20 @@ const InlineNameEdit = ({
 const ExperimentRow = ({
   ...props
 }: InternalProps & { handleDelete: Props['handleDelete'] }): JSX.Element => {
-  const { experiment, username } = props;
-  const isOwner = username === experiment.createdBy;
+  const node = useRef(null);
   const [editingExperimentName, setEditingExperimentName] = useState<
     EditingProps['editingExperimentName']
   >(null);
   const [confirmDelete, setConfirmDelete] = useState<null | string>(null);
+
+  const { experiment, username } = props;
+  const isOwner = username === experiment.createdBy;
+
+  const handleClickOutside = (event: Event): void => {
+    setConfirmDelete(null);
+  };
+
+  useOnClickOutside(node, handleClickOutside);
 
   const ConfimDeleteContainer = ({
     ...props
@@ -251,7 +267,7 @@ const ExperimentRow = ({
     handleDelete: Props['handleDelete'];
   }): JSX.Element => (
     <td colSpan={3}>
-      <InlineDialog>
+      <InlineDialog ref={node}>
         <p className="danger">Really delete this experiment?</p>
         <div>
           <Button
