@@ -10,14 +10,15 @@ export interface User {
 }
 
 export interface State {
+  authenticated: boolean;
   error?: string;
-  forbidden?: boolean;
   user?: User;
   loading: boolean;
 }
 
 class UserContainer extends Container<State> {
   state: State = {
+    authenticated: false,
     loading: true
   };
 
@@ -37,20 +38,29 @@ class UserContainer extends Container<State> {
     return response.data;
   };
 
-  logout = async (): Promise<void> => {
+  logout = (): void => {
     const logoutURL = `${this.backendURL}/logout`;
-    const response = await axios.post(logoutURL, this.options);
-
-    return response.data;
+    axios.get(logoutURL, this.options);
   };
 
   user = async (): Promise<void> => {
     console.log('Check user authorization');
     try {
-      const response = await axios.get(
-        `${this.backendURL}/activeUser `,
-        this.options
-      );
+      const response = await axios.get(`${this.backendURL}/activeUser `, {
+        ...this.options,
+        headers: {
+          // https://github.com/axios/axios/issues/980
+          'X-Requested-With': 'XMLHttpRequest'
+        }
+      });
+
+      if (response.status === 401) {
+        return await this.setState({
+          error: response.statusText,
+          loading: false,
+          authenticated: false
+        });
+      }
 
       const user = response.data;
 
@@ -65,7 +75,6 @@ class UserContainer extends Container<State> {
       if (response.status === 403) {
         return await this.setState({
           error: response.statusText,
-          forbidden: true,
           loading: false,
           user
         });
@@ -74,12 +83,12 @@ class UserContainer extends Container<State> {
       return await this.setState({
         error: undefined,
         loading: false,
+        authenticated: true,
         user
       });
     } catch (error) {
       return await this.setState({
         error: error.message,
-        forbidden: false,
         loading: false
       });
     }

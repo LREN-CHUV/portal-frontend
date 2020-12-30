@@ -125,21 +125,21 @@ export default ({
     return nextModel;
   };
 
-  useEffect(() => {
-    if (
-      apiUser.state.user &&
-      !apiUser.state.loading &&
-      !apiUser.state.forbidden &&
-      !apiUser.state.user?.agreeNDA
-    ) {
-      history.push('/tos');
-    }
-  }, [
-    apiUser.state.user,
-    apiUser.state.forbidden,
-    apiUser.state.loading,
-    history
-  ]);
+  // useEffect(() => {
+  //   if (
+  //     apiUser.state.user &&
+  //     !apiUser.state.loading &&
+  //     !apiUser.state.forbidden &&
+  //     !apiUser.state.user?.agreeNDA
+  //   ) {
+  //     history.push('/tos');
+  //   }
+  // }, [
+  //   apiUser.state.user,
+  //   apiUser.state.forbidden,
+  //   apiUser.state.loading,
+  //   history
+  // ]);
 
   // select default pathology at start
   useEffect(() => {

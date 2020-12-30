@@ -1,17 +1,16 @@
 import * as React from 'react';
 import ReactGA from 'react-ga';
-import { Route, Router } from 'react-router-dom';
+import { Redirect, Route, Router } from 'react-router-dom';
 import { Provider, Subscribe } from 'unstated';
-
-// import UNSTATED from 'unstated-debug';
 import {
   APICore,
   APIExperiment,
   APIMining,
   APIModel,
   APIUser,
+  backendURL,
   webURL
-} from '../API'; // as interfaces
+} from '../API';
 import config from '../API/RequestHeaders';
 import App, { AppConfig } from '../App/App';
 import Splash from '../UI/Splash';
@@ -67,14 +66,11 @@ class AppContainer extends React.Component<any, State> {
     }
 
     await this.apiUser.user();
-    if (this.apiUser.state.user) {
-      const username =
-        this.apiUser.state.user && this.apiUser.state.user.username;
-
+    if (this.apiUser.state.authenticated) {
       // Experiments polling and auth by interval
       this.intervalId = setInterval(() => {
         this.apiUser.user().then(() => {
-          if (this.apiUser.state.user) {
+          if (this.apiUser.state.authenticated) {
             this.apiExperiment.list({});
           } else {
             clearInterval(this.intervalId);
@@ -132,31 +128,26 @@ class AppContainer extends React.Component<any, State> {
                 apiMining: APIMining,
                 apiUser: APIUser
               ): JSX.Element => {
-                const loading = apiUser.state.loading;
-                const authenticated = apiUser.state.user;
+                const authenticated = apiUser.state.authenticated;
 
                 return (
                   <>
                     <Route
-                      // Callback from the auth server, redirected to the API
-                      path="/services/sso/login"
+                      // Callback from the auth server
+                      path="/services/"
+                      exact={true}
                       // tslint:disable-next-line jsx-no-lambda
-                      render={(props): JSX.Element => {
-                        const {
-                          location: { search }
-                        } = props;
-                        apiUser.login(search);
-
-                        return <div />;
-                      }}
+                      render={() => <Redirect to={'/'} />}
                     />
-                    {!loading && !authenticated && (
+                    {!authenticated && (
                       <Splash
-                        forbidden={this.apiUser.state.forbidden}
-                        logout={apiUser.logout}
+                        login={() => {
+                          window.location.href = `${backendURL}/sso/login`;
+                        }}
                       />
                     )}
-                    {!loading && authenticated && (
+
+                    {authenticated && (
                       <App
                         appConfig={this.state.appConfig}
                         apiExperiment={apiExperiment}

@@ -3,8 +3,6 @@ import { Alert, Button } from 'react-bootstrap';
 import styled from 'styled-components';
 
 import HBPLogo from '../../images/hbp_logo_135.png';
-import { backendURL } from '../API';
-import { FORBIDDEN_ACCESS_MESSAGE } from '../constants';
 import HelpButton from './HelpButton';
 
 const ContentBox = styled.div`
@@ -113,109 +111,84 @@ const Logo = styled.img`
   margin: 16px auto 32px auto;
 `;
 
-export default ({
-  logout,
-  forbidden
-}: {
-  logout: () => Promise<void>;
-  forbidden: boolean | undefined;
-}): JSX.Element => {
-  const handleLoginPress = (): void => {
-    window.location.href = `${backendURL}/sso/login`;
-  };
-  const handleLogoutPress = (): void => {
-    logout();
-    window.location.href = '/';
-  };
+export default ({ login }: { login: () => void }): JSX.Element => (
+  <ContentBox>
+    <ActionBar>
+      <div style={{ left: 100 }}>
+        <HelpButton />
+      </div>
+      <LoginBox>
+        <Button onClick={login} variant={'info'} type="submit">
+          Login
+        </Button>
+        <p>
+          <a href="https://mip.ebrains.eu/access">Request Access</a>
+        </p>
+      </LoginBox>
+    </ActionBar>
+    <main>
+      <Logo alt="HBP logo" title={'Human Brain Project'} src={HBPLogo} />
+      <h2>Human Brain Project</h2>
+      <h1>THE MEDICAL INFORMATICS PLATFORM</h1>
 
-  return (
-    <ContentBox>
-      <ActionBar>
-        <div style={{ left: 100 }}>
-          <HelpButton />
-        </div>
-        <LoginBox>
-          <Button onClick={handleLoginPress} variant={'info'} type="submit">
-            Login
-          </Button>
+      <Columns>
+        <section>
           <p>
-            <a href="https://mip.ebrains.eu/access">Request Access</a>
+            Thousands of brain images and terabytes of invaluable associated
+            medical data are produced every day at a gigantic pace around the
+            world. The Medical Informatics Platform (MIP) aims to federate this
+            information and provide the tools to the experts to effectively
+            analyse it and advance more rapidly in understanding the
+            neurological and psychiatric diseases. This will in turn allow
+            identifying the biological changes associated and open real
+            possibilities for early diagnosis and personalised medicine.
           </p>
-        </LoginBox>
-      </ActionBar>
-      <main>
-        {forbidden && (
-          <AlertBox variant="success">
-            <div
-              dangerouslySetInnerHTML={{
-                __html: `${FORBIDDEN_ACCESS_MESSAGE}`
-              }}
-            />
-          </AlertBox>
-        )}
-        <Logo alt="HBP logo" title={'Human Brain Project'} src={HBPLogo} />
-        <h2>Human Brain Project</h2>
-        <h1>THE MEDICAL INFORMATICS PLATFORM</h1>
-
-        <Columns>
+          <p>
+            The MIP provides methods to analyse federated data from hospitals,
+            research centres and biobanks. Clinical scientists can develop,
+            share and release results of their research. The MIP aims to bring
+            together people across professional and scientific fields encourages
+            them to actively contribute to the design and development of the
+            services which the MIP provides.
+          </p>
+        </section>
+        <div>
           <section>
-            <p>
-              Thousands of brain images and terabytes of invaluable associated
-              medical data are produced every day at a gigantic pace around the
-              world. The Medical Informatics Platform (MIP) aims to federate
-              this information and provide the tools to the experts to
-              effectively analyse it and advance more rapidly in understanding
-              the neurological and psychiatric diseases. This will in turn allow
-              identifying the biological changes associated and open real
-              possibilities for early diagnosis and personalised medicine.
-            </p>
-            <p>
-              The MIP provides methods to analyse federated data from hospitals,
-              research centres and biobanks. Clinical scientists can develop,
-              share and release results of their research. The MIP aims to bring
-              together people across professional and scientific fields
-              encourages them to actively contribute to the design and
-              development of the services which the MIP provides.
-            </p>
+            <h3>The MIP has three main goals:</h3>
+            <ul>
+              <li>
+                Build the tools to federate clinical data, currently
+                inaccessible outside hospital and research archives;
+              </li>
+              <li>
+                Recruit hospitals to contribute to and benefit by using the
+                platform;
+              </li>
+              <li>
+                Develop tools for extracting biological signatures of diseases
+                from multi-level data.
+              </li>
+            </ul>
           </section>
-          <div>
-            <section>
-              <h3>The MIP has three main goals:</h3>
-              <ul>
-                <li>
-                  Build the tools to federate clinical data, currently
-                  inaccessible outside hospital and research archives;
-                </li>
-                <li>
-                  Recruit hospitals to contribute to and benefit by using the
-                  platform;
-                </li>
-                <li>
-                  Develop tools for extracting biological signatures of diseases
-                  from multi-level data.
-                </li>
-              </ul>
-            </section>
-            <section>
-              <h3>You can use the MIP</h3>
-              <ul>
-                <li>
-                  as a clinician, for objective diagnoses and treatment of brain
-                  disease;
-                </li>
-                <li>
-                  as a neuroscientist, for the application and testing of new
-                  models and methods;
-                </li>
-                <li>
-                  as a pharmaceutical or biotech company, for disease target
-                  discovery.
-                </li>
-              </ul>
-            </section>
-          </div>
-        </Columns>
-      </main>
-    </ContentBox>
-  );
-};
+          <section>
+            <h3>You can use the MIP</h3>
+            <ul>
+              <li>
+                as a clinician, for objective diagnoses and treatment of brain
+                disease;
+              </li>
+              <li>
+                as a neuroscientist, for the application and testing of new
+                models and methods;
+              </li>
+              <li>
+                as a pharmaceutical or biotech company, for disease target
+                discovery.
+              </li>
+            </ul>
+          </section>
+        </div>
+      </Columns>
+    </main>
+  </ContentBox>
+);

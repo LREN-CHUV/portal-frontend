@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Button } from 'react-bootstrap';
-import { NavLink } from 'react-router-dom';
+import { NavLink, Link as NormalLink } from 'react-router-dom';
 import styled from 'styled-components';
 
 import logo from '../../images/hbp-logo.png';
@@ -102,7 +102,7 @@ const DropdownWrapper = styled.div``;
 interface Props {
   name?: string;
   datacatalogueUrl: string | undefined;
-  logout?: () => {};
+  logout?: () => void;
   experiment: IExperiment | undefined;
   children: JSX.Element;
 }
@@ -163,14 +163,9 @@ export default ({
         </MIPContext.Consumer>
         <HelpButton showTraining={true} />
         {logout && (
-          <Button
-            onClick={(): void => {
-              logout();
-              window.location.href = '/';
-            }}
-          >
+          <NormalLink to={'/'} onClick={logout}>
             Logout
-          </Button>
+          </NormalLink>
         )}
       </RightLinks>
     </NavBar>
