@@ -101,7 +101,9 @@ const LogoutButton = styled(Button)`
   font-weight: bold;
 `;
 
-const DropdownWrapper = styled.div``;
+const DropdownWrapper = styled.div`
+  padding-left: 124px;
+`;
 
 interface Props {
   isAnonymous: boolean;

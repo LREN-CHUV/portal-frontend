@@ -130,7 +130,12 @@ const ExperimentIcon = ({
   shared
 }: Partial<IExperiment>): JSX.Element => {
   if (status === 'error') {
-    return <BsFillExclamationCircleFill title="Experiment has errors" className="danger"/>;
+    return (
+      <BsFillExclamationCircleFill
+        title="Experiment has errors"
+        className="danger"
+      />
+    );
   }
 
   if (status === 'pending') {
@@ -146,7 +151,7 @@ const ExperimentIcon = ({
   }
 
   if (!viewed && status === 'success') {
-    return <BsFillEyeSlashFill title="Not viewed" className="info"/>;
+    return <BsFillEyeSlashFill title="Not viewed" className="info" />;
   }
 
   return <BsCloudDownload />;
