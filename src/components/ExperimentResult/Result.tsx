@@ -8,6 +8,8 @@ import RenderResult from './RenderResult';
 
 const Body = styled(Card.Body)`
   min-height: 20vh;
+  max-width: calc(100vw - 280px);
+  }
 `;
 
 const LoadingTitle = styled.h5`

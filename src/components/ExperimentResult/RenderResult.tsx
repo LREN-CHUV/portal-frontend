@@ -7,6 +7,12 @@ import { Highchart, JSONData } from '../UI/Visualization';
 import Dendogram from '../UI/Visualization/Dendogram';
 import BinaryTree from '../UI/Visualization/BinaryTree';
 import Warning from '../UI/Visualization/Warning';
+import styled from 'styled-components';
+
+const ResultContainer = styled.div`
+  max-width: calc(100vw - 280px);
+  overflow: auto;
+`;
 
 export default ({
   results
@@ -17,7 +23,7 @@ export default ({
     <>
       {results &&
         results.map((result: Result, i: number) => (
-          <div className="result" key={i}>
+          <ResultContainer className="result" key={i}>
             {result.type === MIME_TYPES.ERROR && (
               <Error message={result.data} />
             )}
@@ -39,7 +45,7 @@ export default ({
             {result.type === MIME_TYPES.JSON && (
               <Dendogram data={result.data} />
             )}
-          </div>
+          </ResultContainer>
         ))}
     </>
   );
