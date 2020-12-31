@@ -1,24 +1,30 @@
 import React, { useCallback } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import styled from 'styled-components';
-
-import ExperimentReview from '../ExperimentAnalysis/Container';
-import { APICore, APIExperiment, APIMining, APIModel, APIUser } from '../API';
+import {
+  APICore,
+  APIExperiment,
+  APIMining,
+  APIModel,
+  APIUser,
+  backendURL
+} from '../API';
 import { ExperimentListQueryParameters, IExperiment } from '../API/Experiment';
+import ExperimentReview from '../ExperimentAnalysis/Container';
 import ExperimentCreate from '../ExperimentCreate/Container';
 import Explore from '../ExperimentExplore/Container';
-import Help from '../Help/Help';
 import ExperimentResult from '../ExperimentResult/Container';
-import Tutorial from '../UserGuide/Tutorial';
+import Help from '../Help/Videos';
 import DataCatalog from '../UI/DataCatalog';
 import ExperimentList from '../UI/DropdownExperimentList';
 import Footer from '../UI/Footer';
 import Galaxy from '../UI/Galaxy';
 import { GlobalStyles } from '../UI/GlobalStyle';
+import LoginPage from '../UI/LoginPage';
 import Navigation from '../UI/Navigation';
 import NotFound from '../UI/NotFound';
 import TOS from '../UI/TOS';
-import User from '../User/Container';
+import Tutorial from '../UserGuide/Tutorial';
 
 export interface AppConfig {
   version?: string;
@@ -73,12 +79,24 @@ const App = ({
   apiUser,
   showTutorial
 }: Props): JSX.Element => {
+  const loading = apiUser.state.loading;
+  const authenticated = apiUser.state.authenticated || false;
+  const showApp = !loading && authenticated;
+  const isAnonymous = apiUser.state.user?.username === 'anonymous' || false;
+
   return (
     <>
       <GlobalStyles />
       <header>
         <Navigation
           name={appConfig.instanceName}
+          isAnonymous={isAnonymous}
+          authenticated={authenticated}
+          login={() => {
+            if (apiUser.state.user?.username !== 'anonymous') {
+              window.location.href = `${backendURL}/sso/login`;
+            }
+          }}
           datacatalogueUrl={appConfig.datacatalogueUrl || undefined}
           logout={
             (apiUser.state.user?.username !== 'anonymous' && apiUser.logout) ||
@@ -107,88 +125,97 @@ const App = ({
         </Navigation>
       </header>
       <Main showTutorial={showTutorial}>
-        {showTutorial && <Tutorial />}
         <Switch>
-          <Route
-            path={['/', '/explore']}
-            exact={true}
-            // tslint:disable-next-line jsx-no-lambda
-            render={(props): JSX.Element => (
-              <Explore
-                apiCore={apiCore}
-                apiMining={apiMining}
-                apiModel={apiModel}
-                appConfig={appConfig}
-                apiUser={apiUser}
-                apiExperiment={apiExperiment}
-                {...props}
-              ></Explore>
-            )}
-          />
-          <Route
-            path="/tos"
-            // tslint:disable-next-line jsx-no-lambda
-            render={(props): JSX.Element => (
-              <TOS apiUser={apiUser} {...props} />
-            )}
-          />
-
-          <Route
-            path="/review"
-            // tslint:disable-next-line jsx-no-lambda
-            render={(props): JSX.Element => (
-              <ExperimentReview
-                apiMining={apiMining}
-                apiModel={apiModel}
-                apiCore={apiCore}
-                apiExperiment={apiExperiment}
-                {...props}
-              />
-            )}
-          />
-          <Route
-            path="/experiment/:uuid"
-            // tslint:disable-next-line jsx-no-lambda
-            render={(): JSX.Element => (
-              <ExperimentResult
-                apiExperiment={apiExperiment}
-                apiModel={apiModel}
-                apiCore={apiCore}
-              />
-            )}
-          />
-          <Route
-            exact={true}
-            path="/experiment"
-            // tslint:disable-next-line jsx-no-lambda
-            render={(): JSX.Element => (
-              <ExperimentCreate
-                apiExperiment={apiExperiment}
-                apiCore={apiCore}
-                apiModel={apiModel}
-              />
-            )}
-          />
-          <Route
-            path="/galaxy"
-            render={(): JSX.Element => <Galaxy apiCore={apiCore} />}
-          />
-          <Route path="/catalog" render={(): JSX.Element => <DataCatalog />} />
-          <Route
-            path="/profile"
-            // tslint:disable-next-line jsx-no-lambda
-            render={(props): JSX.Element => (
-              <User apiUser={apiUser} {...props} />
-            )}
-          />
+          {showTutorial && <Tutorial />}
+          {!showApp && (
+            <Route
+              path={['/', '/explore']}
+              exact={true}
+              render={(props): JSX.Element => <LoginPage />}
+            />
+          )}
 
           <Route
             path="/training"
+            exact={true}
             // tslint:disable-next-line jsx-no-lambda
             render={(props): JSX.Element => <Help />}
           />
 
-          <Route component={NotFound} />
+          {showApp && (
+            <Switch>
+              <Route
+                path={['/', '/explore']}
+                exact={true}
+                // tslint:disable-next-line jsx-no-lambda
+                render={(props): JSX.Element => (
+                  <Explore
+                    apiCore={apiCore}
+                    apiMining={apiMining}
+                    apiModel={apiModel}
+                    appConfig={appConfig}
+                    apiUser={apiUser}
+                    apiExperiment={apiExperiment}
+                    {...props}
+                  ></Explore>
+                )}
+              />
+              <Route
+                path="/tos"
+                // tslint:disable-next-line jsx-no-lambda
+                render={(props): JSX.Element => (
+                  <TOS apiUser={apiUser} {...props} />
+                )}
+              />
+
+              <Route
+                path="/review"
+                // tslint:disable-next-line jsx-no-lambda
+                render={(props): JSX.Element => (
+                  <ExperimentReview
+                    apiMining={apiMining}
+                    apiModel={apiModel}
+                    apiCore={apiCore}
+                    apiExperiment={apiExperiment}
+                    {...props}
+                  />
+                )}
+              />
+              <Route
+                path="/experiment/:uuid"
+                // tslint:disable-next-line jsx-no-lambda
+                render={(): JSX.Element => (
+                  <ExperimentResult
+                    apiExperiment={apiExperiment}
+                    apiModel={apiModel}
+                    apiCore={apiCore}
+                  />
+                )}
+              />
+              <Route
+                exact={true}
+                path="/experiment"
+                // tslint:disable-next-line jsx-no-lambda
+                render={(): JSX.Element => (
+                  <ExperimentCreate
+                    apiExperiment={apiExperiment}
+                    apiCore={apiCore}
+                    apiModel={apiModel}
+                  />
+                )}
+              />
+              <Route
+                path="/galaxy"
+                render={(): JSX.Element => <Galaxy apiCore={apiCore} />}
+              />
+              <Route
+                path="/catalog"
+                render={(): JSX.Element => <DataCatalog />}
+              />
+
+              <Route component={NotFound} />
+            </Switch>
+          )}
         </Switch>
       </Main>
       <footer>

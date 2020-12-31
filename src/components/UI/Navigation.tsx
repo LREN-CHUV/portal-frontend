@@ -104,6 +104,9 @@ const LogoutButton = styled(Button)`
 const DropdownWrapper = styled.div``;
 
 interface Props {
+  isAnonymous: boolean;
+  authenticated: boolean;
+  login: () => void;
   name?: string;
   datacatalogueUrl: string | undefined;
   logout?: () => void;
@@ -112,6 +115,9 @@ interface Props {
 }
 
 export default ({
+  isAnonymous,
+  authenticated,
+  login,
   name,
   datacatalogueUrl,
   logout,
@@ -128,33 +134,35 @@ export default ({
         </Link>
         <Link to="/">{instanceName}</Link>
       </Brand>
-      <Links>
-        <Group className="experiment-nav">
-          <GroupLink to="/explore">Variables</GroupLink>
-          <span> &gt; </span>
-          <GroupLink to="/review">Analysis</GroupLink>
-          <span> &gt; </span>
-          {experiment && (
-            <GroupLink to={`/experiment/${experiment.uuid}`}>
-              Experiment
-            </GroupLink>
-          )}
-          {!experiment && <GroupLink to="/experiment">Experiment</GroupLink>}
-        </Group>
-        <DropdownWrapper>{children}</DropdownWrapper>
-        <div className="experiment-nav">
-          <Link to="/galaxy">Workflow</Link>
-          {datacatalogueUrl && (
-            <a
-              href={datacatalogueUrl}
-              rel="noopener noreferrer"
-              target="_blank"
-            >
-              Data Catalogue
-            </a>
-          )}
-        </div>
-      </Links>
+      {authenticated && (
+        <Links>
+          <Group className="experiment-nav">
+            <GroupLink to="/explore">Variables</GroupLink>
+            <span> &gt; </span>
+            <GroupLink to="/review">Analysis</GroupLink>
+            <span> &gt; </span>
+            {experiment && (
+              <GroupLink to={`/experiment/${experiment.uuid}`}>
+                Experiment
+              </GroupLink>
+            )}
+            {!experiment && <GroupLink to="/experiment">Experiment</GroupLink>}
+          </Group>
+          <DropdownWrapper>{children}</DropdownWrapper>
+          <div className="experiment-nav">
+            <Link to="/galaxy">Workflow</Link>
+            {datacatalogueUrl && (
+              <a
+                href={datacatalogueUrl}
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                Data Catalogue
+              </a>
+            )}
+          </div>
+        </Links>
+      )}
       <RightLinks className="experiment-nav">
         <MIPContext.Consumer>
           {({ toggleTutorial }): JSX.Element =>
@@ -166,8 +174,18 @@ export default ({
           }
         </MIPContext.Consumer>
         <HelpButton showTraining={true} />
-        {logout && (
-          <LogoutButton onClick={logout} variant={'outline-info'} size="sm">
+        {!isAnonymous && !authenticated && (
+          <LogoutButton
+            onClick={login}
+            size={'sm'}
+            variant={'info'}
+            type="submit"
+          >
+            Login
+          </LogoutButton>
+        )}
+        {!isAnonymous && authenticated && (
+          <LogoutButton variant={'outline-info'} size={'sm'} onClick={logout}>
             Logout
           </LogoutButton>
         )}

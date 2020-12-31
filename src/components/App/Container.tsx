@@ -8,12 +8,10 @@ import {
   APIMining,
   APIModel,
   APIUser,
-  backendURL,
   webURL
 } from '../API';
 import config from '../API/RequestHeaders';
 import App, { AppConfig } from '../App/App';
-import Splash from '../UI/Splash';
 import { history } from '../utils';
 import MIPContext from './MIPContext';
 
@@ -139,25 +137,16 @@ class AppContainer extends React.Component<any, State> {
                       // tslint:disable-next-line jsx-no-lambda
                       render={() => <Redirect to={'/'} />}
                     />
-                    {!authenticated && (
-                      <Splash
-                        login={() => {
-                          window.location.href = `${backendURL}/sso/login`;
-                        }}
-                      />
-                    )}
-
-                    {authenticated && (
-                      <App
-                        appConfig={this.state.appConfig}
-                        apiExperiment={apiExperiment}
-                        apiCore={apiCore}
-                        apiModel={apiModel}
-                        apiMining={apiMining}
-                        apiUser={apiUser}
-                        showTutorial={this.state.showTutorial}
-                      />
-                    )}
+                    <App
+                      appConfig={this.state.appConfig}
+                      apiExperiment={apiExperiment}
+                      apiCore={apiCore}
+                      apiModel={apiModel}
+                      apiMining={apiMining}
+                      apiUser={apiUser}
+                      showTutorial={this.state.showTutorial}
+                    />
+                    )
                   </>
                 );
               }}

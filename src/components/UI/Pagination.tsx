@@ -88,43 +88,42 @@ export default ({
   list: IExperimentList;
   query: HandleQueryParameters;
 }): JSX.Element => {
-  const pagination = list.totalExperiments && paginate(
-    list.totalExperiments,
-    list.currentPage + 1,
-    PAGE_SIZE,
-    MAX_PAGES
-  );
+  const pagination =
+    list.totalExperiments &&
+    paginate(list.totalExperiments, list.currentPage + 1, PAGE_SIZE, MAX_PAGES);
 
   return (
-    pagination && <Pagination className="justify-content-center">
-      <Pagination.Prev
-        disabled={pagination.currentPage <= 1}
-        onClick={(): void =>
-          query({
-            page: pagination.currentPage - 2
-          })
-        }
-      />
+    (pagination && (
+      <Pagination className="justify-content-center">
+        <Pagination.Prev
+          disabled={pagination.currentPage <= 1}
+          onClick={(): void =>
+            query({
+              page: pagination.currentPage - 2
+            })
+          }
+        />
 
-      {pagination.pages.map((n: number) => (
-        <Pagination.Item
-          key={`page-${n}`}
-          onClick={(): void => query({ page: n - 1 })}
-          active={pagination.currentPage === n}
-        >
-          {n}
-        </Pagination.Item>
-      ))}
+        {pagination.pages.map((n: number) => (
+          <Pagination.Item
+            key={`page-${n}`}
+            onClick={(): void => query({ page: n - 1 })}
+            active={pagination.currentPage === n}
+          >
+            {n}
+          </Pagination.Item>
+        ))}
 
-      <Pagination.Next
-        onClick={(): void =>
-          query({
-            page: pagination.currentPage
-          })
-        }
-        active={pagination.totalPages === pagination.currentPage}
-        disabled={pagination.currentPage >= pagination.totalPages}
-      />
-    </Pagination> || <div></div>
+        <Pagination.Next
+          onClick={(): void =>
+            query({
+              page: pagination.currentPage
+            })
+          }
+          active={pagination.totalPages === pagination.currentPage}
+          disabled={pagination.currentPage >= pagination.totalPages}
+        />
+      </Pagination>
+    )) || <div></div>
   );
 };

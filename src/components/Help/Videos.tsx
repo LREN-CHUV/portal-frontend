@@ -19,9 +19,13 @@ const Video = styled.iframe`
 export default (): JSX.Element => (
   <>
     <Card>
-      <Card.Title>
-        <Title>Training</Title>
-      </Card.Title>
+      <Card.Body>
+        <Title>Videos Training</Title>
+        <p>
+          Basic skills to start working with the MIP and conduct initial
+          experiments
+        </p>
+      </Card.Body>
     </Card>
     <Card>
       <Card.Body>
