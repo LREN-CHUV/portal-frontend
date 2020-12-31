@@ -88,7 +88,7 @@ export default ({
   list: IExperimentList;
   query: HandleQueryParameters;
 }): JSX.Element => {
-  const pagination = paginate(
+  const pagination = list.totalExperiments && paginate(
     list.totalExperiments,
     list.currentPage + 1,
     PAGE_SIZE,
@@ -96,7 +96,7 @@ export default ({
   );
 
   return (
-    <Pagination className="justify-content-center">
+    pagination && <Pagination className="justify-content-center">
       <Pagination.Prev
         disabled={pagination.currentPage <= 1}
         onClick={(): void =>
@@ -125,6 +125,6 @@ export default ({
         active={pagination.totalPages === pagination.currentPage}
         disabled={pagination.currentPage >= pagination.totalPages}
       />
-    </Pagination>
+    </Pagination> || <div></div>
   );
 };
