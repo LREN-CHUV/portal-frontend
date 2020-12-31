@@ -97,6 +97,10 @@ const GroupLink = styled(Link)`
   margin: 0 8px 0 0;
 `;
 
+const LogoutButton = styled(Button)`
+  font-weight: bold;
+`;
+
 const DropdownWrapper = styled.div``;
 
 interface Props {
@@ -163,9 +167,9 @@ export default ({
         </MIPContext.Consumer>
         <HelpButton showTraining={true} />
         {logout && (
-          <NormalLink to={'/'} onClick={logout}>
+          <LogoutButton onClick={logout} variant={'outline-info'} size="sm">
             Logout
-          </NormalLink>
+          </LogoutButton>
         )}
       </RightLinks>
     </NavBar>
