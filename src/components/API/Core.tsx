@@ -239,7 +239,7 @@ class Core extends Container<State> {
       });
     } catch (error) {
       return await this.setState({
-        pathologyError: error.message
+        pathologyError: FORBIDDEN_ACCESS_MESSAGE
       });
     }
   };
