@@ -49,6 +49,10 @@ export const GlobalStyles = createGlobalStyle`
     text-decoration: underline;
   }
 
+  .secondary {
+    color: #6c757d;
+  }
+
   .success {
     color: #28a745;
   }

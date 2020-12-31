@@ -173,7 +173,7 @@ class Experiment extends React.Component<Props> {
 
   private handleCreateNewExperiment = (): void => {
     const { history } = this.props;
-    history.push(`/experiment`);
+    history.push(`/review`);
   };
 
   private pollFetchExperiment = (uuid: string): void => {

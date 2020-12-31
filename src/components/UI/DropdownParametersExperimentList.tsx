@@ -216,7 +216,7 @@ const Dropdown = ({ ...props }: Props): JSX.Element => {
   return (
     <DropDownContainer ref={node}>
       <DropDownHeader onClick={toggling}>
-        {experiment ? `from ${experiment.name}` : 'Select from Experiment'}
+        {experiment ? `from ${experiment.name}` : 'Select Parameters'}
       </DropDownHeader>
       {isOpen && (
         <DropDownListContainer>
