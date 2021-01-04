@@ -1,11 +1,10 @@
 import * as React from 'react';
-import { Alert } from 'react-bootstrap';
-import styled from 'styled-components';
 import { Card } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
+import styled from 'styled-components';
+import EBRAINS from '../../images/ebrains';
 import HBPLogo from '../../images/hbp_logo_135.png';
 import Helpdesk from './Helpdesk';
-import { Link } from 'react-router-dom';
-import EBRAINS from '../../images/ebrains';
 
 const Logo = styled.img`
   width: 135px;
