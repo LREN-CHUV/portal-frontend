@@ -2,8 +2,16 @@ import { mount } from 'enzyme';
 import * as React from 'react';
 
 import Result from '../../../ExperimentResult/Result';
-import { ExperimentParameter, IExperiment } from '../../Experiment';
-import { createExperiment, TEST_PATHOLOGIES, waitForResult } from '../../UtiltyTests';
+import {
+  ExperimentParameter,
+  IExperiment,
+  IExperimentPrototype
+} from '../../Experiment';
+import {
+  createExperiment,
+  TEST_PATHOLOGIES,
+  waitForResult
+} from '../../UtiltyTests';
 
 // config
 
@@ -37,7 +45,7 @@ const parameters: ExperimentParameter[] = [
   }
 ];
 
-const experiment: Partial<IExperiment> = {
+const experiment: IExperimentPrototype = {
   algorithm: {
     name: algorithmId,
     parameters,
@@ -49,31 +57,26 @@ const experiment: Partial<IExperiment> = {
 // Test
 
 describe('Integration Test for experiment API', () => {
-  
   it(`create ${algorithmId}`, async () => {
-    
-    const { error, experiment: result } = await createExperiment({
+    const { experiment: result } = await createExperiment({
       experiment
     });
 
-    expect(error).toBeFalsy();
     expect(result).toBeTruthy();
+    expect(result.status).toStrictEqual('pending');
 
-    const uuid = result?.uuid;
+    const uuid = (result as IExperiment)?.uuid;
     expect(uuid).toBeTruthy();
+
     if (!uuid) {
       throw new Error('uuid not defined');
     }
 
-    const experimentState = await waitForResult({
-      uuid
-    });
-    expect(experimentState.error).toBeFalsy();
+    const experimentState = await waitForResult({ uuid });
+    expect(experimentState.experiment.status).toStrictEqual('success');
     expect(experimentState.experiment).toBeTruthy();
 
-    const props = {
-      experimentState
-    };
+    const props = { experimentState };
 
     const wrapper = mount(<Result {...props} />);
     expect(wrapper.find('.error')).toHaveLength(0);

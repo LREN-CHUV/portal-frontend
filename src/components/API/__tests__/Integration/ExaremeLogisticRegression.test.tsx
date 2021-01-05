@@ -74,6 +74,7 @@ describe('Integration Test for experiment API', () => {
     }
 
     const experimentState = await waitForResult({ uuid });
+    
     expect(experimentState.experiment.status).toStrictEqual('success');
     expect(experimentState.experiment).toBeTruthy();
 
