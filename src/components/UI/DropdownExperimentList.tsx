@@ -379,7 +379,7 @@ const ExperimentRow = ({
                     onClick={(): void => {
                       setEditingExperimentName({
                         uuid: experiment.uuid,
-                        name: experiment.name
+                        name: experiment.name || ''
                       });
                     }}
                   >
