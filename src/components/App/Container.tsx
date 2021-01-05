@@ -1,6 +1,6 @@
 import * as React from 'react';
 import ReactGA from 'react-ga';
-import { Redirect, Route, Router } from 'react-router-dom';
+import { Router } from 'react-router-dom';
 import { Provider, Subscribe } from 'unstated';
 import {
   APICore,
@@ -126,28 +126,16 @@ class AppContainer extends React.Component<any, State> {
                 apiMining: APIMining,
                 apiUser: APIUser
               ): JSX.Element => {
-                const authenticated = apiUser.state.authenticated;
-
                 return (
-                  <>
-                    <Route
-                      // Callback from the auth server
-                      path="/services/"
-                      exact={true}
-                      // tslint:disable-next-line jsx-no-lambda
-                      render={() => <Redirect to={'/'} />}
-                    />
-                    <App
-                      appConfig={this.state.appConfig}
-                      apiExperiment={apiExperiment}
-                      apiCore={apiCore}
-                      apiModel={apiModel}
-                      apiMining={apiMining}
-                      apiUser={apiUser}
-                      showTutorial={this.state.showTutorial}
-                    />
-                    )
-                  </>
+                  <App
+                    appConfig={this.state.appConfig}
+                    apiExperiment={apiExperiment}
+                    apiCore={apiCore}
+                    apiModel={apiModel}
+                    apiMining={apiMining}
+                    apiUser={apiUser}
+                    showTutorial={this.state.showTutorial}
+                  />
                 );
               }}
             </Subscribe>

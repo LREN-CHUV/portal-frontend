@@ -87,7 +87,6 @@ const App = ({
 }: Props): JSX.Element => {
   const loading = apiUser.state.loading;
   const authenticated = apiUser.state.authenticated || false;
-  const showApp = !loading && authenticated;
   const isAnonymous = apiUser.state.user?.username === 'anonymous' || false;
 
   return (
@@ -98,7 +97,7 @@ const App = ({
           name={appConfig.instanceName}
           isAnonymous={isAnonymous}
           authenticated={authenticated}
-          login={() => {
+          login={(): void => {
             if (apiUser.state.user?.username !== 'anonymous') {
               window.location.href = `${backendURL}/sso/login`;
             }
@@ -139,7 +138,8 @@ const App = ({
         {!loading && (
           <Switch>
             {showTutorial && <Tutorial />}
-            {!showApp && (
+
+            {!authenticated && (
               <Route path="/" exact={true}>
                 <LoginPage />
               </Route>
@@ -149,7 +149,7 @@ const App = ({
               <Help />
             </Route>
 
-            {showApp && (
+            {authenticated && (
               <Switch>
                 <Route
                   path={['/', '/explore']}

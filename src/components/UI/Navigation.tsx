@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Button } from 'react-bootstrap';
-import { NavLink, Link as NormalLink } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
 
 import logo from '../../images/hbp-logo.png';
@@ -169,7 +169,15 @@ export default ({
         <MIPContext.Consumer>
           {({ toggleTutorial }): JSX.Element =>
             (
-              <a href="#" onClick={toggleTutorial}>
+              <a
+                href="/"
+                onClick={(
+                  e: React.MouseEvent<HTMLAnchorElement, MouseEvent>
+                ): void => {
+                  e.preventDefault();
+                  toggleTutorial && toggleTutorial();
+                }}
+              >
                 User Guide
               </a>
             ) || <></>
