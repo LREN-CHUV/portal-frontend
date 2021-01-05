@@ -25,9 +25,7 @@ import Navigation from '../UI/Navigation';
 import NotFound from '../UI/NotFound';
 import TOS from '../UI/TOS';
 import Tutorial from '../UserGuide/Tutorial';
-import { Spinner } from 'react-bootstrap'
-
-
+import { Spinner } from 'react-bootstrap';
 
 const Main = styled.main<MainProps>`
   margin: 0 auto;
@@ -56,7 +54,7 @@ const SpinnerContainer = styled.div`
   min-height: inherit;
   justify-content: center;
   align-items: center;
-`
+`;
 
 export interface AppConfig {
   version?: string;
@@ -133,23 +131,21 @@ const App = ({
         </Navigation>
       </header>
       <Main showTutorial={showTutorial}>
-        {loading && <SpinnerContainer><Spinner animation="border" variant="info" /></SpinnerContainer>}
-        {!loading &&
+        {loading && (
+          <SpinnerContainer>
+            <Spinner animation="border" variant="info" />
+          </SpinnerContainer>
+        )}
+        {!loading && (
           <Switch>
             {showTutorial && <Tutorial />}
             {!showApp && (
-              <Route
-                path='/'
-                exact={true}
-              >
+              <Route path="/" exact={true}>
                 <LoginPage />
               </Route>
             )}
 
-            <Route
-              path="/training"
-              exact={true}
-            >
+            <Route path="/training" exact={true}>
               <Help />
             </Route>
 
@@ -228,7 +224,7 @@ const App = ({
               </Switch>
             )}
           </Switch>
-        }
+        )}
       </Main>
       <footer>
         <Footer appConfig={appConfig} />
