@@ -60,7 +60,8 @@ export type ParameterName =
   | 'outcome_neg'
   | 'max_age'
   | 'positive_level'
-  | 'negative_level';
+  | 'negative_level'
+  | 'total_duration';
 
 export interface ExperimentParameter {
   name: ParameterName;

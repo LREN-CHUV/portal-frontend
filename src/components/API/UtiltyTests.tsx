@@ -1,8 +1,9 @@
 import APIExperiment, {
-  IExperiment,
+  IExperimentPrototype,
   State as ExperimentState
 } from './Experiment';
 import config from './RequestHeaders';
+import { Exareme } from './Exareme';
 
 const TIMEOUT_DURATION = 60 * 10;
 
@@ -31,10 +32,11 @@ const TEST_PATHOLOGIES = {
 const apiExperiment = new APIExperiment(config);
 
 const createExperiment = async ({
-  experiment
+  experiment: tmpexperiment
 }: {
-  experiment: Partial<IExperiment>;
+  experiment: IExperimentPrototype;
 }): Promise<ExperimentState> => {
+  const experiment = Exareme.handleParametersExceptions(tmpexperiment);
   await apiExperiment.create({ experiment, transient: false });
   await new Promise(resolve => setTimeout(resolve, 1000));
 

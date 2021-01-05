@@ -2,7 +2,11 @@ import { mount } from 'enzyme';
 import * as React from 'react';
 
 import Result from '../../../ExperimentResult/Result';
-import { ExperimentParameter, IExperiment } from '../../Experiment';
+import {
+  ExperimentParameter,
+  IExperiment,
+  IExperimentPrototype
+} from '../../Experiment';
 import {
   createExperiment,
   TEST_PATHOLOGIES,
@@ -23,8 +27,8 @@ const parameters: ExperimentParameter[] = [
     name: 'y', // variable
     value: 'gender'
   },
-  { name: "positive_level", label: "other", value: "M" },
-  { name: "negative_level", label: "other", value: "F" },
+  { name: 'positive_level', label: 'other', value: 'M' },
+  { name: 'negative_level', label: 'other', value: 'F' },
   {
     name: 'pathology',
     value: TEST_PATHOLOGIES.dementia.code
@@ -42,7 +46,7 @@ const parameters: ExperimentParameter[] = [
   }
 ];
 
-const experiment: Partial<IExperiment> = {
+const experiment: IExperimentPrototype = {
   algorithm: {
     name: algorithmId,
     parameters,
@@ -60,7 +64,7 @@ describe('Integration Test for experiment API', () => {
     });
 
     expect(result).toBeTruthy();
-    expect(result.status).toStrictEqual('pending')
+    expect(result.status).toStrictEqual('pending');
 
     const uuid = (result as IExperiment)?.uuid;
     expect(uuid).toBeTruthy();
@@ -69,9 +73,8 @@ describe('Integration Test for experiment API', () => {
       throw new Error('uuid not defined');
     }
 
-    
     const experimentState = await waitForResult({ uuid });
-    expect(experimentState.experiment.status).toStrictEqual('success')
+    expect(experimentState.experiment.status).toStrictEqual('success');
     expect(experimentState.experiment).toBeTruthy();
 
     const props = { experimentState };

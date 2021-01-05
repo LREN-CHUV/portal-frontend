@@ -2,7 +2,11 @@ import { mount } from 'enzyme';
 import * as React from 'react';
 
 import Result from '../../../ExperimentResult/Result';
-import { ExperimentParameter, IExperiment } from '../../Experiment';
+import {
+  ExperimentParameter,
+  IExperiment,
+  IExperimentPrototype
+} from '../../Experiment';
 import {
   createExperiment,
   TEST_PATHOLOGIES,
@@ -16,13 +20,13 @@ const algorithmId = 'THREE_C';
 const algorithmLabel = '3C';
 
 const parameters: ExperimentParameter[] = [
-  { "name": "dx", "value": "alzheimerbroadcategory" },
-  { "name": "c2_feature_selection_method", "value": "RF" },
-  { "name": "c2_num_clusters_method", "value": "Euclidean" },
-  { "name": "c2_num_clusters", "value": "6" },
-  { "name": "c2_clustering_method", "value": "Euclidean" },
-  { "name": "c3_feature_selection_method", "value": "RF" },
-  { "name": "c3_classification_method", "value": "RF" },
+  { name: 'dx', value: 'alzheimerbroadcategory' },
+  { name: 'c2_feature_selection_method', value: 'RF' },
+  { name: 'c2_num_clusters_method', value: 'Euclidean' },
+  { name: 'c2_num_clusters', value: '6' },
+  { name: 'c2_clustering_method', value: 'Euclidean' },
+  { name: 'c3_feature_selection_method', value: 'RF' },
+  { name: 'c3_classification_method', value: 'RF' },
   {
     name: 'x', // covariable
     value: 'gender, agegroup'
@@ -44,37 +48,37 @@ const parameters: ExperimentParameter[] = [
   }
 ];
 
-const experiment: Partial<IExperiment> = {
+const experiment: IExperimentPrototype = {
   algorithm: {
     name: algorithmId,
     parameters,
     type: 'string'
   },
-  name: modelSlug
+  name: modelSlug,
 };
 
 // Test
 
 describe('Integration Test for experiment API', () => {
-
-
+  
   it(`create ${algorithmId}`, async () => {
-
-    const { error, experiment: result } = await createExperiment({
+    const { experiment: result } = await createExperiment({
       experiment
     });
 
-    expect(error).toBeFalsy();
     expect(result).toBeTruthy();
+    expect(result.status).toStrictEqual('pending');
 
-    const uuid = result && result.uuid;
+    const uuid = (result as IExperiment)?.uuid;
     expect(uuid).toBeTruthy();
+
     if (!uuid) {
       throw new Error('uuid not defined');
     }
 
     const experimentState = await waitForResult({ uuid });
-    expect(experimentState.error).toBeFalsy();
+
+    expect(experimentState.experiment.status).toStrictEqual('success');
     expect(experimentState.experiment).toBeTruthy();
 
     const props = { experimentState };
