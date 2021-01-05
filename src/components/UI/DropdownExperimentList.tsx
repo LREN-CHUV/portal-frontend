@@ -14,7 +14,9 @@ import {
 import { FaShareAlt } from 'react-icons/fa';
 import { GoCheck } from 'react-icons/go';
 import { Link } from 'react-router-dom';
+import { Transition } from 'react-transition-group';
 import styled from 'styled-components';
+
 import {
   ExperimentListQueryParameters,
   IExperiment,
@@ -103,6 +105,19 @@ const InlineDialog = styled.div`
   justify-content: space-between;
   align-items: center;
 `;
+
+const AnimatedItemRow = styled.tr<AnimatedProps>`
+  transition: 0.5s;
+  transform: ${(prop: any): any =>
+    prop.entering &&
+    `
+       translateX(1000px)
+   `};
+`;
+
+interface AnimatedProps {
+  entering: any;
+}
 
 interface Props {
   username?: string;
@@ -254,6 +269,7 @@ const ExperimentRow = ({
     EditingProps['editingExperimentName']
   >(null);
   const [confirmDelete, setConfirmDelete] = useState<null | string>(null);
+  const [deleted, setDeleted] = useState<null | string>(null);
 
   const { experiment, username } = props;
   const isOwner = username === experiment.createdBy;
@@ -277,8 +293,11 @@ const ExperimentRow = ({
             size={'sm'}
             variant="primary"
             onClick={(): void => {
-              props.handleDelete(experiment.uuid);
-              setConfirmDelete(null);
+              setTimeout(() => {
+                props.handleDelete(experiment.uuid);
+                setConfirmDelete(null);
+              }, 200);
+              setDeleted(experiment.uuid);
             }}
           >
             <GoCheck />
@@ -298,87 +317,92 @@ const ExperimentRow = ({
   );
 
   return (
-    <tr>
-      <td className="centered align-middle">
-        <ExperimentIcon {...experiment} />
-      </td>
-
-      {editingExperimentName?.uuid === experiment.uuid ? (
-        <td colSpan={5} className="align-middle">
-          <InlineNameEdit
-            editingExperimentName={editingExperimentName}
-            setEditingExperimentName={setEditingExperimentName}
-            {...props}
-          />
+    <Transition timeout={500}>
+      <AnimatedItemRow entering={deleted === experiment.uuid}>
+        <td className="centered align-middle">
+          <ExperimentIcon {...experiment} />
         </td>
-      ) : (
-        <>
-          <td className="align-middle">
-            <Link
-              className="experiment-name"
-              to={`/experiment/${experiment.uuid}`}
-              title={`See experiment ${experiment.name}`}
-              onClick={(): void => props.handleOnClick(experiment)}
-            >
-              {experiment.name}
-            </Link>
-          </td>
 
-          {confirmDelete ? (
-            <ConfimDeleteContainer {...props} />
-          ) : (
-            <>
-              <td className="centered align-middle">
-                {dayjs().to(dayjs(experiment.created))}
-              </td>
-              <td className="centered align-middle">{experiment.createdBy}</td>
-              <td className="centered align-middle">
-                <Button
-                  size={'sm'}
-                  disabled={!isOwner}
-                  variant="light"
-                  title="Share with all users"
-                  onClick={(): void =>
-                    props?.handleUpdate(experiment.uuid, {
-                      shared: !experiment.shared
-                    })
-                  }
-                >
-                  <FaShareAlt />
-                </Button>{' '}
-                <Button
-                  size={'sm'}
-                  disabled={
-                    !isOwner || editingExperimentName?.uuid === experiment.uuid
-                  }
-                  variant="light"
-                  title="Edit name"
-                  onClick={(): void => {
-                    setEditingExperimentName({
-                      uuid: experiment.uuid,
-                      name: experiment.name
-                    });
-                  }}
-                >
-                  <BsPencilSquare />
-                </Button>{' '}
-                <Button
-                  size={'sm'}
-                  disabled={!isOwner}
-                  variant="light"
-                  title="Delete"
-                  onClick={(): void => {
-                    setConfirmDelete(experiment.uuid);
-                  }}
-                >
-                  <BsFillTrashFill />
-                </Button>
-              </td>
-            </>
-          )}
-        </>
-      )}
-    </tr>
+        {editingExperimentName?.uuid === experiment.uuid ? (
+          <td colSpan={5} className="align-middle">
+            <InlineNameEdit
+              editingExperimentName={editingExperimentName}
+              setEditingExperimentName={setEditingExperimentName}
+              {...props}
+            />
+          </td>
+        ) : (
+          <>
+            <td className="align-middle">
+              <Link
+                className="experiment-name"
+                to={`/experiment/${experiment.uuid}`}
+                title={`See experiment ${experiment.name}`}
+                onClick={(): void => props.handleOnClick(experiment)}
+              >
+                {experiment.name}
+              </Link>
+            </td>
+
+            {confirmDelete ? (
+              <ConfimDeleteContainer {...props} />
+            ) : (
+              <>
+                <td className="centered align-middle">
+                  {dayjs().to(dayjs(experiment.created))}
+                </td>
+                <td className="centered align-middle">
+                  {experiment.createdBy}
+                </td>
+                <td className="centered align-middle">
+                  <Button
+                    size={'sm'}
+                    disabled={!isOwner}
+                    variant="light"
+                    title="Share with all users"
+                    onClick={(): void =>
+                      props?.handleUpdate(experiment.uuid, {
+                        shared: !experiment.shared
+                      })
+                    }
+                  >
+                    <FaShareAlt />
+                  </Button>{' '}
+                  <Button
+                    size={'sm'}
+                    disabled={
+                      !isOwner ||
+                      editingExperimentName?.uuid === experiment.uuid
+                    }
+                    variant="light"
+                    title="Edit name"
+                    onClick={(): void => {
+                      setEditingExperimentName({
+                        uuid: experiment.uuid,
+                        name: experiment.name
+                      });
+                    }}
+                  >
+                    <BsPencilSquare />
+                  </Button>{' '}
+                  <Button
+                    size={'sm'}
+                    disabled={!isOwner}
+                    variant="light"
+                    title="Delete"
+                    onClick={(): void => {
+                      setConfirmDelete(experiment.uuid);
+                    }}
+                  >
+                    <BsFillTrashFill />
+                  </Button>
+                </td>
+              </>
+            )}
+          </>
+        )}
+      </AnimatedItemRow>
+    </Transition>
   );
 };
 
