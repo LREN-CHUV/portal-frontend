@@ -36,7 +36,7 @@ const handleParametersExceptions = (
   }
 
   // outputs: a1-a2,b1-b2, c1-a1
-  const isVector = selectedAlgorithm.label === 'T-Test Paired';
+  const isVector = selectedAlgorithm.name === 'TTEST_PAIRED';
   const varCount = variablesArray?.length || 0;
   if (variables && isVector) {
     console.log(variables);

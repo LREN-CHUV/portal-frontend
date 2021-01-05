@@ -61,7 +61,10 @@ export type ParameterName =
   | 'max_age'
   | 'positive_level'
   | 'negative_level'
-  | 'total_duration';
+  | 'total_duration'
+  | 'iterationNumber'
+  | 'dbIdentifier'
+  | 'sediff';
 
 export interface ExperimentParameter {
   name: ParameterName;
