@@ -4,7 +4,7 @@ import { RouteComponentProps, withRouter } from 'react-router-dom';
 
 import { APICore, APIExperiment, APIModel } from '../API';
 import { Algorithm, AlgorithmParameter } from '../API/Core';
-import { IExperiment } from '../API/Experiment';
+import { IExperiment, IExperimentPrototype } from '../API/Experiment';
 import { Alert, IAlert } from '../UI/Alert';
 import DropdownParametersExperimentList from '../UI/DropdownParametersExperimentList';
 import LargeDatasetSelect from '../UI/LargeDatasetSelect';
@@ -15,6 +15,7 @@ import ExperimentCreateHeader from './Header';
 import Help from './Help';
 import Parameters from './Parameters';
 import styled from 'styled-components';
+import { Exareme } from '../API/Exareme';
 
 const Wrapper = styled.div`
   padding: 0 1em;
@@ -194,13 +195,12 @@ class Container extends React.Component<Props, State> {
       return;
     }
 
-    const nextParameters = apiExperiment.makeParameters(
+    const nextParameters = apiExperiment.makeParametersFromModel(
       model,
-      selectedAlgorithm,
       parameters
     );
 
-    const experiment: Partial<IExperiment> = {
+    const tmpexperiment: IExperimentPrototype = {
       algorithm: {
         name: selectedAlgorithm.name,
         label: selectedAlgorithm.label,
@@ -209,6 +209,8 @@ class Container extends React.Component<Props, State> {
       },
       name: experimentName
     };
+
+    const experiment = Exareme.handleParametersExceptions(tmpexperiment);
 
     await apiExperiment.create({ experiment, transient: false });
     const { experiment: e } = apiExperiment.state;

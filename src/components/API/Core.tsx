@@ -2,11 +2,9 @@ import request from 'request-promise-native';
 import { Container } from 'unstated';
 
 import { backendURL } from '../API';
-import {
-  ALGORITHMS_OUTPUT,
-  FORBIDDEN_ACCESS_MESSAGE,
-  UI_HIDDEN_PARAMETERS
-} from '../constants';
+import { FORBIDDEN_ACCESS_MESSAGE } from '../constants';
+
+import { Exareme } from '../API/Exareme';
 
 export interface Variable {
   code: string;
@@ -258,30 +256,6 @@ class Core extends Container<State> {
     return Promise.resolve();
   };
 
-  articles = async (): Promise<void> => {
-    try {
-      const data = await request.get(
-        `${this.backendURL}/articles`,
-        this.options
-      );
-      const json = await JSON.parse(data);
-      if (json.error) {
-        return await this.setState({
-          error: json.error
-        });
-      }
-
-      return await this.setState({
-        articles: json,
-        error: undefined
-      });
-    } catch (error) {
-      return await this.setState({
-        error: error.message
-      });
-    }
-  };
-
   fetchGalaxyConfiguration = async (): Promise<void> => {
     try {
       const data = await request.get(`${this.backendURL}/galaxy`, {
@@ -382,109 +356,15 @@ class Core extends Container<State> {
         return { error: json.error, data: undefined };
       }
 
-      const algorithms = all
-        ? json
-        : json.filter(
-            (algorithm: Algorithm) =>
-              ALGORITHMS_OUTPUT.find(a => algorithm.name === a.name)?.enabled
-          );
+      const algorithms = Exareme.algorithmInputFilters(json);
+      const data = algorithms.sort((x: Algorithm, y: Algorithm) => {
+        const a = x.label;
+        const b = y.label;
 
-      const galaxyAlgorithms = all
-        ? json
-        : json.filter(
-            (algorithm: Algorithm) =>
-              ALGORITHMS_OUTPUT.find(
-                a =>
-                  algorithm.type === 'workflow' && algorithm.label === a.label
-              )?.enabled
-          );
+        return a > b ? 1 : a < b ? -1 : 0;
+      });
 
-      const data = [...algorithms, ...galaxyAlgorithms].sort(
-        (x: Algorithm, y: Algorithm) => {
-          const a = x.label;
-          const b = y.label;
-
-          return a > b ? 1 : a < b ? -1 : 0;
-        }
-      );
-
-      // FIXME: Algorithms defnition in Exareme will contains those extra parameters.
-      const extraParametersData = data.map((algorithm: Algorithm) => ({
-        ...algorithm,
-        parameters: [
-          ...(algorithm.parameters as AlgorithmParameter[]).map(
-            (p: AlgorithmParameter) => {
-              const visible = !UI_HIDDEN_PARAMETERS.includes(p.label || '');
-
-              // Semantic adjustements:
-              // For historical reason, exareme serves a "value" as a "defaultValue".
-              // doesn't work for x,y,dataset and pathology. So we blank our "value", and
-              // assign the default on the fly, if the user didn't provide it's own value
-              // Exareme's "defaultValue" on an other hand is a placeholder, a recommendation
-
-              const parameter = {
-                ...p,
-                value: visible ? p.value : '',
-                defaultValue: p.value,
-                placeholder: p.defaultValue,
-                visible
-              };
-
-              if (parameter.label === 'standardize') {
-                return {
-                  name: 'standardize',
-                  label: 'standardize',
-                  valueEnumerations: ['false', 'true'],
-                  defaultValue: 'false',
-                  value: 'false',
-                  desc: 'Standardize'
-                };
-              }
-
-              return parameter;
-            }
-          ),
-          // TODO: delete this once we have the formula
-          ...(algorithm.label === 'ANOVA' ||
-          algorithm.label === 'Linear Regression'
-            ? [
-                {
-                  name: 'design',
-                  label: 'design',
-                  valueEnumerations: ['none', 'factorial', 'additive'],
-                  defaultValue: 'none',
-                  value: 'none',
-                  desc: 'Operator for the variables'
-                }
-              ]
-            : [])
-        ]
-      }));
-
-      const workflowParametersData = extraParametersData.map(
-        (algorithm: Algorithm) => {
-          if (algorithm.type === 'workflow') {
-            return {
-              ...algorithm,
-              parameters: (algorithm.parameters as AlgorithmParameter[]).map(
-                parameter => ({
-                  ...parameter,
-                  defaultValue: this.defaultValueFor({
-                    label: parameter.label || ''
-                  }),
-                  value: this.defaultValueFor({
-                    label: parameter.label || ''
-                  })
-                })
-              )
-            };
-          }
-
-          return algorithm;
-        }
-      );
-
-      return { error: undefined, data: workflowParametersData };
+      return { error: undefined, data };
     } catch (error) {
       console.log(error);
       return { error, data: undefined };

@@ -3,12 +3,9 @@ import { Container } from 'unstated';
 
 import { backendURL } from '../API';
 import { Algorithm, AlgorithmParameter } from '../API/Core';
+import { ALGORITHMS_OUTPUT } from '../API/Exareme';
 import { ModelResponse } from '../API/Model';
-import {
-  MIME_TYPES,
-  ALGORITHMS_OUTPUT,
-  MIN_SEARCH_CHARACTER_NUMBER
-} from '../constants';
+import { MIME_TYPES, MIN_SEARCH_CHARACTER_NUMBER } from '../constants';
 
 interface IUUID {
   uuid: string;
@@ -81,9 +78,19 @@ export interface IExperimentError {
   result?: Result[];
 }
 
-export interface IExperiment extends IExperimentError {
+export interface IExperimentPrototype {
+  algorithm: {
+    name: string;
+    desc?: string;
+    label?: string;
+    type: string;
+    parameters: ExperimentParameter[];
+  };
+  name?: string;
+}
+
+export interface IExperiment extends IExperimentPrototype, IExperimentError {
   uuid: string;
-  name: string;
   createdBy: string;
   created: string;
   finisehd: string;
@@ -392,7 +399,7 @@ class Experiment extends Container<State> {
     experiment,
     transient = true
   }: {
-    experiment: Partial<IExperiment>;
+    experiment: IExperimentPrototype;
     transient?: boolean;
   }): Promise<void> => {
     try {
@@ -426,14 +433,13 @@ class Experiment extends Container<State> {
   markAsUnshared = async ({ uuid }: IUUID): Promise<void> =>
     this.update({ uuid, experiment: { shared: false } });
 
-  makeParameters = (
+  makeParametersFromModel = (
     model: ModelResponse,
-    selectedAlgorithm: Algorithm,
     parameters: AlgorithmParameter[]
-  ): ExperimentParameter[] =>
-    parameters.map(p => {
+  ): ExperimentParameter[] => {
+    const query = model && model.query;
+    return parameters.map(p => {
       let value: string = p.value;
-      const query = model && model.query;
 
       if (query) {
         if (p.label === 'x') {
@@ -443,49 +449,13 @@ class Experiment extends Container<State> {
             ? [...covariablesArray, ...query.groupings.map(v => v.code)]
             : covariablesArray;
 
-          if (covariablesArray.length > 0) {
-            const design = parameters.find(p => p.label === 'design');
-            // FIXME: a+b doesn't work for those
-            if (
-              design &&
-              selectedAlgorithm.label !== 'Multiple Histograms' &&
-              selectedAlgorithm.label !== 'CART' &&
-              selectedAlgorithm.label !== 'ID3' &&
-              selectedAlgorithm.label !== 'Naive Bayes Training'
-            ) {
-              value =
-                design.value === 'additive'
-                  ? covariablesArray.toString().replace(/,/g, '+')
-                  : covariablesArray.toString().replace(/,/g, '*');
-            } else {
-              value = covariablesArray.toString();
-            }
-          }
+          value = covariablesArray.toString();
         }
 
         if (p.label === 'y') {
-          // TEST_PAIRED
-          // TODO: this will be replaced by the formula field and should be removed when it occurs
-          const isVector = selectedAlgorithm.label === 'T-Test Paired';
-          const varCount = (query.variables && query.variables.length) || 0;
-          value = isVector
-            ? (query.variables &&
-                query.variables // outputs: a1-a2,b1-b2, c1-a1
-                  .reduce(
-                    (vectors: string, v, i) =>
-                      (i + 1) % 2 === 0
-                        ? `${vectors}${v.code},`
-                        : varCount === i + 1
-                        ? `${vectors}${v.code}-${query.variables &&
-                            query.variables[0].code}`
-                        : `${vectors}${v.code}-`,
-                    ''
-                  )
-                  .replace(/,$/, '')) ||
-              ''
-            : (query.variables &&
-                query.variables.map(v => v.code).toString()) ||
-              '';
+          value =
+            (query.variables && query.variables.map(v => v.code).toString()) ||
+            '';
         }
 
         if (p.label === 'dataset') {
@@ -510,6 +480,7 @@ class Experiment extends Container<State> {
         value
       };
     });
+  };
 }
 
 export default Experiment;
