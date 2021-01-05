@@ -65,7 +65,6 @@ const handleParametersExceptions = (
   const isVector = selectedAlgorithm.name === 'TTEST_PAIRED';
   const varCount = variablesArray?.length || 0;
   if (variables && isVector) {
-    console.log(variables);
     variables.value = variablesArray
       ?.reduce(
         (vectors: string, v, i) =>
