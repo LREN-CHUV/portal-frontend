@@ -6,6 +6,7 @@ import { Algorithm, AlgorithmParameter } from '../API/Core';
 import { ALGORITHMS_OUTPUT } from '../API/Exareme';
 import { ModelResponse } from '../API/Model';
 import { MIME_TYPES, MIN_SEARCH_CHARACTER_NUMBER } from '../constants';
+import { Exareme } from './Exareme';
 
 interface IUUID {
   uuid: string;
@@ -64,7 +65,8 @@ export type ParameterName =
   | 'total_duration'
   | 'iterationNumber'
   | 'dbIdentifier'
-  | 'sediff';
+  | 'sediff'
+  | 'no_split_points';
 
 export interface ExperimentParameter {
   name: ParameterName;
@@ -170,41 +172,35 @@ class Experiment extends Container<State> {
       ? (e as IExperiment)
       : undefined;
 
-  filterResponse = (
+  handleErrors = (
     response: AxiosResponse<any>
-  ): { experiment: IExperiment | IExperimentError } => {
+  ): IExperiment | IExperimentError => {
     if (response.status >= 500) {
       return {
-        experiment: {
-          status: 'error',
-          result: [{ type: MIME_TYPES.ERROR, data: response.data.message }]
-        }
+        status: 'error',
+        result: [{ type: MIME_TYPES.ERROR, data: response.data.message }]
       };
     }
 
     if (response.status >= 400) {
       return {
-        experiment: {
-          status: 'error',
-          result: [{ type: MIME_TYPES.WARNING, data: response.data.message }]
-        }
+        status: 'error',
+        result: [{ type: MIME_TYPES.WARNING, data: response.data.message }]
       };
     }
 
     const experiment: IExperiment = response.data;
     if (experiment.status === 'error') {
       return {
-        experiment: {
-          ...experiment,
-          status: 'error',
-          result: [
-            {
-              type: MIME_TYPES.ERROR,
-              data: 'An unknown error occured. Please retry in a moment'
-            },
-            ...(experiment?.result || [])
-          ]
-        }
+        ...experiment,
+        status: 'error',
+        result: [
+          {
+            type: MIME_TYPES.ERROR,
+            data: 'An unknown error occured. Please retry in a moment'
+          },
+          ...(experiment?.result || [])
+        ]
       };
     }
 
@@ -215,10 +211,8 @@ class Experiment extends Container<State> {
     );
 
     return {
-      experiment: {
-        ...experiment,
-        result
-      }
+      ...experiment,
+      result
     };
   };
 
@@ -226,7 +220,9 @@ class Experiment extends Container<State> {
     try {
       const response = await Axios.get(`${this.baseUrl}/${uuid}`, this.options);
 
-      return await this.setState(this.filterResponse(response));
+      const e = this.handleErrors(response);
+      const experiment = Exareme.handleExperimentResponseExceptions(e);
+      return await this.setState({ experiment });
     } catch (error) {
       console.log('error');
       return await this.setState({
@@ -357,7 +353,7 @@ class Experiment extends Container<State> {
 
       await this.list({});
 
-      return await this.setState(this.filterResponse(response));
+      return await this.setState({ experiment: this.handleErrors(response) });
     } catch (error) {
       return await this.setState({
         experiment: {
@@ -388,7 +384,11 @@ class Experiment extends Container<State> {
 
       await this.list({});
 
-      return await this.setState(this.filterResponse(response));
+      const e = this.handleErrors(response);
+      const experimentRes = Exareme.handleExperimentResponseExceptions(e);
+      return await this.setState({
+        experiment: experimentRes
+      });
     } catch (error) {
       return await this.setState({
         experiment: {
@@ -417,7 +417,9 @@ class Experiment extends Container<State> {
         url: transient ? `${this.baseUrl}/transient` : `${this.baseUrl}`
       });
 
-      return await this.setState(this.filterResponse(response));
+      return await this.setState({
+        experiment: this.handleErrors(response)
+      });
     } catch (error) {
       return await this.setState({
         experiment: {

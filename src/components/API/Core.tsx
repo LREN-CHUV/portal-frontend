@@ -356,7 +356,7 @@ class Core extends Container<State> {
         return { error: json.error, data: undefined };
       }
 
-      const algorithms = Exareme.algorithmInputFilters(json);
+      const algorithms = Exareme.algorithmOutputFiltering(json);
       const data = algorithms.sort((x: Algorithm, y: Algorithm) => {
         const a = x.label;
         const b = y.label;

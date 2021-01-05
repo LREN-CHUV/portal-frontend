@@ -1,7 +1,33 @@
-import { IExperimentPrototype, ExperimentParameter } from '../API/Experiment';
+import {
+  IExperimentPrototype,
+  ExperimentParameter,
+  IExperiment,
+  Result,
+  IExperimentError
+} from '../API/Experiment';
 import { MIME_TYPES, ERRORS_OUTPUT, UI_HIDDEN_PARAMETERS } from '../constants';
 import { AlgorithmParameter, Algorithm } from '../API/Core';
 
+const handleExperimentResponseExceptions = (
+  experiment: IExperiment | IExperimentError
+): IExperiment | IExperimentError => {
+  if ((experiment as IExperiment).uuid === undefined) {
+    return experiment;
+  }
+
+  const e = experiment as IExperiment;
+  if (e.algorithm.name === 'CART') {
+    return {
+      ...e,
+      result: e?.result?.map((r: Result) => ({
+        ...r,
+        type: MIME_TYPES.JSONBTREE
+      }))
+    };
+  }
+
+  return experiment;
+};
 const handleParametersExceptions = (
   experiment: IExperimentPrototype
 ): IExperimentPrototype => {
@@ -132,6 +158,11 @@ export const ALGORITHMS_OUTPUT: AlgorithmOutput[] = [
     types: [MIME_TYPES.HIGHCHARTS]
   },
   {
+    enabled: false,
+    name: 'DESCRIPTIVE_STATS',
+    types: [MIME_TYPES.JSON]
+  },
+  {
     enabled: true,
     name: 'PCA',
     types: [MIME_TYPES.JSONDATA, MIME_TYPES.HIGHCHARTS]
@@ -184,7 +215,7 @@ const defaultValueFor = ({
   return defaults[label] ? defaults[label] : '';
 };
 
-const algorithmInputFilters = (json: Record<string, any>) => {
+const algorithmOutputFiltering = (json: Record<string, any>) => {
   const algorithms = json.filter(
     (algorithm: Algorithm) =>
       ALGORITHMS_OUTPUT.find(a => algorithm.name === a.name)?.enabled
@@ -278,7 +309,8 @@ const algorithmInputFilters = (json: Record<string, any>) => {
 };
 
 export const Exareme = {
-  algorithmInputFilters,
+  algorithmOutputFiltering,
   handleParametersExceptions,
+  handleExperimentResponseExceptions,
   ALGORITHMS_OUTPUT
 };
