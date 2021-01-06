@@ -10,7 +10,7 @@ import { IAlert } from '../UI/Alert';
 import DropdownParametersExperimentList from '../UI/DropdownParametersExperimentList';
 import LargeDatasetSelect from '../UI/LargeDatasetSelect';
 import Model from '../UI/Model';
-import { handleSelectExperimentToModel } from '../utils';
+import { Exareme } from '../API/Exareme';
 import Content from './Content';
 import Filter from './Filter';
 import ExperimentReviewHeader from './Header';
@@ -219,7 +219,7 @@ const Container = ({
                   apiExperiment={apiExperiment}
                   handleSelectExperiment={(experiment?: IExperiment): void => {
                     apiExperiment.setExperiment(experiment);
-                    handleSelectExperimentToModel(apiModel, experiment);
+                    Exareme.handleSelectExperimentToModel(apiModel, experiment);
                   }}
                 />
               </section>

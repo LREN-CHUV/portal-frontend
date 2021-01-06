@@ -7,6 +7,9 @@ import {
 } from '../API/Experiment';
 import { MIME_TYPES, ERRORS_OUTPUT, UI_HIDDEN_PARAMETERS } from '../constants';
 import { AlgorithmParameter, Algorithm } from '../API/Core';
+import { VariableEntity } from './Core';
+import { APIModel } from './';
+import { ModelResponse } from './Model';
 
 const handleExperimentResponseExceptions = (
   experiment: IExperiment | IExperimentError
@@ -307,9 +310,73 @@ const algorithmOutputFiltering = (json: Record<string, any>) => {
   return workflowParametersData;
 };
 
+const handleSelectExperimentToModel = (
+  apiModel: APIModel,
+  experiment?: IExperiment
+): void => {
+  if (!experiment) {
+    const oldModel = apiModel.state.model;
+    const newModel: ModelResponse = {
+      query: {
+        pathology: oldModel?.query.pathology,
+        trainingDatasets: oldModel?.query.trainingDatasets,
+        variables: undefined,
+        coVariables: undefined,
+        filters: undefined
+      }
+    };
+
+    apiModel.setModel(newModel);
+
+    return;
+  }
+
+  const parameters = experiment.algorithm?.parameters;
+
+  if (!parameters) {
+    return;
+  }
+
+  const isWorkflow = experiment.algorithm.type === 'workflow';
+  const paramName = isWorkflow ? 'label' : 'name';
+
+  const extract = (field: string): VariableEntity[] | undefined => {
+    const p = parameters.find(p => p[paramName] === field)?.value as string;
+    const separator = /\*/.test(p)
+      ? '*'
+      : /\+/.test(p)
+        ? '+'
+        : /-/.test(p)
+          ? '-'
+          : ',';
+    const parameter = p
+      ? p.split(separator).map(m => ({ code: m, label: m }))
+      : undefined;
+
+    return parameter;
+  };
+
+  const newModel: ModelResponse = {
+    query: {
+      pathology: parameters.find(p => p[paramName] === 'pathology')
+        ?.value as string,
+      trainingDatasets: (parameters.find(p => p[paramName] === 'dataset')
+        ?.value as string)
+        .split(',')
+        .map(m => ({ code: m, label: m })),
+      variables: extract('y'),
+      coVariables: extract('x'),
+      filters: parameters.find(p => p[paramName] === 'filter')?.value as string
+    }
+  };
+
+  apiModel.setModel(newModel);
+};
+
 export const Exareme = {
   algorithmOutputFiltering,
   handleParametersExceptions,
   handleExperimentResponseExceptions,
+  handleSelectExperimentToModel,
   ALGORITHMS_OUTPUT
 };

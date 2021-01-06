@@ -5,7 +5,7 @@ import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { APICore, APIExperiment, APIModel } from '../API';
 import Datasets from '../UI/Datasets';
 import Model from '../UI/Model';
-import { handleSelectExperimentToModel } from '../utils';
+import { Exareme } from '../API/Exareme';
 import { ExperimentResult, ExperimentResultHeader } from './';
 import Algorithm from './Algorithms';
 
@@ -38,7 +38,7 @@ class Experiment extends React.Component<Props> {
 
     const e = apiExperiment.isExperiment(apiExperiment.state.experiment);
     if (e) {
-      handleSelectExperimentToModel(apiModel, e);
+      Exareme.handleSelectExperimentToModel(apiModel, e);
 
       if (!e.viewed) {
         apiExperiment.markAsViewed({ uuid });
@@ -62,7 +62,7 @@ class Experiment extends React.Component<Props> {
       await apiExperiment.get({ uuid });
       const e = apiExperiment.isExperiment(apiExperiment.state.experiment);
       if (e) {
-        handleSelectExperimentToModel(apiModel, e);
+        Exareme.handleSelectExperimentToModel(apiModel, e);
         if (!e.viewed) {
           apiExperiment.markAsViewed({ uuid });
         }

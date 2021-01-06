@@ -1,21 +1,20 @@
 import * as React from 'react';
 import { Card, Tab, Tabs } from 'react-bootstrap';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
-
+import styled from 'styled-components';
 import { APICore, APIExperiment, APIModel } from '../API';
 import { Algorithm, AlgorithmParameter } from '../API/Core';
+import { Exareme } from '../API/Exareme';
 import { IExperiment, IExperimentPrototype } from '../API/Experiment';
 import { Alert, IAlert } from '../UI/Alert';
 import DropdownParametersExperimentList from '../UI/DropdownParametersExperimentList';
 import LargeDatasetSelect from '../UI/LargeDatasetSelect';
 import Model from '../UI/Model';
-import { handleSelectExperimentToModel } from '../utils';
 import AvailableAlgorithms from './AvailableAlgorithms';
 import ExperimentCreateHeader from './Header';
 import Help from './Help';
 import Parameters from './Parameters';
-import styled from 'styled-components';
-import { Exareme } from '../API/Exareme';
+
 
 const Wrapper = styled.div`
   padding: 0 1em;
@@ -65,7 +64,7 @@ class Container extends React.Component<Props, State> {
                       experiment?: IExperiment
                     ): void => {
                       apiExperiment.setExperiment(experiment);
-                      handleSelectExperimentToModel(apiModel, experiment);
+                      Exareme.handleSelectExperimentToModel(apiModel, experiment);
                     }}
                   />
                 </section>

@@ -1,10 +1,7 @@
 import numbro from 'numbro';
 import { createBrowserHistory } from 'history';
 import { useEffect, RefObject, useState } from 'react';
-import { VariableEntity } from './API/Core';
-import { APIModel } from './API';
-import { ModelResponse } from './API/Model';
-import { IExperiment } from './API/Experiment';
+
 
 export const round = (num: number, decimals = 3): string =>
   // !(num % 1 === 0) checks if number is an Integer
@@ -74,56 +71,4 @@ export function useOnClickOutside<T extends HTMLElement = HTMLElement>(
   }, [ref, handler]);
 }
 
-export const handleSelectExperimentToModel = (
-  apiModel: APIModel,
-  experiment?: IExperiment
-): void => {
-  if (!experiment) {
-    const oldModel = apiModel.state.model;
-    const newModel: ModelResponse = {
-      query: {
-        pathology: oldModel?.query.pathology,
-        trainingDatasets: oldModel?.query.trainingDatasets,
-        variables: undefined,
-        coVariables: undefined,
-        filters: undefined
-      }
-    };
 
-    apiModel.setModel(newModel);
-
-    return;
-  }
-
-  const parameters = experiment.algorithm?.parameters;
-
-  if (!parameters) {
-    return;
-  }
-
-  const isWorkflow = experiment.algorithm.type === 'workflow';
-  const paramName = isWorkflow ? 'label' : 'name';
-
-  const extract = (field: string): VariableEntity[] | undefined => {
-    const p = parameters.find(p => p[paramName] === field)?.value as string;
-    const separator = /\*/.test(p) ? '*' : /\+/.test(p) ? '+' : ',';
-    const parameter = p
-      ? p.split(separator).map(m => ({ code: m, label: m }))
-      : undefined;
-
-    return parameter;
-  };
-
-  const newModel: ModelResponse = {
-    query: {
-      pathology: parameters.find(p => p[paramName] === 'pathology')
-        ?.value as string,
-      trainingDatasets: extract('dataset'),
-      variables: extract('y'),
-      coVariables: extract('x'),
-      filters: parameters.find(p => p[paramName] === 'filter')?.value as string
-    }
-  };
-
-  apiModel.setModel(newModel);
-};

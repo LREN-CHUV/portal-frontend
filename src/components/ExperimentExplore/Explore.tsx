@@ -11,7 +11,7 @@ import { ONTOLOGY_URL } from '../constants';
 import AvailableAlgorithms from '../ExperimentCreate/AvailableAlgorithms';
 import DropdownParametersExperimentList from '../UI/DropdownParametersExperimentList';
 import LargeDatasetSelect from '../UI/LargeDatasetSelect';
-import { handleSelectExperimentToModel } from '../utils';
+import { Exareme } from '../API/Exareme';
 import { ModelType } from './Container';
 import Histograms from './D3Histograms';
 import ModelView from './D3Model';
@@ -205,7 +205,7 @@ export default (props: ExploreProps): JSX.Element => {
                       experiment?: IExperiment
                     ): void => {
                       apiExperiment.setExperiment(experiment);
-                      handleSelectExperimentToModel(apiModel, experiment);
+                      Exareme.handleSelectExperimentToModel(apiModel, experiment);
                     }}
                   />
                 </ParameterContainer>
