@@ -4,9 +4,9 @@ upstream portal-backend {
 {{ if (len $backend_array) gt 1 }}
   ip_hash;
 {{   range $backend := split $backends "," }}
-  server {{ $backend }} fail_timeout=0 weight=5;
+  server {{ $backend }} fail_timeout=60s weight=5;
 {{   end }}
 {{ else }}
-  server {{ $backends }} fail_timeout=0;
+  server {{ $backends }} fail_timeout=60s;
 {{ end }}
 }

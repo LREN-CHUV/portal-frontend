@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Card } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import EBRAINS from '../../images/ebrains.svg';
+import { ReactComponent as EBRAINS } from '../../images/ebrains.svg';
 import HBPLogo from '../../images/hbp_logo_135.png';
 import Helpdesk from './Helpdesk';
 
