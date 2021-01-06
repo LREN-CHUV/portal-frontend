@@ -58,8 +58,7 @@ const computeSingleResults = ({
 
   const rows: TableRow[] = [];
   variables.forEach(variable => {
-    const isMultinominal =
-      variable.type === 'multinominal' || variable.type === 'binominal';
+    const isMultinominal = variable.type === 'nominal';
     const row: TableRow = {};
     let polynominalRows: TableRow[] = [];
 
@@ -167,8 +166,7 @@ const computeModelResults = ({
 
   const rows: TableRow[] = [];
   variables.forEach(variable => {
-    const isMultinominal =
-      variable.type === 'multinominal' || variable.type === 'binominal';
+    const isMultinominal = variable.type === 'nominal';
     const row: TableRow = {};
     let polynominalRows: TableRow[] = [];
 

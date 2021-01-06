@@ -67,7 +67,7 @@ const Parameters = ({
       categoricalVariables &&
       categoricalVariables
         .map(v => lookupCallback(v.code, query?.pathology))
-        .filter(v => v.type === 'multinominal' || v.type === 'binominal');
+        .filter(v => v.type === 'nominal');
 
     const first = (vars && vars.length && vars[0]) || undefined;
     if (first && first.enumerations) {

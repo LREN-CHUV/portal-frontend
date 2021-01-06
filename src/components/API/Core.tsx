@@ -11,12 +11,10 @@ export interface Variable {
   label?: string;
 }
 export interface VariableEntity extends Variable {
-  type?: 'multinominal' | 'binominal' | 'real' | 'integer';
-  sqlType?: string;
+  type?: 'nominal' | 'ordinal' | 'real' | 'integer' | 'text' | 'date';
   description?: string;
   enumerations?: Variable[];
   group?: Variable[];
-  isCategorical?: boolean;
   info?: string;
 }
 

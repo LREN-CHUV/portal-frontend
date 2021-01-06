@@ -136,7 +136,7 @@ export default (props: ExploreProps): JSX.Element => {
     undefined;
   const independantsVariables =
     variablesForPathology &&
-    variablesForPathology.filter((v: any) => v.isCategorical);
+    variablesForPathology.filter((v: any) => v.type === 'nominal');
 
   return (
     <>

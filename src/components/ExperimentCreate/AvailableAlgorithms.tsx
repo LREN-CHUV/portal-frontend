@@ -81,11 +81,14 @@ const AvailableAlgorithms = ({
         const multiple = definition.valueMultiple === 'true';
         const notBlank = definition.valueNotBlank === 'true';
 
-        if (isCategorical && !variables.every(c => c.isCategorical)) {
+        if (isCategorical && !variables.every(c => c.type === 'nominal')) {
           return false;
         }
 
-        if (isCategorical === false && variables.some(c => c.isCategorical)) {
+        if (
+          isCategorical === false &&
+          variables.some(c => c.type === 'nominal')
+        ) {
           return false;
         }
 

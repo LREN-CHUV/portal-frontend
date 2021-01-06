@@ -153,9 +153,7 @@ class Model extends Container<ModelState> {
       coVariables:
         (d3Model.covariables &&
           d3Model.covariables
-            .filter(
-              v => v.data.type !== 'multinominal' && v.data.type !== 'binominal'
-            )
+            .filter(v => v.data.type !== 'nominal')
             .map(v => ({ code: v.data.code }))) ||
         [],
       filters: model?.query.filters || '',
@@ -166,9 +164,7 @@ class Model extends Container<ModelState> {
       groupings:
         (d3Model.covariables &&
           d3Model.covariables
-            .filter(
-              v => v.data.type === 'multinominal' || v.data.type === 'binominal'
-            )
+            .filter(v => v.data.type === 'nominal')
             .map(v => ({ code: v.data.code }))) ||
         [],
       trainingDatasets: datasets,
