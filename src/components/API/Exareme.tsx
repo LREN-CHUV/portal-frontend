@@ -171,11 +171,6 @@ export const ALGORITHMS_OUTPUT: AlgorithmOutput[] = [
   },
   {
     enabled: true,
-    label: 'Naive Bayes with Hold Out Validation',
-    types: [MIME_TYPES.HIGHCHARTS]
-  },
-  {
-    enabled: true,
     label: 'Naive Bayes with Cross Validation',
     types: [MIME_TYPES.HIGHCHARTS, MIME_TYPES.JSONDATA]
   },
