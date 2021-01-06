@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-export default ({ doc }: { doc: any }) => (
+export default ({ doc }: { doc: any }): JSX.Element => (
   <iframe
     title="HTML results"
     className="html-iframe"

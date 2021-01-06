@@ -77,7 +77,7 @@ export default ({
         ) : (
           experiment && (
             <Button
-              onClick={() => setConfirmDelete(experiment.uuid)}
+              onClick={(): void => setConfirmDelete(experiment.uuid)}
               style={{ marginRight: '8px' }}
               variant="outline-dark"
               type="submit"

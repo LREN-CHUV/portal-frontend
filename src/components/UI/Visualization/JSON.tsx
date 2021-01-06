@@ -1,10 +1,8 @@
 import * as React from 'react';
 import { round } from '../../utils';
-
-import { isNumber } from 'util';
 import './JSON.css';
 
-export default ({ row }: { row: any }) => {
+export default ({ row }: { row: any }): JSX.Element => {
   const variables = Object.keys(row);
   const tables = variables.map(v => row[v]);
   const tableKeys = tables.map((k: any) => Object.keys(k)).pop() || [];
@@ -15,7 +13,7 @@ export default ({ row }: { row: any }) => {
     .map(s => s.code);
   const headers: string[] = headersKeys.map(mapCode).map(s => s.label);
 
-  const computedBody = variables.map((v: any, j: number) => {
+  const computedBody = variables.map((v: any, j: number): any[][] => {
     const val = headersKeys.map(key => {
       const value = tables[j][key];
       let output;
@@ -30,7 +28,7 @@ export default ({ row }: { row: any }) => {
 
       if (
         (key === 'PR(>F)' || key === 'p_values' || key === 'p') &&
-        isNumber(value)
+        typeof value === 'number'
       ) {
         output = starIt(value, round(value));
       } else {

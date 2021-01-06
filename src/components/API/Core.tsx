@@ -49,14 +49,6 @@ export interface Algorithm {
   enabled?: boolean;
 }
 
-export interface AlgorithmResult {
-  name: string;
-  label: string;
-  mime: string;
-  data: any[];
-  error?: string;
-}
-
 // FIXME should be private
 export interface AlgorithmConstraintParameter {
   binominal?: boolean;
@@ -98,12 +90,6 @@ export interface AlgorithmParameterRequest {
   name: string;
   label: string;
   value: string;
-}
-
-export interface Parameter {
-  label: string;
-  name: string;
-  value: any;
 }
 
 export interface Stats {
@@ -159,7 +145,7 @@ class Core extends Container<State> {
   private options: request.Options;
   private backendURL: string;
 
-  constructor(config: any) {
+  constructor(config: Record<string, any>) {
     super();
     this.options = config.options;
     this.backendURL = backendURL;
@@ -297,7 +283,7 @@ class Core extends Container<State> {
     json.forEach(pathology => {
       let variables: VariableEntity[] = [];
 
-      const dummyAccumulator = (node: any) => {
+      const dummyAccumulator = (node: any): void => {
         if (node.variables) {
           variables = [...variables, ...node.variables];
         }

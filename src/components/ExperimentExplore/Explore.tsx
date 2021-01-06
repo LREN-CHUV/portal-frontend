@@ -205,7 +205,10 @@ export default (props: ExploreProps): JSX.Element => {
                       experiment?: IExperiment
                     ): void => {
                       apiExperiment.setExperiment(experiment);
-                      Exareme.handleSelectExperimentToModel(apiModel, experiment);
+                      Exareme.handleSelectExperimentToModel(
+                        apiModel,
+                        experiment
+                      );
                     }}
                   />
                 </ParameterContainer>

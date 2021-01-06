@@ -2,7 +2,6 @@ import numbro from 'numbro';
 import { createBrowserHistory } from 'history';
 import { useEffect, RefObject, useState } from 'react';
 
-
 export const round = (num: number, decimals = 3): string =>
   // !(num % 1 === 0) checks if number is an Integer
   !isNaN(num) && !(num % 1 === 0)
@@ -70,5 +69,3 @@ export function useOnClickOutside<T extends HTMLElement = HTMLElement>(
     // Reload only if ref or handler changes
   }, [ref, handler]);
 }
-
-

@@ -71,12 +71,12 @@ interface TabularDataResource {
   schema: Fields;
 }
 
-export default ({ data }: { data: TabularDataResource }) => {
+export default ({ data }: { data: TabularDataResource }): JSX.Element => {
   if (!data) {
     return <p>No data</p>;
   }
 
-  const formatNumber = (value: any, field: Field): string => {
+  const formatNumber = (value: number | null, field: Field): string => {
     if (field.type === 'string' || value === null) {
       return `${value}`;
     }

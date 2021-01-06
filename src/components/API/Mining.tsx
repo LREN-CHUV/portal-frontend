@@ -4,7 +4,7 @@ import { Container } from 'unstated';
 import { backendURL } from '../API';
 import { ERRORS_OUTPUT, HISTOGRAMS_STORAGE_KEY } from '../constants';
 import { VariableDatum } from '../ExperimentExplore/d3Hierarchy';
-import { Algorithm, Parameter, VariableEntity } from './Core';
+import { Algorithm, AlgorithmParameterRequest, VariableEntity } from './Core';
 import { IExperiment } from './Experiment';
 
 export interface MiningResponse {
@@ -35,10 +35,6 @@ export interface MiningState {
   histograms?: MiningResponse;
   refetchAlgorithms?: number;
 }
-
-Axios.defaults.validateStatus = () => {
-  return true;
-};
 
 //
 class Mining extends Container<MiningState> {
@@ -128,7 +124,7 @@ class Mining extends Container<MiningState> {
       }
     });
 
-    const parameters: Parameter[] = [
+    const parameters: AlgorithmParameterRequest[] = [
       {
         name: 'dataset',
         label: 'dataset',
@@ -254,7 +250,7 @@ class Mining extends Container<MiningState> {
       return;
     }
 
-    const parameters: Parameter[] = [
+    const parameters: AlgorithmParameterRequest[] = [
       {
         name: 'dataset',
         label: 'dataset',
@@ -273,7 +269,7 @@ class Mining extends Container<MiningState> {
       {
         name: 'pathology',
         label: 'pathology',
-        value: payload.pathology
+        value: payload.pathology || ''
       }
     ];
 

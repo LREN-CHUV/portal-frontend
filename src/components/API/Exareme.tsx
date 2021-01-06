@@ -217,7 +217,7 @@ const defaultValueFor = ({
   return defaults[label] ? defaults[label] : '';
 };
 
-const algorithmOutputFiltering = (json: Record<string, any>) => {
+const algorithmOutputFiltering = (json: Record<string, any>): Algorithm[] => {
   const algorithms = json.filter(
     (algorithm: Algorithm) =>
       ALGORITHMS_OUTPUT.find(a => algorithm.name === a.name)?.enabled
@@ -345,10 +345,10 @@ const handleSelectExperimentToModel = (
     const separator = /\*/.test(p)
       ? '*'
       : /\+/.test(p)
-        ? '+'
-        : /-/.test(p)
-          ? '-'
-          : ',';
+      ? '+'
+      : /-/.test(p)
+      ? '-'
+      : ',';
     const parameter = p
       ? p.split(separator).map(m => ({ code: m, label: m }))
       : undefined;

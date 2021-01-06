@@ -56,7 +56,7 @@ class Model extends React.Component<Props> {
     );
   }
 
-  private ruleOperator = (operator: string) => {
+  private ruleOperator = (operator: string): string => {
     switch (operator) {
       case 'greater':
         return '>';
@@ -75,7 +75,7 @@ class Model extends React.Component<Props> {
     }
   };
 
-  private formatFilter = (filter: any) => {
+  private formatFilter = (filter: any): JSX.Element => {
     const { lookup, model } = this.props;
     const humanRules: any = [];
     const pathologyCode = model?.query?.pathology;

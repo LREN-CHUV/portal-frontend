@@ -9,7 +9,7 @@ const Warning = styled.div`
   }
 `;
 
-export default ({ message }: { message: any }): JSX.Element => (
+export default ({ message }: { message: string }): JSX.Element => (
   <Warning>
     <h3>A problem has occured</h3>
     <p>{message}</p>

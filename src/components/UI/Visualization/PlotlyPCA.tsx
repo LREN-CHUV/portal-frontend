@@ -7,7 +7,7 @@ import createPlotlyComponent from 'react-plotly.js/factory';
 Plotly.register([scatter, bar]);
 const PlotlyComponent = createPlotlyComponent(Plotly);
 
-export default ({ data }: { data: any; layout: any }) =>
+export default ({ data }: { data: any; layout: any }): JSX.Element =>
   data.map((d: any, i: number) => (
     <PlotlyComponent data={d.data} layout={d.layout} key={i} />
   ));

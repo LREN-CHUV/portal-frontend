@@ -70,7 +70,7 @@
     "analyze": "source-map-explorer 'build/static/js/*.js'",
     "watch": "react-scripts start",
     "build": "react-scripts --max_old_space_size=5048 build",
-    "test": "react-scripts test --silent",
+    "test": "react-scripts test",
     "ci-test": "react-scripts test --watchAll --forceExit  --silent",
     "eject": "react-scripts eject",
     "lint:fix": "eslint './src/**/*.{ts,tsx}' --fix",

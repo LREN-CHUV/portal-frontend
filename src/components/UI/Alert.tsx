@@ -11,7 +11,7 @@ const Box = styled(BSAlert)`
   position: relative !important;
 `;
 
-export const Alert = ({ message, styled, title }: IAlert) =>
+export const Alert = ({ message, styled, title }: IAlert): JSX.Element | null =>
   (message && (
     <Box variant={styled || 'danger'}>
       <h4>{title || 'Error'}</h4>

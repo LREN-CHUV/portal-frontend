@@ -23,9 +23,13 @@ const Algorithms = ({
   const parameters =
     (algorithm?.parameters &&
       algorithm.parameters.length > 0 &&
-      algorithm.parameters.filter(
-        p => !UI_HIDDEN_PARAMETERS.includes(p[paramName]!)
-      )) ||
+      algorithm.parameters.filter(p => {
+        const param = p[paramName];
+        if (param) {
+          return !UI_HIDDEN_PARAMETERS.includes(param);
+        }
+        return false;
+      })) ||
     [];
 
   return (

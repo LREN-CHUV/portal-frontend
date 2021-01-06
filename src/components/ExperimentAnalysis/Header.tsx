@@ -18,7 +18,11 @@ export default class Header extends React.Component<Props> {
           </Button>
           <h3>Descriptive Analysis</h3>
           <div className="item">
-            <Button onClick={handleCreateExperiment} variant="info" type="submit">
+            <Button
+              onClick={handleCreateExperiment}
+              variant="info"
+              type="submit"
+            >
               Create Experiment <BsFillCaretRightFill />{' '}
             </Button>
           </div>

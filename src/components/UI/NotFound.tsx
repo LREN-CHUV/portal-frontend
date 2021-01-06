@@ -12,4 +12,4 @@ const Title = styled.h1`
   justify-content: center;
 `;
 
-export default () => <Title>404 Not Found</Title>;
+export default (): JSX.Element => <Title>404 Not Found</Title>;

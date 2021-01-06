@@ -64,7 +64,7 @@ export default ({ showTraining }: { showTraining?: boolean }): JSX.Element => {
           <a
             href="https://mip.ebrains.eu/documentation/"
             // tslint:disable-next-line jsx-no-lambda
-            onSelect={() => {
+            onSelect={(): void => {
               window.open('https://mip.ebrains.eu/documentation/');
             }}
           >

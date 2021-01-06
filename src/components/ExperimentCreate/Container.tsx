@@ -15,7 +15,6 @@ import ExperimentCreateHeader from './Header';
 import Help from './Help';
 import Parameters from './Parameters';
 
-
 const Wrapper = styled.div`
   padding: 0 1em;
   min-height: 50vh;
@@ -64,7 +63,10 @@ class Container extends React.Component<Props, State> {
                       experiment?: IExperiment
                     ): void => {
                       apiExperiment.setExperiment(experiment);
-                      Exareme.handleSelectExperimentToModel(apiModel, experiment);
+                      Exareme.handleSelectExperimentToModel(
+                        apiModel,
+                        experiment
+                      );
                     }}
                   />
                 </section>
