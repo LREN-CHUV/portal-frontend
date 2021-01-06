@@ -72,7 +72,7 @@ const Container = ({
     shouldReload
   ]);
 
-  const handleRunExperiment = async (): Promise<void> => {
+  const handleCreateExperiment = async (): Promise<void> => {
     const model = apiModel.state.model;
     if (model) {
       apiMining.abortMiningRequests();
@@ -207,7 +207,7 @@ const Container = ({
       <div className="header">
         <ExperimentReviewHeader
           handleGoBackToExplore={handleGoBackToExplore}
-          handleRunAnalysis={handleRunExperiment}
+          handleCreateExperiment={handleCreateExperiment}
         />
       </div>
       <div className="content">

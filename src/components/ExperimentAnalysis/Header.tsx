@@ -4,11 +4,11 @@ import { BsFillCaretLeftFill, BsFillCaretRightFill } from 'react-icons/bs';
 
 interface Props {
   handleGoBackToExplore: () => void;
-  handleRunAnalysis: () => void;
+  handleCreateExperiment: () => void;
 }
 export default class Header extends React.Component<Props> {
   render(): JSX.Element {
-    const { handleGoBackToExplore, handleRunAnalysis } = this.props;
+    const { handleGoBackToExplore, handleCreateExperiment } = this.props;
 
     return (
       <Card>
@@ -18,8 +18,8 @@ export default class Header extends React.Component<Props> {
           </Button>
           <h3>Descriptive Analysis</h3>
           <div className="item">
-            <Button onClick={handleRunAnalysis} variant="info" type="submit">
-              Run experiment <BsFillCaretRightFill />{' '}
+            <Button onClick={handleCreateExperiment} variant="info" type="submit">
+              Create Experiment <BsFillCaretRightFill />{' '}
             </Button>
           </div>
         </Card.Body>
