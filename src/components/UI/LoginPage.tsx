@@ -20,6 +20,10 @@ const StyledContainer = styled(Container)`
   background-color: white;
   padding: 0;
 
+  @media (min-width: 1400px) {
+    max-width: 1280px;
+  }
+
   @media (max-width: 768px) {
     flex-direction: column;
   }

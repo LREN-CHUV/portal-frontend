@@ -82,6 +82,7 @@ const AlgorithmTitleContainer = styled.div`
   p {
     margin: 0;
     padding: 0;
+    color: #666;
     font-size: 0.9em;
   }
 `;
@@ -317,7 +318,9 @@ export default (props: ExploreProps): JSX.Element => {
                 }
               />
               <AlgorithmTitleContainer>
-                <h5>Available algorithms</h5>
+                <p>
+                  <strong>Available algorithms</strong>
+                </p>
                 <p>
                   <a
                     href={`${ONTOLOGY_URL}`}

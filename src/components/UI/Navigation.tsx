@@ -39,6 +39,13 @@ const NavBar = styled.nav`
     color: #ccc;
     text-decoration: none;
   }
+
+  @media (max-width: 992px) {
+    .logo-title,
+    .links {
+      display: none;
+    }
+  }
 `;
 
 const Brand = styled.div`
@@ -134,7 +141,9 @@ export default ({
         <Link to="/">
           <div title="Human Brain Project"></div>
         </Link>
-        <Link to="/">{instanceName}</Link>
+        <Link className="logo-title" to="/">
+          {instanceName}
+        </Link>
       </Brand>
       {authenticated && (
         <Links>
@@ -150,8 +159,8 @@ export default ({
             )}
             {!experiment && <GroupLink to="/experiment">Experiment</GroupLink>}
           </Group>
-          <DropdownWrapper>{children}</DropdownWrapper>
-          <div className="experiment-nav">
+          <DropdownWrapper className="links">{children}</DropdownWrapper>
+          <div className="experiment-nav links">
             <Link to="/galaxy">Workflow</Link>
             {datacatalogueUrl && (
               <a
