@@ -39,6 +39,17 @@ const HelpDeskForm = ({
   formId?: string;
 }): JSX.Element => {
   React.useEffect(() => {
+    const supportformLoad = function() {
+      const scriptId = `${formId}-loader`;
+      const scriptElement = document.querySelector(`#${scriptId}`);
+      if (scriptElement) {
+        document.body.removeChild(scriptElement);
+      }
+      const script = document.createElement('script');
+      script.setAttribute('id', scriptId);
+      script.text = code(formId);
+      document.body.appendChild(script);
+    };
     // Load jQuery once
     if (!document.querySelector('#jquery')) {
       const script = document.createElement('script');
@@ -47,28 +58,27 @@ const HelpDeskForm = ({
       script.src =
         'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js';
       document.head.appendChild(script);
+
+      script.addEventListener('load', function() {
+        // Load ZammadScript once
+        if (!document.querySelector('#zammad_form_script')) {
+          const script = document.createElement('script');
+          script.setAttribute('id', 'zammad_form_script');
+          script.async = true;
+          script.src =
+            'https://support.humanbrainproject.eu/assets/form/form.js';
+          document.head.appendChild(script);
+
+          script.addEventListener('load', function() {
+            // Load the form via jQuery and code as code.text = '...',
+            // first time with window.onload to ensure jQuery is loaded
+            supportformLoad();
+          });
+        }
+      });
     }
 
-    // Load ZammadScript once
-    if (!document.querySelector('#zammad_form_script')) {
-      const script = document.createElement('script');
-      script.setAttribute('id', 'zammad_form_script');
-      script.async = true;
-      script.src = 'https://support.humanbrainproject.eu/assets/form/form.js';
-      document.head.appendChild(script);
-    }
-
-    // Load the form via jQuery and code as code.text = '...',
-    // first time with window.onload to ensure jQuery is loaded
-    const scriptId = `${formId}-loader`;
-    const scriptElement = document.querySelector(`#${scriptId}`);
-    if (scriptElement) {
-      document.body.removeChild(scriptElement);
-    }
-    const script = document.createElement('script');
-    script.setAttribute('id', scriptId);
-    script.text = code(formId);
-    document.body.appendChild(script);
+    supportformLoad();
   });
 
   return (
