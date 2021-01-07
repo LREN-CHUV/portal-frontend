@@ -11,7 +11,7 @@ import {
 
 // config
 
-const modelSlug = `naivebayes-${Math.round(Math.random() * 10000)}`;
+const modelSlug = `naivebayes-training-${Math.round(Math.random() * 10000)}`;
 const algorithmId = 'NAIVE_BAYES_TRAINING';
 const algorithmLabel = 'Naive Bayes Training';
 
@@ -20,6 +20,11 @@ const parameters: ExperimentParameter[] = [
     name: 'alpha',
     value: '0.1',
     label: 'alpha'
+  },
+  {
+    name: 'iterationNumber',
+    value: 3,
+    label: 'iterationNumber',
   },
   {
     name: 'x', // covariable

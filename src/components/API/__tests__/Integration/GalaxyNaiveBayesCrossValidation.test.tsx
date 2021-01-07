@@ -9,7 +9,7 @@ import { createExperiment, TEST_PATHOLOGIES, waitForResult } from '../../UtiltyT
 
 // config
 
-const modelSlug = `naivebayes-${Math.round(Math.random() * 10000)}`;
+const modelSlug = `naivebayes-galaxy-cross-${Math.round(Math.random() * 10000)}`;
 //const algorithmId = 'c9468fdb6dc5c5f1';
 const algorithmLabel = 'Naive Bayes with Cross Validation';
 const parameters: ExperimentParameter[] = [
