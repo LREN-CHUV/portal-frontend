@@ -37,6 +37,7 @@ const Wrapper = styled.div`
 
   p {
     margin: 0;
+    font-size: 0.9em;
   }
 
   div div {

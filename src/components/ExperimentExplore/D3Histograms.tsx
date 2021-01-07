@@ -72,7 +72,9 @@ const Histogram = styled.div`
 
 const Overview = styled.div`
   p {
+    display: inline;
     margin: 0;
+    font-size: 0.9em;
   }
 `;
 
@@ -102,7 +104,8 @@ const DropDown = styled(DropdownButton)`
   padding: 0;
 `;
 
-const Title = styled.h5`
+const Title = styled.p`
+  font-weight: bold;
   display: inline;
 `;
 
@@ -214,7 +217,8 @@ export default (props: Props): JSX.Element => {
             <Title>Path</Title>: <Breadcrumb ref={divRef} />
           </div>
           <div>
-            <Title>Description</Title>: {selectedNode.data.description || '-'}
+            <Title>Description</Title>:{' '}
+            <p>{selectedNode.data.description || '-'}</p>
           </div>
         </Overview>
       )}

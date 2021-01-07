@@ -47,7 +47,9 @@ export default ({
   return (
     <Card>
       <Body>
-        <h4>{experiment?.name}</h4>
+        <h4>
+          <strong>{experiment?.name}</strong>
+        </h4>
         {loading ? (
           <div className="loading">
             <LoadingTitle>Your experiment is currently running</LoadingTitle>

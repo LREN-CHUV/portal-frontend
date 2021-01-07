@@ -6,38 +6,43 @@ export const GlobalStyles = createGlobalStyle`
   body {
     margin: 0;
     padding: 0;
-    font-family: 'Open Sans', sans-serif;
     background: url(${backgroundImage}) top center no-repeat fixed #f5f5f5;
     background-size: 100% auto;
   }
 
-  h1, h2, h3, h4, h5, h6 {
+  .header h3 {
     margin: 0;
-  }
-
-   h1, h3, h4, h6 {
-    font-size: 1.2em
-  }
-
-  h2 {
     font-size: 1.4em;
   }
 
-  h5 {
-    font-size: 1em;
+  .header p {
+    margin: 0;
+    padding: 0;
+  }
+
+  .sidebar h4, .sidebar2 h4 {
+    margin: 0.25em 0;
+    font-size: 1.3em
+  }
+
+  .sidebar p,  .sidebar label {
+    margin: 0;
+    font-size: 0.9em
+  }
+
+   h5 {
     font-weight: bold;
     color: #666;
   }
 
-  h6 {
-    font-size: 1em;
+   h6 {
     color: #333;
   }
 
-  p, label, ol {
-    margin: 0;
-    font-size: 0.9em;
+    p, label, ol {
   }
+
+
 
   a {
     color: #007ad9;

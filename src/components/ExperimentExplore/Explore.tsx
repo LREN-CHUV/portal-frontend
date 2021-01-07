@@ -55,17 +55,35 @@ const MenuParametersContainer = styled.div`
   border-bottom: 1px solid lightgray;
 `;
 
-const AlgorithmTitleContainer = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin: 0.5em 0.5em 0 0;
-`;
-
 const ParameterContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: flex-start;
+
+  h5 {
+    padding: 0;
+    margin-bottom: 2px;
+    font-size: 1.1em;
+  }
+`;
+
+const AlgorithmTitleContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 8px 0 0 0;
+
+  h5 {
+    padding: 0;
+    font-size: 1.1em;
+    margin: 0;
+  }
+
+  p {
+    margin: 0;
+    padding: 0;
+    font-size: 0.9em;
+  }
 `;
 
 const Grid = styled.div`

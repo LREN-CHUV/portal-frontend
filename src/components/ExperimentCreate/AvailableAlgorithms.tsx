@@ -161,7 +161,7 @@ const AvailableAlgorithms = ({
             <Popover id={`tooltip-${algorithm.name}`}>
               <Card>
                 <Card.Body>
-                  <h4>{algorithm.label}</h4>
+                  <h5>{algorithm.label}</h5>
                   <p>{algorithm.desc}</p>
                   {variablesHelpMessage(algorithm)}
                 </Card.Body>
