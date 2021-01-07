@@ -355,8 +355,10 @@ const handleSelectExperimentToModel = (
     query: {
       pathology: parameters.find(p => p[paramName] === 'pathology')
         ?.value as string,
-      trainingDatasets: (parameters.find(p => p[paramName] === 'dataset')
-        ?.value as string)
+      trainingDatasets: (
+        (parameters.find(p => p[paramName] === 'dataset')?.value as string) ||
+        ''
+      )
         .split(',')
         .map(m => ({ code: m, label: m })),
       variables: extract('y'),
