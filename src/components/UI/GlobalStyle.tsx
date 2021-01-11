@@ -77,6 +77,12 @@ export const GlobalStyles = createGlobalStyle`
   .btn {
     font-size: 0.9rem;
   }
+
+  .zammad-form .btn {
+    background-color: #eee;
+    border-color: #ddd;
+    color: #333;
+  }
   
   .card {
     margin-bottom: 8px;

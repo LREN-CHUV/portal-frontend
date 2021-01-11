@@ -46,18 +46,24 @@ export default (): JSX.Element => {
     <StyledContainer>
       <StyledJumbotron>
         <h1 className="display-4">The Medical Informatics Platform</h1>
+        <h3>About</h3>
         <p className="lead">
-          The Medical Informatics Platform (MIP) is a privacy preserving,
-          federated data processing and analysis system
+          The Medical Informatics Platform (MIP) is the most advanced, fully
+          operational, open source platform for sharing of decentralized
+          clinical data.
         </p>
-        <hr className="my-4" />
-        <p>
-          The MIP is designed to help clinicians, clinical scientists, and
-          clinical data scientists aiming to adopt advanced analytics for
-          diagnosis and research in clinics.
+
+        <p className="lead">
+          Clinical data that cannot be shared, transferred and stored in a
+          centralized way can be federated and collaboratively analysed.{' '}
         </p>
-        <p>
-          More information about the MIP can be found on{' '}
+        <p className="lead">
+          Data Owners have full control of accessibility and sharing of their
+          data through a tightly controlled accreditation, access control and
+          user management system.
+        </p>
+        <p className="lead">
+          For detailed information go to the MIP on the{' '}
           <a
             href="https://ebrains.eu/"
             target="_blank"
@@ -67,13 +73,10 @@ export default (): JSX.Element => {
           </a>
         </p>
         <hr className="my-4" />
-        <h3>More about the MIP</h3>
+        <h3>The MIP explained</h3>
         <ul>
           <li>
-            Watch the <Link to={`/training`}>video tutorials</Link>
-          </li>
-          <li>
-            An introduction to the MIP:{' '}
+            General introduction:{' '}
             <a
               href="https://mip.ebrains.eu/documentation/Deployment%20Pack/1"
               target="_blank"
@@ -81,6 +84,29 @@ export default (): JSX.Element => {
             >
               Executive Summary
             </a>
+          </li>
+          <li>
+            Technical overview:
+            <a
+              href="https://github.com/HBPMedical/mip-docs"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Technical description
+            </a>
+          </li>
+          <li>
+            Available algorithms: Description of{' '}
+            <a
+              href="https://mip.ebrains.eu/documentation/Technical%20Documents/11"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Algorithms for Federated Analysis
+            </a>
+          </li>
+          <li>
+            Watch the <Link to={`/training`}>video tutorials</Link>
           </li>
           <li>
             <a
@@ -91,46 +117,29 @@ export default (): JSX.Element => {
               FAQ
             </a>
           </li>
-          <li>
-            Read about the included algorithms:{' '}
-            <a
-              href="https://mip.ebrains.eu/documentation/Technical%20Documents/11"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Federated Analysis Algorithms Descriptions
-            </a>
-          </li>
-          <li>
-            <a
-              href="https://github.com/HBPMedical/mip-docs"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Technical overview
-            </a>
-          </li>
         </ul>
-        <EBRAINS />
       </StyledJumbotron>
       <SideCard>
-        <Card.Title>
+        <Card.Body>
           <Logo alt="HBP logo" title={'Human Brain Project'} src={HBPLogo} />
           <h3>Access the MIP</h3>
-        </Card.Title>
-        <Card.Body>
           <p>
-            If you are a registered user of the MIP, you can access it by login
-            on the top right button
-          </p>
-          <p>
-            <strong>You need an EBRAINS user account to access the MIP.</strong>
+            <strong>
+              You need an{' '}
+              <a
+                href="https://ebrains.eu/register"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                EBRAINS user account
+              </a>{' '}
+              to access the MIP.
+            </strong>
           </p>
           <p>
             Access to the different federations will be granted on a case-by
-            case basis, and is only possible after you have signed in on the
-            platform and your user account is registered. Specify your request
-            in the form below or by mail at{' '}
+            case basis, and is only possible for fully accredited users. Specify
+            your request in the form below or by mail at{' '}
             <a href="mailto://support@ebrains.eu">support@ebrains.eu</a>
           </p>
           <Helpdesk formId={'login-mailform'} />
