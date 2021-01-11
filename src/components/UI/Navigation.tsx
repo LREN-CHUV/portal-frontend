@@ -108,6 +108,10 @@ const LogoutButton = styled(Button)`
   font-weight: bold;
 `;
 
+const LoginButton = styled(Button)`
+  font-weight: bold;
+`;
+
 const DropdownWrapper = styled.div`
   padding-left: 124px;
 `;
@@ -194,14 +198,14 @@ export default ({
         </MIPContext.Consumer>
         <HelpButton showTraining={true} />
         {!isAnonymous && !authenticated && (
-          <LogoutButton
+          <LoginButton
             onClick={login}
             size={'sm'}
             variant={'info'}
             type="submit"
           >
             Login
-          </LogoutButton>
+          </LoginButton>
         )}
         {!isAnonymous && authenticated && (
           <LogoutButton variant={'outline-info'} size={'sm'} onClick={logout}>

@@ -38,11 +38,10 @@ class UserContainer extends Container<State> {
     return response.data;
   };
 
-  logout = (): void => {
+  logout = async (): Promise<void> => {
     const logoutURL = `${this.backendURL}/logout`;
-    axios.get(logoutURL, this.options).then(() => {
-      window.location.href = '/';
-    });
+
+    return await axios.get(logoutURL, this.options);
   };
 
   user = async (): Promise<void> => {

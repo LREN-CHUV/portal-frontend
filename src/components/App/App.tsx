@@ -103,10 +103,11 @@ const App = ({
             }
           }}
           datacatalogueUrl={appConfig.datacatalogueUrl || undefined}
-          logout={
-            (apiUser.state.user?.username !== 'anonymous' && apiUser.logout) ||
-            undefined
-          }
+          logout={() => {
+            (apiUser.state.user?.username !== 'anonymous' || undefined) &&
+              apiUser.logout();
+            window.location.href = '/';
+          }}
           experiment={apiExperiment.isExperiment(
             apiExperiment.state.experiment
           )}
