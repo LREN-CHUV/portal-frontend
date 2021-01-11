@@ -19,6 +19,17 @@ import nine from './9.png';
 import ten from './10.png';
 import eleven from './11.png';
 
+const CarouselStyled = styled(Carousel)`
+  .carousel-control-next-icon,
+  .carousel-control-prev-icon {
+    background-color: black;
+  }
+
+  .carousel-indicators li {
+    background-color: #333;
+  }
+`;
+
 const Title = styled.h3`
   color: black;
 `;
@@ -63,7 +74,7 @@ export default React.memo(
               </Button>
             </Modal.Header>
             <Modal.Body>
-              <Carousel>
+              <CarouselStyled>
                 <Carousel.Item>
                   <img
                     width={width}
@@ -114,7 +125,7 @@ export default React.memo(
                     </Text>
                   </Carousel.Caption>
                 </Carousel.Item>
-              </Carousel>
+              </CarouselStyled>
             </Modal.Body>
             <Modal.Footer>
               <Button onClick={toggleTutorial}>Close</Button>
