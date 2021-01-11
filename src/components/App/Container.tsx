@@ -60,11 +60,13 @@ class AppContainer extends React.Component<any, State> {
         datacatalogueUrl: undefined
       };
 
-      this.setState({ appConfig, showTutorial: !seenTutorial });
+      this.setState({ appConfig, showTutorial: false });
     }
 
     await this.apiUser.user();
     if (this.apiUser.state.authenticated) {
+      this.setState({ showTutorial: !seenTutorial });
+
       // Experiments polling and auth by interval
       this.intervalId = setInterval(() => {
         this.apiUser.user().then(() => {
@@ -94,7 +96,6 @@ class AppContainer extends React.Component<any, State> {
     const toggleTutorial = (): void => {
       localStorage.setItem('seenTutorial', 'true');
       this.setState(state => ({
-        ...state,
         showTutorial: !state.showTutorial
       }));
     };
