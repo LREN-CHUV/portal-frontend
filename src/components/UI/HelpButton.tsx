@@ -16,6 +16,19 @@ const MainBox = styled.div`
     overflow-y: auto;
     padding: 0.8em;
     min-width: 200px;
+    font-family: apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+      'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji',
+      'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    font-size: 1rem;
+
+    label,
+    .btn {
+      font-weight: normal !important;
+    }
+
+    p {
+      margin: 0;
+    }
 
     p > a {
       font-family: 'Open Sans', sans-serif;
@@ -56,6 +69,10 @@ const MainBox = styled.div`
   }
 `;
 
+const HelpdeskContainer = styled.div`
+  margin-top: 16px;
+`;
+
 export default ({ showTraining }: { showTraining?: boolean }): JSX.Element => {
   return (
     <MainBox>
@@ -83,7 +100,10 @@ export default ({ showTraining }: { showTraining?: boolean }): JSX.Element => {
             <BsFillEnvelopeFill /> Email us at support@ebrains.eu
           </a>
         </p>
-        <Helpdesk />
+        <HelpdeskContainer>
+          Contact us
+          <Helpdesk />
+        </HelpdeskContainer>
       </DropdownButton>
     </MainBox>
   );
