@@ -247,8 +247,8 @@ class Experiment extends Container<State> {
       params.page === 0
         ? 0
         : params.page === undefined
-          ? currentExperimentListQueryParameters.page
-          : params.page;
+        ? currentExperimentListQueryParameters.page
+        : params.page;
 
     // reset the page if search is on
     const page =
@@ -300,8 +300,8 @@ class Experiment extends Container<State> {
       params.page === 0
         ? 0
         : params.page === undefined
-          ? currentExperimentListQueryParameters.page
-          : params.page;
+        ? currentExperimentListQueryParameters.page
+        : params.page;
 
     // reset the page if search is on */
     const page =

@@ -24,7 +24,7 @@ const parameters: ExperimentParameter[] = [
   {
     name: 'k',
     value: 10,
-    label: 'iterationNumber',
+    label: 'k',
   },
   {
     name: 'x', // covariable
