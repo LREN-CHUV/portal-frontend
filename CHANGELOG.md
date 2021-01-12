@@ -1,5 +1,24 @@
 # Changelog
 
+## 6.4.10 - 2021/01/12
+
+- New Login page
+- Better labels display in Bubble hierarchy
+- Boostrap Components updated to v4
+- Data Model replacement by experiment parameters
+- Experiment module, search, delete, pagination
+- Refactored tests
+- Basic SEO ls+json
+- Styling harmonized
+- Various UI improvements
+- nginx timeout for backend increased
+- nominal replaces multinominal % binominal types (Breaking change)
+- New Logistic Regression integration
+- New Naive Bayes integration
+- React.Strict component
+- Removed moment.js for Day.js
+- moving XMLHTTPRequest from request to Axios library
+
 ## 6.4.9 - 2020/10/20
 
 - Naive Bayes visualisations #283
