@@ -92,6 +92,6 @@ describe('Integration Test for experiment API', () => {
         .find('div.result table tbody tr td')
         .at(1)
         .text()
-    ).toEqual('4.198');
+    ).toEqual('4.197');
   });
 });
