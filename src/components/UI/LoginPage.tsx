@@ -17,7 +17,6 @@ const StyledContainer = styled(Container)`
   margin: 16px auto 0 auto;
   display: flex;
   flex-direction: row;
-  background-color: white;
   padding: 0;
 
   @media (min-width: 1400px) {
@@ -33,12 +32,15 @@ const StyledJumbotron = styled(Jumbotron)`
   margin-bottom: 0;
   border-radius: 0;
   flex: 2;
+  background-color: #ffffff;
+  border-right: 1px solid #ddd;
 `;
 
-const SideCard = styled(Card)`
-  margin: 0 8px;
-  padding: 16px;
+const SideCard = styled.div`
+  margin: 0;
+  padding: 32px;
   flex: 1;
+  background-color: #ffffffaa;
 `;
 
 export default (): JSX.Element => {
@@ -120,30 +122,28 @@ export default (): JSX.Element => {
         </ul>
       </StyledJumbotron>
       <SideCard>
-        <Card.Body>
-          <Logo alt="HBP logo" title={'Human Brain Project'} src={HBPLogo} />
-          <h3>Access the MIP</h3>
-          <p>
-            <strong>
-              You need an{' '}
-              <a
-                href="https://ebrains.eu/register"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                EBRAINS user account
-              </a>{' '}
-              to access the MIP.
-            </strong>
-          </p>
-          <p>
-            Access to the different federations will be granted on a case-by
-            case basis, and is only possible for fully accredited users. Specify
-            your request in the form below or by mail at{' '}
-            <a href="mailto://support@ebrains.eu">support@ebrains.eu</a>
-          </p>
-          <Helpdesk formId={'login-mailform'} />
-        </Card.Body>
+        <Logo alt="HBP logo" title={'Human Brain Project'} src={HBPLogo} />
+        <h3>Access the MIP</h3>
+        <p>
+          <strong>
+            You need an{' '}
+            <a
+              href="https://ebrains.eu/register"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              EBRAINS user account
+            </a>{' '}
+            to access the MIP.
+          </strong>
+        </p>
+        <p>
+          Access to the different federations will be granted on a case-by case
+          basis, and is only possible for fully accredited users. Specify your
+          request in the form below or by mail at{' '}
+          <a href="mailto://support@ebrains.eu">support@ebrains.eu</a>
+        </p>
+        <Helpdesk formId={'login-mailform'} />
       </SideCard>
     </StyledContainer>
   );
