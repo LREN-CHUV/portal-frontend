@@ -1,17 +1,9 @@
 import * as React from 'react';
-import { Container, Card, Jumbotron } from 'react-bootstrap';
+import { Container, Jumbotron } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { ReactComponent as EBRAINS } from '../../images/ebrains.svg';
 import HBPLogo from '../../images/hbp_logo_135.png';
 import Helpdesk from './Helpdesk';
-
-const Logo = styled.img`
-  width: 135px;
-  height: 135px;
-  display: block;
-  margin: 16px auto 32px auto;
-`;
 
 const StyledContainer = styled(Container)`
   margin: 16px auto 0 auto;
@@ -32,7 +24,7 @@ const StyledJumbotron = styled(Jumbotron)`
   margin-bottom: 0;
   border-radius: 0;
   flex: 2;
-  background-color: #ffffff;
+  background-color: #ffffffaa;
   border-right: 1px solid #ddd;
 `;
 
@@ -41,6 +33,13 @@ const SideCard = styled.div`
   padding: 32px;
   flex: 1;
   background-color: #ffffffaa;
+`;
+
+const Logo = styled.img`
+  width: 135px;
+  height: 135px;
+  display: block;
+  margin: 16px auto 32px auto;
 `;
 
 export default (): JSX.Element => {
