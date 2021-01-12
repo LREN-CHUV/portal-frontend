@@ -33,6 +33,44 @@ export interface Props {
   setFormulaString: (f: string) => void;
 }
 
+const maxSigns = 13;
+const extractWord = (bit: string) => (bit !== undefined ? bit : '');
+
+// "Sleeping with or checking on attachment figures at night in the past 4 weeks"
+// very basic text splitting, test for 3, 2, 1 words
+const splitText = (text: string): string[] => {
+  const acc: string[] = [];
+  let currentBitIndex = 0;
+  const bits = text.split(/(?=[A-Z][a-z])|[\s+]|_/g); // ["Sleeping", "with", "or", "checking", "on" ...]
+
+  bits.forEach((curr, i) => {
+    if (i === currentBitIndex) {
+      const test1word = extractWord(bits[currentBitIndex]);
+      const test2word = [
+        test1word,
+        extractWord(bits[currentBitIndex + 1])
+      ].join(' ');
+      const test3word = [
+        test2word,
+        extractWord(bits[currentBitIndex + 2])
+      ].join(' ');
+
+      if (test3word.length < maxSigns) {
+        currentBitIndex = currentBitIndex + 3;
+        acc.push(test3word);
+      } else if (test2word.length < maxSigns) {
+        currentBitIndex = currentBitIndex + 2;
+        acc.push(test2word);
+      } else {
+        currentBitIndex = currentBitIndex + 1;
+        acc.push(test1word);
+      }
+    }
+  });
+
+  return acc;
+};
+
 export default ({ layout, ...props }: Props): JSX.Element => {
   const svgRef = useRef(null);
   const view = useRef<IView>([diameter / 2, diameter / 2, diameter]);
@@ -228,7 +266,6 @@ export default ({ layout, ...props }: Props): JSX.Element => {
         d => `${d.data.label}\n${d.data.description ? d.data.description : ''}`
       );
 
-    const maxLength = 12;
     svg
       .append('g')
       .selectAll('text')
@@ -237,17 +274,12 @@ export default ({ layout, ...props }: Props): JSX.Element => {
       .attr('class', 'label')
       .style('fill-opacity', d => (d.parent === layout ? 1 : 0))
       .style('display', d => (d.parent === layout ? 'inline' : 'none'))
-      .text(d =>
-        d.data && d.data.label && d.data.label.length > maxLength
-          ? d.data.label
-              .split(' ')
-              .reduce(
-                (acc: string, p: string) =>
-                  acc.length < maxLength ? `${acc} ${p}` : `${acc}`,
-                ''
-              ) + '...'
-          : d.data.label
-      );
+      .selectAll('tspan')
+      .data(d => splitText(d.data.label))
+      .join('tspan')
+      .attr('x', 0)
+      .attr('y', (d, i, nodes) => `${i - nodes.length / 2 + 0.8}em`)
+      .text(d => d);
 
     selectNodeCallback(layout);
     zoomTo([layout.x, layout.y, layout.r * 2]);

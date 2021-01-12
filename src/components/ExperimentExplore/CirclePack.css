@@ -8,9 +8,8 @@
 
 .label {
   text-anchor: middle;
-  font: 1.2em sans-serif;
+  font: 1em sans-serif;
   pointer-events: none;
-  color: '#eeeeee';
 }
 
 circle.node.selected {
