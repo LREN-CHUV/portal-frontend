@@ -10,6 +10,38 @@ import { AlgorithmParameter, Algorithm } from '../API/Core';
 import { VariableEntity } from './Core';
 import { APIModel } from './';
 import { ModelResponse } from './Model';
+import { round } from '../utils';
+
+type fieldType = 'p-value' | 'p' | 'prvalue' | 'p_value';
+// TODO: in Visualisation JSONDAta
+
+// const formatNumber = (
+//   value: number | null,
+//   field: Record<string, string>
+// ): string => {
+//   if (field.type === 'string' || value === null) {
+//     return `${value}`;
+//   }
+
+//   const roundValue = round(value);
+
+//   if (
+//     field.name === 'p-value' ||
+//     field.name === 'p' ||
+//     field.name === 'prvalue' ||
+//     field.name === 'p_value'
+//   ) {
+//     return value < 0.001
+//       ? `${roundValue} (***)`
+//       : value < 0.01
+//       ? `${roundValue} (**)`
+//       : value < 0.05
+//       ? `${roundValue} (*)`
+//       : `${roundValue}`;
+//   }
+
+//   return `${roundValue}`;
+// };
 
 const handleExperimentResponseExceptions = (
   experiment: IExperiment | IExperimentError
@@ -146,7 +178,7 @@ export const ALGORITHMS_OUTPUT: AlgorithmOutput[] = [
   },
   {
     enabled: true,
-    name: 'NAIVE_BAYES_TRAINING',
+    name: 'NAIVE_BAYES',
     types: [MIME_TYPES.JSONDATA, MIME_TYPES.HIGHCHARTS]
   },
   {
@@ -168,11 +200,6 @@ export const ALGORITHMS_OUTPUT: AlgorithmOutput[] = [
     enabled: true,
     name: 'PCA',
     types: [MIME_TYPES.JSONDATA, MIME_TYPES.HIGHCHARTS]
-  },
-  {
-    enabled: true,
-    label: 'Naive Bayes with Cross Validation',
-    types: [MIME_TYPES.HIGHCHARTS, MIME_TYPES.JSONDATA]
   },
   {
     enabled: true,

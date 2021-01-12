@@ -11,9 +11,9 @@ import {
 
 // config
 
-const modelSlug = `naivebayes-training-${Math.round(Math.random() * 10000)}`;
-const algorithmId = 'NAIVE_BAYES_TRAINING';
-const algorithmLabel = 'Naive Bayes Training';
+const modelSlug = `naivebayes-${Math.round(Math.random() * 10000)}`;
+const algorithmId = 'NAIVE_BAYES';
+const algorithmLabel = 'Naive Bayes classifier';
 
 const parameters: ExperimentParameter[] = [
   {
@@ -22,13 +22,13 @@ const parameters: ExperimentParameter[] = [
     label: 'alpha'
   },
   {
-    name: 'iterationNumber',
-    value: 3,
+    name: 'k',
+    value: 10,
     label: 'iterationNumber',
   },
   {
     name: 'x', // covariable
-    value: 'leftacgganteriorcingulategyrus,lefthippocampus'
+    value: 'righthippocampus,lefthippocampus'
   },
   {
     name: 'y', // variable
@@ -47,7 +47,7 @@ const parameters: ExperimentParameter[] = [
   }
 ];
 
-const experiment: Partial<IExperiment> = {
+const experiment: IExperimentPrototype = {
   algorithm: {
     name: algorithmId,
     parameters,
@@ -60,43 +60,36 @@ const experiment: Partial<IExperiment> = {
 
 describe('Integration Test for experiment API', () => {
   it(`create ${algorithmId}`, async () => {
-    const { error, experiment: result } = await createExperiment({
+    const { experiment: result } = await createExperiment({
       experiment
     });
 
-    expect(error).toBeFalsy();
     expect(result).toBeTruthy();
+    expect(result.status).toStrictEqual('pending');
 
-    const uuid = result && result.uuid;
+    const uuid = (result as IExperiment)?.uuid;
     expect(uuid).toBeTruthy();
+
     if (!uuid) {
       throw new Error('uuid not defined');
     }
 
     const experimentState = await waitForResult({ uuid });
-    expect(experimentState.error).toBeFalsy();
+
+    expect(experimentState.experiment.status).toStrictEqual('success');
     expect(experimentState.experiment).toBeTruthy();
 
     const props = { experimentState };
     const wrapper = mount(<Result {...props} />);
     expect(wrapper.find('.error')).toHaveLength(0);
     expect(wrapper.find('.loading')).toHaveLength(0);
-    expect(wrapper.find('.result')).toHaveLength(2);
-    // expect(
-    //   wrapper
-    //     .find('div.result table tbody tr td')
-    //     .at(1)
-    //     .first()
-    //     .text()
-    // ).toEqual('0.937');
-    // expect(
-    //   wrapper
-    //     .find('div.result')
-    //     .at(1)
-    //     .find('table tbody tr td')
-    //     .at(1)
-    //     .first()
-    //     .text()
-    // ).toEqual('-1.455');
+    expect(wrapper.find('.result')).toHaveLength(5);
+    expect(
+      wrapper
+        .find('div.result table tbody tr td')
+        .at(1)
+        .first()
+        .text()
+    ).toEqual('0.517');
   });
 });
