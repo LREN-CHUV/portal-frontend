@@ -50,6 +50,7 @@ interface JSONNode {
   colName: string;
   threshold: number;
   gain: number | string;
+  samples: string | number;
   class: string;
   criterion: string;
   classValue: number | string;
@@ -65,6 +66,7 @@ interface NodeData {
   variable: NodeInfo | undefined;
   criterion: NodeInfo | undefined;
   class: NodeInfo | undefined;
+  samples: NodeInfo | undefined;
 }
 
 interface NodeAttribute {
@@ -72,6 +74,8 @@ interface NodeAttribute {
 }
 
 type HierarchyPointNode = d3.HierarchyPointNode<Node>;
+
+const Y_LINE_HEIGHT = 14;
 
 // parsing JSON
 const makeNodes = (data: JSONNode): Node[] | undefined => {
@@ -102,21 +106,22 @@ const makeNodes = (data: JSONNode): Node[] | undefined => {
 };
 
 const makeNodeData = (data: JSONNode, isRight: boolean): NodeData => {
+  let y = 0;
   const variable =
     data.colName !== 'None'
-      ? { y: 0, text: `${data.colName} <= ${round(data.threshold, 3)}` }
+      ? { y, text: `${data.colName} <= ${round(data.threshold, 3)}` }
       : undefined;
 
+  y = variable ? Y_LINE_HEIGHT : 0;
   const criterion =
     data.gain !== 'None'
       ? {
-          y: variable ? 14 : 0,
+          y,
           text: `${data.criterion} = ${round(data.gain as number, 3)}`
         }
       : undefined;
 
-  const y = criterion ? (variable ? 28 : 14) : 0;
-
+  y = criterion ? y + Y_LINE_HEIGHT : y;
   const klass =
     data.class !== 'None'
       ? { y, text: `class = ${data.class}` }
@@ -124,11 +129,24 @@ const makeNodeData = (data: JSONNode, isRight: boolean): NodeData => {
       ? { y, text: `classValue = ${round(data.classValue as number, 3)}` }
       : undefined;
 
+  y = klass ? y + Y_LINE_HEIGHT : y;
+  const samples =
+    data.samples !== undefined
+      ? {
+          y: y,
+          text:
+            typeof data.samples === 'number'
+              ? `samples <= ${round(data.samples, 0)}`
+              : `samples: ${data.samples}`
+        }
+      : undefined;
+
   return {
     isRight: isRight ? 'False' : 'True',
     variable,
     criterion,
-    class: klass
+    class: klass,
+    samples
   };
 };
 
@@ -258,6 +276,13 @@ export default ({ data }: { data: JSONNode }): JSX.Element => {
         .attr('y', d => y + (d?.data.info?.class?.y || 0))
         .style('text-anchor', 'start')
         .text((d: HierarchyPointNode) => d?.data.info?.class?.text || '');
+
+      node
+        .append('text')
+        .attr('x', x)
+        .attr('y', d => y + (d?.data.info?.samples?.y || 0))
+        .style('text-anchor', 'start')
+        .text((d: HierarchyPointNode) => d?.data.info?.samples?.text || '');
     };
 
     const updateRender = (treeData: Node): void => {
