@@ -36,6 +36,14 @@ const IndederminateProgressBar = styled(ProgressBar)`
   animation-iteration-count: infinite;
 `;
 
+const ProgressBarStyled = styled.div`
+  width: 360px;
+  position: relative;
+  overflow-x: hidden;
+  border: 1px solid dodgerblue;
+  border-radius: 4px;
+`;
+
 export default ({
   experimentState
 }: {
@@ -53,9 +61,9 @@ export default ({
         {loading ? (
           <div className="loading">
             <LoadingTitle>Your experiment is currently running</LoadingTitle>
-            <div style={{ position: 'relative', overflowX: 'hidden' }}>
+            <ProgressBarStyled>
               <IndederminateProgressBar striped now={100} />
-            </div>
+            </ProgressBarStyled>
             <p style={{ marginTop: '16px ' }}>
               Please check back in a moment. This page will automatically
               refresh once your experiment has finished executing.
