@@ -18,6 +18,7 @@
 - React.Strict component
 - Removed moment.js for Day.js
 - moving XMLHTTPRequest from request to Axios library
+- CART: added samples value
 
 ## 6.4.9 - 2020/10/20
 
