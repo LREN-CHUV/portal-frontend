@@ -89,8 +89,9 @@ class UserContainer extends Container<State> {
       });
     } catch (error) {
       return await this.setState({
-        error: error.message,
-        loading: false
+        error: error.response?.data,
+        loading: false,
+        authenticated: false
       });
     }
   };

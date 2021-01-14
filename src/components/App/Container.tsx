@@ -74,6 +74,7 @@ class AppContainer extends React.Component<any, State> {
             this.apiExperiment.list({});
           } else {
             clearInterval(this.intervalId);
+            window.location.href = '/';
           }
         });
       }, 10 * 1000);

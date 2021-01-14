@@ -1,5 +1,11 @@
 # Changelog
 
+## 6.4.12 - 2021/01/14
+
+- CART: typo
+- Logout handling
+- Scaling charts & visualisation fix
+
 ## 6.4.10 - 2021/01/12
 
 - New Login page
