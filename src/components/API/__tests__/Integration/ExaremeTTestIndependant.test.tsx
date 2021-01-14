@@ -15,7 +15,7 @@ import {
 
 // config
 
-const modelSlug = `ttest-i-${Math.round(Math.random() * 10000)}`;
+const modelSlug = `ttest-idp-${Math.round(Math.random() * 10000)}`;
 const algorithmId = 'TTEST_INDEPENDENT';
 const algorithmLabel = 'T-Test Independent';
 

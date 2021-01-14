@@ -16,7 +16,7 @@ import {
 
 // config
 
-const modelSlug = `ttest-p-${Math.round(Math.random() * 10000)}`;
+const modelSlug = `ttest-paired-${Math.round(Math.random() * 10000)}`;
 const algorithmId = 'TTEST_PAIRED';
 const algorithmLabel = 'T-Test Paired';
 

@@ -15,7 +15,7 @@ import {
 
 // config
 
-const modelSlug = `ttest-p-${Math.round(Math.random() * 10000)}`;
+const modelSlug = `ttest-1s-${Math.round(Math.random() * 10000)}`;
 const algorithmId = 'TTEST_ONESAMPLE';
 const algorithmLabel = 'T-Test One-Sample ';
 
