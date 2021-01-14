@@ -2,9 +2,14 @@
 
 ## 6.4.12 - 2021/01/14
 
+- One-way Anova integration
 - CART: typo
 - Logout handling
 - Scaling charts & visualisation fix
+
+## 6.4.11 - 2021/01/12
+
+- Cart & bug fixes
 
 ## 6.4.10 - 2021/01/12
 
