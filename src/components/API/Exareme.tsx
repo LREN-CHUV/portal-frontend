@@ -10,7 +10,6 @@ import { AlgorithmParameter, Algorithm } from '../API/Core';
 import { VariableEntity } from './Core';
 import { APIModel } from './';
 import { ModelResponse } from './Model';
-import { round } from '../utils';
 
 type fieldType = 'p-value' | 'p' | 'prvalue' | 'p_value';
 // TODO: in Visualisation JSONDAta
@@ -136,6 +135,11 @@ interface AlgorithmOutput {
 }
 
 export const ALGORITHMS_OUTPUT: AlgorithmOutput[] = [
+  {
+    enabled: true,
+    name: 'ANOVA_ONEWAY',
+    types: [MIME_TYPES.JSONDATA, MIME_TYPES.HIGHCHARTS]
+  },
   {
     enabled: true,
     name: 'ANOVA',
