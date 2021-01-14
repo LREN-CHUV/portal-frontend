@@ -136,7 +136,7 @@ const makeNodeData = (data: JSONNode, isRight: boolean): NodeData => {
           y: y,
           text:
             typeof data.samples === 'number'
-              ? `samples <= ${round(data.samples, 0)}`
+              ? `samples = ${round(data.samples, 0)}`
               : `samples: ${data.samples}`
         }
       : undefined;
