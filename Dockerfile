@@ -11,7 +11,13 @@ RUN yarn install
 ENV NODE_PATH=/frontend/node_modules
 ENV PATH=$PATH:/frontend/node_modules/.bin
 
-COPY . /frontend
+COPY public /frontend/public
+COPY src /frontend/src
+COPY ./.eslintrc.json \
+    ./.eslintignore \
+    ./.prettierrc.js \
+    ./tsconfig.json \
+    /frontend/
 
 RUN yarn build
 
