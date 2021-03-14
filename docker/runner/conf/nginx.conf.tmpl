@@ -130,7 +130,8 @@ http {
 
     # keycloak redirect on /services/ after login. In that case, redirect to /
     location = /services/ {
-        return 302 "/";
+    resolver 8.8.8.8;
+    return 301 $scheme://$http_host/;
     }
 
     {{ if .Env.PORTAL_BACKEND_SERVER }}
