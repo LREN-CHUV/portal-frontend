@@ -48,11 +48,6 @@ COPY docker/runner/run.sh /
 # Add front end resources
 COPY --from=builder /frontend/build /usr/share/nginx/html/
 
-# Protected files folder
-ENV PROTECTED_DIR /protected
-RUN mkdir ${PROTECTED_DIR} && chown -R nginx:nginx ${PROTECTED_DIR}
-VOLUME ["${PROTECTED_DIR}"]
-
 EXPOSE 80 443
 
 ENTRYPOINT ["/run.sh"]
