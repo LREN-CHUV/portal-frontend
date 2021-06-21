@@ -63,16 +63,16 @@ class UserContainer extends Container<State> {
         });
       }
 
-      const user = response.data;
-
-      if (!user) {
+      // Check for json object
+      if (response.data && !response.data?.name) {
         return await this.setState({
-          error: "The server didn't get any response from the API",
+          error: "Unexpected server response",
           user: undefined,
           loading: false
         });
       }
 
+      const user = response.data;
       if (response.status === 403) {
         return await this.setState({
           error: response.statusText,
