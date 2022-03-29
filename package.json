@@ -7,7 +7,7 @@
     "@bugsnag/plugin-react": "^6.4.0",
     "@types/js-base64": "^2.3.1",
     "bootstrap": "3.4.1",
-    "d3": "^5.11.0",
+    "d3": "^7.0.0",
     "dotenv": "^8.1.0",
     "highcharts": "^7.2.0",
     "highcharts-react-official": "^2.2.2",
